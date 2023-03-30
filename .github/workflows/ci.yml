@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - ".vscode/**"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+      - ".vscode/**"
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 16
+  JAVA_VERSION: 11
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Set up Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Build packages affected by changes
+        if: github.ref != 'refs/heads/main'
+        run: npm run affected:verify
+      - name: Build all packages
+        if: github.ref == 'refs/heads/main'
+        run: npm run verify
+  lint:
+    name: Lint
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint packages affected by changes
+        if: github.ref != 'refs/heads/main'
+        run: npm run affected:lint
+      - name: Lint all packages
+        if: github.ref == 'refs/heads/main'
+        run: npm run lint
