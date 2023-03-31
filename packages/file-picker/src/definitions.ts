@@ -1,3 +1,5 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+
 export interface FilePickerPlugin {
   /**
    * Convert a HEIC image to JPEG.
@@ -43,6 +45,23 @@ export interface FilePickerPlugin {
    * @since 0.5.3
    */
   pickVideos(options?: PickVideosOptions): Promise<PickVideosResult>;
+  /**
+   * Called when the file picker is dismissed.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.6.2
+   */
+  addListener(
+    eventName: 'pickerDismissed',
+    listenerFunc: () => void,
+  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 0.6.2
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

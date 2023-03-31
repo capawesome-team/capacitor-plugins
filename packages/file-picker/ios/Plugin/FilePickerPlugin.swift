@@ -16,6 +16,7 @@ public class FilePickerPlugin: CAPPlugin {
     public let errorUnknown = "Unknown error occurred."
     public let errorTemporaryCopyFailed = "An unknown error occurred while creating a temporary copy of the file."
     public let errorUnsupportedFileTypeIdentifier = "Unsupported file type identifier."
+    public let pickerDismissedEvent = "pickerDismissed"
     private var implementation: FilePicker?
     private var savedCall: CAPPluginCall?
 
@@ -83,15 +84,8 @@ public class FilePickerPlugin: CAPPlugin {
         implementation?.openVideoPicker(multiple: multiple)
     }
 
-    @objc func parseTypesOption(_ types: [String]) -> [String] {
-        var parsedTypes: [String] = []
-        for (_, type) in types.enumerated() {
-            guard let utType: String = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, type as CFString, nil)?.takeRetainedValue() as String? else {
-                continue
-            }
-            parsedTypes.append(utType)
-        }
-        return parsedTypes
+    @objc func notifyPickerDismissedListener() {
+        notifyListeners(pickerDismissedEvent, data: nil)
     }
 
     @objc func handleDocumentPickerResult(urls: [URL]?, error: String?) {
@@ -138,5 +132,16 @@ public class FilePickerPlugin: CAPPlugin {
             savedCall.reject(error.localizedDescription, nil, error)
             return
         }
+    }
+
+    private func parseTypesOption(_ types: [String]) -> [String] {
+        var parsedTypes: [String] = []
+        for (_, type) in types.enumerated() {
+            guard let utType: String = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, type as CFString, nil)?.takeRetainedValue() as String? else {
+                continue
+            }
+            parsedTypes.append(utType)
+        }
+        return parsedTypes
     }
 }

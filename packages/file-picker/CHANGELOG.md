@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.6.3](https://github.com/capawesome-team/capacitor-file-picker/compare/v0.6.2...v0.6.3) (2023-03-31)
+
+
+### Features
+
+* **ios:** add `pickerDismissed` listener ([#93](https://github.com/capawesome-team/capacitor-file-picker/issues/93)) ([85c1d5f](https://github.com/capawesome-team/capacitor-file-picker/commit/85c1d5fba0b7a0f4c86b5db37825862f48563ee3))
+
 ### [0.6.2](https://github.com/capawesome-team/capacitor-file-picker/compare/v0.6.1...v0.6.2) (2023-03-01)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-file-picker",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Capacitor plugin that allows the user to select a file.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

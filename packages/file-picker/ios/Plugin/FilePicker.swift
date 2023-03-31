@@ -30,11 +30,11 @@ import MobileCoreServices
 
     public func openDocumentPicker(multiple: Bool, documentTypes: [String]) {
         DispatchQueue.main.async {
-            let documentPicker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
-            documentPicker.delegate = self
-            documentPicker.allowsMultipleSelection = multiple
-            documentPicker.modalPresentationStyle = .fullScreen
-            self.plugin?.bridge?.viewController?.present(documentPicker, animated: true, completion: nil)
+            let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
+            picker.delegate = self
+            picker.allowsMultipleSelection = multiple
+            picker.modalPresentationStyle = .fullScreen
+            self.presentViewController(picker)
         }
     }
 
@@ -47,13 +47,13 @@ import MobileCoreServices
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             } else {
                 let picker = UIImagePickerController()
                 picker.delegate = self
                 picker.sourceType = .photoLibrary
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             }
         }
     }
@@ -66,13 +66,13 @@ import MobileCoreServices
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             } else {
                 let picker = UIImagePickerController()
                 picker.delegate = self
                 picker.mediaTypes = ["public.movie", "public.image"]
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             }
         }
     }
@@ -86,13 +86,13 @@ import MobileCoreServices
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             } else {
                 let picker = UIImagePickerController()
                 picker.delegate = self
                 picker.mediaTypes = ["public.movie"]
                 picker.modalPresentationStyle = .fullScreen
-                self.plugin?.bridge?.viewController?.present(picker, animated: true, completion: nil)
+                self.presentViewController(picker)
             }
         }
     }
@@ -167,6 +167,38 @@ import MobileCoreServices
         return (nil, nil)
     }
 
+    public func getHeightAndWidthFromImageProperties(_ properties: [NSObject: AnyObject]) -> (Int?, Int?) {
+        let width = properties[kCGImagePropertyPixelWidth] as? Int
+        let height = properties[kCGImagePropertyPixelHeight] as? Int
+        let orientation = properties[kCGImagePropertyOrientation] as? Int ?? UIImage.Orientation.up.rawValue
+        switch orientation {
+        case UIImage.Orientation.left.rawValue, UIImage.Orientation.right.rawValue, UIImage.Orientation.leftMirrored.rawValue, UIImage.Orientation.rightMirrored.rawValue:
+            return (width, height)
+        default:
+            return (height, width)
+        }
+    }
+
+    public func getFileUrlByPath(_ path: String) -> URL? {
+        guard let url = URL.init(string: path) else {
+            return nil
+        }
+        if FileManager.default.fileExists(atPath: url.path) {
+            return url
+        } else {
+            return nil
+        }
+    }
+
+    private func presentViewController(_ viewControllerToPresent: UIViewController) {
+        self.plugin?.bridge?.viewController?.present(viewControllerToPresent, animated: true, completion: nil)
+    }
+
+    private func dismissViewController(_ viewControllerToPresent: UIViewController, completion: (() -> Void)? = nil) {
+        viewControllerToPresent.dismiss(animated: true, completion: completion)
+        plugin?.notifyPickerDismissedListener()
+    }
+
     private func isImageUrl(_ url: URL) -> Bool {
         let mimeType = self.getMimeTypeFromUrl(url)
         return mimeType.hasPrefix("image")
@@ -190,30 +222,7 @@ import MobileCoreServices
         return targetUrl
     }
 
-    public func getHeightAndWidthFromImageProperties(_ properties: [NSObject: AnyObject]) -> (Int?, Int?) {
-        let width = properties[kCGImagePropertyPixelWidth] as? Int
-        let height = properties[kCGImagePropertyPixelHeight] as? Int
-        let orientation = properties[kCGImagePropertyOrientation] as? Int ?? UIImage.Orientation.up.rawValue
-        switch orientation {
-        case UIImage.Orientation.left.rawValue, UIImage.Orientation.right.rawValue, UIImage.Orientation.leftMirrored.rawValue, UIImage.Orientation.rightMirrored.rawValue:
-            return (width, height)
-        default:
-            return (height, width)
-        }
-    }
-
-    @objc public func getFileUrlByPath(_ path: String) -> URL? {
-        guard let url = URL.init(string: path) else {
-            return nil
-        }
-        if FileManager.default.fileExists(atPath: url.path) {
-            return url
-        } else {
-            return nil
-        }
-    }
-
-    @objc func deleteFile(_ url: URL) throws {
+    private func deleteFile(_ url: URL) throws {
         if FileManager.default.fileExists(atPath: url.path) {
             try FileManager.default.removeItem(atPath: url.path)
         }
@@ -228,16 +237,18 @@ extension FilePicker: UIDocumentPickerDelegate {
         } catch {
             plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
         }
+        plugin?.notifyPickerDismissedListener()
     }
 
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         plugin?.handleDocumentPickerResult(urls: nil, error: nil)
+        plugin?.notifyPickerDismissedListener()
     }
 }
 
 extension FilePicker: UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPopoverPresentationControllerDelegate {
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.dismiss(animated: true)
+        dismissViewController(picker)
         plugin?.handleDocumentPickerResult(urls: nil, error: nil)
     }
 
@@ -250,7 +261,7 @@ extension FilePicker: UIImagePickerControllerDelegate, UINavigationControllerDel
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-        picker.dismiss(animated: true) {
+        dismissViewController(picker) {
             if let url = info[.mediaURL] as? URL {
                 do {
                     let temporaryUrl = try self.saveTemporaryFile(url)
@@ -268,7 +279,7 @@ extension FilePicker: UIImagePickerControllerDelegate, UINavigationControllerDel
 @available(iOS 14, *)
 extension FilePicker: PHPickerViewControllerDelegate {
     public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        picker.dismiss(animated: true, completion: nil)
+        dismissViewController(picker)
         if results.first == nil {
             self.plugin?.handleDocumentPickerResult(urls: nil, error: nil)
             return
