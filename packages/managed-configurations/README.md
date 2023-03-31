@@ -139,11 +139,11 @@ On **iOS**, you need to install the app as a [managed app](https://support.apple
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/managed-configurations/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/managed-configurations/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/managed-configurations/blob/main/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/managed-configurations/LICENSE).
 
 ## Credits
 

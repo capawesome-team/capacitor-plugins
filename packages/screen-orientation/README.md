@@ -196,11 +196,11 @@ Callback to receive the screen orientation change notifications.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/screen-orientation/blob/master/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/screen-orientation/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/screen-orientation/blob/master/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/screen-orientation/LICENSE).
 
 ## Credits
 

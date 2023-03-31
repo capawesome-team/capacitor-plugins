@@ -124,11 +124,11 @@ It's planned to add the support in the near future.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/background-task/blob/master/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/background-task/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/background-task/blob/master/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/background-task/LICENSE).
 
 ## Credits
 
