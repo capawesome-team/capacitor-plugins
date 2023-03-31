@@ -300,8 +300,13 @@ The Android Developers documentation describes how to test [in-app updates](http
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-app-update/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/app-update/blob/main/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-app-update/blob/main/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/app-update/blob/main/LICENSE).
+
+## Credits
+
+This plugin is based on the [Capacitor App Update](https://github.com/capawesome-team/capacitor-app-update) plugin.
+Thanks to everyone who contributed to the project!
