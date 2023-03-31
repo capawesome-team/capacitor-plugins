@@ -228,11 +228,11 @@ See [docs/utils/README.md](/docs/utils/README.md).
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-cloudinary/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/cloudinary/blob/main/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-cloudinary/blob/main/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/cloudinary/blob/main/LICENSE).
 
 ## Credits
 

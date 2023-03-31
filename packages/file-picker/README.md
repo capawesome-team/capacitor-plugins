@@ -278,11 +278,11 @@ Only available on Android and iOS.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-file-picker/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/packages/file-picker/blob/main/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-file-picker/blob/main/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/packages/file-picker/blob/main/LICENSE).
 
 ## Credits
 
