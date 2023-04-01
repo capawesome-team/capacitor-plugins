@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capawesome-team/capacitor-app-update.git"
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
   },
   "bugs": {
-    "url": "https://github.com/capawesome-team/capacitor-app-update/issues"
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
   "funding": [
     {
@@ -32,6 +32,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
+  "homepage": "https://capawesome.io/plugins/",
   "keywords": [
     "capacitor",
     "plugin",

@@ -17,11 +17,22 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capawesome-team/capacitor-cloudinary.git"
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
   },
   "bugs": {
-    "url": "https://github.com/capawesome-team/capacitor-cloudinary/issues"
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/capawesome-team/"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/capawesome"
+    }
+  ],
+  "homepage": "https://capawesome.io/plugins/",
   "keywords": [
     "capacitor",
     "plugin",
