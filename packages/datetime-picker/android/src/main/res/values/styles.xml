@@ -1,0 +1,4 @@
+<resources>
+    <style name="MaterialLightTheme" parent="android:Theme.Material.Light.Dialog.Alert"></style>
+    <style name="MaterialDarkTheme" parent="android:Theme.Material.Dialog.Alert"></style>
+</resources>
