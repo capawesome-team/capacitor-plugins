@@ -38,3 +38,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Set npm token for GitHub Packages
+        if: steps.changesets.outputs.published == 'true'
+        run: npm config set //npm.pkg.github.com/:_authToken ${{ secrets.PAT }}
+      - name: Publish Sponsorware to GitHub Packages
+        if: steps.changesets.outputs.published == 'true'
+        run: node ./scripts/publish-sponsorware.mjs --packages='${{ steps.changesets.outputs.publishedPackages }}'
