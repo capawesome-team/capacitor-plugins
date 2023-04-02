@@ -9,6 +9,24 @@ jobs:
   package-label:
     runs-on: ubuntu-latest
     steps:
+      - name: Add package-android-foreground-service label
+        if: contains(github.event.issue.body, '@capawesome-team/capacitor-android-foreground-service')
+        run: |
+          curl --request POST \
+          --url 'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data-raw '{ "labels": ["package: android-foreground-service"] }'
+      - name: Add package-android-battery-optimization label
+        if: contains(github.event.issue.body, '@capawesome-team/capacitor-android-battery-optimization')
+        run: |
+          curl --request POST \
+          --url 'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data-raw '{ "labels": ["package: android-battery-optimization"] }'
       - name: Add package-app-update label
         if: contains(github.event.issue.body, '@capawesome/capacitor-app-update')
         run: |
@@ -45,6 +63,24 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Accept: application/vnd.github.v3+json' \
           --data-raw '{ "labels": ["package: cloudinary"] }'
+      - name: Add package-datetime-picker label
+        if: contains(github.event.issue.body, '@capawesome-team/capacitor-datetime-picker')
+        run: |
+          curl --request POST \
+          --url 'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data-raw '{ "labels": ["package: datetime-picker"] }'
+      - name: Add package-file-opener label
+        if: contains(github.event.issue.body, '@capawesome-team/capacitor-file-opener')
+        run: |
+          curl --request POST \
+          --url 'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data-raw '{ "labels": ["package: file-opener"] }'
       - name: Add package-file-picker label
         if: contains(github.event.issue.body, '@capawesome/capacitor-file-picker')
         run: |
@@ -63,6 +99,15 @@ jobs:
           --header 'Content-Type: application/json' \
           --header 'Accept: application/vnd.github.v3+json' \
           --data-raw '{ "labels": ["package: managed-configurations"] }'
+      - name: Add package-nfc label
+        if: contains(github.event.issue.body, '@capawesome-team/capacitor-nfc')
+        run: |
+          curl --request POST \
+          --url 'https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/labels' \
+          --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+          --header 'Content-Type: application/json' \
+          --header 'Accept: application/vnd.github.v3+json' \
+          --data-raw '{ "labels": ["package: nfc"] }'
       - name: Add package-photo-editor label
         if: contains(github.event.issue.body, '@capawesome/capacitor-photo-editor')
         run: |
