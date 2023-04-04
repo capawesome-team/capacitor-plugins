@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Genz"
+  given-names: "Robin"
+  orcid: "https://orcid.org/0009-0004-8587-6112"
+title: "Capacitor Plugins"
+version: 5.0.0
+date-released: 2023-04-04
+url: "https://github.com/capawesome-team/capacitor-plugins"
