@@ -3,7 +3,7 @@ ext {
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.6.1'
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.1.5'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.5.1'
-    androidPlayCore = project.hasProperty('androidPlayCore') ? rootProject.ext.androidPlayCore : '1.9.0'
+    androidPlayCoreVersion = project.hasProperty('androidPlayCoreVersion') ? rootProject.ext.androidPlayCoreVersion : '1.9.0'
     androidPlayServicesBaseVersion = project.hasProperty('androidPlayServicesBaseVersion') ? rootProject.ext.androidPlayServicesBaseVersion : '18.0.1'
 }
 
@@ -54,7 +54,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation "com.google.android.play:core:$androidPlayCore"
+    implementation "com.google.android.play:core:$androidPlayCoreVersion"
     implementation "com.google.android.gms:play-services-base:$androidPlayServicesBaseVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
