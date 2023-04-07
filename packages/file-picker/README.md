@@ -70,6 +70,8 @@ const appendFileToFormData = async () => {
 * [`pickImages(...)`](#pickimages)
 * [`pickMedia(...)`](#pickmedia)
 * [`pickVideos(...)`](#pickvideos)
+* [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -185,6 +187,41 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('pickerDismissed', ...)
+
+```typescript
+addListener(eventName: 'pickerDismissed', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+Called when the file picker is dismissed.
+
+Only available on iOS.
+
+| Param              | Type                           |
+| ------------------ | ------------------------------ |
+| **`eventName`**    | <code>'pickerDismissed'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+**Since:** 0.6.2
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 0.6.2
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -240,6 +277,13 @@ Only available on Android and iOS.
 | -------------- | -------------------- | --------------------------------------- | ------------------ |
 | **`multiple`** | <code>boolean</code> | Whether multiple files may be selected. | <code>false</code> |
 | **`readData`** | <code>boolean</code> | Whether to read the file data.          | <code>false</code> |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases

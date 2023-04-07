@@ -55,7 +55,7 @@ const open = async () => {
 openFile(options: OpenFileOptions) => Promise<void>
 ```
 
-Open a file with the default application. 
+Open a file with the default application.
 
 Only available on Android and iOS.
 
