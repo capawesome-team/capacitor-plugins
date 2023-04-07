@@ -2,104 +2,90 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [2.0.2](https://github.com/capawesome-team/capacitor-screen-orientation/compare/v2.0.1...v2.0.2) (2023-01-21)
-
-
-### Bug Fixes
-
-* **ios:** `Setting UIDevice.orientation is not supported` error on iOS 16 ([#29](https://github.com/capawesome-team/capacitor-screen-orientation/issues/29)) ([879a3fd](https://github.com/capawesome-team/capacitor-screen-orientation/commit/879a3fdd50301371091ec8784a5906d9af0f5fee))
-
-### [2.0.1](https://github.com/capawesome-team/capacitor-screen-orientation/compare/v2.0.0...v2.0.1) (2022-08-19)
-
+## [2.0.2](https://github.com/capawesome-team/capacitor-screen-orientation/compare/v2.0.1...v2.0.2) (2023-01-21)
 
 ### Bug Fixes
 
-* **ios:** replace deprecated `statusBarOrientation` ([#24](https://github.com/capawesome-team/capacitor-screen-orientation/issues/24)) ([7405595](https://github.com/capawesome-team/capacitor-screen-orientation/commit/74055956d03707c087d411d039c247dbfc96daa0))
+- **ios:** `Setting UIDevice.orientation is not supported` error on iOS 16 ([#29](https://github.com/capawesome-team/capacitor-screen-orientation/issues/29)) ([879a3fd](https://github.com/capawesome-team/capacitor-screen-orientation/commit/879a3fdd50301371091ec8784a5906d9af0f5fee))
+
+## [2.0.1](https://github.com/capawesome-team/capacitor-screen-orientation/compare/v2.0.0...v2.0.1) (2022-08-19)
+
+### Bug Fixes
+
+- **ios:** replace deprecated `statusBarOrientation` ([#24](https://github.com/capawesome-team/capacitor-screen-orientation/issues/24)) ([7405595](https://github.com/capawesome-team/capacitor-screen-orientation/commit/74055956d03707c087d411d039c247dbfc96daa0))
 
 ## [2.0.0](https://github.com/capawesome-team/capacitor-screen-orientation/compare/v1.1.7...v2.0.0) (2022-08-04)
 
-
 ### ⚠ BREAKING CHANGES
 
-* This plugin was renamed to `@capawesome/capacitor-screen-orientation`. Please install the new npm package and run `npx cap sync`.
-* This plugin now only supports Capacitor 4.
+- This plugin was renamed to `@capawesome/capacitor-screen-orientation`. Please install the new npm package and run `npx cap sync`.
+- This plugin now only supports Capacitor 4.
 
 ### Features
 
-* update to Capacitor 4 ([#21](https://github.com/capawesome-team/capacitor-screen-orientation/issues/21)) ([adadb99](https://github.com/capawesome-team/capacitor-screen-orientation/commit/adadb9995827251466fbe98d8449dc29f603f983))
+- update to Capacitor 4 ([#21](https://github.com/capawesome-team/capacitor-screen-orientation/issues/21)) ([adadb99](https://github.com/capawesome-team/capacitor-screen-orientation/commit/adadb9995827251466fbe98d8449dc29f603f983))
 
+- rename to `@capawesome/capacitor-screen-orientation` ([#22](https://github.com/capawesome-team/capacitor-screen-orientation/issues/22)) ([f846c40](https://github.com/capawesome-team/capacitor-screen-orientation/commit/f846c4067d5b31721989887952b3bbec931ed3f3))
 
-* rename to `@capawesome/capacitor-screen-orientation` ([#22](https://github.com/capawesome-team/capacitor-screen-orientation/issues/22)) ([f846c40](https://github.com/capawesome-team/capacitor-screen-orientation/commit/f846c4067d5b31721989887952b3bbec931ed3f3))
-
-### [1.1.7](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.6...v1.1.7) (2022-04-21)
-
+## [1.1.7](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.6...v1.1.7) (2022-04-21)
 
 ### Bug Fixes
 
-* **ios:** return correct current orientation type while locked ([#19](https://github.com/robingenz/capacitor-screen-orientation/issues/19)) ([9b6053a](https://github.com/robingenz/capacitor-screen-orientation/commit/9b6053ae9402db591c58f1bcc19358a2ac69d90f))
+- **ios:** return correct current orientation type while locked ([#19](https://github.com/robingenz/capacitor-screen-orientation/issues/19)) ([9b6053a](https://github.com/robingenz/capacitor-screen-orientation/commit/9b6053ae9402db591c58f1bcc19358a2ac69d90f))
 
-### [1.1.6](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.5...v1.1.6) (2022-04-21)
-
-
-### Bug Fixes
-
-* **ios:** `removeAllListeners` method not found ([7c20eb8](https://github.com/robingenz/capacitor-screen-orientation/commit/7c20eb82f6b4ecd4600ea94d209a11650b925edb))
-
-### [1.1.5](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.4...v1.1.5) (2022-04-13)
-
+## [1.1.6](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.5...v1.1.6) (2022-04-21)
 
 ### Bug Fixes
 
-* **ios:** orientation change events fired while locked ([#16](https://github.com/robingenz/capacitor-screen-orientation/issues/16)) ([ce876e6](https://github.com/robingenz/capacitor-screen-orientation/commit/ce876e6795d51b21e3a6218c31e7d45725ea6bd6))
+- **ios:** `removeAllListeners` method not found ([7c20eb8](https://github.com/robingenz/capacitor-screen-orientation/commit/7c20eb82f6b4ecd4600ea94d209a11650b925edb))
 
-### [1.1.4](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.3...v1.1.4) (2022-01-26)
-
-
-### Bug Fixes
-
-* inline source code in esm map files ([31692b7](https://github.com/robingenz/capacitor-screen-orientation/commit/31692b717bac9c54317e46046aefb605d4aeaafe))
-
-### [1.1.3](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.2...v1.1.3) (2022-01-12)
-
+## [1.1.5](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.4...v1.1.5) (2022-04-13)
 
 ### Bug Fixes
 
-* **ios:** rotate back to current orientation after unlock ([#14](https://github.com/robingenz/capacitor-screen-orientation/issues/14)) ([7def624](https://github.com/robingenz/capacitor-screen-orientation/commit/7def624915826cb263c71e7e53b507c1eb8bf584))
+- **ios:** orientation change events fired while locked ([#16](https://github.com/robingenz/capacitor-screen-orientation/issues/16)) ([ce876e6](https://github.com/robingenz/capacitor-screen-orientation/commit/ce876e6795d51b21e3a6218c31e7d45725ea6bd6))
 
-### [1.1.2](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.1...v1.1.2) (2022-01-07)
-
-
-### Bug Fixes
-
-* **ios:** `UI API called on a background thread` ([#12](https://github.com/robingenz/capacitor-screen-orientation/issues/12)) ([e70232d](https://github.com/robingenz/capacitor-screen-orientation/commit/e70232d32bd786dd9459c4261bc9a81ad6961cfb))
-
-### [1.1.1](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.0...v1.1.1) (2021-12-14)
-
+## [1.1.4](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.3...v1.1.4) (2022-01-26)
 
 ### Bug Fixes
 
-* **ios:** handle `faceUp` and `faceDown` orientation ([#10](https://github.com/robingenz/capacitor-screen-orientation/issues/10)) ([25d58a4](https://github.com/robingenz/capacitor-screen-orientation/commit/25d58a4da012c6faf8d19b1d7221cd9d4ac22f23))
+- inline source code in esm map files ([31692b7](https://github.com/robingenz/capacitor-screen-orientation/commit/31692b717bac9c54317e46046aefb605d4aeaafe))
+
+## [1.1.3](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.2...v1.1.3) (2022-01-12)
+
+### Bug Fixes
+
+- **ios:** rotate back to current orientation after unlock ([#14](https://github.com/robingenz/capacitor-screen-orientation/issues/14)) ([7def624](https://github.com/robingenz/capacitor-screen-orientation/commit/7def624915826cb263c71e7e53b507c1eb8bf584))
+
+## [1.1.2](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.1...v1.1.2) (2022-01-07)
+
+### Bug Fixes
+
+- **ios:** `UI API called on a background thread` ([#12](https://github.com/robingenz/capacitor-screen-orientation/issues/12)) ([e70232d](https://github.com/robingenz/capacitor-screen-orientation/commit/e70232d32bd786dd9459c4261bc9a81ad6961cfb))
+
+## [1.1.1](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.1.0...v1.1.1) (2021-12-14)
+
+### Bug Fixes
+
+- **ios:** handle `faceUp` and `faceDown` orientation ([#10](https://github.com/robingenz/capacitor-screen-orientation/issues/10)) ([25d58a4](https://github.com/robingenz/capacitor-screen-orientation/commit/25d58a4da012c6faf8d19b1d7221cd9d4ac22f23))
 
 ## [1.1.0](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.0.2...v1.1.0) (2021-08-26)
 
-
 ### Features
 
-* add `screenOrientationChange` listener ([#8](https://github.com/robingenz/capacitor-screen-orientation/issues/8)) ([9bb5c2e](https://github.com/robingenz/capacitor-screen-orientation/commit/9bb5c2ef89cabfcdebc33a2d6a4d8f606179fe51))
+- add `screenOrientationChange` listener ([#8](https://github.com/robingenz/capacitor-screen-orientation/issues/8)) ([9bb5c2e](https://github.com/robingenz/capacitor-screen-orientation/commit/9bb5c2ef89cabfcdebc33a2d6a4d8f606179fe51))
 
-### [1.0.2](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.0.1...v1.0.2) (2021-07-16)
-
-
-### Bug Fixes
-
-* **ios:** rotate to locked orientation ([#7](https://github.com/robingenz/capacitor-screen-orientation/issues/7)) ([a3bac7b](https://github.com/robingenz/capacitor-screen-orientation/commit/a3bac7b522897893362199d44e63d0e1451b1fb5))
-
-### [1.0.1](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.0.0...v1.0.1) (2021-06-02)
-
+## [1.0.2](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.0.1...v1.0.2) (2021-07-16)
 
 ### Bug Fixes
 
-* **ios:** typo `potrait` ([9c3380f](https://github.com/robingenz/capacitor-screen-orientation/commit/9c3380f25e139624d4641bb805f779c5e61a5c97))
+- **ios:** rotate to locked orientation ([#7](https://github.com/robingenz/capacitor-screen-orientation/issues/7)) ([a3bac7b](https://github.com/robingenz/capacitor-screen-orientation/commit/a3bac7b522897893362199d44e63d0e1451b1fb5))
+
+## [1.0.1](https://github.com/robingenz/capacitor-screen-orientation/compare/v1.0.0...v1.0.1) (2021-06-02)
+
+### Bug Fixes
+
+- **ios:** typo `potrait` ([9c3380f](https://github.com/robingenz/capacitor-screen-orientation/commit/9c3380f25e139624d4641bb805f779c5e61a5c97))
 
 ## 1.0.0 (2021-05-17)
 
