@@ -69,4 +69,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 ## License
 
 Each plugin has its own `LICENSE` file which contains license information.
-Click on the name of the desired plugin under the [`Plugins`](#plugins) section to get to the plugin folder
+Click on the name of the desired plugin under the [`Plugins`](#plugins) section to get to the plugin folder.
