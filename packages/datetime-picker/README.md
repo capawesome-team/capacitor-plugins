@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-datetime-picker
 
-Capacitor plugin that let the user easily enter both a date and a time. 
+Capacitor plugin that let the user easily enter both a date and a time.
 
 ## Installation
 
@@ -68,7 +68,7 @@ Open the datetime picker.
 
 An error is thrown if the input is canceled or dismissed by the user.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
@@ -102,7 +102,7 @@ Only available for Android and iOS.
 | **`max`**              | <code>string</code>                         | The latest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string later than or equal to the one specified by the `min` attribute.     |                                             | 0.0.1 |
 | **`min`**              | <code>string</code>                         | The earliest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string earlier than or equal to the one specified by the `max` attribute. |                                             | 0.0.1 |
 | **`mode`**             | <code>'date' \| 'time' \| 'datetime'</code> | Whether you want a date or time or datetime picker.                                                                                                                                                                     | <code>'datetime'</code>                     | 0.0.1 |
-| **`theme`**            | <code>'auto' \| 'light' \| 'dark'</code>    | Choose the theme that the datetime picker should have. With `auto` the system theme is used. This value overwrites the `theme` configuration value. Only available for Android and iOS.                                 |                                             | 0.0.1 |
+| **`theme`**            | <code>'auto' \| 'light' \| 'dark'</code>    | Choose the theme that the datetime picker should have. With `auto` the system theme is used. This value overwrites the `theme` configuration value. Only available on Android and iOS.                                  |                                             | 0.0.1 |
 | **`value`**            | <code>string</code>                         | The predefined value when opening the picker. The format of this value must match the value of the `format` parameter.                                                                                                  |                                             | 0.0.1 |
 
 </docgen-api>

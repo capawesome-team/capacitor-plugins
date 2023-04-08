@@ -37,7 +37,9 @@ const getNumber = async () => {
 };
 
 const getBoolean = async () => {
-  const result = await ManagedConfigurations.getBoolean({ key: 'download_on_cellular' });
+  const result = await ManagedConfigurations.getBoolean({
+    key: 'download_on_cellular',
+  });
   return result.value;
 };
 ```
@@ -64,7 +66,7 @@ getString(options: GetOptions) => Promise<GetResult<string>>
 
 Fetches the value associated with the given key, or `null` if no mapping exists for the given key.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
@@ -83,7 +85,7 @@ getNumber(options: GetOptions) => Promise<GetResult<number>>
 
 Fetches the value associated with the given key, or `null` if no mapping exists for the given key.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
@@ -102,7 +104,7 @@ getBoolean(options: GetOptions) => Promise<GetResult<boolean>>
 
 Fetches the value associated with the given key, or `null` if no mapping exists for the given key.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |

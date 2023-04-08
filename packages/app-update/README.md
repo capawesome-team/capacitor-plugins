@@ -96,7 +96,7 @@ getAppUpdateInfo(options?: GetAppUpdateInfoOptions | undefined) => Promise<AppUp
 
 Returns app update informations.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                                        |
 | ------------- | --------------------------------------------------------------------------- |
@@ -115,7 +115,7 @@ openAppStore(options?: OpenAppStoreOptions | undefined) => Promise<void>
 
 Opens the app store entry of the app in the Play Store (Android) or App Store (iOS).
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
@@ -132,7 +132,7 @@ performImmediateUpdate() => Promise<AppUpdateResult>
 
 Performs an immediate in-app update.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#appupdateresult">AppUpdateResult</a>&gt;</code>
 
@@ -147,7 +147,7 @@ startFlexibleUpdate() => Promise<AppUpdateResult>
 
 Starts a flexible in-app update.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#appupdateresult">AppUpdateResult</a>&gt;</code>
 
@@ -162,7 +162,7 @@ completeFlexibleUpdate() => Promise<void>
 
 Completes a flexible in-app update by restarting the app.
 
-Only available for Android.
+Only available on Android.
 
 --------------------
 
@@ -175,7 +175,7 @@ addListener(eventName: 'onFlexibleUpdateStateChange', listenerFunc: (state: Flex
 
 Adds a flexbile in-app update state change listener.
 
-Only available for Android.
+Only available on Android.
 
 | Param              | Type                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------- |
@@ -203,32 +203,32 @@ Remove all listeners for this plugin.
 
 #### AppUpdateInfo
 
-| Prop                              | Type                                                                                | Description                                                                                                                                                                    |
-| --------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`currentVersion`**              | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version. Only available for Android and iOS.                                         |
-| **`availableVersion`**            | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the update. Only available for Android and iOS.                                                                  |
-| **`availableVersionReleaseDate`** | <code>string</code>                                                                 | Release date of the update in ISO 8601 (UTC) format. Only available for iOS.                                                                                                   |
-| **`updateAvailability`**          | <code><a href="#appupdateavailability">AppUpdateAvailability</a></code>             | The app update availability. Only available for Android and iOS.                                                                                                               |
-| **`updatePriority`**              | <code>number</code>                                                                 | In-app update priority for this update, as defined by the developer in the Google Play Developer API. Only available for Android.                                              |
-| **`immediateUpdateAllowed`**      | <code>boolean</code>                                                                | `true` if an immediate update is allowed, otherwise `false`. Only available for Android.                                                                                       |
-| **`flexibleUpdateAllowed`**       | <code>boolean</code>                                                                | `true` if a flexible update is allowed, otherwise `false`. Only available for Android.                                                                                         |
-| **`clientVersionStalenessDays`**  | <code>number</code>                                                                 | Number of days since the Google Play Store app on the user's device has learnt about an available update if an update is available or in progress. Only available for Android. |
-| **`installStatus`**               | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status. Only available for Android.                                                                                                             |
-| **`minimumOsVersion`**            | <code>string</code>                                                                 | The minimum version of the operating system required for the app to run in iOS. Only available for iOS.                                                                        |
+| Prop                              | Type                                                                                | Description                                                                                                                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`currentVersion`**              | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version. Only available on Android and iOS.                                         |
+| **`availableVersion`**            | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the update. Only available on Android and iOS.                                                                  |
+| **`availableVersionReleaseDate`** | <code>string</code>                                                                 | Release date of the update in ISO 8601 (UTC) format. Only available on iOS.                                                                                                   |
+| **`updateAvailability`**          | <code><a href="#appupdateavailability">AppUpdateAvailability</a></code>             | The app update availability. Only available on Android and iOS.                                                                                                               |
+| **`updatePriority`**              | <code>number</code>                                                                 | In-app update priority for this update, as defined by the developer in the Google Play Developer API. Only available on Android.                                              |
+| **`immediateUpdateAllowed`**      | <code>boolean</code>                                                                | `true` if an immediate update is allowed, otherwise `false`. Only available on Android.                                                                                       |
+| **`flexibleUpdateAllowed`**       | <code>boolean</code>                                                                | `true` if a flexible update is allowed, otherwise `false`. Only available on Android.                                                                                         |
+| **`clientVersionStalenessDays`**  | <code>number</code>                                                                 | Number of days since the Google Play Store app on the user's device has learnt about an available update if an update is available or in progress. Only available on Android. |
+| **`installStatus`**               | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status. Only available on Android.                                                                                                             |
+| **`minimumOsVersion`**            | <code>string</code>                                                                 | The minimum version of the operating system required for the app to run in iOS. Only available on iOS.                                                                        |
 
 
 #### GetAppUpdateInfoOptions
 
-| Prop          | Type                | Description                                                                                                                                                                |
-| ------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available for iOS. |
+| Prop          | Type                | Description                                                                                                                                                               |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available on iOS. |
 
 
 #### OpenAppStoreOptions
 
-| Prop          | Type                | Description                                                                                                                                                                |
-| ------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available for iOS. |
+| Prop          | Type                | Description                                                                                                                                                               |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available on iOS. |
 
 
 #### AppUpdateResult

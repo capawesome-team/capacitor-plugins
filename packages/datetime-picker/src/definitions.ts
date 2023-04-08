@@ -10,7 +10,7 @@ declare module '@capacitor/cli' {
        * Choose the theme that the datetime picker should have.
        * With `auto` the system theme is used.
        *
-       * Only available for Android and iOS.
+       * Only available on Android and iOS.
        *
        * @since 0.0.1
        * @default 'auto'
@@ -26,7 +26,7 @@ export interface DatetimePickerPlugin {
    *
    * An error is thrown if the input is canceled or dismissed by the user.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    *
    * @since 0.0.1
    */
@@ -90,7 +90,7 @@ export interface PresentOptions {
    * With `auto` the system theme is used.
    * This value overwrites the `theme` configuration value.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    *
    * @since 0.0.1
    */

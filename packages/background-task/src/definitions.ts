@@ -7,14 +7,14 @@ export interface BackgroundTaskPlugin {
    *
    * On **iOS** this method should be finished in less than 30 seconds.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   beforeExit(cb: () => void): Promise<CallbackID>;
   /**
    * Finish the current background task.
    * The OS will put the app to sleep.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   finish(options: FinishOptions): void;
 }

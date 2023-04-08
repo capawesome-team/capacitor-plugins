@@ -4,37 +4,37 @@ export interface AppUpdatePlugin {
   /**
    * Returns app update informations.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   getAppUpdateInfo(options?: GetAppUpdateInfoOptions): Promise<AppUpdateInfo>;
   /**
    * Opens the app store entry of the app in the Play Store (Android) or App Store (iOS).
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   openAppStore(options?: OpenAppStoreOptions): Promise<void>;
   /**
    * Performs an immediate in-app update.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   performImmediateUpdate(): Promise<AppUpdateResult>;
   /**
    * Starts a flexible in-app update.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   startFlexibleUpdate(): Promise<AppUpdateResult>;
   /**
    * Completes a flexible in-app update by restarting the app.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   completeFlexibleUpdate(): Promise<void>;
   /**
    * Adds a flexbile in-app update state change listener.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   addListener(
     eventName: 'onFlexibleUpdateStateChange',
@@ -51,7 +51,7 @@ export interface GetAppUpdateInfoOptions {
    *  The two-letter country code for the store you want to search.
    *  See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes.
    *
-   *  Only available for iOS.
+   *  Only available on iOS.
    */
   country?: string;
 }
@@ -60,61 +60,61 @@ export interface AppUpdateInfo {
   /**
    * Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   currentVersion: string;
   /**
    * Version code (Android) or CFBundleShortVersionString (iOS) of the update.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   availableVersion: string;
   /**
    * Release date of the update in ISO 8601 (UTC) format.
    *
-   * Only available for iOS.
+   * Only available on iOS.
    */
   availableVersionReleaseDate?: string;
   /**
    * The app update availability.
    *
-   * Only available for Android and iOS.
+   * Only available on Android and iOS.
    */
   updateAvailability: AppUpdateAvailability;
   /**
    * In-app update priority for this update, as defined by the developer in the Google Play Developer API.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   updatePriority?: number;
   /**
    * `true` if an immediate update is allowed, otherwise `false`.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   immediateUpdateAllowed?: boolean;
   /**
    * `true` if a flexible update is allowed, otherwise `false`.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   flexibleUpdateAllowed?: boolean;
   /**
    * Number of days since the Google Play Store app on the user's device has learnt about an available update if an update is available or in progress.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   clientVersionStalenessDays?: number;
   /**
    * Flexible in-app update install status.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   installStatus?: FlexibleUpdateInstallStatus;
   /**
    * The minimum version of the operating system required for the app to run in iOS.
    *
-   * Only available for iOS.
+   * Only available on iOS.
    */
   minimumOsVersion?: string;
 }
@@ -131,7 +131,7 @@ export interface OpenAppStoreOptions {
    *  The two-letter country code for the store you want to search.
    *  See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes.
    *
-   *  Only available for iOS.
+   *  Only available on iOS.
    */
   country?: string;
 }

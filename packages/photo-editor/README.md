@@ -1,6 +1,6 @@
 # @capawesome/capacitor-photo-editor
 
-Capacitor plugin that allows the user to edit a photo. 
+Capacitor plugin that allows the user to edit a photo.
 
 ## Installation
 
@@ -47,7 +47,7 @@ editPhoto(options: EditPhotoOptions) => Promise<void>
 
 Edit a photo at a given path.
 
-Only available for Android.
+Only available on Android.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |

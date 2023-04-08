@@ -2,7 +2,7 @@ export interface PhotoEditorPlugin {
   /**
    * Edit a photo at a given path.
    *
-   * Only available for Android.
+   * Only available on Android.
    */
   editPhoto(options: EditPhotoOptions): Promise<void>;
 }

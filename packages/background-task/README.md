@@ -62,7 +62,7 @@ It allows the app to continue running a task in the background.
 
 On **iOS** this method should be finished in less than 30 seconds.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param    | Type                       |
 | -------- | -------------------------- |
@@ -82,7 +82,7 @@ finish(options: FinishOptions) => void
 Finish the current background task.
 The OS will put the app to sleep.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |

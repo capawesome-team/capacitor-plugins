@@ -12,6 +12,7 @@ npx cap sync
 ### Android Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
 - `$shortcutBadgerVersion` version of `me.leolin:ShortcutBadger` (default: `1.1.22`)
 
 ## Configuration
@@ -21,10 +22,10 @@ This plugin will use the following project variables (defined in your app’s `v
 
 These configuration values are available:
 
-| Prop            | Type                 | Description                                                                                                                | Default            |
-| --------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available for Android and iOS. | <code>true</code>  |
-| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. Only available for Android and iOS.  | <code>false</code> |
+| Prop            | Type                 | Description                                                                                                               | Default            |
+| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available on Android and iOS. | <code>true</code>  |
+| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. Only available on Android and iOS.  | <code>false</code> |
 
 ### Examples
 
