@@ -84,7 +84,7 @@ public class DatetimePickerPlugin: CAPPlugin {
     private func getDatetimePickerConfig() -> DatetimePickerConfig {
         var config = DatetimePickerConfig()
 
-        if let theme = getConfigValue("theme") as? String {
+        if let theme = getConfig().getString("theme") {
             if let convertedTheme = DatetimePickerHelper.convertStringToTheme(theme) {
                 config.theme = convertedTheme
             }
