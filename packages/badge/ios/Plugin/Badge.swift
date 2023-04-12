@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import UserNotifications
 
 @objc public class Badge: NSObject {
     private var config: BadgeConfig
