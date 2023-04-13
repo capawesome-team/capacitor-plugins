@@ -2,4 +2,4 @@
 "@capawesome/capacitor-badge": patch
 ---
 
-fix(badge): add UserNotifications import to fix build on Mac OS
+fix(badge): import `UserNotifications` to support MacOS
