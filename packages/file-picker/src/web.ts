@@ -50,21 +50,19 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   }
 
   public async pickImages(
-    _options?: PickImagesOptions,
+    options?: PickImagesOptions,
   ): Promise<PickImagesResult> {
-    throw this.unimplemented('Not implemented on web.');
+    return this.pickFiles({ types: ['image/*'], ...options });
   }
 
-  public async pickMedia(
-    _options?: PickMediaOptions,
-  ): Promise<PickMediaResult> {
-    throw this.unimplemented('Not implemented on web.');
+  public async pickMedia(options?: PickMediaOptions): Promise<PickMediaResult> {
+    return this.pickFiles({ types: ['image/*', 'video/*'], ...options });
   }
 
   public async pickVideos(
-    _options?: PickVideosOptions,
+    options?: PickVideosOptions,
   ): Promise<PickVideosResult> {
-    throw this.unimplemented('Not implemented on web.');
+    return this.pickFiles({ types: ['video/*'], ...options });
   }
 
   private async openFilePicker(
