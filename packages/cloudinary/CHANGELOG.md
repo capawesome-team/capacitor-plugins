@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- [`3442479`](https://github.com/capawesome-team/capacitor-plugins/commit/3442479e9927c8a9641b0f27c04268d2bdb189a4) ([#20](https://github.com/capawesome-team/capacitor-plugins/pull/20)): feat!: update to Capacitor 5
+
 ## [0.1.5](https://github.com/capawesome-team/capacitor-cloudinary/compare/v0.1.4...v0.1.5) (2023-03-19)
 
 ### Features

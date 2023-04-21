@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- [`3442479`](https://github.com/capawesome-team/capacitor-plugins/commit/3442479e9927c8a9641b0f27c04268d2bdb189a4) ([#20](https://github.com/capawesome-team/capacitor-plugins/pull/20)): feat!: update to Capacitor 5
+
+### Patch Changes
+
+- [`595add4`](https://github.com/capawesome-team/capacitor-plugins/commit/595add4a991d454370fd1bb4df947279ff2d0b0a) ([#23](https://github.com/capawesome-team/capacitor-plugins/pull/23)): fix(ios): `getConfigValue` is deprecated
+
 ## [0.2.2](https://github.com/capawesome-team/sponsorware/compare/v0.2.1...v0.2.2) (2023-02-14)
 
 ### Bug Fixes
