@@ -55,16 +55,14 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     return this.pickFiles({ types: ['image/*'], ...options });
   }
 
-  public async pickMedia(
-    options?: PickMediaOptions,
-  ): Promise<PickMediaResult> {
+  public async pickMedia(options?: PickMediaOptions): Promise<PickMediaResult> {
     return this.pickFiles({ types: ['image/*', 'video/*'], ...options });
   }
 
   public async pickVideos(
     options?: PickVideosOptions,
   ): Promise<PickVideosResult> {
-    return this.pickFiles({ types: ['video/*'], ...options })
+    return this.pickFiles({ types: ['video/*'], ...options });
   }
 
   private async openFilePicker(
