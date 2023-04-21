@@ -2,4 +2,4 @@
 "@capawesome/capacitor-app-update": major
 ---
 
-refactor!(android): rename project variable `androidPlayCore` to `androidPlayCoreVersion`
+refactor(android)!: rename project variable `androidPlayCore` to `androidPlayCoreVersion`
