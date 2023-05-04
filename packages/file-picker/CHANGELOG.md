@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- [`3442479`](https://github.com/capawesome-team/capacitor-plugins/commit/3442479e9927c8a9641b0f27c04268d2bdb189a4) ([#20](https://github.com/capawesome-team/capacitor-plugins/pull/20)): feat!: update to Capacitor 5
+
+### Minor Changes
+
+- [`145a35b`](https://github.com/capawesome-team/capacitor-plugins/commit/145a35b941567a874313ca4f79117da4c8ae6fde) ([#32](https://github.com/capawesome-team/capacitor-plugins/pull/32)): feat(web): add support for `pickImages(...)`, `pickMedia(...)` and `pickVideos(...)`
+
 ## [0.6.3](https://github.com/capawesome-team/capacitor-file-picker/compare/v0.6.2...v0.6.3) (2023-03-31)
 
 ### Features

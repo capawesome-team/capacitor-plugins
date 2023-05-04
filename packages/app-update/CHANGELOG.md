@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.0.0
+
+### Major Changes
+
+- [`be60559`](https://github.com/capawesome-team/capacitor-plugins/commit/be6055988799282a56ef696d09d34e3eaa9c6e2d) ([#22](https://github.com/capawesome-team/capacitor-plugins/pull/22)): refactor(android)!: rename project variable `androidPlayCore` to `androidPlayCoreVersion`
+
+* [`3442479`](https://github.com/capawesome-team/capacitor-plugins/commit/3442479e9927c8a9641b0f27c04268d2bdb189a4) ([#20](https://github.com/capawesome-team/capacitor-plugins/pull/20)): feat!: update to Capacitor 5
+
 ## [2.1.1](https://github.com/capawesome-team/capacitor-app-update/compare/v2.1.0...v2.1.1) (2023-03-30)
 
 ### Bug Fixes
