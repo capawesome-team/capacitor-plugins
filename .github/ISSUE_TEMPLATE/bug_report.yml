@@ -13,6 +13,8 @@ body:
         - label: Background Task
         - label: Badge
         - label: Cloudinary
+        - label: Datetime Picker
+        - label: File Opener
         - label: File Picker
         - label: Managed Configurations
         - label: Photo Editor
