@@ -273,10 +273,11 @@ Remove all listeners for this plugin.
 
 #### PickMediaOptions
 
-| Prop           | Type                 | Description                             | Default            |
-| -------------- | -------------------- | --------------------------------------- | ------------------ |
-| **`multiple`** | <code>boolean</code> | Whether multiple files may be selected. | <code>false</code> |
-| **`readData`** | <code>boolean</code> | Whether to read the file data.          | <code>false</code> |
+| Prop                  | Type                 | Description                                                     | Default            |
+| --------------------- | -------------------- | --------------------------------------------------------------- | ------------------ |
+| **`multiple`**        | <code>boolean</code> | Whether multiple files may be selected.                         | <code>false</code> |
+| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                  | <code>false</code> |
+| **`skipTranscoding`** | <code>boolean</code> | Instruct to skip transcoding of file(s). Only available on iOS. | <code>false</code> |
 
 
 #### PluginListenerHandle

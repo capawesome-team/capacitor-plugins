@@ -205,6 +205,15 @@ export interface PickMediaOptions {
    * @default false
    */
   readData?: boolean;
+
+  /**
+   * Instruct to skip transcoding of file(s).
+   *
+   * Only available on iOS.
+   *
+   * @default false
+   */
+  skipTranscoding?: boolean;
 }
 
 /**
