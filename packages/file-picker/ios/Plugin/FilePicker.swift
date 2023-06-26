@@ -44,6 +44,7 @@ import MobileCoreServices
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
                 configuration.filter = .images
+                configuration.preferredAssetRepresentationMode = .current
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
@@ -63,6 +64,7 @@ import MobileCoreServices
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
+                configuration.preferredAssetRepresentationMode = .current
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
@@ -83,6 +85,7 @@ import MobileCoreServices
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
                 configuration.filter = .videos
+                configuration.preferredAssetRepresentationMode = .current
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
