@@ -1,11 +1,5 @@
 # Changelog
 
-## 5.1.0
-
-### Minor Changes
-
-- feat(ios): add `skipTranscoding` option
-
 ## 5.0.0
 
 ### Major Changes
