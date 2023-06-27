@@ -64,24 +64,27 @@ public class FilePickerPlugin: CAPPlugin {
         savedCall = call
 
         let multiple = call.getBool("multiple", false)
+        let skipTranscoding = call.getBool("skipTranscoding", false)
 
-        implementation?.openImagePicker(multiple: multiple)
+        implementation?.openImagePicker(multiple: multiple, skipTranscoding: skipTranscoding)
     }
 
     @objc func pickMedia(_ call: CAPPluginCall) {
         savedCall = call
 
         let multiple = call.getBool("multiple", false)
+        let skipTranscoding = call.getBool("skipTranscoding", false)
 
-        implementation?.openMediaPicker(multiple: multiple)
+        implementation?.openMediaPicker(multiple: multiple, skipTranscoding: skipTranscoding)
     }
 
     @objc func pickVideos(_ call: CAPPluginCall) {
         savedCall = call
 
         let multiple = call.getBool("multiple", false)
+        let skipTranscoding = call.getBool("skipTranscoding", false)
 
-        implementation?.openVideoPicker(multiple: multiple)
+        implementation?.openVideoPicker(multiple: multiple, skipTranscoding: skipTranscoding)
     }
 
     @objc func notifyPickerDismissedListener() {

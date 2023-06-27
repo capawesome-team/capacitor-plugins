@@ -38,12 +38,13 @@ import MobileCoreServices
         }
     }
 
-    public func openImagePicker(multiple: Bool) {
+    public func openImagePicker(multiple: Bool, skipTranscoding: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
                 configuration.filter = .images
+                configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
@@ -58,11 +59,12 @@ import MobileCoreServices
         }
     }
 
-    public func openMediaPicker(multiple: Bool) {
+    public func openMediaPicker(multiple: Bool, skipTranscoding: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
+                configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
@@ -77,12 +79,13 @@ import MobileCoreServices
         }
     }
 
-    public func openVideoPicker(multiple: Bool) {
+    public func openVideoPicker(multiple: Bool, skipTranscoding: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
                 configuration.selectionLimit = multiple ? 0 : 1
                 configuration.filter = .videos
+                configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
                 picker.modalPresentationStyle = .fullScreen
