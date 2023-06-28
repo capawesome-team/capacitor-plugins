@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.0
+
+### Minor Changes
+
+- [`4b3195d`](https://github.com/capawesome-team/capacitor-plugins/commit/4b3195d27f76c0ad0cae3306c086f611ee07bc69) ([#42](https://github.com/capawesome-team/capacitor-plugins/pull/42)): feat(ios): add `skipTranscoding` option
+
 ## 5.0.0
 
 ### Major Changes
