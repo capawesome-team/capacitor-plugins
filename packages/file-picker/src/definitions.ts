@@ -205,13 +205,15 @@ export interface PickMediaOptions {
    * @default false
    */
   readData?: boolean;
-
   /**
-   * Instruct to skip transcoding of file(s).
+   * Whether to avoid transcoding, if possible.
+   *
+   * On iOS, for example, HEIC images are automatically transcoded to JPEG.
    *
    * Only available on iOS.
    *
    * @default false
+   * @see https://developer.apple.com/documentation/photokit/phpickerconfiguration/assetrepresentationmode/current
    */
   skipTranscoding?: boolean;
 }
