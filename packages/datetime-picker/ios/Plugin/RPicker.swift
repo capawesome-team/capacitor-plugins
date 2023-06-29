@@ -117,10 +117,10 @@ private extension UIView {
 class RPickerController: UIViewController {
 
     // MARK: - Public closuers
-    var onDateSelected : ((_ date: Date) -> Void)?
-    var onCanceled : (() -> Void)?
-    var onBackdropDismissed : (() -> Void)?
-    var onWillDismiss : (() -> Void)?
+    var onDateSelected: ((_ date: Date) -> Void)?
+    var onCanceled: (() -> Void)?
+    var onBackdropDismissed: (() -> Void)?
+    var onWillDismiss: (() -> Void)?
 
     // MARK: - Public variables
     var selectedDate = Date()

@@ -13,6 +13,12 @@ npm install @capawesome-team/capacitor-file-opener
 npx cap sync
 ```
 
+### Android Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -21,8 +27,8 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
-| Android | iOS |
-| ---------- | ---------- |
+| Android                                                                                                                         | iOS                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://user-images.githubusercontent.com/13857929/185747140-7e59ca70-96c9-4d67-a3b3-8fd9c7eb1546.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/185747133-62a2b5e5-ff6f-4b30-871c-4c3609db7829.gif" width="266" /> |
 
 ## Usage
@@ -32,7 +38,7 @@ import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 
 const open = async () => {
   await FileOpener.openFile({
-    path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Images/test.png'
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',
   });
 };
 ```

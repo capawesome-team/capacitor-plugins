@@ -1,14 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <application>
-        <provider
-            android:name=".FileOpenerProvider"
-            android:authorities="${applicationId}.fileopener.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/filepaths"></meta-data>
-        </provider>
-    </application>
 </manifest>

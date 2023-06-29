@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.fileopener;
 
+import android.net.Uri;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -29,13 +30,15 @@ public class FileOpenerPlugin extends Plugin {
                 return;
             }
             String mimeType = call.getString("mimeType");
-            File file = implementation.getFileByPath(path);
-            if (file == null || !file.exists()) {
+
+            Uri uri = implementation.getUriByPath(path);
+            boolean fileExists = implementation.isFileExists(uri);
+            if (!fileExists) {
                 call.reject(ERROR_FILE_NOT_EXIST);
                 return;
             }
 
-            implementation.openFile(file, mimeType);
+            implementation.openFile(uri, mimeType);
             call.resolve();
         } catch (Exception ex) {
             call.reject(ex.getMessage());
