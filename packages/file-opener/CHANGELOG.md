@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.1
+
+### Patch Changes
+
+- [`1e1f23c`](https://github.com/capawesome-team/capacitor-plugins/commit/1e1f23c20c4072566c108f7d88aa333e4de1aa0b) ([#44](https://github.com/capawesome-team/capacitor-plugins/pull/44)): fix(android): returns `File does not exist` although file exists
+
 ## 5.0.0
 
 ### Major Changes
