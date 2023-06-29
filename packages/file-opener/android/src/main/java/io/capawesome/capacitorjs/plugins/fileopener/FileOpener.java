@@ -8,8 +8,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 public class FileOpener {
 
@@ -19,7 +17,7 @@ public class FileOpener {
         this.plugin = plugin;
     }
 
-    public void openFile(@NonNull Uri uri, @Nullable String mimeType) {
+    public Intent createIntent(@NonNull Uri uri, @Nullable String mimeType) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         if (mimeType == null || mimeType.trim().equals("")) {
             intent.setDataAndNormalize(uri);
@@ -27,7 +25,7 @@ public class FileOpener {
             intent.setDataAndTypeAndNormalize(uri, mimeType);
         }
         intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        plugin.getActivity().startActivity(intent);
+        return intent;
     }
 
     public boolean isFileExists(@NonNull Uri uri) {
