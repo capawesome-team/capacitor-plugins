@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.documentfile.provider.DocumentFile;
-
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +40,11 @@ public class FileOpener {
         if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             return uri;
         } else if (uri.getScheme() == null || uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-            return FileProvider.getUriForFile(plugin.getActivity(), plugin.getContext().getPackageName() + ".fileprovider", new File(uri.getPath()));
+            return FileProvider.getUriForFile(
+                plugin.getActivity(),
+                plugin.getContext().getPackageName() + ".fileprovider",
+                new File(uri.getPath())
+            );
         } else {
             return FileProvider.getUriForFile(plugin.getActivity(), plugin.getContext().getPackageName() + ".fileprovider", new File(path));
         }
