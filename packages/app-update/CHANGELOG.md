@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.1
+
+### Patch Changes
+
+- [`0f2a592`](https://github.com/capawesome-team/capacitor-plugins/commit/0f2a5929697a3018a79b5727b5b016312d3a0059) ([#47](https://github.com/capawesome-team/capacitor-plugins/pull/47)): fix(android): replace `com.google.android.play:core` as dependency
+
 ## 5.0.0
 
 ### Major Changes
