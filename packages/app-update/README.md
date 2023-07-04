@@ -14,7 +14,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$androidPlayCoreVersion` version of `com.google.android.play:core` (default: `1.9.0`)
+- `$androidPlayAppUpdateVersion` version of `com.google.android.play:app-update` (default: `2.1.0`)
 - `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.0.1`)
 
 ## Configuration
