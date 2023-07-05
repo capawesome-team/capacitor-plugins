@@ -13,7 +13,24 @@ npm install @capawesome-team/capacitor-file-opener
 npx cap sync
 ```
 
-### Android Variables
+### Android
+
+You need to specify the directories that contain the files you want to open.
+To specify the directories, start by creating the file `file_paths.xml` in the `res/xml/` subdirectory of your project (see [Android docs](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData)).  
+This is an example:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <external-files-path name="external-files" path="." />
+    <external-cache-path name="external-cache" path="." />
+    <external-path name="external" path="." />
+</paths>
+```
+
+#### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
@@ -47,8 +64,8 @@ const open = async () => {
 
 <docgen-index>
 
-* [`openFile(...)`](#openfile)
-* [Interfaces](#interfaces)
+- [`openFile(...)`](#openfile)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -71,11 +88,9 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### OpenFileOptions
 
