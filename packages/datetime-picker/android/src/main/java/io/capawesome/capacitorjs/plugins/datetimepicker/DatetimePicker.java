@@ -76,6 +76,9 @@ public class DatetimePicker {
             calendar.get(Calendar.DAY_OF_MONTH)
         );
         dialog.setOnDismissListener(_dialog -> resultCallback.dismiss());
+        dialog.getDatePicker().setSpinnersShown(true);
+        dialog.getDatePicker().setCalendarViewShown(false);
+
         dialog.create();
 
         Button doneButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
@@ -181,6 +184,22 @@ public class DatetimePicker {
                             return R.style.MaterialLightTheme;
                         case Configuration.UI_MODE_NIGHT_UNDEFINED:
                             return R.style.MaterialLightTheme;
+                    }
+                }
+            case LIGHT_SPINNER:
+                return R.style.MaterialLightThemeSpinner;
+            case DARK_SPINNER:
+                return R.style.MaterialDarkThemeSpinner;
+            case AUTO_SPINNER:
+                {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkThemeSpinner;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightThemeSpinner;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightThemeSpinner;
                     }
                 }
         }

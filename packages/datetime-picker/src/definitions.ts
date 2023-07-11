@@ -91,10 +91,11 @@ export interface PresentOptions {
    * This value overwrites the `theme` configuration value.
    *
    * Only available on Android and iOS.
+   * Spinner options only available on Android
    *
    * @since 0.0.1
    */
-  theme?: 'auto' | 'light' | 'dark';
+  theme?: 'auto' | 'light' | 'dark' | 'auto-spinner' | 'light-spinner' | 'dark-spinner';
   /**
    * The predefined value when opening the picker.
    * The format of this value must match the value of the `format` parameter.
