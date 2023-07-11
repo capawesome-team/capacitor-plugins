@@ -76,7 +76,6 @@ public class DatetimePicker {
             calendar.get(Calendar.DAY_OF_MONTH)
         );
         dialog.setOnDismissListener(_dialog -> resultCallback.dismiss());
-
         dialog.create();
 
         Button doneButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
