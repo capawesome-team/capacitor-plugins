@@ -183,6 +183,22 @@ public class DatetimePicker {
                             return R.style.MaterialLightTheme;
                     }
                 }
+            case LIGHT_SPINNER:
+                return R.style.MaterialLightThemeSpinner;
+            case DARK_SPINNER:
+                return R.style.MaterialDarkThemeSpinner;
+            case AUTO_SPINNER:
+                {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkThemeSpinner;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightThemeSpinner;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightThemeSpinner;
+                    }
+                }
         }
         return R.style.MaterialLightTheme;
     }

@@ -3,5 +3,8 @@ package io.capawesome.capacitorjs.plugins.datetimepicker;
 public enum Theme {
     LIGHT,
     DARK,
-    AUTO
+    AUTO,
+    LIGHT_SPINNER,
+    DARK_SPINNER,
+    AUTO_SPINNER
 }

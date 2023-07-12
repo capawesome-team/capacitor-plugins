@@ -32,6 +32,12 @@ public class DatetimePickerHelper {
                 return Theme.DARK;
             case "auto":
                 return Theme.AUTO;
+            case "light-spinner":
+                return Theme.LIGHT_SPINNER;
+            case "dark-spinner":
+                return Theme.DARK_SPINNER;
+            case "auto-spinner":
+                return Theme.AUTO_SPINNER;
             default:
                 return null;
         }
