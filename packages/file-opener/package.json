@@ -17,10 +17,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capawesome-team/sponsorware.git"
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
   },
   "bugs": {
-    "url": "https://github.com/capawesome-team/capacitor-file-opener/issues"
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
   "funding": [
     {

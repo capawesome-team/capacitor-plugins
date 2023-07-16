@@ -64,8 +64,8 @@ const open = async () => {
 
 <docgen-index>
 
-- [`openFile(...)`](#openfile)
-- [Interfaces](#interfaces)
+* [`openFile(...)`](#openfile)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -88,9 +88,11 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### OpenFileOptions
 
