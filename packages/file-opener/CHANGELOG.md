@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.2
+
+### Patch Changes
+
+- [`454e473`](https://github.com/capawesome-team/capacitor-plugins/commit/454e47340fdc205adf3d11a7ab4d2f0170108f19) ([#59](https://github.com/capawesome-team/capacitor-plugins/pull/59)): fix(android): check if file can be opened
+
 ## 5.0.1
 
 ### Patch Changes
