@@ -9,6 +9,8 @@ body:
       label: Plugin(s)
       description: Select the plugins that this bug affects.
       options:
+        - label: Android Foreground Service
+        - label: Android Battery Optimization
         - label: App Update
         - label: Background Task
         - label: Badge
@@ -17,6 +19,7 @@ body:
         - label: File Opener
         - label: File Picker
         - label: Managed Configurations
+        - label: NFC
         - label: Photo Editor
         - label: Screen Orientation
   - type: checkboxes

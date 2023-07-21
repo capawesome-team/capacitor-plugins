@@ -15,6 +15,7 @@ public class FileOpenerPlugin extends Plugin {
 
     public static final String ERROR_PATH_MISSING = "path must be provided.";
     public static final String ERROR_FILE_NOT_EXIST = "File does not exist.";
+    public static final String ERROR_CANNOT_OPEN_FILE = "File cannot be opened.";
 
     private FileOpener implementation;
 
@@ -41,8 +42,12 @@ public class FileOpenerPlugin extends Plugin {
             }
 
             Intent intent = implementation.createIntent(uri, mimeType);
-            getActivity().startActivity(intent);
-            call.resolve();
+            if (intent.resolveActivity(getContext().getPackageManager()) == null) {
+                call.reject(ERROR_CANNOT_OPEN_FILE);
+            } else {
+                getActivity().startActivity(intent);
+                call.resolve();
+            }
         } catch (Exception ex) {
             String message = ex.getMessage();
             Log.e(TAG, message);

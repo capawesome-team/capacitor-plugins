@@ -17,6 +17,10 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
+| Android                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/062c0623-ebb2-4782-a464-b4bebd2aa58d" width="324" /> |
+
 ## Usage
 
 ```typescript
@@ -46,6 +50,10 @@ editPhoto(options: EditPhotoOptions) => Promise<void>
 ```
 
 Edit a photo at a given path.
+
+**Attention**: A suitable photo editing app must be installed (e.g. Google Photos)
+and the user should overwrite the image when saving
+so that the path to the image is not lost.
 
 Only available on Android.
 
