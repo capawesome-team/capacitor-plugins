@@ -9,6 +9,23 @@ npm install @capawesome/capacitor-photo-editor
 npx cap sync
 ```
 
+### Android
+
+You need to specify the directories that contain the photos you want to edit.
+To specify the directories, start by creating the file `file_paths.xml` in the `res/xml/` subdirectory of your project (see [Android docs](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData)).  
+This is an example:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <external-files-path name="external-files" path="." />
+    <external-cache-path name="external-cache" path="." />
+    <external-path name="external" path="." />
+</paths>
+```
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -35,8 +52,8 @@ const editPhoto = async () => {
 
 <docgen-index>
 
-* [`editPhoto(...)`](#editphoto)
-* [Interfaces](#interfaces)
+- [`editPhoto(...)`](#editphoto)
+- [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -61,11 +78,9 @@ Only available on Android.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#editphotooptions">EditPhotoOptions</a></code> |
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### EditPhotoOptions
 
