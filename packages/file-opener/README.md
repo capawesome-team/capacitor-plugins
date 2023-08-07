@@ -15,7 +15,18 @@ npx cap sync
 
 ### Android
 
-You need to specify the directories that contain the files you want to open.
+You need to specify the set of other apps that your app intends to interact with. 
+Add the following intent to `android/app/src/main/AndroidManifest.xml` inside the `queries` element:
+
+```xml
+<intent>
+  <action android:name="android.intent.action.VIEW" />
+  <category android:name="android.intent.category.BROWSABLE" />
+  <data android:scheme="https" />
+</intent>
+```
+
+You also need to specify the directories that contain the files you want to open.
 To specify the directories, start by creating the file `file_paths.xml` in the `res/xml/` subdirectory of your project (see [Android docs](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData)).  
 This is an example:
 
