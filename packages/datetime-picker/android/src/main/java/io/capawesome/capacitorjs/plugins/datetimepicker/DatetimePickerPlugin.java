@@ -92,9 +92,29 @@ public class DatetimePickerPlugin extends Plugin {
                     androidTimePickerMode
                 );
             } else if (mode.equals("date")) {
-                implementation.presentDatePicker(date, minDate, maxDate, locale, cancelButtonText, doneButtonText, theme, resultCallback, androidDatePickerMode, androidTimePickerMode);
+                implementation.presentDatePicker(
+                    date,
+                    minDate,
+                    maxDate,
+                    locale,
+                    cancelButtonText,
+                    doneButtonText,
+                    theme,
+                    resultCallback,
+                    androidDatePickerMode,
+                    androidTimePickerMode
+                );
             } else if (mode.equals("time")) {
-                implementation.presentTimePicker(date, locale, cancelButtonText, doneButtonText, theme, resultCallback, androidDatePickerMode, androidTimePickerMode);
+                implementation.presentTimePicker(
+                    date,
+                    locale,
+                    cancelButtonText,
+                    doneButtonText,
+                    theme,
+                    resultCallback,
+                    androidDatePickerMode,
+                    androidTimePickerMode
+                );
             } else {
                 call.reject(ERROR_MODE_INVALID);
             }

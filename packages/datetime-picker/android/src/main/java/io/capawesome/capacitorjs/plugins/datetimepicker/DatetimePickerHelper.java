@@ -37,7 +37,7 @@ public class DatetimePickerHelper {
         }
     }
 
-     @Nullable
+    @Nullable
     public static AndroidTimePickerMode convertStringToTimePickerMode(@Nullable String value) {
         if (value == null) {
             return null;
