@@ -32,12 +32,36 @@ public class DatetimePickerHelper {
                 return Theme.DARK;
             case "auto":
                 return Theme.AUTO;
-            case "light-spinner":
-                return Theme.LIGHT_SPINNER;
-            case "dark-spinner":
-                return Theme.DARK_SPINNER;
-            case "auto-spinner":
-                return Theme.AUTO_SPINNER;
+            default:
+                return null;
+        }
+    }
+
+     @Nullable
+    public static AndroidTimePickerMode convertStringToTimePickerMode(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        switch (value) {
+            case "clock":
+                return AndroidTimePickerMode.CLOCK;
+            case "spinner":
+                return AndroidTimePickerMode.SPINNER;
+            default:
+                return null;
+        }
+    }
+
+    @Nullable
+    public static AndroidDatePickerMode convertStringToDatePickerMode(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        switch (value) {
+            case "calendar":
+                return AndroidDatePickerMode.CALENDAR;
+            case "spinner":
+                return AndroidDatePickerMode.SPINNER;
             default:
                 return null;
         }

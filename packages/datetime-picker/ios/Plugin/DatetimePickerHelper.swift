@@ -16,11 +16,11 @@ public class DatetimePickerHelper {
     }
 
     public static func convertStringToTheme(_ value: String) -> Theme? {
-        if value == "light" || value == "light-spinner" {
+        if value == "light" {
             return .light
-        } else if value == "dark" || value == "dark-spinner" {
+        } else if value == "dark" {
             return .dark
-        } else if value == "auto" || value == "auto-spinner" {
+        } else if value == "auto" {
             return .auto
         }
         return nil
