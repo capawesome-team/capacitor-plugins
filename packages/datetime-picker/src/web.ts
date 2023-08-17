@@ -11,6 +11,6 @@ export class DatetimePickerWeb
   implements DatetimePickerPlugin
 {
   public async present(_options: PresentOptions): Promise<PresentResult> {
-    throw this.unimplemented('Not implemented on web. Options: ' + _options);
+    throw this.unimplemented('Not implemented on web.');
   }
 }
