@@ -32,8 +32,8 @@ public class DatetimePicker {
         String doneButtonText,
         @Nullable String theme,
         final PresentResultCallback resultCallback,
-        @Nullable AndroidDatePickerMode androidTimePickerMode,
-        @Nullable AndroidTimePickerMode androidDatePickerMode
+        @Nullable AndroidDatePickerMode androidDatePickerMode,
+        @Nullable AndroidTimePickerMode androidTimePickerMode
     ) {
         PresentResultCallback dateResultCallback = new PresentResultCallback();
         dateResultCallback.setSuccessListener(
@@ -42,7 +42,7 @@ public class DatetimePicker {
                 timeResultCallback.setSuccessListener((Date selectedDateAndTime) -> resultCallback.success(selectedDateAndTime));
                 timeResultCallback.setCancelListener(() -> resultCallback.cancel());
                 timeResultCallback.setDismissListener(() -> resultCallback.dismiss());
-                presentTimePicker(selectedDate, locale, cancelButtonText, doneButtonText, theme, timeResultCallback, androidTimePickerMode, androidTimePickerMode);
+                presentTimePicker(selectedDate, locale, cancelButtonText, doneButtonText, theme, timeResultCallback, androidDatePickerMode, androidTimePickerMode);
             }
         );
         dateResultCallback.setCancelListener(() -> resultCallback.cancel());
