@@ -14,6 +14,7 @@ public class CloudinaryHelper {
         result["resourceType"] = resultData.resourceType
         result["publicId"] = resultData.publicId
         result["url"] = resultData.url
+        result["secureUrl"] = resultData.secureUrl
         result["width"] = resultData.width
         return result
     }

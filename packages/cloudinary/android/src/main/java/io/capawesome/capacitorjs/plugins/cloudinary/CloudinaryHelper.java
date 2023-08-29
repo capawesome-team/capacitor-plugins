@@ -17,6 +17,7 @@ public class CloudinaryHelper {
         result.put("resourceType", resultData.get("resource_type"));
         result.put("publicId", resultData.get("public_id"));
         result.put("url", resultData.get("url"));
+        result.put("secureUrl", resultData.get("secure_url"));
         result.put("width", resultData.get("width"));
         return result;
     }

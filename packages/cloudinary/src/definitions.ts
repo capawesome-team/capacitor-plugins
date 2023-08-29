@@ -161,6 +161,12 @@ export interface UploadResourceResult {
    */
   url: string;
   /**
+   * The secure url of the uploaded resource.
+   *
+   * @since 5.0.1
+   */
+  secureUrl: string;
+  /**
    * The width of the uploaded resource.
    *
    * @since 0.1.4
