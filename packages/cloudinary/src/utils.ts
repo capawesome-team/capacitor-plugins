@@ -47,6 +47,7 @@ export class CloudinaryUtils implements ICloudinaryUtils {
       resourceType: response.resource_type,
       publicId: response.public_id,
       url: response.secure_url,
+      secureUrl: response.secure_url,
       width: response.width,
     };
   }
