@@ -70,7 +70,7 @@ Download a file from Cloudinary as a blob.
 | **`resourceType`**     | <code><a href="#resourcetype">ResourceType</a></code> | The resource type of the uploaded resource.                                              | 0.0.1 |
 | **`publicId`**         | <code>string</code>                                   | The unique public identifier of the uploaded resource.                                   | 0.0.1 |
 | **`url`**              | <code>string</code>                                   | The url of the uploaded resource.                                                        | 0.0.1 |
-| **`secureUrl`**        | <code>string</code>                                   | The secure url of the uploaded resource.                                                 | 5.0.1 |
+| **`secureUrl`**        | <code>string</code>                                   | The secure url of the uploaded resource.                                                 | 5.1.0 |
 | **`width`**            | <code>number</code>                                   | The width of the uploaded resource.                                                      | 0.1.4 |
 
 

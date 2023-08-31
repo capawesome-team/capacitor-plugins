@@ -163,7 +163,7 @@ export interface UploadResourceResult {
   /**
    * The secure url of the uploaded resource.
    *
-   * @since 5.0.1
+   * @since 5.1.0
    */
   secureUrl: string;
   /**

@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-cloudinary': patch
+'@capawesome/capacitor-cloudinary': minor
 ---
 
-feat(cloudinary): add secure url property
+feat(cloudinary): add `secure_url` property
