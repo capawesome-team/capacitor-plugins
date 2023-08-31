@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.fileopener;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -41,15 +42,15 @@ public class FileOpenerPlugin extends Plugin {
                 return;
             }
 
-            Intent intent = implementation.createIntent(uri, mimeType);
-            if (intent.resolveActivity(getContext().getPackageManager()) == null) {
-                call.reject(ERROR_CANNOT_OPEN_FILE);
-            } else {
+            try {
+                Intent intent = implementation.createIntent(uri, mimeType);
                 getActivity().startActivity(intent);
                 call.resolve();
+            } catch (ActivityNotFoundException exception) {
+                call.reject(ERROR_CANNOT_OPEN_FILE);
             }
-        } catch (Exception ex) {
-            String message = ex.getMessage();
+        } catch (Exception exception) {
+            String message = exception.getMessage();
             Log.e(TAG, message);
             call.reject(message);
         }
