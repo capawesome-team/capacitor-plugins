@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.0
+
+### Minor Changes
+
+- [`202bfb9`](https://github.com/capawesome-team/capacitor-plugins/commit/202bfb98697d6ebc1baa98c3b4daeda711f7697d) ([#51](https://github.com/capawesome-team/capacitor-plugins/pull/51)): feat(android): support spinner mode
+
 ## 5.0.0
 
 ### Major Changes
