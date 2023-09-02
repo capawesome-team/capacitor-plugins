@@ -16,6 +16,24 @@ declare module '@capacitor/cli' {
        * @default 'auto'
        */
       theme?: 'auto' | 'light' | 'dark';
+      /**
+       * Whether to use the spinner or clock mode for the time picker on Android.
+       *
+       * Only available on Android.
+       *
+       * @since 5.1.0
+       * @default 'clock'
+       */
+      androidTimePickerMode?: 'clock' | 'spinner';
+      /**
+       * Whether to use the calendar or spinner mode for the date picker on Android.
+       *
+       * Only available on Android.
+       *
+       * @since 5.1.0
+       * @default 'calendar'
+       */
+      androidDatePickerMode?: 'calendar' | 'spinner';
     };
   }
 }
@@ -91,6 +109,7 @@ export interface PresentOptions {
    * This value overwrites the `theme` configuration value.
    *
    * Only available on Android and iOS.
+   * Spinner options only available on Android
    *
    * @since 0.0.1
    */
@@ -102,6 +121,24 @@ export interface PresentOptions {
    * @since 0.0.1
    */
   value?: string;
+  /**
+   * Whether to use the spinner or clock mode for the time picker on Android.
+   * This value overwrites the `androidTimePickerMode` configuration value.
+   *
+   * Only available on Android.
+   *
+   * @since 5.1.0
+   */
+  androidTimePickerMode?: 'clock' | 'spinner';
+  /**
+   * Whether to use the calendar or spinner mode for the date picker on Android.
+   * This value overwrites the `androidDatePickerMode` configuration value.
+   *
+   * Only available on Android.
+   *
+   * @since 5.1.0
+   */
+  androidDatePickerMode?: 'calendar' | 'spinner';
 }
 
 export interface PresentResult {

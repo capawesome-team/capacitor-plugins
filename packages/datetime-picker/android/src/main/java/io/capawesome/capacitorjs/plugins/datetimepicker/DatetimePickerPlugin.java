@@ -39,7 +39,17 @@ public class DatetimePickerPlugin extends Plugin {
             String value = call.getString("value");
             String cancelButtonText = call.getString("cancelButtonText", "Cancel");
             String doneButtonText = call.getString("doneButtonText", "Ok");
+            String androidTimePickerModeText = call.getString("androidTimePickerMode", "clock");
+            String androidDatePickerModeText = call.getString("androidDatePickerMode", "calendar");
 
+            AndroidDatePickerMode androidDatePickerMode = null;
+            if (androidDatePickerModeText != null) {
+                androidDatePickerMode = DatetimePickerHelper.convertStringToDatePickerMode(androidDatePickerModeText);
+            }
+            AndroidTimePickerMode androidTimePickerMode = null;
+            if (androidTimePickerModeText != null) {
+                androidTimePickerMode = DatetimePickerHelper.convertStringToTimePickerMode(androidTimePickerModeText);
+            }
             Locale locale = null;
             if (localeString != null) {
                 locale = DatetimePickerHelper.convertStringToLocale(localeString);
@@ -77,12 +87,34 @@ public class DatetimePickerPlugin extends Plugin {
                     cancelButtonText,
                     doneButtonText,
                     theme,
-                    resultCallback
+                    resultCallback,
+                    androidDatePickerMode,
+                    androidTimePickerMode
                 );
             } else if (mode.equals("date")) {
-                implementation.presentDatePicker(date, minDate, maxDate, locale, cancelButtonText, doneButtonText, theme, resultCallback);
+                implementation.presentDatePicker(
+                    date,
+                    minDate,
+                    maxDate,
+                    locale,
+                    cancelButtonText,
+                    doneButtonText,
+                    theme,
+                    resultCallback,
+                    androidDatePickerMode,
+                    androidTimePickerMode
+                );
             } else if (mode.equals("time")) {
-                implementation.presentTimePicker(date, locale, cancelButtonText, doneButtonText, theme, resultCallback);
+                implementation.presentTimePicker(
+                    date,
+                    locale,
+                    cancelButtonText,
+                    doneButtonText,
+                    theme,
+                    resultCallback,
+                    androidDatePickerMode,
+                    androidTimePickerMode
+                );
             } else {
                 call.reject(ERROR_MODE_INVALID);
             }

@@ -37,6 +37,36 @@ public class DatetimePickerHelper {
         }
     }
 
+    @Nullable
+    public static AndroidTimePickerMode convertStringToTimePickerMode(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        switch (value) {
+            case "clock":
+                return AndroidTimePickerMode.CLOCK;
+            case "spinner":
+                return AndroidTimePickerMode.SPINNER;
+            default:
+                return null;
+        }
+    }
+
+    @Nullable
+    public static AndroidDatePickerMode convertStringToDatePickerMode(@Nullable String value) {
+        if (value == null) {
+            return null;
+        }
+        switch (value) {
+            case "calendar":
+                return AndroidDatePickerMode.CALENDAR;
+            case "spinner":
+                return AndroidDatePickerMode.SPINNER;
+            default:
+                return null;
+        }
+    }
+
     public static Locale convertStringToLocale(String value) {
         return Locale.forLanguageTag(value);
     }

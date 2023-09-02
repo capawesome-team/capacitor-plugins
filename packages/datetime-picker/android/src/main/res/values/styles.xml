@@ -1,4 +1,30 @@
 <resources>
     <style name="MaterialLightTheme" parent="android:Theme.Material.Light.Dialog.Alert"></style>
     <style name="MaterialDarkTheme" parent="android:Theme.Material.Dialog.Alert"></style>
+    <style name="MaterialLightTheme.DatePickerStyleSpinner" parent="MaterialLightTheme">
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+    <style name="MaterialDarkTheme.DatePickerStyleSpinner" parent="MaterialDarkTheme">
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+     <style name="MaterialLightTheme.TimePickerStyleSpinner" parent="MaterialLightTheme">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+     </style>
+     <style name="MaterialDarkTheme.TimePickerStyleSpinner" parent="MaterialDarkTheme">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+     </style>
+    <style name="MaterialLightTheme.DateTimePickerStyleSpinner" parent="MaterialLightTheme">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+    <style name="MaterialDarkTheme.DateTimePickerStyleSpinner" parent="MaterialDarkTheme">
+        <item name="android:timePickerStyle">@style/SpinnerTimePicker</item>
+        <item name="android:datePickerStyle">@style/SpinnerDatePicker</item>
+    </style>
+     <style name="SpinnerDatePicker" parent="android:Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+     </style>
+     <style name="SpinnerTimePicker" parent="android:Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
 </resources>
