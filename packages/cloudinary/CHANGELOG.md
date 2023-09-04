@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.0
+
+### Minor Changes
+
+- [`78cf2a8`](https://github.com/capawesome-team/capacitor-plugins/commit/78cf2a82342c49ab7ee634767e6673e9dcdb2c81) ([#70](https://github.com/capawesome-team/capacitor-plugins/pull/70)): feat(cloudinary): add `secure_url` property
+
 ## 5.0.0
 
 ### Major Changes

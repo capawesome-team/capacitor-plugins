@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.3
+
+### Patch Changes
+
+- [`6060d2c`](https://github.com/capawesome-team/capacitor-plugins/commit/6060d2c2c12e2235a2b424a13c62ca0320d76c49) ([#71](https://github.com/capawesome-team/capacitor-plugins/pull/71)): fix(android): remove `resolveActivity` check
+
 ## 5.0.2
 
 ### Patch Changes
