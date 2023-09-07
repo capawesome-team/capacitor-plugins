@@ -223,14 +223,12 @@ import MobileCoreServices
         return "\(uniqueId)_\(fileName)"
     }
 
-   private func saveTemporaryFile(_ sourceUrl: URL) throws -> URL {
+    private func saveTemporaryFile(_ sourceUrl: URL) throws -> URL {
         var directory = URL(fileURLWithPath: NSTemporaryDirectory())
         if let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
             directory = cachesDirectory
         }
-        let uniqueFileName = generateUniqueFileName(sourceUrl)
-        let targetUrl = directory.appendingPathComponent(uniqueFileName)
-
+        let targetUrl = directory.appendingPathComponent(sourceUrl.lastPathComponent)
         do {
             try deleteFile(targetUrl)
         }
