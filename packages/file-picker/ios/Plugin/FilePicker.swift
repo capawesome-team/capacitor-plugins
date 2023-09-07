@@ -213,11 +213,14 @@ import MobileCoreServices
     }
 
     private func saveTemporaryFile(_ sourceUrl: URL) throws -> URL {
-        var directory = URL(fileURLWithPath: NSTemporaryDirectory())
+        let uniqueFolderName = UUID().uuidString
+        var directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(uniqueFolderName)
         if let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
-            directory = cachesDirectory
+            directory = cachesDirectory.appendingPathComponent(uniqueFolderName)
         }
-        let targetUrl = directory.appendingPathComponent(sourceUrl.lastPathComponent)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+        let uniqueFileName = "\(directory.lastPathComponent)_\(sourceUrl.lastPathComponent)"
+        let targetUrl = directory.appendingPathComponent(uniqueFileName)
         do {
             try deleteFile(targetUrl)
         }
