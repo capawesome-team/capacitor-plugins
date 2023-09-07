@@ -104,14 +104,9 @@ import MobileCoreServices
         return url.absoluteString
     }
 
-     public func getNameFromUrl(_ url: URL) -> String {
-            let fileName = url.lastPathComponent
-            if let range = fileName.range(of: "_") {
-                let index = range.upperBound
-                return String(fileName.suffix(from: index))
-            }
-            return fileName
-        }
+    public func getNameFromUrl(_ url: URL) -> String {
+        return url.lastPathComponent
+    }
 
     public func getDataFromUrl(_ url: URL) throws -> String {
         let data = try Data(contentsOf: url)
@@ -215,12 +210,6 @@ import MobileCoreServices
     private func isVideoUrl(_ url: URL) -> Bool {
         let mimeType = self.getMimeTypeFromUrl(url)
         return mimeType.hasPrefix("video")
-    }
-
-    private func generateUniqueFileName(_ sourceUrl: URL) -> String {
-        let fileName = sourceUrl.lastPathComponent
-        let uniqueId = UUID().uuidString
-        return "\(uniqueId)_\(fileName)"
     }
 
     private func saveTemporaryFile(_ sourceUrl: URL) throws -> URL {
