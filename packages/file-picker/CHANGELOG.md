@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.1
+
+### Patch Changes
+
+- [`0abee4e`](https://github.com/capawesome-team/capacitor-plugins/commit/0abee4e2807fbd9a7c5f56b7adbbe4890a58e399) ([#73](https://github.com/capawesome-team/capacitor-plugins/pull/73)): fix(ios): copy picked files to unique directories
+
 ## 5.1.0
 
 ### Minor Changes
