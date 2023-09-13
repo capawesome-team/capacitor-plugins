@@ -13,19 +13,20 @@ import MobileCoreServices
         self.plugin = plugin
     }
 
-    public func convertHeicToJpeg(_ sourceUrl: URL) throws -> String? {
+    public func convertHeicToJpeg(_ sourceUrl: URL) throws -> URL? {
         let heicImage = UIImage(named: sourceUrl.path)
         guard let heicImage = heicImage else {
             return nil
         }
         let jpegImageData = heicImage.jpegData(compressionQuality: 0.9)
+        let directory = try self.createUniqueTemporaryDirectory()
         let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
-        let targetUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("\(filenameWithoutExtension).jpeg")
+        let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
         do {
             try deleteFile(targetUrl)
         }
         try jpegImageData?.write(to: targetUrl)
-        return targetUrl.absoluteString
+        return targetUrl
     }
 
     public func openDocumentPicker(multiple: Bool, documentTypes: [String]) {
@@ -213,16 +214,23 @@ import MobileCoreServices
     }
 
     private func saveTemporaryFile(_ sourceUrl: URL) throws -> URL {
-        var directory = URL(fileURLWithPath: NSTemporaryDirectory())
-        if let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
-            directory = cachesDirectory
-        }
+        let directory = try self.createUniqueTemporaryDirectory()
         let targetUrl = directory.appendingPathComponent(sourceUrl.lastPathComponent)
         do {
             try deleteFile(targetUrl)
         }
         try FileManager.default.copyItem(at: sourceUrl, to: targetUrl)
         return targetUrl
+    }
+    
+    private func createUniqueTemporaryDirectory() throws -> URL {
+        let uniqueFolderName = UUID().uuidString
+        var directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(uniqueFolderName)
+        if let cachesDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            directory = cachesDirectory.appendingPathComponent(uniqueFolderName)
+        }
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true, attributes: nil)
+        return directory
     }
 
     private func deleteFile(_ url: URL) throws {
