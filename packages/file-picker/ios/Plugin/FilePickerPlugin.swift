@@ -35,14 +35,14 @@ public class FilePickerPlugin: CAPPlugin {
         }
 
         do {
-            let jpegPath = try implementation?.convertHeicToJpeg(url)
-            guard let jpegPath = jpegPath else {
+            let jpegUrl = try implementation?.convertHeicToJpeg(url)
+            guard let jpegUrl = jpegUrl else {
                 call.reject(errorConvertFailed)
                 return
             }
 
             var result = JSObject()
-            result["path"] = jpegPath
+            result["path"] = jpegUrl.absoluteString
             call.resolve(result)
         } catch let error as NSError {
             call.reject(error.localizedDescription, nil, error)
