@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.1.1
+
+### Patch Changes
+
+- [`4701f7a`](https://github.com/capawesome-team/capacitor-plugins/commit/4701f7a27888b960c2e5f6087cb2e076a67e35b4) ([#77](https://github.com/capawesome-team/capacitor-plugins/pull/77)): fix(android): missing null check on `max`
+
 ## 5.1.0
 
 ### Minor Changes
