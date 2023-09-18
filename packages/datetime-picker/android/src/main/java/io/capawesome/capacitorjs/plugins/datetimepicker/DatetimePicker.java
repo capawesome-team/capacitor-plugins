@@ -118,7 +118,7 @@ public class DatetimePicker {
         if (minDate != null) {
             picker.setMinDate(minDate.getTime());
         }
-        if (minDate != null) {
+        if (maxDate != null) {
             picker.setMaxDate(maxDate.getTime());
         }
 
