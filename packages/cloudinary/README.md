@@ -225,7 +225,7 @@ further processing after downloading.
 
 ## Utils
 
-See [docs/utils/README.md](/docs/utils/README.md).
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/cloudinary/docs/utils/README.md).
 
 ## Changelog
 
