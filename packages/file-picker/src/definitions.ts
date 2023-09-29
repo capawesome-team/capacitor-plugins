@@ -92,6 +92,15 @@ export interface ConvertHeicToJpegResult {
 
 export interface PickFilesOptions {
   /**
+   * Request persistent file access for reusing received path after app restart or system reboot.
+   *
+   * Only available on Android, iOS paths are persistent by default.
+   *
+   * @since 5.1.2
+   * @default false
+   */
+  persistContentUri?: boolean;
+  /**
    * List of accepted file types.
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
    *

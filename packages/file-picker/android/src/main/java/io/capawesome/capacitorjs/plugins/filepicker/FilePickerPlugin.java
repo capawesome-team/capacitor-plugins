@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.filepicker;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -16,6 +17,7 @@ import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.json.JSONException;
 
 @CapacitorPlugin(name = "FilePicker")
@@ -39,11 +41,13 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickFiles(PluginCall call) {
         try {
+            boolean persistContentUri = call.getBoolean("persistContentUri", false);
+            String intentAction = persistContentUri ? Intent.ACTION_OPEN_DOCUMENT : Intent.ACTION_GET_CONTENT;
             JSArray types = call.getArray("types", null);
             boolean multiple = call.getBoolean("multiple", false);
             String[] parsedTypes = parseTypesOption(types);
 
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            Intent intent = new Intent(intentAction);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
@@ -139,11 +143,12 @@ public class FilePickerPlugin extends Plugin {
             if (call == null) {
                 return;
             }
+            boolean persistContentUri = call.getBoolean("persistContentUri", false);
             boolean readData = call.getBoolean("readData", false);
             int resultCode = result.getResultCode();
             switch (resultCode) {
                 case Activity.RESULT_OK:
-                    JSObject callResult = createPickFilesResult(result.getData(), readData);
+                    JSObject callResult = createPickFilesResult(result.getData(), persistContentUri, readData);
                     call.resolve(callResult);
                     break;
                 case Activity.RESULT_CANCELED:
@@ -159,7 +164,8 @@ public class FilePickerPlugin extends Plugin {
         }
     }
 
-    private JSObject createPickFilesResult(@Nullable Intent data, boolean readData) {
+    private JSObject createPickFilesResult(@Nullable Intent data, boolean persistContentUri, boolean readData) {
+        ContentResolver contentResolver = getContext().getContentResolver();
         JSObject callResult = new JSObject();
         List<JSObject> filesResultList = new ArrayList<>();
         if (data == null) {
@@ -180,6 +186,9 @@ public class FilePickerPlugin extends Plugin {
             Uri uri = uris.get(i);
             if (uri == null) {
                 continue;
+            }
+            if (persistContentUri) {
+                contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             }
             JSObject fileResult = new JSObject();
             if (readData) {
