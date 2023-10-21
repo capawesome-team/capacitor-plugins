@@ -54,7 +54,7 @@ Click on the name of the desired plugin under the [`Plugins`](#plugins) section 
 
 ## Changelogs
 
-Each plugin has its own `CHANGELOG.md` file which contains information about version changes.****
+Each plugin has its own `CHANGELOG.md` file which contains information about version changes.
 Click on the name of the desired plugin under the [`Plugins`](#plugins) section to get to the plugin folder.
 
 ## Breaking Changes
