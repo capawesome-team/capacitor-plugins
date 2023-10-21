@@ -1,7 +1,7 @@
 {
-  "name": "@capawesome-team/capacitor-datetime-picker",
-  "version": "5.1.1",
-  "description": "Capacitor plugin that let the user easily enter both a date and a time.",
+  "name": "@capawesome-team/capacitor-android-battery-optimization",
+  "version": "5.0.0",
+  "description": "Capacitor plugin to access battery optimization settings on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -9,9 +9,7 @@
   "files": [
     "android/src/main/",
     "android/build.gradle",
-    "dist/",
-    "ios/Plugin/",
-    "CapawesomeTeamCapacitorDatetimePicker.podspec"
+    "dist/"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
@@ -32,23 +30,21 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/datetime-picker/",
+  "homepage": "https://capawesome.io/plugins/android-battery-optimization/",
   "keywords": [
     "capacitor",
     "plugin",
     "native"
   ],
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
+    "verify": "npm run verify:android && npm run verify:web",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
-    "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
-    "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
+    "lint": "npm run eslint && npm run prettier -- --check",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
-    "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api DatetimePickerPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api BatteryOptimizationPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
@@ -59,28 +55,21 @@
     "@capacitor/cli": "5.0.0",
     "@capacitor/core": "5.0.0",
     "@capacitor/docgen": "0.0.18",
-    "@capacitor/ios": "5.0.0",
     "@ionic/eslint-config": "0.3.0",
-    "@ionic/swiftlint-config": "1.1.2",
     "eslint": "7.32.0",
     "prettier": "2.3.2",
     "prettier-plugin-java": "1.0.2",
     "rimraf": "3.0.2",
     "rollup": "2.77.2",
-    "swiftlint": "1.0.1",
     "typescript": "4.1.5"
   },
   "peerDependencies": {
     "@capacitor/core": "^5.0.0"
   },
-  "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },
   "capacitor": {
-    "ios": {
-      "src": "ios"
-    },
     "android": {
       "src": "android"
     }
