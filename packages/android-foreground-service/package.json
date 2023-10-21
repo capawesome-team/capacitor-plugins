@@ -1,0 +1,77 @@
+{
+  "name": "@capawesome-team/capacitor-android-foreground-service",
+  "version": "5.0.0",
+  "description": "Capacitor plugin to run a foreground service on Android.",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle",
+    "dist/"
+  ],
+  "author": "Robin Genz <mail@robingenz.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/capawesome-team/"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/capawesome"
+    }
+  ],
+  "homepage": "https://capawesome.io/plugins/android-foreground-service/",
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "scripts": {
+    "verify": "npm run verify:android && npm run verify:web",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
+    "lint": "npm run eslint && npm run prettier -- --check",
+    "fmt": "npm run eslint -- --fix && npm run prettier -- --write",
+    "eslint": "eslint . --ext ts",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
+    "docgen": "docgen --api ForegroundServicePlugin --output-readme README.md --output-json dist/docs.json",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "clean": "rimraf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "5.0.0",
+    "@capacitor/cli": "5.0.0",
+    "@capacitor/core": "5.0.0",
+    "@capacitor/docgen": "0.0.18",
+    "@ionic/eslint-config": "0.3.0",
+    "eslint": "7.32.0",
+    "prettier": "2.3.2",
+    "prettier-plugin-java": "1.0.2",
+    "rimraf": "3.0.2",
+    "rollup": "2.77.2",
+    "typescript": "4.1.5"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@ionic/eslint-config/recommended"
+  },
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  }
+}
