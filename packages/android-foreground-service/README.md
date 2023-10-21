@@ -307,8 +307,8 @@ Remove all listeners for this plugin.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-android-foreground-service/blob/main/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-foreground-service/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-android-foreground-service/blob/main/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-foreground-service/LICENSE).
