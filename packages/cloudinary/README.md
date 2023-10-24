@@ -171,7 +171,7 @@ further processing after downloading.
 | Prop                   | Type                                                  | Description                                                                              | Since |
 | ---------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----- |
 | **`assetId`**          | <code>string</code>                                   | The unique asset identifier of the uploaded resource. Only available on Android and Web. | 0.0.1 |
-| **`bytes`**            | <code>number</code>                                   | The number of bytes of the uploaded resource. Only available on Android and Web.         | 0.0.1 |
+| **`bytes`**            | <code>number</code>                                   | The number of bytes of the uploaded resource.                                            | 0.0.1 |
 | **`createdAt`**        | <code>string</code>                                   | The timestamp at which the resource was uploaded.                                        | 0.0.1 |
 | **`duration`**         | <code>number</code>                                   | The duration of the uploaded resource in seconds.                                        | 0.1.5 |
 | **`format`**           | <code>string</code>                                   | The format of the uploaded resource.                                                     | 0.0.1 |
