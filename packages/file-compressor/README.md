@@ -23,17 +23,15 @@ However, we kindly ask you to respect our **fair use policy**:
 
 ## Demo
 
-A working example can be found here: [capawesome-team/capacitor-nfc-demo](https://github.com/capawesome-team/capacitor-nfc-demo)
+A working example can be found here: [capawesome-team/capacitor-plugin-demo](https://github.com/capawesome-team/capacitor-plugin-demo)
 
-| Android                                                                                                                         | iOS                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" /> |
+| Android                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" /> |
 
 ## Installation
 
 See [Getting started with Insiders](https://capawesome.io/insiders/getting-started/?plugin=capacitor-file-compressor) and follow the instructions to install the plugin.
-
-After that, follow the platform-specific instructions in the sections [Android](#android) and [iOS](#ios).
 
 ### Android
 
@@ -50,12 +48,15 @@ No configuration required for this plugin.
 ## Usage
 
 ```typescript
-import { Nfc, NfcUtils, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
+import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
-const createNdefTextRecord = () => {
-  const utils = new NfcUtils();
-  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
-  return record;
+const compressImage = () => {
+  const { path } = await FileCompressor.compressImage({
+    mimeType: 'image/jpeg',
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
+    quality: 0.7,
+  });
+  return path;
 };
 ```
 
@@ -79,10 +80,7 @@ compressImage(options: CompressImageOptions) => Promise<CompressImageResult>
 
 Compress an image.
 
-The following image formats are supported:
-- JPEG
-- PNG
-- WEBP
+**Attention**: This method was only tested with png, jpeg and webp images.
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
@@ -108,12 +106,12 @@ The following image formats are supported:
 
 #### CompressImageOptions
 
-| Prop           | Type                | Description                                                                                        | Default          | Since |
-| -------------- | ------------------- | -------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`blob`**     | <code>Blob</code>   | The blob of the file to compress. Only available on Web.                                           |                  | 5.0.0 |
-| **`mimeType`** | <code>string</code> | The mime type of the compressed file. On Web, only `image/jpeg` and `image/webp` is supported.     |                  | 5.0.0 |
-| **`path`**     | <code>string</code> | The path of the file to compress. The file will be overwritten. Only available on Android and iOS. |                  | 5.0.0 |
-| **`quality`**  | <code>number</code> | The quality of the resulting image. This must be a number between `0` and `1`.                     | <code>0.8</code> | 5.0.0 |
+| Prop           | Type                | Description                                                                                                                                                                                                                    | Default                   | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The blob of the file to compress. Only available on Web.                                                                                                                                                                       |                           | 5.0.0 |
+| **`mimeType`** | <code>string</code> | The mime type of the compressed file. On Android, only `image/jpeg` and `image/webp` are supported. On iOS, only `image/jpeg` is supported. On Web, only `image/jpeg` and `image/webp` are supported.                          | <code>'image/jpeg'</code> | 5.0.0 |
+| **`path`**     | <code>string</code> | The path of the file to compress. Only available on Android and iOS.                                                                                                                                                           |                           | 5.0.0 |
+| **`quality`**  | <code>number</code> | The quality of the resulting image, expressed as a value from `0.0` to `1.0`. The value `0.0` represents the maximum compression (or lowest quality) while the value `1.0` represents the least compression (or best quality). | <code>0.6</code>          | 5.0.0 |
 
 </docgen-api>
 
