@@ -14,7 +14,7 @@ export interface OpenFileOptions {
    * The path of the file.
    *
    * @since 0.0.1
-   * @example '/storage/emulated/0/DCIM/Camera/IMG_20220808_1234.jpg'
+   * @example 'content://com.android.providers.downloads.documents/document/msf%3A1000000073'
    */
   path: string;
   /**
