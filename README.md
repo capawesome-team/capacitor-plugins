@@ -24,8 +24,8 @@ It can grow thanks to the support by these awesome people.
 If you'd like to join them, please read more [here](https://github.com/sponsors/capawesome-team).
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/capawesome-team/static/main/images/sponsors/sponsors.svg">
-    <img src="https://raw.githubusercontent.com/capawesome-team/static/main/images/sponsors/sponsors.svg" />
+  <a href="https://cdn.jsdelivr.net/gh/capawesome-team/static/images/sponsors/sponsors.svg">
+    <img src="https://cdn.jsdelivr.net/gh/capawesome-team/static/images/sponsors/sponsors.svg" />
   </a>
 </p>
 
