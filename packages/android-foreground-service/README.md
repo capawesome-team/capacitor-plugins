@@ -19,7 +19,7 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 ```
 
-You also need to add the following receiver and service **in** the `application` tag in your `AndroidManifest.xml`:
+You also need to add the following receiver and service **inside** the `application` tag in your `AndroidManifest.xml`:
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationActionBroadcastReceiver" />

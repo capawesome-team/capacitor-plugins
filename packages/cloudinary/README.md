@@ -26,7 +26,7 @@ This API requires the following permission be added to your `AndroidManifest.xml
 <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 ```
 
-You also need to add the following receiver **in** the `application` tag in your `AndroidManifest.xml`:
+You also need to add the following receiver **inside** the `application` tag in your `AndroidManifest.xml`:
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.cloudinary.DownloadBroadcastReceiver" android:exported="true">
