@@ -10,7 +10,7 @@ import MobileCoreServices
         self.plugin = plugin
     }
 
-    @objc public func openFile(url: URL, mimeType: String?, completion: @escaping () -> Void) {
+    @objc public func openFile(url: URL, mimeType: String?, completion: @escaping (Bool) -> Void) {
         if self.interactionController == nil {
             self.interactionController = UIDocumentInteractionController()
         }
@@ -25,8 +25,13 @@ import MobileCoreServices
             strongSelf.interactionController?.url = url
             strongSelf.interactionController?.uti = uti
             strongSelf.interactionController?.delegate = strongSelf
-            strongSelf.interactionController?.presentPreview(animated: true)
-            completion()
+            let isPresentPreview = strongSelf.interactionController?.presentPreview(animated: true)
+            if(isPresentPreview == false){
+                 completion(false)
+            }
+            else{
+                 completion(true)
+            }
         }
     }
 
