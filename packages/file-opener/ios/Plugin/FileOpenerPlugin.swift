@@ -29,9 +29,9 @@ public class FileOpenerPlugin: CAPPlugin {
         }
 
         implementation?.openFile(url: url, mimeType: mimeType, completion: {completionResult in
-            if completionResult == false{
+            if completionResult == false {
                 call.reject(self.errorCannotOpenFile)
-            }else{
+            } else {
                 call.resolve()
             }
         })

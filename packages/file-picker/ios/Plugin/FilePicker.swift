@@ -222,7 +222,7 @@ import MobileCoreServices
         try FileManager.default.copyItem(at: sourceUrl, to: targetUrl)
         return targetUrl
     }
-    
+
     private func createUniqueTemporaryDirectory() throws -> URL {
         let uniqueFolderName = UUID().uuidString
         var directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(uniqueFolderName)

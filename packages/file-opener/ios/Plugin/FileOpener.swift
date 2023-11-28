@@ -26,11 +26,10 @@ import MobileCoreServices
             strongSelf.interactionController?.uti = uti
             strongSelf.interactionController?.delegate = strongSelf
             let isPresentPreview = strongSelf.interactionController?.presentPreview(animated: true)
-            if(isPresentPreview == false){
-                 completion(false)
-            }
-            else{
-                 completion(true)
+            if isPresentPreview == false {
+                completion(false)
+            } else {
+                completion(true)
             }
         }
     }
