@@ -9,6 +9,7 @@ import Capacitor
 public class FileOpenerPlugin: CAPPlugin {
     public let errorPathMissing = "path must be provided."
     public let errorFileNotExist = "File does not exist."
+    public let errorCannotOpenFile = "File cannot be opened."
 
     private var implementation: FileOpener?
 
@@ -27,8 +28,12 @@ public class FileOpenerPlugin: CAPPlugin {
             return
         }
 
-        implementation?.openFile(url: url, mimeType: mimeType, completion: {
-            call.resolve()
+        implementation?.openFile(url: url, mimeType: mimeType, completion: {completionResult in
+            if completionResult == false{
+                call.reject(self.errorCannotOpenFile)
+            }else{
+                call.resolve()
+            }
         })
     }
 }
