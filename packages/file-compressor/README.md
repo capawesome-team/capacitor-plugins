@@ -31,7 +31,7 @@ A working example can be found here: [capawesome-team/capacitor-plugin-demo](htt
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/insiders/getting-started/?plugin=capacitor-file-compressor) and follow the instructions to install the plugin.
+See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-file-compressor) and follow the instructions to install the plugin.
 
 ### Android
 
