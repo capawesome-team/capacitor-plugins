@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.4
+
+### Patch Changes
+
+- [`36ebeca`](https://github.com/capawesome-team/capacitor-plugins/commit/36ebecab922ecd045c6c8163b330ee3142cd7bfd) ([#96](https://github.com/capawesome-team/capacitor-plugins/pull/96)): fix(ios): throw an error if the file could not be opened
+
 ## 5.0.3
 
 ### Patch Changes
