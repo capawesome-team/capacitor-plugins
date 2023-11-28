@@ -1,5 +1,5 @@
 ---
-'@capawesome-team/capacitor-file-opener': major
+'@capawesome-team/capacitor-file-opener': patch
 ---
 
-iOS file opening function fixed to throw an exception on failure for improved error handling.
+fix(ios): throw an error if the file could not be opened
