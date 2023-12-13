@@ -30,7 +30,9 @@ import Capacitor
             strongSelf.requestGeometryUpdate(orientationValue: nextOrientationValue, orientationMask: nextOrientationMask)
             ScreenOrientation.supportedInterfaceOrientations = nextOrientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
-            strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
+            if #unavailable(iOS 16) {
+                strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
+            }
             strongSelf.notifyOrientationChangeListeners(orientationType)
             completion()
         }
@@ -55,7 +57,7 @@ import Capacitor
         }
         completion(cachedOrientationType)
     }
-
+    
     @objc private func requestGeometryUpdate(orientationValue: Int, orientationMask: UIInterfaceOrientationMask) {
         if #available(iOS 16, *) {
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
@@ -98,7 +100,7 @@ import Capacitor
         self.currentOrientationType = orientationType
         self.plugin.notifyOrientationChangeListeners(orientationType)
     }
-
+    
     @objc private func convertOrientationValueToMask(_ orientationValue: Int) -> UIInterfaceOrientationMask {
         switch orientationValue {
         case UIInterfaceOrientation.landscapeLeft.rawValue:
