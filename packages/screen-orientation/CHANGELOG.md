@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.0.1
+
+### Patch Changes
+
+- [`89ab014`](https://github.com/capawesome-team/capacitor-plugins/commit/89ab014dba722e4ded1822a4862b04a8c621df47) ([#101](https://github.com/capawesome-team/capacitor-plugins/pull/101)): fix(ios): `None of the requested orientations are supported by the view controller` error
+
 ## 5.0.0
 
 ### Major Changes
