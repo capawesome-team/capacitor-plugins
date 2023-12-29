@@ -65,8 +65,9 @@ public class FilePickerPlugin: CAPPlugin {
 
         let multiple = call.getBool("multiple", false)
         let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit")
 
-        implementation?.openImagePicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openImagePicker(multiple: multiple, skipTranscoding: skipTranscoding, limit: limit)
     }
 
     @objc func pickMedia(_ call: CAPPluginCall) {
@@ -74,8 +75,9 @@ public class FilePickerPlugin: CAPPlugin {
 
         let multiple = call.getBool("multiple", false)
         let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit")
 
-        implementation?.openMediaPicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openMediaPicker(multiple: multiple, skipTranscoding: skipTranscoding, limit: limit)
     }
 
     @objc func pickVideos(_ call: CAPPluginCall) {
@@ -83,8 +85,9 @@ public class FilePickerPlugin: CAPPlugin {
 
         let multiple = call.getBool("multiple", false)
         let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit")
 
-        implementation?.openVideoPicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openVideoPicker(multiple: multiple, skipTranscoding: skipTranscoding, limit: limit)
     }
 
     @objc func notifyPickerDismissedListener() {
