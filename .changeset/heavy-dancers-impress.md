@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-file-picker': patch
+'@capawesome/capacitor-file-picker': minor
 ---
 
-feat(file-picker): Create the option to define a limit for the number of files picked by user - only on ios
+feat(ios): add `limit` option
