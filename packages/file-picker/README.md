@@ -273,12 +273,12 @@ Remove all listeners for this plugin.
 
 #### PickMediaOptions
 
-| Prop                  | Type                 | Description                                                                                                                              | Default            |
-| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`multiple`**        | <code>boolean</code> | Whether multiple files may be selected.                                                                                                  | <code>false</code> |
-| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                           | <code>false</code> |
-| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS. | <code>false</code> |
-| **`limit`**           | <code>number</code>  | iOS only: Maximum number of pictures the user will be able to choose.                                                                    | <code>0 (unlimited)</code> |
+| Prop                  | Type                 | Description                                                                                                                              | Default                    |
+| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| **`multiple`**        | <code>boolean</code> | Whether multiple files may be selected.                                                                                                  | <code>false</code>         |
+| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                           | <code>false</code>         |
+| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS. | <code>false</code>         |
+| **`limit`**           | <code>number</code>  | The maximum number of files that the user can select. This option is ignored if `multiple` is set to `false`. Only available on iOS.     | <code>0 (unlimited)</code> |
 
 
 #### PluginListenerHandle
