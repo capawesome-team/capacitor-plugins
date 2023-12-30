@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.2.0
+
+### Minor Changes
+
+- [`777fff5`](https://github.com/capawesome-team/capacitor-plugins/commit/777fff5ff11fbeac6076089bcb5e90e77fd4dd7a) ([#108](https://github.com/capawesome-team/capacitor-plugins/pull/108)): feat(ios): add `limit` option
+
+### Patch Changes
+
+- [`154fb47`](https://github.com/capawesome-team/capacitor-plugins/commit/154fb4702c0524bad17036730f393e56ab5a0f7f) ([#111](https://github.com/capawesome-team/capacitor-plugins/pull/111)): fix(web): `pickFiles (...)` doesn't work first time on Safari
+
 ## 5.1.1
 
 ### Patch Changes
