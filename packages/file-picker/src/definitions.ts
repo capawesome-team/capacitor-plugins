@@ -224,7 +224,7 @@ export interface PickMediaOptions {
    * Only available on iOS.
    *
    * @default 0 (unlimited)
-   * 
+   *
    * @example 4
    */
   limit?: number;
