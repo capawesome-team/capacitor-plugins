@@ -216,6 +216,18 @@ export interface PickMediaOptions {
    * @see https://developer.apple.com/documentation/photokit/phpickerconfiguration/assetrepresentationmode/current
    */
   skipTranscoding?: boolean;
+  /**
+   * The maximum number of files that the user can select.
+   *
+   * This option is ignored if `multiple` is set to `false`.
+   *
+   * Only available on iOS.
+   *
+   * @default 0 (unlimited)
+   *
+   * @example 4
+   */
+  limit?: number;
 }
 
 /**
