@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-file-picker': minor
+'@capawesome/capacitor-file-picker': patch
 ---
 
-bug(file-picker): pickFiles on Safari web does not bring up file picker on first call #14
+fix(web): `pickFiles (...)` doesn't work first time on Safari
