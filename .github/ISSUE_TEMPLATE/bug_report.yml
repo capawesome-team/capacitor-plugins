@@ -16,6 +16,7 @@ body:
         - label: Badge
         - label: Cloudinary
         - label: Datetime Picker
+        - label: File Compressor
         - label: File Opener
         - label: File Picker
         - label: Managed Configurations
