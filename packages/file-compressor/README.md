@@ -50,7 +50,7 @@ No configuration required for this plugin.
 ```typescript
 import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
-const compressImage = () => {
+const compressImage = async () => {
   const { path } = await FileCompressor.compressImage({
     mimeType: 'image/jpeg',
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
