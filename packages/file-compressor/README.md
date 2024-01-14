@@ -82,6 +82,8 @@ Compress an image.
 
 **Attention**: This method was only tested with png, jpeg and webp images.
 
+**Attention**: The exif data of the image is lost during compression.
+
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
 | **`options`** | <code><a href="#compressimageoptions">CompressImageOptions</a></code> |
