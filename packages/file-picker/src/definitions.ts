@@ -231,9 +231,10 @@ export interface PickMediaOptions {
   /**
    * Whether an ordered number is displayed instead of a check mark in the selection badge.
    *
-   * Only available on iOS >= 15.
+   * Only available on iOS (15+).
    *
-   * @default false (checkmark)
+   * @default false
+   * @since 5.3.0
    */
   ordered?: boolean;
 }
