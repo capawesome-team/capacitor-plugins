@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.3.0
+
+### Minor Changes
+
+- [`5bf165c`](https://github.com/capawesome-team/capacitor-plugins/commit/5bf165c097349d73ddd47c098e94d10c25710f0f) ([#119](https://github.com/capawesome-team/capacitor-plugins/pull/119)): feat(ios): add `ordered` option
+
 ## 5.2.0
 
 ### Minor Changes
