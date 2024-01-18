@@ -115,6 +115,9 @@ export interface PickFilesOptions {
 }
 
 export interface PickFilesResult {
+  /**
+   * The list of picked files.
+   */
   files: PickedFile[];
 }
 
@@ -237,6 +240,24 @@ export interface PickMediaOptions {
    * @since 5.3.0
    */
   ordered?: boolean;
+  /**
+   * The list of filters to apply to the picker.
+   * 
+   * Only available on iOS (14+).
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952798-all
+   */
+  includeFilters?: Filter[];
+  /**
+   * The list of filters to exclude from the picker.
+   * 
+   * Only available on iOS (14+).
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952802-not
+   */
+  excludeFilters?: Filter[];
 }
 
 /**
@@ -247,7 +268,7 @@ export type PickMediaResult = PickFilesResult;
 /**
  * @since 0.5.3
  */
-export type PickImagesOptions = PickMediaOptions;
+export type PickImagesOptions = Omit<PickMediaOptions, 'includeFilters' | 'excludeFilters'>;
 
 /**
  * @since 0.5.3
@@ -257,9 +278,93 @@ export type PickImagesResult = PickMediaResult;
 /**
  * @since 0.5.3
  */
-export type PickVideosOptions = PickMediaOptions;
+export type PickVideosOptions = Omit<PickMediaOptions, 'includeFilters' | 'excludeFilters'>;
 
 /**
  * @since 0.5.3
  */
 export type PickVideosResult = PickMediaResult;
+
+/**
+ * @since 5.4.0
+ * @see https://developer.apple.com/documentation/photokit/phpickerfilter
+ */
+export enum Filter {
+  /**
+   * A filter that represents assets with multiple high-speed photos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952799-bursts
+   */
+  Bursts = 'bursts',
+  /**
+   * A filter that represents videos with a shallow depth of field and focus transitions.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952800-cinematicvideos
+   */
+  CinematicVideos = 'cinematicVideos',
+  /**
+   * A filter that represents photos with depth information.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952801-deptheffectphotos
+   */
+  DepthEffectPhotos = 'depthEffectPhotos',
+  /**
+   * A filter that represents images and includes live photos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3606595-images
+   */
+  Images = 'images',
+  /**
+   * A filter that represents live photos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3606596-livephotos
+   */
+  LivePhotos = 'livePhotos',
+  /**
+   * A filter that represents panorama photos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952803-panoramas
+   */
+  Panoramas = 'panoramas',
+  /**
+   * A filter that represents screen recordings.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952805-screenrecordings
+   */
+  ScreenRecordings = 'screenRecordings',
+  /**
+   * A filter that represents screenshots.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952806-screenshots
+   */
+  Screenshots = 'screenshots',
+  /**
+   * A filter that represents slow-motion videos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952807-slomovideos
+   */
+  SlomoVideos = 'slomoVideos',
+  /**
+   * A filter that represents time-lapse videos.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3952808-timelapsevideos
+   */
+  TimelapseVideos = 'timelapseVideos',
+  /**
+   * A filter that represents video assets.
+   * 
+   * @since 5.4.0
+   * @see https://developer.apple.com/documentation/photokit/phpickerfilter/3606597-videos
+   */
+  Videos = 'videos',
+}
