@@ -25,9 +25,9 @@ However, we kindly ask you to respect our **fair use policy**:
 
 A working example can be found here: [capawesome-team/capacitor-plugin-demo](https://github.com/capawesome-team/capacitor-plugin-demo)
 
-| Android                    | iOS                        |
-| -------------------------- | -------------------------- |
-| <img src="" width="324" /> | <img src="" width="324" /> |
+| Android                                                                                                                             | iOS                                                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/7de4bcb3-aa59-43bc-a882-2796964be539" width="324" /> | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/d796d9f0-32c1-4d5c-b38f-ab46509a5eda" width="324" /> |
 
 ## Installation
 
