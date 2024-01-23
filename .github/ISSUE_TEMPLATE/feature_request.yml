@@ -22,6 +22,7 @@ body:
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
+        - label: Printer
         - label: Screen Orientation
   - type: textarea
     attributes:
