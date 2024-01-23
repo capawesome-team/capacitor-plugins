@@ -33,6 +33,14 @@ A working example can be found here: [capawesome-team/capacitor-plugin-demo](htt
 
 See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-printer) and follow the instructions to install the plugin.
 
+### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -49,6 +57,13 @@ const printHtml = async () => {
   });
 };
 
+const printPdf = async () => {
+  await Printer.printPdf({
+    name: 'My Document',
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
+  });
+};
+
 const printWebView = async () => {
   await Printer.printWebView({
     name: 'My Document',
@@ -61,6 +76,7 @@ const printWebView = async () => {
 <docgen-index>
 
 * [`printHtml(...)`](#printhtml)
+* [`printPdf(...)`](#printpdf)
 * [`printWebView(...)`](#printwebview)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -85,6 +101,25 @@ Only available for Android and iOS.
 | **`options`** | <code><a href="#printhtmloptions">PrintHtmlOptions</a></code> |
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### printPdf(...)
+
+```typescript
+printPdf(options: PrintPdfOptions) => Promise<void>
+```
+
+Present the printing user interface to print a pdf document.
+
+Only available for Android and iOS.
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#printpdfoptions">PrintPdfOptions</a></code> |
+
+**Since:** 5.1.0
 
 --------------------
 
@@ -116,6 +151,13 @@ Only available for Android and iOS.
 | Prop       | Type                | Description                | Since |
 | ---------- | ------------------- | -------------------------- | ----- |
 | **`html`** | <code>string</code> | The HTML content to print. | 5.0.0 |
+
+
+#### PrintPdfOptions
+
+| Prop       | Type                | Description                                 | Since |
+| ---------- | ------------------- | ------------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path to the pdf document on the device. | 5.1.0 |
 
 
 #### PrintOptions
