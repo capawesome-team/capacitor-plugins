@@ -78,6 +78,8 @@ printHtml(options: PrintHtmlOptions) => Promise<void>
 
 Present the printing user interface to print a html document.
 
+Only available for Android and iOS.
+
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#printhtmloptions">PrintHtmlOptions</a></code> |
@@ -100,6 +102,8 @@ Present the printing user interface to print the web view content.
 | **`options`** | <code><a href="#printoptions">PrintOptions</a></code> |
 
 **Since:** 5.0.0
+
+Only available for Android and iOS.
 
 --------------------
 
