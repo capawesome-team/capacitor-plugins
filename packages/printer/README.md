@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-printer
 
-Capacitor plugin for priniting.
+Capacitor plugin for printing.
 
 ## Sponsorware
 
