@@ -11,7 +11,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -229,8 +228,6 @@ public class AppUpdatePlugin extends Plugin {
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {
         String packageName = this.getContext().getPackageName();
-
-        // PackageManager.getPackageInfo(packageName, 0) is deprecated as of API 33: Android 13.0 (Tiramisu).
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             return this.getContext().getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
         } else {
