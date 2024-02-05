@@ -99,7 +99,7 @@ export interface AppUpdateInfo {
    * @since 5.1.0
    * @example "1"
    */
-  currentVersionCode?: string;
+  currentVersionCode: string;
   /**
    * Version code (Android) or CFBundleShortVersionString (iOS) of the update.
    *
