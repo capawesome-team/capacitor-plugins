@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.1.0
+
+### Minor Changes
+
+- [`be586c0`](https://github.com/capawesome-team/capacitor-plugins/commit/be586c09b3c5189bb4f578b28f539929607255f7) ([#137](https://github.com/capawesome-team/capacitor-plugins/pull/137)): feat: add `currentVersionName`, `availableVersionName`, ...
+
+### Patch Changes
+
+- [`d091ddf`](https://github.com/capawesome-team/capacitor-plugins/commit/d091ddfd16a07b77d72b853d1163f80472dad8e7) ([#135](https://github.com/capawesome-team/capacitor-plugins/pull/135)): fix(android): replace deprecated method
+
 ## 5.0.1
 
 ### Patch Changes
