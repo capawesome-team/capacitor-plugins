@@ -28,16 +28,25 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 ## Usage
 
 ```typescript
+import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 
 const getCurrentAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
-  return result.currentVersion;
+  if (Capacitor.getPlatform() === 'android') {
+    return result.currentVersionCode;
+  } else {
+    return result.currentVersionName;
+  }
 };
 
 const getAvailableAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
-  return result.availableVersion;
+  if (Capacitor.getPlatform() === 'android') {
+    return result.availableVersionCode;
+  } else {
+    return result.availableVersionName;
+  }
 };
 
 const openAppStore = async () => {
