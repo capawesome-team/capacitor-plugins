@@ -17,7 +17,8 @@ public class AppUpdatePlugin: CAPPlugin {
                 guard
                     let info = Bundle.main.infoDictionary,
                     let bundleId = info["CFBundleIdentifier"] as? String,
-                    let currentVersion = info["CFBundleShortVersionString"] as? String,
+                    let currentVersionCode = info["CFBundleVersion"] as? String,
+                    let currentVersionName = info["CFBundleShortVersionString"] as? String,
                     var lookupUrl = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleId)&date=\(date)")
                 else {
                     call.reject("Invalid bundle info provided")
@@ -30,7 +31,7 @@ public class AppUpdatePlugin: CAPPlugin {
                 guard
                     let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? [String: Any],
                     let result = (json["results"] as? [Any])?.first as? [String: Any],
-                    let availableVersion = result["version"] as? String,
+                    let availableVersionName = result["version"] as? String,
                     let availableVersionReleaseDate = result["currentVersionReleaseDate"] as? String,
                     let minimumOsVersion = result["minimumOsVersion"] as? String
                 else {
@@ -38,13 +39,16 @@ public class AppUpdatePlugin: CAPPlugin {
                     return
                 }
                 var updateAvailability = AppUpdatePlugin.updateAvailabilityNotAvailable
-                let updateAvailable = self.compareVersions(currentVersion, availableVersion) == .orderedDescending
+                let updateAvailable = self.compareVersions(currentVersionName, availableVersionName) == .orderedDescending
                 if updateAvailable {
                     updateAvailability = AppUpdatePlugin.updateAvailabilityAvailable
                 }
                 call.resolve([
-                    "currentVersion": currentVersion,
-                    "availableVersion": availableVersion,
+                    "currentVersionName": currentVersionName,
+                    "availableVersionName": availableVersionName,
+                    "currentVersion": currentVersionName,
+                    "currentVersionCode": currentVersionCode,
+                    "availableVersion": availableVersionName,
                     "availableVersionReleaseDate": availableVersionReleaseDate,
                     "updateAvailability": updateAvailability,
                     "minimumOsVersion": minimumOsVersion

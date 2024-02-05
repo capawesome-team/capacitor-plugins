@@ -28,16 +28,25 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 ## Usage
 
 ```typescript
+import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 
 const getCurrentAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
-  return result.currentVersion;
+  if (Capacitor.getPlatform() === 'android') {
+    return result.currentVersionCode;
+  } else {
+    return result.currentVersionName;
+  }
 };
 
 const getAvailableAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
-  return result.availableVersion;
+  if (Capacitor.getPlatform() === 'android') {
+    return result.availableVersionCode;
+  } else {
+    return result.availableVersionName;
+  }
 };
 
 const openAppStore = async () => {
@@ -203,18 +212,22 @@ Remove all listeners for this plugin.
 
 #### AppUpdateInfo
 
-| Prop                              | Type                                                                                | Description                                                                                                                                                                   |
-| --------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`currentVersion`**              | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version. Only available on Android and iOS.                                         |
-| **`availableVersion`**            | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the update. Only available on Android and iOS.                                                                  |
-| **`availableVersionReleaseDate`** | <code>string</code>                                                                 | Release date of the update in ISO 8601 (UTC) format. Only available on iOS.                                                                                                   |
-| **`updateAvailability`**          | <code><a href="#appupdateavailability">AppUpdateAvailability</a></code>             | The app update availability. Only available on Android and iOS.                                                                                                               |
-| **`updatePriority`**              | <code>number</code>                                                                 | In-app update priority for this update, as defined by the developer in the Google Play Developer API. Only available on Android.                                              |
-| **`immediateUpdateAllowed`**      | <code>boolean</code>                                                                | `true` if an immediate update is allowed, otherwise `false`. Only available on Android.                                                                                       |
-| **`flexibleUpdateAllowed`**       | <code>boolean</code>                                                                | `true` if a flexible update is allowed, otherwise `false`. Only available on Android.                                                                                         |
-| **`clientVersionStalenessDays`**  | <code>number</code>                                                                 | Number of days since the Google Play Store app on the user's device has learnt about an available update if an update is available or in progress. Only available on Android. |
-| **`installStatus`**               | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status. Only available on Android.                                                                                                             |
-| **`minimumOsVersion`**            | <code>string</code>                                                                 | The minimum version of the operating system required for the app to run in iOS. Only available on iOS.                                                                        |
+| Prop                              | Type                                                                                | Description                                                                                                                                                                                                                                  | Since |
+| --------------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`currentVersionName`**          | <code>string</code>                                                                 | The current version name of the app. On **Android**, this is the `versionName` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file. Only available on Android and iOS. | 5.1.0 |
+| **`availableVersionName`**        | <code>string</code>                                                                 | The available version name of the update. On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file. Only available on iOS.                                                                                            | 5.1.0 |
+| **`currentVersion`**              | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version. Only available on Android and iOS.                                                                                                        |       |
+| **`currentVersionCode`**          | <code>string</code>                                                                 | The current version code of the app. On **Android**, this is the `versionCode` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file. Only available on Android and iOS.            | 5.1.0 |
+| **`availableVersion`**            | <code>string</code>                                                                 | Version code (Android) or CFBundleShortVersionString (iOS) of the update. Only available on Android and iOS.                                                                                                                                 |       |
+| **`availableVersionCode`**        | <code>string</code>                                                                 | The available version code of the update. On **Android**, this is the `versionCode` from the `android/app/build.gradle` file. Only available on Android.                                                                                     | 5.1.0 |
+| **`availableVersionReleaseDate`** | <code>string</code>                                                                 | Release date of the update in ISO 8601 (UTC) format. Only available on iOS.                                                                                                                                                                  |       |
+| **`updateAvailability`**          | <code><a href="#appupdateavailability">AppUpdateAvailability</a></code>             | The app update availability. Only available on Android and iOS.                                                                                                                                                                              |       |
+| **`updatePriority`**              | <code>number</code>                                                                 | In-app update priority for this update, as defined by the developer in the Google Play Developer API. Only available on Android.                                                                                                             |       |
+| **`immediateUpdateAllowed`**      | <code>boolean</code>                                                                | `true` if an immediate update is allowed, otherwise `false`. Only available on Android.                                                                                                                                                      |       |
+| **`flexibleUpdateAllowed`**       | <code>boolean</code>                                                                | `true` if a flexible update is allowed, otherwise `false`. Only available on Android.                                                                                                                                                        |       |
+| **`clientVersionStalenessDays`**  | <code>number</code>                                                                 | Number of days since the Google Play Store app on the user's device has learnt about an available update if an update is available or in progress. Only available on Android.                                                                |       |
+| **`installStatus`**               | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status. Only available on Android.                                                                                                                                                                            |       |
+| **`minimumOsVersion`**            | <code>string</code>                                                                 | The minimum version of the operating system required for the app to run in iOS. Only available on iOS.                                                                                                                                       |       |
 
 
 #### GetAppUpdateInfoOptions

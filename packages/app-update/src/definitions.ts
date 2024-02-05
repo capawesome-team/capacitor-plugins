@@ -58,17 +58,67 @@ export interface GetAppUpdateInfoOptions {
 
 export interface AppUpdateInfo {
   /**
+   * The current version name of the app.
+   *
+   * On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 5.1.0
+   * @example "1.0.0"
+   */
+  currentVersionName: string;
+  /**
+   * The available version name of the update.
+   *
+   * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
+   *
+   * Only available on iOS.
+   *
+   * @since 5.1.0
+   * @example "1.1.0"
+   */
+  availableVersionName?: string;
+  /**
    * Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version.
    *
    * Only available on Android and iOS.
+   *
+   * @deprecated On **Android**, use `currentVersionCode` instead. On **iOS**, use `currentVersionName` instead.
    */
   currentVersion: string;
+  /**
+   * The current version code of the app.
+   *
+   * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 5.1.0
+   * @example "1"
+   */
+  currentVersionCode: string;
   /**
    * Version code (Android) or CFBundleShortVersionString (iOS) of the update.
    *
    * Only available on Android and iOS.
+   *
+   * @deprecated On **Android**, use `availableVersionCode` instead. On **iOS**, use `availableVersionName` instead.
    */
   availableVersion: string;
+  /**
+   * The available version code of the update.
+   *
+   * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
+   *
+   * Only available on Android.
+   *
+   * @since 5.1.0
+   * @example "2"
+   */
+  availableVersionCode?: string;
   /**
    * Release date of the update in ISO 8601 (UTC) format.
    *
