@@ -81,14 +81,6 @@ export interface AppUpdateInfo {
    */
   availableVersionName?: string;
   /**
-   * Version code (Android) or CFBundleShortVersionString (iOS) of the currently installed app version.
-   *
-   * Only available on Android and iOS.
-   *
-   * @deprecated On **Android**, use `currentVersionCode` instead. On **iOS**, use `currentVersionName` instead.
-   */
-  currentVersion: string;
-  /**
    * The current version code of the app.
    *
    * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
@@ -100,14 +92,6 @@ export interface AppUpdateInfo {
    * @example "1"
    */
   currentVersionCode: string;
-  /**
-   * Version code (Android) or CFBundleShortVersionString (iOS) of the update.
-   *
-   * Only available on Android and iOS.
-   *
-   * @deprecated On **Android**, use `availableVersionCode` instead. On **iOS**, use `availableVersionName` instead.
-   */
-  availableVersion: string;
   /**
    * The available version code of the update.
    *

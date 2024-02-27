@@ -4,13 +4,14 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 6.x.x](#version-6xx)
 - [Version 5.x.x](#version-5xx)
 
 ## Version 6.x.x
 
-### Replace the `multiple` option
+### `multiple` property
 
-The `multiple` option has been replaced by a new `limit` option in the `pickFiles(...)`, `pickImages(...)`, `pickMedia(...)` and `pickVideos(...)` methods.
+The `multiple` property has been replaced by a new `limit` property in the `PickFilesOptions` and `PickMediaOptions` interfaces.
 
 ## Version 5.x.x
 
