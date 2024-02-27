@@ -95,17 +95,22 @@ export interface PickFilesOptions {
    * List of accepted file types.
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
    *
-   * This option cannot be used with `multiple: true` on Android.
+   * This option is ignored if `limit` is set.
    *
    * @example ['image/png', 'application/pdf']
    */
   types?: string[];
   /**
-   * Whether multiple files may be selected.
+   * The maximum number of files that the user can select.
+   * Setting this to `0` sets the selection limit to unlimited.
    *
-   * @default false
+   * Currently, only `0` and `1` are supported.
+   *
+   * @default 0
+   * @example 1
+   * @since 6.0.0
    */
-  multiple?: boolean;
+  limit?: number;
   /**
    * Whether to read the file data.
    *
@@ -194,12 +199,6 @@ export interface File {
  */
 export interface PickMediaOptions {
   /**
-   * Whether multiple files may be selected.
-   *
-   * @default false
-   */
-  multiple?: boolean;
-  /**
    * Whether to read the file data.
    *
    * @default false
@@ -218,14 +217,13 @@ export interface PickMediaOptions {
   skipTranscoding?: boolean;
   /**
    * The maximum number of files that the user can select.
+   * Setting this to `0` sets the selection limit to unlimited.
    *
-   * This option is ignored if `multiple` is set to `false`.
+   * On Android and Web, only `0` and `1` are supported.
    *
-   * Only available on iOS.
-   *
-   * @default 0 (unlimited)
-   *
-   * @example 4
+   * @default 0
+   * @example 1
+   * @since 5.2.0
    */
   limit?: number;
   /**
