@@ -6,6 +6,12 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 - [Version 5.x.x](#version-5xx)
 
+## Version 6.x.x
+
+### Replace the `multiple` option
+
+The `multiple` option has been replaced by a new `limit` option in the `pickFiles(...)`, `pickImages(...)`, `pickMedia(...)` and `pickVideos(...)` methods.
+
 ## Version 5.x.x
 
 ### Capacitor 5

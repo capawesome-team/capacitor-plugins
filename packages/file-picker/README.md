@@ -264,22 +264,21 @@ Remove all listeners for this plugin.
 
 #### PickFilesOptions
 
-| Prop           | Type                  | Description                                                                                                                                                                                                                       | Default            |
-| -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option cannot be used with `multiple: true` on Android. |                    |
-| **`multiple`** | <code>boolean</code>  | Whether multiple files may be selected.                                                                                                                                                                                           | <code>false</code> |
-| **`readData`** | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                                    | <code>false</code> |
+| Prop           | Type                  | Description                                                                                                                                                                                                    | Default            | Since |
+| -------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
+| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
 
 
 #### PickMediaOptions
 
-| Prop                  | Type                 | Description                                                                                                                              | Default                    | Since |
-| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ----- |
-| **`multiple`**        | <code>boolean</code> | Whether multiple files may be selected.                                                                                                  | <code>false</code>         |       |
-| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                           | <code>false</code>         |       |
-| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS. | <code>false</code>         |       |
-| **`limit`**           | <code>number</code>  | The maximum number of files that the user can select. This option is ignored if `multiple` is set to `false`. Only available on iOS.     | <code>0 (unlimited)</code> |       |
-| **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                      | <code>false</code>         | 5.3.0 |
+| Prop                  | Type                 | Description                                                                                                                                                          | Default            | Since |
+| --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                                                       | <code>false</code> |       |
+| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS.                             | <code>false</code> |       |
+| **`limit`**           | <code>number</code>  | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. On Android and Web, only `0` and `1` are supported. | <code>0</code>     | 5.2.0 |
+| **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                                                  | <code>false</code> | 5.3.0 |
 
 
 #### PluginListenerHandle

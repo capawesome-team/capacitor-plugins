@@ -39,15 +39,15 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickFiles(PluginCall call) {
         try {
+            int limit = call.getInt("limit", 0);
             JSArray types = call.getArray("types", null);
-            boolean multiple = call.getBoolean("multiple", false);
             String[] parsedTypes = parseTypesOption(types);
 
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
-            if (multiple == false && parsedTypes != null && parsedTypes.length > 0) {
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
+            if (limit == 1 && parsedTypes != null && parsedTypes.length > 0) {
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, parsedTypes);
             }
 
@@ -62,12 +62,12 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickImages(PluginCall call) {
         try {
-            boolean multiple = call.getBoolean("multiple", false);
+            int limit = call.getInt("limit", 0);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
             intent.setType("image/*");
-            intent.putExtra("multi-pick", multiple);
+            intent.putExtra("multi-pick", limit == 0);
             intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
 
             startActivityForResult(call, intent, "pickFilesResult");
@@ -81,12 +81,12 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickMedia(PluginCall call) {
         try {
-            boolean multiple = call.getBoolean("multiple", false);
+            int limit = call.getInt("limit", 0);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
             intent.setType("*/*");
-            intent.putExtra("multi-pick", multiple);
+            intent.putExtra("multi-pick", limit == 0);
             intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*", "video/*" });
 
             startActivityForResult(call, intent, "pickFilesResult");
@@ -100,12 +100,12 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickVideos(PluginCall call) {
         try {
-            boolean multiple = call.getBoolean("multiple", false);
+            int limit = call.getInt("limit", 0);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, multiple);
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
             intent.setType("video/*");
-            intent.putExtra("multi-pick", multiple);
+            intent.putExtra("multi-pick", limit == 0);
             intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "video/*" });
 
             startActivityForResult(call, intent, "pickFilesResult");

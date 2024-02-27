@@ -69,13 +69,13 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     options?: PickFilesOptions,
   ): Promise<File[] | undefined> {
     const accept = options?.types?.join(',') || '';
-    const multiple = !!options?.multiple;
+    const limit = options?.limit === undefined ? 0 : options.limit;
     return new Promise(resolve => {
       let onChangeFired = false;
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = accept;
-      input.multiple = multiple;
+      input.multiple = limit === 0;
       input.addEventListener(
         'change',
         () => {
