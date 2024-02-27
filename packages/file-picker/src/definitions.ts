@@ -123,15 +123,7 @@ export interface PickFilesResult {
   files: PickedFile[];
 }
 
-/**
- * @since 0.5.3
- */
-export type PickedFile = File;
-
-/**
- * @deprecated Use `PickedFile` instead.
- */
-export interface File {
+export interface PickedFile {
   /**
    * The Blob instance of the file.
    *
