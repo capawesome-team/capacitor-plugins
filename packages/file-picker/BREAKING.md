@@ -13,6 +13,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 The `multiple` property has been replaced by a new `limit` property in the `PickFilesOptions` and `PickMediaOptions` interfaces.
 
+### `File` interface
+
+The `File` interface has been replaced by the `PickedFile` interface.
+
 ## Version 5.x.x
 
 ### Capacitor 5
