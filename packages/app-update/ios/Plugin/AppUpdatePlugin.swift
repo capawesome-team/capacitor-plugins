@@ -46,9 +46,7 @@ public class AppUpdatePlugin: CAPPlugin {
                 call.resolve([
                     "currentVersionName": currentVersionName,
                     "availableVersionName": availableVersionName,
-                    "currentVersion": currentVersionName,
                     "currentVersionCode": currentVersionCode,
-                    "availableVersion": availableVersionName,
                     "availableVersionReleaseDate": availableVersionReleaseDate,
                     "updateAvailability": updateAvailability,
                     "minimumOsVersion": minimumOsVersion

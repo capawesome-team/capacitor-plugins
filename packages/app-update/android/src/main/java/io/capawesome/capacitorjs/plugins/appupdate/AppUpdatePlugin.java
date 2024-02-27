@@ -80,9 +80,7 @@ public class AppUpdatePlugin extends Plugin {
                     }
                     JSObject ret = new JSObject();
                     ret.put("currentVersionName", pInfo.versionName);
-                    ret.put("currentVersion", String.valueOf(pInfo.versionCode));
                     ret.put("currentVersionCode", String.valueOf(pInfo.versionCode));
-                    ret.put("availableVersion", String.valueOf(appUpdateInfo.availableVersionCode()));
                     ret.put("availableVersionCode", String.valueOf(appUpdateInfo.availableVersionCode()));
                     ret.put("updateAvailability", appUpdateInfo.updateAvailability());
                     ret.put("updatePriority", appUpdateInfo.updatePriority());
