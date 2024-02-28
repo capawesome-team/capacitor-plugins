@@ -241,12 +241,12 @@ Remove all listeners for this plugin.
 
 #### PickFilesResult
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`files`** | <code>File[]</code> |
+| Prop        | Type                      |
+| ----------- | ------------------------- |
+| **`files`** | <code>PickedFile[]</code> |
 
 
-#### File
+#### PickedFile
 
 | Prop             | Type                | Description                                                                                                          | Since |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -276,7 +276,7 @@ Remove all listeners for this plugin.
 | Prop                  | Type                 | Description                                                                                                                                                          | Default            | Since |
 | --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
 | **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                                                       | <code>false</code> |       |
-| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS.                             | <code>false</code> |       |
+| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS.                             | <code>true</code>  |       |
 | **`limit`**           | <code>number</code>  | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. On Android and Web, only `0` and `1` are supported. | <code>0</code>     | 5.2.0 |
 | **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                                                  | <code>false</code> | 5.3.0 |
 
@@ -289,11 +289,6 @@ Remove all listeners for this plugin.
 
 
 ### Type Aliases
-
-
-#### PickedFile
-
-<code><a href="#file">File</a></code>
 
 
 #### PickImagesOptions
