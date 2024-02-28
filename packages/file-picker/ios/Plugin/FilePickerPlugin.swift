@@ -64,7 +64,7 @@ public class FilePickerPlugin: CAPPlugin {
         savedCall = call
 
         let limit = call.getInt("limit", 0)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
         implementation?.openImagePicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)
@@ -74,7 +74,7 @@ public class FilePickerPlugin: CAPPlugin {
         savedCall = call
 
         let limit = call.getInt("limit", 0)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
         implementation?.openMediaPicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)
@@ -84,7 +84,7 @@ public class FilePickerPlugin: CAPPlugin {
         savedCall = call
 
         let limit = call.getInt("limit", 0)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
         implementation?.openVideoPicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)

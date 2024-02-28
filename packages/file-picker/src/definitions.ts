@@ -203,7 +203,7 @@ export interface PickMediaOptions {
    *
    * Only available on iOS.
    *
-   * @default false
+   * @default true
    * @see https://developer.apple.com/documentation/photokit/phpickerconfiguration/assetrepresentationmode/current
    */
   skipTranscoding?: boolean;

@@ -17,6 +17,10 @@ The `multiple` property has been replaced by a new `limit` property in the `Pick
 
 The `File` interface has been replaced by the `PickedFile` interface.
 
+### `skipTranscoding` property
+
+The default value of the `skipTranscoding` property has been changed to `true`.
+
 ## Version 5.x.x
 
 ### Capacitor 5
