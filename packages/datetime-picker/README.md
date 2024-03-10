@@ -33,7 +33,7 @@ import { DatetimePicker } from '@capawesome-team/capacitor-datetime-picker';
 const present = async () => {
   const date = new Date('1995-12-24T02:23:00');
 
-  const { value } = DatetimePicker.present({
+  const { value } = await DatetimePicker.present({
     cancelButtonText: 'Cancel',
     doneButtonText: 'Ok',
     mode: 'time',
