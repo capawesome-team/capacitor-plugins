@@ -78,6 +78,7 @@ No configuration required for this plugin.
 
 ```typescript
 import { Nfc, NfcUtils, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
+import { Capacitor } from '@capacitor/core';
 
 const createNdefTextRecord = () => {
   const utils = new NfcUtils();
@@ -125,9 +126,21 @@ const makeReadOnly = async () => {
 const readSignature = async () => {
   return new Promise((resolve) => {
     Nfc.addListener('nfcTagScanned', async (event) => {
-      const { response } = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
-      await Nfc.stopScanSession();
-      resolve(response);
+      if (Capacitor.getPlatform() === 'android') {
+        // 1. Connect to the tag.
+        await Nfc.connect({ techType: NfcTagTechType.NfcA }); 
+        // 2. Send one or more commands to the tag and receive the response.
+        const result = await Nfc.transceive({ data: [60, 0] });
+        // 3. Close the connection to the tag.
+        await Nfc.close();
+        await Nfc.stopScanSession();
+        resolve(response);
+      } else {
+        // 1. Send one or more commands to the tag and receive the response.
+        const result = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
+        await Nfc.stopScanSession();
+        resolve(response);
+      }
     });
 
     Nfc.startScanSession();
@@ -198,6 +211,8 @@ const removeAllListeners = async () => {
 * [`erase()`](#erase)
 * [`format()`](#format)
 * [`transceive(...)`](#transceive)
+* [`connect(...)`](#connect)
+* [`close()`](#close)
 * [`isSupported()`](#issupported)
 * [`isEnabled()`](#isenabled)
 * [`openSettings()`](#opensettings)
@@ -333,6 +348,8 @@ Send raw command to the tag and receive the response.
 
 This method must be called from within a `nfcTagScanned` handler.
 
+On **Android**, the tag must be connected with `connect()` first.
+
 ⚠️ **Experimental:** This method could not be tested extensively yet.
 Please let us know if you discover any issues!
 
@@ -354,6 +371,44 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#transceiveresult">TransceiveResult</a>&gt;</code>
 
 **Since:** 0.3.0
+
+--------------------
+
+
+### connect(...)
+
+```typescript
+connect(options: ConnectOptions) => Promise<void>
+```
+
+Connect to the tag and enable I/O operations.
+
+This method must be called from within a `nfcTagScanned` handler.
+
+Only available on Android.
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#connectoptions">ConnectOptions</a></code> |
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### close()
+
+```typescript
+close() => Promise<void>
+```
+
+Close the connection to the tag.
+
+This method must be called from within a `nfcTagScanned` handler.
+
+Only available on Android.
+
+**Since:** 6.0.0
 
 --------------------
 
@@ -569,12 +624,19 @@ Remove all listeners for this plugin.
 
 #### TransceiveOptions
 
-| Prop                       | Type                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Since |
-| -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. On Android, only <a href="#nfctagtechtype">`NfcTagTechType.NfcA`</a>, <a href="#nfctagtechtype">`NfcTagTechType.NfcB`</a>, <a href="#nfctagtechtype">`NfcTagTechType.NfcF`</a>, <a href="#nfctagtechtype">`NfcTagTechType.NfcV`</a>, `NfcTagTechType.IsoDep`, <a href="#nfctagtechtype">`NfcTagTechType.MifareClassic`</a> and <a href="#nfctagtechtype">`NfcTagTechType.MifareUltralight`</a> are supported. On iOS, only <a href="#nfctagtechtype">`NfcTagTechType.NfcF`</a>, <a href="#nfctagtechtype">`NfcTagTechType.NfcV`</a> and <a href="#nfctagtechtype">`NfcTagTechType.MifareDesfire`</a> are supported. | 0.3.0 |
-| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | 0.3.0 |
-| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | 0.3.0 |
-| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively. Only available on iOS 14+                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 0.3.0 |
+| Prop                       | Type                                                      | Description                                                                                                                                                                     | Since |
+| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on iOS.                                                                                                                  | 0.3.0 |
+| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                  | 0.3.0 |
+| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                               | 0.3.0 |
+| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively. Only available on iOS 14+ | 0.3.0 |
+
+
+#### ConnectOptions
+
+| Prop           | Type                                                      | Description                                                        | Since |
+| -------------- | --------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
+| **`techType`** | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on Android. | 6.0.0 |
 
 
 #### IsSupportedResult
