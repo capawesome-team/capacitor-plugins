@@ -624,12 +624,12 @@ Remove all listeners for this plugin.
 
 #### TransceiveOptions
 
-| Prop                       | Type                                                      | Description                                                                                                                                                                     | Since |
-| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on iOS.                                                                                                                  | 0.3.0 |
-| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                  | 0.3.0 |
-| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                               | 0.3.0 |
-| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively. Only available on iOS 14+ | 0.3.0 |
+| Prop                       | Type                                                      | Description                                                                                                                                                                                             | Since |
+| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on iOS.                                                                                                                                          | 0.3.0 |
+| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                                          | 0.3.0 |
+| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                                                       | 0.3.0 |
+| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively, 0x23 is also supported. Only available on iOS 14+ | 0.3.0 |
 
 
 #### ConnectOptions
