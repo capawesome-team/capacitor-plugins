@@ -14,17 +14,22 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 <!-- Required to request the manage overlay permission -->
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 ```
 
+**Attention**: Replace `FOREGROUND_SERVICE_LOCATION` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
+
 You also need to add the following receiver and service **inside** the `application` tag in your `AndroidManifest.xml`:
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationActionBroadcastReceiver" />
-<service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" />
+<service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" />
 ```
+
+**Attention**: Replace `location` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
 
 ## Configuration
 
@@ -63,17 +68,34 @@ const stopForegroundService = async () => {
 
 <docgen-index>
 
-* [`moveToForeground()`](#movetoforeground)
-* [`startForegroundService(...)`](#startforegroundservice)
-* [`stopForegroundService()`](#stopforegroundservice)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
-* [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
-* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [@capawesome-team/capacitor-android-foreground-service](#capawesome-teamcapacitor-android-foreground-service)
+  - [Installation](#installation)
+    - [Android](#android)
+  - [Configuration](#configuration)
+  - [Demo](#demo)
+  - [Usage](#usage)
+  - [API](#api)
+    - [moveToForeground()](#movetoforeground)
+    - [startForegroundService(...)](#startforegroundservice)
+    - [stopForegroundService()](#stopforegroundservice)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions()](#requestpermissions)
+    - [checkManageOverlayPermission()](#checkmanageoverlaypermission)
+    - [requestManageOverlayPermission()](#requestmanageoverlaypermission)
+    - [addListener('buttonClicked', ...)](#addlistenerbuttonclicked-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [StartForegroundServiceOptions](#startforegroundserviceoptions)
+      - [NotificationButton](#notificationbutton)
+      - [PermissionStatus](#permissionstatus)
+      - [ManageOverlayPermissionResult](#manageoverlaypermissionresult)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [ButtonClickedEvent](#buttonclickedevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+      - [ButtonClickedEventListener](#buttonclickedeventlistener)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
