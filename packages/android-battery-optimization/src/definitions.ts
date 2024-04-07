@@ -2,7 +2,7 @@ export interface BatteryOptimizationPlugin {
   /**
    * Returns whether or not battery optimization is enabled.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.0.1
    */
@@ -10,7 +10,7 @@ export interface BatteryOptimizationPlugin {
   /**
    * Opens the battery optimization settings page.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.0.1
    */
@@ -20,7 +20,7 @@ export interface BatteryOptimizationPlugin {
    * This method needs the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` manifest permission.
    * Use this method only if your app meets an acceptable use case (see Google Play Policy).
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.0.1
    */

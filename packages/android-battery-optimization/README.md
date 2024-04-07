@@ -81,7 +81,7 @@ isBatteryOptimizationEnabled() => Promise<IsBatteryOptimizationEnabledResult>
 
 Returns whether or not battery optimization is enabled.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#isbatteryoptimizationenabledresult">IsBatteryOptimizationEnabledResult</a>&gt;</code>
 
@@ -98,7 +98,7 @@ openBatteryOptimizationSettings() => Promise<void>
 
 Opens the battery optimization settings page.
 
-Only available for Android.
+Only available on Android.
 
 **Since:** 0.0.1
 
@@ -115,7 +115,7 @@ Requests the battery optimization ignore permission.
 This method needs the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` manifest permission.
 Use this method only if your app meets an acceptable use case (see Google Play Policy).
 
-Only available for Android.
+Only available on Android.
 
 **Since:** 0.0.1
 

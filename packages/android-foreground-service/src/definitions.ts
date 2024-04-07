@@ -9,7 +9,7 @@ export interface ForegroundServicePlugin {
    * permission and the `checkManageOverlayPermission()` method to check if the
    * permission is granted.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.3.0
    * @experimental This method is experimental and may not work as expected.
@@ -18,7 +18,7 @@ export interface ForegroundServicePlugin {
   /**
    * Starts the foreground service.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.0.1
    */
@@ -26,7 +26,7 @@ export interface ForegroundServicePlugin {
   /**
    * Stops the foreground service.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.0.1
    */
@@ -36,7 +36,7 @@ export interface ForegroundServicePlugin {
    *
    * On **Android**, this method only needs to be called on Android 13+.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 5.0.0
    */
@@ -46,7 +46,7 @@ export interface ForegroundServicePlugin {
    *
    * On **Android**, this method only needs to be called on Android 13+.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 5.0.0
    */
@@ -54,7 +54,7 @@ export interface ForegroundServicePlugin {
   /**
    * Check if the overlay permission is granted.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.3.0
    */
@@ -62,7 +62,7 @@ export interface ForegroundServicePlugin {
   /**
    * Request the manage overlay permission.
    *
-   * Only available for Android.
+   * Only available on Android.
    *
    * @since 0.3.0
    */
@@ -97,7 +97,7 @@ export interface StartForegroundServiceOptions {
   /**
    * The buttons to show on the notification.
    *
-   * Only available for Android (SDK 24+).
+   * Only available on Android (SDK 24+).
    *
    * @since 0.2.0
    */

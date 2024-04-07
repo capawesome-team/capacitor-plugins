@@ -68,34 +68,17 @@ const stopForegroundService = async () => {
 
 <docgen-index>
 
-- [@capawesome-team/capacitor-android-foreground-service](#capawesome-teamcapacitor-android-foreground-service)
-  - [Installation](#installation)
-    - [Android](#android)
-  - [Configuration](#configuration)
-  - [Demo](#demo)
-  - [Usage](#usage)
-  - [API](#api)
-    - [moveToForeground()](#movetoforeground)
-    - [startForegroundService(...)](#startforegroundservice)
-    - [stopForegroundService()](#stopforegroundservice)
-    - [checkPermissions()](#checkpermissions)
-    - [requestPermissions()](#requestpermissions)
-    - [checkManageOverlayPermission()](#checkmanageoverlaypermission)
-    - [requestManageOverlayPermission()](#requestmanageoverlaypermission)
-    - [addListener('buttonClicked', ...)](#addlistenerbuttonclicked-)
-    - [removeAllListeners()](#removealllisteners)
-    - [Interfaces](#interfaces)
-      - [StartForegroundServiceOptions](#startforegroundserviceoptions)
-      - [NotificationButton](#notificationbutton)
-      - [PermissionStatus](#permissionstatus)
-      - [ManageOverlayPermissionResult](#manageoverlaypermissionresult)
-      - [PluginListenerHandle](#pluginlistenerhandle)
-      - [ButtonClickedEvent](#buttonclickedevent)
-    - [Type Aliases](#type-aliases)
-      - [PermissionState](#permissionstate)
-      - [ButtonClickedEventListener](#buttonclickedeventlistener)
-  - [Changelog](#changelog)
-  - [License](#license)
+* [`moveToForeground()`](#movetoforeground)
+* [`startForegroundService(...)`](#startforegroundservice)
+* [`stopForegroundService()`](#stopforegroundservice)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
+* [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
+* [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
+* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -115,7 +98,7 @@ You can use the `requestManageOverlayPermission()` method to request the
 permission and the `checkManageOverlayPermission()` method to check if the
 permission is granted.
 
-Only available for Android.
+Only available on Android.
 
 **Since:** 0.3.0
 
@@ -130,7 +113,7 @@ startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
 
 Starts the foreground service.
 
-Only available for Android.
+Only available on Android.
 
 | Param         | Type                                                                                    |
 | ------------- | --------------------------------------------------------------------------------------- |
@@ -149,7 +132,7 @@ stopForegroundService() => Promise<void>
 
 Stops the foreground service.
 
-Only available for Android.
+Only available on Android.
 
 **Since:** 0.0.1
 
@@ -166,7 +149,7 @@ Check permission to display notifications.
 
 On **Android**, this method only needs to be called on Android 13+.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -185,7 +168,7 @@ Request permission to display notifications.
 
 On **Android**, this method only needs to be called on Android 13+.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -202,7 +185,7 @@ checkManageOverlayPermission() => Promise<ManageOverlayPermissionResult>
 
 Check if the overlay permission is granted.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#manageoverlaypermissionresult">ManageOverlayPermissionResult</a>&gt;</code>
 
@@ -219,7 +202,7 @@ requestManageOverlayPermission() => Promise<ManageOverlayPermissionResult>
 
 Request the manage overlay permission.
 
-Only available for Android.
+Only available on Android.
 
 **Returns:** <code>Promise&lt;<a href="#manageoverlaypermissionresult">ManageOverlayPermissionResult</a>&gt;</code>
 
@@ -271,7 +254,7 @@ Remove all listeners for this plugin.
 | Prop            | Type                              | Description                                                                                                                                                                                                     | Since |
 | --------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`body`**      | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            | 0.0.1 |
-| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available for Android (SDK 24+).                                                                                                                                  | 0.2.0 |
+| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   | 0.2.0 |
 | **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    | 0.0.1 |
 | **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 0.0.1 |
 | **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  | 0.0.1 |
