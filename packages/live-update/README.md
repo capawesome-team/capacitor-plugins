@@ -1,6 +1,6 @@
 # @capawesome/capacitor-live-update
 
-Capacitor plugin to update your app remotely in realtime.
+Capacitor plugin to update your app remotely in real-time.
 
 ## Install
 
