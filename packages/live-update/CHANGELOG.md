@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/capawesome-team/capacitor-plugins/compare/v5.0.0...v6.0.0) (2024-04-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* This plugin now only supports Capacitor 6.
+
+### Features
+
+* update to Capacitor 6 ([#4](https://github.com/capawesome-team/capacitor-plugins/issues/4)) ([9ce9cd2](https://github.com/capawesome-team/capacitor-plugins/commit/9ce9cd24bc0a6c688621750d1f8a97e2a52e5827))
+
 ## 5.0.0 (2024-04-15)
 
 Initial release 🎉
