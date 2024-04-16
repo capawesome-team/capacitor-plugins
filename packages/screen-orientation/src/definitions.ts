@@ -19,7 +19,7 @@ export interface ScreenOrientationPlugin {
   addListener(
     eventName: 'screenOrientationChange',
     listenerFunc: ScreenOrientationChangeListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    */

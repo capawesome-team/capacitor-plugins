@@ -179,7 +179,7 @@ Only available on Android.
 ### addListener('onFlexibleUpdateStateChange', ...)
 
 ```typescript
-addListener(eventName: 'onFlexibleUpdateStateChange', listenerFunc: (state: FlexibleUpdateState) => void) => PluginListenerHandle
+addListener(eventName: 'onFlexibleUpdateStateChange', listenerFunc: (state: FlexibleUpdateState) => void) => Promise<PluginListenerHandle>
 ```
 
 Adds a flexbile in-app update state change listener.
@@ -191,7 +191,7 @@ Only available on Android.
 | **`eventName`**    | <code>'onFlexibleUpdateStateChange'</code>                                              |
 | **`listenerFunc`** | <code>(state: <a href="#flexibleupdatestate">FlexibleUpdateState</a>) =&gt; void</code> |
 
-**Returns:** <code><a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 

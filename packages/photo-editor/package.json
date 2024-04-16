@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-photo-editor",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Capacitor plugin that allows the user to edit a photo.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -52,14 +52,15 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
+    "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "5.0.0",
-    "@capacitor/cli": "5.0.0",
-    "@capacitor/core": "5.0.0",
+    "@capacitor/android": "6.0.0",
+    "@capacitor/cli": "6.0.0",
+    "@capacitor/core": "6.0.0",
     "@capacitor/docgen": "0.2.0",
-    "@capacitor/ios": "5.0.0",
+    "@capacitor/ios": "6.0.0",
     "@ionic/eslint-config": "0.3.0",
     "@ionic/swiftlint-config": "1.1.2",
     "eslint": "7.32.0",
@@ -71,7 +72,7 @@
     "typescript": "4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^5.0.0"
+    "@capacitor/core": "^6.0.0"
   },
   "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {

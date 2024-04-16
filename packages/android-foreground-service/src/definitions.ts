@@ -77,7 +77,7 @@ export interface ForegroundServicePlugin {
   addListener(
     eventName: 'buttonClicked',
     listenerFunc: ButtonClickedEventListener,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    *

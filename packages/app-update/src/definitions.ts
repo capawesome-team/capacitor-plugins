@@ -39,7 +39,7 @@ export interface AppUpdatePlugin {
   addListener(
     eventName: 'onFlexibleUpdateStateChange',
     listenerFunc: (state: FlexibleUpdateState) => void,
-  ): PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    */

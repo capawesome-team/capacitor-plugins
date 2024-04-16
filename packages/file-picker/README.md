@@ -190,7 +190,7 @@ Only available on Android and iOS.
 ### addListener('pickerDismissed', ...)
 
 ```typescript
-addListener(eventName: 'pickerDismissed', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'pickerDismissed', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
 Called when the file picker is dismissed.
@@ -202,7 +202,7 @@ Only available on iOS.
 | **`eventName`**    | <code>'pickerDismissed'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.6.2
 
