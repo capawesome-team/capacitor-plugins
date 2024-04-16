@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/capawesome-team/sponsorware/compare/v5.1.0...v6.0.0) (2024-04-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* This plugin now only supports Capacitor 6.
+* **android:** See BREAKING.md.
+
+* feat(android)!: add `connect(...)` and `close(...)` methods
+
+* wip
+
+* fix
+
+* update  docs [skip ci]
+
+### Features
+
+* **android:** add `connect(...)` and `close(...)` methods ([#21](https://github.com/capawesome-team/sponsorware/issues/21)) ([299fa9c](https://github.com/capawesome-team/sponsorware/commit/299fa9c282b696ea7a6045f064a75d1169c1cd94))
+* **ios:** support iso15693 command code `0x23` ([#19](https://github.com/capawesome-team/sponsorware/issues/19)) ([923f46a](https://github.com/capawesome-team/sponsorware/commit/923f46a5beadeb0c5a3f966a1dbac3132ff5c118))
+* update to Capacitor 6 ([#22](https://github.com/capawesome-team/sponsorware/issues/22)) ([0c7b849](https://github.com/capawesome-team/sponsorware/commit/0c7b849560f796e16925a46b07f0fc1eb7c6e1f2))
+
+
+### Bug Fixes
+
+* **android:** convert bytes to unsigned ([#20](https://github.com/capawesome-team/sponsorware/issues/20)) ([13779ba](https://github.com/capawesome-team/sponsorware/commit/13779baa627435b4e303c105d1b4f9a56ed1801d))
+
 ## [5.1.0](https://github.com/capawesome-team/sponsorware/compare/v5.0.2...v5.1.0) (2024-01-18)
 
 
