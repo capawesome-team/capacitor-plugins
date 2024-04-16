@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-android-battery-optimization",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Capacitor plugin to access battery optimization settings on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -51,9 +51,9 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "5.0.0",
-    "@capacitor/cli": "5.0.0",
-    "@capacitor/core": "5.0.0",
+    "@capacitor/android": "6.0.0",
+    "@capacitor/cli": "6.0.0",
+    "@capacitor/core": "6.0.0",
     "@capacitor/docgen": "0.0.18",
     "@ionic/eslint-config": "0.3.0",
     "eslint": "7.32.0",
@@ -64,7 +64,7 @@
     "typescript": "4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^5.0.0"
+    "@capacitor/core": "^6.0.0"
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
