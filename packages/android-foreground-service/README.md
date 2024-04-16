@@ -214,7 +214,7 @@ Only available on Android.
 ### addListener('buttonClicked', ...)
 
 ```typescript
-addListener(eventName: 'buttonClicked', listenerFunc: ButtonClickedEventListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'buttonClicked', listenerFunc: ButtonClickedEventListener) => Promise<PluginListenerHandle>
 ```
 
 Called when a notification button is clicked.
@@ -226,7 +226,7 @@ Only available on iOS.
 | **`eventName`**    | <code>'buttonClicked'</code>                                                      |
 | **`listenerFunc`** | <code><a href="#buttonclickedeventlistener">ButtonClickedEventListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.2.0
 

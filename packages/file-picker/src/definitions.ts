@@ -55,7 +55,7 @@ export interface FilePickerPlugin {
   addListener(
     eventName: 'pickerDismissed',
     listenerFunc: () => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    *
