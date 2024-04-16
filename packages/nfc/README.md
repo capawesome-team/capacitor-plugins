@@ -499,7 +499,7 @@ On Android and iOS, `granted` is always returned.
 ### addListener('nfcTagScanned', ...)
 
 ```typescript
-addListener(eventName: 'nfcTagScanned', listenerFunc: (event: NfcTagScannedEvent) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'nfcTagScanned', listenerFunc: (event: NfcTagScannedEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when a new NFC tag is scanned.
@@ -509,7 +509,7 @@ Called when a new NFC tag is scanned.
 | **`eventName`**    | <code>'nfcTagScanned'</code>                                                          |
 | **`listenerFunc`** | <code>(event: <a href="#nfctagscannedevent">NfcTagScannedEvent</a>) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.0.1
 
@@ -519,7 +519,7 @@ Called when a new NFC tag is scanned.
 ### addListener('scanSessionCanceled', ...)
 
 ```typescript
-addListener(eventName: 'scanSessionCanceled', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'scanSessionCanceled', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
 Called when the scan session was canceled.
@@ -531,7 +531,7 @@ Only available on iOS.
 | **`eventName`**    | <code>'scanSessionCanceled'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>         |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.0.1
 
@@ -541,7 +541,7 @@ Only available on iOS.
 ### addListener('scanSessionError', ...)
 
 ```typescript
-addListener(eventName: 'scanSessionError', listenerFunc: (event: ScanSessionErrorEvent) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'scanSessionError', listenerFunc: (event: ScanSessionErrorEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when an error occurs during the scan session.
@@ -551,7 +551,7 @@ Called when an error occurs during the scan session.
 | **`eventName`**    | <code>'scanSessionError'</code>                                                             |
 | **`listenerFunc`** | <code>(event: <a href="#scansessionerrorevent">ScanSessionErrorEvent</a>) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.0.1
 
