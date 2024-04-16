@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.0.0
+
+### Major Changes
+
+- [`7033a8a`](https://github.com/capawesome-team/capacitor-plugins/commit/7033a8a42984523902f125239c3623e1e872b489) ([#159](https://github.com/capawesome-team/capacitor-plugins/pull/159)): feat: update to Capacitor 6
+
+* [`bffb370`](https://github.com/capawesome-team/capacitor-plugins/commit/bffb370870acc6f7ea05820ebd2dec26767fafe9) ([#160](https://github.com/capawesome-team/capacitor-plugins/pull/160)): chore(deps): update Cloudinary iOS SDK to `5.0.0`
+
+### Minor Changes
+
+- [`de6bcf8`](https://github.com/capawesome-team/capacitor-plugins/commit/de6bcf8f887b7f6ad954015c22b049990a623088) ([#89](https://github.com/capawesome-team/capacitor-plugins/pull/89)): feat(ios): make `bytes` available
+
 ## 5.1.0
 
 ### Minor Changes
