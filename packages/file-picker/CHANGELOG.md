@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.0.0
+
+### Major Changes
+
+- [`7033a8a`](https://github.com/capawesome-team/capacitor-plugins/commit/7033a8a42984523902f125239c3623e1e872b489) ([#159](https://github.com/capawesome-team/capacitor-plugins/pull/159)): feat: update to Capacitor 6
+
+* [`f102470`](https://github.com/capawesome-team/capacitor-plugins/commit/f102470e7339d281951776c4ea82b9f3e6fa4f87) ([#151](https://github.com/capawesome-team/capacitor-plugins/pull/151)): refactor: remove `File` interface
+
+- [`965e912`](https://github.com/capawesome-team/capacitor-plugins/commit/965e912a5cfb12ba28a9319ef9f4619aa2e8e120) ([#148](https://github.com/capawesome-team/capacitor-plugins/pull/148)): feat: replace `multiple` option with `limit`
+
+* [`3b50f3f`](https://github.com/capawesome-team/capacitor-plugins/commit/3b50f3f00560c009e4573f45ccbcb4e2a5499669) ([#152](https://github.com/capawesome-team/capacitor-plugins/pull/152)): refactor(ios): default value for `skipTranscoding` is now `true`
+
 ## 5.3.0
 
 ### Minor Changes

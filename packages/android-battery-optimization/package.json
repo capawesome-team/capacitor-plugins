@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-android-battery-optimization",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Capacitor plugin to access battery optimization settings on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

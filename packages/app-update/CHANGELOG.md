@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.0
+
+### Major Changes
+
+- [`7033a8a`](https://github.com/capawesome-team/capacitor-plugins/commit/7033a8a42984523902f125239c3623e1e872b489) ([#159](https://github.com/capawesome-team/capacitor-plugins/pull/159)): feat: update to Capacitor 6
+
+* [`a8e0940`](https://github.com/capawesome-team/capacitor-plugins/commit/a8e0940e1240907162ca55843d8de151f412919f) ([#150](https://github.com/capawesome-team/capacitor-plugins/pull/150)): refactor: remove `currentVersion` and `availableVersion` properties
+
 ## 5.1.0
 
 ### Minor Changes
