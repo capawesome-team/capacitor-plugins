@@ -8,15 +8,6 @@ All notable changes to this project will be documented in this file. See [standa
 ### ⚠ BREAKING CHANGES
 
 * This plugin now only supports Capacitor 6.
-* **android:** See BREAKING.md.
-
-* feat(android)!: add `connect(...)` and `close(...)` methods
-
-* wip
-
-* fix
-
-* update  docs [skip ci]
 
 ### Features
 
