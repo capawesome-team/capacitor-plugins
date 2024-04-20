@@ -57,7 +57,7 @@ import Capacitor
         }
         completion(cachedOrientationType)
     }
-    
+
     @objc private func requestGeometryUpdate(orientationValue: Int, orientationMask: UIInterfaceOrientationMask) {
         if #available(iOS 16, *) {
             let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
@@ -100,7 +100,7 @@ import Capacitor
         self.currentOrientationType = orientationType
         self.plugin.notifyOrientationChangeListeners(orientationType)
     }
-    
+
     @objc private func convertOrientationValueToMask(_ orientationValue: Int) -> UIInterfaceOrientationMask {
         switch orientationValue {
         case UIInterfaceOrientation.landscapeLeft.rawValue:
