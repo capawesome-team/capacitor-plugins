@@ -25,26 +25,19 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles({
     types: ['image/png'],
-    multiple: true,
   });
 };
 
 const pickImages = async () => {
-  const result = await FilePicker.pickImages({
-    multiple: true,
-  });
+  const result = await FilePicker.pickImages();
 };
 
 const pickMedia = async () => {
-  const result = await FilePicker.pickMedia({
-    multiple: true,
-  });
+  const result = await FilePicker.pickMedia();
 };
 
 const pickVideos = async () => {
-  const result = await FilePicker.pickVideos({
-    multiple: true,
-  });
+  const result = await FilePicker.pickVideos();
 };
 
 const appendFileToFormData = async () => {
