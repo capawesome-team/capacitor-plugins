@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.2](https://github.com/capawesome-team/capacitor-plugins/compare/v6.0.1...v6.0.2) (2024-04-21)
+
+
+### Bug Fixes
+
+* **ios:** bundles directory was not created automatically ([9dd0f55](https://github.com/capawesome-team/capacitor-plugins/commit/9dd0f554a3a344032cd2476783b96039114ac765))
+
 ### [6.0.1](https://github.com/capawesome-team/capacitor-plugins/compare/v6.0.0...v6.0.1) (2024-04-16)
 
 
