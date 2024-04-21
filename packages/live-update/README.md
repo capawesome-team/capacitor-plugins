@@ -2,12 +2,21 @@
 
 Capacitor plugin to update your app remotely in real-time.
 
-## Install
+## Installation
 
 ```bash
 npm install @capawesome/capacitor-live-update
 npx cap sync
 ```
+
+### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `22.3.1`)
+- `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
 
 ## Configuration
 
