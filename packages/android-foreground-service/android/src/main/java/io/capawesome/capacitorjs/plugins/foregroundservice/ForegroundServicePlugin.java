@@ -108,7 +108,7 @@ public class ForegroundServicePlugin extends Plugin {
     public void checkPermissions(PluginCall call) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             JSObject result = new JSObject();
-            result.put("receive", "granted");
+            result.put(LOCAL_NOTIFICATIONS, "granted");
             call.resolve(result);
         } else {
             super.checkPermissions(call);
@@ -120,7 +120,7 @@ public class ForegroundServicePlugin extends Plugin {
     public void requestPermissions(PluginCall call) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
             JSObject result = new JSObject();
-            result.put("receive", "granted");
+            result.put(LOCAL_NOTIFICATIONS, "granted");
             call.resolve(result);
         } else {
             if (getPermissionState(LOCAL_NOTIFICATIONS) == PermissionState.GRANTED) {
