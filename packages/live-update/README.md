@@ -2,6 +2,16 @@
 
 Capacitor plugin to update your app remotely in real-time.
 
+## Features
+
+- 🔋 Supports **Android and iOS**
+- ⚡️ **Capacitor 6** support
+- 📦 **Bundle Management**: Download, set, and delete bundles.
+- ☁️ **Cloud Support**: Use the [Capawesome Cloud](https://capawesome.io/cloud) to manage your app updates.
+- 📺 **Channel Support**: Set a channel for the app to manage different versions.
+- 🔄 **Auto Update**: Automatically download and set the latest bundle for the app.
+- 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
+
 ## Installation
 
 ```bash
@@ -76,6 +86,10 @@ export default config;
 ## Demo
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+## Guides
+
+- [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
 
 ## Usage
 
@@ -508,6 +522,24 @@ Only available on Android and iOS.
 | **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
 
 </docgen-api>
+
+## Testing
+
+When testing the plugin, you must make sure that you do not use the [Live Reload](https://ionicframework.com/docs/cli/livereload) option, as in this case a development server is used to load the bundle.
+
+Therefore, simply start your app without the live reload option, for example with the following command:
+
+```bash
+npx ionic cap run android --open
+```
+
+If you want to disable the plugin to test other parts of your app, you can set the [`enabled`](#configuration) configuration option to `false`.
+
+## Limitations
+
+Live updates are only supported for [binary-compatible changes](https://capawesome.io/cloud/live-updates/faq/#what-are-binary-compatible-changes) (e.g. HTML, CSS, JavaScript).
+If you change native code, such as adding a new plugin, you need to resubmit your app to the app stores.
+For this reason, you must be careful to limit live updates to compatible native versions of your app.
 
 ## Changelog
 
