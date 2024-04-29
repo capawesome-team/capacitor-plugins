@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.1
+
+### Patch Changes
+
+- [`a9652e8`](https://github.com/capawesome-team/capacitor-plugins/commit/a9652e89227cf72995d4fe3634d4c7aefc3d0f12) ([#164](https://github.com/capawesome-team/capacitor-plugins/pull/164)): fix(android): invalid property name returned
+
 ## 6.0.0
 
 ### Major Changes
