@@ -262,6 +262,9 @@ export interface GetDeviceIdResult {
   /**
    * The unique identifier of the device.
    *
+   * On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used.
+   * The value of this property is the same for apps that come from the same vendor running on the same device.
+   *
    * @since 5.0.0
    *
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'

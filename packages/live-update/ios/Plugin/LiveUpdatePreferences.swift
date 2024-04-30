@@ -2,20 +2,11 @@ import Foundation
 
 public class LiveUpdatePreferences: NSObject {
     private let channelKey = "channel" // DO NOT CHANGE
-    private let deviceIdKey = "deviceId" // DO NOT CHANGE
     private let customIdKey = "customId" // DO NOT CHANGE
     private let lastBundleVersionKey = "lastBundleVersion" // DO NOT CHANGE
 
     public func getChannel() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: channelKey))
-    }
-
-    public func getDeviceIdForApp(appId: String?) -> String? {
-        if let appId = appId {
-            return UserDefaults.standard.string(forKey: applyPrefix(to: deviceIdKey + "_" + appId))
-        } else {
-            return UserDefaults.standard.string(forKey: applyPrefix(to: deviceIdKey))
-        }
     }
 
     public func getCustomId() -> String? {
@@ -31,15 +22,6 @@ public class LiveUpdatePreferences: NSObject {
             UserDefaults.standard.set(value, forKey: applyPrefix(to: channelKey))
         } else {
             UserDefaults.standard.removeObject(forKey: applyPrefix(to: channelKey))
-        }
-        UserDefaults.standard.synchronize()
-    }
-
-    public func setDeviceIdForApp(appId: String?, _ value: String) {
-        if let appId = appId {
-            UserDefaults.standard.set(value, forKey: applyPrefix(to: deviceIdKey + "_" + appId))
-        } else {
-            UserDefaults.standard.set(value, forKey: applyPrefix(to: deviceIdKey))
         }
         UserDefaults.standard.synchronize()
     }

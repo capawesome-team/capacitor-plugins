@@ -386,11 +386,7 @@ import Alamofire
     }
 
     private func getDeviceId() -> String {
-        if let deviceId = preferences.getDeviceIdForApp(appId: config.appId) {
-            return deviceId
-        }
-        let deviceId = UUID().uuidString
-        preferences.setDeviceIdForApp(appId: config.appId, deviceId)
+        let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
         return deviceId
     }
 
