@@ -475,9 +475,9 @@ Only available on Android and iOS.
 
 #### GetDeviceIdResult
 
-| Prop           | Type                | Description                          | Since |
-| -------------- | ------------------- | ------------------------------------ | ----- |
-| **`deviceId`** | <code>string</code> | The unique identifier of the device. | 5.0.0 |
+| Prop           | Type                | Description                                                                                                                                                                                                                                                                    | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. | 5.0.0 |
 
 
 #### GetVersionCodeResult
