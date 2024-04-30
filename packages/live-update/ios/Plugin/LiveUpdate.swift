@@ -387,7 +387,7 @@ import Alamofire
 
     private func getDeviceId() -> String {
         let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? ""
-        return deviceId
+        return deviceId.lowercased()
     }
 
     private func getNextBundleId() -> String? {

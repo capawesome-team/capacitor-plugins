@@ -477,7 +477,7 @@ public class LiveUpdate {
     private String getDeviceId() {
         String deviceId = preferences.getDeviceIdForApp(config.getAppId());
         if (deviceId == null) {
-            deviceId = UUID.randomUUID().toString();
+            deviceId = UUID.randomUUID().toString().toLowerCase();
             preferences.setDeviceIdForApp(config.getAppId(), deviceId);
         }
         return deviceId;
