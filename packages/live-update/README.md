@@ -125,25 +125,76 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 ```typescript
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
+const deleteBundle = async () => {
+  await LiveUpdate.deleteBundle({ bundleId: 'my-bundle' });
+};
+
 const downloadBundle = async () => {
-    // Download a bundle from a URL
-    await LiveUpdate.downloadBundle({
-        url: 'https://example.com/1.0.0.zip',
-        bundleId: '1.0.0',
-    });
-    // Set the downloaded bundle as the next bundle to use
-    await LiveUpdate.setBundle({ bundleId: '1.0.0' });
-    // Reload the app to apply the new bundle
-    await LiveUpdate.reload();
+  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+};
+
+const getBundle = async () => {
+  const result = await LiveUpdate.getBundle();
+  return result.bundleId;
+};
+
+const getBundles = async () => {
+  const result = await LiveUpdate.getBundles();
+  return result.bundleIds;
+};
+
+const getChannel = async () => {
+  const result = await LiveUpdate.getChannel();
+  return result.channel;
+};
+
+const getCustomId = async () => {
+  const result = await LiveUpdate.getCustomId();
+  return result.customId;
+};
+
+const getDeviceId = async () => {
+  const result = await LiveUpdate.getDeviceId();
+  return result.deviceId;
+};
+
+const getVersionCode = async () => {
+  const result = await LiveUpdate.getVersionCode();
+  return result.versionCode;
+};
+
+const getVersionName = async () => {
+  const result = await LiveUpdate.getVersionName();
+  return result.versionName;
+};
+
+const ready = async () => {
+  await LiveUpdate.ready();
+};
+
+const reload = async () => {
+  await LiveUpdate.reload();
+};
+
+const reset = async () => {
+  await LiveUpdate.reset();
+};
+
+const setBundle = async () => {
+  await LiveUpdate.setBundle({ bundleId: '1.0.0' });
+};
+
+const setChannel = async () => {
+  await LiveUpdate.setChannel({ channel: 'beta' });
+};
+
+const setCustomId = async () => {
+  await LiveUpdate.setCustomId({ customId: 'my-custom-id' });
 };
 
 const sync = async () => {
-    // Automatically download and set the latest bundle for the app
-    const result = await LiveUpdate.sync();
-    if (result.nextBundleId) {
-        // Reload the app to apply the new bundle
-        await LiveUpdate.reload();
-    }
+  const result = await LiveUpdate.sync();
+  return result.nextBundleId;
 };
 ```
 
