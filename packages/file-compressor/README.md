@@ -10,8 +10,8 @@ This project is available as **Sponsorware**.
 
 This means...
 
-- The source code will be published as soon as [our GitHub Sponsors goal](https://github.com/sponsors/capawesome-team) is reached.
-- Any GitHub sponsor with a [sponsorware tier](https://github.com/sponsors/capawesome-team?frequency=recurring) gets **immediate access** to our sponsors-only repository and can start using the project right away.
+- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
+- Any [Polar sponsor](https://polar.sh/capawesome-team/subscriptions) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
 
 ## Terms
 
@@ -80,7 +80,7 @@ compressImage(options: CompressImageOptions) => Promise<CompressImageResult>
 
 Compress an image.
 
-**Attention**: This method was only tested with png, jpeg and webp images.
+Only png, jpeg, and webp images are supported.
 
 **Attention**: The exif data of the image is lost during compression.
 
