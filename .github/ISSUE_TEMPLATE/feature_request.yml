@@ -24,6 +24,7 @@ body:
         - label: Photo Editor
         - label: Printer
         - label: Screen Orientation
+        - label: Zip
   - type: textarea
     attributes:
       label: Current problem
