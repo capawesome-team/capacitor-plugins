@@ -11,7 +11,7 @@ This project is available as **Sponsorware**.
 This means...
 
 - The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [Polar sponsor](https://polar.sh/capawesome-team/subscriptions) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
+- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
 
 ## Terms
 
