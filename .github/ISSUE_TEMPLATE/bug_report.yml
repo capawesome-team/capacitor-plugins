@@ -19,6 +19,7 @@ body:
         - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: Live Update
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
