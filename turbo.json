@@ -12,6 +12,7 @@
     "dev": {
       "cache": false
     },
+    "version": {},
     "ios:pod:install": {}
   }
 }
