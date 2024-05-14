@@ -265,6 +265,9 @@ public class LiveUpdate {
             throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_INDEX_HTML_MISSING);
         }
 
+        // Create the bundles directory if it does not exist
+        createBundlesDirectory();
+
         // Move the bundle directory to the bundles directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         indexHtmlFile.getParentFile().renameTo(bundleDirectory);
@@ -286,6 +289,13 @@ public class LiveUpdate {
 
     private File buildBundleDirectoryFor(@NonNull String bundle) {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundle);
+    }
+
+    private void createBundlesDirectory() {
+        File bundlesDirectory = buildBundlesDirectory();
+        if (!bundlesDirectory.exists()) {
+            bundlesDirectory.mkdir();
+        }
     }
 
     private void deleteBundle(@NonNull String bundleId) {
