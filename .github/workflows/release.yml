@@ -36,7 +36,6 @@ jobs:
           publish: npm run release
           commit: "chore(release): publish"
           title: "chore(release): publish"
-          version: npx changeset version && npm run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
