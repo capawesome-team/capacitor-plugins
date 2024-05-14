@@ -49,7 +49,6 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
 <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 <!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <!-- Needed only if your app uses the foreground service. -->
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -94,12 +93,155 @@ No configuration required for this plugin.
 ```typescript
 import { BluetoothLowEnergy, BluetoothLowEnergyUtils } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
-const connect = async (deviceId: string) => {
-  await BluetoothLowEnergy.connect({ deviceId });
+const connect = async () => {
+  await BluetoothLowEnergy.connect({ deviceId: '00:00:00:00:00:00' });
+};
+
+const disconnect = async () => {
+  await BluetoothLowEnergy.disconnect({ deviceId: '00:00:00:00:00:00' });
+};
+
+const discoverServices = async () => {
+  await BluetoothLowEnergy.discoverServices({ deviceId: '00:00:00:00:00:00' });
+};
+
+const getConnectedDevices = async () => {
+  const result = await BluetoothLowEnergy.getConnectedDevices();
+  return result.devices;
+};
+
+const getServices = async () => {
+  const result = await BluetoothLowEnergy.getServices({ deviceId: '00:00:00:00:00:00' });
+  return result.services;
 };
 
 const initialize = async () => {
   await BluetoothLowEnergy.initialize();
+};
+
+const isEnabled = async () => {
+  const result = await BluetoothLowEnergy.isEnabled();
+  return result.enabled;
+};
+
+const openAppSettings = async () => {
+  await BluetoothLowEnergy.openAppSettings();
+};
+
+const openBluetoothSettings = async () => {
+  await BluetoothLowEnergy.openBluetoothSettings();
+};
+
+const openLocationSettings = async () => {
+  await BluetoothLowEnergy.openLocationSettings();
+};
+
+const readCharacteristic = async () => {
+  const result = await BluetoothLowEnergy.readCharacteristic({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+  return result.value;
+};
+
+const readDescriptor = async () => {
+  const result = await BluetoothLowEnergy.readDescriptor({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    descriptorId: '00002902-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+  return result.value;
+};
+
+const readRssi = async () => {
+  const result = await BluetoothLowEnergy.readRssi({ deviceId: '00:00:00:00:00:00' });
+  return result.rssi;
+};
+
+const startCharacteristicNotifications = async () => {
+  await BluetoothLowEnergy.startCharacteristicNotifications({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+};
+
+const startForegroundService = async () => {
+  await BluetoothLowEnergy.startForegroundService({
+    body: 'Body',
+    id: 1,
+    smallIcon: 'smallIcon',
+    title: 'Title',
+  });
+};
+
+const startScan = async () => {
+  await BluetoothLowEnergy.startScan();
+};
+
+const stopCharacteristicNotifications = async () => {
+  await BluetoothLowEnergy.stopCharacteristicNotifications({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+};
+
+const stopForegroundService = async () => {
+  await BluetoothLowEnergy.stopForegroundService();
+};
+
+const stopScan = async () => {
+  await BluetoothLowEnergy.stopScan();
+};
+
+const writeCharacteristic = async () => {
+  await BluetoothLowEnergy.writeCharacteristic({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [0x01, 0x02, 0x03],
+  });
+};
+
+const writeDescriptor = async () => {
+  await BluetoothLowEnergy.writeDescriptor({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    descriptorId: '00002902-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [0x01, 0x02, 0x03],
+  });
+};
+
+const checkPermissions = async () => {
+  const result = await BluetoothLowEnergy.checkPermissions();
+  return result;
+};
+
+const requestPermissions = async () => {
+  const result = await BluetoothLowEnergy.requestPermissions();
+  return result;
+};
+
+const addListener = () => {
+  BluetoothLowEnergy.addListener('characteristicChanged', (event) => {
+    console.log('Characteristic changed', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
+    console.log('Device disconnected', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceScanned', (event) => {
+    console.log('Device scanned', event);
+  });
+};
+
+const removeAllListeners = () => {
+  BluetoothLowEnergy.removeAllListeners();
 };
 
 const convertBytesToHex = (bytes: number[]) => {
