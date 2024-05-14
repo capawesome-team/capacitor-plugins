@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.5
+
+### Patch Changes
+
+- [`a215553`](https://github.com/capawesome-team/capacitor-plugins/commit/a215553180d3c96b6d58cc3cecd537be4d0c6349) ([#183](https://github.com/capawesome-team/capacitor-plugins/pull/183)): fix(android): create bundles directory if it does not exist
+
 ## 6.0.4
 
 ### Patch Changes
