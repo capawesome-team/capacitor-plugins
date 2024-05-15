@@ -66,6 +66,24 @@ You also need to add the following service **inside** the `application` tag in y
 <service android:name="io.capawesome.capacitorjs.plugins.bluetoothle.BluetoothLowEnergyService" android:foregroundServiceType="connectedDevice" />
 ```
 
+#### Headless Task
+
+If you want to run your own native code when a specific event occurs, you can create a headless task.
+For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
+Then you need to add the `onCharacteristicChanged` method to your class:
+
+```java
+import android.bluetooth.BluetoothGatt;
+import android.bluetooth.BluetoothGattCharacteristic;
+import androidx.annotation.NonNull;
+
+public class BluetoothLowEnergyHeadlessTask {
+  public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+}
+```
+
 ### iOS
 
 Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
@@ -88,13 +106,21 @@ If the app wants to use Bluetooth in the background, add the `UIBackgroundModes`
 
 No configuration required for this plugin.
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Usage
 
 ```typescript
-import { BluetoothLowEnergy, BluetoothLowEnergyUtils } from '@capawesome-team/capacitor-bluetooth-low-energy';
+import { BluetoothLowEnergy, BluetoothLowEnergyUtils, ConnectionPriority } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const connect = async () => {
   await BluetoothLowEnergy.connect({ deviceId: '00:00:00:00:00:00' });
+};
+
+const createBond = async () => {
+  await BluetoothLowEnergy.createBond({ deviceId: '00:00:00:00:00:00' });
 };
 
 const disconnect = async () => {
@@ -117,6 +143,11 @@ const getServices = async () => {
 
 const initialize = async () => {
   await BluetoothLowEnergy.initialize();
+};
+
+const isBonded = async () => {
+  const result = await BluetoothLowEnergy.isBonded({ deviceId: '00:00:00:00:00:00' });
+  return result.bonded;
 };
 
 const isEnabled = async () => {
@@ -158,6 +189,20 @@ const readDescriptor = async () => {
 const readRssi = async () => {
   const result = await BluetoothLowEnergy.readRssi({ deviceId: '00:00:00:00:00:00' });
   return result.rssi;
+};
+
+const requestConnectionPriority = async () => {
+  await BluetoothLowEnergy.requestConnectionPriority({
+    connectionPriority: ConnectionPriority.BALANCED,
+    deviceId: '00:00:00:00:00:00',
+  });
+};
+
+const requestMtu = async () => {
+  await BluetoothLowEnergy.requestMtu({
+    deviceId: '00:00:00:00:00:00',
+    mtu: 512,
+  });
 };
 
 const startCharacteristicNotifications = async () => {
@@ -254,11 +299,13 @@ const convertBytesToHex = (bytes: number[]) => {
 <docgen-index>
 
 * [`connect(...)`](#connect)
+* [`createBond(...)`](#createbond)
 * [`disconnect(...)`](#disconnect)
 * [`discoverServices(...)`](#discoverservices)
 * [`getConnectedDevices()`](#getconnecteddevices)
 * [`getServices(...)`](#getservices)
 * [`initialize()`](#initialize)
+* [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
 * [`openAppSettings()`](#openappsettings)
 * [`openBluetoothSettings()`](#openbluetoothsettings)
@@ -266,6 +313,8 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`readCharacteristic(...)`](#readcharacteristic)
 * [`readDescriptor(...)`](#readdescriptor)
 * [`readRssi(...)`](#readrssi)
+* [`requestConnectionPriority(...)`](#requestconnectionpriority)
+* [`requestMtu(...)`](#requestmtu)
 * [`startCharacteristicNotifications(...)`](#startcharacteristicnotifications)
 * [`startForegroundService(...)`](#startforegroundservice)
 * [`startScan(...)`](#startscan)
@@ -282,6 +331,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -301,6 +351,25 @@ Only available on Android and iOS.
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#connectoptions">ConnectOptions</a></code> |
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### createBond(...)
+
+```typescript
+createBond(options: CreateBondOptions) => Promise<void>
+```
+
+Create a bond with the BLE device.
+
+Only available on Android.
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#createbondoptions">CreateBondOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -396,6 +465,27 @@ Initialize the plugin. This method must be called before any other method.
 On **iOS**, this will prompt the user for Bluetooth permissions.
 
 Only available on iOS.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### isBonded(...)
+
+```typescript
+isBonded(options: IsBondedOptions) => Promise<IsBondedResult>
+```
+
+Check if the device is bonded.
+
+Only available on Android.
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#isbondedoptions">IsBondedOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isbondedresult">IsBondedResult</a>&gt;</code>
 
 **Since:** 6.0.0
 
@@ -521,6 +611,44 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#readrssioptions">ReadRssiOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#readrssiresult">ReadRssiResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### requestConnectionPriority(...)
+
+```typescript
+requestConnectionPriority(options: RequestConnectionPriorityOptions) => Promise<void>
+```
+
+Request a connection priority.
+
+Only available on Android.
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#requestconnectionpriorityoptions">RequestConnectionPriorityOptions</a></code> |
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### requestMtu(...)
+
+```typescript
+requestMtu(options: RequestMtuOptions) => Promise<void>
+```
+
+Request an MTU size.
+
+Only available on Android.
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#requestmtuoptions">RequestMtuOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -799,6 +927,14 @@ Remove all listeners for this plugin.
 | **`timeout`**  | <code>number</code> | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>10000</code> | 6.0.0 |
 
 
+#### CreateBondOptions
+
+| Prop           | Type                | Description                                                                                                                             | Default            | Since |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`deviceId`** | <code>string</code> | The address of the device to create a bond with.                                                                                        |                    | 6.0.0 |
+| **`timeout`**  | <code>number</code> | The timeout for the create bond operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>10000</code> | 6.0.0 |
+
+
 #### DisconnectOptions
 
 | Prop           | Type                | Description                                                                                                                            | Default           | Since |
@@ -885,6 +1021,21 @@ Remove all listeners for this plugin.
 | **`timeout`**  | <code>number</code> | The timeout for the get services operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code> | 6.0.0 |
 
 
+#### IsBondedResult
+
+| Prop         | Type                 | Description                          | Since |
+| ------------ | -------------------- | ------------------------------------ | ----- |
+| **`bonded`** | <code>boolean</code> | Whether or not the device is bonded. | 6.0.0 |
+
+
+#### IsBondedOptions
+
+| Prop           | Type                | Description                                                                                                                           | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`deviceId`** | <code>string</code> | The address of the device to check if it is bonded.                                                                                   | 6.0.0 |
+| **`timeout`**  | <code>number</code> | The timeout for the is bonded operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | 6.0.0 |
+
+
 #### IsEnabledResult
 
 | Prop          | Type                 | Description                          | Since |
@@ -940,6 +1091,24 @@ Remove all listeners for this plugin.
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
 | **`deviceId`** | <code>string</code> | The address of the device to read the RSSI for.                                                                                       |                   | 6.0.0 |
 | **`timeout`**  | <code>number</code> | The timeout for the read RSSI operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code> | 6.0.0 |
+
+
+#### RequestConnectionPriorityOptions
+
+| Prop                     | Type                                                              | Description                                                                                                                                             | Since |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`deviceId`**           | <code>string</code>                                               | The address of the device to request the connection priority for.                                                                                       | 6.0.0 |
+| **`connectionPriority`** | <code><a href="#connectionpriority">ConnectionPriority</a></code> | The connection priority to request.                                                                                                                     | 6.0.0 |
+| **`timeout`**            | <code>number</code>                                               | The timeout for the request connection priority operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | 6.0.0 |
+
+
+#### RequestMtuOptions
+
+| Prop           | Type                | Description                                                                                                                             | Since |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`deviceId`** | <code>string</code> | The address of the device to request the MTU size for.                                                                                  | 6.0.0 |
+| **`mtu`**      | <code>number</code> | The mtu size to request.                                                                                                                | 6.0.0 |
+| **`timeout`**  | <code>number</code> | The timeout for the request MTU operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | 6.0.0 |
 
 
 #### StartCharacteristicNotificationsOptions
@@ -1065,6 +1234,19 @@ Remove all listeners for this plugin.
 #### BluetoothLowEnergyPermissionType
 
 <code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'location' | 'notifications'</code>
+
+
+### Enums
+
+
+#### ConnectionPriority
+
+| Members            | Value          | Description                          | Since |
+| ------------------ | -------------- | ------------------------------------ | ----- |
+| **`BALANCED`**     | <code>0</code> | Balanced connection priority.        | 6.0.0 |
+| **`HIGH`**         | <code>1</code> | High connection priority.            | 6.0.0 |
+| **`LOW_POWER`**    | <code>2</code> | Low power connection priority.       | 6.0.0 |
+| **`PRIORITY_DCK`** | <code>3</code> | Digital Car Key connection priority. | 6.0.0 |
 
 </docgen-api>
 
