@@ -14,6 +14,7 @@ body:
         - label: App Update
         - label: Background Task
         - label: Badge
+        - label: Bluetooth Low Energy
         - label: Cloudinary
         - label: Datetime Picker
         - label: File Compressor
