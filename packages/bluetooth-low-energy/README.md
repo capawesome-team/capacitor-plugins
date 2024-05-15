@@ -247,7 +247,7 @@ const writeCharacteristic = async () => {
     characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
     deviceId: '00:00:00:00:00:00',
     serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-    value: [0x01, 0x02, 0x03],
+    value: [1, 2, 3],
   });
 };
 
@@ -257,7 +257,7 @@ const writeDescriptor = async () => {
     descriptorId: '00002902-0000-1000-8000-00805f9b34fb',
     deviceId: '00:00:00:00:00:00',
     serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-    value: [0x01, 0x02, 0x03],
+    value: [1, 2, 3],
   });
 };
 
@@ -352,7 +352,7 @@ Only available on Android and iOS.
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#connectoptions">ConnectOptions</a></code> |
 
-**Since:** 6.0.0
+**Since:** 6.1.0
 
 --------------------
 
