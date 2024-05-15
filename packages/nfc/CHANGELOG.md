@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/capawesome-team/sponsorware/compare/v6.0.0...v6.1.0) (2024-05-15)
+
+
+### Features
+
+* **android:** add `getAntennaInfo` method ([#23](https://github.com/capawesome-team/sponsorware/issues/23)) ([70deebf](https://github.com/capawesome-team/sponsorware/commit/70deebf6457612899695f67c46270f80f8f82c5f))
+
 ## [6.0.0](https://github.com/capawesome-team/sponsorware/compare/v5.1.0...v6.0.0) (2024-04-16)
 
 
