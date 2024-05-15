@@ -2,6 +2,12 @@
 
 Capacitor plugin to zip and unzip files.
 
+## Features
+
+- 🔋 Supports Android and iOS
+- 📁 Zip and unzip single or multiple files
+- 🔑 Encrypt and decrypt files
+
 ## Sponsorware
 
 This project is available as **Sponsorware**.
