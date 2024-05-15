@@ -204,62 +204,28 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-- [@capawesome-team/capacitor-nfc](#capawesome-teamcapacitor-nfc)
-  - [Sponsorware](#sponsorware)
-  - [Terms](#terms)
-  - [Demo](#demo)
-  - [Guides](#guides)
-  - [Installation](#installation)
-    - [Android](#android)
-    - [iOS](#ios)
-  - [Configuration](#configuration)
-  - [Usage](#usage)
-  - [API](#api)
-    - [startScanSession(...)](#startscansession)
-    - [stopScanSession(...)](#stopscansession)
-    - [write(...)](#write)
-    - [makeReadOnly()](#makereadonly)
-    - [erase()](#erase)
-    - [format()](#format)
-    - [transceive(...)](#transceive)
-    - [connect(...)](#connect)
-    - [close()](#close)
-    - [isSupported()](#issupported)
-    - [isEnabled()](#isenabled)
-    - [openSettings()](#opensettings)
-    - [checkPermissions()](#checkpermissions)
-    - [requestPermissions()](#requestpermissions)
-    - [addListener('nfcTagScanned', ...)](#addlistenernfctagscanned-)
-    - [addListener('scanSessionCanceled', ...)](#addlistenerscansessioncanceled-)
-    - [addListener('scanSessionError', ...)](#addlistenerscansessionerror-)
-    - [removeAllListeners()](#removealllisteners)
-    - [Interfaces](#interfaces)
-      - [StartScanSessionOptions](#startscansessionoptions)
-      - [StopScanSessionOptions](#stopscansessionoptions)
-      - [WriteOptions](#writeoptions)
-      - [NdefMessage](#ndefmessage)
-      - [NdefRecord](#ndefrecord)
-      - [TransceiveResult](#transceiveresult)
-      - [TransceiveOptions](#transceiveoptions)
-      - [ConnectOptions](#connectoptions)
-      - [IsSupportedResult](#issupportedresult)
-      - [IsEnabledResult](#isenabledresult)
-      - [PermissionResult](#permissionresult)
-      - [PluginListenerHandle](#pluginlistenerhandle)
-      - [NfcTagScannedEvent](#nfctagscannedevent)
-      - [NfcTag](#nfctag)
-      - [ScanSessionErrorEvent](#scansessionerrorevent)
-    - [Type Aliases](#type-aliases)
-      - [PermissionState](#permissionstate)
-    - [Enums](#enums)
-      - [NfcTagTechType](#nfctagtechtype)
-      - [PollingOption](#pollingoption)
-      - [TypeNameFormat](#typenameformat)
-      - [Iso15693RequestFlag](#iso15693requestflag)
-      - [NfcTagType](#nfctagtype)
-  - [Utils](#utils)
-  - [Changelog](#changelog)
-  - [License](#license)
+* [`startScanSession(...)`](#startscansession)
+* [`stopScanSession(...)`](#stopscansession)
+* [`write(...)`](#write)
+* [`makeReadOnly()`](#makereadonly)
+* [`erase()`](#erase)
+* [`format()`](#format)
+* [`transceive(...)`](#transceive)
+* [`connect(...)`](#connect)
+* [`close()`](#close)
+* [`isSupported()`](#issupported)
+* [`isEnabled()`](#isenabled)
+* [`openSettings()`](#opensettings)
+* [`getAntennaInfo()`](#getantennainfo)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
+* [`addListener('nfcTagScanned', ...)`](#addlistenernfctagscanned-)
+* [`addListener('scanSessionCanceled', ...)`](#addlistenerscansessioncanceled-)
+* [`addListener('scanSessionError', ...)`](#addlistenerscansessionerror-)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -495,6 +461,23 @@ Only available on Android.
 --------------------
 
 
+### getAntennaInfo()
+
+```typescript
+getAntennaInfo() => Promise<GetAntennaInfoResult>
+```
+
+Returns information regarding Nfc antennas on the device such as their relative positioning on the device.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#getantennainforesult">GetAntennaInfoResult</a>&gt;</code>
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### checkPermissions()
 
 ```typescript
@@ -686,6 +669,24 @@ Remove all listeners for this plugin.
 | Prop            | Type                 | Since |
 | --------------- | -------------------- | ----- |
 | **`isEnabled`** | <code>boolean</code> | 0.0.1 |
+
+
+#### GetAntennaInfoResult
+
+| Prop                    | Type                   | Description                               | Since |
+| ----------------------- | ---------------------- | ----------------------------------------- | ----- |
+| **`availableAntennas`** | <code>Antenna[]</code> | The available NFC antennas on the device. | 6.1.0 |
+| **`deviceHeight`**      | <code>number</code>    | The height of the device in millimeters.  | 6.1.0 |
+| **`deviceWidth`**       | <code>number</code>    | The width of the device in millimeters.   | 6.1.0 |
+| **`isDeviceFoldable`**  | <code>boolean</code>   | Whether or not the device is foldable.    | 6.1.0 |
+
+
+#### Antenna
+
+| Prop            | Type                | Description                                                   | Since |
+| --------------- | ------------------- | ------------------------------------------------------------- | ----- |
+| **`locationX`** | <code>number</code> | The location of the NFC antenna on the X axis in millimeters. | 6.1.0 |
+| **`locationY`** | <code>number</code> | The location of the NFC antenna on the Y axis in millimeters. | 6.1.0 |
 
 
 #### PermissionResult
