@@ -509,7 +509,7 @@ import Alamofire
 
 extension DispatchQueue {
     static func background(background: (() -> Void)? = nil, completion: (() -> Void)? = nil) {
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
             background?()
             if let completion = completion {
                 DispatchQueue.main.async {
