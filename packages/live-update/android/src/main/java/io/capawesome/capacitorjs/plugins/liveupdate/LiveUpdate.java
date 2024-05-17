@@ -185,6 +185,7 @@ public class LiveUpdate {
         }
 
         setNextBundle(bundleId);
+        callback.success();
     }
 
     public void setChannel(@NonNull SetChannelOptions options, @NonNull EmptyCallback callback) {
