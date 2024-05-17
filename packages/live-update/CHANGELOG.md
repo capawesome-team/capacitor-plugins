@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.6
+
+### Patch Changes
+
+- [`b0a6473`](https://github.com/capawesome-team/capacitor-plugins/commit/b0a647325380973351512a9dae00db96f2fe4c16) ([#188](https://github.com/capawesome-team/capacitor-plugins/pull/188)): fix(ios): improve unzip performance
+
+* [`843900b`](https://github.com/capawesome-team/capacitor-plugins/commit/843900bfbab3ec89f2289d0399e7bef1cba4a632) ([#189](https://github.com/capawesome-team/capacitor-plugins/pull/189)): fix: `setBundle` is not resolved
+
 ## 6.0.5
 
 ### Patch Changes
