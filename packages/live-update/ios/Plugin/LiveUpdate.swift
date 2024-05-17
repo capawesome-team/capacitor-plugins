@@ -154,6 +154,7 @@ import Alamofire
         }
 
         setNextBundle(bundleId: bundleId)
+        completion(nil)
     }
 
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {

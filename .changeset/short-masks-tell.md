@@ -2,4 +2,4 @@
 '@capawesome/capacitor-live-update': patch
 ---
 
-fix(android): `setBundle` is not resolved
+fix: `setBundle` is not resolved
