@@ -352,7 +352,7 @@ Only available on Android and iOS.
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#connectoptions">ConnectOptions</a></code> |
 
-**Since:** 6.1.0
+**Since:** 6.0.0
 
 --------------------
 
@@ -805,7 +805,7 @@ Only available on Android and iOS.
 checkPermissions() => Promise<PermissionStatus>
 ```
 
-Check permission for
+Check permissions for the plugin.
 
 Only available on Android.
 
@@ -822,7 +822,7 @@ Only available on Android.
 requestPermissions(permissions?: BluetoothLowEnergyPluginPermission | undefined) => Promise<PermissionStatus>
 ```
 
-Request permission
+Request permissions for the plugin.
 
 Only available on Android.
 
