@@ -11,6 +11,7 @@ Capacitor plugin to update your app remotely in real-time.
 - 📺 **Channel Support**: Set a channel for the app to manage different versions.
 - 🔄 **Auto Update**: Automatically download and set the latest bundle for the app.
 - 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
+- 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 
 ## Installation
 
