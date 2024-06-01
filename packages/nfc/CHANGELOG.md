@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/capawesome-team/sponsorware/compare/v6.1.0...v6.2.0) (2024-06-01)
+
+
+### Features
+
+* **ios:** add `setAlertMessage(...)` method ([#24](https://github.com/capawesome-team/sponsorware/issues/24)) ([af380d9](https://github.com/capawesome-team/sponsorware/commit/af380d9e81ae01cc45d5b7c6cc664f83cb848579))
+
 ## [6.1.0](https://github.com/capawesome-team/sponsorware/compare/v6.0.0...v6.1.0) (2024-05-15)
 
 
