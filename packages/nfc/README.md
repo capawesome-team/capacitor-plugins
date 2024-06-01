@@ -217,6 +217,7 @@ const removeAllListeners = async () => {
 * [`isEnabled()`](#isenabled)
 * [`openSettings()`](#opensettings)
 * [`getAntennaInfo()`](#getantennainfo)
+* [`setAlertMessage(...)`](#setalertmessage)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('nfcTagScanned', ...)`](#addlistenernfctagscanned-)
@@ -478,6 +479,25 @@ Only available on Android.
 --------------------
 
 
+### setAlertMessage(...)
+
+```typescript
+setAlertMessage(options: SetAlertMessageOptions) => Promise<void>
+```
+
+Set a custom message, which is displayed in the NFC Reader Session alert.
+
+Only available on iOS.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setalertmessageoptions">SetAlertMessageOptions</a></code> |
+
+**Since:** 6.2.0
+
+--------------------
+
+
 ### checkPermissions()
 
 ```typescript
@@ -687,6 +707,13 @@ Remove all listeners for this plugin.
 | --------------- | ------------------- | ------------------------------------------------------------- | ----- |
 | **`locationX`** | <code>number</code> | The location of the NFC antenna on the X axis in millimeters. | 6.1.0 |
 | **`locationY`** | <code>number</code> | The location of the NFC antenna on the Y axis in millimeters. | 6.1.0 |
+
+
+#### SetAlertMessageOptions
+
+| Prop          | Type                | Description                                                             | Since |
+| ------------- | ------------------- | ----------------------------------------------------------------------- | ----- |
+| **`message`** | <code>string</code> | The custom message, which is displayed in the NFC Reader Session alert. | 6.2.0 |
 
 
 #### PermissionResult
