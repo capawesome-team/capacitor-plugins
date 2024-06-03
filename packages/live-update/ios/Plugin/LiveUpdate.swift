@@ -218,10 +218,10 @@ import Alamofire
                 completion(CustomError.bundleIndexHtmlMissing)
                 return
             }
-            
-            //Create the bundles directory if it does not exist
+
+            // Create the bundles directory if it does not exist
             self.createBundlesDirectory()
-            
+
             // Move the unzipped files to the bundles directory
             let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
             do {
@@ -402,7 +402,7 @@ import Alamofire
     }
 
     private func getNextCapacitorServerPath() -> String? {
-        if let path = UserDefaults.standard.string(forKey: self.defaultServerPathKey) {
+        if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
             return path.isEmpty ? nil : path
         }
         return nil
@@ -460,12 +460,11 @@ import Alamofire
     private func setNextCapacitorServerPath(path: String) {
         if path.hasSuffix("/public") {
             // Reset the custom server base path
-            UserDefaults.standard.set("", forKey: self.defaultServerPathKey)
+            KeyValueStore.standard[self.defaultServerPathKey] = ""
         } else {
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
-            UserDefaults.standard.set(path, forKey: self.defaultServerPathKey)
+            KeyValueStore.standard[self.defaultServerPathKey] = path
         }
-        UserDefaults.standard.synchronize()
     }
 
     private func setNextCapacitorServerPathToDefaultWebAssetDir() {
