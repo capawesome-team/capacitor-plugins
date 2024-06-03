@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.7
+
+### Patch Changes
+
+- [`6d44185`](https://github.com/capawesome-team/capacitor-plugins/commit/6d441858266e1dfc5e3e2606a0e71b30540a9742): fix(ios): bundle was reset after restarting the app
+
 ## 6.0.6
 
 ### Patch Changes
