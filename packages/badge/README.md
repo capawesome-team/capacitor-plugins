@@ -9,11 +9,40 @@ npm install @capawesome/capacitor-badge
 npx cap sync
 ```
 
-### Android Variables
+### Android
+
+#### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
 - `$shortcutBadgerVersion` version of `me.leolin:ShortcutBadger` (default: `1.1.22`)
+
+### iOS
+
+#### Privacy manifest
+
+Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Privacy Manifest](https://capacitorjs.com/docs/ios/privacy-manifest) (usually `ios/App/PrivacyInfo.xcprivacy`):
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>NSPrivacyAccessedAPITypes</key>
+    <array>
+      <!-- Add this dict entry to the array if the file already exists. -->
+      <dict>
+        <key>NSPrivacyAccessedAPIType</key>
+        <string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+        <key>NSPrivacyAccessedAPITypeReasons</key>
+        <array>
+          <string>CA92.1</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
+```
 
 ## Configuration
 
