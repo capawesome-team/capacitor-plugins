@@ -21,7 +21,6 @@ import Alamofire
         self.plugin = plugin
         self.preferences = LiveUpdatePreferences()
         super.init()
-        createBundlesDirectory()
 
         if config.enabled {
             if wasUpdated() && config.resetOnUpdate {
@@ -219,6 +218,10 @@ import Alamofire
                 completion(CustomError.bundleIndexHtmlMissing)
                 return
             }
+            
+            //Create the bundles directory if it does not exist
+            self.createBundlesDirectory()
+            
             // Move the unzipped files to the bundles directory
             let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
             do {
