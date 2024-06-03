@@ -117,6 +117,13 @@ export default config;
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
+## Starter templates
+
+The following starter templates are available:
+
+- [Ionstarter Angular Firebase](https://ionstarter.dev/)
+- [Ionstarter Angular SQLite](https://ionstarter.dev/)
+
 ## Guides
 
 - [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
