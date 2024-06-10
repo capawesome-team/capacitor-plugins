@@ -120,6 +120,9 @@ export interface LiveUpdatePlugin {
   /**
    * Notify the plugin that the app is ready to use and no rollback is needed.
    *
+   * **Attention**: This method should be called as soon as the app is ready to use
+   * to prevent the app from being reset to the default bundle.
+   *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
