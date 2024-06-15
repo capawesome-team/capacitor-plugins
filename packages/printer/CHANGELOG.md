@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.0.1](https://github.com/capawesome-team/sponsorware/compare/v6.0.0...v6.0.1) (2024-06-15)
+
+
+### Bug Fixes
+
+* **ios:** stylesheets in html lead to blank page ([#3](https://github.com/capawesome-team/sponsorware/issues/3)) ([4a0ec5a](https://github.com/capawesome-team/sponsorware/commit/4a0ec5a2146508e0f269e6a06309208be2506e16))
+
 ## [6.0.0](https://github.com/capawesome-team/sponsorware/compare/v5.1.0...v6.0.0) (2024-04-16)
 
 
