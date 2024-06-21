@@ -3,7 +3,13 @@ import { WebPlugin } from '@capacitor/core';
 import type { FileOpenerPlugin, OpenFileOptions } from './definitions';
 
 export class FileOpenerWeb extends WebPlugin implements FileOpenerPlugin {
-  public openFile(_options: OpenFileOptions): Promise<void> {
-    throw this.unimplemented('Not implemented on web.');
+  public static readonly ERROR_BLOB_MISSING = 'blob must be provided.';
+
+  public async openFile(options: OpenFileOptions): Promise<void> {
+    if (!options.blob) {
+      throw new Error(FileOpenerWeb.ERROR_BLOB_MISSING);
+    }
+    const objectUrl = URL.createObjectURL(options.blob);
+    window.open(objectUrl, '_blank');
   }
 }
