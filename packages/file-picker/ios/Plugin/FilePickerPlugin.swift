@@ -52,7 +52,7 @@ public class FilePickerPlugin: CAPPlugin {
     @objc func pickFiles(_ call: CAPPluginCall) {
         savedCall = call
 
-        let limit = call.getInt("limit", 0)
+        let limit = call.getInt("limit", 1)
         let types = call.getArray("types", String.self) ?? []
         let parsedTypes = parseTypesOption(types)
         let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
@@ -63,7 +63,7 @@ public class FilePickerPlugin: CAPPlugin {
     @objc func pickImages(_ call: CAPPluginCall) {
         savedCall = call
 
-        let limit = call.getInt("limit", 0)
+        let limit = call.getInt("limit", 1)
         let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
@@ -73,7 +73,7 @@ public class FilePickerPlugin: CAPPlugin {
     @objc func pickMedia(_ call: CAPPluginCall) {
         savedCall = call
 
-        let limit = call.getInt("limit", 0)
+        let limit = call.getInt("limit", 1)
         let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
@@ -83,7 +83,7 @@ public class FilePickerPlugin: CAPPlugin {
     @objc func pickVideos(_ call: CAPPluginCall) {
         savedCall = call
 
-        let limit = call.getInt("limit", 0)
+        let limit = call.getInt("limit", 1)
         let skipTranscoding = call.getBool("skipTranscoding", true)
         let ordered = call.getBool("ordered", false)
 
