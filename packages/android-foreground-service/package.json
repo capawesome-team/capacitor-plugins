@@ -34,7 +34,10 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "ionic",
+    "android",
+    "foreground service"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",

@@ -36,7 +36,12 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "ionic",
+    "android",
+    "ios",
+    "web",
+    "badge"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

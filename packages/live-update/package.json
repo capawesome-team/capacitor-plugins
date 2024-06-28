@@ -36,7 +36,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "ionic",
+    "android",
+    "ios",
+    "live update",
+    "remote update",
+    "ota",
+    "capgo"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
