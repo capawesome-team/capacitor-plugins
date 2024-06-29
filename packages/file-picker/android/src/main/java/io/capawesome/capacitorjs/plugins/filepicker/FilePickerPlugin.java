@@ -39,7 +39,7 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickFiles(PluginCall call) {
         try {
-            int limit = call.getInt("limit", 0);
+            int limit = call.getInt("limit", 1);
             JSArray types = call.getArray("types", null);
             String[] parsedTypes = parseTypesOption(types);
 
@@ -62,7 +62,7 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickImages(PluginCall call) {
         try {
-            int limit = call.getInt("limit", 0);
+            int limit = call.getInt("limit", 1);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
@@ -81,7 +81,7 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickMedia(PluginCall call) {
         try {
-            int limit = call.getInt("limit", 0);
+            int limit = call.getInt("limit", 1);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
@@ -100,7 +100,7 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void pickVideos(PluginCall call) {
         try {
-            int limit = call.getInt("limit", 0);
+            int limit = call.getInt("limit", 1);
 
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
