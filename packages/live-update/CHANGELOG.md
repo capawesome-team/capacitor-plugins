@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.0.8
+
+### Patch Changes
+
+- [`bb4ba6d`](https://github.com/capawesome-team/capacitor-plugins/commit/bb4ba6df4631c2f903a6d9c65ec78c4477cc14ab): chore(ios): print sync response error message
+
+* [`175ff86`](https://github.com/capawesome-team/capacitor-plugins/commit/175ff8620ff20f4cf04b291e11c826ad486c4b10) ([#216](https://github.com/capawesome-team/capacitor-plugins/pull/216)): fix: `reset()` followed by `reload()` did not load the built-in bundle
+
+- [`6a92e93`](https://github.com/capawesome-team/capacitor-plugins/commit/6a92e93d98a23168ffd0a394b776c30aa42e7dbc) ([#218](https://github.com/capawesome-team/capacitor-plugins/pull/218)): chore: print debug url on sync
+
 ## 6.0.7
 
 ### Patch Changes
