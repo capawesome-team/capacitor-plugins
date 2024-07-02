@@ -164,9 +164,7 @@ public class LiveUpdate {
     }
 
     public void reload() {
-        String currentPath = getCurrentCapacitorServerPath();
-        String nextPath = getNextCapacitorServerPath();
-        String path = nextPath == null ? currentPath : nextPath;
+        String path = getNextCapacitorServerPath();
         setCurrentCapacitorServerPath(path);
         startRollbackTimer();
     }
@@ -472,6 +470,9 @@ public class LiveUpdate {
         return bundleIds;
     }
 
+    /**
+     * @return The current bundle ID (`public` for the built-in bundle).
+     */
     private String getCurrentBundleId() {
         String currentPath = getCurrentCapacitorServerPath();
         if (currentPath.equals(defaultWebAssetDir)) {
@@ -480,6 +481,9 @@ public class LiveUpdate {
         return new File(currentPath).getName();
     }
 
+    /**
+     * @return The absolute path to the current bundle directory (`public` for the built-in bundle).
+     */
     private String getCurrentCapacitorServerPath() {
         return plugin.getBridge().getServerBasePath();
     }
@@ -494,23 +498,27 @@ public class LiveUpdate {
         return deviceId;
     }
 
+    /**
+     * @return The next bundle ID (`public` for the built-in bundle).
+     */
+    @NonNull
     private String getNextBundleId() {
         String nextPath = getNextCapacitorServerPath();
-        if (nextPath == null) {
-            return null;
-        }
         if (nextPath.equals(defaultWebAssetDir)) {
             return defaultWebAssetDir;
         }
         return new File(nextPath).getName();
     }
 
-    @Nullable
+    /**
+     * @return The absolute path to the next bundle directory (`public` for the built-in bundle).
+     */
+    @NonNull
     private String getNextCapacitorServerPath() {
         return plugin
             .getContext()
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
-            .getString(WebView.CAP_SERVER_PATH, null);
+            .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
     }
 
     private boolean hasBundle(@NonNull String bundleId) {

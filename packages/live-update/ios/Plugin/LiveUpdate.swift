@@ -125,17 +125,9 @@ import Alamofire
     }
 
     @objc public func reload() {
-        var path: String?
-        if let currentPath = getCurrentCapacitorServerPath() {
-            path = currentPath
-        }
-        if let nextPath = getNextCapacitorServerPath() {
-            path = nextPath
-        }
-        if let path = path {
-            setCurrentCapacitorServerPath(path: path)
-            startRollbackTimer()
-        }
+        let path = getNextCapacitorServerPath()
+        setCurrentCapacitorServerPath(path: path)
+        startRollbackTimer()
     }
 
     @objc public func reset() {
@@ -375,6 +367,7 @@ import Alamofire
         }
     }
 
+    /// - Returns: The current bundle ID (`public` for the built-in bundle) or `nil` if no view controller was found.
     private func getCurrentBundleId() -> String? {
         guard let path = getCurrentCapacitorServerPath() else {
             return nil
@@ -382,6 +375,7 @@ import Alamofire
         return URL(fileURLWithPath: path).lastPathComponent
     }
 
+    /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
         guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
             return nil
@@ -394,18 +388,19 @@ import Alamofire
         return deviceId.lowercased()
     }
 
-    private func getNextBundleId() -> String? {
-        guard let path = getNextCapacitorServerPath() else {
-            return nil
-        }
+    /// - Returns: The next bundle ID (`public` for the built-in bundle).
+    private func getNextBundleId() -> String {
+        let path = getNextCapacitorServerPath()
         return URL(fileURLWithPath: path).lastPathComponent
     }
 
-    private func getNextCapacitorServerPath() -> String? {
+    /// - Returns: The absolute path to the next bundle directory.
+    private func getNextCapacitorServerPath() -> String {
+        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
         if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
-            return path.isEmpty ? nil : path
+            return path.isEmpty ? defaultCapacitorServerPath : path
         }
-        return nil
+        return defaultCapacitorServerPath
     }
 
     private func hasBundle(bundleId: String) -> Bool {
@@ -459,7 +454,7 @@ import Alamofire
 
     private func setNextCapacitorServerPath(path: String) {
         if path.hasSuffix("/public") {
-            // Reset the custom server base path
+            // Must set an empty string to reset the custom server base path
             KeyValueStore.standard[self.defaultServerPathKey] = ""
         } else {
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
