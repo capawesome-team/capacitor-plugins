@@ -333,6 +333,9 @@ import Alamofire
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
+                if let data = response.data {
+                    CAPLog.print("[", LiveUpdatePlugin.tag, "] ", String(decoding: data, as: UTF8.self))
+                }
                 completion(nil, error)
                 return
             }
