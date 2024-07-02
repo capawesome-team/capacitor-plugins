@@ -330,6 +330,7 @@ import Alamofire
         parameters["pluginVersion"] = LiveUpdatePlugin.version
         let url = URL(string: "https://api.cloud.capawesome.io/v1/apps/\(config.appId ?? "")/bundles/latest")!
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
                 completion(nil, error)
