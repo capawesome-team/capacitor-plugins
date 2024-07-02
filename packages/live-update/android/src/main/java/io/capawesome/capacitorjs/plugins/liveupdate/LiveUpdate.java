@@ -422,6 +422,7 @@ public class LiveUpdate {
                 new okhttp3.Callback() {
                     @Override
                     public void onFailure(@NonNull okhttp3.Call call, @NonNull IOException exception) {
+                        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
                         callback.error(exception);
                     }
 
