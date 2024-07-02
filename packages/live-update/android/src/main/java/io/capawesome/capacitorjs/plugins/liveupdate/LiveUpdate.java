@@ -413,6 +413,7 @@ public class LiveUpdate {
             .addQueryParameter("platform", "0")
             .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
             .build();
+        Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle from " + url);
         OkHttpClient client = new OkHttpClient();
         okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
         client
