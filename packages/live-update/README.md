@@ -630,7 +630,7 @@ If you want to disable the plugin to test other parts of your app, you can set t
 
 Live updates are only supported for [binary-compatible changes](https://capawesome.io/cloud/live-updates/faq/#what-are-binary-compatible-changes) (e.g. HTML, CSS, JavaScript).
 If you change native code, such as adding a new plugin, you need to resubmit your app to the app stores.
-For this reason, you must be careful to limit live updates to compatible native versions of your app.
+For this reason, you must be careful to [restrict live updates to compatible native versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/) of your app.
 
 ## Changelog
 
