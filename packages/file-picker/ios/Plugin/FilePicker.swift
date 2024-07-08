@@ -310,10 +310,10 @@ extension FilePicker: PHPickerViewControllerDelegate {
             self.plugin?.handleDocumentPickerResult(urls: nil, error: nil)
             return
         }
-        var temporaryUrls: [URL] = []
+        var temporaryUrls = [URL?](repeating: nil, count: results.count)
         var errorMessage: String?
         let dispatchGroup = DispatchGroup()
-        for result in results {
+        for (index, result) in results.enumerated() {
             if errorMessage != nil {
                 break
             }
@@ -333,7 +333,7 @@ extension FilePicker: PHPickerViewControllerDelegate {
                     }
                     do {
                         let temporaryUrl = try self.saveTemporaryFile(url)
-                        temporaryUrls.append(temporaryUrl)
+                        temporaryUrls[index] = temporaryUrl
                     } catch {
                         errorMessage = self.plugin?.errorTemporaryCopyFailed
                     }
@@ -354,7 +354,7 @@ extension FilePicker: PHPickerViewControllerDelegate {
                     }
                     do {
                         let temporaryUrl = try self.saveTemporaryFile(url)
-                        temporaryUrls.append(temporaryUrl)
+                        temporaryUrls[index] = temporaryUrl
                     } catch {
                         errorMessage = self.plugin?.errorTemporaryCopyFailed
                     }
@@ -368,7 +368,9 @@ extension FilePicker: PHPickerViewControllerDelegate {
                 self.plugin?.handleDocumentPickerResult(urls: nil, error: errorMessage)
                 return
             }
-            self.plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
+
+            let finalUrls: [URL] = temporaryUrls.compactMap { $0 }
+            self.plugin?.handleDocumentPickerResult(urls: finalUrls, error: nil)
         }
     }
 }
