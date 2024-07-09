@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.0.1
+
+### Patch Changes
+
+- [`7a2e409`](https://github.com/capawesome-team/capacitor-plugins/commit/7a2e40981ed4e13aab889b0679a27b6a691a3fb0) ([#227](https://github.com/capawesome-team/capacitor-plugins/pull/227)): fix(ios): media selection order
+
 ## 6.0.0
 
 ### Major Changes
