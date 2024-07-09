@@ -26,6 +26,8 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
     public static final String ERROR_BUNDLE_NOT_FOUND = "bundle not found.";
+    public static final String ERROR_CHECKSUM_CALCULATION_FAILED = "Failed to calculate checksum.";
+    public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_URL_MISSING = "url must be provided.";

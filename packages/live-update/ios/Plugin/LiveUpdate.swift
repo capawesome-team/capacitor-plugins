@@ -2,6 +2,7 @@ import Foundation
 import SSZipArchive
 import Capacitor
 import Alamofire
+import CryptoKit
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
@@ -61,7 +62,7 @@ import Alamofire
         }
 
         // Download the bundle
-        downloadBundle(bundleId: bundleId, url: url, completion: { error in
+        downloadBundle(bundleId: bundleId, checksum: nil, url: url, completion: { error in
             if let error = error {
                 completion(error)
                 return
@@ -187,7 +188,7 @@ import Alamofire
                     completion(result, nil)
                 } else {
                     // Download and unzip the bundle
-                    self.downloadBundle(bundleId: latestBundleId, url: response.url, completion: { error in
+                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, url: response.url, completion: { error in
                         if let error = error {
                             completion(nil, error)
                             return
@@ -241,6 +242,21 @@ import Alamofire
         return url.path
     }
 
+    /// - Returns: The sha256 checksum of the file at the given URL.
+    @available(iOS 13.2, *)
+    private func calculateChecksumForFile(url: URL) throws -> String {
+        let handle = try FileHandle(forReadingFrom: url)
+        var hasher = SHA256()
+        while autoreleasepool(invoking: {
+            let nextChunk = handle.readData(ofLength: SHA256.blockByteCount)
+            guard !nextChunk.isEmpty else { return false }
+            hasher.update(data: nextChunk)
+            return true
+        }) { }
+        let digest = hasher.finalize()
+        return digest.map { String(format: "%02hhx", $0) }.joined()
+    }
+
     private func createBundlesDirectory() {
         let bundlesDirectoryUrl = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         let exists = FileManager.default.fileExists(atPath: bundlesDirectoryUrl.path)
@@ -274,7 +290,7 @@ import Alamofire
         }
     }
 
-    private func downloadBundle(bundleId: String, url: String, completion: @escaping (Error?) -> Void) {
+    private func downloadBundle(bundleId: String, checksum: String?, url: String, completion: @escaping (Error?) -> Void) {
         // Download the bundle
         downloadFile(url: url, completion: { url, error in
             if let error = error {
@@ -282,6 +298,21 @@ import Alamofire
                 return
             }
             if let url = url {
+                if let checksum = checksum {
+                    // Calculate the checksum
+                    if #available(iOS 13.2, *) {
+                        do {
+                            let calculatedChecksum = try self.calculateChecksumForFile(url: url)
+                            if calculatedChecksum != checksum {
+                                completion(CustomError.checksumMismatch)
+                                return
+                            }
+                        } catch {
+                            completion(CustomError.checksumCalculationFailed)
+                        }
+                    }
+                }
+
                 // Add the bundle
                 self.addBundle(bundleId: bundleId, zipFile: url, completion: { error in
                     // Delete the temporary file
