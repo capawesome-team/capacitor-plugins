@@ -370,7 +370,7 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundle(@NonNull String bundleId, @Nullable String checksum, @Nullable String signature, @NonNull String url, @NonNull EmptyCallback callback) {
+    private void downloadBundle(@NonNull String bundleId, @Nullable String expectedChecksum, @Nullable String signature, @NonNull String url, @NonNull EmptyCallback callback) {
         downloadFile(
             url,
             new NonEmptyCallback<File>() {
@@ -383,10 +383,10 @@ public class LiveUpdate {
                 public void success(@NonNull File result) {
                     try {
                         // Verify the checksum
-                        if (checksum != null) {
+                        if (expectedChecksum != null) {
                             // Calculate the checksum
-                            String calculatedChecksum = getChecksumForFileAsString(result);
-                            if (!checksum.equals(calculatedChecksum)) {
+                            String receivedChecksum = getChecksumForFileAsString(result);
+                            if (!expectedChecksum.equals(receivedChecksum)) {
                                 throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
                             }
                         }
