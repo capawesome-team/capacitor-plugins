@@ -10,6 +10,9 @@ public class GetLatestBundleResponse {
     @Nullable
     private String checksum;
 
+    @Nullable
+    private String signature;
+
     private String url;
 
     public GetLatestBundleResponse(JSONObject responseJson) {
@@ -19,6 +22,12 @@ public class GetLatestBundleResponse {
             this.checksum = null;
         } else {
             this.checksum = checksum;
+        }
+        String signature = responseJson.optString("signature", "null");
+        if (signature.equals("null")) {
+            this.signature = null;
+        } else {
+            this.signature = signature;
         }
         this.url = responseJson.optString("url");
     }
@@ -30,6 +39,11 @@ public class GetLatestBundleResponse {
     @Nullable
     public String getChecksum() {
         return checksum;
+    }
+
+    @Nullable
+    public String getSignature() {
+        return signature;
     }
 
     public String getUrl() {

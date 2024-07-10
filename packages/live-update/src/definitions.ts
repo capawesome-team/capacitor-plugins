@@ -27,6 +27,15 @@ declare module '@capacitor/cli' {
        */
       enabled?: boolean;
       /**
+       * The public key to verify the integrity of the bundle in base64 format.
+       *
+       * The public key must be a PEM-encoded RSA public key.
+       *
+       * @since 6.2.0
+       * @example 'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlHZk1BMEdDU3FHU0liM0RRRUJBUVVBQTRHTkFEQ0JpUUtCZ1FERG9kZjFTRDBPT242aElsRHVLQnphMEVkMApPcXR3eVZKd2l5am1FOUJKYVo3eThaVWZjRitTS21kMGwyY0RQTTQ1WElnMnRBRnV4NW4yOXVvS3lId1N0KzZ0CkNpNUNKQTVaMS8xZVpydVJScUFCTG9uVjc3S1MzSFV0dk9ncVJMRG5LU1Y4OWRZWmtNKytOd216T1BnSUY0MjIKbXZjK1Z1a2NWT0JmYzgvQUhRSURBUUFCCi0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo='
+       */
+      publicKey?: string;
+      /**
        * The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle.
        *
        * @since 5.0.0

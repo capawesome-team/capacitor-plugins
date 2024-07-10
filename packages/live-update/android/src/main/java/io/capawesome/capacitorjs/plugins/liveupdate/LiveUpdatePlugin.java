@@ -19,7 +19,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.1.0";
+    public static final String VERSION = "6.2.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -31,6 +31,9 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
+    public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
+    public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
+    public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
 
     @Nullable
     private LiveUpdateConfig config;

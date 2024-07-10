@@ -63,7 +63,7 @@ import CryptoKit
         }
 
         // Download the bundle
-        downloadBundle(bundleId: bundleId, checksum: checksum, url: url, completion: { error in
+        downloadBundle(bundleId: bundleId, checksum: checksum, signature: nil, url: url, completion: { error in
             if let error = error {
                 completion(error)
                 return
@@ -189,7 +189,7 @@ import CryptoKit
                     completion(result, nil)
                 } else {
                     // Download and unzip the bundle
-                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, url: response.url, completion: { error in
+                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, signature: response.signature, url: response.url, completion: { error in
                         if let error = error {
                             completion(nil, error)
                             return
@@ -291,7 +291,7 @@ import CryptoKit
         }
     }
 
-    private func downloadBundle(bundleId: String, checksum: String?, url: String, completion: @escaping (Error?) -> Void) {
+    private func downloadBundle(bundleId: String, checksum: String?, signature: String?, url: String, completion: @escaping (Error?) -> Void) {
         // Download the bundle
         downloadFile(url: url, completion: { url, error in
             if let error = error {
@@ -299,6 +299,7 @@ import CryptoKit
                 return
             }
             if let url = url {
+                // Verify the checksum
                 if let checksum = checksum {
                     // Calculate the checksum
                     if #available(iOS 13.2, *) {
@@ -311,6 +312,19 @@ import CryptoKit
                         } catch {
                             completion(CustomError.checksumCalculationFailed)
                         }
+                    }
+                }
+                // Verify the signature
+                if let publicKeyAsBase64 = self.config.publicKey {
+                    guard let signature = signature else {
+                        completion(CustomError.signatureMissing)
+                        return
+                    }
+                    // Verify the signature
+                    let verified = self.verifySignatureForFile(url: url, signature: signature, publicKeyAsBase64: publicKeyAsBase64)
+                    if !verified {
+                        completion(CustomError.signatureVerificationFailed)
+                        return
                     }
                 }
 
@@ -522,6 +536,22 @@ import CryptoKit
         }, completion: {
             completion(destinationDirectory)
         })
+    }
+
+    private func verifySignatureForFile(url: URL, signature: String, publicKeyAsBase64: String) -> Bool {
+        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
+            return false
+        }
+        guard let signatureData = Data(base64Encoded: signature) else {
+            return false
+        }
+        do {
+            let publicKey = try CryptoKit.RSAPublicKey(data: publicKeyData)
+            let fileData = try Data(contentsOf: url)
+            return publicKey.isValidSignature(signatureData, for: fileData)
+        } catch {
+            return false
+        }
     }
 
     private func wasUpdated() -> Bool {
