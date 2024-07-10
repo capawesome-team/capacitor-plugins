@@ -14,7 +14,12 @@ public class GetLatestBundleResponse {
 
     public GetLatestBundleResponse(JSONObject responseJson) {
         this.bundleId = responseJson.optString("bundleId");
-        this.checksum = responseJson.optString("checksum", null);
+        String checksum = responseJson.optString("checksum", "null");
+        if (checksum.equals("null")) {
+            this.checksum = null;
+        } else {
+            this.checksum = checksum;
+        }
         this.url = responseJson.optString("url");
     }
 
