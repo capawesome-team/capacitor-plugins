@@ -210,7 +210,7 @@ export interface DownloadBundleOptions {
    *
    * Must be a SHA-256 hash in hexadecimal format.
    *
-   * @since 5.0.0
+   * @since 6.1.0
    * @example 'aab8e0a312e807c8eaeb923e2bdccd7731c5508869c62ad8e6e43ee881414c84'
    */
   checksum?: string;
