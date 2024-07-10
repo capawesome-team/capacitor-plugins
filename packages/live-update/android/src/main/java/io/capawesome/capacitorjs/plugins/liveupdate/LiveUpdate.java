@@ -306,7 +306,7 @@ public class LiveUpdate {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             BufferedSource source = Okio.buffer(Okio.source(file));
             Buffer buffer = new Buffer();
-            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1; ) {
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
                 digest.update(buffer.readByteArray());
             }
             source.close();

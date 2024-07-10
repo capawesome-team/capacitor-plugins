@@ -6,8 +6,10 @@ import org.json.JSONObject;
 public class GetLatestBundleResponse {
 
     private String bundleId;
+
     @Nullable
     private String checksum;
+
     private String url;
 
     public GetLatestBundleResponse(JSONObject responseJson) {
