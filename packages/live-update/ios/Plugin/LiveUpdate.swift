@@ -1,8 +1,8 @@
 import Foundation
+import CryptoKit
 import SSZipArchive
 import Capacitor
 import Alamofire
-import CryptoKit
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
@@ -299,10 +299,10 @@ import CryptoKit
                 return
             }
             if let url = url {
-                // Verify the checksum
-                if let checksum = checksum {
-                    // Calculate the checksum
-                    if #available(iOS 13.2, *) {
+                if #available(iOS 13.2, *) {
+                    // Verify the checksum
+                    if let checksum = checksum {
+                        // Calculate the checksum
                         do {
                             let calculatedChecksum = try self.calculateChecksumForFile(url: url)
                             if calculatedChecksum != checksum {
@@ -313,18 +313,18 @@ import CryptoKit
                             completion(CustomError.checksumCalculationFailed)
                         }
                     }
-                }
-                // Verify the signature
-                if let publicKeyAsBase64 = self.config.publicKey {
-                    guard let signature = signature else {
-                        completion(CustomError.signatureMissing)
-                        return
-                    }
                     // Verify the signature
-                    let verified = self.verifySignatureForFile(url: url, signature: signature, publicKeyAsBase64: publicKeyAsBase64)
-                    if !verified {
-                        completion(CustomError.signatureVerificationFailed)
-                        return
+                    if let publicKeyAsBase64 = self.config.publicKey {
+                        guard let signature = signature else {
+                            completion(CustomError.signatureMissing)
+                            return
+                        }
+                        // Verify the signature
+                        let verified = self.verifySignatureForFile(url: url, signature: signature, publicKeyAsBase64: publicKeyAsBase64)
+                        if !verified {
+                            completion(CustomError.signatureVerificationFailed)
+                            return
+                        }
                     }
                 }
 
@@ -538,17 +538,35 @@ import CryptoKit
         })
     }
 
+    @available(iOS 13.2, *)
     private func verifySignatureForFile(url: URL, signature: String, publicKeyAsBase64: String) -> Bool {
-        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
-            return false
-        }
-        guard let signatureData = Data(base64Encoded: signature) else {
-            return false
-        }
         do {
-            let publicKey = try CryptoKit.RSAPublicKey(data: publicKeyData)
-            let fileData = try Data(contentsOf: url)
-            return publicKey.isValidSignature(signatureData, for: fileData)
+            let calculatedChecksum = try self.calculateChecksumForFile(url: url)
+            guard let data = calculatedChecksum.data(using: .utf8) else {
+                return false
+            }
+            guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
+                return false
+            }
+            guard let signatureData = Data(base64Encoded: signature) else {
+                return false
+            }
+            let keyDict:[NSObject:NSObject] = [
+                kSecAttrKeyType: kSecAttrKeyTypeRSA,
+                kSecAttrKeyClass: kSecAttrKeyClassPublic,
+                kSecAttrKeySizeInBits: NSNumber(value: 2048)
+            ]
+            
+            var error: Unmanaged<CFError>?
+            guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, keyDict as CFDictionary, &error) else {
+                return false
+            }
+
+            let algorithm: SecKeyAlgorithm = .rsaSignatureMessagePKCS1v15SHA256
+
+            let isVerified = SecKeyVerifySignature(publicKey, algorithm, data as CFData, signatureData as CFData, &error)
+
+            return isVerified
         } catch {
             return false
         }
