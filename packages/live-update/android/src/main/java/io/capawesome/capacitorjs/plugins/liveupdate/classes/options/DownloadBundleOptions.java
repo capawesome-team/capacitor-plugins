@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes.options;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class DownloadBundleOptions {
 
