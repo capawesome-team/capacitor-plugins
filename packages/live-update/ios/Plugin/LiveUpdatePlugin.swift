@@ -42,12 +42,13 @@ public class LiveUpdatePlugin: CAPPlugin {
             call.reject(CustomError.bundleIdMissing.localizedDescription)
             return
         }
+        let checksum = call.getString("checksum")
         guard let url = call.getString("url") else {
             call.reject(CustomError.urlMissing.localizedDescription)
             return
         }
 
-        let options = DownloadBundleOptions(bundleId: bundleId, url: url)
+        let options = DownloadBundleOptions(bundleId: bundleId, checksum: checksum, url: url)
 
         implementation?.downloadBundle(options, completion: { error in
             if let error = error {

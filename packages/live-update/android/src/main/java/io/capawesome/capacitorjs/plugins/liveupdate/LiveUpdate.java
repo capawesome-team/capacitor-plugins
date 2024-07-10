@@ -99,6 +99,7 @@ public class LiveUpdate {
 
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
         String bundleId = options.getBundleId();
+        String checksum = options.getChecksum();
         String url = options.getUrl();
 
         // Check if the bundle already exists
@@ -109,7 +110,7 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        downloadBundle(bundleId, null, url, callback);
+        downloadBundle(bundleId, checksum, url, callback);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {

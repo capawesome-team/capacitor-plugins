@@ -199,6 +199,22 @@ export interface DeleteBundleOptions {
 
 export interface DownloadBundleOptions {
   /**
+   * The unique identifier of the bundle.
+   *
+   * @since 5.0.0
+   * @example '1.0.0'
+   */
+  bundleId: string;
+  /**
+   * The checksum of the bundle to verify the integrity of the ZIP file.
+   *
+   * Must be a SHA-256 hash in hexadecimal format.
+   *
+   * @since 5.0.0
+   * @example 'aab8e0a312e807c8eaeb923e2bdccd7731c5508869c62ad8e6e43ee881414c84'
+   */
+  checksum?: string;
+  /**
    * The URL of the bundle to download.
    *
    * The bundle must be a ZIP file containing at least a `index.html` file.
@@ -207,13 +223,6 @@ export interface DownloadBundleOptions {
    * @example 'https://example.com/bundle.zip'
    */
   url: string;
-  /**
-   * The unique identifier of the bundle.
-   *
-   * @since 5.0.0
-   * @example '1.0.0'
-   */
-  bundleId: string;
 }
 
 /**

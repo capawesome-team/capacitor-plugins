@@ -80,18 +80,19 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void downloadBundle(PluginCall call) {
         try {
-            String url = call.getString("url");
-            if (url == null) {
-                call.reject(ERROR_URL_MISSING);
-                return;
-            }
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
                 call.reject(ERROR_BUNDLE_ID_MISSING);
                 return;
             }
+            String checksum = call.getString("checksum");
+            String url = call.getString("url");
+            if (url == null) {
+                call.reject(ERROR_URL_MISSING);
+                return;
+            }
 
-            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, url);
+            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, checksum, url);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {

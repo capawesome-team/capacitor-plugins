@@ -51,8 +51,9 @@ import CryptoKit
     }
 
     @objc public func downloadBundle(_ options: DownloadBundleOptions, completion: @escaping (Error?) -> Void) {
-        let url = options.getUrl()
         let bundleId = options.getBundleId()
+        let checksum = options.getChecksum()
+        let url = options.getUrl()
 
         // Check if the bundle already exists
         if hasBundle(bundleId: bundleId) {
@@ -62,7 +63,7 @@ import CryptoKit
         }
 
         // Download the bundle
-        downloadBundle(bundleId: bundleId, checksum: nil, url: url, completion: { error in
+        downloadBundle(bundleId: bundleId, checksum: checksum, url: url, completion: { error in
             if let error = error {
                 completion(error)
                 return
