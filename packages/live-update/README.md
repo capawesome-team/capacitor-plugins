@@ -531,10 +531,11 @@ Only available on Android and iOS.
 
 #### DownloadBundleOptions
 
-| Prop           | Type                | Description                                                                                               | Since |
-| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| **`url`**      | <code>string</code> | The URL of the bundle to download. The bundle must be a ZIP file containing at least a `index.html` file. | 5.0.0 |
-| **`bundleId`** | <code>string</code> | The unique identifier of the bundle.                                                                      | 5.0.0 |
+| Prop           | Type                | Description                                                                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string</code> | The unique identifier of the bundle.                                                                              | 5.0.0 |
+| **`checksum`** | <code>string</code> | The checksum of the bundle to verify the integrity of the ZIP file. Must be a SHA-256 hash in hexadecimal format. | 5.0.0 |
+| **`url`**      | <code>string</code> | The URL of the bundle to download. The bundle must be a ZIP file containing at least a `index.html` file.         | 5.0.0 |
 
 
 #### GetBundleResult
