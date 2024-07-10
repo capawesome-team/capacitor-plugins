@@ -31,10 +31,10 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import java.io.File;
 import java.io.IOException;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.UUID;
@@ -52,11 +52,6 @@ import okio.BufferedSource;
 import okio.Okio;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 public class LiveUpdate {
 
@@ -307,13 +302,7 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundle);
     }
 
-    /**
-     * @param file The file to calculate the checksum for.
-     * @return The sha256 checksum in hexadecimal format.
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     */
-    private String calculateChecksumForFile(@NonNull File file) throws Exception {
+    private byte[] getChecksumForFileAsBytes(@NonNull File file) throws Exception {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             BufferedSource source = Okio.buffer(Okio.source(file));
@@ -322,16 +311,20 @@ public class LiveUpdate {
                 digest.update(buffer.readByteArray());
             }
             source.close();
-            byte[] checksumBytes = digest.digest();
-            StringBuilder checksum = new StringBuilder();
-            for (byte checksumByte : checksumBytes) {
-                checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
-            }
-            return checksum.toString();
+            return digest.digest();
         } catch (IOException exception) {
             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
         }
+    }
+
+    private String getChecksumForFileAsString(@NonNull File file) throws Exception {
+        byte[] checksumBytes = getChecksumForFileAsBytes(file);
+        StringBuilder checksum = new StringBuilder();
+        for (byte checksumByte : checksumBytes) {
+            checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
+        }
+        return checksum.toString();
     }
 
     private void createBundlesDirectory() {
@@ -341,9 +334,10 @@ public class LiveUpdate {
         }
     }
 
-    private Key createKeyFromBase64(@NonNull String base64) throws Exception {
+    private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
         try{
-            byte[] byteKey = Base64.decode(base64, Base64.DEFAULT);
+            value = value.replace("\n", "").replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+            byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return keyFactory.generatePublic(X509publicKey);
@@ -391,18 +385,18 @@ public class LiveUpdate {
                         // Verify the checksum
                         if (checksum != null) {
                             // Calculate the checksum
-                            String calculatedChecksum = calculateChecksumForFile(result);
+                            String calculatedChecksum = getChecksumForFileAsString(result);
                             if (!checksum.equals(calculatedChecksum)) {
                                 throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
                             }
                         }
                         // Verify the signature
-                        String publicKeyAsBase64 = config.getPublicKey();
-                        if (publicKeyAsBase64 != null) {
+                        String publicKey = config.getPublicKey();
+                        if (publicKey != null) {
                             if (signature == null) {
                                 throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
                             }
-                            Key key = createKeyFromBase64(publicKeyAsBase64);
+                            PublicKey key = createPublicKeyFromString(publicKey);
                             // Verify the signature
                             boolean verified = verifySignatureForFile(result, signature, key);
                             if (!verified) {
@@ -695,12 +689,22 @@ public class LiveUpdate {
         return destination;
     }
 
-    private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull Key key) throws Exception {
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
-        byte[] decryptedSignature = cipher.doFinal(signatureBytes);
-        return Arrays.equals(decryptedSignature, calculateChecksumForFile(file).getBytes());
+    private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull PublicKey key) throws Exception {
+        try {
+            byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
+            Signature sig = Signature.getInstance("SHA256withRSA");
+            sig.initVerify(key);
+            BufferedSource source = Okio.buffer(Okio.source(file));
+            Buffer buffer = new Buffer();
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+                sig.update(buffer.readByteArray());
+            }
+            source.close();
+            return sig.verify(signatureBytes);
+        } catch (Exception exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+        }
     }
 
     private boolean wasUpdated() throws PackageManager.NameNotFoundException {
