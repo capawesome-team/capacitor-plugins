@@ -19,13 +19,15 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.0.7";
+    public static final String VERSION = "6.1.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
     public static final String ERROR_BUNDLE_NOT_FOUND = "bundle not found.";
+    public static final String ERROR_CHECKSUM_CALCULATION_FAILED = "Failed to calculate checksum.";
+    public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
@@ -78,18 +80,19 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void downloadBundle(PluginCall call) {
         try {
-            String url = call.getString("url");
-            if (url == null) {
-                call.reject(ERROR_URL_MISSING);
-                return;
-            }
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
                 call.reject(ERROR_BUNDLE_ID_MISSING);
                 return;
             }
+            String checksum = call.getString("checksum");
+            String url = call.getString("url");
+            if (url == null) {
+                call.reject(ERROR_URL_MISSING);
+                return;
+            }
 
-            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, url);
+            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, checksum, url);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {

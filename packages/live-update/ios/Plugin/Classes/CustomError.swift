@@ -7,6 +7,8 @@ public enum CustomError: Error {
     case bundleIndexHtmlMissing
     case bundleNotFound
     case channelMissing
+    case checksumCalculationFailed
+    case checksumMismatch
     case customIdMissing
     case downloadFailed
     case urlMissing
@@ -27,6 +29,10 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("bundle not found.", comment: "bundleNotFound")
         case .channelMissing:
             return NSLocalizedString("channel must be provided.", comment: "channelMissing")
+        case .checksumCalculationFailed:
+            return NSLocalizedString("Failed to calculate checksum.", comment: "checksumCalculationFailed")
+        case .checksumMismatch:
+            return NSLocalizedString("Checksum mismatch.", comment: "checksumMismatch")
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
         case .downloadFailed:

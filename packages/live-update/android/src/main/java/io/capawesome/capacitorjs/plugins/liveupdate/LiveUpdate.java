@@ -29,6 +29,8 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.UUID;
 import net.lingala.zip4j.ZipFile;
@@ -97,6 +99,7 @@ public class LiveUpdate {
 
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
         String bundleId = options.getBundleId();
+        String checksum = options.getChecksum();
         String url = options.getUrl();
 
         // Check if the bundle already exists
@@ -107,7 +110,7 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        downloadBundle(bundleId, url, callback);
+        downloadBundle(bundleId, checksum, url, callback);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
@@ -215,6 +218,7 @@ public class LiveUpdate {
                 @Override
                 public void success(@NonNull GetLatestBundleResponse result) {
                     String latestBundleId = result.getBundleId();
+                    String checksum = result.getChecksum();
                     String url = result.getUrl();
 
                     // Check if the bundle already exists
@@ -233,6 +237,7 @@ public class LiveUpdate {
                     // Download and unzip the bundle
                     downloadBundle(
                         latestBundleId,
+                        checksum,
                         url,
                         new EmptyCallback() {
                             @Override
@@ -290,6 +295,33 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundle);
     }
 
+    /**
+     * @param file The file to calculate the checksum for.
+     * @return The sha256 checksum in hexadecimal format.
+     * @throws NoSuchAlgorithmException
+     * @throws IOException
+     */
+    private String calculateChecksumForFile(@NonNull File file) throws Exception {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            BufferedSource source = Okio.buffer(Okio.source(file));
+            Buffer buffer = new Buffer();
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+                digest.update(buffer.readByteArray());
+            }
+            source.close();
+            byte[] checksumBytes = digest.digest();
+            StringBuilder checksum = new StringBuilder();
+            for (byte checksumByte : checksumBytes) {
+                checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
+            }
+            return checksum.toString();
+        } catch (IOException exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
+        }
+    }
+
     private void createBundlesDirectory() {
         File bundlesDirectory = buildBundlesDirectory();
         if (!bundlesDirectory.exists()) {
@@ -320,7 +352,7 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundle(@NonNull String bundleId, @NonNull String url, @NonNull EmptyCallback callback) {
+    private void downloadBundle(@NonNull String bundleId, @Nullable String checksum, @NonNull String url, @NonNull EmptyCallback callback) {
         downloadFile(
             url,
             new NonEmptyCallback<File>() {
@@ -332,6 +364,14 @@ public class LiveUpdate {
                 @Override
                 public void success(@NonNull File result) {
                     try {
+                        if (checksum != null) {
+                            // Calculate the checksum
+                            String calculatedChecksum = calculateChecksumForFile(result);
+                            if (!checksum.equals(calculatedChecksum)) {
+                                throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
+                            }
+                        }
+
                         // Add the bundle
                         addBundle(bundleId, result);
 

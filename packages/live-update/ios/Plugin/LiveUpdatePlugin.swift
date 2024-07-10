@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "6.0.7"
+    public static let version = "6.1.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     private var config: LiveUpdateConfig?
@@ -42,12 +42,13 @@ public class LiveUpdatePlugin: CAPPlugin {
             call.reject(CustomError.bundleIdMissing.localizedDescription)
             return
         }
+        let checksum = call.getString("checksum")
         guard let url = call.getString("url") else {
             call.reject(CustomError.urlMissing.localizedDescription)
             return
         }
 
-        let options = DownloadBundleOptions(bundleId: bundleId, url: url)
+        let options = DownloadBundleOptions(bundleId: bundleId, checksum: checksum, url: url)
 
         implementation?.downloadBundle(options, completion: { error in
             if let error = error {
