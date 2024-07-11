@@ -3,6 +3,7 @@ import CryptoKit
 import SSZipArchive
 import Capacitor
 import Alamofire
+import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
@@ -314,16 +315,20 @@ import Alamofire
                         }
                     }
                     // Verify the signature
-                    if let publicKeyAsBase64 = self.config.publicKey {
+                    if let publicKey = self.config.publicKey {
                         guard let signature = signature else {
                             completion(CustomError.signatureMissing)
                             return
                         }
                         // Verify the signature
-                        let verified = self.verifySignatureForFile(url: url, signature: signature, publicKeyAsBase64: publicKeyAsBase64)
-                        if !verified {
+                        do {
+                            let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
+                            if !verified {
+                                completion(CustomError.signatureVerificationFailed)
+                                return
+                            }
+                        } catch {
                             completion(CustomError.signatureVerificationFailed)
-                            return
                         }
                     }
                 }
@@ -374,7 +379,7 @@ import Alamofire
         parameters["osVersion"] = UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        let url = URL(string: "https://api.cloud.capawesome.io/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        let url = URL(string: "https://faq-uv-noise-rolls.trycloudflare.com/v1/apps/\(config.appId ?? "")/bundles/latest")!
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
@@ -539,37 +544,58 @@ import Alamofire
     }
 
     @available(iOS 13.2, *)
-    private func verifySignatureForFile(url: URL, signature: String, publicKeyAsBase64: String) -> Bool {
-        do {
-            let calculatedChecksum = try self.calculateChecksumForFile(url: url)
-            guard let data = calculatedChecksum.data(using: .utf8) else {
-                return false
-            }
-            guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
-                return false
-            }
-            guard let signatureData = Data(base64Encoded: signature) else {
-                return false
-            }
-            let keyDict:[NSObject:NSObject] = [
-                kSecAttrKeyType: kSecAttrKeyTypeRSA,
-                kSecAttrKeyClass: kSecAttrKeyClassPublic,
-                kSecAttrKeySizeInBits: NSNumber(value: 2048)
-            ]
-            
-            var error: Unmanaged<CFError>?
-            guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, keyDict as CFDictionary, &error) else {
-                return false
-            }
-
-            let algorithm: SecKeyAlgorithm = .rsaSignatureMessagePKCS1v15SHA256
-
-            let isVerified = SecKeyVerifySignature(publicKey, algorithm, data as CFData, signatureData as CFData, &error)
-
-            return isVerified
-        } catch {
+    private func verifySignatureForFile(url: URL, signature: String, publicKey: String) throws -> Bool {
+        let publicKeyAsBase64 = publicKey
+            .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "\n", with: "")
+        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
             return false
         }
+        let publicKeyAttributes: [CFString: Any] = [
+            kSecAttrKeyType: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass: kSecAttrKeyClassPublic,
+            kSecAttrKeySizeInBits: 2048,
+            kSecReturnPersistentRef: true
+        ]
+        var error: Unmanaged<CFError>?
+        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &error) else {
+            return false
+        }
+        guard let signatureData = Data(base64Encoded: signature) else {
+            return false
+        }
+        
+        // Create SHA256 digest
+        var digestContext = CC_SHA256_CTX()
+        CC_SHA256_Init(&digestContext)
+        
+        let handle = try FileHandle(forReadingFrom: url)
+        while autoreleasepool(invoking: {
+            let nextChunk = handle.readData(ofLength: SHA256.blockByteCount)
+            guard !nextChunk.isEmpty else { return false }
+            nextChunk.withUnsafeBytes {
+                _ = CC_SHA256_Update(&digestContext, $0.baseAddress, CC_LONG(nextChunk.count))
+            }
+            return true
+        }) { }
+        
+        // Compute the digest
+        var digest = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
+        digest.withUnsafeMutableBytes {
+            _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
+        }
+        
+        // Verify Signature
+        var error2: Unmanaged<CFError>?
+        let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
+        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &error2)
+        if let actualError = error2?.takeRetainedValue() {
+            print("Error \(actualError)")
+        } else {
+            print("No error from signature verification")
+        }
+        return verificationResult
     }
 
     private func wasUpdated() -> Bool {

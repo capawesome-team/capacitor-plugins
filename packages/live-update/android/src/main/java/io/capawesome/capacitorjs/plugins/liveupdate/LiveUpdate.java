@@ -336,7 +336,7 @@ public class LiveUpdate {
 
     private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
         try{
-            value = value.replace("\n", "").replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+            value = value.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "").replace("\n", "");
             byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
