@@ -310,6 +310,7 @@ import CommonCrypto
                         }
                     } catch {
                         completion(CustomError.checksumCalculationFailed)
+                        return
                     }
                 }
                 // Verify the signature
@@ -327,6 +328,7 @@ import CommonCrypto
                         }
                     } catch {
                         completion(CustomError.signatureVerificationFailed)
+                        return
                     }
                 }
 
