@@ -27,7 +27,7 @@ declare module '@capacitor/cli' {
        */
       enabled?: boolean;
       /**
-       * The public key to verify the integrity of the bundle in base64 format.
+       * The public key to verify the integrity of the bundle.
        *
        * The public key must be a PEM-encoded RSA public key.
        *

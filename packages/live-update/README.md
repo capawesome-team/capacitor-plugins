@@ -69,7 +69,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`appId`**             | <code>string</code>  | The app ID is used to identify the app when using [Capawesome Cloud](https://capawesome.io/cloud).                                                |                    | 5.0.0 |
 | **`autoDeleteBundles`** | <code>boolean</code> | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`. | <code>false</code> | 5.0.0 |
 | **`enabled`**           | <code>boolean</code> | Whether or not the plugin is enabled.                                                                                                             | <code>true</code>  | 5.0.0 |
-| **`publicKey`**         | <code>string</code>  | The public key to verify the integrity of the bundle in base64 format. The public key must be a PEM-encoded RSA public key.                       |                    | 6.2.0 |
+| **`publicKey`**         | <code>string</code>  | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                        |                    | 6.2.0 |
 | **`readyTimeout`**      | <code>number</code>  | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle.                                               | <code>10000</code> | 5.0.0 |
 | **`resetOnUpdate`**     | <code>boolean</code> | Whether or not the app should be reset to the default bundle during an update.                                                                    | <code>true</code>  | 5.0.0 |
 
