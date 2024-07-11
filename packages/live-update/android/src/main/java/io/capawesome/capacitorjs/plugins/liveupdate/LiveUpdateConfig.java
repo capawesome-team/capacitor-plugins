@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.Nullable;
-
 import java.security.Key;
 
 public class LiveUpdateConfig {
@@ -11,8 +10,10 @@ public class LiveUpdateConfig {
 
     private boolean autoDeleteBundles = false;
     private boolean enabled = true;
+
     @Nullable
     private String publicKey = null;
+
     private int readyTimeout = 10000;
     private boolean resetOnUpdate = true;
 

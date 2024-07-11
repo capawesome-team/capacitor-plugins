@@ -566,11 +566,11 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
             return false
         }
-        
+
         // Create SHA256 digest
         var digestContext = CC_SHA256_CTX()
         CC_SHA256_Init(&digestContext)
-        
+
         // Update the digest with the file's data
         let handle = try FileHandle(forReadingFrom: url)
         while autoreleasepool(invoking: {
@@ -581,13 +581,13 @@ import CommonCrypto
             }
             return true
         }) { }
-        
+
         // Compute the digest
         var digest = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
         digest.withUnsafeMutableBytes {
             _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
         }
-        
+
         // Verify the signature
         var secKeyVerifySignatureError: Unmanaged<CFError>?
         let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256

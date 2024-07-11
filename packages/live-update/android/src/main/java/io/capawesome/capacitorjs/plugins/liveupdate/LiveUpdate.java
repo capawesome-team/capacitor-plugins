@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Base64;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
@@ -335,13 +334,13 @@ public class LiveUpdate {
     }
 
     private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
-        try{
+        try {
             value = value.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "").replace("\n", "");
             byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
             X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return keyFactory.generatePublic(X509publicKey);
-        } catch(Exception exception){
+        } catch (Exception exception) {
             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID);
         }
@@ -370,7 +369,13 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundle(@NonNull String bundleId, @Nullable String expectedChecksum, @Nullable String signature, @NonNull String url, @NonNull EmptyCallback callback) {
+    private void downloadBundle(
+        @NonNull String bundleId,
+        @Nullable String expectedChecksum,
+        @Nullable String signature,
+        @NonNull String url,
+        @NonNull EmptyCallback callback
+    ) {
         downloadFile(
             url,
             new NonEmptyCallback<File>() {
