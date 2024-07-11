@@ -245,12 +245,11 @@ import CommonCrypto
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
-    @available(iOS 13.2, *)
     private func calculateChecksumForFile(url: URL) throws -> String {
         let handle = try FileHandle(forReadingFrom: url)
         var hasher = SHA256()
         while autoreleasepool(invoking: {
-            let nextChunk = handle.readData(ofLength: SHA256.blockByteCount)
+            let nextChunk = handle.readData(ofLength: 2048)
             guard !nextChunk.isEmpty else { return false }
             hasher.update(data: nextChunk)
             return true
@@ -300,36 +299,34 @@ import CommonCrypto
                 return
             }
             if let url = url {
-                if #available(iOS 13.2, *) {
-                    // Verify the checksum
-                    if let checksum = checksum {
-                        // Calculate the checksum
-                        do {
-                            let calculatedChecksum = try self.calculateChecksumForFile(url: url)
-                            if calculatedChecksum != checksum {
-                                completion(CustomError.checksumMismatch)
-                                return
-                            }
-                        } catch {
-                            completion(CustomError.checksumCalculationFailed)
-                        }
-                    }
-                    // Verify the signature
-                    if let publicKey = self.config.publicKey {
-                        guard let signature = signature else {
-                            completion(CustomError.signatureMissing)
+                // Verify the checksum
+                if let checksum = checksum {
+                    // Calculate the checksum
+                    do {
+                        let calculatedChecksum = try self.calculateChecksumForFile(url: url)
+                        if calculatedChecksum != checksum {
+                            completion(CustomError.checksumMismatch)
                             return
                         }
-                        // Verify the signature
-                        do {
-                            let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
-                            if !verified {
-                                completion(CustomError.signatureVerificationFailed)
-                                return
-                            }
-                        } catch {
+                    } catch {
+                        completion(CustomError.checksumCalculationFailed)
+                    }
+                }
+                // Verify the signature
+                if let publicKey = self.config.publicKey {
+                    guard let signature = signature else {
+                        completion(CustomError.signatureMissing)
+                        return
+                    }
+                    // Verify the signature
+                    do {
+                        let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
+                        if !verified {
                             completion(CustomError.signatureVerificationFailed)
+                            return
                         }
+                    } catch {
+                        completion(CustomError.signatureVerificationFailed)
                     }
                 }
 
@@ -379,7 +376,7 @@ import CommonCrypto
         parameters["osVersion"] = UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        let url = URL(string: "https://faq-uv-noise-rolls.trycloudflare.com/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        let url = URL(string: "https://api.cloud.capawesome.io/v1/apps/\(config.appId ?? "")/bundles/latest")!
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
@@ -543,13 +540,13 @@ import CommonCrypto
         })
     }
 
-    @available(iOS 13.2, *)
     private func verifySignatureForFile(url: URL, signature: String, publicKey: String) throws -> Bool {
         let publicKeyAsBase64 = publicKey
             .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
             .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
             .replacingOccurrences(of: "\n", with: "")
         guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode public key.")
             return false
         }
         let publicKeyAttributes: [CFString: Any] = [
@@ -558,11 +555,15 @@ import CommonCrypto
             kSecAttrKeySizeInBits: 2048,
             kSecReturnPersistentRef: true
         ]
-        var error: Unmanaged<CFError>?
-        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &error) else {
+        var secKeyCreateWithDataError: Unmanaged<CFError>?
+        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &secKeyCreateWithDataError) else {
+            if let error = secKeyCreateWithDataError?.takeRetainedValue() {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create public key with error: \(error)")
+            }
             return false
         }
         guard let signatureData = Data(base64Encoded: signature) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
             return false
         }
         
@@ -570,9 +571,10 @@ import CommonCrypto
         var digestContext = CC_SHA256_CTX()
         CC_SHA256_Init(&digestContext)
         
+        // Update the digest with the file's data
         let handle = try FileHandle(forReadingFrom: url)
         while autoreleasepool(invoking: {
-            let nextChunk = handle.readData(ofLength: SHA256.blockByteCount)
+            let nextChunk = handle.readData(ofLength: 2048)
             guard !nextChunk.isEmpty else { return false }
             nextChunk.withUnsafeBytes {
                 _ = CC_SHA256_Update(&digestContext, $0.baseAddress, CC_LONG(nextChunk.count))
@@ -586,14 +588,12 @@ import CommonCrypto
             _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
         }
         
-        // Verify Signature
-        var error2: Unmanaged<CFError>?
+        // Verify the signature
+        var secKeyVerifySignatureError: Unmanaged<CFError>?
         let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
-        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &error2)
-        if let actualError = error2?.takeRetainedValue() {
-            print("Error \(actualError)")
-        } else {
-            print("No error from signature verification")
+        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &secKeyVerifySignatureError)
+        if let error = secKeyVerifySignatureError?.takeRetainedValue() {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to verify signature with error: \(error)")
         }
         return verificationResult
     }
