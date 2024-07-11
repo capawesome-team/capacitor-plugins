@@ -245,7 +245,7 @@ import CommonCrypto
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
-    private func calculateChecksumForFile(url: URL) throws -> String {
+    private func getChecksumForFile(url: URL) throws -> String {
         let handle = try FileHandle(forReadingFrom: url)
         var hasher = SHA256()
         while autoreleasepool(invoking: {
@@ -300,11 +300,11 @@ import CommonCrypto
             }
             if let url = url {
                 // Verify the checksum
-                if let checksum = checksum {
+                if let expectedChecksum = checksum {
                     // Calculate the checksum
                     do {
-                        let calculatedChecksum = try self.calculateChecksumForFile(url: url)
-                        if calculatedChecksum != checksum {
+                        let receivedChecksum = try self.getChecksumForFile(url: url)
+                        if receivedChecksum != expectedChecksum {
                             completion(CustomError.checksumMismatch)
                             return
                         }
