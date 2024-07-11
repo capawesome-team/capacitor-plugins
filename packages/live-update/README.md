@@ -13,6 +13,7 @@ Capacitor plugin to update your app remotely in real-time.
 - 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔒 **Security**: Verify the integrity of the bundle using a public key.
+- 🌐 **Open Source**: Licensed under the MIT License.
 
 ## Installation
 
