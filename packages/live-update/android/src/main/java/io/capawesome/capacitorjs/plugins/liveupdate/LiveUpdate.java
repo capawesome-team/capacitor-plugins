@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
@@ -29,8 +30,11 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyFactory;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.UUID;
 import net.lingala.zip4j.ZipFile;
@@ -110,7 +114,7 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        downloadBundle(bundleId, checksum, url, callback);
+        downloadBundle(bundleId, checksum, null, url, callback);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
@@ -219,6 +223,7 @@ public class LiveUpdate {
                 public void success(@NonNull GetLatestBundleResponse result) {
                     String latestBundleId = result.getBundleId();
                     String checksum = result.getChecksum();
+                    String signature = result.getSignature();
                     String url = result.getUrl();
 
                     // Check if the bundle already exists
@@ -238,6 +243,7 @@ public class LiveUpdate {
                     downloadBundle(
                         latestBundleId,
                         checksum,
+                        signature,
                         url,
                         new EmptyCallback() {
                             @Override
@@ -295,13 +301,7 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundle);
     }
 
-    /**
-     * @param file The file to calculate the checksum for.
-     * @return The sha256 checksum in hexadecimal format.
-     * @throws NoSuchAlgorithmException
-     * @throws IOException
-     */
-    private String calculateChecksumForFile(@NonNull File file) throws Exception {
+    private byte[] getChecksumForFileAsBytes(@NonNull File file) throws Exception {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             BufferedSource source = Okio.buffer(Okio.source(file));
@@ -310,22 +310,39 @@ public class LiveUpdate {
                 digest.update(buffer.readByteArray());
             }
             source.close();
-            byte[] checksumBytes = digest.digest();
-            StringBuilder checksum = new StringBuilder();
-            for (byte checksumByte : checksumBytes) {
-                checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
-            }
-            return checksum.toString();
+            return digest.digest();
         } catch (IOException exception) {
             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
         }
     }
 
+    private String getChecksumForFileAsString(@NonNull File file) throws Exception {
+        byte[] checksumBytes = getChecksumForFileAsBytes(file);
+        StringBuilder checksum = new StringBuilder();
+        for (byte checksumByte : checksumBytes) {
+            checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
+        }
+        return checksum.toString();
+    }
+
     private void createBundlesDirectory() {
         File bundlesDirectory = buildBundlesDirectory();
         if (!bundlesDirectory.exists()) {
             bundlesDirectory.mkdir();
+        }
+    }
+
+    private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
+        try {
+            value = value.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "").replace("\n", "");
+            byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
+            X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(X509publicKey);
+        } catch (Exception exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID);
         }
     }
 
@@ -352,7 +369,13 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundle(@NonNull String bundleId, @Nullable String checksum, @NonNull String url, @NonNull EmptyCallback callback) {
+    private void downloadBundle(
+        @NonNull String bundleId,
+        @Nullable String expectedChecksum,
+        @Nullable String signature,
+        @NonNull String url,
+        @NonNull EmptyCallback callback
+    ) {
         downloadFile(
             url,
             new NonEmptyCallback<File>() {
@@ -364,11 +387,25 @@ public class LiveUpdate {
                 @Override
                 public void success(@NonNull File result) {
                     try {
-                        if (checksum != null) {
+                        // Verify the checksum
+                        if (expectedChecksum != null) {
                             // Calculate the checksum
-                            String calculatedChecksum = calculateChecksumForFile(result);
-                            if (!checksum.equals(calculatedChecksum)) {
+                            String receivedChecksum = getChecksumForFileAsString(result);
+                            if (!expectedChecksum.equals(receivedChecksum)) {
                                 throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
+                            }
+                        }
+                        // Verify the signature
+                        String publicKey = config.getPublicKey();
+                        if (publicKey != null) {
+                            if (signature == null) {
+                                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
+                            }
+                            PublicKey key = createPublicKeyFromString(publicKey);
+                            // Verify the signature
+                            boolean verified = verifySignatureForFile(result, signature, key);
+                            if (!verified) {
+                                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
                             }
                         }
 
@@ -655,6 +692,24 @@ public class LiveUpdate {
         String destinationPath = destination.getPath();
         new ZipFile(zipFile).extractAll(destinationPath);
         return destination;
+    }
+
+    private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull PublicKey key) throws Exception {
+        try {
+            byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
+            Signature sig = Signature.getInstance("SHA256withRSA");
+            sig.initVerify(key);
+            BufferedSource source = Okio.buffer(Okio.source(file));
+            Buffer buffer = new Buffer();
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+                sig.update(buffer.readByteArray());
+            }
+            source.close();
+            return sig.verify(signatureBytes);
+        } catch (Exception exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+        }
     }
 
     private boolean wasUpdated() throws PackageManager.NameNotFoundException {

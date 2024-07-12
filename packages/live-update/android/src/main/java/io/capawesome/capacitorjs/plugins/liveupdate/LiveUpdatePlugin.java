@@ -31,6 +31,9 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
+    public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
+    public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
+    public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
 
     @Nullable
     private LiveUpdateConfig config;
@@ -430,6 +433,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAutoDeleteBundles(autoDeleteBundles);
         boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
         config.setEnabled(enabled);
+        String publicKey = getConfig().getString("publicKey", config.getPublicKey());
+        config.setPublicKey(publicKey);
         int readyTimeout = getConfig().getInt("readyTimeout", config.getReadyTimeout());
         config.setReadyTimeout(readyTimeout);
         boolean resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.getResetOnUpdate());

@@ -240,6 +240,7 @@ public class LiveUpdatePlugin: CAPPlugin {
         config.appId = getConfig().getString("appId", config.appId)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
         config.enabled = getConfig().getBoolean("enabled", config.enabled)
+        config.publicKey = getConfig().getString("publicKey", config.publicKey)
         config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
         config.resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.resetOnUpdate)
 

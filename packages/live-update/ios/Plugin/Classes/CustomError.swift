@@ -11,6 +11,8 @@ public enum CustomError: Error {
     case checksumMismatch
     case customIdMissing
     case downloadFailed
+    case signatureMissing
+    case signatureVerificationFailed
     case urlMissing
 }
 
@@ -37,6 +39,10 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
         case .downloadFailed:
             return NSLocalizedString("Bundle could not be downloaded.", comment: "downloadFailed")
+        case .signatureMissing:
+            return NSLocalizedString("Bundle does not contain a signature.", comment: "signatureMissing")
+        case .signatureVerificationFailed:
+            return NSLocalizedString("Signature verification failed.", comment: "signatureVerificationFailed")
         case .urlMissing:
             return NSLocalizedString("url must be provided.", comment: "urlMissing")
         }

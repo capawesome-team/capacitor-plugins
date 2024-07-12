@@ -1,8 +1,9 @@
 import Foundation
+import CryptoKit
 import SSZipArchive
 import Capacitor
 import Alamofire
-import CryptoKit
+import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
@@ -63,7 +64,7 @@ import CryptoKit
         }
 
         // Download the bundle
-        downloadBundle(bundleId: bundleId, checksum: checksum, url: url, completion: { error in
+        downloadBundle(bundleId: bundleId, checksum: checksum, signature: nil, url: url, completion: { error in
             if let error = error {
                 completion(error)
                 return
@@ -189,7 +190,7 @@ import CryptoKit
                     completion(result, nil)
                 } else {
                     // Download and unzip the bundle
-                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, url: response.url, completion: { error in
+                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, signature: response.signature, url: response.url, completion: { error in
                         if let error = error {
                             completion(nil, error)
                             return
@@ -244,12 +245,11 @@ import CryptoKit
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
-    @available(iOS 13.2, *)
-    private func calculateChecksumForFile(url: URL) throws -> String {
+    private func getChecksumForFile(url: URL) throws -> String {
         let handle = try FileHandle(forReadingFrom: url)
         var hasher = SHA256()
         while autoreleasepool(invoking: {
-            let nextChunk = handle.readData(ofLength: SHA256.blockByteCount)
+            let nextChunk = handle.readData(ofLength: 2048)
             guard !nextChunk.isEmpty else { return false }
             hasher.update(data: nextChunk)
             return true
@@ -291,7 +291,7 @@ import CryptoKit
         }
     }
 
-    private func downloadBundle(bundleId: String, checksum: String?, url: String, completion: @escaping (Error?) -> Void) {
+    private func downloadBundle(bundleId: String, checksum: String?, signature: String?, url: String, completion: @escaping (Error?) -> Void) {
         // Download the bundle
         downloadFile(url: url, completion: { url, error in
             if let error = error {
@@ -299,18 +299,36 @@ import CryptoKit
                 return
             }
             if let url = url {
-                if let checksum = checksum {
+                // Verify the checksum
+                if let expectedChecksum = checksum {
                     // Calculate the checksum
-                    if #available(iOS 13.2, *) {
-                        do {
-                            let calculatedChecksum = try self.calculateChecksumForFile(url: url)
-                            if calculatedChecksum != checksum {
-                                completion(CustomError.checksumMismatch)
-                                return
-                            }
-                        } catch {
-                            completion(CustomError.checksumCalculationFailed)
+                    do {
+                        let receivedChecksum = try self.getChecksumForFile(url: url)
+                        if receivedChecksum != expectedChecksum {
+                            completion(CustomError.checksumMismatch)
+                            return
                         }
+                    } catch {
+                        completion(CustomError.checksumCalculationFailed)
+                        return
+                    }
+                }
+                // Verify the signature
+                if let publicKey = self.config.publicKey {
+                    guard let signature = signature else {
+                        completion(CustomError.signatureMissing)
+                        return
+                    }
+                    // Verify the signature
+                    do {
+                        let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
+                        if !verified {
+                            completion(CustomError.signatureVerificationFailed)
+                            return
+                        }
+                    } catch {
+                        completion(CustomError.signatureVerificationFailed)
+                        return
                     }
                 }
 
@@ -522,6 +540,64 @@ import CryptoKit
         }, completion: {
             completion(destinationDirectory)
         })
+    }
+
+    private func verifySignatureForFile(url: URL, signature: String, publicKey: String) throws -> Bool {
+        let publicKeyAsBase64 = publicKey
+            .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "\n", with: "")
+        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode public key.")
+            return false
+        }
+        let publicKeyAttributes: [CFString: Any] = [
+            kSecAttrKeyType: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass: kSecAttrKeyClassPublic,
+            kSecAttrKeySizeInBits: 2048,
+            kSecReturnPersistentRef: true
+        ]
+        var secKeyCreateWithDataError: Unmanaged<CFError>?
+        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &secKeyCreateWithDataError) else {
+            if let error = secKeyCreateWithDataError?.takeRetainedValue() {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create public key with error: \(error)")
+            }
+            return false
+        }
+        guard let signatureData = Data(base64Encoded: signature) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
+            return false
+        }
+
+        // Create SHA256 digest
+        var digestContext = CC_SHA256_CTX()
+        CC_SHA256_Init(&digestContext)
+
+        // Update the digest with the file's data
+        let handle = try FileHandle(forReadingFrom: url)
+        while autoreleasepool(invoking: {
+            let nextChunk = handle.readData(ofLength: 2048)
+            guard !nextChunk.isEmpty else { return false }
+            nextChunk.withUnsafeBytes {
+                _ = CC_SHA256_Update(&digestContext, $0.baseAddress, CC_LONG(nextChunk.count))
+            }
+            return true
+        }) { }
+
+        // Compute the digest
+        var digest = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
+        digest.withUnsafeMutableBytes {
+            _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
+        }
+
+        // Verify the signature
+        var secKeyVerifySignatureError: Unmanaged<CFError>?
+        let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
+        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &secKeyVerifySignatureError)
+        if let error = secKeyVerifySignatureError?.takeRetainedValue() {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to verify signature with error: \(error)")
+        }
+        return verificationResult
     }
 
     private func wasUpdated() -> Bool {
