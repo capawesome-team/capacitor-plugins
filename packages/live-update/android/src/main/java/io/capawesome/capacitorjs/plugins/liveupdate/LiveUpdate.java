@@ -387,14 +387,6 @@ public class LiveUpdate {
                 @Override
                 public void success(@NonNull File result) {
                     try {
-                        // Verify the checksum
-                        if (expectedChecksum != null) {
-                            // Calculate the checksum
-                            String receivedChecksum = getChecksumForFileAsString(result);
-                            if (!expectedChecksum.equals(receivedChecksum)) {
-                                throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
-                            }
-                        }
                         // Verify the signature
                         String publicKey = config.getPublicKey();
                         if (publicKey != null) {
@@ -406,6 +398,14 @@ public class LiveUpdate {
                             boolean verified = verifySignatureForFile(result, signature, key);
                             if (!verified) {
                                 throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+                            }
+                        }
+                        // Verify the checksum
+                        else if (expectedChecksum != null) {
+                            // Calculate the checksum
+                            String receivedChecksum = getChecksumForFileAsString(result);
+                            if (!expectedChecksum.equals(receivedChecksum)) {
+                                throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
                             }
                         }
 

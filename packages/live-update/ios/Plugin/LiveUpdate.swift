@@ -299,20 +299,6 @@ import CommonCrypto
                 return
             }
             if let url = url {
-                // Verify the checksum
-                if let expectedChecksum = checksum {
-                    // Calculate the checksum
-                    do {
-                        let receivedChecksum = try self.getChecksumForFile(url: url)
-                        if receivedChecksum != expectedChecksum {
-                            completion(CustomError.checksumMismatch)
-                            return
-                        }
-                    } catch {
-                        completion(CustomError.checksumCalculationFailed)
-                        return
-                    }
-                }
                 // Verify the signature
                 if let publicKey = self.config.publicKey {
                     guard let signature = signature else {
@@ -328,6 +314,20 @@ import CommonCrypto
                         }
                     } catch {
                         completion(CustomError.signatureVerificationFailed)
+                        return
+                    }
+                }
+                // Verify the checksum
+                else if let expectedChecksum = checksum {
+                    // Calculate the checksum
+                    do {
+                        let receivedChecksum = try self.getChecksumForFile(url: url)
+                        if receivedChecksum != expectedChecksum {
+                            completion(CustomError.checksumMismatch)
+                            return
+                        }
+                    } catch {
+                        completion(CustomError.checksumCalculationFailed)
                         return
                     }
                 }
