@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [`a4fe04d`](https://github.com/capawesome-team/capacitor-plugins/commit/a4fe04d8f225f892fc8da88816acf9cd41ff4acc) ([#229](https://github.com/capawesome-team/capacitor-plugins/pull/229)): feat: add support for checksum verification
+
+* [`a4b1a06`](https://github.com/capawesome-team/capacitor-plugins/commit/a4b1a060eebe446427ed9ea5a600a271fdc6acfa) ([#231](https://github.com/capawesome-team/capacitor-plugins/pull/231)): feat: add support for signature verification
+
 ## 6.0.8
 
 ### Patch Changes
