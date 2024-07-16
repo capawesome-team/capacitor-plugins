@@ -63,6 +63,10 @@ public class LiveUpdateConfig {
         this.enabled = enabled;
     }
 
+    public void setLocation(@Nullable String location) {
+        this.location = location;
+    }
+
     public void setPublicKey(@Nullable String publicKey) {
         this.publicKey = publicKey;
     }
