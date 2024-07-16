@@ -378,7 +378,13 @@ import CommonCrypto
         parameters["osVersion"] = UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        let url = URL(string: "https://api.cloud.capawesome.io/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var host = "api.cloud.capawesome.io"
+        if let location = config.location {
+            if location == "eu" {
+                host = "api.cloud.capawesome.eu"
+            }
+        }
+        let url = URL(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
         AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {

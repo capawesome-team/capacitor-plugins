@@ -433,6 +433,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAutoDeleteBundles(autoDeleteBundles);
         boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
         config.setEnabled(enabled);
+        String location = getConfig().getString("location", config.getLocation());
+        config.setLocation(location);
         String publicKey = getConfig().getString("publicKey", config.getPublicKey());
         config.setPublicKey(publicKey);
         int readyTimeout = getConfig().getInt("readyTimeout", config.getReadyTimeout());

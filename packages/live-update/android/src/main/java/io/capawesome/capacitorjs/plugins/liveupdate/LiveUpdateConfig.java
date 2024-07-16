@@ -12,6 +12,9 @@ public class LiveUpdateConfig {
     private boolean enabled = true;
 
     @Nullable
+    private String location = null;
+
+    @Nullable
     private String publicKey = null;
 
     private int readyTimeout = 10000;
@@ -28,6 +31,11 @@ public class LiveUpdateConfig {
 
     public boolean getEnabled() {
         return enabled;
+    }
+
+    @Nullable
+    public String getLocation() {
+        return location;
     }
 
     @Nullable
@@ -53,6 +61,10 @@ public class LiveUpdateConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setLocation(@Nullable String location) {
+        this.location = location;
     }
 
     public void setPublicKey(@Nullable String publicKey) {
