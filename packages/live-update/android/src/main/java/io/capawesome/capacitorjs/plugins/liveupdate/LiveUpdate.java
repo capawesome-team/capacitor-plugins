@@ -472,9 +472,13 @@ public class LiveUpdate {
     @Nullable
     private void fetchLatestBundle(@NonNull NonEmptyCallback<GetLatestBundleResponse> callback)
         throws PackageManager.NameNotFoundException {
+        String host = "api.cloud.capawesome.io";
+        if (config.getLocation() != null && config.getLocation().equals("eu")) {
+            host = "api.cloud.capawesome.eu";
+        }
         HttpUrl url = new HttpUrl.Builder()
             .scheme("https")
-            .host("api.cloud.capawesome.io")
+            .host(host)
             .addPathSegment("v1")
             .addPathSegment("apps")
             .addPathSegment(config.getAppId())

@@ -27,6 +27,15 @@ declare module '@capacitor/cli' {
        */
       enabled?: boolean;
       /**
+       * The location of the server to use when using [Capawesome Cloud](https://capawesome.io/cloud).
+       *
+       * @since 6.2.0
+       * @default 'us'
+       * @example 'eu'
+       * @see https://capawesome.io/cloud/live-updates/advanced/privacy/
+       */
+      location?: 'us' | 'eu';
+      /**
        * The public key to verify the integrity of the bundle.
        *
        * The public key must be a PEM-encoded RSA public key.

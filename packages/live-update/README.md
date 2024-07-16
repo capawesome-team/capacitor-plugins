@@ -65,14 +65,15 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                    | Type                 | Description                                                                                                                                       | Default            | Since |
-| ----------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`appId`**             | <code>string</code>  | The app ID is used to identify the app when using [Capawesome Cloud](https://capawesome.io/cloud).                                                |                    | 5.0.0 |
-| **`autoDeleteBundles`** | <code>boolean</code> | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`. | <code>false</code> | 5.0.0 |
-| **`enabled`**           | <code>boolean</code> | Whether or not the plugin is enabled.                                                                                                             | <code>true</code>  | 5.0.0 |
-| **`publicKey`**         | <code>string</code>  | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                        |                    | 6.1.0 |
-| **`readyTimeout`**      | <code>number</code>  | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle.                                               | <code>10000</code> | 5.0.0 |
-| **`resetOnUpdate`**     | <code>boolean</code> | Whether or not the app should be reset to the default bundle during an update.                                                                    | <code>true</code>  | 5.0.0 |
+| Prop                    | Type                      | Description                                                                                                                                       | Default            | Since |
+| ----------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`appId`**             | <code>string</code>       | The app ID is used to identify the app when using [Capawesome Cloud](https://capawesome.io/cloud).                                                |                    | 5.0.0 |
+| **`autoDeleteBundles`** | <code>boolean</code>      | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`. | <code>false</code> | 5.0.0 |
+| **`enabled`**           | <code>boolean</code>      | Whether or not the plugin is enabled.                                                                                                             | <code>true</code>  | 5.0.0 |
+| **`location`**          | <code>'us' \| 'eu'</code> | The location of the server to use when using [Capawesome Cloud](https://capawesome.io/cloud).                                                     | <code>'us'</code>  | 6.2.0 |
+| **`publicKey`**         | <code>string</code>       | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                        |                    | 6.1.0 |
+| **`readyTimeout`**      | <code>number</code>       | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle.                                               | <code>10000</code> | 5.0.0 |
+| **`resetOnUpdate`**     | <code>boolean</code>      | Whether or not the app should be reset to the default bundle during an update.                                                                    | <code>true</code>  | 5.0.0 |
 
 ### Examples
 
@@ -85,6 +86,7 @@ In `capacitor.config.json`:
       "appId": '4100e356-e851-47fe-9d3c-b411eb325a99',
       "autoDeleteBundles": undefined,
       "enabled": undefined,
+      "location": 'eu',
       "publicKey": '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       "readyTimeout": undefined,
       "resetOnUpdate": undefined
@@ -106,6 +108,7 @@ const config: CapacitorConfig = {
       appId: '4100e356-e851-47fe-9d3c-b411eb325a99',
       autoDeleteBundles: undefined,
       enabled: undefined,
+      location: 'eu',
       publicKey: '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       readyTimeout: undefined,
       resetOnUpdate: undefined,
