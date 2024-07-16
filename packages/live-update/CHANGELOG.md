@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`370095c`](https://github.com/capawesome-team/capacitor-plugins/commit/370095c63a28a2901efad611a74bb880d9c6bdc0) ([#232](https://github.com/capawesome-team/capacitor-plugins/pull/232)): feat: add `location` configuration option
+
 ## 6.1.0
 
 ### Minor Changes
