@@ -280,8 +280,20 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void ready(PluginCall call) {
         try {
-            implementation.ready();
-            call.resolve();
+            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(Result result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    Logger.error(TAG, exception.getMessage(), exception);
+                    call.reject(exception.getMessage());
+                }
+            };
+
+            implementation.ready(callback);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());

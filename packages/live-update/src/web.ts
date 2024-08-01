@@ -11,6 +11,7 @@ import type {
   GetVersionCodeResult,
   GetVersionNameResult,
   LiveUpdatePlugin,
+  ReadyResult,
   SetBundleOptions,
   SetChannelOptions,
   SetCustomIdOptions,
@@ -54,7 +55,7 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
     this.throwUnimplementedError();
   }
 
-  public async ready(): Promise<void> {
+  public async ready(): Promise<ReadyResult> {
     this.throwUnimplementedError();
   }
 

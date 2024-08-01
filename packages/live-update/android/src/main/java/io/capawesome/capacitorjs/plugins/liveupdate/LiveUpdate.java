@@ -24,6 +24,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdR
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
@@ -70,6 +71,8 @@ public class LiveUpdate {
 
     private final String bundlesDirectory = "_capacitor_live_update_bundles";
     private final Handler rollbackHandler = new Handler();
+
+    private boolean rollbackPerformed = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
@@ -162,12 +165,18 @@ public class LiveUpdate {
         callback.success(result);
     }
 
-    public void ready() {
+    public void ready(@NonNull NonEmptyCallback callback) {
         Logger.debug(LiveUpdatePlugin.TAG, "App is ready.");
         stopRollbackTimer();
         if (config.getAutoDeleteBundles()) {
             deleteUnusedBundles();
         }
+        String currentBundleId = getCurrentBundleId();
+        String previousBundleId = getPreviousBundleId();
+        ReadyResult result = new ReadyResult(currentBundleId, previousBundleId, rollbackPerformed);
+        callback.success(result);
+        setPreviousBundleId(currentBundleId);
+        rollbackPerformed = false;
     }
 
     public void reload() {
@@ -604,6 +613,11 @@ public class LiveUpdate {
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
     }
 
+    @Nullable
+    private String getPreviousBundleId() {
+        return preferences.getPreviousBundleId();
+    }
+
     private boolean hasBundle(@NonNull String bundleId) {
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         return bundleDirectory.exists();
@@ -616,6 +630,7 @@ public class LiveUpdate {
     }
 
     private void rollback() {
+        rollbackPerformed = true;
         if (getCurrentBundleId() == defaultWebAssetDir) {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
             return;
@@ -680,6 +695,10 @@ public class LiveUpdate {
 
     private void setNextCapacitorServerPathToDefaultWebAssetDir() {
         setNextCapacitorServerPath(defaultWebAssetDir);
+    }
+
+    private void setPreviousBundleId(@Nullable String bundleId) {
+        preferences.setPreviousBundleId(bundleId);
     }
 
     private void startRollbackTimer() {
