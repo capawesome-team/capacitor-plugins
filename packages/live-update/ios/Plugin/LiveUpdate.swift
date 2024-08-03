@@ -8,7 +8,7 @@ import CommonCrypto
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
     public static let defaultWebAssetDir = "public" // DO NOT CHANGE (See https://dub.sh/Buvz4yj)
-    
+
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE (See https://dub.sh/ceDl0zT)

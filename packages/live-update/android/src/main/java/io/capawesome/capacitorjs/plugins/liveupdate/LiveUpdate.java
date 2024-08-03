@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
@@ -56,6 +55,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LiveUpdate {
+
     public static final String DEFAULT_WEB_ASSET_DIR = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull

@@ -2,13 +2,12 @@ package io.capawesome.capacitorjs.plugins.liveupdate.classes.results;
 
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
-
-import org.json.JSONObject;
-
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
+import org.json.JSONObject;
 
 public class ReadyResult implements Result {
+
     @Nullable
     private String currentBundleId;
 

@@ -55,7 +55,9 @@ public class LiveUpdatePreferences {
 
     @Nullable
     public String getPreviousBundleId() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(previousBundleIdKey, null);
+        return context
+            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
+            .getString(previousBundleIdKey, null);
     }
 
     public void setChannel(@Nullable String channel) {
