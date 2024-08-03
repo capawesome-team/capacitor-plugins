@@ -7,9 +7,10 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    public static let defaultWebAssetDir = "public" // DO NOT CHANGE (See https://dub.sh/Buvz4yj)
+    
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
-    private let defaultWebAssetDir = "public" // DO NOT CHANGE (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE (See https://dub.sh/ceDl0zT)
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let plugin: LiveUpdatePlugin
@@ -17,6 +18,7 @@ import CommonCrypto
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
+    private var rollbackPerformed = false
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
@@ -74,10 +76,7 @@ import CommonCrypto
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
+        let bundleId = getCurrentBundleId()
         let result = GetBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -119,12 +118,18 @@ import CommonCrypto
         completion(result, nil)
     }
 
-    @objc public func ready() {
+    @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
         stopRollbackTimer()
         if config.autoDeleteBundles {
             deleteUnusedBundles()
         }
+        let currentBundleId = getCurrentBundleId()
+        let previousBundleId = getPreviousBundleId()
+        let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
+        completion(result, nil)
+        setPreviousBundleId(bundleId: currentBundleId)
+        rollbackPerformed = false
     }
 
     @objc public func reload() {
@@ -456,11 +461,15 @@ import CommonCrypto
 
     /// - Returns: The absolute path to the next bundle directory.
     private func getNextCapacitorServerPath() -> String {
-        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
+        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
         if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
             return path.isEmpty ? defaultCapacitorServerPath : path
         }
         return defaultCapacitorServerPath
+    }
+
+    private func getPreviousBundleId() -> String? {
+        return preferences.getPreviousBundleId()
     }
 
     private func hasBundle(bundleId: String) -> Bool {
@@ -469,7 +478,10 @@ import CommonCrypto
     }
 
     private func rollback() {
-        if getCurrentBundleId() == defaultWebAssetDir {
+        rollbackPerformed = true
+        let currentBundleId = getCurrentBundleId()
+        setPreviousBundleId(bundleId: currentBundleId)
+        if currentBundleId == LiveUpdate.defaultWebAssetDir {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
             return
         }
@@ -503,7 +515,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
         setCurrentCapacitorServerPath(path: path)
     }
 
@@ -523,8 +535,12 @@ import CommonCrypto
     }
 
     private func setNextCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
         setNextCapacitorServerPath(path: path)
+    }
+
+    private func setPreviousBundleId(bundleId: String?) {
+        preferences.setPreviousBundleId(bundleId)
     }
 
     private func startRollbackTimer() {

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
+
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import org.json.JSONObject;
 
@@ -18,7 +20,7 @@ public class GetBundleResult implements Result {
 
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
+        result.put("bundleId", bundleId.equals(LiveUpdate.DEFAULT_WEB_ASSET_DIR) ? JSONObject.NULL : bundleId);
         return result;
     }
 }

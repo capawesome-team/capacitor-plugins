@@ -5,6 +5,7 @@ import com.getcapacitor.JSObject;
 
 import org.json.JSONObject;
 
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 
 public class ReadyResult implements Result {
@@ -24,8 +25,8 @@ public class ReadyResult implements Result {
 
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("currentBundleId", currentBundleId == null ? JSONObject.NULL : currentBundleId);
-        result.put("previousBundleId", previousBundleId == null ? JSONObject.NULL : previousBundleId);
+        result.put("currentBundleId", currentBundleId.equals(LiveUpdate.DEFAULT_WEB_ASSET_DIR) ? JSONObject.NULL : currentBundleId);
+        result.put("previousBundleId", previousBundleId.equals(LiveUpdate.DEFAULT_WEB_ASSET_DIR) ? JSONObject.NULL : previousBundleId);
         result.put("rollback", rollback);
         return result;
     }

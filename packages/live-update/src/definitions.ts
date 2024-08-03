@@ -357,16 +357,22 @@ export interface ReadyResult {
    * The identifier of the previous bundle used.
    *
    * If `null`, the default bundle was used.
+   *
+   * @since 7.0.0
    */
   previousBundleId: string | null;
   /**
    * The identifier of the current bundle used.
    *
    * If `null`, the default bundle is being used.
+   *
+   * @since 7.0.0
    */
   currentBundleId: string | null;
   /**
    * Whether or not the app was reset to the default bundle.
+   *
+   * @since 7.0.0
    */
   rollback: boolean;
 }
