@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-live-update",
-  "version": "6.2.0",
+  "version": "6.2.0-dev.0a2a6a5.1722676620",
   "description": "Capacitor plugin to update your app remotely in real-time.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
