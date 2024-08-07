@@ -9,8 +9,10 @@ public class LiveUpdateConfig {
     private String appId = null;
 
     private boolean autoDeleteBundles = false;
+
     @Nullable
     private String defaultChannel = null;
+
     private boolean enabled = true;
 
     @Nullable

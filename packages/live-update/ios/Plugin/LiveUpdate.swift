@@ -412,7 +412,7 @@ import CommonCrypto
             return []
         }
     }
-    
+
     private func getChannel() -> String? {
         var channel: String?
         if let _ = config.defaultChannel {
@@ -459,7 +459,7 @@ import CommonCrypto
         }
         return defaultCapacitorServerPath
     }
-    
+
     private func getVersionCode() -> String {
         guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
             return ""
