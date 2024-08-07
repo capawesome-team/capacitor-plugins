@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.3.0
+
+### Minor Changes
+
+- [`826955b`](https://github.com/capawesome-team/capacitor-plugins/commit/826955b5bd40bb17154b4182689ef1216402e2a2) ([#248](https://github.com/capawesome-team/capacitor-plugins/pull/248)): feat: add `defaultChannel` configuration option
+
 ## 6.2.0
 
 ### Minor Changes
