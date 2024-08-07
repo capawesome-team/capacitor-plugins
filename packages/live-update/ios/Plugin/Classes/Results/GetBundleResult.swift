@@ -10,7 +10,7 @@ import Capacitor
 
     public func toJSObject() -> AnyObject {
         var result = JSObject()
-        result["bundleId"] = bundleId == nil ? NSNull() : bundleId
+        result["bundleId"] = bundleId == LiveUpdate.defaultWebAssetDir ? NSNull() : bundleId
         return result as AnyObject
     }
 }
