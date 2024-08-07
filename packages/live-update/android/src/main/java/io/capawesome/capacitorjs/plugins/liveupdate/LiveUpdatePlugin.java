@@ -431,6 +431,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAppId(appId);
         boolean autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.getAutoDeleteBundles());
         config.setAutoDeleteBundles(autoDeleteBundles);
+        String defaultChannel = getConfig().getString("defaultChannel", config.getDefaultChannel());
+        config.setDefaultChannel(defaultChannel);
         boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
         config.setEnabled(enabled);
         String location = getConfig().getString("location", config.getLocation());

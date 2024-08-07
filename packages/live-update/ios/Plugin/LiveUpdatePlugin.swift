@@ -239,6 +239,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         config.appId = getConfig().getString("appId", config.appId)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
+        config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
         config.enabled = getConfig().getBoolean("enabled", config.enabled)
         config.location = getConfig().getString("location", config.location)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)

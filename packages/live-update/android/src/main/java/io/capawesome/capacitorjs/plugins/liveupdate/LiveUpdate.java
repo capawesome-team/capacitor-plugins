@@ -133,7 +133,7 @@ public class LiveUpdate {
     }
 
     public void getChannel(@NonNull NonEmptyCallback callback) {
-        String channel = preferences.getChannel();
+        String channel = getChannel();
         GetChannelResult result = new GetChannelResult(channel);
         callback.success(result);
     }
@@ -487,7 +487,7 @@ public class LiveUpdate {
             .addQueryParameter("appVersionCode", getVersionCode())
             .addQueryParameter("appVersionName", getVersionName())
             .addQueryParameter("bundleId", getCurrentBundleId())
-            .addQueryParameter("channelName", preferences.getChannel())
+            .addQueryParameter("channelName", getChannel())
             .addQueryParameter("customId", preferences.getCustomId())
             .addQueryParameter("deviceId", getDeviceId())
             .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))
@@ -530,14 +530,6 @@ public class LiveUpdate {
             );
     }
 
-    private String getVersionCode() throws PackageManager.NameNotFoundException {
-        return String.valueOf(getPackageInfo().versionCode);
-    }
-
-    private String getVersionName() throws PackageManager.NameNotFoundException {
-        return getPackageInfo().versionName;
-    }
-
     private String[] getBundleIds() {
         File bundlesDirectory = buildBundlesDirectory();
         File[] bundles = bundlesDirectory.listFiles();
@@ -551,6 +543,18 @@ public class LiveUpdate {
         }
 
         return bundleIds;
+    }
+
+    @Nullable
+    private String getChannel() {
+        String channel = null;
+        if (config.getDefaultChannel() != null) {
+            channel = config.getDefaultChannel();
+        }
+        if (preferences.getChannel() != null) {
+            channel = preferences.getChannel();
+        }
+        return channel;
     }
 
     /**
@@ -602,6 +606,14 @@ public class LiveUpdate {
             .getContext()
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
+    }
+
+    private String getVersionCode() throws PackageManager.NameNotFoundException {
+        return String.valueOf(getPackageInfo().versionCode);
+    }
+
+    private String getVersionName() throws PackageManager.NameNotFoundException {
+        return getPackageInfo().versionName;
     }
 
     private boolean hasBundle(@NonNull String bundleId) {

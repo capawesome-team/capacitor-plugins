@@ -20,6 +20,13 @@ declare module '@capacitor/cli' {
        */
       autoDeleteBundles?: boolean;
       /**
+       * The default channel of the app.
+       *
+       * @since 6.3.0
+       * @example 'production'
+       */
+      defaultChannel?: string;
+      /**
        * Whether or not the plugin is enabled.
        *
        * @since 5.0.0
