@@ -9,6 +9,10 @@ public class LiveUpdateConfig {
     private String appId = null;
 
     private boolean autoDeleteBundles = false;
+
+    @Nullable
+    private String defaultChannel = null;
+
     private boolean enabled = true;
 
     @Nullable
@@ -27,6 +31,11 @@ public class LiveUpdateConfig {
 
     public boolean getAutoDeleteBundles() {
         return autoDeleteBundles;
+    }
+
+    @Nullable
+    public String getDefaultChannel() {
+        return defaultChannel;
     }
 
     public boolean getEnabled() {
@@ -57,6 +66,10 @@ public class LiveUpdateConfig {
 
     public void setAutoDeleteBundles(boolean autoDeleteBundles) {
         this.autoDeleteBundles = autoDeleteBundles;
+    }
+
+    public void setDefaultChannel(@Nullable String defaultChannel) {
+        this.defaultChannel = defaultChannel;
     }
 
     public void setEnabled(boolean enabled) {

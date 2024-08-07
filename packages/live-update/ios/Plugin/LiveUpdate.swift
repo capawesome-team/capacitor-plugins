@@ -89,7 +89,7 @@ import CommonCrypto
     }
 
     @objc public func getChannel(completion: @escaping (Result?, Error?) -> Void) {
-        let channel = preferences.getChannel()
+        let channel = getChannel()
         let result = GetChannelResult(channel: channel)
         completion(result, nil)
     }
@@ -372,7 +372,7 @@ import CommonCrypto
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
         parameters["bundleId"] = getCurrentBundleId()
-        parameters["channelName"] = preferences.getChannel()
+        parameters["channelName"] = getChannel()
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()
         parameters["osVersion"] = UIDevice.current.systemVersion
@@ -399,20 +399,6 @@ import CommonCrypto
         }
     }
 
-    private func getVersionCode() -> String {
-        guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
-            return ""
-        }
-        return appVersionCode
-    }
-
-    private func getVersionName() -> String {
-        guard let appVersionName = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-            return ""
-        }
-        return appVersionName
-    }
-
     private func getBundleIds() -> [String] {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         do {
@@ -425,6 +411,17 @@ import CommonCrypto
         } catch {
             return []
         }
+    }
+
+    private func getChannel() -> String? {
+        var channel: String?
+        if let _ = config.defaultChannel {
+            channel = config.defaultChannel
+        }
+        if let _ = preferences.getChannel() {
+            channel = preferences.getChannel()
+        }
+        return channel
     }
 
     /// - Returns: The current bundle ID (`public` for the built-in bundle) or `nil` if no view controller was found.
@@ -461,6 +458,20 @@ import CommonCrypto
             return path.isEmpty ? defaultCapacitorServerPath : path
         }
         return defaultCapacitorServerPath
+    }
+
+    private func getVersionCode() -> String {
+        guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
+            return ""
+        }
+        return appVersionCode
+    }
+
+    private func getVersionName() -> String {
+        guard let appVersionName = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return ""
+        }
+        return appVersionName
     }
 
     private func hasBundle(bundleId: String) -> Bool {
