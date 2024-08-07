@@ -661,7 +661,7 @@ Only available on Android.
 startCharacteristicNotifications(options: StartCharacteristicNotificationsOptions) => Promise<void>
 ```
 
-Start listening for characteristic value changes.
+Start listening for characteristic value changes. This will emit the `characteristicChanged` event when a value changes.
 
 Only available on Android and iOS.
 
@@ -699,7 +699,7 @@ Only available on Android.
 startScan(options?: StartScanOptions | undefined) => Promise<void>
 ```
 
-Start scanning for BLE devices.
+Start scanning for BLE devices. This will emit the `deviceScanned` event when a device is found.
 
 Only available on Android and iOS.
 
