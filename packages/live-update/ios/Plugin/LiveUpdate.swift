@@ -497,9 +497,8 @@ import CommonCrypto
     }
 
     private func searchIndexHtmlFile(url: URL) -> URL? {
-        let enumerator = FileManager.default.enumerator(atPath: url.path)
-        while let element = enumerator?.nextObject() as? String {
-            if element.hasSuffix("index.html") {
+        if let directoryContents = try? FileManager.default.contentsOfDirectory(atPath: url.path) {
+            for element in directoryContents where element == "index.html" {
                 return url.appendingPathComponent(element)
             }
         }
