@@ -497,11 +497,28 @@ import CommonCrypto
     }
 
     private func searchIndexHtmlFile(url: URL) -> URL? {
-        let enumerator = FileManager.default.enumerator(atPath: url.path)
-        while let element = enumerator?.nextObject() as? String {
-            if element.hasSuffix("index.html") {
-                return url.appendingPathComponent(element)
+        do {
+            let directoryContents = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: [])
+            if directoryContents.isEmpty {
+                return nil
             }
+            let fileNames = directoryContents.map { $0.lastPathComponent }
+            if fileNames.contains("index.html") {
+                return url.appendingPathComponent("index.html")
+            } else {
+                for fileUrl in directoryContents {
+                    var isDirectory: ObjCBool = false
+                    if FileManager.default.fileExists(atPath: fileUrl.path, isDirectory: &isDirectory) {
+                        if isDirectory.boolValue {
+                            if let indexHtmlFile = searchIndexHtmlFile(url: fileUrl) {
+                                return indexHtmlFile
+                            }
+                        }
+                    }
+                }
+            }
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to search index.html file: \(error.localizedDescription)")
         }
         return nil
     }
