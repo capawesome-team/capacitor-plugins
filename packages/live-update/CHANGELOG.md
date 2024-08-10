@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.3.0
+
+### Minor Changes
+
+- [`826955b`](https://github.com/capawesome-team/capacitor-plugins/commit/826955b5bd40bb17154b4182689ef1216402e2a2) ([#248](https://github.com/capawesome-team/capacitor-plugins/pull/248)): feat: add `defaultChannel` configuration option
+
+### Patch Changes
+
+- [`83f3f7f`](https://github.com/capawesome-team/capacitor-plugins/commit/83f3f7f3ff314a1c69f5280848262bfdb5afbd2d) ([#253](https://github.com/capawesome-team/capacitor-plugins/pull/253)): fix(ios): update possibly failed if more than one `index.html` file exists
+
 ## 6.2.0
 
 ### Minor Changes
