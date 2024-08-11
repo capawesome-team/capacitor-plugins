@@ -644,6 +644,20 @@ Live updates are only supported for [binary-compatible changes](https://capaweso
 If you change native code, such as adding a new plugin, you need to resubmit your app to the app stores.
 For this reason, you must be careful to [restrict live updates to compatible native versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/) of your app.
 
+## FAQ
+
+### Why can't I see my changes during development?
+
+As soon as you have installed a live update, the app will use the live update bundle and no longer the default bundle. 
+So if you make local changes to your app and execute `npx cap run`, for example, these changes will apply to the default bundle, which is not currently in use.
+You then have three options:
+
+1. **Reset**: Call the `reset()` method to reset the app to the default bundle.
+2. **Reinstall**: Reinstall the app to use the default bundle.
+3. **Update**: Increase the `versionCode`/`CFBundleVersion` so that the plugin automatically performs a reset (assuming the `resetOnUpdate` configuration option is active).
+
+However, this is only a problem during development. It is not a problem in production as long as you have the `resetOnUpdate` configuration option enabled, as the `versionCode`/`CFBundleVersion` is always incremented during a native update and thus always resets to the default bundle.
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/CHANGELOG.md).
