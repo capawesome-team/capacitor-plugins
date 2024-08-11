@@ -652,11 +652,11 @@ As soon as you have installed a live update, the app will use the live update bu
 So if you make local changes to your app and execute `npx cap run`, for example, these changes will apply to the default bundle, which is not currently in use.
 You then have three options:
 
-1. **Reset**: Call the `reset()` method to reset the app to the default bundle.
+1. **Reset**: Call the [`reset()`](#reset) method to reset the app to the default bundle.
 2. **Reinstall**: Reinstall the app to use the default bundle.
-3. **Update**: Increase the `versionCode`/`CFBundleVersion` so that the plugin automatically performs a reset (assuming the `resetOnUpdate` configuration option is active).
+3. **Update**: Increase the `versionCode`/`CFBundleVersion` so that the plugin automatically performs a reset (assuming the [`resetOnUpdate`](#configuration) configuration option is active).
 
-However, this is only a problem during development. It is not a problem in production as long as you have the `resetOnUpdate` configuration option enabled, as the `versionCode`/`CFBundleVersion` is always incremented during a native update and thus always resets to the default bundle.
+However, this is only a problem during development. It is not a problem in production as long as you have the [`resetOnUpdate`](#configuration) configuration option enabled, as the `versionCode`/`CFBundleVersion` is always incremented during a native update and thus always resets to the default bundle.
 
 ## Changelog
 
