@@ -650,7 +650,7 @@ For this reason, you must be careful to [restrict live updates to compatible nat
 
 As soon as you have installed a live update, the app will use the live update bundle and no longer the default bundle. 
 So if you make local changes to your app and execute `npx cap run`, for example, these changes will apply to the default bundle, which is not currently in use.
-You then have three options:
+You then have three options to get back to the default bundle:
 
 1. **Reset**: Call the [`reset()`](#reset) method to reset the app to the default bundle.
 2. **Reinstall**: Reinstall the app to use the default bundle.
