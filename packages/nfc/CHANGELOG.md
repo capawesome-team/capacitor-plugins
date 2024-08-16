@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [6.2.1](https://github.com/capawesome-team/sponsorware/compare/v6.2.0...v6.2.1) (2024-08-16)
+
+
+### Bug Fixes
+
+* **android:** skip `canMakeReadOnly` if it cannot be read ([bddaeec](https://github.com/capawesome-team/sponsorware/commit/bddaeec13a6085b6f36c2044c10132c2c7ca5baf))
+
 ## [6.2.0](https://github.com/capawesome-team/sponsorware/compare/v6.1.0...v6.2.0) (2024-06-01)
 
 
