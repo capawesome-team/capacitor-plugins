@@ -59,6 +59,7 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
+    "publish:preview": "pkg-pr-new publish",
     "version": "node scripts/sync-plugin-version.mjs",
     "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
     "prepublishOnly": "npm run build"
@@ -73,6 +74,7 @@
     "@ionic/prettier-config": "2.0.0",
     "@ionic/swiftlint-config": "1.1.2",
     "eslint": "7.32.0",
+    "pkg-pr-new": "0.0.20",
     "prettier": "2.6.2",
     "prettier-plugin-java": "1.6.1",
     "rimraf": "3.0.2",

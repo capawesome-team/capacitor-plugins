@@ -63,3 +63,30 @@ jobs:
       - name: Lint all packages
         if: github.ref == 'refs/heads/main'
         run: npm run lint
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [build, lint]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Build packages affected by changes
+        if: github.ref != 'refs/heads/main'
+        run: npm run affected:verify:web
+      - name: Build all packages
+        if: github.ref == 'refs/heads/main'
+        run: npm run verify:web
+      - name: Publish packages affected by changes
+        if: github.ref != 'refs/heads/main'
+        run: npm run affected:publish:preview
+      - name: Publish all packages
+        if: github.ref == 'refs/heads/main'
+        run: npm run publish:preview

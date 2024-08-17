@@ -13,6 +13,7 @@
       "cache": false
     },
     "version": {},
+    "publish:preview": {},
     "ios:pod:install": {}
   }
 }
