@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.foregroundservice;
 
+import android.app.NotificationManager;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
@@ -55,6 +56,21 @@ public class ForegroundServicePlugin extends Plugin {
             String packageName = getContext().getPackageName();
             Intent intent = getContext().getApplicationContext().getPackageManager().getLaunchIntentForPackage(packageName);
             startActivityForResult(call, intent, MOVE_TO_FOREGROUND_CALLBACK_NAME);
+        } catch (Exception exception) {
+            call.reject(exception.getMessage());
+            Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
+        }
+    }
+
+    @PluginMethod
+    public void createNotificationChannel(PluginCall call) {
+        try {
+            implementation.createNotificationChannel(
+                call.getString("name", "Default"),
+                call.getString("description", "Default"),
+                call.getInt("importance", NotificationManager.IMPORTANCE_DEFAULT)
+            );
+            call.resolve();
         } catch (Exception exception) {
             call.reject(exception.getMessage());
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);

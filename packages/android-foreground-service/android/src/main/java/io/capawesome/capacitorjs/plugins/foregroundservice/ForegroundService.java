@@ -21,13 +21,33 @@ public class ForegroundService {
 
     @Nullable
     private PowerManager.WakeLock activeWakeLock;
+    private boolean notificationChannelCreated = false;
 
     public ForegroundService(ForegroundServicePlugin plugin) {
         this.plugin = plugin;
-        createNotificationChannel();
+    }
+
+    public void createNotificationChannel(String name, String description, int importance) {
+        if (notificationChannelCreated) {
+            return;
+        }
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = plugin.getContext().getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationChannelCreated = true;
     }
 
     public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
+        createNotificationChannel("Default", "Default", NotificationManager.IMPORTANCE_DEFAULT);
         acquireWakeLock();
         int iconResourceId = AssetUtil.getResourceID(plugin.getContext(), AssetUtil.getResourceBaseName(icon), "drawable");
         Bundle notificationBundle = new Bundle();
@@ -74,21 +94,5 @@ public class ForegroundService {
         }
         activeWakeLock.release();
         activeWakeLock = null;
-    }
-
-    private void createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Default";
-            String description = "Default";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(DEFAULT_NOTIFICATION_CHANNEL_ID, name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = plugin.getContext().getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
     }
 }
