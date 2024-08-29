@@ -14,6 +14,7 @@ public class LiveUpdateConfig {
     private String defaultChannel = null;
 
     private boolean enabled = true;
+    private int httpTimeout = 60000;
 
     @Nullable
     private String location = null;
@@ -40,6 +41,10 @@ public class LiveUpdateConfig {
 
     public boolean getEnabled() {
         return enabled;
+    }
+
+    public int getHttpTimeout() {
+        return httpTimeout;
     }
 
     @Nullable
@@ -74,6 +79,10 @@ public class LiveUpdateConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setHttpTimeout(int httpTimeout) {
+        this.httpTimeout = httpTimeout;
     }
 
     public void setLocation(@Nullable String location) {

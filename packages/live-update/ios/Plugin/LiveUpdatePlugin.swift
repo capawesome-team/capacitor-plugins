@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "6.3.0"
+    public static let version = "6.4.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     private var config: LiveUpdateConfig?
@@ -250,6 +250,7 @@ public class LiveUpdatePlugin: CAPPlugin {
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
         config.enabled = getConfig().getBoolean("enabled", config.enabled)
+        config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
         config.location = getConfig().getString("location", config.location)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)
         config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)

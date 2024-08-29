@@ -19,7 +19,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.3.0";
+    public static final String VERSION = "6.4.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -448,6 +448,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setDefaultChannel(defaultChannel);
         boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
         config.setEnabled(enabled);
+        int httpTimeout = getConfig().getInt("httpTimeout", config.getHttpTimeout());
+        config.setHttpTimeout(httpTimeout);
         String location = getConfig().getString("location", config.getLocation());
         config.setLocation(location);
         String publicKey = getConfig().getString("publicKey", config.getPublicKey());

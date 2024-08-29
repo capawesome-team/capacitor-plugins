@@ -356,8 +356,10 @@ import CommonCrypto
             let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
             return (temporaryZipFileUrl, [.createIntermediateDirectories])
         }
-
-        AF.download(url, to: destination).validate().response { response in
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = TimeInterval(config.httpTimeout)
+        let session = Session(configuration: configuration)
+        session.download(url, to: destination).validate().response { response in
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
                 completion(nil, CustomError.downloadFailed)
@@ -385,7 +387,10 @@ import CommonCrypto
             }
         }
         let url = URL(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
-        AF.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = TimeInterval(config.httpTimeout)
+        let session = Session(configuration: configuration)
+        session.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)

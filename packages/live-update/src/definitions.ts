@@ -37,6 +37,13 @@ declare module '@capacitor/cli' {
        */
       enabled?: boolean;
       /**
+       * The timeout in milliseconds for HTTP requests.
+       *
+       * @since 6.4.0
+       * @default 60000
+       */
+      httpTimeout?: number;
+      /**
        * The location of the server to use when using [Capawesome Cloud](https://capawesome.io/cloud).
        *
        * @since 6.2.0
