@@ -13,6 +13,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
+    private var syncInProgress = false
 
     override public func load() {
         self.config = liveUpdateConfig()
@@ -222,7 +223,15 @@ public class LiveUpdatePlugin: CAPPlugin {
             call.reject(CustomError.appIdMissing.localizedDescription)
             return
         }
+        
+        guard !syncInProgress else {
+            call.reject(CustomError.syncInProgress.localizedDescription)
+            return
+        }
+        syncInProgress = true
+        
         implementation?.sync(completion: { result, error in
+            self.syncInProgress = false
             if let error = error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
                 call.reject(error.localizedDescription)

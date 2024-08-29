@@ -13,6 +13,7 @@ public enum CustomError: Error {
     case downloadFailed
     case signatureMissing
     case signatureVerificationFailed
+    case syncInProgress
     case urlMissing
 }
 
@@ -43,6 +44,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Bundle does not contain a signature.", comment: "signatureMissing")
         case .signatureVerificationFailed:
             return NSLocalizedString("Signature verification failed.", comment: "signatureVerificationFailed")
+        case .syncInProgress:
+            return NSLocalizedString("Sync is already in progress.", comment: "syncInProgress")
         case .urlMissing:
             return NSLocalizedString("url must be provided.", comment: "urlMissing")
         }

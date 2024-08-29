@@ -34,6 +34,9 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
     public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
+    public static final String ERROR_SYNC_IN_PROGRESS = "Sync is already in progress.";
+
+    private boolean syncInProgress = false;
 
     @Nullable
     private LiveUpdateConfig config;
@@ -404,14 +407,23 @@ public class LiveUpdatePlugin extends Plugin {
                 call.reject(ERROR_APP_ID_MISSING);
                 return;
             }
+
+            if (syncInProgress) {
+                call.reject(ERROR_SYNC_IN_PROGRESS);
+                return;
+            }
+            syncInProgress = true;
+
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
+                    syncInProgress = false;
                     call.resolve(result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
+                    syncInProgress = false;
                     Logger.error(TAG, exception.getMessage(), exception);
                     call.reject(exception.getMessage());
                 }
@@ -419,6 +431,7 @@ public class LiveUpdatePlugin extends Plugin {
 
             implementation.sync(callback);
         } catch (Exception exception) {
+            syncInProgress = false;
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());
         }
