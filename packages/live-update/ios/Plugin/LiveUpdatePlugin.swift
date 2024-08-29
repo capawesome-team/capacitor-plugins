@@ -223,13 +223,13 @@ public class LiveUpdatePlugin: CAPPlugin {
             call.reject(CustomError.appIdMissing.localizedDescription)
             return
         }
-        
+
         guard !syncInProgress else {
             call.reject(CustomError.syncInProgress.localizedDescription)
             return
         }
         syncInProgress = true
-        
+
         implementation?.sync(completion: { result, error in
             self.syncInProgress = false
             if let error = error {

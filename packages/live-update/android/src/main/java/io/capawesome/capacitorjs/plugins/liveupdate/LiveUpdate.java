@@ -38,7 +38,6 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
 import net.lingala.zip4j.ZipFile;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -428,10 +427,10 @@ public class LiveUpdate {
 
     private void downloadFile(@NonNull String url, @NonNull NonEmptyCallback<File> callback) {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-                .readTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-                .writeTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-                .build();
+            .connectTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
+            .readTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
+            .writeTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
+            .build();
         Request request = new Request.Builder().url(url).build();
         okHttpClient
             .newCall(request)
