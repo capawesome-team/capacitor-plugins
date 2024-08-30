@@ -426,7 +426,7 @@ public class LiveUpdate {
     }
 
     private void downloadFile(@NonNull String url, @NonNull NonEmptyCallback<File> callback) {
-      int httpTimeout = config.getHttpTimeout();
+        int httpTimeout = config.getHttpTimeout();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
