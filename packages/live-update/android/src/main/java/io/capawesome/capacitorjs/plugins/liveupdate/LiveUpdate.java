@@ -426,10 +426,11 @@ public class LiveUpdate {
     }
 
     private void downloadFile(@NonNull String url, @NonNull NonEmptyCallback<File> callback) {
+      int httpTimeout = config.getHttpTimeout();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-            .readTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-            .writeTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .build();
         Request request = new Request.Builder().url(url).build();
         okHttpClient
@@ -500,11 +501,12 @@ public class LiveUpdate {
             .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
             .build();
         Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle from " + url);
+        int httpTimeout = config.getHttpTimeout();
         OkHttpClient client = new OkHttpClient()
             .newBuilder()
-            .connectTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-            .readTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
-            .writeTimeout(config.getHttpTimeout(), TimeUnit.MILLISECONDS)
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .build();
         okhttp3.Request request = new okhttp3.Request.Builder().url(url).build();
         client

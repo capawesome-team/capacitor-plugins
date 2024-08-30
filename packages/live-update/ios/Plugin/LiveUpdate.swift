@@ -356,10 +356,10 @@ import CommonCrypto
             let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
             return (temporaryZipFileUrl, [.createIntermediateDirectories])
         }
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = TimeInterval(config.httpTimeout)
-        let session = Session(configuration: configuration)
-        session.download(url, to: destination).validate().response { response in
+        var request = URLRequest(url: URL(string: url)!)
+        request.httpMethod = HTTPMethod.get.rawValue
+        request.timeoutInterval = Double(config.httpTimeout) / 1000.0
+        AF.download(request, to: destination).validate().response { response in
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
                 completion(nil, CustomError.downloadFailed)
@@ -386,11 +386,12 @@ import CommonCrypto
                 host = "api.cloud.capawesome.eu"
             }
         }
-        let url = URL(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
-        let configuration = URLSessionConfiguration.default
-        configuration.timeoutIntervalForRequest = TimeInterval(config.httpTimeout)
-        let session = Session(configuration: configuration)
-        session.request(url, method: .get, parameters: parameters).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
+        var urlComponents = URLComponents(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        var request = URLRequest(url: urlComponents.url!)
+        request.httpMethod = HTTPMethod.get.rawValue
+        request.timeoutInterval = Double(config.httpTimeout) / 1000.0
+        AF.request(request).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
