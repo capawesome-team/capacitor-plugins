@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [`d6d8397`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d6d83973e0c177a87fb21f11a95be1b2b5b77c68) ([#6](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/6)): feat: add `type` property to `WriteCharacteristicOptions`
+
 ## 6.0.1
 
 ### Patch Changes
