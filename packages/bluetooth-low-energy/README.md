@@ -1150,13 +1150,14 @@ Remove all listeners for this plugin.
 
 #### WriteCharacteristicOptions
 
-| Prop                   | Type                  | Description                                                                                                                       | Default           | Since |
-| ---------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
-| **`characteristicId`** | <code>string</code>   | The UUID of the characteristic to write.                                                                                          |                   | 6.0.0 |
-| **`deviceId`**         | <code>string</code>   | The address of the device to write the characteristic to.                                                                         |                   | 6.0.0 |
-| **`serviceId`**        | <code>string</code>   | The UUID of the service to write the characteristic to.                                                                           |                   | 6.0.0 |
-| **`timeout`**          | <code>number</code>   | The timeout for the write operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code> | 6.0.0 |
-| **`value`**            | <code>number[]</code> | The value bytes to write to the characteristic.                                                                                   |                   | 6.0.0 |
+| Prop                   | Type                                        | Description                                                                                                                       | Default                | Since |
+| ---------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
+| **`characteristicId`** | <code>string</code>                         | The UUID of the characteristic to write.                                                                                          |                        | 6.0.0 |
+| **`deviceId`**         | <code>string</code>                         | The address of the device to write the characteristic to.                                                                         |                        | 6.0.0 |
+| **`serviceId`**        | <code>string</code>                         | The UUID of the service to write the characteristic to.                                                                           |                        | 6.0.0 |
+| **`timeout`**          | <code>number</code>                         | The timeout for the write operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code>      | 6.0.0 |
+| **`type`**             | <code>'default' \| 'withoutResponse'</code> | The type of write operation.                                                                                                      | <code>'default'</code> | 6.1.0 |
+| **`value`**            | <code>number[]</code>                       | The value bytes to write to the characteristic.                                                                                   |                        | 6.0.0 |
 
 
 #### WriteDescriptorOptions
