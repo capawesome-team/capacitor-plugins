@@ -1,5 +1,17 @@
 # Changelog
 
+## 6.4.0
+
+### Minor Changes
+
+- [`4e4fcc0`](https://github.com/capawesome-team/capacitor-plugins/commit/4e4fcc0515f5b55280755766056c86eb2a7442a1) ([#277](https://github.com/capawesome-team/capacitor-plugins/pull/277)): feat: add configuration option `httpTimeout`
+
+### Patch Changes
+
+- [`f4df3ff`](https://github.com/capawesome-team/capacitor-plugins/commit/f4df3ffec7b9a18271be8e0596b8f864de127eff) ([#275](https://github.com/capawesome-team/capacitor-plugins/pull/275)): fix: throw an error if the sync is already in progress
+
+* [`375c857`](https://github.com/capawesome-team/capacitor-plugins/commit/375c8574cf09a7053e35408177eb8b340a648e42) ([#279](https://github.com/capawesome-team/capacitor-plugins/pull/279)): fix: throw error if a http timeout occurs
+
 ## 6.3.0
 
 ### Minor Changes
