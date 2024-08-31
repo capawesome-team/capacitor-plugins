@@ -362,7 +362,16 @@ import CommonCrypto
         AF.download(request, to: destination).validate().response { response in
             if let error = response.error {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                completion(nil, CustomError.downloadFailed)
+                if let urlError = error.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        completion(nil, CustomError.httpTimeout)
+                    default:
+                        completion(nil, CustomError.downloadFailed)
+                    }
+                } else {
+                    completion(nil, CustomError.downloadFailed)
+                }
                 return
             }
             completion(response.fileURL, nil)
@@ -398,7 +407,16 @@ import CommonCrypto
                 if let data = response.data {
                     CAPLog.print("[", LiveUpdatePlugin.tag, "] ", String(decoding: data, as: UTF8.self))
                 }
-                completion(nil, error)
+                if let urlError = error.underlyingError as? URLError {
+                    switch urlError.code {
+                    case .timedOut:
+                        completion(nil, CustomError.httpTimeout)
+                    default:
+                        completion(nil, error)
+                    }
+                } else {
+                    completion(nil, error)
+                }
                 return
             }
             completion(response.value, nil)

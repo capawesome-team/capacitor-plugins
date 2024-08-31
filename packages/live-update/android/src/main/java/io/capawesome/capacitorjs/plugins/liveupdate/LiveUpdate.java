@@ -214,6 +214,11 @@ public class LiveUpdate {
             new NonEmptyCallback<GetLatestBundleResponse>() {
                 @Override
                 public void error(Exception exception) {
+                    // Throw error if the exception is a timeout
+                    if (exception instanceof java.net.SocketTimeoutException) {
+                        callback.error(new Exception(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+                        return;
+                    }
                     // No update available
                     Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
                     SyncResult syncResult = new SyncResult(null);
@@ -382,6 +387,11 @@ public class LiveUpdate {
             new NonEmptyCallback<File>() {
                 @Override
                 public void error(Exception exception) {
+                    // Throw error if the exception is a timeout
+                    if (exception instanceof java.net.SocketTimeoutException) {
+                        callback.error(new Exception(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+                        return;
+                    }
                     callback.error(exception);
                 }
 
