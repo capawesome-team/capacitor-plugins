@@ -221,33 +221,38 @@ public class LiveUpdate {
                     }
                     // No update available
                     Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
-                    SyncResult syncResult = new SyncResult(null);
+                    String currentBundleId = getCurrentBundleId();
+                    SyncResult syncResult = new SyncResult(currentBundleId, currentBundleId);
                     callback.success(syncResult);
                 }
 
                 @Override
                 public void success(@NonNull GetLatestBundleResponse result) {
-                    String latestBundleId = result.getBundleId();
+                    String currentBundleId = getCurrentBundleId();
+                    String nextBundleId = result.getBundleId();
                     String checksum = result.getChecksum();
                     String signature = result.getSignature();
                     String url = result.getUrl();
 
+                    // Check if a latest bundle is available
+                    if (nextBundleId == null) {
+                        Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+                        setNextCapacitorServerPathToDefaultWebAssetDir();
+                        SyncResult syncResult = new SyncResult(currentBundleId, null);
+                        callback.success(syncResult);
+                        return;
+                    }
                     // Check if the bundle already exists
-                    if (hasBundle(latestBundleId)) {
-                        String nextBundleId = null;
-                        String currentBundleId = getCurrentBundleId();
-                        if (!latestBundleId.equals(currentBundleId)) {
-                            // Set the next bundle
-                            setNextBundle(latestBundleId);
-                            nextBundleId = latestBundleId;
-                        }
-                        SyncResult syncResult = new SyncResult(nextBundleId);
+                    if (hasBundle(nextBundleId)) {
+                        // Set the next bundle
+                        setNextBundle(nextBundleId);
+                        SyncResult syncResult = new SyncResult(currentBundleId, nextBundleId);
                         callback.success(syncResult);
                         return;
                     }
                     // Download and unzip the bundle
                     downloadBundle(
-                        latestBundleId,
+                      nextBundleId,
                         checksum,
                         signature,
                         url,
@@ -255,8 +260,8 @@ public class LiveUpdate {
                             @Override
                             public void success() {
                                 // Set the next bundle
-                                setNextBundle(latestBundleId);
-                                SyncResult syncResult = new SyncResult(latestBundleId);
+                                setNextBundle(nextBundleId);
+                                SyncResult syncResult = new SyncResult(currentBundleId, nextBundleId);
                                 callback.success(syncResult);
                             }
 
@@ -541,6 +546,9 @@ public class LiveUpdate {
                                 callback.error(exception);
                             }
                             GetLatestBundleResponse getLatestBundleResponse = new GetLatestBundleResponse(responseJson);
+                            callback.success(getLatestBundleResponse);
+                        } else if (response.code() == 404) {
+                            GetLatestBundleResponse getLatestBundleResponse = new GetLatestBundleResponse();
                             callback.success(getLatestBundleResponse);
                         } else {
                             Exception exception = new Exception(responseBody.string());

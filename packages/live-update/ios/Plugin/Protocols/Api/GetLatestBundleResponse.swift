@@ -1,6 +1,6 @@
 struct GetLatestBundleResponse: Codable {
-    var bundleId: String
+    var bundleId: String?
     var checksum: String?
     var signature: String?
-    var url: String
+    var url: String?
 }
