@@ -271,8 +271,15 @@ import CommonCrypto
     }
 
     private func deleteBundle(bundleId: String) throws {
+        // Delete the bundle directory
         let path = buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.removeItem(atPath: path)
+        // Reset the next bundle if it is the deleted bundle
+        let currentBundleId = getCurrentBundleId()
+        let nextBundleId = getNextBundleId()
+        if bundleId == currentBundleId && bundleId == nextBundleId {
+            setNextCapacitorServerPathToDefaultWebAssetDir()
+        }
     }
 
     private func deleteUnusedBundles() {

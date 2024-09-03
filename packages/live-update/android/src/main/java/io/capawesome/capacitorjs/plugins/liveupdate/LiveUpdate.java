@@ -353,8 +353,15 @@ public class LiveUpdate {
     }
 
     private void deleteBundle(@NonNull String bundleId) {
+        // Delete the bundle directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         deleteFileRecursively(bundleDirectory);
+        // Reset the next bundle if it is the deleted bundle
+        String currentBundleId = getCurrentBundleId();
+        String nextBundleId = getNextBundleId();
+        if (bundleId.equals(currentBundleId) && bundleId.equals(nextBundleId)) {
+            setNextCapacitorServerPathToDefaultWebAssetDir();
+        }
     }
 
     private void deleteFileRecursively(@NonNull File file) {
