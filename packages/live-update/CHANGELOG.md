@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.1
+
+### Patch Changes
+
+- [`f2c5a79`](https://github.com/capawesome-team/capacitor-plugins/commit/f2c5a79c41baded4bb5be3939bebde9a72e37ce7) ([#283](https://github.com/capawesome-team/capacitor-plugins/pull/283)): fix: perform a reset when the current bundle is deleted
+
 ## 6.4.0
 
 ### Minor Changes
