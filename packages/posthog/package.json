@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-posthog",
-  "version": "5.0.0-dev.d2b906c.1725610017",
+  "version": "5.0.0",
   "description": "Unofficial Capacitor plugin for PostHog SDK.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
