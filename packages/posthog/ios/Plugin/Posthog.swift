@@ -24,12 +24,12 @@ import PostHog
     @objc public func flush() {
         PostHogSDK.shared.flush()
     }
-    
+
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
         let key = options.getKey()
         let groupProperties = options.getGroupProperties()
-        
+
         PostHogSDK.shared.group(type: type, key: key, groupProperties: groupProperties)
     }
 

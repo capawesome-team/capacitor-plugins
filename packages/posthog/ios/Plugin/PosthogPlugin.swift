@@ -51,7 +51,7 @@ public class PosthogPlugin: CAPPlugin {
         implementation?.flush()
         call.resolve()
     }
-    
+
     @objc func group(_ call: CAPPluginCall) {
         guard let type = call.getString("type") else {
             call.reject(errorTypeMissing)
@@ -91,9 +91,9 @@ public class PosthogPlugin: CAPPlugin {
             call.reject(errorValueMissing)
             return
         }
-        
+
         let options = RegisterOptions(key: key, value: value)
-        
+
         implementation?.register(options)
         call.resolve()
     }
