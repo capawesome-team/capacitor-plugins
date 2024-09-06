@@ -3,6 +3,7 @@ package io.capawesome.capacitorjs.plugins.posthog.classes.options;
 import androidx.annotation.NonNull;
 
 public class SetupOptions {
+
     @NonNull
     private String apiKey;
 

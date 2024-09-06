@@ -38,7 +38,7 @@ public class PosthogPlugin extends Plugin {
         }
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void alias(PluginCall call) {
         try {
             String alias = call.getString("alias");
@@ -56,7 +56,7 @@ public class PosthogPlugin extends Plugin {
         }
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void capture(PluginCall call) {
         try {
             String event = call.getString("event");
@@ -75,7 +75,7 @@ public class PosthogPlugin extends Plugin {
         }
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void flush(PluginCall call) {
         try {
             implementation.flush();
@@ -85,7 +85,7 @@ public class PosthogPlugin extends Plugin {
         }
     }
 
-    @PluginMethod()
+    @PluginMethod
     public void identify(PluginCall call) {
         try {
             String distinctId = call.getString("distinctId");

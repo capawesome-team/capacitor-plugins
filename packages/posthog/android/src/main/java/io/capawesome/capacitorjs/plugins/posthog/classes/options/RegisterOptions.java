@@ -1,12 +1,11 @@
 package io.capawesome.capacitorjs.plugins.posthog.classes.options;
 
 import androidx.annotation.NonNull;
-
+import io.capawesome.capacitorjs.plugins.posthog.PosthogHelper;
 import org.json.JSONException;
 
-import io.capawesome.capacitorjs.plugins.posthog.PosthogHelper;
-
 public class RegisterOptions {
+
     @NonNull
     private String key;
 

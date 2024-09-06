@@ -1,16 +1,15 @@
 package io.capawesome.capacitorjs.plugins.posthog;
 
 import androidx.annotation.Nullable;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
 public class PosthogHelper {
+
     @Nullable
     public static HashMap<String, Object> createHashMapFromJSONObject(@Nullable JSONObject object) throws JSONException {
         if (object == null) {

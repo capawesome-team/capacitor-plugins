@@ -2,16 +2,13 @@ package io.capawesome.capacitorjs.plugins.posthog.classes.options;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.getcapacitor.JSObject;
-
+import io.capawesome.capacitorjs.plugins.posthog.PosthogHelper;
+import java.util.Map;
 import org.json.JSONException;
 
-import java.util.Map;
-
-import io.capawesome.capacitorjs.plugins.posthog.PosthogHelper;
-
 public class CaptureOptions {
+
     @NonNull
     private String event;
 
