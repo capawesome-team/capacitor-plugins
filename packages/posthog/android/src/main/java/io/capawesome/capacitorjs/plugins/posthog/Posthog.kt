@@ -8,6 +8,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
 
 import com.posthog.android.PostHogAndroidConfig
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 
 class Posthog(private val plugin: PosthogPlugin) {
@@ -26,6 +27,14 @@ class Posthog(private val plugin: PosthogPlugin) {
 
     fun flush() {
         com.posthog.PostHog.flush()
+    }
+
+    fun group(options: GroupOptions) {
+        val type = options.type
+        val key = options.key
+        val groupProperties = options.groupProperties
+
+        com.posthog.PostHog.group(type = type, key = key, groupProperties = groupProperties)
     }
 
     fun identify(options: IdentifyOptions) {

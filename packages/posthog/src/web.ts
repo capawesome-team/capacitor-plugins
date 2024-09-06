@@ -4,6 +4,7 @@ import posthog from 'posthog-js';
 import type {
   AliasOptions,
   CaptureOptions,
+  GroupOptions,
   IdentifyOptions,
   PosthogPlugin,
   RegisterOptions,
@@ -23,6 +24,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async flush(): Promise<void> {
     this.throwUnimplementedError();
+  }
+
+  async group(options: GroupOptions): Promise<void> {
+    posthog.group(options.type, options.key, options.groupProperties);
   }
 
   async identify(options: IdentifyOptions): Promise<void> {

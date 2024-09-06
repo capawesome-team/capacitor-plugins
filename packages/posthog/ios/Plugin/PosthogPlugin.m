@@ -7,6 +7,7 @@ CAP_PLUGIN(PosthogPlugin, "Posthog",
            CAP_PLUGIN_METHOD(alias, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(capture, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(flush, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(group, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(identify, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(register, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(reset, CAPPluginReturnPromise);

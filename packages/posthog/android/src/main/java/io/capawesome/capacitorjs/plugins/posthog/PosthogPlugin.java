@@ -8,6 +8,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
@@ -23,6 +24,7 @@ public class PosthogPlugin extends Plugin {
     private static final String ERROR_DISTINCT_ID_MISSING = "distinctId must be provided.";
     private static final String ERROR_KEY_MISSING = "key must be provided.";
     private static final String ERROR_SCREEN_TITLE_MISSING = "screenTitle must be provided.";
+    private static final String ERROR_TYPE_MISSING = "type must be provided.";
     private static final String ERROR_VALUE_MISSING = "value must be provided.";
     private static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     private static final String TAG = "PosthogPlugin";
@@ -79,6 +81,30 @@ public class PosthogPlugin extends Plugin {
     public void flush(PluginCall call) {
         try {
             implementation.flush();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void group(PluginCall call) {
+        try {
+            String type = call.getString("type");
+            if (type == null) {
+                call.reject(ERROR_TYPE_MISSING);
+                return;
+            }
+            String key = call.getString("key");
+            if (key == null) {
+                call.reject(ERROR_KEY_MISSING);
+                return;
+            }
+            JSObject groupProperties = call.getObject("groupProperties");
+
+            GroupOptions options = new GroupOptions(type, key, groupProperties);
+
+            implementation.group(options);
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);

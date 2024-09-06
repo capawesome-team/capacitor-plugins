@@ -20,6 +20,12 @@ export interface PosthogPlugin {
    */
   flush(): Promise<void>;
   /**
+   * Associate the events for that user with a group.
+   *
+   * @since 6.0.0
+   */
+  group(options: GroupOptions): Promise<void>;
+  /**
    * Identify the current user.
    *
    * @since 6.0.0
@@ -89,6 +95,32 @@ export interface CaptureOptions {
    * @since 6.0.0
    */
   properties?: Record<string, any>;
+}
+
+/**
+ * @since 6.0.0
+ */
+export interface GroupOptions {
+  /**
+   * The group type.
+   *
+   * @since 6.0.0
+   * @example 'company'
+   */
+  type: string;
+  /**
+   * The group key.
+   *
+   * @since 6.0.0
+   * @example 'company_id_in_your_db'
+   */
+  key: string;
+  /**
+   * The properties to send with the group event.
+   *
+   * @since 6.0.0
+   */
+  groupProperties?: Record<string, any>;
 }
 
 /**

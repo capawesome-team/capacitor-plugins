@@ -38,7 +38,7 @@ const alias = async () => {
 
 const capture = async () => {
   await Posthog.capture({
-    event: 'test-event',
+    event: 'event',
     properties: {
       key: 'value',
     },
@@ -47,6 +47,16 @@ const capture = async () => {
 
 const flush = async () => {
   await Posthog.flush();
+};
+
+const group = async () => {
+  await Posthog.group({
+    type: 'group',
+    key: 'key',
+    groupProperties: {
+      key: 'value',
+    },
+  });
 };
 
 const identify = async () => {
@@ -71,7 +81,7 @@ const reset = async () => {
 
 const screen = async () => {
   await Posthog.screen({
-    screenTitle: 'test-screen',
+    screenTitle: 'screen',
     properties: {
       key: 'value',
     },
@@ -99,6 +109,7 @@ const unregister = async () => {
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
+* [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`register(...)`](#register)
 * [`reset()`](#reset)
@@ -156,6 +167,23 @@ flush() => Promise<void>
 Flush all events in the queue.
 
 Only available on Android and iOS.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### group(...)
+
+```typescript
+group(options: GroupOptions) => Promise<void>
+```
+
+Associate the events for that user with a group.
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#groupoptions">GroupOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -282,6 +310,15 @@ Remove a super property.
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### GroupOptions
+
+| Prop                  | Type                                                         | Description                                  | Since |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------- | ----- |
+| **`type`**            | <code>string</code>                                          | The group type.                              | 6.0.0 |
+| **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
+| **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
+
+
 #### IdentifyOptions
 
 | Prop                 | Type                                                         | Description                   | Since |
@@ -328,9 +365,7 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 </docgen-api>
 

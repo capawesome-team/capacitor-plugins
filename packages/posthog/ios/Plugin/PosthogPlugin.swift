@@ -14,6 +14,7 @@ public class PosthogPlugin: CAPPlugin {
     public let errorEventMissing = "event must be provided."
     public let errorKeyMissing = "key must be provided."
     public let errorScreenTitleMissing = "screenTitle must be provided."
+    public let errorTypeMissing = "type must be provided."
     public let errorValueMissing = "value must be provided."
     private var implementation: Posthog?
 
@@ -50,6 +51,23 @@ public class PosthogPlugin: CAPPlugin {
         implementation?.flush()
         call.resolve()
     }
+    
+    @objc func group(_ call: CAPPluginCall) {
+        guard let type = call.getString("type") else {
+            call.reject(errorTypeMissing)
+            return
+        }
+        guard let key = call.getString("key") else {
+            call.reject(errorKeyMissing)
+            return
+        }
+        let groupProperties = call.getObject("groupProperties")
+
+        let options = GroupOptions(type: type, key: key, groupProperties: groupProperties)
+
+        implementation?.group(options)
+        call.resolve()
+    }
 
     @objc func identify(_ call: CAPPluginCall) {
         guard let distinctId = call.getString("distinctId") else {
@@ -69,10 +87,15 @@ public class PosthogPlugin: CAPPlugin {
             call.reject(errorKeyMissing)
             return
         }
-        guard let value = call.getString("value") else {
+        guard let value = call.getObject("value") as AnyObject? else {
             call.reject(errorValueMissing)
             return
         }
+        
+        let options = RegisterOptions(key: key, value: value)
+        
+        implementation?.register(options)
+        call.resolve()
     }
 
     @objc func reset(_ call: CAPPluginCall) {
