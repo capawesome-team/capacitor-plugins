@@ -5,7 +5,7 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 ## Installation
 
 ```bash
-npm install @capawesome/capacitor-posthog
+npm install @capawesome/capacitor-posthog posthog-js
 npx cap sync
 ```
 
@@ -328,7 +328,9 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
+<code>{
+ [P in K]: T;
+ }</code>
 
 </docgen-api>
 
