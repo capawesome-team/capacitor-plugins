@@ -16,6 +16,14 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* PosthogPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* PosthogPlugin.m */; };
 		50E1A94820377CB70090CE1A /* PosthogPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* PosthogPlugin.swift */; };
+		7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C12C8AE99100271553 /* AliasOptions.swift */; };
+		7C28C8C42C8AE99E00271553 /* CaptureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */; };
+		7C28C8C62C8AE9AC00271553 /* IdentifyOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */; };
+		7C28C8C82C8AE9B800271553 /* RegisterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C72C8AE9B800271553 /* RegisterOptions.swift */; };
+		7C28C8CA2C8AE9C300271553 /* ScreenOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C92C8AE9C300271553 /* ScreenOptions.swift */; };
+		7C28C8CC2C8AE9CD00271553 /* SetupOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CB2C8AE9CD00271553 /* SetupOptions.swift */; };
+		7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CD2C8AE9D800271553 /* UnregisterOptions.swift */; };
+		7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +49,14 @@
 		50ADFFA72020EE4F00D50D53 /* PosthogPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PosthogPlugin.m; sourceTree = "<group>"; };
 		50E1A94720377CB70090CE1A /* PosthogPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PosthogPlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		7C28C8C12C8AE99100271553 /* AliasOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasOptions.swift; sourceTree = "<group>"; };
+		7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureOptions.swift; sourceTree = "<group>"; };
+		7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyOptions.swift; sourceTree = "<group>"; };
+		7C28C8C72C8AE9B800271553 /* RegisterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterOptions.swift; sourceTree = "<group>"; };
+		7C28C8C92C8AE9C300271553 /* ScreenOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOptions.swift; sourceTree = "<group>"; };
+		7C28C8CB2C8AE9CD00271553 /* SetupOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupOptions.swift; sourceTree = "<group>"; };
+		7C28C8CD2C8AE9D800271553 /* UnregisterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnregisterOptions.swift; sourceTree = "<group>"; };
+		7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosthogHelper.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -92,8 +108,10 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				7C28C8BF2C8AE97B00271553 /* Classes */,
 				50E1A94720377CB70090CE1A /* PosthogPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* Posthog.swift */,
+				7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */,
 				50ADFF8B201F53D600D50D53 /* PosthogPlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* PosthogPlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
@@ -108,6 +126,28 @@
 				50ADFF98201F53D600D50D53 /* Info.plist */,
 			);
 			path = PluginTests;
+			sourceTree = "<group>";
+		};
+		7C28C8BF2C8AE97B00271553 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7C28C8C02C8AE98000271553 /* Options */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		7C28C8C02C8AE98000271553 /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				7C28C8C12C8AE99100271553 /* AliasOptions.swift */,
+				7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */,
+				7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */,
+				7C28C8C72C8AE9B800271553 /* RegisterOptions.swift */,
+				7C28C8C92C8AE9C300271553 /* ScreenOptions.swift */,
+				7C28C8CB2C8AE9CD00271553 /* SetupOptions.swift */,
+				7C28C8CD2C8AE9D800271553 /* UnregisterOptions.swift */,
+			);
+			path = Options;
 			sourceTree = "<group>";
 		};
 		8C8E7744173064A9F6D438E3 /* Pods */ = {
@@ -308,9 +348,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C28C8C82C8AE9B800271553 /* RegisterOptions.swift in Sources */,
 				50E1A94820377CB70090CE1A /* PosthogPlugin.swift in Sources */,
+				7C28C8CC2C8AE9CD00271553 /* SetupOptions.swift in Sources */,
+				7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */,
+				7C28C8CA2C8AE9C300271553 /* ScreenOptions.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* Posthog.swift in Sources */,
+				7C28C8C62C8AE9AC00271553 /* IdentifyOptions.swift in Sources */,
+				7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* PosthogPlugin.m in Sources */,
+				7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */,
+				7C28C8C42C8AE99E00271553 /* CaptureOptions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
