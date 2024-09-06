@@ -14,6 +14,8 @@ export interface PosthogPlugin {
   /**
    * Flush all events in the queue.
    *
+   * Only available on Android and iOS.
+   *
    * @since 6.0.0
    */
   flush(): Promise<void>;
@@ -37,6 +39,8 @@ export interface PosthogPlugin {
   reset(): Promise<void>;
   /**
    * Send a screen event.
+   *
+   * Only available on Android and iOS.
    *
    * @since 6.0.0
    */

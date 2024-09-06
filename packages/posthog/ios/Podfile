@@ -9,6 +9,7 @@ end
 
 target 'Plugin' do
   capacitor_pods
+  pod 'PostHog', '3.8.2'
 end
 
 target 'PluginTests' do

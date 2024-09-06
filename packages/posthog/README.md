@@ -155,6 +155,8 @@ flush() => Promise<void>
 
 Flush all events in the queue.
 
+Only available on Android and iOS.
+
 **Since:** 6.0.0
 
 --------------------
@@ -214,6 +216,8 @@ screen(options: ScreenOptions) => Promise<void>
 ```
 
 Send a screen event.
+
+Only available on Android and iOS.
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
@@ -324,9 +328,7 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 </docgen-api>
 
