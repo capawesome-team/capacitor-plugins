@@ -55,7 +55,7 @@ export interface FilePickerPlugin {
   addListener(
     eventName: 'pickerDismissed',
     listenerFunc: () => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    *
@@ -104,17 +104,22 @@ export interface PickFilesOptions {
    * List of accepted file types.
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
    *
-   * This option cannot be used with `multiple: true` on Android.
+   * This option is ignored if `limit` is set.
    *
    * @example ['image/png', 'application/pdf']
    */
   types?: string[];
   /**
-   * Whether multiple files may be selected.
+   * The maximum number of files that the user can select.
+   * Setting this to `0` sets the selection limit to unlimited.
    *
-   * @default false
+   * Currently, only `0` and `1` are supported.
+   *
+   * @default 0
+   * @example 1
+   * @since 6.0.0
    */
-  multiple?: boolean;
+  limit?: number;
   /**
    * Whether to read the file data.
    *
@@ -127,15 +132,7 @@ export interface PickFilesResult {
   files: PickedFile[];
 }
 
-/**
- * @since 0.5.3
- */
-export type PickedFile = File;
-
-/**
- * @deprecated Use `PickedFile` instead.
- */
-export interface File {
+export interface PickedFile {
   /**
    * The Blob instance of the file.
    *
@@ -203,12 +200,6 @@ export interface File {
  */
 export interface PickMediaOptions {
   /**
-   * Whether multiple files may be selected.
-   *
-   * @default false
-   */
-  multiple?: boolean;
-  /**
    * Whether to read the file data.
    *
    * @default false
@@ -221,10 +212,30 @@ export interface PickMediaOptions {
    *
    * Only available on iOS.
    *
-   * @default false
+   * @default true
    * @see https://developer.apple.com/documentation/photokit/phpickerconfiguration/assetrepresentationmode/current
    */
   skipTranscoding?: boolean;
+  /**
+   * The maximum number of files that the user can select.
+   * Setting this to `0` sets the selection limit to unlimited.
+   *
+   * On Android and Web, only `0` and `1` are supported.
+   *
+   * @default 0
+   * @example 1
+   * @since 5.2.0
+   */
+  limit?: number;
+  /**
+   * Whether an ordered number is displayed instead of a check mark in the selection badge.
+   *
+   * Only available on iOS (15+).
+   *
+   * @default false
+   * @since 5.3.0
+   */
+  ordered?: boolean;
 }
 
 /**

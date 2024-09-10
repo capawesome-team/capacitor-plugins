@@ -245,10 +245,8 @@ class RPickerController: UIViewController {
         switch theme {
         case .light:
             applyLightTheme()
-            break
         case .dark:
             applyDarkTheme()
-            break
         case .auto:
             if systemIsDark {
                 applyDarkTheme()

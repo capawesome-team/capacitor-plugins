@@ -6,6 +6,7 @@ public class CloudinaryHelper {
 
     public static func createUploadResourceResult(_ resultData: CLDUploadResult) -> JSObject {
         var result = JSObject()
+        result["bytes"] = resultData.length
         result["createdAt"] = resultData.createdAt
         result["duration"] = resultData.duration
         result["format"] = resultData.format

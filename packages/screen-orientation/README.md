@@ -111,7 +111,7 @@ Gets the current device orientation type.
 ### addListener('screenOrientationChange', ...)
 
 ```typescript
-addListener(eventName: 'screenOrientationChange', listenerFunc: ScreenOrientationChangeListener) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'screenOrientationChange', listenerFunc: ScreenOrientationChangeListener) => Promise<PluginListenerHandle>
 ```
 
 Listen for screen orientation changes.
@@ -121,7 +121,7 @@ Listen for screen orientation changes.
 | **`eventName`**    | <code>'screenOrientationChange'</code>                                                      |
 | **`listenerFunc`** | <code><a href="#screenorientationchangelistener">ScreenOrientationChangeListener</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 

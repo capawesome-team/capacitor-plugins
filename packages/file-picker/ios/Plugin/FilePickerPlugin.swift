@@ -52,39 +52,42 @@ public class FilePickerPlugin: CAPPlugin {
     @objc func pickFiles(_ call: CAPPluginCall) {
         savedCall = call
 
-        let multiple = call.getBool("multiple", false)
+        let limit = call.getInt("limit", 0)
         let types = call.getArray("types", String.self) ?? []
         let parsedTypes = parseTypesOption(types)
         let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
 
-        implementation?.openDocumentPicker(multiple: multiple, documentTypes: documentTypes)
+        implementation?.openDocumentPicker(limit: limit, documentTypes: documentTypes)
     }
 
     @objc func pickImages(_ call: CAPPluginCall) {
         savedCall = call
 
-        let multiple = call.getBool("multiple", false)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit", 0)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
+        let ordered = call.getBool("ordered", false)
 
-        implementation?.openImagePicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openImagePicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)
     }
 
     @objc func pickMedia(_ call: CAPPluginCall) {
         savedCall = call
 
-        let multiple = call.getBool("multiple", false)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit", 0)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
+        let ordered = call.getBool("ordered", false)
 
-        implementation?.openMediaPicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openMediaPicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)
     }
 
     @objc func pickVideos(_ call: CAPPluginCall) {
         savedCall = call
 
-        let multiple = call.getBool("multiple", false)
-        let skipTranscoding = call.getBool("skipTranscoding", false)
+        let limit = call.getInt("limit", 0)
+        let skipTranscoding = call.getBool("skipTranscoding", true)
+        let ordered = call.getBool("ordered", false)
 
-        implementation?.openVideoPicker(multiple: multiple, skipTranscoding: skipTranscoding)
+        implementation?.openVideoPicker(limit: limit, skipTranscoding: skipTranscoding, ordered: ordered)
     }
 
     @objc func notifyPickerDismissedListener() {

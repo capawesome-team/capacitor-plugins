@@ -1,5 +1,39 @@
 # Changelog
 
+## 6.0.1
+
+### Patch Changes
+
+- [`7a2e409`](https://github.com/capawesome-team/capacitor-plugins/commit/7a2e40981ed4e13aab889b0679a27b6a691a3fb0) ([#227](https://github.com/capawesome-team/capacitor-plugins/pull/227)): fix(ios): media selection order
+
+## 6.0.0
+
+### Major Changes
+
+- [`7033a8a`](https://github.com/capawesome-team/capacitor-plugins/commit/7033a8a42984523902f125239c3623e1e872b489) ([#159](https://github.com/capawesome-team/capacitor-plugins/pull/159)): feat: update to Capacitor 6
+
+* [`f102470`](https://github.com/capawesome-team/capacitor-plugins/commit/f102470e7339d281951776c4ea82b9f3e6fa4f87) ([#151](https://github.com/capawesome-team/capacitor-plugins/pull/151)): refactor: remove `File` interface
+
+- [`965e912`](https://github.com/capawesome-team/capacitor-plugins/commit/965e912a5cfb12ba28a9319ef9f4619aa2e8e120) ([#148](https://github.com/capawesome-team/capacitor-plugins/pull/148)): feat: replace `multiple` option with `limit`
+
+* [`3b50f3f`](https://github.com/capawesome-team/capacitor-plugins/commit/3b50f3f00560c009e4573f45ccbcb4e2a5499669) ([#152](https://github.com/capawesome-team/capacitor-plugins/pull/152)): refactor(ios): default value for `skipTranscoding` is now `true`
+
+## 5.3.0
+
+### Minor Changes
+
+- [`5bf165c`](https://github.com/capawesome-team/capacitor-plugins/commit/5bf165c097349d73ddd47c098e94d10c25710f0f) ([#119](https://github.com/capawesome-team/capacitor-plugins/pull/119)): feat(ios): add `ordered` option
+
+## 5.2.0
+
+### Minor Changes
+
+- [`777fff5`](https://github.com/capawesome-team/capacitor-plugins/commit/777fff5ff11fbeac6076089bcb5e90e77fd4dd7a) ([#108](https://github.com/capawesome-team/capacitor-plugins/pull/108)): feat(ios): add `limit` option
+
+### Patch Changes
+
+- [`154fb47`](https://github.com/capawesome-team/capacitor-plugins/commit/154fb4702c0524bad17036730f393e56ab5a0f7f) ([#111](https://github.com/capawesome-team/capacitor-plugins/pull/111)): fix(web): `pickFiles (...)` doesn't work first time on Safari
+
 ## 5.1.1
 
 ### Patch Changes

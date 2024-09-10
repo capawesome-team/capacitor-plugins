@@ -1,5 +1,23 @@
 # Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [`abf085b`](https://github.com/capawesome-team/capacitor-plugins/commit/abf085b9536c39530b530377f54d8165a06b962f) ([#197](https://github.com/capawesome-team/capacitor-plugins/pull/197)): feat: add web support
+
+## 6.0.0
+
+### Major Changes
+
+- [`7033a8a`](https://github.com/capawesome-team/capacitor-plugins/commit/7033a8a42984523902f125239c3623e1e872b489) ([#159](https://github.com/capawesome-team/capacitor-plugins/pull/159)): feat: update to Capacitor 6
+
+## 5.0.4
+
+### Patch Changes
+
+- [`36ebeca`](https://github.com/capawesome-team/capacitor-plugins/commit/36ebecab922ecd045c6c8163b330ee3142cd7bfd) ([#96](https://github.com/capawesome-team/capacitor-plugins/pull/96)): fix(ios): throw an error if the file could not be opened
+
 ## 5.0.3
 
 ### Patch Changes

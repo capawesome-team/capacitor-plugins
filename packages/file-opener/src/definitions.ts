@@ -2,8 +2,6 @@ export interface FileOpenerPlugin {
   /**
    * Open a file with the default application.
    *
-   * Only available on Android and iOS.
-   *
    * @since 0.0.1
    */
   openFile(options: OpenFileOptions): Promise<void>;
@@ -11,15 +9,27 @@ export interface FileOpenerPlugin {
 
 export interface OpenFileOptions {
   /**
+   * The blob instance of the file to open.
+   *
+   * Only available on Web.
+   *
+   * @since 6.1.0
+   */
+  blob?: Blob;
+  /**
    * The path of the file.
    *
+   * Only available on Android and iOS.
+   *
    * @since 0.0.1
-   * @example '/storage/emulated/0/DCIM/Camera/IMG_20220808_1234.jpg'
+   * @example 'content://com.android.providers.downloads.documents/document/msf%3A1000000073'
    */
-  path: string;
+  path?: string;
   /**
    * The mime type of the file.
    * If not specified, the mime type will be determined.
+   *
+   * Only available on Android and iOS.
    *
    * @since 0.0.1
    * @example 'image/jpeg'

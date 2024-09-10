@@ -14,14 +14,19 @@ body:
         - label: App Update
         - label: Background Task
         - label: Badge
+        - label: Bluetooth Low Energy
         - label: Cloudinary
         - label: Datetime Picker
+        - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: Live Update
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
+        - label: Printer
         - label: Screen Orientation
+        - label: Zip
   - type: textarea
     attributes:
       label: Current problem
@@ -43,3 +48,14 @@ body:
     attributes:
       label: Additional context
       description: Add any other context or screenshots about the feature request here.
+  - type: checkboxes
+    attributes:
+      label:  Before submitting 
+      description: |
+        Please ensure your idea fulfills all of the following requirements.
+      options:
+      - label: I have read and followed the [feature request guidelines](https://capawesome.io/contributing/feature-requests/).
+        required: true
+      - label: I have attached links to possibly related issues and discussions.
+        required: true
+

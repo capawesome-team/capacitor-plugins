@@ -100,11 +100,9 @@ export interface UploadResourceResult {
   /**
    * The number of bytes of the uploaded resource.
    *
-   * Only available on Android and Web.
-   *
    * @since 0.0.1
    */
-  bytes?: number;
+  bytes: number;
   /**
    * The timestamp at which the resource was uploaded.
    *

@@ -10,6 +10,7 @@ import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -78,8 +79,9 @@ public class AppUpdatePlugin extends Plugin {
                         return;
                     }
                     JSObject ret = new JSObject();
-                    ret.put("currentVersion", String.valueOf(pInfo.versionCode));
-                    ret.put("availableVersion", String.valueOf(appUpdateInfo.availableVersionCode()));
+                    ret.put("currentVersionName", pInfo.versionName);
+                    ret.put("currentVersionCode", String.valueOf(pInfo.versionCode));
+                    ret.put("availableVersionCode", String.valueOf(appUpdateInfo.availableVersionCode()));
                     ret.put("updateAvailability", appUpdateInfo.updateAvailability());
                     ret.put("updatePriority", appUpdateInfo.updatePriority());
                     ret.put("immediateUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE));
@@ -227,7 +229,11 @@ public class AppUpdatePlugin extends Plugin {
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {
         String packageName = this.getContext().getPackageName();
-        return this.getContext().getPackageManager().getPackageInfo(packageName, 0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return this.getContext().getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
+        } else {
+            return this.getContext().getPackageManager().getPackageInfo(packageName, 0);
+        }
     }
 
     private boolean readyForUpdate(PluginCall call, int appUpdateType) {

@@ -80,8 +80,6 @@ openFile(options: OpenFileOptions) => Promise<void>
 
 Open a file with the default application.
 
-Only available on Android and iOS.
-
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
 | **`options`** | <code><a href="#openfileoptions">OpenFileOptions</a></code> |
@@ -96,10 +94,11 @@ Only available on Android and iOS.
 
 #### OpenFileOptions
 
-| Prop           | Type                | Description                                                                    | Since |
-| -------------- | ------------------- | ------------------------------------------------------------------------------ | ----- |
-| **`path`**     | <code>string</code> | The path of the file.                                                          | 0.0.1 |
-| **`mimeType`** | <code>string</code> | The mime type of the file. If not specified, the mime type will be determined. | 0.0.1 |
+| Prop           | Type                | Description                                                                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The blob instance of the file to open. Only available on Web.                                                     | 6.1.0 |
+| **`path`**     | <code>string</code> | The path of the file. Only available on Android and iOS.                                                          | 0.0.1 |
+| **`mimeType`** | <code>string</code> | The mime type of the file. If not specified, the mime type will be determined. Only available on Android and iOS. | 0.0.1 |
 
 </docgen-api>
 

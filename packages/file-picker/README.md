@@ -25,26 +25,19 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles({
     types: ['image/png'],
-    multiple: true,
   });
 };
 
 const pickImages = async () => {
-  const result = await FilePicker.pickImages({
-    multiple: true,
-  });
+  const result = await FilePicker.pickImages();
 };
 
 const pickMedia = async () => {
-  const result = await FilePicker.pickMedia({
-    multiple: true,
-  });
+  const result = await FilePicker.pickMedia();
 };
 
 const pickVideos = async () => {
-  const result = await FilePicker.pickVideos({
-    multiple: true,
-  });
+  const result = await FilePicker.pickVideos();
 };
 
 const appendFileToFormData = async () => {
@@ -190,7 +183,7 @@ Only available on Android and iOS.
 ### addListener('pickerDismissed', ...)
 
 ```typescript
-addListener(eventName: 'pickerDismissed', listenerFunc: () => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'pickerDismissed', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
 Called when the file picker is dismissed.
@@ -202,7 +195,7 @@ Only available on iOS.
 | **`eventName`**    | <code>'pickerDismissed'</code> |
 | **`listenerFunc`** | <code>() =&gt; void</code>     |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.6.2
 
@@ -241,12 +234,12 @@ Remove all listeners for this plugin.
 
 #### PickFilesResult
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`files`** | <code>File[]</code> |
+| Prop        | Type                      |
+| ----------- | ------------------------- |
+| **`files`** | <code>PickedFile[]</code> |
 
 
-#### File
+#### PickedFile
 
 | Prop             | Type                | Description                                                                                                          | Since |
 | ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
@@ -264,21 +257,21 @@ Remove all listeners for this plugin.
 
 #### PickFilesOptions
 
-| Prop                    | Type                  | Description                                                                                                                                                                                                                       | Default            | Since |
-| ----------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`persistContentUri`** | <code>boolean</code>  | Request persistent file access for reusing received path after app restart or system reboot. Only available on Android, iOS paths are persistent by default.                                                                      | <code>false</code> | 5.1.2 |
-| **`types`**             | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option cannot be used with `multiple: true` on Android. |                    |       |
-| **`multiple`**          | <code>boolean</code>  | Whether multiple files may be selected.                                                                                                                                                                                           | <code>false</code> |       |
-| **`readData`**          | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                                    | <code>false</code> |       |
+| Prop           | Type                  | Description                                                                                                                                                                                                    | Default            | Since |
+| -------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
+| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
 
 
 #### PickMediaOptions
 
-| Prop                  | Type                 | Description                                                                                                                              | Default            |
-| --------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`multiple`**        | <code>boolean</code> | Whether multiple files may be selected.                                                                                                  | <code>false</code> |
-| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                           | <code>false</code> |
-| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS. | <code>false</code> |
+| Prop                  | Type                 | Description                                                                                                                                                          | Default            | Since |
+| --------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`readData`**        | <code>boolean</code> | Whether to read the file data.                                                                                                                                       | <code>false</code> |       |
+| **`skipTranscoding`** | <code>boolean</code> | Whether to avoid transcoding, if possible. On iOS, for example, HEIC images are automatically transcoded to JPEG. Only available on iOS.                             | <code>true</code>  |       |
+| **`limit`**           | <code>number</code>  | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. On Android and Web, only `0` and `1` are supported. | <code>0</code>     | 5.2.0 |
+| **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                                                  | <code>false</code> | 5.3.0 |
 
 
 #### PluginListenerHandle
@@ -289,11 +282,6 @@ Remove all listeners for this plugin.
 
 
 ### Type Aliases
-
-
-#### PickedFile
-
-<code><a href="#file">File</a></code>
 
 
 #### PickImagesOptions

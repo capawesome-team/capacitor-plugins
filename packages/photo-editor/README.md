@@ -52,8 +52,8 @@ const editPhoto = async () => {
 
 <docgen-index>
 
-- [`editPhoto(...)`](#editphoto)
-- [Interfaces](#interfaces)
+* [`editPhoto(...)`](#editphoto)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
@@ -78,9 +78,11 @@ Only available on Android.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#editphotooptions">EditPhotoOptions</a></code> |
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### EditPhotoOptions
 

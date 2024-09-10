@@ -3,7 +3,6 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   ConvertHeicToJpegOptions,
   ConvertHeicToJpegResult,
-  File as FileModel,
   FilePickerPlugin,
   PickFilesOptions,
   PickFilesResult,
@@ -13,6 +12,7 @@ import type {
   PickMediaResult,
   PickVideosOptions,
   PickVideosResult,
+  PickedFile,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -33,7 +33,7 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
       files: [],
     };
     for (const pickedFile of pickedFiles) {
-      const file: FileModel = {
+      const file: PickedFile = {
         blob: pickedFile,
         modifiedAt: pickedFile.lastModified,
         mimeType: this.getMimeTypeFromUrl(pickedFile),
@@ -69,13 +69,13 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     options?: PickFilesOptions,
   ): Promise<File[] | undefined> {
     const accept = options?.types?.join(',') || '';
-    const multiple = !!options?.multiple;
+    const limit = options?.limit === undefined ? 0 : options.limit;
     return new Promise(resolve => {
       let onChangeFired = false;
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = accept;
-      input.multiple = multiple;
+      input.multiple = limit === 0;
       input.addEventListener(
         'change',
         () => {

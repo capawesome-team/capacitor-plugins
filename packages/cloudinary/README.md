@@ -26,7 +26,7 @@ This API requires the following permission be added to your `AndroidManifest.xml
 <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 ```
 
-You also need to add the following receiver **in** the `application` tag in your `AndroidManifest.xml`:
+You also need to add the following receiver **inside** the `application` tag in your `AndroidManifest.xml`:
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.cloudinary.DownloadBroadcastReceiver" android:exported="true">
@@ -171,7 +171,7 @@ further processing after downloading.
 | Prop                   | Type                                                  | Description                                                                              | Since |
 | ---------------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----- |
 | **`assetId`**          | <code>string</code>                                   | The unique asset identifier of the uploaded resource. Only available on Android and Web. | 0.0.1 |
-| **`bytes`**            | <code>number</code>                                   | The number of bytes of the uploaded resource. Only available on Android and Web.         | 0.0.1 |
+| **`bytes`**            | <code>number</code>                                   | The number of bytes of the uploaded resource.                                            | 0.0.1 |
 | **`createdAt`**        | <code>string</code>                                   | The timestamp at which the resource was uploaded.                                        | 0.0.1 |
 | **`duration`**         | <code>number</code>                                   | The duration of the uploaded resource in seconds.                                        | 0.1.5 |
 | **`format`**           | <code>string</code>                                   | The format of the uploaded resource.                                                     | 0.0.1 |

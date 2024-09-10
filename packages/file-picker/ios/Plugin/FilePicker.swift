@@ -29,21 +29,26 @@ import MobileCoreServices
         return targetUrl
     }
 
-    public func openDocumentPicker(multiple: Bool, documentTypes: [String]) {
+    public func openDocumentPicker(limit: Int, documentTypes: [String]) {
         DispatchQueue.main.async {
             let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
             picker.delegate = self
-            picker.allowsMultipleSelection = multiple
+            picker.allowsMultipleSelection = limit == 0
             picker.modalPresentationStyle = .fullScreen
             self.presentViewController(picker)
         }
     }
 
-    public func openImagePicker(multiple: Bool, skipTranscoding: Bool) {
+    public func openImagePicker(limit: Int, skipTranscoding: Bool, ordered: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-                configuration.selectionLimit = multiple ? 0 : 1
+                configuration.selectionLimit = limit
+
+                if #available(iOS 15, *) {
+                    configuration.selection = ordered ? .ordered : .default
+                }
+
                 configuration.filter = .images
                 configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
@@ -60,11 +65,16 @@ import MobileCoreServices
         }
     }
 
-    public func openMediaPicker(multiple: Bool, skipTranscoding: Bool) {
+    public func openMediaPicker(limit: Int, skipTranscoding: Bool, ordered: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-                configuration.selectionLimit = multiple ? 0 : 1
+                configuration.selectionLimit = limit
+
+                if #available(iOS 15, *) {
+                    configuration.selection = ordered ? .ordered : .default
+                }
+
                 configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
                 picker.delegate = self
@@ -80,11 +90,16 @@ import MobileCoreServices
         }
     }
 
-    public func openVideoPicker(multiple: Bool, skipTranscoding: Bool) {
+    public func openVideoPicker(limit: Int, skipTranscoding: Bool, ordered: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
                 var configuration = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-                configuration.selectionLimit = multiple ? 0 : 1
+                configuration.selectionLimit = limit
+
+                if #available(iOS 15, *) {
+                    configuration.selection = ordered ? .ordered : .default
+                }
+
                 configuration.filter = .videos
                 configuration.preferredAssetRepresentationMode = skipTranscoding ? .current : .automatic
                 let picker = PHPickerViewController(configuration: configuration)
@@ -222,7 +237,7 @@ import MobileCoreServices
         try FileManager.default.copyItem(at: sourceUrl, to: targetUrl)
         return targetUrl
     }
-    
+
     private func createUniqueTemporaryDirectory() throws -> URL {
         let uniqueFolderName = UUID().uuidString
         var directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(uniqueFolderName)
@@ -295,10 +310,10 @@ extension FilePicker: PHPickerViewControllerDelegate {
             self.plugin?.handleDocumentPickerResult(urls: nil, error: nil)
             return
         }
-        var temporaryUrls: [URL] = []
+        var temporaryUrls = [URL?](repeating: nil, count: results.count)
         var errorMessage: String?
         let dispatchGroup = DispatchGroup()
-        for result in results {
+        for (index, result) in results.enumerated() {
             if errorMessage != nil {
                 break
             }
@@ -318,7 +333,7 @@ extension FilePicker: PHPickerViewControllerDelegate {
                     }
                     do {
                         let temporaryUrl = try self.saveTemporaryFile(url)
-                        temporaryUrls.append(temporaryUrl)
+                        temporaryUrls[index] = temporaryUrl
                     } catch {
                         errorMessage = self.plugin?.errorTemporaryCopyFailed
                     }
@@ -339,7 +354,7 @@ extension FilePicker: PHPickerViewControllerDelegate {
                     }
                     do {
                         let temporaryUrl = try self.saveTemporaryFile(url)
-                        temporaryUrls.append(temporaryUrl)
+                        temporaryUrls[index] = temporaryUrl
                     } catch {
                         errorMessage = self.plugin?.errorTemporaryCopyFailed
                     }
@@ -353,7 +368,9 @@ extension FilePicker: PHPickerViewControllerDelegate {
                 self.plugin?.handleDocumentPickerResult(urls: nil, error: errorMessage)
                 return
             }
-            self.plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
+
+            let finalUrls: [URL] = temporaryUrls.compactMap { $0 }
+            self.plugin?.handleDocumentPickerResult(urls: finalUrls, error: nil)
         }
     }
 }
