@@ -257,11 +257,12 @@ Remove all listeners for this plugin.
 
 #### PickFilesOptions
 
-| Prop           | Type                  | Description                                                                                                                                                                                                    | Default            | Since |
-| -------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
-| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
-| **`readData`** | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
+| Prop                    | Type                  | Description                                                                                                                                                                                                    | Default            | Since |
+| ----------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`persistContentUri`** | <code>boolean</code>  | Request persistent file access for reusing received path after app restart or system reboot. Only available on Android, iOS paths are persistent by default.                                                   | <code>false</code> | 5.1.2 |
+| **`types`**             | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
+| **`limit`**             | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
+| **`readData`**          | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
 
 
 #### PickMediaOptions
