@@ -14,6 +14,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "Posthog")
 public class PosthogPlugin extends Plugin {
@@ -139,7 +140,7 @@ public class PosthogPlugin extends Plugin {
                 call.reject(ERROR_KEY_MISSING);
                 return;
             }
-            JSObject value = call.getObject("value");
+            Object value = call.getData().get("value");
             if (value == null) {
                 call.reject(ERROR_VALUE_MISSING);
                 return;
