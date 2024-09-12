@@ -71,6 +71,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`autoDeleteBundles`** | <code>boolean</code>      | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`.                                                                                                                                    | <code>false</code> | 5.0.0 |
 | **`defaultChannel`**    | <code>string</code>       | The default channel of the app.                                                                                                                                                                                                                                                      |                    | 6.3.0 |
 | **`enabled`**           | <code>boolean</code>      | Whether or not the plugin is enabled.                                                                                                                                                                                                                                                | <code>true</code>  | 5.0.0 |
+| **`httpTimeout`**       | <code>number</code>       | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                       | <code>60000</code> | 6.4.0 |
 | **`location`**          | <code>'us' \| 'eu'</code> | The location of the server to use when using [Capawesome Cloud](https://capawesome.io/cloud).                                                                                                                                                                                        | <code>'us'</code>  | 6.2.0 |
 | **`publicKey`**         | <code>string</code>       | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                           |                    | 6.1.0 |
 | **`readyTimeout`**      | <code>number</code>       | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle.                                                                                                                                                                                  | <code>10000</code> | 5.0.0 |
@@ -88,6 +89,7 @@ In `capacitor.config.json`:
       "autoDeleteBundles": undefined,
       "defaultChannel": 'production',
       "enabled": undefined,
+      "httpTimeout": undefined,
       "location": 'eu',
       "publicKey": '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       "readyTimeout": undefined,
@@ -111,6 +113,7 @@ const config: CapacitorConfig = {
       autoDeleteBundles: undefined,
       defaultChannel: 'production',
       enabled: undefined,
+      httpTimeout: undefined,
       location: 'eu',
       publicKey: '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       readyTimeout: undefined,
