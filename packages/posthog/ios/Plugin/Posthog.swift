@@ -65,6 +65,8 @@ import PostHog
         let host = options.getHost()
 
         let config = PostHogConfig(apiKey: apiKey, host: host)
+        config.captureScreenViews = false
+        config.optOut = false
 
         PostHogSDK.shared.setup(config)
     }

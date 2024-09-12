@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.posthog
 
+import com.posthog.android.PostHogAndroid
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
@@ -70,7 +71,10 @@ class Posthog(private val plugin: PosthogPlugin) {
             apiKey = apiKey,
             host = host
         )
-        com.posthog.PostHog.setup(config)
+        config.captureScreenViews = false
+        config.optOut = false
+        
+        PostHogAndroid.setup(plugin.context, config)
     }
 
     fun unregister(options: UnregisterOptions) {
