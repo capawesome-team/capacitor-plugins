@@ -6,6 +6,7 @@ import android.hardware.camera2.CameraManager;
 import android.os.Build;
 
 public class Torch {
+
     private final TorchPlugin plugin;
 
     private boolean isTorchEnabled = false;

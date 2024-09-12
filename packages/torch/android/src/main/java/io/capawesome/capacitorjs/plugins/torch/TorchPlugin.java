@@ -9,6 +9,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 @CapacitorPlugin(name = "Torch")
 public class TorchPlugin extends Plugin {
+
     public static final String TAG = "Torch";
 
     private static final String ERROR_NOT_AVAILABLE = "Not available on this device.";

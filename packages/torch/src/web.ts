@@ -1,6 +1,10 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { IsAvailableResult, IsEnabledResult, TorchPlugin } from './definitions';
+import type {
+  IsAvailableResult,
+  IsEnabledResult,
+  TorchPlugin,
+} from './definitions';
 
 export class TorchWeb extends WebPlugin implements TorchPlugin {
   async enable(): Promise<void> {
