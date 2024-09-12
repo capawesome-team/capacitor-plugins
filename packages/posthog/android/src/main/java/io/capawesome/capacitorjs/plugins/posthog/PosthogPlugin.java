@@ -18,6 +18,8 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptio
 @CapacitorPlugin(name = "Posthog")
 public class PosthogPlugin extends Plugin {
 
+    public static final String TAG = "Posthog";
+
     private static final String ERROR_EVENT_MISSING = "event must be provided.";
     private static final String ERROR_ALIAS_MISSING = "alias must be provided.";
     private static final String ERROR_API_KEY_MISSING = "apiKey must be provided.";
@@ -27,7 +29,6 @@ public class PosthogPlugin extends Plugin {
     private static final String ERROR_TYPE_MISSING = "type must be provided.";
     private static final String ERROR_VALUE_MISSING = "value must be provided.";
     private static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
-    private static final String TAG = "PosthogPlugin";
 
     private Posthog implementation;
 
