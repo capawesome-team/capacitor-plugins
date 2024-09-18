@@ -6,7 +6,12 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(VapiPlugin)
-public class VapiPlugin: CAPPlugin {
+public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "VapiPlugin"
+    public let jsName = "Vapi"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+    ]
     private let implementation = Vapi()
 
     @objc func echo(_ call: CAPPluginCall) {
