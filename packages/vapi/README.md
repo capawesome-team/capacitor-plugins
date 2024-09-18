@@ -154,10 +154,10 @@ stop() => Promise<void>
 
 #### SendOptions
 
-| Prop          | Type                |
-| ------------- | ------------------- |
-| **`role`**    | <code>string</code> |
-| **`content`** | <code>string</code> |
+| Prop          | Type                                                                   |
+| ------------- | ---------------------------------------------------------------------- |
+| **`role`**    | <code>'function' \| 'user' \| 'system' \| 'assistant' \| 'tool'</code> |
+| **`content`** | <code>string</code>                                                    |
 
 
 #### SetMutedOptions
