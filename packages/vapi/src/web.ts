@@ -39,7 +39,7 @@ export class VapiWeb extends WebPlugin implements VapiPlugin {
     this.vapi.send({
       type: 'add-message',
       message: {
-        role: options.role,
+        role: 'system',
         content: options.content,
       },
     });

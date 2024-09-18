@@ -5,7 +5,7 @@ Unofficial Capacitor plugin for [Vapi](https://vapi.ai/).[^1]
 ## Installation
 
 ```bash
-npm install @capawesome/capacitor-vapi @vapi-ai/web
+npm install @capawesome/capacitor-vapi @vapi-ai/web openai
 npx cap sync
 ```
 
@@ -35,10 +35,150 @@ const echo = async () => {
 
 <docgen-index>
 
+* [`isMuted()`](#ismuted)
+* [`say(...)`](#say)
+* [`send(...)`](#send)
+* [`setMuted(...)`](#setmuted)
+* [`setup(...)`](#setup)
+* [`start(...)`](#start)
+* [`stop()`](#stop)
+* [Interfaces](#interfaces)
+
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### isMuted()
+
+```typescript
+isMuted() => Promise<IsMutedResult>
+```
+
+**Returns:** <code>Promise&lt;<a href="#ismutedresult">IsMutedResult</a>&gt;</code>
+
+--------------------
+
+
+### say(...)
+
+```typescript
+say(options: SayOptions) => Promise<void>
+```
+
+| Param         | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`options`** | <code><a href="#sayoptions">SayOptions</a></code> |
+
+--------------------
+
+
+### send(...)
+
+```typescript
+send(options: SendOptions) => Promise<void>
+```
+
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#sendoptions">SendOptions</a></code> |
+
+--------------------
+
+
+### setMuted(...)
+
+```typescript
+setMuted(options: SetMutedOptions) => Promise<void>
+```
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#setmutedoptions">SetMutedOptions</a></code> |
+
+--------------------
+
+
+### setup(...)
+
+```typescript
+setup(options: SetupOptions) => Promise<void>
+```
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#setupoptions">SetupOptions</a></code> |
+
+--------------------
+
+
+### start(...)
+
+```typescript
+start(options: StartOptions) => Promise<void>
+```
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#startoptions">StartOptions</a></code> |
+
+--------------------
+
+
+### stop()
+
+```typescript
+stop() => Promise<void>
+```
+
+--------------------
+
+
+### Interfaces
+
+
+#### IsMutedResult
+
+| Prop        | Type                 |
+| ----------- | -------------------- |
+| **`muted`** | <code>boolean</code> |
+
+
+#### SayOptions
+
+| Prop                     | Type                 |
+| ------------------------ | -------------------- |
+| **`message`**            | <code>string</code>  |
+| **`endCallAfterSpoken`** | <code>boolean</code> |
+
+
+#### SendOptions
+
+| Prop          | Type                |
+| ------------- | ------------------- |
+| **`role`**    | <code>string</code> |
+| **`content`** | <code>string</code> |
+
+
+#### SetMutedOptions
+
+| Prop        | Type                 |
+| ----------- | -------------------- |
+| **`muted`** | <code>boolean</code> |
+
+
+#### SetupOptions
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`apiKey`** | <code>string</code> |
+
+
+#### StartOptions
+
+| Prop              | Type                |
+| ----------------- | ------------------- |
+| **`assistantId`** | <code>string</code> |
 
 </docgen-api>
 

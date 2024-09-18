@@ -18,7 +18,7 @@ export interface SayOptions {
 }
 
 export interface SendOptions {
-  role: string;
+  role: 'function' | 'system' | 'user' | 'assistant' | 'tool';
   content: string;
 }
 
