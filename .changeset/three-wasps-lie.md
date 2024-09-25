@@ -1,5 +1,6 @@
 ---
-'@capawesome/capacitor-file-picker': minor
+'@capawesome/capacitor-file-picker': patch
 ---
 
-Resolved issue with multiple file picker not returning any items on Android 10 and below when using Samsung Gallery App.
+fix(android): no files were returned on Android 10 and below with the Samsung Gallery app
+
