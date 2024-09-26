@@ -106,8 +106,8 @@ export interface PickFilesOptions {
    *
    * Currently, only `0` and `1` are supported.
    *
-   * @default 0
-   * @example 1
+   * @default 1
+   * @example 0
    * @since 6.0.0
    */
   limit?: number;
@@ -213,8 +213,8 @@ export interface PickMediaOptions {
    *
    * On Android and Web, only `0` and `1` are supported.
    *
-   * @default 0
-   * @example 1
+   * @default 1
+   * @example 0
    * @since 5.2.0
    */
   limit?: number;
