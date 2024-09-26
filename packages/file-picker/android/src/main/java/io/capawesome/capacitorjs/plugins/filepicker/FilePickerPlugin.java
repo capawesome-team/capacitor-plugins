@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.Nullable;
@@ -184,7 +186,19 @@ public class FilePickerPlugin extends Plugin {
             return callResult;
         }
         List<Uri> uris = new ArrayList<>();
-        if (data.getClipData() == null) {
+        if (data.getClipData() == null && data.getData() == null && data.getExtras() != null) {
+            Bundle bundle = data.getExtras();
+            if (bundle.containsKey("selectedItems")) {
+                ArrayList<Parcelable> selectedItems = bundle.getParcelableArrayList("selectedItems");
+                if (selectedItems != null) {
+                    for (Parcelable selectedItem : selectedItems) {
+                        if (selectedItem instanceof Uri) {
+                            uris.add((Uri) selectedItem);
+                        }
+                    }
+                }
+            }
+        } else if (data.getClipData() == null) {
             Uri uri = data.getData();
             uris.add(uri);
         } else {
