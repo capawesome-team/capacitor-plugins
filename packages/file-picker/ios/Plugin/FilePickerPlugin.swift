@@ -24,6 +24,10 @@ public class FilePickerPlugin: CAPPlugin {
         self.implementation = FilePicker(self)
     }
 
+    @objc func requestMediaLocationPermission(_ call: CAPPluginCall) {
+        CAPLog.print("requestMediaLocationPermissions() called on iOS - not needed")
+    }
+
     @objc func convertHeicToJpeg(_ call: CAPPluginCall) {
         guard let path = call.getString("path") else {
             call.reject(errorPathMissing)

@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.filepicker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,12 +15,21 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
+import com.getcapacitor.PermissionState;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 
-@CapacitorPlugin(name = "FilePicker")
+@CapacitorPlugin(name = "FilePicker", permissions = {
+        @Permission(strings = {
+                Manifest.permission.ACCESS_MEDIA_LOCATION
+        }, alias = FilePickerPlugin.ACCESS_MEDIA_LOCATION),
+})
 public class FilePickerPlugin extends Plugin {
+
+    static final String ACCESS_MEDIA_LOCATION = "accessMediaLocation";
 
     public static final String TAG = "FilePickerPlugin";
 
@@ -29,6 +39,13 @@ public class FilePickerPlugin extends Plugin {
 
     public void load() {
         implementation = new FilePicker(this.getBridge());
+    }
+
+    @PluginMethod
+    public void requestMediaLocationPermission(PluginCall call) {
+        if (getPermissionState(ACCESS_MEDIA_LOCATION) == PermissionState.GRANTED)
+            return;
+        super.requestPermissions(call);
     }
 
     @PluginMethod

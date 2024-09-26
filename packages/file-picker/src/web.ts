@@ -13,6 +13,7 @@ import type {
   PickVideosOptions,
   PickVideosResult,
   PickedFile,
+  PermissionStatus,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -21,6 +22,10 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   public async convertHeicToJpeg(
     _options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  public async requestMediaLocationPermission(): Promise<PermissionStatus> {
     throw this.unimplemented('Not implemented on web.');
   }
 

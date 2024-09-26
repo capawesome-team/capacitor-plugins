@@ -1,4 +1,8 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { PluginListenerHandle, PermissionState } from '@capacitor/core';
+
+export interface PermissionStatus {
+  accessMediaLocation: PermissionState;
+}
 
 export interface FilePickerPlugin {
   /**
@@ -11,6 +15,14 @@ export interface FilePickerPlugin {
   convertHeicToJpeg(
     options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult>;
+  /**
+   * Requests ACCESS_MEDIA_LOCATION permission to get location metadata from photos.
+   *
+   * Only needed on Android.
+   *
+   * @since x.x.x
+   */
+  requestMediaLocationPermission(): Promise<PermissionStatus>;
   /**
    * Open the file picker that allows the user to select one or more files.
    */
