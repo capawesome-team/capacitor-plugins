@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "main"),
-        .package(url: "https://github.com/VapiAI/ios", from: "0.0.1")
+        .package(url: "https://github.com/VapiAI/ios", branch: "main")
     ],
     targets: [
         .target(

@@ -1,5 +1,8 @@
 export interface VapiPlugin {
   isMuted(): Promise<IsMutedResult>;
+  /**
+   * Only available on Web.
+   */
   say(options: SayOptions): Promise<void>;
   send(options: SendOptions): Promise<void>;
   setMuted(options: SetMutedOptions): Promise<void>;
@@ -18,8 +21,8 @@ export interface SayOptions {
 }
 
 export interface SendOptions {
-  role: 'function' | 'system' | 'user' | 'assistant' | 'tool';
   content: string;
+  role: 'function' | 'system' | 'user' | 'assistant' | 'tool';
 }
 
 export interface SetMutedOptions {
