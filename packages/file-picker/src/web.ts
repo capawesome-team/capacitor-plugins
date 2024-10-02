@@ -4,6 +4,7 @@ import type {
   ConvertHeicToJpegOptions,
   ConvertHeicToJpegResult,
   FilePickerPlugin,
+  PermissionStatus,
   PickFilesOptions,
   PickFilesResult,
   PickImagesOptions,
@@ -13,10 +14,15 @@ import type {
   PickVideosOptions,
   PickVideosResult,
   PickedFile,
+  RequestPermissionsOptions,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   public readonly ERROR_PICK_FILE_CANCELED = 'pickFiles canceled.';
+
+  public async checkPermissions(): Promise<PermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 
   public async convertHeicToJpeg(
     _options: ConvertHeicToJpegOptions,
@@ -63,6 +69,12 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     options?: PickVideosOptions,
   ): Promise<PickVideosResult> {
     return this.pickFiles({ types: ['video/*'], ...options });
+  }
+
+  public async requestPermissions(
+    _options?: RequestPermissionsOptions,
+  ): Promise<PermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
   private async openFilePicker(
