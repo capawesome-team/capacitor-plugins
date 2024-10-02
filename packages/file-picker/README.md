@@ -9,6 +9,19 @@ npm install @capawesome/capacitor-file-picker
 npx cap sync
 ```
 
+### Android
+
+#### Permissions
+
+This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<!-- Needed if you want to retrieve unredacted EXIF metadata from photos -->
+<uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+<!-- Needed if you want to read files from external storage -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+```
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -21,6 +34,23 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const appendFileToFormData = async () => {
+  const result = await FilePicker.pickFiles();
+  const file = result.files[0];
+
+  const formData = new FormData();
+  if (file.blob) {
+    const rawFile = new File(file.blob, file.name, {
+      type: file.mimeType,
+    });
+    formData.append('file', rawFile, file.name);
+  }
+};
+
+const checkPermissions = async () => {
+  const result = await FilePicker.checkPermissions();
+};
 
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles({
@@ -40,17 +70,8 @@ const pickVideos = async () => {
   const result = await FilePicker.pickVideos();
 };
 
-const appendFileToFormData = async () => {
-  const result = await FilePicker.pickFiles();
-  const file = result.files[0];
-
-  const formData = new FormData();
-  if (file.blob) {
-    const rawFile = new File(file.blob, file.name, {
-      type: file.mimeType,
-    });
-    formData.append('file', rawFile, file.name);
-  }
+const requestPermissions = async () => {
+  const result = await FilePicker.requestPermissions();
 };
 ```
 
@@ -58,11 +79,13 @@ const appendFileToFormData = async () => {
 
 <docgen-index>
 
+* [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
 * [`pickFiles(...)`](#pickfiles)
 * [`pickImages(...)`](#pickimages)
 * [`pickMedia(...)`](#pickmedia)
 * [`pickVideos(...)`](#pickvideos)
+* [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
@@ -72,6 +95,23 @@ const appendFileToFormData = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check permissions to access files.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 6.1.0
+
+--------------------
+
 
 ### convertHeicToJpeg(...)
 
@@ -180,6 +220,27 @@ Only available on Android and iOS.
 --------------------
 
 
+### requestPermissions(...)
+
+```typescript
+requestPermissions(options?: RequestPermissionsOptions | undefined) => Promise<PermissionStatus>
+```
+
+Request permissions to access files.
+
+Only available on Android.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#requestpermissionsoptions">RequestPermissionsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### addListener('pickerDismissed', ...)
 
 ```typescript
@@ -216,6 +277,14 @@ Remove all listeners for this plugin.
 
 
 ### Interfaces
+
+
+#### PermissionStatus
+
+| Prop                      | Type                                                        | Description                                                                                                             | Since |
+| ------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`accessMediaLocation`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for accessing media location. On Android, this requests/checks the `ACCESS_MEDIA_LOCATION` permission. | 6.1.0 |
+| **`readExternalStorage`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for reading external storage. On Android, this requests/checks the `READ_EXTERNAL_STORAGE` permission. | 6.1.0 |
 
 
 #### ConvertHeicToJpegResult
@@ -274,6 +343,13 @@ Remove all listeners for this plugin.
 | **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                                                  | <code>false</code> | 5.3.0 |
 
 
+#### RequestPermissionsOptions
+
+| Prop              | Type                          | Description                 | Default                                                     | Since |
+| ----------------- | ----------------------------- | --------------------------- | ----------------------------------------------------------- | ----- |
+| **`permissions`** | <code>PermissionType[]</code> | The permissions to request. | <code>["accessMediaLocation", "readExternalStorage"]</code> | 6.1.0 |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -282,6 +358,11 @@ Remove all listeners for this plugin.
 
 
 ### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 #### PickImagesOptions
@@ -307,6 +388,11 @@ Remove all listeners for this plugin.
 #### PickVideosResult
 
 <code><a href="#pickmediaresult">PickMediaResult</a></code>
+
+
+#### PermissionType
+
+<code>'accessMediaLocation' | 'readExternalStorage'</code>
 
 </docgen-api>
 

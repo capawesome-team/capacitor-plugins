@@ -2,6 +2,14 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface FilePickerPlugin {
   /**
+   * Check permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
    * Convert a HEIC image to JPEG.
    *
    * Only available on iOS.
@@ -46,6 +54,16 @@ export interface FilePickerPlugin {
    */
   pickVideos(options?: PickVideosOptions): Promise<PickVideosResult>;
   /**
+   * Request permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  requestPermissions(
+    options?: RequestPermissionsOptions,
+  ): Promise<PermissionStatus>;
+  /**
    * Called when the file picker is dismissed.
    *
    * Only available on iOS.
@@ -88,6 +106,28 @@ export interface ConvertHeicToJpegResult {
    * @since 0.6.0
    */
   path: string;
+}
+
+/**
+ * @since 6.1.0
+ */
+export interface PermissionStatus {
+  /**
+   * Permission state for accessing media location.
+   *
+   * On Android, this requests/checks the `ACCESS_MEDIA_LOCATION` permission.
+   *
+   * @since 6.1.0
+   */
+  accessMediaLocation: PermissionState;
+  /**
+   * Permission state for reading external storage.
+   *
+   * On Android, this requests/checks the `READ_EXTERNAL_STORAGE` permission.
+   *
+   * @since 6.1.0
+   */
+  readExternalStorage: PermissionState;
 }
 
 export interface PickFilesOptions {
@@ -253,3 +293,21 @@ export type PickVideosOptions = PickMediaOptions;
  * @since 0.5.3
  */
 export type PickVideosResult = PickMediaResult;
+
+/**
+ * @since 6.1.0
+ */
+export interface RequestPermissionsOptions {
+  /**
+   * The permissions to request.
+   *
+   * @since 6.1.0
+   * @default ["accessMediaLocation", "readExternalStorage"]
+   */
+  permissions?: PermissionType[];
+}
+
+/**
+ * @since 6.1.0
+ */
+export type PermissionType = 'accessMediaLocation' | 'readExternalStorage';
