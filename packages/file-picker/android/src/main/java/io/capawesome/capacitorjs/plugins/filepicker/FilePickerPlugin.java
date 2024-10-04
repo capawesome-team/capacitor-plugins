@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.filepicker;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,21 +17,37 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONException;
 
-@CapacitorPlugin(name = "FilePicker")
+@CapacitorPlugin(
+    name = "FilePicker",
+    permissions = {
+        @Permission(strings = { Manifest.permission.ACCESS_MEDIA_LOCATION }, alias = FilePickerPlugin.PERMISSION_ACCESS_MEDIA_LOCATION),
+        @Permission(strings = { Manifest.permission.READ_EXTERNAL_STORAGE }, alias = FilePickerPlugin.PERMISSION_READ_EXTERNAL_STORAGE)
+    }
+)
 public class FilePickerPlugin extends Plugin {
-
-    public static final String TAG = "FilePickerPlugin";
 
     public static final String ERROR_PICK_FILE_FAILED = "pickFiles failed.";
     public static final String ERROR_PICK_FILE_CANCELED = "pickFiles canceled.";
+    public static final String PERMISSION_ACCESS_MEDIA_LOCATION = "accessMediaLocation";
+    public static final String PERMISSION_READ_EXTERNAL_STORAGE = "readExternalStorage";
+    public static final String TAG = "FilePickerPlugin";
+
     private FilePicker implementation;
 
     public void load() {
         implementation = new FilePicker(this.getBridge());
+    }
+
+    @Override
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        super.checkPermissions(call);
     }
 
     @PluginMethod
@@ -118,6 +135,23 @@ public class FilePickerPlugin extends Plugin {
         }
     }
 
+    @Override
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        List<String> permissionsList = new ArrayList<>();
+        permissionsList.add(PERMISSION_ACCESS_MEDIA_LOCATION);
+        permissionsList.add(PERMISSION_READ_EXTERNAL_STORAGE);
+
+        JSArray permissions = call.getArray("permissions");
+        if (permissions != null) {
+            try {
+                permissionsList = permissions.toList();
+            } catch (JSONException e) {}
+        }
+
+        requestPermissionForAliases(permissionsList.toArray(new String[0]), call, "permissionsCallback");
+    }
+
     @Nullable
     private String[] parseTypesOption(@Nullable JSArray types) {
         if (types == null) {
@@ -133,6 +167,11 @@ public class FilePickerPlugin extends Plugin {
             Logger.error("parseTypesOption failed.", exception);
             return null;
         }
+    }
+
+    @PermissionCallback
+    private void permissionsCallback(PluginCall call) {
+        this.checkPermissions(call);
     }
 
     @ActivityCallback
