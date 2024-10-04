@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 public class GetLatestBundleResponse {
 
+    @Nullable
     private String bundleId;
 
     @Nullable
@@ -13,7 +14,15 @@ public class GetLatestBundleResponse {
     @Nullable
     private String signature;
 
+    @Nullable
     private String url;
+
+    public GetLatestBundleResponse() {
+        this.bundleId = null;
+        this.checksum = null;
+        this.signature = null;
+        this.url = null;
+    }
 
     public GetLatestBundleResponse(JSONObject responseJson) {
         this.bundleId = responseJson.optString("bundleId");
@@ -32,6 +41,7 @@ public class GetLatestBundleResponse {
         this.url = responseJson.optString("url");
     }
 
+    @Nullable
     public String getBundleId() {
         return bundleId;
     }
@@ -46,6 +56,7 @@ public class GetLatestBundleResponse {
         return signature;
     }
 
+    @Nullable
     public String getUrl() {
         return url;
     }

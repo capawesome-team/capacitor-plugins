@@ -412,9 +412,17 @@ export interface SetCustomIdOptions {
  */
 export interface SyncResult {
   /**
+   * The unique identifier of the current bundle.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 7.0.0
+   */
+  currentBundleId: string | null;
+  /**
    * The identifier of the next bundle to use.
    *
-   * If `null`, the app is up-to-date and no new bundle is available.
+   * If `null`, the default bundle is being used.
    *
    * @since 5.0.0
    */

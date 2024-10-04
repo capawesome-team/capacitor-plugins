@@ -623,9 +623,10 @@ Only available on Android and iOS.
 
 #### SyncResult
 
-| Prop               | Type                        | Description                                                                                                | Since |
-| ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+| Prop                  | Type                        | Description                                                                               | Since |
+| --------------------- | --------------------------- | ----------------------------------------------------------------------------------------- | ----- |
+| **`currentBundleId`** | <code>string \| null</code> | The unique identifier of the current bundle. If `null`, the default bundle is being used. | 7.0.0 |
+| **`nextBundleId`**    | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the default bundle is being used.    | 5.0.0 |
 
 </docgen-api>
 
