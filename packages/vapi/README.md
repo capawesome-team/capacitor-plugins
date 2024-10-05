@@ -17,6 +17,22 @@ This plugin will use the following project variables (defined in your app’s `v
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
 
+### iOS
+
+Add the `NSMicrophoneUsageDescription`, `NSCameraUsageDescription` and `UIBackgroundModes` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why your app needs access to the microphone and camera, and that it needs to run in the background:
+
+```xml
+<key>NSMicrophoneUsageDescription</key>
+<string>The app needs access to the microphone to record audio.</string>
+<key>NSCameraUsageDescription</key>
+<string>The app needs access to the camera to record video.</string>
+<key>UIBackgroundModes</key>
+<array>
+  <string>voip</string>
+  <string>audio</string>
+</array>
+```
+
 ## Configuration
 
 No configuration required for this plugin.

@@ -7,13 +7,15 @@ import Capacitor
  */
 @objc(VapiPlugin)
 public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let errorApiKeyMissing = "apiKey must be provided."
-    
     public let identifier = "VapiPlugin"
     public let jsName = "Vapi"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "isMuted", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "say", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setMuted", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "start", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stop", returnType: CAPPluginReturnPromise)
     ]
     private let implementation = VapiImpl()
     
@@ -26,10 +28,46 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
+    
+    @objc func say(_ call: CAPPluginCall) {
+        Task {
+            do {
+                guard let message = call.getString("message") else {
+                    rejectCall(call, CustomError.messageMissing)
+                    return
+                }
+                
+                let options = SayOptions(message: message)
+                
+                try await implementation.say(options)
+                call.resolve()
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
+    
+    @objc func setMuted(_ call: CAPPluginCall) {
+        Task {
+            do {
+                guard let muted = call.getBool("muted") else {
+                    rejectCall(call, CustomError.mutedMissing)
+                    return
+                }
+                
+                let options = SetMutedOptions(muted: muted)
+                
+                try await implementation.setMuted(options)
+                call.resolve()
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
 
     @objc func setup(_ call: CAPPluginCall) {
         guard let apiKey = call.getString("apiKey") else {
-            call.reject(errorApiKeyMissing)
+            rejectCall(call, CustomError.apiKeyMissing)
             return
         }
         
@@ -39,14 +77,53 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve()
     }
     
+    @objc func start(_ call: CAPPluginCall) {
+        Task {
+            do {
+                guard let assistantId = call.getString("assistantId") else {
+                    rejectCall(call, CustomError.assistantIdMissing)
+                    return
+                }
+                
+                let options = StartOptions(assistantId: assistantId)
+                
+                try await implementation.start(options)
+                call.resolve()
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
+    
+    @objc func stop(_ call: CAPPluginCall) {
+        Task {
+            do {
+                try await implementation.stop()
+                call.resolve()
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
+    
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         var message = error.localizedDescription
         switch error {
+        case let CustomError.apiKeyMissing:
+            message = "apiKey must be provided."
+        case let CustomError.assistantIdMissing:
+            message = "assistantId must be provided."
+        case let CustomError.customError(msg):
+            message = msg
+        case let CustomError.messageMissing:
+            message = "message must be provided."
+        case let CustomError.mutedMissing:
+            message = "muted must be provided."
         case let CustomError.uninitialized:
             message = "Vapi is not initialized. Please call setup() first."
         default:
             break
         }
-        call.reject(error.localizedDescription, nil, error)
+        call.reject(message, nil, error)
     }
 }

@@ -4,7 +4,6 @@ import Vapi from '@vapi-ai/web';
 import type {
   IsMutedResult,
   SayOptions,
-  SendOptions,
   SetMutedOptions,
   SetupOptions,
   StartOptions,
@@ -29,20 +28,6 @@ export class VapiWeb extends WebPlugin implements VapiPlugin {
     }
 
     this.vapi.say(options.message, options.endCallAfterSpoken);
-  }
-
-  async send(options: SendOptions): Promise<void> {
-    if (!this.vapi) {
-      this.throwUninitializedError();
-    }
-
-    this.vapi.send({
-      type: 'add-message',
-      message: {
-        role: options.role,
-        content: options.content,
-      },
-    });
   }
 
   async setMuted(options: SetMutedOptions): Promise<void> {
