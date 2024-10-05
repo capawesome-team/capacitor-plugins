@@ -1,8 +1,16 @@
 import Foundation
+import Combine
 import Vapi
 
 @objc public class VapiImpl: NSObject {
+    private let plugin: VapiPlugin
+    
+    var subscription: AnyCancellable?
     var vapi: Vapi?
+
+    init(plugin: VapiPlugin) {
+        self.plugin = plugin
+    }
     
     @objc public func isMuted() async throws {
         guard let vapi = self.vapi else {
@@ -34,8 +42,36 @@ import Vapi
     
     @objc public func setup(_ options: SetupOptions) {
         let apiKey = options.getApiKey()
+
+        if self.subscription != nil {
+            self.subscription?.cancel()
+            self.subscription = nil
+        }
         
         self.vapi = Vapi.init(publicKey: apiKey)
+        self.subscription = self.vapi?.eventPublisher
+                    .sink { [weak self] event in
+                        switch event {
+                        case .callDidStart:
+                            self?.callState = .started
+                        case .callDidEnd:
+                            self?.callState = .ended
+                        case .speechUpdate:
+                            print(event)
+                        case .conversationUpdate:
+                            print(event)
+                        case .functionCall:
+                            print(event)
+                        case .hang:
+                            print(event)
+                        case .metadata:
+                            print(event)
+                        case .transcript:
+                            print(event)
+                        case .error(let error):
+                            print("Error: \(error)")
+                        }
+                    };
     }
     
     @objc public func start(_ options: StartOptions) async throws {

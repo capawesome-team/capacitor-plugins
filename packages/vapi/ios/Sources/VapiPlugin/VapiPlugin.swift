@@ -17,7 +17,11 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "start", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stop", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = VapiImpl()
+    private let implementation: VapiImpl?
+    
+    override public func load() {
+        implementation = VapiImpl(plugin: self)
+    }
     
     @objc func isMuted(_ call: CAPPluginCall) {
         Task {
