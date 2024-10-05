@@ -7,7 +7,7 @@ import Capacitor
     init(muted: Bool) {
         self.muted = muted
     }
-    
+
     func getMuted() -> Bool {
         return muted
     }

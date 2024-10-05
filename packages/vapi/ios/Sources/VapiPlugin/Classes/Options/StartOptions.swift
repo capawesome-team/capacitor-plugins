@@ -7,7 +7,7 @@ import Capacitor
     init(assistantId: String) {
         self.assistantId = assistantId
     }
-    
+
     func getAssistantId() -> String {
         return assistantId
     }

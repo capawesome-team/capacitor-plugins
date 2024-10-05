@@ -18,11 +18,11 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "stop", returnType: CAPPluginReturnPromise)
     ]
     private let implementation: VapiImpl?
-    
+
     override public func load() {
         implementation = VapiImpl(plugin: self)
     }
-    
+
     @objc func isMuted(_ call: CAPPluginCall) {
         Task {
             do {
@@ -32,7 +32,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     @objc func say(_ call: CAPPluginCall) {
         Task {
             do {
@@ -40,9 +40,9 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
                     rejectCall(call, CustomError.messageMissing)
                     return
                 }
-                
+
                 let options = SayOptions(message: message)
-                
+
                 try await implementation.say(options)
                 call.resolve()
             } catch {
@@ -50,7 +50,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     @objc func setMuted(_ call: CAPPluginCall) {
         Task {
             do {
@@ -58,9 +58,9 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
                     rejectCall(call, CustomError.mutedMissing)
                     return
                 }
-                
+
                 let options = SetMutedOptions(muted: muted)
-                
+
                 try await implementation.setMuted(options)
                 call.resolve()
             } catch {
@@ -74,13 +74,13 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             rejectCall(call, CustomError.apiKeyMissing)
             return
         }
-        
+
         let options = SetupOptions(apiKey: apiKey)
-        
+
         implementation.setup(options)
         call.resolve()
     }
-    
+
     @objc func start(_ call: CAPPluginCall) {
         Task {
             do {
@@ -88,9 +88,9 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
                     rejectCall(call, CustomError.assistantIdMissing)
                     return
                 }
-                
+
                 let options = StartOptions(assistantId: assistantId)
-                
+
                 try await implementation.start(options)
                 call.resolve()
             } catch {
@@ -98,7 +98,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     @objc func stop(_ call: CAPPluginCall) {
         Task {
             do {
@@ -109,7 +109,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         var message = error.localizedDescription
         switch error {

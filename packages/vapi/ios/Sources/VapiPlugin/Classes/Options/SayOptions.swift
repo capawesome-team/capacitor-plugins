@@ -7,7 +7,7 @@ import Capacitor
     init(message: String) {
         self.message = message
     }
-    
+
     func getMessage() -> String {
         return message
     }

@@ -1,9 +1,10 @@
 package io.capawesome.capacitorjs.plugins.vapi;
 
-import io.capawesome.capacitorjs.plugins.vapi.classes.options.SetupOptions;
 import ai.vapi.android.Vapi;
+import io.capawesome.capacitorjs.plugins.vapi.classes.options.SetupOptions;
 
 public class VapiImpl {
+
     private final VapiPlugin plugin;
 
     public VapiImpl(VapiPlugin plugin) {

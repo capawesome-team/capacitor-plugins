@@ -5,7 +5,6 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import io.capawesome.capacitorjs.plugins.vapi.classes.options.SetupOptions;
 
 @CapacitorPlugin(name = "Vapi")

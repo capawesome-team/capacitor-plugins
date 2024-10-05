@@ -7,7 +7,7 @@ import Capacitor
     init(apiKey: String) {
         self.apiKey = apiKey
     }
-    
+
     func getApiKey() -> String {
         return apiKey
     }
