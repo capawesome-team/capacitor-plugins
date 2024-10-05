@@ -16,7 +16,7 @@ import Capacitor
             messageResult["content"] = item.content
             messageResult["role"] = convertRoleToString(item.role)
         }
-        
+
         var result = JSObject()
         result["messages"] = messagesResult
         return result as AnyObject

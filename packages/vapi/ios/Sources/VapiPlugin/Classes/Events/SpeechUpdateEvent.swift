@@ -15,7 +15,7 @@ import Capacitor
         result["status"] = convertStatusToString(data.status)
         return result as AnyObject
     }
-    
+
     private func convertRoleToString(_ role: SpeechUpdate.Role) -> String {
         switch role {
         case .assistant:
@@ -24,7 +24,7 @@ import Capacitor
             return "user"
         }
     }
-    
+
     private func convertStatusToString(_ status: SpeechUpdate.Status) -> String {
         switch status {
         case .started:

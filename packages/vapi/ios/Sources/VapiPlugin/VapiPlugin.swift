@@ -109,27 +109,27 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
     }
-    
+
     func notifyCallEndListeners() {
         notifyListeners("callEnd", data: nil)
     }
-    
+
     func notifyCallStartListeners() {
         notifyListeners("callStart", data: nil)
     }
-    
+
     func notifyConversationUpdateListeners(event: ConversationUpdateEvent) {
         if let event = event.toJSObject() as? JSObject {
             notifyListeners("conversationUpdate", data: event)
         }
     }
-    
+
     func notifyErrorListeners(event: ErrorEvent) {
         if let event = event.toJSObject() as? JSObject {
             notifyListeners("error", data: event)
         }
     }
-    
+
     func notifySpeechUpdateListeners(event: SpeechUpdateEvent) {
         if let event = event.toJSObject() as? JSObject {
             notifyListeners("speechUpdate", data: event)
