@@ -53,7 +53,6 @@ const echo = async () => {
 
 * [`isMuted()`](#ismuted)
 * [`say(...)`](#say)
-* [`send(...)`](#send)
 * [`setMuted(...)`](#setmuted)
 * [`setup(...)`](#setup)
 * [`start(...)`](#start)
@@ -85,19 +84,6 @@ say(options: SayOptions) => Promise<void>
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`options`** | <code><a href="#sayoptions">SayOptions</a></code> |
-
---------------------
-
-
-### send(...)
-
-```typescript
-send(options: SendOptions) => Promise<void>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#sendoptions">SendOptions</a></code> |
 
 --------------------
 
@@ -162,18 +148,10 @@ stop() => Promise<void>
 
 #### SayOptions
 
-| Prop                     | Type                 |
-| ------------------------ | -------------------- |
-| **`message`**            | <code>string</code>  |
-| **`endCallAfterSpoken`** | <code>boolean</code> |
-
-
-#### SendOptions
-
-| Prop          | Type                                                                   |
-| ------------- | ---------------------------------------------------------------------- |
-| **`role`**    | <code>'function' \| 'user' \| 'system' \| 'assistant' \| 'tool'</code> |
-| **`content`** | <code>string</code>                                                    |
+| Prop                     | Type                 | Description            |
+| ------------------------ | -------------------- | ---------------------- |
+| **`message`**            | <code>string</code>  |                        |
+| **`endCallAfterSpoken`** | <code>boolean</code> | Only available on Web. |
 
 
 #### SetMutedOptions

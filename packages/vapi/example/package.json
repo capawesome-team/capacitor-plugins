@@ -13,9 +13,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/android": "^6.1.2",
-    "@capacitor/camera": "latest",
+    "@capacitor/android": "^6.0.0",
     "@capacitor/core": "latest",
+    "@capacitor/camera": "latest",
     "@capacitor/ios": "^6.0.0",
     "@capacitor/splash-screen": "latest",
     "@capawesome/capacitor-vapi": "file:.."
