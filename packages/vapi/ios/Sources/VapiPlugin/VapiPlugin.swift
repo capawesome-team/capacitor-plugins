@@ -17,7 +17,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "start", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stop", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation: VapiImpl?
+    private var implementation: VapiImpl?
 
     override public func load() {
         implementation = VapiImpl(plugin: self)
@@ -26,7 +26,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func isMuted(_ call: CAPPluginCall) {
         Task {
             do {
-                try await implementation.isMuted()
+                try await implementation?.isMuted()
             } catch {
                 rejectCall(call, error)
             }
@@ -43,7 +43,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
 
                 let options = SayOptions(message: message)
 
-                try await implementation.say(options)
+                try await implementation?.say(options)
                 call.resolve()
             } catch {
                 rejectCall(call, error)
@@ -61,7 +61,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
 
                 let options = SetMutedOptions(muted: muted)
 
-                try await implementation.setMuted(options)
+                try await implementation?.setMuted(options)
                 call.resolve()
             } catch {
                 rejectCall(call, error)
@@ -77,7 +77,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
 
         let options = SetupOptions(apiKey: apiKey)
 
-        implementation.setup(options)
+        implementation?.setup(options)
         call.resolve()
     }
 
@@ -91,7 +91,7 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
 
                 let options = StartOptions(assistantId: assistantId)
 
-                try await implementation.start(options)
+                try await implementation?.start(options)
                 call.resolve()
             } catch {
                 rejectCall(call, error)
@@ -102,11 +102,37 @@ public class VapiPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func stop(_ call: CAPPluginCall) {
         Task {
             do {
-                try await implementation.stop()
+                try await implementation?.stop()
                 call.resolve()
             } catch {
                 rejectCall(call, error)
             }
+        }
+    }
+    
+    func notifyCallEndListeners() {
+        notifyListeners("callEnd", data: nil)
+    }
+    
+    func notifyCallStartListeners() {
+        notifyListeners("callStart", data: nil)
+    }
+    
+    func notifyConversationUpdateListeners(event: ConversationUpdateEvent) {
+        if let event = event.toJSObject() as? JSObject {
+            notifyListeners("conversationUpdate", data: event)
+        }
+    }
+    
+    func notifyErrorListeners(event: ErrorEvent) {
+        if let event = event.toJSObject() as? JSObject {
+            notifyListeners("error", data: event)
+        }
+    }
+    
+    func notifySpeechUpdateListeners(event: SpeechUpdateEvent) {
+        if let event = event.toJSObject() as? JSObject {
+            notifyListeners("speechUpdate", data: event)
         }
     }
 

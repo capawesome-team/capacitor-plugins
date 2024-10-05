@@ -53,13 +53,15 @@ import Vapi
             .sink { [weak self] event in
                 switch event {
                 case .callDidStart:
-                    self?.callState = .started
+                    self?.plugin.notifyCallStartListeners()
                 case .callDidEnd:
-                    self?.callState = .ended
-                case .speechUpdate:
-                    print(event)
-                case .conversationUpdate:
-                    print(event)
+                    self?.plugin.notifyCallEndListeners()
+                case .speechUpdate(let data):
+                    let event = SpeechUpdateEvent(data: data)
+                    self?.plugin.notifySpeechUpdateListeners(event: event)
+                case .conversationUpdate(let data):
+                    let event = ConversationUpdateEvent(data: data)
+                    self?.plugin.notifyConversationUpdateListeners(event: event)
                 case .functionCall:
                     print(event)
                 case .hang:
@@ -69,7 +71,8 @@ import Vapi
                 case .transcript:
                     print(event)
                 case .error(let error):
-                    print("Error: \(error)")
+                    let event = ErrorEvent(message: error.localizedDescription)
+                    self?.plugin.notifyErrorListeners(event: event)
                 }
             }
     }

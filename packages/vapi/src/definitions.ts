@@ -16,20 +16,16 @@ export interface VapiPlugin {
     listenerFunc: CallStartEventListener,
   ): Promise<PluginListenerHandle>;
   addListener(
+    eventName: 'conversationUpdate',
+    listenerFunc: ConversationUpdateEventListener,
+  ): Promise<PluginListenerHandle>;
+  addListener(
     eventName: 'error',
     listenerFunc: ErrorEventListener,
   ): Promise<PluginListenerHandle>;
   addListener(
-    eventName: 'speechEnd',
-    listenerFunc: SpeechEndEventListener,
-  ): Promise<PluginListenerHandle>;
-  addListener(
-    eventName: 'speechStart',
-    listenerFunc: SpeechStartEventListener,
-  ): Promise<PluginListenerHandle>;
-  addListener(
-    eventName: 'message',
-    listenerFunc: MessageEventListener,
+    eventName: 'speechUpdate',
+    listenerFunc: SpeechUpdateEventListener,
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
@@ -65,15 +61,32 @@ export type CallEndEventListener = () => void;
 
 export type CallStartEventListener = () => void;
 
+export type ConversationUpdateEventListener = (
+  event: ConversationUpdateEvent,
+) => void;
+
+export interface ConversationUpdateEvent {
+  messages: {
+    content: string;
+    role: 'assistant' | 'system' | 'user';
+  }[];
+}
+
 export type ErrorEventListener = (error: ErrorEvent) => void;
 
 export interface ErrorEvent {
   message: string;
 }
 
-export type SpeechEndEventListener = () => void;
+export type SpeechUpdateEventListener = (event: SpeechUpdateEvent) => void;
 
-export type SpeechStartEventListener = () => void;
+export interface SpeechUpdateEvent {
+  /**
+   * Only available on Android and iOS.
+   */
+  role?: 'assistant' | 'user';
+  status: 'started' | 'stopped';
+}
 
 export type MessageEventListener = (event: MessageEvent) => void;
 
