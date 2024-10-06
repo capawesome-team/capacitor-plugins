@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
@@ -36,6 +37,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import net.lingala.zip4j.ZipFile;
@@ -115,7 +117,7 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        downloadBundle(bundleId, checksum, null, url, callback);
+        downloadBundleOfTypeZip(bundleId, checksum, null, url, callback);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
@@ -229,6 +231,7 @@ public class LiveUpdate {
                 public void success(@NonNull GetLatestBundleResponse result) {
                     String latestBundleId = result.getBundleId();
                     String checksum = result.getChecksum();
+                    List<ManifestItem> manifest = result.getManifest();
                     String signature = result.getSignature();
                     String url = result.getUrl();
 
@@ -245,13 +248,30 @@ public class LiveUpdate {
                         callback.success(syncResult);
                         return;
                     }
-                    // Download and unzip the bundle
-                    downloadBundle(
-                        latestBundleId,
-                        checksum,
-                        signature,
-                        url,
-                        new EmptyCallback() {
+                    // Download the bundle
+                    if (manifest == null) {
+                        downloadBundleOfTypeZip(
+                                latestBundleId,
+                                checksum,
+                                signature,
+                                url,
+                                new EmptyCallback() {
+                                    @Override
+                                    public void success() {
+                                        // Set the next bundle
+                                        setNextBundle(latestBundleId);
+                                        SyncResult syncResult = new SyncResult(latestBundleId);
+                                        callback.success(syncResult);
+                                    }
+
+                                    @Override
+                                    public void error(Exception exception) {
+                                        callback.error(exception);
+                                    }
+                                }
+                        );
+                    } else {
+                        downloadBundleOfTypeManifest(latestBundleId, manifest, new EmptyCallback() {
                             @Override
                             public void success() {
                                 // Set the next bundle
@@ -264,8 +284,8 @@ public class LiveUpdate {
                             public void error(Exception exception) {
                                 callback.error(exception);
                             }
-                        }
-                    );
+                        });
+                    }
                 }
             }
         );
@@ -382,7 +402,37 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundle(
+    private void downloadBundleOfTypeManifest(
+        @NonNull String bundleId,
+        @NonNull List<ManifestItem> manifest,
+        @NonNull EmptyCallback callback
+    ) {
+        downloadBundleOfTypeManifestRecursively(bundleId, manifest, callback, 0);
+    }
+
+    private void downloadBundleOfTypeManifestRecursively(
+            @NonNull String bundleId,
+            @NonNull List<ManifestItem> manifest,
+            @NonNull EmptyCallback callback,
+            int index
+    ) {
+        if (index < manifest.size()) {
+            ManifestItem item = manifest.get(index);
+            String id = item.getId();
+            String checksum = item.getChecksum();
+            String href = item.getHref();
+            String signature = item.getSignature();
+            if (hasCurrentBundleFile(checksum, href)) {
+                copyCurrentBundleFile(href, () -> downloadBundleOfTypeManifestRecursively(bundleId, manifest, callback, index + 1));
+            } else {
+                downloadBundleFile(id, bundleId, checksum, href, signature, () -> downloadBundleOfTypeManifestRecursively(bundleId, manifest, callback, index + 1));
+            }
+        } else {
+            callback.success();
+        }
+    }
+
+    private void downloadBundleOfTypeZip(
         @NonNull String bundleId,
         @Nullable String expectedChecksum,
         @Nullable String signature,
