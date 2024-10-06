@@ -57,7 +57,14 @@ const echo = async () => {
 * [`setup(...)`](#setup)
 * [`start(...)`](#start)
 * [`stop()`](#stop)
+* [`addListener('callEnd', ...)`](#addlistenercallend)
+* [`addListener('callStart', ...)`](#addlistenercallstart)
+* [`addListener('conversationUpdate', ...)`](#addlistenerconversationupdate)
+* [`addListener('error', ...)`](#addlistenererror)
+* [`addListener('speechUpdate', ...)`](#addlistenerspeechupdate)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -136,6 +143,97 @@ stop() => Promise<void>
 --------------------
 
 
+### addListener('callEnd', ...)
+
+```typescript
+addListener(eventName: 'callEnd', listenerFunc: CallEndEventListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| **`eventName`**    | <code>'callEnd'</code>                                                |
+| **`listenerFunc`** | <code><a href="#callendeventlistener">CallEndEventListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('callStart', ...)
+
+```typescript
+addListener(eventName: 'callStart', listenerFunc: CallStartEventListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                      |
+| ------------------ | ------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'callStart'</code>                                                  |
+| **`listenerFunc`** | <code><a href="#callstarteventlistener">CallStartEventListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('conversationUpdate', ...)
+
+```typescript
+addListener(eventName: 'conversationUpdate', listenerFunc: ConversationUpdateEventListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'conversationUpdate'</code>                                                           |
+| **`listenerFunc`** | <code><a href="#conversationupdateeventlistener">ConversationUpdateEventListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('error', ...)
+
+```typescript
+addListener(eventName: 'error', listenerFunc: ErrorEventListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code>'error'</code>                                              |
+| **`listenerFunc`** | <code><a href="#erroreventlistener">ErrorEventListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### addListener('speechUpdate', ...)
+
+```typescript
+addListener(eventName: 'speechUpdate', listenerFunc: SpeechUpdateEventListener) => Promise<PluginListenerHandle>
+```
+
+| Param              | Type                                                                            |
+| ------------------ | ------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'speechUpdate'</code>                                                     |
+| **`listenerFunc`** | <code><a href="#speechupdateeventlistener">SpeechUpdateEventListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -173,6 +271,69 @@ stop() => Promise<void>
 | Prop              | Type                |
 | ----------------- | ------------------- |
 | **`assistantId`** | <code>string</code> |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### ConversationUpdateEvent
+
+| Prop           | Type                                                                         |
+| -------------- | ---------------------------------------------------------------------------- |
+| **`messages`** | <code>{ content: string; role: 'user' \| 'assistant' \| 'system'; }[]</code> |
+
+
+#### ErrorEvent
+
+Events providing information related to errors in scripts or in files.
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`colno`**    | <code>number</code> |
+| **`error`**    | <code>any</code>    |
+| **`filename`** | <code>string</code> |
+| **`lineno`**   | <code>number</code> |
+| **`message`**  | <code>string</code> |
+
+
+#### SpeechUpdateEvent
+
+| Prop         | Type                                | Description                        |
+| ------------ | ----------------------------------- | ---------------------------------- |
+| **`role`**   | <code>'user' \| 'assistant'</code>  | Only available on Android and iOS. |
+| **`status`** | <code>'stopped' \| 'started'</code> |                                    |
+
+
+### Type Aliases
+
+
+#### CallEndEventListener
+
+<code>(): void</code>
+
+
+#### CallStartEventListener
+
+<code>(): void</code>
+
+
+#### ConversationUpdateEventListener
+
+<code>(event: <a href="#conversationupdateevent">ConversationUpdateEvent</a>): void</code>
+
+
+#### ErrorEventListener
+
+<code>(error: <a href="#errorevent">ErrorEvent</a>): void</code>
+
+
+#### SpeechUpdateEventListener
+
+<code>(event: <a href="#speechupdateevent">SpeechUpdateEvent</a>): void</code>
 
 </docgen-api>
 
