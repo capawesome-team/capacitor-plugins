@@ -16,6 +16,16 @@ export interface ForegroundServicePlugin {
    */
   moveToForeground(): Promise<void>;
   /**
+   * Creates a notification channel. If you don't explicitly create a channel,
+   * then the plugin will create a default channel with the name "Default" and
+   * the description "Default".
+   * 
+   * Only available on Android.
+   * 
+   * @since 6.1.0
+   */
+  createNotificationChannel(options: CreateNotificationChannelOptions): Promise<void>;
+  /**
    * Starts the foreground service.
    *
    * Only available on Android.
@@ -84,6 +94,42 @@ export interface ForegroundServicePlugin {
    * @since 0.2.0
    */
   removeAllListeners(): Promise<void>;
+}
+
+export enum NotificationImportance {
+  DEFAULT = 3,
+  HIGH = 4,
+  LOW = 2,
+  MAX = 5,
+  MIN = 1,
+  NONE = 0,
+  UNSPECIFIED = -1000,
+}
+
+export interface CreateNotificationChannelOptions {
+  /**
+   * The channel name.
+   *
+   * @since 6.1.0
+   * @default "Default"
+   */
+  name?: string;
+
+  /**
+   * The channel description.
+   *
+   * @since 6.1.0
+   * @default "Default"
+   */
+  description?: string;
+
+  /**
+   * The channel importance.
+   *
+   * @since 6.1.0
+   * @default NotificationImportance.DEFAULT
+   */
+  importance?: NotificationImportance;
 }
 
 export interface StartForegroundServiceOptions {

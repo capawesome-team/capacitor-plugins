@@ -69,6 +69,7 @@ const stopForegroundService = async () => {
 <docgen-index>
 
 * [`moveToForeground()`](#movetoforeground)
+* [`createNotificationChannel(...)`](#createnotificationchannel)
 * [`startForegroundService(...)`](#startforegroundservice)
 * [`stopForegroundService()`](#stopforegroundservice)
 * [`checkPermissions()`](#checkpermissions)
@@ -79,6 +80,7 @@ const stopForegroundService = async () => {
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -101,6 +103,27 @@ permission is granted.
 Only available on Android.
 
 **Since:** 0.3.0
+
+--------------------
+
+
+### createNotificationChannel(...)
+
+```typescript
+createNotificationChannel(options: CreateNotificationChannelOptions) => Promise<void>
+```
+
+Creates a notification channel. If you don't explicitly create a channel,
+then the plugin will create a default channel with the name "Default" and
+the description "Default".
+
+Only available on Android.
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#createnotificationchanneloptions">CreateNotificationChannelOptions</a></code> |
+
+**Since:** 6.1.0
 
 --------------------
 
@@ -249,6 +272,15 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
+#### CreateNotificationChannelOptions
+
+| Prop              | Type                                                                      | Description              | Default                                     | Since |
+| ----------------- | ------------------------------------------------------------------------- | ------------------------ | ------------------------------------------- | ----- |
+| **`name`**        | <code>string</code>                                                       | The channel name.        | <code>"Default"</code>                      | 6.1.0 |
+| **`description`** | <code>string</code>                                                       | The channel description. | <code>"Default"</code>                      | 6.1.0 |
+| **`importance`**  | <code><a href="#notificationimportance">NotificationImportance</a></code> | The channel importance.  | <code>NotificationImportance.DEFAULT</code> | 6.1.0 |
+
+
 #### StartForegroundServiceOptions
 
 | Prop            | Type                              | Description                                                                                                                                                                                                     | Since |
@@ -307,6 +339,22 @@ Remove all listeners for this plugin.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
+
+
+### Enums
+
+
+#### NotificationImportance
+
+| Members           | Value              |
+| ----------------- | ------------------ |
+| **`DEFAULT`**     | <code>3</code>     |
+| **`HIGH`**        | <code>4</code>     |
+| **`LOW`**         | <code>2</code>     |
+| **`MAX`**         | <code>5</code>     |
+| **`MIN`**         | <code>1</code>     |
+| **`NONE`**        | <code>0</code>     |
+| **`UNSPECIFIED`** | <code>-1000</code> |
 
 </docgen-api>
 
