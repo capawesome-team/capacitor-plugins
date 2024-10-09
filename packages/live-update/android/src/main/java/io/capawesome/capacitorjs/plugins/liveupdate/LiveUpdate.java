@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Handler;
 import android.util.Base64;
@@ -32,11 +33,13 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -60,20 +63,18 @@ public class LiveUpdate {
 
     @NonNull
     private final LiveUpdateConfig config;
-
     private final String defaultWebAssetDir;
-
     @NonNull
     private final LiveUpdatePlugin plugin;
-
     @NonNull
     private final LiveUpdatePreferences preferences;
-
     @NonNull
     private final SharedPreferences.Editor webViewSettingsEditor;
-
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // Do NOT change this value!
     private final Handler rollbackHandler = new Handler();
+
+    @Nullable
+    private List<String> assetsList;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
@@ -89,6 +90,12 @@ public class LiveUpdate {
                 startRollbackTimer();
             }
             saveCurrentVersionCode();
+        }
+
+        try {
+            loadAssetsList();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -315,27 +322,32 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
     }
 
-    private File buildBundleDirectoryFor(@NonNull String bundle) {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundle);
-    }
-
-    private void catchAndIgnoreAnyException(@NonNull Runnable runnable) {
-        try {
-            runnable.run();
-        } catch (Exception exception) {
-            // No-op
-        }
+    private File buildBundleDirectoryFor(@NonNull String bundleId) {
+        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private void copyCurrentBundleFile(@NonNull String href, @NonNull File directory) throws IOException {
-        File currentBundleDirectory = buildBundleDirectoryFor(getCurrentBundleId());
-        // Create the source and destination files
-        File source = new File(currentBundleDirectory, href);
-        File destination = new File(directory, href);
-        // Create all destination directories if they do not exist
-        destination.getParentFile().mkdirs();
-        // Copy the file
-        Okio.buffer(Okio.source(source)).readAll(Okio.buffer(Okio.sink(destination)));
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId.equals(defaultWebAssetDir)) {
+            // Create the source input stream
+            AssetManager assets = plugin.getContext().getAssets();
+            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
+            // Create the destination file
+            File destination = new File(directory, href);
+            // Create all destination directories if they do not exist
+            destination.getParentFile().mkdirs();
+            // Copy the file
+            Okio.buffer(Okio.source(inputStream)).readAll(Okio.buffer(Okio.sink(destination)));
+        } else {
+            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
+            // Create the source and destination files
+            File source = new File(currentBundleDirectory, href);
+            File destination = new File(directory, href);
+            // Create all destination directories if they do not exist
+            destination.getParentFile().mkdirs();
+            // Copy the file
+            Okio.buffer(Okio.source(source)).readAll(Okio.buffer(Okio.sink(destination)));
+        }
     }
 
     private void createBundlesDirectory() {
@@ -418,62 +430,67 @@ public class LiveUpdate {
         @NonNull EmptyCallback callback,
         int index
     ) {
-        if (index < manifest.size()) {
-            ManifestItem item = manifest.get(index);
-            String id = item.getId();
-            String checksum = item.getChecksum();
-            String href = item.getHref();
-            String signature = item.getSignature();
-            if (hasCurrentBundleFile(href, checksum)) {
-                try {
-                    copyCurrentBundleFile(href, directory);
-                    downloadBundleOfTypeManifestRecursively(bundleId, manifest, directory, callback, index + 1);
-                } catch (Exception exception) {
-                    callback.error(exception);
-                }
-            } else {
-                String url = "https://api.cloud.capawesome.io/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/files/" + id;
-                File file = new File(directory, href);
-                downloadFile(url, file, new EmptyCallback() {
-                    @Override
-                    public void success() {
-                        try {
-                            // Verify the signature
-                            String publicKey = config.getPublicKey();
-                            if (publicKey != null) {
-                                if (signature == null) {
-                                    throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
-                                }
-                                // Verify the signature
-                                boolean verified = verifySignatureForFile(file, signature, publicKey);
-                                if (!verified) {
-                                    throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
-                                }
-                            }
-                            // Verify the checksum
-                            else if (checksum != null) {
-                                // Calculate the checksum
-                                boolean verified = verifyChecksumForFile(file, checksum);
-                                if (!verified) {
-                                    throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
-                                }
-                            }
-
-                            // Download the next file
-                            downloadBundleOfTypeManifestRecursively(bundleId, manifest, directory, callback, index + 1);
-                        } catch (Exception exception) {
-                            callback.error(exception);
-                        }
-                    }
-
-                    @Override
-                    public void error(Exception exception) {
+        try {
+            if (index < manifest.size()) {
+                ManifestItem item = manifest.get(index);
+                String id = item.getId();
+                String checksum = item.getChecksum();
+                String href = item.getHref();
+                String signature = item.getSignature();
+                if (hasCurrentBundleFile(href, checksum)) {
+                    try {
+                        copyCurrentBundleFile(href, directory);
+                        downloadBundleOfTypeManifestRecursively(bundleId, manifest, directory, callback, index + 1);
+                    } catch (Exception exception) {
                         callback.error(exception);
                     }
-                });
+                } else {
+                    String url = "https://wrote-travelers-marco-consumption.trycloudflare.com/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/files/" + id + "/download";
+                    File file = new File(directory, href);
+                    file.getParentFile().mkdirs();
+                    downloadFile(url, file, new EmptyCallback() {
+                        @Override
+                        public void success() {
+                            try {
+                                // Verify the signature
+                                String publicKey = config.getPublicKey();
+                                if (publicKey != null) {
+                                    if (signature == null) {
+                                        throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
+                                    }
+                                    // Verify the signature
+                                    boolean verified = verifySignatureForFile(file, signature, publicKey);
+                                    if (!verified) {
+                                        throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+                                    }
+                                }
+                                // Verify the checksum
+                                else if (checksum != null) {
+                                    // Calculate the checksum
+                                    boolean verified = verifyChecksumForFile(file, checksum);
+                                    if (!verified) {
+                                        throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
+                                    }
+                                }
+
+                                // Download the next file
+                                downloadBundleOfTypeManifestRecursively(bundleId, manifest, directory, callback, index + 1);
+                            } catch (Exception exception) {
+                                callback.error(exception);
+                            }
+                        }
+
+                        @Override
+                        public void error(Exception exception) {
+                            callback.error(exception);
+                        }
+                    });
+                }
+            } else {
+                callback.success();
             }
-        } else {
-            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
         }
     }
 
@@ -492,7 +509,11 @@ public class LiveUpdate {
                 @Override
                 public void error(Exception exception) {
                     // Delete the temporary file
-                    catchAndIgnoreAnyException(() -> deleteFileIfExists(file));
+                    try {
+                        deleteFileIfExists(file);
+                    } catch (Exception exception1) {
+                        // No-op
+                    }
                     // Throw error if the exception is a timeout
                     if (exception instanceof java.net.SocketTimeoutException) {
                         callback.error(new Exception(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
@@ -598,7 +619,7 @@ public class LiveUpdate {
         throws PackageManager.NameNotFoundException {
         String host = "api.cloud.capawesome.io";
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            host = "api.cloud.capawesome.eu";
+            host = "wrote-travelers-marco-consumption.trycloudflare.com";
         }
         HttpUrl url = new HttpUrl.Builder()
             .scheme("https")
@@ -638,20 +659,25 @@ public class LiveUpdate {
                     }
 
                     @Override
-                    public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) throws IOException {
-                        ResponseBody responseBody = response.body();
-                        if (response.isSuccessful()) {
-                            String responseBodyString = responseBody.string();
-                            JSONObject responseJson = null;
-                            try {
-                                responseJson = new JSONObject(responseBodyString);
-                            } catch (JSONException exception) {
+                    public void onResponse(@NonNull okhttp3.Call call, @NonNull okhttp3.Response response) {
+                        try {
+                            ResponseBody responseBody = response.body();
+                            if (response.isSuccessful()) {
+                                String responseBodyString = responseBody.string();
+                                JSONObject responseJson = null;
+                                try {
+                                    responseJson = new JSONObject(responseBodyString);
+                                } catch (JSONException exception) {
+                                    callback.error(exception);
+                                }
+                                GetLatestBundleResponse getLatestBundleResponse = new GetLatestBundleResponse(responseJson);
+                                callback.success(getLatestBundleResponse);
+                            } else {
+                                Exception exception = new Exception(responseBody.string());
+                                Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
                                 callback.error(exception);
                             }
-                            GetLatestBundleResponse getLatestBundleResponse = new GetLatestBundleResponse(responseJson);
-                            callback.success(getLatestBundleResponse);
-                        } else {
-                            Exception exception = new Exception(responseBody.string());
+                        } catch (Exception exception) {
                             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
                             callback.error(exception);
                         }
@@ -698,6 +724,27 @@ public class LiveUpdate {
             checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
         }
         return checksum.toString();
+    }
+
+    private String getChecksumForInputStreamAsString(@NonNull InputStream inputStream) throws Exception {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            BufferedSource source = Okio.buffer(Okio.source(inputStream));
+            Buffer buffer = new Buffer();
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+                digest.update(buffer.readByteArray());
+            }
+            source.close();
+            byte[] checksumBytes = digest.digest();
+            StringBuilder checksum = new StringBuilder();
+            for (byte checksumByte : checksumBytes) {
+                checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
+            }
+            return checksum.toString();
+        } catch (IOException exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
+        }
     }
 
     @Nullable
@@ -776,18 +823,48 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
-    private boolean hasCurrentBundleFile(@NonNull String href, @NonNull String expectedChecksum) {
-        File currentBundleDirectory = buildBundleDirectoryFor(getCurrentBundleId());
-        File file = new File(currentBundleDirectory, href);
-        boolean fileExists = file.exists();
-        if (!fileExists) {
-            return false;
+    private void loadAssetsList() throws Exception {
+        long startTime = System.currentTimeMillis();
+        List<String> assetsList = loadAssetsListRecursively("");
+        long difference = System.currentTimeMillis() - startTime;
+        Logger.debug(LiveUpdatePlugin.TAG, "Loaded assets list in " + difference + "ms.");
+        this.assetsList = assetsList;
+    }
+
+    private List<String> loadAssetsListRecursively(@NonNull String path) throws Exception {
+        List<String> assetsList = new ArrayList<>();
+        String[] assets = plugin.getContext().getAssets().list(path);
+        for (String asset : assets) {
+            String assetPath = path.length() == 0 ? asset : path + "/" + asset;
+            if (asset.contains(".")) {
+                assetsList.add(assetPath);
+                AssetManager assetManager = plugin.getContext().getAssets();
+                InputStream inputStream = assetManager.open(assetPath);
+                String checksum = getChecksumForInputStreamAsString(inputStream);
+            } else {
+                assetsList.addAll(loadAssetsListRecursively(assetPath));
+            }
         }
-        try {
-            String receivedChecksum = getChecksumForFileAsString(file);
-            return expectedChecksum.equals(receivedChecksum);
-        } catch (Exception exception) {
-            return false;
+        return assetsList;
+    }
+
+    private boolean hasCurrentBundleFile(@NonNull String href, @NonNull String expectedChecksum) {
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId.equals(defaultWebAssetDir)) {
+            return assetsList.contains(defaultWebAssetDir + "/" + href);
+        } else {
+            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
+            File file = new File(currentBundleDirectory, href);
+            boolean fileExists = file.exists();
+            if (!fileExists) {
+                return false;
+            }
+            try {
+                String receivedChecksum = getChecksumForFileAsString(file);
+                return expectedChecksum.equals(receivedChecksum);
+            } catch (Exception exception) {
+                return false;
+            }
         }
     }
 

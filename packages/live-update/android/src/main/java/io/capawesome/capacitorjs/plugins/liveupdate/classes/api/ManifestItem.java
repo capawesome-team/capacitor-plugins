@@ -21,8 +21,11 @@ public class ManifestItem {
         this.id = json.optString("id");
         this.href = json.optString("href");
         this.checksum = json.optString("checksum");
-        // TODO: "null"?
-        this.signature = json.optString("signature", null);
+        if (json.isNull("signature")) {
+            this.signature = null;
+        } else {
+            this.signature = json.optString("signature");
+        }
         this.sizeInBytes = json.optString("sizeInBytes");
     }
 

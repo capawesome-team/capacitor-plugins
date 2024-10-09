@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetLatestBundleResponse {
@@ -34,6 +35,7 @@ public class GetLatestBundleResponse {
         if (manifestJson == null) {
             this.manifest = null;
         } else {
+            manifest = new ArrayList<>();
             for (int i = 0; i < manifestJson.length(); i++) {
                 JSONObject manifestItemJson = manifestJson.optJSONObject(i);
                 if (manifestItemJson != null) {
