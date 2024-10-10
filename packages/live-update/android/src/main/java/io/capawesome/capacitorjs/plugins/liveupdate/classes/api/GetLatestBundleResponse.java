@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes.api;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
@@ -8,70 +9,31 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+
 public class GetLatestBundleResponse {
 
-    private String bundleId;
+    @NonNull
+    private ArtifactType artifactType;
 
-    @Nullable
-    private String checksum;
-
-    @Nullable
-    private List<ManifestItem> manifest;
-
-    @Nullable
-    private String signature;
-
-    private String url;
+    @NonNull
+    private String id;
 
     public GetLatestBundleResponse(JSONObject responseJson) {
-        this.bundleId = responseJson.optString("bundleId");
-        String checksum = responseJson.optString("checksum", "null");
-        if (checksum.equals("null")) {
-            this.checksum = null;
+        String artifactType = responseJson.optString("artifactType");
+        if (artifactType.equals("manifest")) {
+            this.artifactType = ArtifactType.MANIFEST;
         } else {
-            this.checksum = checksum;
+            this.artifactType = ArtifactType.ZIP;
         }
-        JSONArray manifestJson = responseJson.optJSONArray("manifest");
-        if (manifestJson == null) {
-            this.manifest = null;
-        } else {
-            manifest = new ArrayList<>();
-            for (int i = 0; i < manifestJson.length(); i++) {
-                JSONObject manifestItemJson = manifestJson.optJSONObject(i);
-                if (manifestItemJson != null) {
-                    manifest.add(new ManifestItem(manifestItemJson));
-                }
-            }
-        }
-        String signature = responseJson.optString("signature", "null");
-        if (signature.equals("null")) {
-            this.signature = null;
-        } else {
-            this.signature = signature;
-        }
-        this.url = responseJson.optString("url");
+        this.id = responseJson.optString("id");
     }
 
-    public String getBundleId() {
-        return bundleId;
+    public String getId() {
+        return id;
     }
 
-    @Nullable
-    public String getChecksum() {
-        return checksum;
-    }
-
-    @Nullable
-    public List<ManifestItem> getManifest() {
-        return manifest;
-    }
-
-    @Nullable
-    public String getSignature() {
-        return signature;
-    }
-
-    public String getUrl() {
-        return url;
+    public ArtifactType getArtifactType() {
+        return artifactType;
     }
 }
