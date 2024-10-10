@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.4.2
+
+### Patch Changes
+
+- [`de9144e`](https://github.com/capawesome-team/capacitor-plugins/commit/de9144eee298e9e80535ebd30086391aad47fc68): fix(android): return `null` if no channel is set
+
 ## 6.4.1
 
 ### Patch Changes
