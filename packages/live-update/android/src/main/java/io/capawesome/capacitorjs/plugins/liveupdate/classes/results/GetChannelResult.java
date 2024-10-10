@@ -15,7 +15,7 @@ public class GetChannelResult implements Result {
 
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("channel", channel);
+        result.put("channel", channel == null ? JSONObject.NULL : channel);
         return result;
     }
 }
