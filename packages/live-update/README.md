@@ -308,7 +308,7 @@ Only available on Android and iOS.
 getBundles() => Promise<GetBundlesResult>
 ```
 
-Get all available bundle identifiers.
+Get all identifiers of bundles that have been downloaded.
 
 Only available on Android and iOS.
 
