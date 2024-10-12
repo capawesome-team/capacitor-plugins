@@ -17,6 +17,9 @@ public class GetLatestBundleResponse {
     private ArtifactType artifactType;
 
     @NonNull
+    private String downloadUrl;
+
+    @NonNull
     private String id;
 
     public GetLatestBundleResponse(JSONObject responseJson) {
@@ -26,14 +29,19 @@ public class GetLatestBundleResponse {
         } else {
             this.artifactType = ArtifactType.ZIP;
         }
+        this.downloadUrl = responseJson.optString("downloadUrl");
         this.id = responseJson.optString("id");
-    }
-
-    public String getId() {
-        return id;
     }
 
     public ArtifactType getArtifactType() {
         return artifactType;
+    }
+
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    public String getId() {
+        return id;
     }
 }

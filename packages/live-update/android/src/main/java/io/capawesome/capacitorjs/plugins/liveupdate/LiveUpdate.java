@@ -83,6 +83,7 @@ public class LiveUpdate {
     private final SharedPreferences.Editor webViewSettingsEditor;
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // Do NOT change this value!
     private final Handler rollbackHandler = new Handler();
+    private final String manifestFileName = "capawesome-live-update-manifest.json";
 
     @Nullable
     private List<String> assetsList;
@@ -142,7 +143,7 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        // downloadBundleOfTypeZip(bundleId, checksum, null, url, callback);
+        downloadBundleOfTypeZip(bundleId, url, checksum);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
@@ -239,6 +240,7 @@ public class LiveUpdate {
         // Fetch the latest bundle
         GetLatestBundleResponse result = fetchLatestBundle();
         ArtifactType artifactType = result.getArtifactType();
+        String downloadUrl = result.getDownloadUrl();
         String latestBundleId = result.getId();
         // Check if the bundle already exists
         if (hasBundle(latestBundleId)) {
@@ -255,7 +257,7 @@ public class LiveUpdate {
         }
         // Download the bundle
         if (artifactType == ArtifactType.ZIP) {
-            downloadBundleOfTypeZip(latestBundleId);
+            downloadBundleOfTypeZip(latestBundleId, downloadUrl, null);
         } else {
             downloadBundleOfTypeManifest(latestBundleId);
         }
@@ -426,7 +428,7 @@ public class LiveUpdate {
 
         File file = new File(directory, href);
         file.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, file);
+        downloadAndVerifyFile(url, file, null);
         return file;
     }
 
@@ -434,7 +436,7 @@ public class LiveUpdate {
         // Create a temporary directory
         File directory = createTemporaryDirectory();
         // Download the latest manifest
-        File latestManifestFile = downloadBundleFile(bundleId, "capawesome-live-update-manifest.json", directory);
+        File latestManifestFile = downloadBundleFile(bundleId, manifestFileName, directory);
         Manifest latestManifest = loadManifest(latestManifestFile);
         // Load the current manifest
         Manifest currentManifest = loadCurrentManifest();
@@ -455,24 +457,23 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, directory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId) throws Exception {
-        String downloadUrl = "https://" + host + "/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/download";
+    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String url, @Nullable String checksum) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file);
+        downloadAndVerifyFile(url, file, checksum);
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file
         file.delete();
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File destinationFile) throws Exception {
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
         Response response = httpClient.execute(url);
         if (response.isSuccessful()) {
             ResponseBody responseBody = response.body();
-            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, destinationFile);
+            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
             // Verify the file
-            String checksum = LiveUpdateHttpClient.getChecksumFromResponse(response);
+            checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
             String publicKey = config.getPublicKey();
             if (publicKey != null) {
                 // Verify the signature
@@ -481,7 +482,7 @@ public class LiveUpdate {
                     throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
                 }
                 // Verify the signature
-                boolean verified = verifySignatureForFile(destinationFile, signature, publicKey);
+                boolean verified = verifySignatureForFile(file, signature, publicKey);
                 if (!verified) {
                     throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
                 }
@@ -489,7 +490,7 @@ public class LiveUpdate {
             // Verify the checksum
             else if (checksum != null) {
                 // Calculate the checksum
-                boolean verified = verifyChecksumForFile(destinationFile, checksum);
+                boolean verified = verifyChecksumForFile(file, checksum);
                 if (!verified) {
                     throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
                 }
@@ -678,7 +679,7 @@ public class LiveUpdate {
 
     private Manifest loadCurrentManifest() throws Exception {
         AssetManager assets = plugin.getContext().getAssets();
-        InputStream inputStream = assets.open(defaultWebAssetDir + "/" + "capawesome-live-update-manifest.json");
+        InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
         BufferedSource source = Okio.buffer(Okio.source(inputStream));
         return loadManifest(source);
     }
