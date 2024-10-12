@@ -37,7 +37,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
@@ -47,21 +46,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import net.lingala.zip4j.ZipFile;
-import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
-import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LiveUpdate {
@@ -94,7 +86,7 @@ public class LiveUpdate {
         this.config = config;
         this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "api.cloud.capawesome.eu";
+            this.host = "gathering-through-diagnosis-crossing.trycloudflare.com";
         } else {
             this.host = "api.cloud.capawesome.io";
         }
@@ -140,6 +132,7 @@ public class LiveUpdate {
 
         // Download the bundle
         downloadBundleOfTypeZip(bundleId, url, checksum);
+        callback.success();
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
@@ -189,7 +182,9 @@ public class LiveUpdate {
 
     public void ready() {
         Logger.debug(LiveUpdatePlugin.TAG, "App is ready.");
+        // Stop the rollback timer
         stopRollbackTimer();
+        // Delete unused bundles
         if (config.getAutoDeleteBundles()) {
             deleteUnusedBundles();
         }
@@ -235,6 +230,12 @@ public class LiveUpdate {
     public void sync(@NonNull NonEmptyCallback<Result> callback) throws Exception {
         // Fetch the latest bundle
         GetLatestBundleResponse result = fetchLatestBundle();
+        if (result == null) {
+            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+            SyncResult syncResult = new SyncResult(null);
+            callback.success(syncResult);
+            return;
+        }
         ArtifactType artifactType = result.getArtifactType();
         String downloadUrl = result.getDownloadUrl();
         String latestBundleId = result.getId();
@@ -431,8 +432,14 @@ public class LiveUpdate {
         // Load the current manifest
         Manifest currentManifest = loadCurrentManifest();
         // Compare the manifests
-        List<ManifestItem> itemsToCopy = Manifest.findDuplicateItems(latestManifest, currentManifest);
-        List<ManifestItem> itemsToDownload = Manifest.findMissingItems(latestManifest, currentManifest);
+        List<ManifestItem> itemsToCopy = new ArrayList<>();
+        List<ManifestItem> itemsToDownload = new ArrayList<>();
+        if (currentManifest == null) {
+            itemsToDownload.addAll(latestManifest.getItems());
+        } else {
+            itemsToCopy.addAll(Manifest.findDuplicateItems(latestManifest, currentManifest));
+            itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
+        }
         // Copy the files
         for (ManifestItem item : itemsToCopy) {
             String href = item.getHref();
@@ -500,7 +507,7 @@ public class LiveUpdate {
             JSONObject responseJson = new JSONObject(responseBodyString);
             return new GetLatestBundleResponse(responseJson);
         } else {
-            throw new Exception(response.message());
+            return null;
         }
     }
 
@@ -620,11 +627,17 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
+    @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         AssetManager assets = plugin.getContext().getAssets();
-        InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
-        BufferedSource source = Okio.buffer(Okio.source(inputStream));
-        return loadManifest(source);
+        Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+        if (manifestFileExists) {
+            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
+            BufferedSource source = Okio.buffer(Okio.source(inputStream));
+            return loadManifest(source);
+        } else {
+            return null;
+        }
     }
 
     private Manifest loadManifest(@NonNull BufferedSource source) throws Exception {
