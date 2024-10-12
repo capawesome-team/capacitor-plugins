@@ -88,10 +88,7 @@ public class LiveUpdate {
 
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // Do NOT change this value!
     private final Handler rollbackHandler = new Handler();
-    private final String manifestFileName = "capawesome-live-update-manifest.json";
-
-    @Nullable
-    private List<String> assetsList;
+    private final String manifestFileName = "capawesome-live-update-manifest.json"; // Do NOT change this value!
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
@@ -113,12 +110,6 @@ public class LiveUpdate {
                 startRollbackTimer();
             }
             saveCurrentVersionCode();
-        }
-
-        try {
-            loadAssetsList();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -402,12 +393,6 @@ public class LiveUpdate {
         }
     }
 
-    private void deleteFileIfExists(@NonNull File file) {
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
     private void deleteFileRecursively(@NonNull File file) {
         if (file.isDirectory()) {
             for (File child : file.listFiles()) {
@@ -579,27 +564,6 @@ public class LiveUpdate {
         return checksum.toString();
     }
 
-    private String getChecksumForInputStreamAsString(@NonNull InputStream inputStream) throws Exception {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            BufferedSource source = Okio.buffer(Okio.source(inputStream));
-            Buffer buffer = new Buffer();
-            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
-                digest.update(buffer.readByteArray());
-            }
-            source.close();
-            byte[] checksumBytes = digest.digest();
-            StringBuilder checksum = new StringBuilder();
-            for (byte checksumByte : checksumBytes) {
-                checksum.append(Integer.toString((checksumByte & 0xff) + 0x100, 16).substring(1));
-            }
-            return checksum.toString();
-        } catch (IOException exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
-        }
-    }
-
     @Nullable
     private String getChannel() {
         String channel = null;
@@ -676,14 +640,6 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
-    private void loadAssetsList() throws Exception {
-        long startTime = System.currentTimeMillis();
-        List<String> assetsList = loadAssetsListRecursively("");
-        long difference = System.currentTimeMillis() - startTime;
-        Logger.debug(LiveUpdatePlugin.TAG, "Loaded assets list in " + difference + "ms.");
-        this.assetsList = assetsList;
-    }
-
     private Manifest loadCurrentManifest() throws Exception {
         AssetManager assets = plugin.getContext().getAssets();
         InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
@@ -700,43 +656,6 @@ public class LiveUpdate {
     private Manifest loadManifest(@NonNull File file) throws Exception {
         BufferedSource source = Okio.buffer(Okio.source(file));
         return loadManifest(source);
-    }
-
-    private List<String> loadAssetsListRecursively(@NonNull String path) throws Exception {
-        List<String> assetsList = new ArrayList<>();
-        String[] assets = plugin.getContext().getAssets().list(path);
-        for (String asset : assets) {
-            String assetPath = path.length() == 0 ? asset : path + "/" + asset;
-            if (asset.contains(".")) {
-                assetsList.add(assetPath);
-                AssetManager assetManager = plugin.getContext().getAssets();
-                InputStream inputStream = assetManager.open(assetPath);
-                String checksum = getChecksumForInputStreamAsString(inputStream);
-            } else {
-                assetsList.addAll(loadAssetsListRecursively(assetPath));
-            }
-        }
-        return assetsList;
-    }
-
-    private boolean hasCurrentBundleFile(@NonNull String href, @NonNull String expectedChecksum) {
-        String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
-            return assetsList.contains(defaultWebAssetDir + "/" + href);
-        } else {
-            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
-            File file = new File(currentBundleDirectory, href);
-            boolean fileExists = file.exists();
-            if (!fileExists) {
-                return false;
-            }
-            try {
-                String receivedChecksum = getChecksumForFileAsString(file);
-                return expectedChecksum.equals(receivedChecksum);
-            } catch (Exception exception) {
-                return false;
-            }
-        }
     }
 
     private boolean isBundleInUse(@NonNull String bundleId) {
