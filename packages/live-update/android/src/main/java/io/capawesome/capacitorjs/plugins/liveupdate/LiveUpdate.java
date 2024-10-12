@@ -94,7 +94,7 @@ public class LiveUpdate {
         this.config = config;
         this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "paths-annotation-von-order.trycloudflare.com";
+            this.host = "api.cloud.capawesome.eu";
         } else {
             this.host = "api.cloud.capawesome.io";
         }
@@ -255,7 +255,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.ZIP) {
             downloadBundleOfTypeZip(latestBundleId, downloadUrl, null);
         } else {
-            downloadBundleOfTypeManifest(latestBundleId);
+            downloadBundleOfTypeManifest(latestBundleId, downloadUrl);
         }
         // Set the next bundle
         setNextBundle(latestBundleId);
@@ -263,9 +263,9 @@ public class LiveUpdate {
         callback.success(syncResult);
     }
 
-    private void addBundle(@NonNull String bundleId, @NonNull File file) throws Exception {
+    private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
         // Search folder with index.html file
-        File indexHtmlFile = searchIndexHtmlFile(file);
+        File indexHtmlFile = searchIndexHtmlFile(sourceDirectory);
         if (indexHtmlFile == null) {
             throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_INDEX_HTML_MISSING);
         }
@@ -282,9 +282,9 @@ public class LiveUpdate {
         addBundle(bundleId, directory);
     }
 
-    private void addBundleOfTypeZip(@NonNull String bundleId, @NonNull File file) throws Exception {
+    private void addBundleOfTypeZip(@NonNull String bundleId, @NonNull File zipFile) throws Exception {
         // Unzip the file to the bundle directory
-        File unzippedDirectory = unzipFile(file);
+        File unzippedDirectory = unzipFile(zipFile);
 
         // Add the bundle
         addBundle(bundleId, unzippedDirectory);
@@ -308,14 +308,14 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
-    private void copyCurrentBundleFile(@NonNull String href, @NonNull File directory) throws IOException {
+    private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId.equals(defaultWebAssetDir)) {
             // Create the source input stream
             AssetManager assets = plugin.getContext().getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
             // Create the destination file
-            File destination = new File(directory, href);
+            File destination = new File(destinationDirectory, href);
             // Create all destination directories if they do not exist
             destination.getParentFile().mkdirs();
             // Copy the file
@@ -324,7 +324,7 @@ public class LiveUpdate {
             File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
             // Create the source and destination files
             File source = new File(currentBundleDirectory, href);
-            File destination = new File(directory, href);
+            File destination = new File(destinationDirectory, href);
             // Create all destination directories if they do not exist
             destination.getParentFile().mkdirs();
             // Copy the file
@@ -411,24 +411,22 @@ public class LiveUpdate {
         }
     }
 
-    private File downloadBundleFile(@NonNull String bundleId, @NonNull String href, @NonNull File directory) throws Exception {
-        HttpUrl.Builder urlBuilder = HttpUrl
-            .parse("https://" + host + "/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/download")
-            .newBuilder();
+    private File downloadBundleFile(@NonNull String baseUrl, @NonNull String href, @NonNull File destinationDirectory) throws Exception {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
         urlBuilder.addQueryParameter("href", href);
         String url = urlBuilder.build().toString();
 
-        File file = new File(directory, href);
-        file.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, file, null);
-        return file;
+        File destinationFile = new File(destinationDirectory, href);
+        destinationFile.getParentFile().mkdirs();
+        downloadAndVerifyFile(url, destinationFile, null);
+        return destinationFile;
     }
 
-    private void downloadBundleOfTypeManifest(@NonNull String bundleId) throws Exception {
+    private void downloadBundleOfTypeManifest(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         // Create a temporary directory
-        File directory = createTemporaryDirectory();
+        File temporaryDirectory = createTemporaryDirectory();
         // Download the latest manifest
-        File latestManifestFile = downloadBundleFile(bundleId, manifestFileName, directory);
+        File latestManifestFile = downloadBundleFile(downloadUrl, manifestFileName, temporaryDirectory);
         Manifest latestManifest = loadManifest(latestManifestFile);
         // Load the current manifest
         Manifest currentManifest = loadCurrentManifest();
@@ -438,21 +436,22 @@ public class LiveUpdate {
         // Copy the files
         for (ManifestItem item : itemsToCopy) {
             String href = item.getHref();
-            copyCurrentBundleFile(href, directory);
+            copyCurrentBundleFile(href, temporaryDirectory);
         }
         // Download the files
         for (ManifestItem item : itemsToDownload) {
             String href = item.getHref();
-            downloadBundleFile(bundleId, href, directory);
+            downloadBundleFile(downloadUrl, href, temporaryDirectory);
         }
         // Add the bundle
-        addBundleOfTypeManifest(bundleId, directory);
+        addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String url, @Nullable String checksum) throws Exception {
+    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl, @Nullable String checksum)
+        throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(url, file, checksum);
+        downloadAndVerifyFile(downloadUrl, file, checksum);
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file
@@ -466,27 +465,8 @@ public class LiveUpdate {
             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
             // Verify the file
             checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
-            String publicKey = config.getPublicKey();
-            if (publicKey != null) {
-                // Verify the signature
-                String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
-                if (signature == null) {
-                    throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
-                }
-                // Verify the signature
-                boolean verified = verifySignatureForFile(file, signature, publicKey);
-                if (!verified) {
-                    throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
-                }
-            }
-            // Verify the checksum
-            else if (checksum != null) {
-                // Calculate the checksum
-                boolean verified = verifyChecksumForFile(file, checksum);
-                if (!verified) {
-                    throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
-                }
-            }
+            String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
+            verifyFile(file, checksum, signature);
         } else {
             throw new Exception(response.message());
         }
@@ -750,6 +730,29 @@ public class LiveUpdate {
     private boolean verifyChecksumForFile(@NonNull File file, @NonNull String checksum) throws Exception {
         String receivedChecksum = getChecksumForFileAsString(file);
         return checksum.equals(receivedChecksum);
+    }
+
+    private void verifyFile(@NonNull File file, @Nullable String checksum, @Nullable String signature) throws Exception {
+        String publicKey = config.getPublicKey();
+        if (publicKey != null) {
+            // Verify the signature
+            if (signature == null) {
+                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
+            }
+            // Verify the signature
+            boolean verified = verifySignatureForFile(file, signature, publicKey);
+            if (!verified) {
+                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+            }
+        }
+        // Verify the checksum
+        else if (checksum != null) {
+            // Calculate the checksum
+            boolean verified = verifyChecksumForFile(file, checksum);
+            if (!verified) {
+                throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
+            }
+        }
     }
 
     private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull String keyAsString) throws Exception {

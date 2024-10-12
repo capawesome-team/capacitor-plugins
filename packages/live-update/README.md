@@ -12,6 +12,7 @@ Capacitor plugin to update your app remotely in real-time.
 - 🔄 **Auto Update**: Automatically download and set the latest bundle for the app.
 - 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
+- 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - 🌐 **Open Source**: Licensed under the MIT License.
 
