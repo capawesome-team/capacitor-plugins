@@ -1,14 +1,16 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes;
 
 import androidx.annotation.NonNull;
-
 import org.json.JSONObject;
 
 public class ManifestItem {
+
     @NonNull
     private String checksum;
+
     @NonNull
     private String href;
+
     @NonNull
     private String sizeInBytes;
 

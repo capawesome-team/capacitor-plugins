@@ -2,10 +2,9 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import java.io.File;
 import java.io.IOException;
-
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -14,7 +13,6 @@ import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
-import java.util.concurrent.TimeUnit;
 
 public class LiveUpdateHttpClient {
 
@@ -28,10 +26,10 @@ public class LiveUpdateHttpClient {
     public Response execute(String url) throws IOException {
         int httpTimeout = config.getHttpTimeout();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .build();
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .build();
         Request request = new Request.Builder().url(url).build();
         return okHttpClient.newCall(request).execute();
     }

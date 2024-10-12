@@ -2,14 +2,11 @@ package io.capawesome.capacitorjs.plugins.liveupdate.classes.api;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class GetLatestBundleResponse {
 

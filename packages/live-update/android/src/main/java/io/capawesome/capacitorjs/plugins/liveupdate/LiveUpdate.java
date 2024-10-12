@@ -12,10 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
-
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
@@ -61,7 +60,6 @@ import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -70,17 +68,24 @@ public class LiveUpdate {
 
     @NonNull
     private final LiveUpdateConfig config;
+
     private final String defaultWebAssetDir;
+
     @NonNull
     private final String host;
+
     @NonNull
     private final LiveUpdateHttpClient httpClient;
+
     @NonNull
     private final LiveUpdatePlugin plugin;
+
     @NonNull
     private final LiveUpdatePreferences preferences;
+
     @NonNull
     private final SharedPreferences.Editor webViewSettingsEditor;
+
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // Do NOT change this value!
     private final Handler rollbackHandler = new Handler();
     private final String manifestFileName = "capawesome-live-update-manifest.json";
@@ -422,7 +427,9 @@ public class LiveUpdate {
     }
 
     private File downloadBundleFile(@NonNull String bundleId, @NonNull String href, @NonNull File directory) throws Exception {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse("https://" + host + "/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/download").newBuilder();
+        HttpUrl.Builder urlBuilder = HttpUrl
+            .parse("https://" + host + "/v1/apps/" + config.getAppId() + "/bundles/" + bundleId + "/download")
+            .newBuilder();
         urlBuilder.addQueryParameter("href", href);
         String url = urlBuilder.build().toString();
 

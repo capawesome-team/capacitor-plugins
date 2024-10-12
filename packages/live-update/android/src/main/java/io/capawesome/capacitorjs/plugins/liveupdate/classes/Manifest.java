@@ -1,12 +1,12 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Manifest {
+
     private List<ManifestItem> items = new ArrayList<>();
 
     public Manifest(JSONArray jsonArray) throws JSONException {
