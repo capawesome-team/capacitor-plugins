@@ -105,7 +105,7 @@ export interface LiveUpdatePlugin {
    */
   getBundle(): Promise<GetBundleResult>;
   /**
-   * Get all available bundle identifiers.
+   * Get all identifiers of bundles that have been downloaded.
    *
    * Only available on Android and iOS.
    *
