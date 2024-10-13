@@ -102,6 +102,7 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getCurrentBundle()` instead.
    */
   getBundle(): Promise<GetBundleResult>;
   /**
@@ -121,6 +122,14 @@ export interface LiveUpdatePlugin {
    */
   getChannel(): Promise<GetChannelResult>;
   /**
+   * Get the current bundle identifier.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.3.0
+   */
+  getCurrentBundle(): Promise<GetCurrentBundleResult>;
+  /**
    * Get the custom identifier of the app.
    *
    * Only available on Android and iOS.
@@ -136,6 +145,14 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
+  /**
+   * Get the next bundle identifier.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.3.0
+   */
+  getNextBundle(): Promise<GetNextBundleResult>;
   /**
    * Get the version code of the app.
    *
