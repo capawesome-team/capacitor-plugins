@@ -78,15 +78,15 @@ public class LiveUpdate {
     @NonNull
     private final SharedPreferences.Editor webViewSettingsEditor;
 
-    private final String bundlesDirectory = "_capacitor_live_update_bundles"; // Do NOT change this value!
+    private final String bundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
     private final Handler rollbackHandler = new Handler();
-    private final String manifestFileName = "capawesome-live-update-manifest.json"; // Do NOT change this value!
+    private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
         this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "gathering-through-diagnosis-crossing.trycloudflare.com";
+            this.host = "urban-filename-keen-rug.trycloudflare.com";
         } else {
             this.host = "api.cloud.capawesome.io";
         }
@@ -253,10 +253,10 @@ public class LiveUpdate {
             return;
         }
         // Download the bundle
-        if (artifactType == ArtifactType.ZIP) {
-            downloadBundleOfTypeZip(latestBundleId, downloadUrl, null);
-        } else {
+        if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(latestBundleId, downloadUrl);
+        } else {
+            downloadBundleOfTypeZip(latestBundleId, downloadUrl, null);
         }
         // Set the next bundle
         setNextBundle(latestBundleId);
@@ -286,9 +286,16 @@ public class LiveUpdate {
     private void addBundleOfTypeZip(@NonNull String bundleId, @NonNull File zipFile) throws Exception {
         // Unzip the file to the bundle directory
         File unzippedDirectory = unzipFile(zipFile);
-
         // Add the bundle
         addBundle(bundleId, unzippedDirectory);
+    }
+
+    private File buildBundlesDirectory() {
+        return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
+    }
+
+    private File buildBundleDirectoryFor(@NonNull String bundleId) {
+        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private File buildTemporaryDirectory() {
@@ -299,14 +306,6 @@ public class LiveUpdate {
     private File buildTemporaryZipFile() {
         String fileName = UUID.randomUUID().toString() + ".zip";
         return new File(plugin.getContext().getCacheDir(), fileName);
-    }
-
-    private File buildBundlesDirectory() {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
-    }
-
-    private File buildBundleDirectoryFor(@NonNull String bundleId) {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
@@ -412,6 +411,21 @@ public class LiveUpdate {
         }
     }
 
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
+        Response response = httpClient.execute(url);
+        if (response.isSuccessful()) {
+            ResponseBody responseBody = response.body();
+            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
+            // Verify the file
+            checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
+            String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
+            verifyFile(file, checksum, signature);
+        } else {
+            // TODO
+            throw new Exception(response.message());
+        }
+    }
+
     private File downloadBundleFile(@NonNull String baseUrl, @NonNull String href, @NonNull File destinationDirectory) throws Exception {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
         urlBuilder.addQueryParameter("href", href);
@@ -463,20 +477,6 @@ public class LiveUpdate {
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file
         file.delete();
-    }
-
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
-        Response response = httpClient.execute(url);
-        if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
-            // Verify the file
-            checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
-            String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
-            verifyFile(file, checksum, signature);
-        } else {
-            throw new Exception(response.message());
-        }
     }
 
     @Nullable
@@ -629,14 +629,25 @@ public class LiveUpdate {
 
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
-        AssetManager assets = plugin.getContext().getAssets();
-        Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
-        if (manifestFileExists) {
-            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
-            BufferedSource source = Okio.buffer(Okio.source(inputStream));
-            return loadManifest(source);
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId.equals(defaultWebAssetDir)) {
+            AssetManager assets = plugin.getContext().getAssets();
+            Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+            if (manifestFileExists) {
+                InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
+                BufferedSource source = Okio.buffer(Okio.source(inputStream));
+                return loadManifest(source);
+            } else {
+                return null;
+            }
         } else {
-            return null;
+            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
+            File manifestFile = new File(currentBundleDirectory, manifestFileName);
+            if (manifestFile.exists()) {
+                return loadManifest(manifestFile);
+            } else {
+                return null;
+            }
         }
     }
 

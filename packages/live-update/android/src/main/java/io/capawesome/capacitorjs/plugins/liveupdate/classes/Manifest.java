@@ -26,6 +26,7 @@ public class Manifest {
             for (ManifestItem item2 : manifest2.getItems()) {
                 if (item1.getChecksum().equals(item2.getChecksum())) {
                     duplicateItems.add(item1);
+                    break;
                 }
             }
         }

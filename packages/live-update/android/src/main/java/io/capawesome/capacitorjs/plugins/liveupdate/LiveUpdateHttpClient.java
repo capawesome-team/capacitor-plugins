@@ -19,21 +19,6 @@ public class LiveUpdateHttpClient {
     @NonNull
     private final LiveUpdateConfig config;
 
-    public LiveUpdateHttpClient(@NonNull LiveUpdateConfig config) {
-        this.config = config;
-    }
-
-    public Response execute(String url) throws IOException {
-        int httpTimeout = config.getHttpTimeout();
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-            .build();
-        Request request = new Request.Builder().url(url).build();
-        return okHttpClient.newCall(request).execute();
-    }
-
     @Nullable
     public static String getChecksumFromResponse(Response response) {
         String checksum = response.header("X-Checksum");
@@ -50,6 +35,21 @@ public class LiveUpdateHttpClient {
             return null;
         }
         return signature;
+    }
+
+    public LiveUpdateHttpClient(@NonNull LiveUpdateConfig config) {
+        this.config = config;
+    }
+
+    public Response execute(String url) throws IOException {
+        int httpTimeout = config.getHttpTimeout();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .build();
+        Request request = new Request.Builder().url(url).build();
+        return okHttpClient.newCall(request).execute();
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file) throws IOException {

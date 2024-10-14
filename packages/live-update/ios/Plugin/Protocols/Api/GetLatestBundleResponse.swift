@@ -1,6 +1,6 @@
-struct GetLatestBundleResponse: Codable {
-    var bundleId: String
-    var checksum: String?
-    var signature: String?
-    var url: String
+public struct GetLatestBundleResponse: Codable {
+    var artifactType: ArtifactType
+    var downloadUrl: String
+    var id: String
 }
+

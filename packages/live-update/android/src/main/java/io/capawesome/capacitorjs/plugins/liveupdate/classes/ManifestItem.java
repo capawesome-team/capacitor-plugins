@@ -12,12 +12,12 @@ public class ManifestItem {
     private String href;
 
     @NonNull
-    private String sizeInBytes;
+    private int sizeInBytes;
 
     public ManifestItem(JSONObject json) {
         this.href = json.optString("href");
         this.checksum = json.optString("checksum");
-        this.sizeInBytes = json.optString("sizeInBytes");
+        this.sizeInBytes = json.optInt("sizeInBytes");
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public class ManifestItem {
     }
 
     @NonNull
-    public String getSizeInBytes() {
+    public int getSizeInBytes() {
         return sizeInBytes;
     }
 }
