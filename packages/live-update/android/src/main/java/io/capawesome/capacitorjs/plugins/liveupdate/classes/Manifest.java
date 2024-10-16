@@ -22,31 +22,35 @@ public class Manifest {
 
     public static List<ManifestItem> findDuplicateItems(Manifest manifest1, Manifest manifest2) {
         List<ManifestItem> duplicateItems = new ArrayList<>();
-        for (ManifestItem item1 : manifest1.getItems()) {
-            for (ManifestItem item2 : manifest2.getItems()) {
-                if (item1.getChecksum().equals(item2.getChecksum())) {
-                    duplicateItems.add(item1);
-                    break;
-                }
+        Set<String> checksums = new HashSet<>();
+        
+        for (ManifestItem item : manifest2.getItems()) {
+            checksums.add(item.getChecksum());
+        }
+        
+        for (ManifestItem item : manifest1.getItems()) {
+            if (checksums.contains(item.getChecksum())) {
+                duplicateItems.add(item);
             }
         }
+        
         return duplicateItems;
     }
 
     public static List<ManifestItem> findMissingItems(Manifest manifest1, Manifest manifest2) {
         List<ManifestItem> missingItems = new ArrayList<>();
-        for (ManifestItem item1 : manifest1.getItems()) {
-            boolean found = false;
-            for (ManifestItem item2 : manifest2.getItems()) {
-                if (item1.getChecksum().equals(item2.getChecksum())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                missingItems.add(item1);
+        Set<String> checksums = new HashSet<>();
+        
+        for (ManifestItem item : manifest2.getItems()) {
+            checksums.add(item.getChecksum());
+        }
+        
+        for (ManifestItem item : manifest1.getItems()) {
+            if (!checksums.contains(item.getChecksum())) {
+                missingItems.add(item);
             }
         }
+        
         return missingItems;
     }
 }
