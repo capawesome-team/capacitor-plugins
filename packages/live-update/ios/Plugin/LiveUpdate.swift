@@ -24,7 +24,7 @@ import CommonCrypto
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
         if (config.location != nil) && config.location == "eu" {
-            self.host = "reaches-shield-forms-village.trycloudflare.com"
+            self.host = "highs-virtually-bridges-neon.trycloudflare.com"
         } else {
             self.host = "api.cloud.capawesome.io"
         }
@@ -260,6 +260,12 @@ import CommonCrypto
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
+    private func copyCurrentBundleFiles(hrefs: [String], toDirectory: URL) throws {
+        for href in hrefs {
+            try copyCurrentBundleFile(href: href, toDirectory: toDirectory)
+        }
+    }
+
     private func createBundlesDirectory() {
         let bundlesDirectoryUrl = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         let exists = FileManager.default.fileExists(atPath: bundlesDirectoryUrl.path)
@@ -333,11 +339,10 @@ import CommonCrypto
         return fileURL
     }
 
-    private func downloadBundleFiles(itemsToDownload: [ManifestItem], url: String, directory: URL) async throws {
+    private func downloadBundleFiles(url: String, hrefs: [String], directory: URL) async throws {
         try await withThrowingTaskGroup(of: Void.self) { group in
-            for item in itemsToDownload {
+            for href in hrefs {
                 group.addTask {
-                    let href = item.href
                     _ = try await self.downloadBundleFile(url: url, href: href, directory: directory)
                 }
             }
@@ -364,12 +369,9 @@ import CommonCrypto
             itemsToDownload.append(contentsOf: latestManifest.items)
         }
         // Copy the files
-        for item in itemsToCopy {
-            let href = item.href
-            try copyCurrentBundleFile(href: href, toDirectory: temporaryDirectory)
-        }
+        try self.copyCurrentBundleFiles(hrefs: itemsToCopy.map { $0.href }, toDirectory: temporaryDirectory)
         // Download the files
-        try await downloadBundleFiles(itemsToDownload: itemsToDownload, url: url, directory: temporaryDirectory)
+        try await self.downloadBundleFiles(url: url, hrefs: itemsToDownload.map { $0.href }, directory: temporaryDirectory)
         // Add the bundle
         try addBundle(bundleId: bundleId, directory: temporaryDirectory)
     }
