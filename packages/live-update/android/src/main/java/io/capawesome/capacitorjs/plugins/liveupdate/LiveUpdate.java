@@ -46,6 +46,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+
 import net.lingala.zip4j.ZipFile;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -86,7 +88,7 @@ public class LiveUpdate {
         this.config = config;
         this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "urban-filename-keen-rug.trycloudflare.com";
+            this.host = "highs-virtually-bridges-neon.trycloudflare.com";
         } else {
             this.host = "api.cloud.capawesome.io";
         }
@@ -332,6 +334,12 @@ public class LiveUpdate {
         }
     }
 
+    private void copyCurrentBundleFiles(@NonNull List<String> hrefs, @NonNull File destinationDirectory) throws IOException {
+        for (String href : hrefs) {
+            copyCurrentBundleFile(href, destinationDirectory);
+        }
+    }
+
     private void copyFile(File input, File output) throws IOException {
         FileInputStream in = new FileInputStream(input);
         FileOutputStream out = new FileOutputStream(output);
@@ -386,9 +394,8 @@ public class LiveUpdate {
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         deleteFileRecursively(bundleDirectory);
         // Reset the next bundle if it is the deleted bundle
-        String currentBundleId = getCurrentBundleId();
         String nextBundleId = getNextBundleId();
-        if (bundleId.equals(currentBundleId) && bundleId.equals(nextBundleId)) {
+        if (bundleId.equals(nextBundleId)) {
             setNextCapacitorServerPathToDefaultWebAssetDir();
         }
     }
@@ -437,6 +444,50 @@ public class LiveUpdate {
         return destinationFile;
     }
 
+    private void downloadBundleFiles(@NonNull String baseUrl, @NonNull List<String> hrefs, @NonNull File destinationDirectory) throws Exception {
+        // Limit the number of threads to twice the number of processors
+        int maxThreads = Runtime.getRuntime().availableProcessors() * 2;
+        List<Thread> threads = new ArrayList<>();
+        AtomicReference<Exception> exceptionReference = new AtomicReference<>();
+        for (String href : hrefs) {
+            // Wait until a thread is available
+            while (threads.size() >= maxThreads) {
+                for (Thread thread : threads) {
+                    if (!thread.isAlive()) {
+                        threads.remove(thread);
+                        break;
+                    }
+                }
+                // Wait a bit before checking again
+                Thread.sleep(10);
+            }
+            // Stop if an exception occurred
+            if (exceptionReference.get() != null) {
+                break;
+            }
+            // Start a new thread
+            Thread thread = new Thread(() -> {
+                try {
+                    downloadBundleFile(baseUrl, href, destinationDirectory);
+                } catch (Exception exception) {
+                    exceptionReference.set(exception);
+                    Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + href, exception);
+                }
+            });
+            threads.add(thread);
+            thread.start();
+        }
+        // Wait for all threads to finish
+        for (Thread thread : threads) {
+            thread.join();
+        }
+        // Throw the exception if one occurred
+        Exception exception = exceptionReference.get();
+        if (exception != null) {
+            throw exception;
+        }
+    }
+
     private void downloadBundleOfTypeManifest(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         // Create a temporary directory
         File temporaryDirectory = createTemporaryDirectory();
@@ -455,15 +506,17 @@ public class LiveUpdate {
             itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
         }
         // Copy the files
+        List<String> hrefsToCopy = new ArrayList<>();
         for (ManifestItem item : itemsToCopy) {
-            String href = item.getHref();
-            copyCurrentBundleFile(href, temporaryDirectory);
+            hrefsToCopy.add(item.getHref());
         }
+        copyCurrentBundleFiles(hrefsToCopy, temporaryDirectory);
         // Download the files
+        List<String> hrefsToDownload = new ArrayList<>();
         for (ManifestItem item : itemsToDownload) {
-            String href = item.getHref();
-            downloadBundleFile(downloadUrl, href, temporaryDirectory);
+            hrefsToDownload.add(item.getHref());
         }
+        downloadBundleFiles(downloadUrl, hrefsToDownload, temporaryDirectory);
         // Add the bundle
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
