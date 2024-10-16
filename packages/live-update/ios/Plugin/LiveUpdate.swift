@@ -24,7 +24,7 @@ import CommonCrypto
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
         if (config.location != nil) && config.location == "eu" {
-            self.host = "urban-filename-keen-rug.trycloudflare.com"
+            self.host = "reaches-shield-forms-village.trycloudflare.com"
         } else {
             self.host = "api.cloud.capawesome.io"
         }
@@ -245,19 +245,19 @@ import CommonCrypto
         
         let destination = toDirectory.appendingPathComponent(href)
         let parentDirectory = destination.deletingLastPathComponent()
-        if !FileManager.default.fileExists(atPath: parentDirectory.path) {
-            try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
-        }
+        try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
         
+        let sourceURL: URL
         if currentBundleId == defaultWebAssetDir {
             guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
                 return
             }
-            try FileManager.default.copyItem(at: file, to: destination)
+            sourceURL = file
         } else {
-            let file = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
-            try FileManager.default.copyItem(at: file, to: destination)
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
         }
+        
+        try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
     private func createBundlesDirectory() {
@@ -283,9 +283,8 @@ import CommonCrypto
         let path = buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.removeItem(atPath: path)
         // Reset the next bundle if it is the deleted bundle
-        let currentBundleId = getCurrentBundleId()
         let nextBundleId = getNextBundleId()
-        if bundleId == currentBundleId && bundleId == nextBundleId {
+        if bundleId == nextBundleId {
             setNextCapacitorServerPathToDefaultWebAssetDir()
         }
     }
@@ -330,8 +329,21 @@ import CommonCrypto
         parameters["href"] = href
         var urlComponents = URLComponents(string: url)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
-        let response = try await self.httpClient.download(url: urlComponents.asURL(), destination: destination)
+        _ = try await self.httpClient.download(url: urlComponents.asURL(), destination: destination)
         return fileURL
+    }
+
+    private func downloadBundleFiles(itemsToDownload: [ManifestItem], url: String, directory: URL) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for item in itemsToDownload {
+                group.addTask {
+                    let href = item.href
+                    _ = try await self.downloadBundleFile(url: url, href: href, directory: directory)
+                }
+            }
+            
+            try await group.waitForAll()
+        }
     }
     
     private func downloadBundleOfTypeManifest(bundleId: String, url: String) async throws {
@@ -357,10 +369,7 @@ import CommonCrypto
             try copyCurrentBundleFile(href: href, toDirectory: temporaryDirectory)
         }
         // Download the files
-        for item in itemsToDownload {
-            let href = item.href
-            try await downloadBundleFile(url: url, href: href, directory: temporaryDirectory)
-        }
+        try await downloadBundleFiles(itemsToDownload: itemsToDownload, url: url, directory: temporaryDirectory)
         // Add the bundle
         try addBundle(bundleId: bundleId, directory: temporaryDirectory)
     }
@@ -609,7 +618,7 @@ import CommonCrypto
 
     private func unzipFile(zipFile: URL) -> URL {
         let destinationDirectory = zipFile.deletingPathExtension()
-        SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path) // TODO: move to background thread
+        SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
         return destinationDirectory
     }
     
