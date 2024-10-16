@@ -3,4 +3,3 @@ public struct GetLatestBundleResponse: Codable {
     var downloadUrl: String
     var id: String
 }
-

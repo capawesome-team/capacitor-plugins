@@ -7,7 +7,7 @@ import Capacitor
     init(items: [ManifestItem]) {
         self.items = items
     }
-    
+
     public static func findDuplicateItems(_ manifest1: Manifest, _ manifest2: Manifest) -> [ManifestItem] {
         let checksumSet = Set(manifest2.items.map { $0.checksum })
         return manifest1.items.filter { checksumSet.contains($0.checksum) }

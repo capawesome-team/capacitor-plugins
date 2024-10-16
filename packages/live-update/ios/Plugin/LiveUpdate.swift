@@ -193,7 +193,7 @@ import CommonCrypto
         setNextBundle(bundleId: latestBundleId)
         return SyncResult(nextBundleId: latestBundleId)
     }
-    
+
     private func addBundle(bundleId: String, directory: URL) throws {
         // Search folder with index.html file
         guard let indexHtmlFile = self.searchIndexHtmlFile(url: directory) else {
@@ -207,7 +207,7 @@ import CommonCrypto
         let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
     }
-    
+
     private func addBundleOfTypeManifest(bundleId: String, directory: URL) async throws {
         try addBundle(bundleId: bundleId, directory: directory)
     }
@@ -232,7 +232,7 @@ import CommonCrypto
     private func buildBundlePathFor(bundleId: String) -> String {
         return buildBundleURLFor(bundleId: bundleId).path
     }
-    
+
     private func buildBundleURLFor(bundleId: String) -> URL {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory).appendingPathComponent(bundleId)
         return url
@@ -242,11 +242,11 @@ import CommonCrypto
         guard let currentBundleId = getCurrentBundleId() else {
             return
         }
-        
+
         let destination = toDirectory.appendingPathComponent(href)
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
-        
+
         let sourceURL: URL
         if currentBundleId == defaultWebAssetDir {
             guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
@@ -256,7 +256,7 @@ import CommonCrypto
         } else {
             sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
         }
-        
+
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
@@ -310,7 +310,7 @@ import CommonCrypto
             }
         }
     }
-    
+
     private func downloadAndVerifyFile(url: String, file: URL, checksum: String?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
@@ -325,7 +325,7 @@ import CommonCrypto
         let signature = LiveUpdateHttpClient.getSignatureFromResponse(response: response)
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
-    
+
     private func downloadBundleFile(url: String, href: String, directory: URL) async throws -> URL {
         let fileURL = directory.appendingPathComponent(href)
         let destination: DownloadRequest.Destination = { _, _ in
@@ -346,11 +346,11 @@ import CommonCrypto
                     _ = try await self.downloadBundleFile(url: url, href: href, directory: directory)
                 }
             }
-            
+
             try await group.waitForAll()
         }
     }
-    
+
     private func downloadBundleOfTypeManifest(bundleId: String, url: String) async throws {
         // Create a temporary directory
         let temporaryDirectory = try createTemporaryDirectory()
@@ -375,7 +375,7 @@ import CommonCrypto
         // Add the bundle
         try addBundle(bundleId: bundleId, directory: temporaryDirectory)
     }
-    
+
     private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?) async throws {
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
@@ -623,7 +623,7 @@ import CommonCrypto
         SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
         return destinationDirectory
     }
-    
+
     private func verifyFile(url: URL, checksum: String?, signature: String?) throws {
         // Verify the signature
         if let publicKey = self.config.publicKey {

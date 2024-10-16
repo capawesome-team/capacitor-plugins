@@ -2,9 +2,9 @@ import Foundation
 import Alamofire
 
 public class LiveUpdateHttpClient: NSObject {
-    
+
     private let config: LiveUpdateConfig
-    
+
     public static func getChecksumFromResponse(response: HTTPURLResponse) -> String? {
         return response.allHeaderFields["X-Checksum"] as? String
     }
@@ -12,11 +12,11 @@ public class LiveUpdateHttpClient: NSObject {
     public static func getSignatureFromResponse(response: HTTPURLResponse) -> String? {
         return response.allHeaderFields["X-Signature"] as? String
     }
-    
+
     init(config: LiveUpdateConfig) {
         self.config = config
     }
-    
+
     public func download(url: URL, destination: @escaping DownloadRequest.Destination) async throws -> AFDownloadResponse<Data> {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue

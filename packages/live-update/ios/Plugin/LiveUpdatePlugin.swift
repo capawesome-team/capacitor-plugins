@@ -210,7 +210,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func sync(_ call: CAPPluginCall) {
         Task {
             do {
-                
+
                 guard let _ = config?.appId else {
                     call.reject(CustomError.appIdMissing.localizedDescription)
                     return
@@ -249,15 +249,15 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         return config
     }
-    
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
         var message = error.localizedDescription
         /*if let urlError = error as? URLError {
-            if urlError.code == .timedOut {
-                message = CustomError.httpTimeout.localizedDescription
-            }
-        }*/
+         if urlError.code == .timedOut {
+         message = CustomError.httpTimeout.localizedDescription
+         }
+         }*/
         call.reject(message)
     }
 }

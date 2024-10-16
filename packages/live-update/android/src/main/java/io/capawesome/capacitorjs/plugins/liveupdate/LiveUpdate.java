@@ -47,7 +47,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
-
 import net.lingala.zip4j.ZipFile;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -444,7 +443,8 @@ public class LiveUpdate {
         return destinationFile;
     }
 
-    private void downloadBundleFiles(@NonNull String baseUrl, @NonNull List<String> hrefs, @NonNull File destinationDirectory) throws Exception {
+    private void downloadBundleFiles(@NonNull String baseUrl, @NonNull List<String> hrefs, @NonNull File destinationDirectory)
+        throws Exception {
         // Limit the number of threads to twice the number of processors
         int maxThreads = Runtime.getRuntime().availableProcessors() * 2;
         List<Thread> threads = new ArrayList<>();
