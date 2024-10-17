@@ -238,8 +238,8 @@ public class LiveUpdate {
             return;
         }
         ArtifactType artifactType = result.getArtifactType();
-        String downloadUrl = result.getDownloadUrl();
-        String latestBundleId = result.getId();
+        String latestBundleId = result.getBundleId();
+        String url = result.getUrl();
         // Check if the bundle already exists
         if (hasBundle(latestBundleId)) {
             String nextBundleId = null;
@@ -255,9 +255,9 @@ public class LiveUpdate {
         }
         // Download the bundle
         if (artifactType == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(latestBundleId, downloadUrl);
+            downloadBundleOfTypeManifest(latestBundleId, url);
         } else {
-            downloadBundleOfTypeZip(latestBundleId, downloadUrl, null);
+            downloadBundleOfTypeZip(latestBundleId, url, null);
         }
         // Set the next bundle
         setNextBundle(latestBundleId);

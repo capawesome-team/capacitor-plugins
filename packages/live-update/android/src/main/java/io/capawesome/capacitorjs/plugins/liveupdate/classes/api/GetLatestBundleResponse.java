@@ -14,10 +14,10 @@ public class GetLatestBundleResponse {
     private ArtifactType artifactType;
 
     @NonNull
-    private String downloadUrl;
+    private String bundleId;
 
     @NonNull
-    private String id;
+    private String url;
 
     public GetLatestBundleResponse(JSONObject responseJson) {
         String artifactType = responseJson.optString("artifactType");
@@ -26,19 +26,19 @@ public class GetLatestBundleResponse {
         } else {
             this.artifactType = ArtifactType.ZIP;
         }
-        this.downloadUrl = responseJson.optString("downloadUrl");
-        this.id = responseJson.optString("id");
+        this.bundleId = responseJson.optString("bundleId");
+        this.url = responseJson.optString("url");
     }
 
     public ArtifactType getArtifactType() {
         return artifactType;
     }
 
-    public String getDownloadUrl() {
-        return downloadUrl;
+    public String getBundleId() {
+        return bundleId;
     }
 
-    public String getId() {
-        return id;
+    public String getUrl() {
+        return url;
     }
 }

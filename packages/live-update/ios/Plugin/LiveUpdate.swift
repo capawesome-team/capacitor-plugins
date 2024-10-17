@@ -170,8 +170,8 @@ import CommonCrypto
         // Fetch the latest bundle
         let response = try await fetchLatestBundle()
         let artifactType = response.artifactType
-        let downloadUrl = response.downloadUrl
-        let latestBundleId = response.id
+        let latestBundleId = response.bundleId
+        let downloadUrl = response.url
         // Check if bundle already exists
         if hasBundle(bundleId: latestBundleId) {
             var nextBundleId: String?
