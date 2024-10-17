@@ -15,6 +15,7 @@ public enum CustomError: Error {
     case signatureMissing
     case signatureVerificationFailed
     case syncInProgress
+    case unknown
     case urlMissing
 }
 
@@ -49,6 +50,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Signature verification failed.", comment: "signatureVerificationFailed")
         case .syncInProgress:
             return NSLocalizedString("Sync is already in progress.", comment: "syncInProgress")
+        case .unknown:
+            return NSLocalizedString("An unknown error occurred.", comment: "unknown")
         case .urlMissing:
             return NSLocalizedString("url must be provided.", comment: "urlMissing")
         }
