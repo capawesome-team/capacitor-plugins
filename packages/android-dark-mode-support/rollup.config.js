@@ -4,7 +4,7 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorTorch',
+      name: 'capacitorAndroidDarkModeSupport',
       globals: {
         '@capacitor/core': 'capacitorExports',
       },
