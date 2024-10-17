@@ -30,7 +30,7 @@ public class AndroidDarkModeSupport {
         }
 
         if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK_STRATEGY)) {
-            WebSettingsCompat.setForceDarkStrategy(settings, WebSettingsCompat.WEB_THEME_DARKENING_ONLY);
+            WebSettingsCompat.setForceDarkStrategy(settings, WebSettingsCompat.DARK_STRATEGY_WEB_THEME_DARKENING_ONLY);
         }
     }
 }
