@@ -1,4 +1,5 @@
 import Foundation
+import Capacitor
 import Alamofire
 
 public class LiveUpdateHttpClient: NSObject {
@@ -6,11 +7,11 @@ public class LiveUpdateHttpClient: NSObject {
     private let config: LiveUpdateConfig
 
     public static func getChecksumFromResponse(response: HTTPURLResponse) -> String? {
-        return response.allHeaderFields["X-Checksum"] as? String
+        return response.allHeaderFields["x-checksum"] as? String // Must be lowercase!
     }
 
     public static func getSignatureFromResponse(response: HTTPURLResponse) -> String? {
-        return response.allHeaderFields["X-Signature"] as? String
+        return response.allHeaderFields["x-signature"] as? String // Must be lowercase!
     }
 
     init(config: LiveUpdateConfig) {

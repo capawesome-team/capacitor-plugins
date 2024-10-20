@@ -4,7 +4,7 @@ import SSZipArchive
 import Capacitor
 import Alamofire
 import CommonCrypto
-
+ 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
@@ -24,7 +24,7 @@ import CommonCrypto
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
         if (config.location != nil) && config.location == "eu" {
-            self.host = "highs-virtually-bridges-neon.trycloudflare.com"
+            self.host = "api.cloud.capawesome.eu"
         } else {
             self.host = "api.cloud.capawesome.io"
         }
@@ -168,7 +168,10 @@ import CommonCrypto
 
     @objc public func sync() async throws -> SyncResult {
         // Fetch the latest bundle
-        let response = try await fetchLatestBundle()
+        guard let response = try await fetchLatestBundle() else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
+            return SyncResult(nextBundleId: nil)
+        }
         let artifactType = response.artifactType
         let latestBundleId = response.bundleId
         let downloadUrl = response.url
@@ -317,25 +320,31 @@ import CommonCrypto
         }
         let urlComponents = URLComponents(string: url)!
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination)
+        if let error = result.error {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
+                }
+            }
+            throw CustomError.downloadFailed
+        }
         guard let response = result.response else {
-            // TODO
-            return
+            throw CustomError.unknown
         }
         let checksum = checksum == nil ? LiveUpdateHttpClient.getChecksumFromResponse(response: response) : checksum
         let signature = LiveUpdateHttpClient.getSignatureFromResponse(response: response)
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
 
-    private func downloadBundleFile(url: String, href: String, directory: URL) async throws -> URL {
+    private func downloadBundleFile(baseUrl: String, href: String, directory: URL) async throws -> URL {
         let fileURL = directory.appendingPathComponent(href)
-        let destination: DownloadRequest.Destination = { _, _ in
-            return (fileURL, [.createIntermediateDirectories])
-        }
         var parameters = [String: String]()
         parameters["href"] = href
-        var urlComponents = URLComponents(string: url)!
+        var urlComponents = URLComponents(string: baseUrl)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
-        _ = try await self.httpClient.download(url: urlComponents.asURL(), destination: destination)
+        let url = urlComponents.string!
+        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil)
         return fileURL
     }
 
@@ -343,7 +352,7 @@ import CommonCrypto
         try await withThrowingTaskGroup(of: Void.self) { group in
             for href in hrefs {
                 group.addTask {
-                    _ = try await self.downloadBundleFile(url: url, href: href, directory: directory)
+                    _ = try await self.downloadBundleFile(baseUrl: url, href: href, directory: directory)
                 }
             }
 
@@ -355,7 +364,7 @@ import CommonCrypto
         // Create a temporary directory
         let temporaryDirectory = try createTemporaryDirectory()
         // Download the latest manifest
-        let latestManifestFile = try await downloadBundleFile(url: url, href: manifestFileName, directory: temporaryDirectory)
+        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory)
         let latestManifest = try loadManifest(file: latestManifestFile)
         // Load the current manifest
         let currentManifest = try loadCurrentManifest()
@@ -385,7 +394,7 @@ import CommonCrypto
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
 
-    private func fetchLatestBundle() async throws -> GetLatestBundleResponse {
+    private func fetchLatestBundle() async throws -> GetLatestBundleResponse? {
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
@@ -398,11 +407,24 @@ import CommonCrypto
         parameters["pluginVersion"] = LiveUpdatePlugin.version
         var urlComponents = URLComponents(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
-        let response = try await self.httpClient.request(url: urlComponents.asURL(), type: GetLatestBundleResponse.self)
+        let url = try urlComponents.asURL()
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
+        let response = try await self.httpClient.request(url: url, type: GetLatestBundleResponse.self)
+        if let data = response.data {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
+        }
+        if let error = response.error {
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
+                }
+            }
+            return nil
+        }
         if let value = response.value {
             return value
         } else {
-            throw CustomError.unknown // TODO
+            return nil
         }
     }
 
@@ -643,13 +665,14 @@ import CommonCrypto
         // Verify the checksum
         else if let expectedChecksum = checksum {
             // Calculate the checksum
+            let receivedChecksum: String
             do {
-                let receivedChecksum = try self.getChecksumForFile(url: url)
-                if receivedChecksum != expectedChecksum {
-                    throw CustomError.checksumMismatch
-                }
+                receivedChecksum = try self.getChecksumForFile(url: url)
             } catch {
                 throw CustomError.checksumCalculationFailed
+            }
+            if receivedChecksum != expectedChecksum {
+                throw CustomError.checksumMismatch
             }
         }
     }

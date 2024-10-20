@@ -87,7 +87,7 @@ public class LiveUpdate {
         this.config = config;
         this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "highs-virtually-bridges-neon.trycloudflare.com";
+            this.host = "api.cloud.capawesome.eu";
         } else {
             this.host = "api.cloud.capawesome.io";
         }
@@ -230,16 +230,16 @@ public class LiveUpdate {
 
     public void sync(@NonNull NonEmptyCallback<Result> callback) throws Exception {
         // Fetch the latest bundle
-        GetLatestBundleResponse result = fetchLatestBundle();
-        if (result == null) {
+        GetLatestBundleResponse response = fetchLatestBundle();
+        if (response == null) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
             SyncResult syncResult = new SyncResult(null);
             callback.success(syncResult);
             return;
         }
-        ArtifactType artifactType = result.getArtifactType();
-        String latestBundleId = result.getBundleId();
-        String url = result.getUrl();
+        ArtifactType artifactType = response.getArtifactType();
+        String latestBundleId = response.getBundleId();
+        String url = response.getUrl();
         // Check if the bundle already exists
         if (hasBundle(latestBundleId)) {
             String nextBundleId = null;
@@ -419,16 +419,17 @@ public class LiveUpdate {
 
     private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
         Response response = httpClient.execute(url);
+        ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
             // Verify the file
             checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
             String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
             verifyFile(file, checksum, signature);
         } else {
-            // TODO
-            throw new Exception(response.message());
+            Exception exception = new Exception(responseBody.string());
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
         }
     }
 
@@ -553,10 +554,11 @@ public class LiveUpdate {
             .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
             .build()
             .toString();
+        Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
         Response response = httpClient.execute(url);
+        String responseBodyString = response.body().string();
+        Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
         if (response.isSuccessful()) {
-            ResponseBody responseBody = response.body();
-            String responseBodyString = responseBody.string();
             JSONObject responseJson = new JSONObject(responseBodyString);
             return new GetLatestBundleResponse(responseJson);
         } else {

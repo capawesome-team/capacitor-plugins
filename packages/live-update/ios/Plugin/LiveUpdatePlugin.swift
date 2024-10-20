@@ -253,11 +253,11 @@ public class LiveUpdatePlugin: CAPPlugin {
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
         var message = error.localizedDescription
-        /*if let urlError = error as? URLError {
-         if urlError.code == .timedOut {
-         message = CustomError.httpTimeout.localizedDescription
-         }
-         }*/
+        if let urlError = error as? URLError {
+            if urlError.code == .timedOut {
+                message = CustomError.httpTimeout.localizedDescription
+            }
+        }
         call.reject(message)
     }
 }
