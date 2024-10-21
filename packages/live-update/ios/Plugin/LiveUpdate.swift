@@ -653,12 +653,13 @@ import CommonCrypto
                 throw CustomError.signatureMissing
             }
             // Verify the signature
+            let verified: Bool
             do {
-                let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
-                if !verified {
-                    throw CustomError.signatureVerificationFailed
-                }
+                verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
             } catch {
+                throw CustomError.signatureVerificationFailed
+            }
+            if !verified {
                 throw CustomError.signatureVerificationFailed
             }
         }
