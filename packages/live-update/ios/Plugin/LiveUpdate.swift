@@ -4,22 +4,31 @@ import SSZipArchive
 import Capacitor
 import Alamofire
 import CommonCrypto
-
+ 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
-    private let defaultWebAssetDir = "public" // DO NOT CHANGE (See https://dub.sh/Buvz4yj)
-    private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE (See https://dub.sh/ceDl0zT)
+    private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
+    private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
+    private let host: String
+    private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+    private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
     private let plugin: LiveUpdatePlugin
-    private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE (See https://dub.sh/BLluidt)
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
+        if (config.location != nil) && config.location == "eu" {
+            self.host = "api.cloud.capawesome.eu"
+        } else {
+            self.host = "api.cloud.capawesome.io"
+        }
+        self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
         self.preferences = LiveUpdatePreferences()
         super.init()
@@ -51,26 +60,18 @@ import CommonCrypto
         }
     }
 
-    @objc public func downloadBundle(_ options: DownloadBundleOptions, completion: @escaping (Error?) -> Void) {
+    @objc public func downloadBundle(_ options: DownloadBundleOptions) async throws {
         let bundleId = options.getBundleId()
         let checksum = options.getChecksum()
         let url = options.getUrl()
 
         // Check if the bundle already exists
         if hasBundle(bundleId: bundleId) {
-            let error = CustomError.bundleAlreadyExists
-            completion(error)
-            return
+            throw CustomError.bundleAlreadyExists
         }
 
         // Download the bundle
-        downloadBundle(bundleId: bundleId, checksum: checksum, signature: nil, url: url, completion: { error in
-            if let error = error {
-                completion(error)
-                return
-            }
-            completion(nil)
-        })
+        try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
@@ -165,68 +166,60 @@ import CommonCrypto
         completion(nil)
     }
 
-    @objc public func sync(completion: @escaping (SyncResult?, Error?) -> Void) {
+    @objc public func sync() async throws -> SyncResult {
         // Fetch the latest bundle
-        fetchLatestBundle(completion: { response, error in
-            if let _ = error {
-                // No update available
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
-                let result = SyncResult(nextBundleId: nil)
-                completion(result, nil)
-                return
+        guard let response = try await fetchLatestBundle() else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
+            return SyncResult(nextBundleId: nil)
+        }
+        let artifactType = response.artifactType
+        let latestBundleId = response.bundleId
+        let downloadUrl = response.url
+        // Check if bundle already exists
+        if hasBundle(bundleId: latestBundleId) {
+            var nextBundleId: String?
+            let currentBundleId = self.getCurrentBundleId()
+            if latestBundleId != currentBundleId {
+                // Set the next bundle
+                setNextBundle(bundleId: latestBundleId)
+                nextBundleId = latestBundleId
             }
-            if let response = response {
-                let latestBundleId = response.bundleId
-                // Check if the bundle already exists
-                if self.hasBundle(bundleId: latestBundleId) {
-                    var nextBundleId: String?
-                    let currentBundleId = self.getCurrentBundleId()
-                    if latestBundleId != currentBundleId {
-                        // Set the next bundle
-                        self.setNextBundle(bundleId: latestBundleId)
-                        nextBundleId = latestBundleId
-                    }
-                    let result = SyncResult(nextBundleId: nextBundleId)
-                    completion(result, nil)
-                } else {
-                    // Download and unzip the bundle
-                    self.downloadBundle(bundleId: latestBundleId, checksum: response.checksum, signature: response.signature, url: response.url, completion: { error in
-                        if let error = error {
-                            completion(nil, error)
-                            return
-                        }
-                        // Set the next bundle
-                        self.setNextBundle(bundleId: latestBundleId)
-                        let result = SyncResult(nextBundleId: latestBundleId)
-                        completion(result, nil)
-                    })
-                }
-            }
-        })
+            return SyncResult(nextBundleId: nextBundleId)
+        }
+        // Download the bundle
+        if artifactType == .manifest {
+            try await downloadBundleOfTypeManifest(bundleId: latestBundleId, url: downloadUrl)
+        } else {
+            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: nil)
+        }
+        // Set the next bundle
+        setNextBundle(bundleId: latestBundleId)
+        return SyncResult(nextBundleId: latestBundleId)
     }
 
-    private func addBundle(bundleId: String, zipFile: URL, completion: @escaping (Error?) -> Void) {
+    private func addBundle(bundleId: String, directory: URL) throws {
+        // Search folder with index.html file
+        guard let indexHtmlFile = self.searchIndexHtmlFile(url: directory) else {
+            throw CustomError.bundleIndexHtmlMissing
+        }
+
+        // Create the bundles directory if it does not exist
+        self.createBundlesDirectory()
+
+        // Move the unzipped files to the bundles directory
+        let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
+        try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
+    }
+
+    private func addBundleOfTypeManifest(bundleId: String, directory: URL) async throws {
+        try addBundle(bundleId: bundleId, directory: directory)
+    }
+
+    private func addBundleOfTypeZip(bundleId: String, zipFile: URL) async throws {
         // Unzip the bundle
-        self.unzipFile(zipFile: zipFile, completion: { url in
-            // Search folder with index.html file
-            guard let indexHtmlFile = self.searchIndexHtmlFile(url: url) else {
-                completion(CustomError.bundleIndexHtmlMissing)
-                return
-            }
-
-            // Create the bundles directory if it does not exist
-            self.createBundlesDirectory()
-
-            // Move the unzipped files to the bundles directory
-            let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
-            do {
-                try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
-                completion(nil)
-            } catch {
-                completion(error)
-                return
-            }
-        })
+        let unzippedDirectory = self.unzipFile(zipFile: zipFile)
+        // Add the bundle
+        try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
 
     private func buildCapacitorServerPathFor(bundleId: String) -> String {
@@ -240,22 +233,40 @@ import CommonCrypto
     }
 
     private func buildBundlePathFor(bundleId: String) -> String {
-        let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory).appendingPathComponent(bundleId)
-        return url.path
+        return buildBundleURLFor(bundleId: bundleId).path
     }
 
-    /// - Returns: The sha256 checksum of the file at the given URL.
-    private func getChecksumForFile(url: URL) throws -> String {
-        let handle = try FileHandle(forReadingFrom: url)
-        var hasher = SHA256()
-        while autoreleasepool(invoking: {
-            let nextChunk = handle.readData(ofLength: 2048)
-            guard !nextChunk.isEmpty else { return false }
-            hasher.update(data: nextChunk)
-            return true
-        }) { }
-        let digest = hasher.finalize()
-        return digest.map { String(format: "%02hhx", $0) }.joined()
+    private func buildBundleURLFor(bundleId: String) -> URL {
+        let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory).appendingPathComponent(bundleId)
+        return url
+    }
+
+    private func copyCurrentBundleFile(href: String, toDirectory: URL) throws {
+        guard let currentBundleId = getCurrentBundleId() else {
+            return
+        }
+
+        let destination = toDirectory.appendingPathComponent(href)
+        let parentDirectory = destination.deletingLastPathComponent()
+        try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
+
+        let sourceURL: URL
+        if currentBundleId == defaultWebAssetDir {
+            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+                return
+            }
+            sourceURL = file
+        } else {
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
+        }
+
+        try FileManager.default.copyItem(at: sourceURL, to: destination)
+    }
+
+    private func copyCurrentBundleFiles(hrefs: [String], toDirectory: URL) throws {
+        for href in hrefs {
+            try copyCurrentBundleFile(href: href, toDirectory: toDirectory)
+        }
     }
 
     private func createBundlesDirectory() {
@@ -270,14 +281,19 @@ import CommonCrypto
         }
     }
 
+    private func createTemporaryDirectory() throws -> URL {
+        let temporaryDirectory = cachesDirectoryUrl.appendingPathComponent(UUID().uuidString)
+        try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
+        return temporaryDirectory
+    }
+
     private func deleteBundle(bundleId: String) throws {
         // Delete the bundle directory
         let path = buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.removeItem(atPath: path)
         // Reset the next bundle if it is the deleted bundle
-        let currentBundleId = getCurrentBundleId()
         let nextBundleId = getNextBundleId()
-        if bundleId == currentBundleId && bundleId == nextBundleId {
+        if bundleId == nextBundleId {
             setNextCapacitorServerPathToDefaultWebAssetDir()
         }
     }
@@ -298,94 +314,87 @@ import CommonCrypto
         }
     }
 
-    private func downloadBundle(bundleId: String, checksum: String?, signature: String?, url: String, completion: @escaping (Error?) -> Void) {
-        // Download the bundle
-        downloadFile(url: url, completion: { url, error in
-            if let error = error {
-                completion(error)
-                return
-            }
-            if let url = url {
-                // Verify the signature
-                if let publicKey = self.config.publicKey {
-                    guard let signature = signature else {
-                        completion(CustomError.signatureMissing)
-                        return
-                    }
-                    // Verify the signature
-                    do {
-                        let verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
-                        if !verified {
-                            completion(CustomError.signatureVerificationFailed)
-                            return
-                        }
-                    } catch {
-                        completion(CustomError.signatureVerificationFailed)
-                        return
-                    }
-                }
-                // Verify the checksum
-                else if let expectedChecksum = checksum {
-                    // Calculate the checksum
-                    do {
-                        let receivedChecksum = try self.getChecksumForFile(url: url)
-                        if receivedChecksum != expectedChecksum {
-                            completion(CustomError.checksumMismatch)
-                            return
-                        }
-                    } catch {
-                        completion(CustomError.checksumCalculationFailed)
-                        return
-                    }
-                }
-
-                // Add the bundle
-                self.addBundle(bundleId: bundleId, zipFile: url, completion: { error in
-                    // Delete the temporary file
-                    do {
-                        try FileManager.default.removeItem(atPath: url.path)
-                    } catch {
-                        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete temporary file.")
-                    }
-                    if let error = error {
-                        completion(error)
-                        return
-                    }
-                    completion(nil)
-                })
-            }
-        })
-    }
-
-    private func downloadFile(url: String, completion: @escaping (URL?, Error?) -> Void) {
+    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
-            let timestamp = String(Int(Date().timeIntervalSince1970))
-            let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
-            return (temporaryZipFileUrl, [.createIntermediateDirectories])
+            return (file, [.createIntermediateDirectories])
         }
-        var request = URLRequest(url: URL(string: url)!)
-        request.httpMethod = HTTPMethod.get.rawValue
-        request.timeoutInterval = Double(config.httpTimeout) / 1000.0
-        AF.download(request, to: destination).validate().response { response in
-            if let error = response.error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                if let urlError = error.underlyingError as? URLError {
-                    switch urlError.code {
-                    case .timedOut:
-                        completion(nil, CustomError.httpTimeout)
-                    default:
-                        completion(nil, CustomError.downloadFailed)
-                    }
-                } else {
-                    completion(nil, CustomError.downloadFailed)
+        let urlComponents = URLComponents(string: url)!
+        let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination)
+        if let error = result.error {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
                 }
-                return
             }
-            completion(response.fileURL, nil)
+            throw CustomError.downloadFailed
+        }
+        guard let response = result.response else {
+            throw CustomError.unknown
+        }
+        let checksum = checksum == nil ? LiveUpdateHttpClient.getChecksumFromResponse(response: response) : checksum
+        let signature = LiveUpdateHttpClient.getSignatureFromResponse(response: response)
+        try verifyFile(url: file, checksum: checksum, signature: signature)
+    }
+
+    private func downloadBundleFile(baseUrl: String, href: String, directory: URL) async throws -> URL {
+        let fileURL = directory.appendingPathComponent(href)
+        var parameters = [String: String]()
+        parameters["href"] = href
+        var urlComponents = URLComponents(string: baseUrl)!
+        urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        let url = urlComponents.string!
+        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil)
+        return fileURL
+    }
+
+    private func downloadBundleFiles(url: String, hrefs: [String], directory: URL) async throws {
+        try await withThrowingTaskGroup(of: Void.self) { group in
+            for href in hrefs {
+                group.addTask {
+                    _ = try await self.downloadBundleFile(baseUrl: url, href: href, directory: directory)
+                }
+            }
+
+            try await group.waitForAll()
         }
     }
 
-    private func fetchLatestBundle(completion: @escaping (GetLatestBundleResponse?, Error?) -> Void) {
+    private func downloadBundleOfTypeManifest(bundleId: String, url: String) async throws {
+        // Create a temporary directory
+        let temporaryDirectory = try createTemporaryDirectory()
+        // Download the latest manifest
+        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory)
+        let latestManifest = try loadManifest(file: latestManifestFile)
+        // Load the current manifest
+        let currentManifest = try loadCurrentManifest()
+        // Compare the manifests
+        var itemsToCopy = [ManifestItem]()
+        var itemsToDownload = [ManifestItem]()
+        if let currentManifest = currentManifest {
+            itemsToCopy.append(contentsOf: Manifest.findDuplicateItems(latestManifest, currentManifest))
+            itemsToDownload.append(contentsOf: Manifest.findMissingItems(latestManifest, currentManifest))
+        } else {
+            itemsToDownload.append(contentsOf: latestManifest.items)
+        }
+        // Copy the files
+        try self.copyCurrentBundleFiles(hrefs: itemsToCopy.map { $0.href }, toDirectory: temporaryDirectory)
+        // Download the files
+        try await self.downloadBundleFiles(url: url, hrefs: itemsToDownload.map { $0.href }, directory: temporaryDirectory)
+        // Add the bundle
+        try await addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
+    }
+
+    private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?) async throws {
+        let timestamp = String(Int(Date().timeIntervalSince1970))
+        let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
+        // Download the bundle
+        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum)
+        // Add the bundle
+        try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
+    }
+
+    private func fetchLatestBundle() async throws -> GetLatestBundleResponse? {
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
@@ -393,40 +402,29 @@ import CommonCrypto
         parameters["channelName"] = getChannel()
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()
-        parameters["osVersion"] = UIDevice.current.systemVersion
+        parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var host = "api.cloud.capawesome.io"
-        if let location = config.location {
-            if location == "eu" {
-                host = "api.cloud.capawesome.eu"
-            }
-        }
         var urlComponents = URLComponents(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
-        var request = URLRequest(url: urlComponents.url!)
-        request.httpMethod = HTTPMethod.get.rawValue
-        request.timeoutInterval = Double(config.httpTimeout) / 1000.0
-        AF.request(request).validate().responseDecodable(of: GetLatestBundleResponse.self) { response in
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle from ", response.request?.url?.absoluteString ?? "")
-            if let error = response.error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                if let data = response.data {
-                    CAPLog.print("[", LiveUpdatePlugin.tag, "] ", String(decoding: data, as: UTF8.self))
+        let url = try urlComponents.asURL()
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
+        let response = try await self.httpClient.request(url: url, type: GetLatestBundleResponse.self)
+        if let data = response.data {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
+        }
+        if let error = response.error {
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
                 }
-                if let urlError = error.underlyingError as? URLError {
-                    switch urlError.code {
-                    case .timedOut:
-                        completion(nil, CustomError.httpTimeout)
-                    default:
-                        completion(nil, error)
-                    }
-                } else {
-                    completion(nil, error)
-                }
-                return
             }
-            completion(response.value, nil)
+            return nil
+        }
+        if let value = response.value {
+            return value
+        } else {
+            return nil
         }
     }
 
@@ -453,6 +451,20 @@ import CommonCrypto
             channel = preferences.getChannel()
         }
         return channel
+    }
+
+    /// - Returns: The sha256 checksum of the file at the given URL.
+    private func getChecksumForFile(url: URL) throws -> String {
+        let handle = try FileHandle(forReadingFrom: url)
+        var hasher = SHA256()
+        while autoreleasepool(invoking: {
+            let nextChunk = handle.readData(ofLength: 2048)
+            guard !nextChunk.isEmpty else { return false }
+            hasher.update(data: nextChunk)
+            return true
+        }) { }
+        let digest = hasher.finalize()
+        return digest.map { String(format: "%02hhx", $0) }.joined()
     }
 
     /// - Returns: The current bundle ID (`public` for the built-in bundle) or `nil` if no view controller was found.
@@ -508,6 +520,36 @@ import CommonCrypto
     private func hasBundle(bundleId: String) -> Bool {
         let path = buildBundlePathFor(bundleId: bundleId)
         return FileManager.default.fileExists(atPath: path)
+    }
+
+    private func loadCurrentManifest() throws -> Manifest? {
+        guard let currentBundleId = getCurrentBundleId() else {
+            return nil
+        }
+        if currentBundleId == defaultWebAssetDir {
+            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
+            let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
+            if let manifestFileUrl = manifestFileUrl {
+                return try loadManifest(file: manifestFileUrl)
+            } else {
+                return nil
+            }
+        } else {
+            let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
+            let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
+            if manifestFileExists {
+                return try loadManifest(file: manifestFileUrl)
+            } else {
+                return nil
+            }
+        }
+    }
+
+    private func loadManifest(file: URL) throws -> Manifest {
+        let data = try Data(contentsOf: file)
+        let decoder = JSONDecoder()
+        let items = try decoder.decode([ManifestItem].self, from: data)
+        return Manifest(items: items)
     }
 
     private func rollback() {
@@ -598,13 +640,42 @@ import CommonCrypto
         rollbackDispatchWorkItem?.cancel()
     }
 
-    private func unzipFile(zipFile: URL, completion: @escaping (URL) -> Void) {
+    private func unzipFile(zipFile: URL) -> URL {
         let destinationDirectory = zipFile.deletingPathExtension()
-        DispatchQueue.background(background: {
-            SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
-        }, completion: {
-            completion(destinationDirectory)
-        })
+        SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
+        return destinationDirectory
+    }
+
+    private func verifyFile(url: URL, checksum: String?, signature: String?) throws {
+        // Verify the signature
+        if let publicKey = self.config.publicKey {
+            guard let signature = signature else {
+                throw CustomError.signatureMissing
+            }
+            // Verify the signature
+            let verified: Bool
+            do {
+                verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
+            } catch {
+                throw CustomError.signatureVerificationFailed
+            }
+            if !verified {
+                throw CustomError.signatureVerificationFailed
+            }
+        }
+        // Verify the checksum
+        else if let expectedChecksum = checksum {
+            // Calculate the checksum
+            let receivedChecksum: String
+            do {
+                receivedChecksum = try self.getChecksumForFile(url: url)
+            } catch {
+                throw CustomError.checksumCalculationFailed
+            }
+            if receivedChecksum != expectedChecksum {
+                throw CustomError.checksumMismatch
+            }
+        }
     }
 
     private func verifySignatureForFile(url: URL, signature: String, publicKey: String) throws -> Bool {

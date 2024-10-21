@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "6.4.1"
+    public static let version = "6.5.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     private var config: LiveUpdateConfig?
@@ -30,8 +30,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         implementation?.deleteBundle(options, completion: { error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             call.resolve()
@@ -39,33 +38,32 @@ public class LiveUpdatePlugin: CAPPlugin {
     }
 
     @objc func downloadBundle(_ call: CAPPluginCall) {
-        guard let bundleId = call.getString("bundleId") else {
-            call.reject(CustomError.bundleIdMissing.localizedDescription)
-            return
-        }
-        let checksum = call.getString("checksum")
-        guard let url = call.getString("url") else {
-            call.reject(CustomError.urlMissing.localizedDescription)
-            return
-        }
+        Task {
+            do {
+                guard let bundleId = call.getString("bundleId") else {
+                    call.reject(CustomError.bundleIdMissing.localizedDescription)
+                    return
+                }
+                let checksum = call.getString("checksum")
+                guard let url = call.getString("url") else {
+                    call.reject(CustomError.urlMissing.localizedDescription)
+                    return
+                }
 
-        let options = DownloadBundleOptions(bundleId: bundleId, checksum: checksum, url: url)
+                let options = DownloadBundleOptions(bundleId: bundleId, checksum: checksum, url: url)
 
-        implementation?.downloadBundle(options, completion: { error in
-            if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
-                return
+                try await implementation?.downloadBundle(options)
+                call.resolve()
+            } catch {
+                rejectCall(call, error)
             }
-            call.resolve()
-        })
+        }
     }
 
     @objc func getBundle(_ call: CAPPluginCall) {
         implementation?.getBundle(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -77,8 +75,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getBundles(_ call: CAPPluginCall) {
         implementation?.getBundles(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -90,8 +87,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getChannel(_ call: CAPPluginCall) {
         implementation?.getChannel(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -103,8 +99,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getCustomId(_ call: CAPPluginCall) {
         implementation?.getCustomId(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -116,8 +111,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getDeviceId(_ call: CAPPluginCall) {
         implementation?.getDeviceId(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -129,8 +123,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getVersionCode(_ call: CAPPluginCall) {
         implementation?.getVersionCode(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -142,8 +135,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func getVersionName(_ call: CAPPluginCall) {
         implementation?.getVersionName(completion: { result, error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
@@ -177,8 +169,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         implementation?.setBundle(options, completion: { error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
         })
@@ -192,8 +183,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         implementation?.setChannel(options, completion: { error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
         })
@@ -210,8 +200,7 @@ public class LiveUpdatePlugin: CAPPlugin {
 
         implementation?.setCustomId(options, completion: { error in
             if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
                 return
             }
         })
@@ -219,28 +208,30 @@ public class LiveUpdatePlugin: CAPPlugin {
     }
 
     @objc func sync(_ call: CAPPluginCall) {
-        guard let _ = config?.appId else {
-            call.reject(CustomError.appIdMissing.localizedDescription)
-            return
-        }
+        Task {
+            do {
 
-        guard !syncInProgress else {
-            call.reject(CustomError.syncInProgress.localizedDescription)
-            return
-        }
-        syncInProgress = true
+                guard let _ = config?.appId else {
+                    call.reject(CustomError.appIdMissing.localizedDescription)
+                    return
+                }
 
-        implementation?.sync(completion: { result, error in
-            self.syncInProgress = false
-            if let error = error {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-                call.reject(error.localizedDescription)
-                return
+                guard !syncInProgress else {
+                    call.reject(CustomError.syncInProgress.localizedDescription)
+                    return
+                }
+                syncInProgress = true
+
+                let result = try await implementation?.sync()
+                self.syncInProgress = false
+                if let result = result?.toJSObject() as? JSObject {
+                    call.resolve(result)
+                }
+            } catch {
+                self.syncInProgress = false
+                rejectCall(call, error)
             }
-            if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
-            }
-        })
+        }
     }
 
     private func liveUpdateConfig() -> LiveUpdateConfig {
@@ -257,5 +248,16 @@ public class LiveUpdatePlugin: CAPPlugin {
         config.resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.resetOnUpdate)
 
         return config
+    }
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
+        var message = error.localizedDescription
+        if let urlError = error as? URLError {
+            if urlError.code == .timedOut {
+                message = CustomError.httpTimeout.localizedDescription
+            }
+        }
+        call.reject(message)
     }
 }

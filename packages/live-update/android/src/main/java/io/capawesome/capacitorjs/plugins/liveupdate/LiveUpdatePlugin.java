@@ -19,7 +19,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.4.1";
+    public static final String VERSION = "6.5.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -36,6 +36,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
     public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
     public static final String ERROR_SYNC_IN_PROGRESS = "Sync is already in progress.";
+    public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
 
     private boolean syncInProgress = false;
 
@@ -72,15 +73,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.deleteBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -108,15 +107,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.downloadBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -131,15 +128,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getBundle(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -154,15 +149,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getBundles(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -177,15 +170,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getChannel(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -200,15 +191,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getCustomId(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -223,15 +212,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getDeviceId(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -246,15 +233,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getVersionCode(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -269,15 +254,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getVersionName(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -287,8 +270,7 @@ public class LiveUpdatePlugin extends Plugin {
             implementation.ready();
             call.resolve();
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -298,8 +280,7 @@ public class LiveUpdatePlugin extends Plugin {
             implementation.reload();
             call.resolve();
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -309,8 +290,7 @@ public class LiveUpdatePlugin extends Plugin {
             implementation.reset();
             call.resolve();
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -332,15 +312,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.setBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -358,15 +336,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.setChannel(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -388,15 +364,13 @@ public class LiveUpdatePlugin extends Plugin {
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.setCustomId(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -425,16 +399,14 @@ public class LiveUpdatePlugin extends Plugin {
                 @Override
                 public void error(Exception exception) {
                     syncInProgress = false;
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.sync(callback);
         } catch (Exception exception) {
             syncInProgress = false;
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -461,5 +433,16 @@ public class LiveUpdatePlugin extends Plugin {
         config.setResetOnUpdate(resetOnUpdate);
 
         return config;
+    }
+
+    private void rejectCall(PluginCall call, Exception exception) {
+        String message = exception.getMessage();
+        if (exception instanceof java.net.SocketTimeoutException) {
+            message = ERROR_HTTP_TIMEOUT;
+        } else {
+            message = message == null ? ERROR_UNKNOWN_ERROR : message;
+        }
+        Logger.error(TAG, message, exception);
+        call.reject(message);
     }
 }
