@@ -382,7 +382,7 @@ import CommonCrypto
         // Download the files
         try await self.downloadBundleFiles(url: url, hrefs: itemsToDownload.map { $0.href }, directory: temporaryDirectory)
         // Add the bundle
-        try addBundle(bundleId: bundleId, directory: temporaryDirectory)
+        try addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
     }
 
     private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?) async throws {
