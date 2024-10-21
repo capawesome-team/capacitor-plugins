@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.5.0
+
+### Minor Changes
+
+- [`afc536c`](https://github.com/capawesome-team/capacitor-plugins/commit/afc536cd4f3b829aa4dc8f68b0b3b5a30abcbbbe) ([#305](https://github.com/capawesome-team/capacitor-plugins/pull/305)): feat: support delta updates
+
 ## 6.4.2
 
 ### Patch Changes
