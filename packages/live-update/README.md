@@ -156,6 +156,10 @@ const downloadBundle = async () => {
   await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
 };
 
+const fetchLatestBundle = async () => {
+  await LiveUpdate.fetchLatestBundle();
+};
+
 const getBundle = async () => {
   const result = await LiveUpdate.getBundle();
   return result.bundleId;
@@ -218,6 +222,16 @@ const setCustomId = async () => {
 const sync = async () => {
   const result = await LiveUpdate.sync();
   return result.nextBundleId;
+};
+
+const isNewBundleAvailable = async () => {
+  const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle();
+  if (latestBundleId) {
+    const { bundleId: currentBundleId } = await LiveUpdate.getBundle();
+    return latestBundleId !== currentBundleId;
+  } else {
+    return false;
+  }
 };
 ```
 

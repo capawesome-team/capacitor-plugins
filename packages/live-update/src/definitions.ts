@@ -103,7 +103,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.6.0
    */
-  fetchLatestBundle(): Promise<void>;
+  fetchLatestBundle(): Promise<FetchLatestBundleResult>;
   /**
    * Get the active bundle identifier.
    *
@@ -266,6 +266,20 @@ export interface DownloadBundleOptions {
    * @example 'https://example.com/bundle.zip'
    */
   url: string;
+}
+
+/**
+ * @since 6.6.0
+ */
+export interface FetchLatestBundleResult {
+  /**
+   * The unique identifier of the latest bundle.
+   *
+   * If `null`, no bundle is available.
+   *
+   * @since 6.6.0
+   */
+  bundleId: string | null;
 }
 
 /**
