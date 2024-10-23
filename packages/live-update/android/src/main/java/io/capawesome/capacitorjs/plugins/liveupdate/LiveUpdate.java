@@ -20,6 +20,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBund
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
@@ -134,6 +135,12 @@ public class LiveUpdate {
         // Download the bundle
         downloadBundleOfTypeZip(bundleId, url, checksum);
         callback.success();
+    }
+
+    public void fetchLatestBundle(@NonNull NonEmptyCallback callback) throws Exception {
+        GetLatestBundleResponse response = fetchLatestBundle();
+        FetchLatestBundleResult result = new FetchLatestBundleResult(response == null ? null : response.getBundleId());
+        callback.success(result);
     }
 
     public void getBundle(@NonNull NonEmptyCallback callback) {

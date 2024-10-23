@@ -19,7 +19,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.5.0";
+    public static final String VERSION = "6.6.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -112,6 +112,27 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.downloadBundle(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void fetchLatestBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(Result result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.fetchLatestBundle(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

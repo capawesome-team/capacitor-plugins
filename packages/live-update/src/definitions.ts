@@ -97,6 +97,14 @@ export interface LiveUpdatePlugin {
    */
   downloadBundle(options: DownloadBundleOptions): Promise<void>;
   /**
+   * Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.6.0
+   */
+  fetchLatestBundle(): Promise<FetchLatestBundleResult>;
+  /**
    * Get the active bundle identifier.
    *
    * Only available on Android and iOS.
@@ -258,6 +266,20 @@ export interface DownloadBundleOptions {
    * @example 'https://example.com/bundle.zip'
    */
   url: string;
+}
+
+/**
+ * @since 6.6.0
+ */
+export interface FetchLatestBundleResult {
+  /**
+   * The unique identifier of the latest bundle.
+   *
+   * If `null`, no bundle is available.
+   *
+   * @since 6.6.0
+   */
+  bundleId: string | null;
 }
 
 /**

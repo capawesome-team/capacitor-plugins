@@ -156,6 +156,10 @@ const downloadBundle = async () => {
   await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
 };
 
+const fetchLatestBundle = async () => {
+  await LiveUpdate.fetchLatestBundle();
+};
+
 const getBundle = async () => {
   const result = await LiveUpdate.getBundle();
   return result.bundleId;
@@ -219,6 +223,16 @@ const sync = async () => {
   const result = await LiveUpdate.sync();
   return result.nextBundleId;
 };
+
+const isNewBundleAvailable = async () => {
+  const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle();
+  if (latestBundleId) {
+    const { bundleId: currentBundleId } = await LiveUpdate.getBundle();
+    return latestBundleId !== currentBundleId;
+  } else {
+    return false;
+  }
+};
 ```
 
 ## API
@@ -227,6 +241,7 @@ const sync = async () => {
 
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
+* [`fetchLatestBundle()`](#fetchlatestbundle)
 * [`getBundle()`](#getbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
@@ -282,6 +297,21 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#downloadbundleoptions">DownloadBundleOptions</a></code> |
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### fetchLatestBundle()
+
+```typescript
+fetchLatestBundle() => Promise<void>
+```
+
+Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
+
+Only available on Android and iOS.
+
+**Since:** 6.6.0
 
 --------------------
 
