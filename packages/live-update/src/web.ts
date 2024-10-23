@@ -26,6 +26,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
     this.throwUnimplementedError();
   }
 
+  public async fetchLatestBundle(): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
   public async getBundle(): Promise<GetBundleResult> {
     this.throwUnimplementedError();
   }

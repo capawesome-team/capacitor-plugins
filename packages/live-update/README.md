@@ -227,6 +227,7 @@ const sync = async () => {
 
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
+* [`fetchLatestBundle()`](#fetchlatestbundle)
 * [`getBundle()`](#getbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
@@ -282,6 +283,21 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#downloadbundleoptions">DownloadBundleOptions</a></code> |
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### fetchLatestBundle()
+
+```typescript
+fetchLatestBundle() => Promise<void>
+```
+
+Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
+
+Only available on Android and iOS.
+
+**Since:** 6.6.0
 
 --------------------
 
