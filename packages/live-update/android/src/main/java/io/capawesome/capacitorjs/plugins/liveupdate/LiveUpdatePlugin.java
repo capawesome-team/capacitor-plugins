@@ -118,6 +118,27 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void fetchLatestBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(Result result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.fetchLatestBundle(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getBundle(PluginCall call) {
         try {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {

@@ -4,7 +4,7 @@ import SSZipArchive
 import Capacitor
 import Alamofire
 import CommonCrypto
- 
+
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
@@ -72,6 +72,11 @@ import CommonCrypto
 
         // Download the bundle
         try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
+    }
+
+    @objc public func fetchLatestBundle() async throws -> FetchLatestBundleResult {
+        let response: GetLatestBundleResponse? = try await self.fetchLatestBundle()
+        return FetchLatestBundleResult(bundleId: response?.bundleId)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {

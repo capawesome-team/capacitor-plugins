@@ -60,6 +60,19 @@ public class LiveUpdatePlugin: CAPPlugin {
         }
     }
 
+    @objc func fetchLatestBundle(_ call: CAPPluginCall) {
+        Task {
+            do {
+                let result = try await implementation?.fetchLatestBundle()
+                if let result = result?.toJSObject() as? JSObject {
+                    call.resolve(result)
+                }
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
+
     @objc func getBundle(_ call: CAPPluginCall) {
         implementation?.getBundle(completion: { result, error in
             if let error = error {

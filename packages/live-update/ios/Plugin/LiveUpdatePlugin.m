@@ -6,6 +6,7 @@
 CAP_PLUGIN(LiveUpdatePlugin, "LiveUpdate",
            CAP_PLUGIN_METHOD(deleteBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(downloadBundle, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(fetchLatestBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getBundles, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getChannel, CAPPluginReturnPromise);
