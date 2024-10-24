@@ -262,7 +262,6 @@ export interface DownloadBundleOptions {
    * Must be a SHA-256 hash in base64 format.
    *
    * @since 6.1.0
-   * @example 'aab8e0a312e807c8eaeb923e2bdccd7731c5508869c62ad8e6e43ee881414c84'
    * @deprecated The server should return a `X-Checksum` header instead.
    */
   checksum?: string;
