@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.6.0
+
+### Minor Changes
+
+- [`0f4f2fa`](https://github.com/capawesome-team/capacitor-plugins/commit/0f4f2fa40318ad82e14b5bf14f7dd70eec7bbe93) ([#311](https://github.com/capawesome-team/capacitor-plugins/pull/311)): feat: add `fetchLatestBundle()` method
+
+* [`626a01d`](https://github.com/capawesome-team/capacitor-plugins/commit/626a01db4d6c6698c3069a9c2f65465545ae8400) ([#315](https://github.com/capawesome-team/capacitor-plugins/pull/315)): feat: add `artifactType` option to `downloadBundle(...)` method
+
 ## 6.5.0
 
 ### Minor Changes
