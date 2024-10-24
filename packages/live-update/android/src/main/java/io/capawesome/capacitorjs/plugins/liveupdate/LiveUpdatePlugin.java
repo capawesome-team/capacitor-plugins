@@ -86,6 +86,7 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void downloadBundle(PluginCall call) {
         try {
+            String artifactType = call.getString("artifactType", "zip");
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
                 call.reject(ERROR_BUNDLE_ID_MISSING);
@@ -98,7 +99,7 @@ public class LiveUpdatePlugin extends Plugin {
                 return;
             }
 
-            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, checksum, url);
+            DownloadBundleOptions options = new DownloadBundleOptions(artifactType, bundleId, checksum, url);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {

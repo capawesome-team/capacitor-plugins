@@ -242,6 +242,14 @@ export interface DeleteBundleOptions {
 
 export interface DownloadBundleOptions {
   /**
+   * The artifact type of the bundle.
+   *
+   * @since 6.6.0
+   * @default 'zip'
+   * @example 'manifest'
+   */
+  artifactType?: 'manifest' | 'zip';
+  /**
    * The unique identifier of the bundle.
    *
    * @since 5.0.0
@@ -251,16 +259,26 @@ export interface DownloadBundleOptions {
   /**
    * The checksum of the bundle to verify the integrity of the ZIP file.
    *
-   * Must be a SHA-256 hash in hexadecimal format.
+   * Must be a SHA-256 hash in base64 format.
    *
    * @since 6.1.0
-   * @example 'aab8e0a312e807c8eaeb923e2bdccd7731c5508869c62ad8e6e43ee881414c84'
+   * @deprecated The server should return a `X-Checksum` header instead.
    */
   checksum?: string;
   /**
    * The URL of the bundle to download.
    *
-   * The bundle must be a ZIP file containing at least a `index.html` file.
+   * For the `zip` artifact type, the URL must point to a ZIP file.
+   * For the `manifest` artifact type, the URL serves as the base URL
+   * to download the individual files. For example, if the URL is
+   * `https://example.com/download`, the plugin will download the file
+   * with the href `index.html` from `https://example.com/download?href=index.html`.
+   *
+   * To **verify the integrity** of the file, the server must return
+   * a `X-Checksum` header with the SHA-256 hash in base64 format.
+   *
+   * To **verify the signature** of the file, the server must return
+   * a `X-Signature` header with the signed SHA-256 hash in base64 format.
    *
    * @since 5.0.0
    * @example 'https://example.com/bundle.zip'

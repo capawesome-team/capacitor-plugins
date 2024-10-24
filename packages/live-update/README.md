@@ -304,12 +304,14 @@ Only available on Android and iOS.
 ### fetchLatestBundle()
 
 ```typescript
-fetchLatestBundle() => Promise<void>
+fetchLatestBundle() => Promise<FetchLatestBundleResult>
 ```
 
 Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
 
 Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#fetchlatestbundleresult">FetchLatestBundleResult</a>&gt;</code>
 
 **Since:** 6.6.0
 
@@ -575,11 +577,19 @@ Only available on Android and iOS.
 
 #### DownloadBundleOptions
 
-| Prop           | Type                | Description                                                                                                       | Since |
-| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| **`bundleId`** | <code>string</code> | The unique identifier of the bundle.                                                                              | 5.0.0 |
-| **`checksum`** | <code>string</code> | The checksum of the bundle to verify the integrity of the ZIP file. Must be a SHA-256 hash in hexadecimal format. | 6.1.0 |
-| **`url`**      | <code>string</code> | The URL of the bundle to download. The bundle must be a ZIP file containing at least a `index.html` file.         | 5.0.0 |
+| Prop               | Type                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Default            | Since |
+| ------------------ | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>'zip'</code> | 6.6.0 |
+| **`bundleId`**     | <code>string</code>              | The unique identifier of the bundle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |                    | 5.0.0 |
+| **`checksum`**     | <code>string</code>              | The checksum of the bundle to verify the integrity of the ZIP file. Must be a SHA-256 hash in base64 format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |                    | 6.1.0 |
+| **`url`**          | <code>string</code>              | The URL of the bundle to download. For the `zip` artifact type, the URL must point to a ZIP file. For the `manifest` artifact type, the URL serves as the base URL to download the individual files. For example, if the URL is `https://example.com/download`, the plugin will download the file with the href `index.html` from `https://example.com/download?href=index.html`. To **verify the integrity** of the file, the server must return a `X-Checksum` header with the SHA-256 hash in base64 format. To **verify the signature** of the file, the server must return a `X-Signature` header with the signed SHA-256 hash in base64 format. |                    | 5.0.0 |
+
+
+#### FetchLatestBundleResult
+
+| Prop           | Type                        | Description                                                                    | Since |
+| -------------- | --------------------------- | ------------------------------------------------------------------------------ | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the latest bundle. If `null`, no bundle is available. | 6.6.0 |
 
 
 #### GetBundleResult

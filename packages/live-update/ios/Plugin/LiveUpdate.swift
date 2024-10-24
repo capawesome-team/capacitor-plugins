@@ -61,6 +61,7 @@ import CommonCrypto
     }
 
     @objc public func downloadBundle(_ options: DownloadBundleOptions) async throws {
+        let artifactType = options.getArtifactType()
         let bundleId = options.getBundleId()
         let checksum = options.getChecksum()
         let url = options.getUrl()
@@ -71,7 +72,11 @@ import CommonCrypto
         }
 
         // Download the bundle
-        try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
+        if artifactType == .manifest {
+            try await downloadBundleOfTypeManifest(bundleId: bundleId, url: url)
+        } else {
+            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
+        }
     }
 
     @objc public func fetchLatestBundle() async throws -> FetchLatestBundleResult {
