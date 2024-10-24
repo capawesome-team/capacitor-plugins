@@ -40,6 +40,7 @@ public class LiveUpdatePlugin: CAPPlugin {
     @objc func downloadBundle(_ call: CAPPluginCall) {
         Task {
             do {
+                let artifactType = call.getString("artifactType", "zip")
                 guard let bundleId = call.getString("bundleId") else {
                     call.reject(CustomError.bundleIdMissing.localizedDescription)
                     return
@@ -50,7 +51,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                     return
                 }
 
-                let options = DownloadBundleOptions(bundleId: bundleId, checksum: checksum, url: url)
+                let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, checksum: checksum, url: url)
 
                 try await implementation?.downloadBundle(options)
                 call.resolve()

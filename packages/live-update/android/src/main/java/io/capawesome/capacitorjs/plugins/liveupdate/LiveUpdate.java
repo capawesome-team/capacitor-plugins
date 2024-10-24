@@ -121,6 +121,7 @@ public class LiveUpdate {
     }
 
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
+        ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
         String checksum = options.getChecksum();
         String url = options.getUrl();
@@ -133,7 +134,11 @@ public class LiveUpdate {
         }
 
         // Download the bundle
-        downloadBundleOfTypeZip(bundleId, url, checksum);
+        if (artifactType == ArtifactType.MANIFEST) {
+            downloadBundleOfTypeManifest(bundleId, url);
+        } else {
+            downloadBundleOfTypeZip(bundleId, url, checksum);
+        }
         callback.success();
     }
 
