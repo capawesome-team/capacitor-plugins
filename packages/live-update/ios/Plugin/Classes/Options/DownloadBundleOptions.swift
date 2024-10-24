@@ -17,7 +17,7 @@ import Capacitor
         self.checksum = checksum
         self.url = url
     }
-    
+
     func getArtifactType() -> ArtifactType {
         return artifactType
     }

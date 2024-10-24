@@ -2,7 +2,6 @@ package io.capawesome.capacitorjs.plugins.liveupdate.classes.options;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 
 public class DownloadBundleOptions {

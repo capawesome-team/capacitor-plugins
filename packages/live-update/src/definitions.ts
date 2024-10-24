@@ -243,7 +243,7 @@ export interface DeleteBundleOptions {
 export interface DownloadBundleOptions {
   /**
    * The artifact type of the bundle.
-   * 
+   *
    * @since 6.6.0
    * @default 'zip'
    * @example 'manifest'
@@ -268,16 +268,16 @@ export interface DownloadBundleOptions {
   checksum?: string;
   /**
    * The URL of the bundle to download.
-   * 
+   *
    * For the `zip` artifact type, the URL must point to a ZIP file.
    * For the `manifest` artifact type, the URL serves as the base URL
    * to download the individual files. For example, if the URL is
-   * `https://example.com/download`, the plugin will download the file 
+   * `https://example.com/download`, the plugin will download the file
    * with the href `index.html` from `https://example.com/download?href=index.html`.
    *
-   * To **verify the integrity** of the file, the server must return 
+   * To **verify the integrity** of the file, the server must return
    * a `X-Checksum` header with the SHA-256 hash in base64 format.
-   * 
+   *
    * To **verify the signature** of the file, the server must return
    * a `X-Signature` header with the signed SHA-256 hash in base64 format.
    *
