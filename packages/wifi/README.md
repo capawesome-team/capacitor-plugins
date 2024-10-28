@@ -140,6 +140,7 @@ const startScan = async () => {
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -396,9 +397,11 @@ Remove all listeners for this plugin.
 
 #### Network
 
-| Prop       | Type                | Description                                       | Since |
-| ---------- | ------------------- | ------------------------------------------------- | ----- |
-| **`ssid`** | <code>string</code> | The service set identifier (SSID) of the network. | 6.0.0 |
+| Prop                | Type                               | Description                                                                            | Since |
+| ------------------- | ---------------------------------- | -------------------------------------------------------------------------------------- | ----- |
+| **`rssi`**          | <code>number</code>                | The received signal strength indicator (RSSI) of the network in dBm.                   | 6.1.0 |
+| **`securityTypes`** | <code>NetworkSecurityType[]</code> | The service set identifier (SSID) of the network. Only available on Android (SDK 33+). | 6.1.0 |
+| **`ssid`**          | <code>string</code>                | The service set identifier (SSID) of the network.                                      | 6.0.0 |
 
 
 #### GetIpAddressResult
@@ -468,6 +471,30 @@ Remove all listeners for this plugin.
 #### PermissionType
 
 <code>'location'</code>
+
+
+### Enums
+
+
+#### NetworkSecurityType
+
+| Members                           | Value           | Description                                                                                | Since |
+| --------------------------------- | --------------- | ------------------------------------------------------------------------------------------ | ----- |
+| **`UNKNOWN`**                     | <code>-1</code> | Unknown security type.                                                                     | 6.1.0 |
+| **`OPEN`**                        | <code>0</code>  | Open network.                                                                              | 6.1.0 |
+| **`WEP`**                         | <code>1</code>  | WEP network.                                                                               | 6.1.0 |
+| **`PSK`**                         | <code>2</code>  | PSK network.                                                                               | 6.1.0 |
+| **`EAP`**                         | <code>3</code>  | EAP network.                                                                               | 6.1.0 |
+| **`SAE`**                         | <code>4</code>  | SAE network.                                                                               | 6.1.0 |
+| **`EAP_WPA3_ENTERPRISE_192_BIT`** | <code>5</code>  | WPA3-Enterprise in 192-bit security network.                                               | 6.1.0 |
+| **`OWE`**                         | <code>6</code>  | OWE network.                                                                               | 6.1.0 |
+| **`WAPI_PSK`**                    | <code>7</code>  | WAPI PSK network.                                                                          | 6.1.0 |
+| **`WAPI_CERT`**                   | <code>8</code>  | WAPI Certificate network.                                                                  | 6.1.0 |
+| **`WPA3_ENTERPRISE`**             | <code>9</code>  | WPA3-Enterprise network.                                                                   | 6.1.0 |
+| **`OSEN`**                        | <code>10</code> | OSEN network.                                                                              | 6.1.0 |
+| **`PASSPOINT_R1_R2`**             | <code>11</code> | Passpoint R1/R2 network, where TKIP and WEP are not allowed.                               | 6.1.0 |
+| **`PASSPOINT_R3`**                | <code>12</code> | Passpoint R3 network, where TKIP and WEP are not allowed, and PMF must be set to Required. | 6.1.0 |
+| **`DPP`**                         | <code>13</code> | Easy Connect (DPP) network.                                                                | 6.1.0 |
 
 </docgen-api>
 
