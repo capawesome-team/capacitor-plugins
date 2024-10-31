@@ -2,42 +2,36 @@
 
 Capacitor plugin for reading and writing NFC tags.
 
-## Sponsorware
+## Features
 
-This project is available as **Sponsorware**.
-
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
-
-This means...
-
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
-
-## Terms
-
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
-
-## Demo
-
-A working example can be found here: [capawesome-team/capacitor-nfc-demo](https://github.com/capawesome-team/capacitor-nfc-demo)
-
-| Android                                                                                                                         | iOS                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" /> |
-
-## Guides
-
-- [Announcing the Capacitor NFC Plugin](https://capawesome.io/blog/announcing-the-capacitor-nfc-plugin/)
+- 🔋 Supports Android, iOS and Web.
+- ⚡️ Capacitor 6 support.
+- 🔄 **NDEF**: Read and write NFC Data Exchange Format (NDEF) messages.
+- 📳 **HCE**: Emulate an NFC card that other devices can interact with.
+- ⌘ **Raw Commands**: Send raw commands to an NFC tag and receive the response.
+- 🛠️ **Utils**: Utility functions to make your life easier.
+- ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- 📚 **Documentation**: Comprehensive documentation to help you get started.
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-nfc) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
 
-After that, follow the platform-specific instructions in the sections [Android](#android) and [iOS](#ios).
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-nfc
+npx cap sync
+```
 
 ### Android
 
@@ -73,6 +67,18 @@ The NFC tag requires a [URI record](https://w3c.github.io/web-nfc/#uri-record) (
 ## Configuration
 
 No configuration required for this plugin.
+
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-nfc-demo](https://github.com/capawesome-team/capacitor-nfc-demo)
+
+| Android                                                                                                                         | iOS                                                                                                                             |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" /> |
+
+## Guides
+
+- [Announcing the Capacitor NFC Plugin](https://capawesome.io/blog/announcing-the-capacitor-nfc-plugin/)
 
 ## Usage
 
