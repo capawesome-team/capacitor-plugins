@@ -2,36 +2,31 @@
 
 Capacitor plugin for compressing files.
 
-## Sponsorware
+## Features
 
-This project is available as **Sponsorware**.
-
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
-
-This means...
-
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
-
-## Terms
-
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
-
-## Demo
-
-A working example can be found here: [capawesome-team/capacitor-plugin-demo](https://github.com/capawesome-team/capacitor-plugin-demo)
-
-| Android                                                                                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" /> |
+- 🔋 Supports Android and iOS.
+- ⚡️ Capacitor 6 support.
+- 🌅 **Compress images**: Compress png, jpeg, and webp images.
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-file-compressor) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
+
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-file-compressor
+npx cap sync
+```
 
 ### Android
 
@@ -44,6 +39,14 @@ This plugin will use the following project variables (defined in your app’s `v
 ## Configuration
 
 No configuration required for this plugin.
+
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-plugin-demo](https://github.com/capawesome-team/capacitor-plugin-demo)
+
+| Android                                                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" /> |
 
 ## Usage
 
