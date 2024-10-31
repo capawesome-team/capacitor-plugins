@@ -4,38 +4,33 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central rol
 
 ## Features
 
-- 🔋 Supports Android and iOS
-- ⚡️ Capacitor 6 support
+- 🔋 Supports Android and iOS.
+- ⚡️ Capacitor 6 support.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier. 
 
-## Sponsorware
-
-This project is available as **Sponsorware**.
-
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
-
-This means...
-
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
-
-## Terms
-
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
-
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-bluetooth-low-energy) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
 
-After that, follow the platform-specific instructions in the sections [Android](#android) and [iOS](#ios).
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-bluetooth-low-energy
+npx cap sync
+```
 
 ### Android
 
