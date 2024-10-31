@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`196eb92`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/196eb92e6a34cddc7b4d83f42a00f01d37c3a473): docs: update `LICENSE`
+
 ## 6.1.1
 
 ### Patch Changes
