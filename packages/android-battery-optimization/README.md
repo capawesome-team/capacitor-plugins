@@ -4,9 +4,10 @@ Capacitor plugin to access battery optimization settings on Android.
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/insiders/getting-started/?plugin=capacitor-android-battery-optimization) and follow the instructions to install the plugin.
-
-After that, follow the platform-specific instructions in the section [Android](#android).
+```bash
+npm install @capawesome-team/capacitor-android-battery-optimization
+npx cap sync
+```
 
 ### Android
 

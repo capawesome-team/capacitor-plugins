@@ -4,10 +4,6 @@ Capacitor plugin that let the user easily enter both a date and a time.
 
 ## Installation
 
-If you are an [Insider](https://capawesome.io/insiders/#what-is-insiders), see [Getting started with Insiders](https://capawesome.io/insiders/getting-started/?plugin=capacitor-datetime-picker) and follow the instructions to install the plugin.
-
-If you are **not** an Insider, please install the package from the public npm registry:
-
 ```bash
 npm install @capawesome-team/capacitor-datetime-picker
 npx cap sync
