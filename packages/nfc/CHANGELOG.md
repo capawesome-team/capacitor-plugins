@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [6.3.0](https://github.com/capawesome-team/sponsorware/compare/v6.2.1...v6.3.0) (2024-10-31)
 
+* update `LICENSE`
+
 ### [6.2.1](https://github.com/capawesome-team/sponsorware/compare/v6.2.0...v6.2.1) (2024-08-16)
 
 
