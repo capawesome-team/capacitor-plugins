@@ -620,12 +620,13 @@ Remove all listeners for this plugin.
 
 #### StartScanSessionOptions
 
-| Prop                 | Type                          | Description                                                                                  | Default                                                       | Since |
-| -------------------- | ----------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----- |
-| **`alertMessage`**   | <code>string</code>           | A custom message, which is displayed in the NFC Reader Session alert. Only available on iOS. |                                                               | 0.0.1 |
-| **`techTypes`**      | <code>NfcTagTechType[]</code> | The NFC tag technologies to filter on in this session. Only available on Android.            |                                                               | 0.0.1 |
-| **`mimeTypes`**      | <code>string[]</code>         | Mime types to filter on in this session. Only available on Android.                          |                                                               | 0.0.1 |
-| **`pollingOptions`** | <code>PollingOption[]</code>  | Type of tags to detect during a polling sequence. Only available on iOS.                     | <code>[PollingOption.iso14443, PollingOption.iso15693]</code> | 0.2.0 |
+| Prop                    | Type                          | Description                                                                                                                                                                                                  | Default                                                       | Since |
+| ----------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------- | ----- |
+| **`alertMessage`**      | <code>string</code>           | A custom message, which is displayed in the NFC Reader Session alert. Only available on iOS.                                                                                                                 |                                                               | 0.0.1 |
+| **`compatibilityMode`** | <code>boolean</code>          | Whether or not to use the [`NFCNDEFReaderSession`](https://developer.apple.com/documentation/corenfc/nfcndefreadersession). **Attention:** This mode only supports reading NDEF tags. Only available on iOS. | <code>false</code>                                            | 6.4.0 |
+| **`techTypes`**         | <code>NfcTagTechType[]</code> | The NFC tag technologies to filter on in this session. Only available on Android.                                                                                                                            |                                                               | 0.0.1 |
+| **`mimeTypes`**         | <code>string[]</code>         | Mime types to filter on in this session. Only available on Android.                                                                                                                                          |                                                               | 0.0.1 |
+| **`pollingOptions`**    | <code>PollingOption[]</code>  | Type of tags to detect during a polling sequence. Only available on iOS.                                                                                                                                     | <code>[PollingOption.iso14443, PollingOption.iso15693]</code> | 0.2.0 |
 
 
 #### StopScanSessionOptions
