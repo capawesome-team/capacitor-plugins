@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.4.0](https://github.com/capawesome-team/sponsorware/compare/v6.3.0...v6.4.0) (2024-11-06)
+
+
+### Features
+
+* **ios:** add compatibility mode ([#28](https://github.com/capawesome-team/sponsorware/issues/28)) ([c0a9374](https://github.com/capawesome-team/sponsorware/commit/c0a937454be1fd1c960f3522e02f317deaf3c341))
+
 ## [6.3.0](https://github.com/capawesome-team/sponsorware/compare/v6.2.1...v6.3.0) (2024-10-31)
 
 * update `LICENSE`
