@@ -26,6 +26,7 @@ body:
         - label: Photo Editor
         - label: Printer
         - label: Screen Orientation
+        - label: Speech Recognition
         - label: Zip
   - type: textarea
     attributes:
