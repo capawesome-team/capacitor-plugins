@@ -4,12 +4,13 @@ Capacitor plugin to transcribe speech into text.
 
 ## Features
 
-- 🔋 Supports Android and iOS.
-- ⚡️ Capacitor 6 support.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple languages**: Supports many different languages.
 - 🛠 **Permissions**: Check and request permissions for recording audio.
 - 🎧 **Listening**: Check if the speech recognizer is available and currently listening.
 - 🎙 **Events**: Listen for events like `beginningOfSpeech`, `endOfSpeech`, `error`, `partialResults`, `readyForSpeech`, and `results`.
+- 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 ## Installation
 
@@ -173,8 +174,6 @@ isAvailable() => Promise<IsAvailableResult>
 
 Check if the speech recognizer is available on the device.
 
-Only available on Android and iOS.
-
 **Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
 
 **Since:** 6.0.0
@@ -190,8 +189,6 @@ isListening() => Promise<IsListeningResult>
 
 Check if the speech recognizer is currently listening.
 
-Only available on Android and iOS.
-
 **Returns:** <code>Promise&lt;<a href="#islisteningresult">IsListeningResult</a>&gt;</code>
 
 **Since:** 6.0.0
@@ -206,8 +203,6 @@ startListening(options?: StartListeningOptions | undefined) => Promise<void>
 ```
 
 Start listening for speech.
-
-Only available on Android and iOS.
 
 | Param         | Type                                                                    |
 | ------------- | ----------------------------------------------------------------------- |
@@ -226,8 +221,6 @@ stopListening() => Promise<void>
 
 Stop listening for speech.
 
-Only available on Android and iOS.
-
 **Since:** 6.0.0
 
 --------------------
@@ -240,8 +233,6 @@ checkPermissions() => Promise<PermissionStatus>
 ```
 
 Check permissions for the plugin.
-
-Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -258,8 +249,6 @@ requestPermissions() => Promise<PermissionStatus>
 
 Request permissions for the plugin.
 
-Only available on Android and iOS.
-
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 6.0.0
@@ -275,7 +264,7 @@ addListener(eventName: 'beginningOfSpeech', listenerFunc: () => void) => Promise
 
 Called when the user has started to speak.
 
-Only available on Android.
+Only available on Android and Web.
 
 | Param              | Type                             |
 | ------------------ | -------------------------------- |
@@ -297,7 +286,7 @@ addListener(eventName: 'endOfSpeech', listenerFunc: () => void) => Promise<Plugi
 
 Called when the user has stopped speaking.
 
-Only available on Android.
+Only available on Android and Web.
 
 | Param              | Type                       |
 | ------------------ | -------------------------- |
@@ -319,8 +308,6 @@ addListener(eventName: 'error', listenerFunc: (event: ErrorEvent) => void) => Pr
 
 Called when an error occurs.
 
-Only available on Android and iOS.
-
 | Param              | Type                                                                  |
 | ------------------ | --------------------------------------------------------------------- |
 | **`eventName`**    | <code>'error'</code>                                                  |
@@ -340,8 +327,6 @@ addListener(eventName: 'listeningState', listenerFunc: (event: ListeningStateEve
 ```
 
 Called when the listening state changes.
-
-Only available on Android and iOS.
 
 | Param              | Type                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------- |
@@ -363,8 +348,6 @@ addListener(eventName: 'partialResults', listenerFunc: (event: PartialResultsEve
 
 Called when a partial result is available.
 
-Only available on Android and iOS.
-
 | Param              | Type                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------- |
 | **`eventName`**    | <code>'partialResults'</code>                                                           |
@@ -385,8 +368,6 @@ addListener(eventName: 'readyForSpeech', listenerFunc: () => void) => Promise<Pl
 
 Called when the speech recognizer is listening for speech.
 
-Only available on Android and iOS.
-
 | Param              | Type                          |
 | ------------------ | ----------------------------- |
 | **`eventName`**    | <code>'readyForSpeech'</code> |
@@ -406,8 +387,6 @@ addListener(eventName: 'results', listenerFunc: (event: ResultsEvent) => void) =
 ```
 
 Called when the final results are available.
-
-Only available on Android and iOS.
 
 | Param              | Type                                                                      |
 | ------------------ | ------------------------------------------------------------------------- |
