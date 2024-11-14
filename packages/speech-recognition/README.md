@@ -5,11 +5,12 @@ Capacitor plugin to transcribe speech into text.
 ## Features
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
-- 🌐 **Multiple languages**: Supports many different languages.
+- 🌐 **Multiple Languages**: Supports many different languages.
 - 🛠 **Permissions**: Check and request permissions for recording audio.
 - 🎧 **Listening**: Check if the speech recognizer is available and currently listening.
 - 🎙 **Events**: Listen for events like `beginningOfSpeech`, `endOfSpeech`, `error`, `partialResults`, `readyForSpeech`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
+- 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 ## Installation
@@ -137,9 +138,8 @@ const removeAllListeners = async () => {
 * [`addListener('endOfSpeech', ...)`](#addlistenerendofspeech-)
 * [`addListener('error', ...)`](#addlistenererror-)
 * [`addListener('listeningState', ...)`](#addlistenerlisteningstate-)
-* [`addListener('partialResults', ...)`](#addlistenerpartialresults-)
-* [`addListener('readyForSpeech', ...)`](#addlistenerreadyforspeech-)
-* [`addListener('results', ...)`](#addlistenerresults-)
+* [`addListener('partialResult', ...)`](#addlistenerpartialresult-)
+* [`addListener('result', ...)`](#addlistenerresult-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -340,18 +340,18 @@ Called when the listening state changes.
 --------------------
 
 
-### addListener('partialResults', ...)
+### addListener('partialResult', ...)
 
 ```typescript
-addListener(eventName: 'partialResults', listenerFunc: (event: PartialResultsEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'partialResult', listenerFunc: (event: PartialResultEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when a partial result is available.
 
-| Param              | Type                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'partialResults'</code>                                                           |
-| **`listenerFunc`** | <code>(event: <a href="#partialresultsevent">PartialResultsEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                                  |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'partialResult'</code>                                                          |
+| **`listenerFunc`** | <code>(event: <a href="#partialresultevent">PartialResultEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -360,38 +360,18 @@ Called when a partial result is available.
 --------------------
 
 
-### addListener('readyForSpeech', ...)
+### addListener('result', ...)
 
 ```typescript
-addListener(eventName: 'readyForSpeech', listenerFunc: () => void) => Promise<PluginListenerHandle>
-```
-
-Called when the speech recognizer is listening for speech.
-
-| Param              | Type                          |
-| ------------------ | ----------------------------- |
-| **`eventName`**    | <code>'readyForSpeech'</code> |
-| **`listenerFunc`** | <code>() =&gt; void</code>    |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 6.0.0
-
---------------------
-
-
-### addListener('results', ...)
-
-```typescript
-addListener(eventName: 'results', listenerFunc: (event: ResultsEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'result', listenerFunc: (event: ResultEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when the final results are available.
 
-| Param              | Type                                                                      |
-| ------------------ | ------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'results'</code>                                                    |
-| **`listenerFunc`** | <code>(event: <a href="#resultsevent">ResultsEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'result'</code>                                                   |
+| **`listenerFunc`** | <code>(event: <a href="#resultevent">ResultEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -439,11 +419,10 @@ Remove all listeners for this plugin.
 
 #### StartListeningOptions
 
-| Prop                             | Type                 | Description                                 | Default           | Since |
-| -------------------------------- | -------------------- | ------------------------------------------- | ----------------- | ----- |
-| **`language`**                   | <code>string</code>  | The language to use for speech recognition. |                   | 6.0.0 |
-| **`maxResults`**                 | <code>number</code>  | The maximum number of results to return.    | <code>5</code>    | 6.0.0 |
-| **`shouldReturnPartialResults`** | <code>boolean</code> | Whether or not to receive partial results.  | <code>true</code> | 6.0.0 |
+| Prop                   | Type                | Description                                                                                                  | Default           | Since |
+| ---------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------- | ----- |
+| **`language`**         | <code>string</code> | The language to use for speech recognition.                                                                  |                   | 6.0.0 |
+| **`silenceThreshold`** | <code>number</code> | The number of milliseconds of silence before the speech recognition ends. Only available on Android and iOS. | <code>2000</code> | 6.0.0 |
 
 
 #### PermissionStatus
@@ -474,18 +453,18 @@ Remove all listeners for this plugin.
 | **`listening`** | <code>boolean</code> | Whether or not the speech recognizer is listening. | 6.0.0 |
 
 
-#### PartialResultsEvent
+#### PartialResultEvent
 
-| Prop          | Type                  | Description                                    | Since |
-| ------------- | --------------------- | ---------------------------------------------- | ----- |
-| **`results`** | <code>string[]</code> | The partial results of the speech recognition. | 6.0.0 |
+| Prop         | Type                | Description                                   | Since |
+| ------------ | ------------------- | --------------------------------------------- | ----- |
+| **`result`** | <code>string</code> | The partial result of the speech recognition. | 6.0.0 |
 
 
-#### ResultsEvent
+#### ResultEvent
 
-| Prop          | Type                  | Description                                  | Since |
-| ------------- | --------------------- | -------------------------------------------- | ----- |
-| **`results`** | <code>string[]</code> | The final results of the speech recognition. | 6.0.0 |
+| Prop         | Type                | Description                                 | Since |
+| ------------ | ------------------- | ------------------------------------------- | ----- |
+| **`result`** | <code>string</code> | The final result of the speech recognition. | 6.0.0 |
 
 
 ### Type Aliases
