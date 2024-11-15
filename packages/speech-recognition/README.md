@@ -58,8 +58,7 @@ import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition
 const startListening = async () => {
   await SpeechRecognition.startListening({
     language: 'en-US',
-    maxResults: 5,
-    shouldReturnPartialResults: true,
+    silenceThreshold: 2000,
   });
 };
 
