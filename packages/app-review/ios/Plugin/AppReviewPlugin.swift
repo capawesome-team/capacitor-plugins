@@ -7,12 +7,25 @@ import Capacitor
  */
 @objc(AppReviewPlugin)
 public class AppReviewPlugin: CAPPlugin {
-    private let implementation = AppReview()
+    private var implementation: AppReview?
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    override public func load() {
+        self.implementation = AppReview(plugin: self)
+    }
+
+    @objc func openAppStore(_ call: CAPPluginCall) {
+        guard let appID = call.getString("appID") else {
+            call.reject("appID parameter is required")
+            return
+        }
+
+        CAPLog.print("Calling openAppStore with appID: \(appID)")
+        self.implementation?.openAppStore(appID: appID)
+
+        call.resolve()
+    }
+
+    @objc func requestReview(_ call: CAPPluginCall) {
+        self.implementation?.requestReview()
     }
 }
