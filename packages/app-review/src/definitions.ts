@@ -4,10 +4,9 @@ export interface AppReviewPlugin {
    *
    * Only available on Android and iOS.
    *
-   * @param options The options to open the App Store page, only available on iOS.
    * @since 6.0.0
    */
-  openAppStore(options?: { appID: string }): Promise<void>;
+  openAppStore(): Promise<void>;
   /**
    * Request an in-app review.
    *

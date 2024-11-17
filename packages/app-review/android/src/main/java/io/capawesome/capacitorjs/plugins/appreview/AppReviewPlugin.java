@@ -1,55 +1,53 @@
 package io.capawesome.capacitorjs.plugins.appreview;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
+import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.google.android.play.core.review.ReviewInfo;
 
 @CapacitorPlugin(name = "AppReview")
 public class AppReviewPlugin extends Plugin {
 
     private AppReview appReview;
-    private ReviewInfo reviewInfo;
 
     @Override
     public void load() {
-        appReview = new AppReview(getActivity());
+        appReview = new AppReview(this);
     }
 
     @PluginMethod
     public void openAppStore(PluginCall call) {
-        if (reviewInfo != null) {
-            appReview.launchReviewFlow(
-                reviewInfo,
-                new ReviewResultCallback<Void>() {
-                    @Override
-                    public void success(Void result) {
-                        call.resolve();
-                    }
+        try {
+            String packageName = this.getContext().getPackageName();
+            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
 
-                    @Override
-                    public void error(Exception exception) {
-                        String message = exception.getMessage();
-                        Logger.error(message, exception);
-                        call.reject(message);
-                    }
-                }
-            );
-        } else {
-            call.reject("ReviewInfo is not available. Please call requestReview first.");
+            try {
+                this.getBridge().getActivity().startActivity(launchIntent);
+            } catch (ActivityNotFoundException ex) {
+                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+                this.getBridge().getActivity().startActivity(launchIntent);
+            }
+            call.resolve();
+        } catch (Exception exception) {
+            Logger.error(exception.getMessage(), exception);
+            call.reject(exception.getMessage());
         }
     }
 
     @PluginMethod
     public void requestReview(PluginCall call) {
+        final AppCompatActivity activity = getActivity();
         appReview.requestReviewFlow(
-            new ReviewResultCallback<ReviewInfo>() {
+            activity,
+            new EmptyCallback() {
                 @Override
-                public void success(ReviewInfo info) {
-                    reviewInfo = info;
+                public void success() {
                     JSObject result = new JSObject();
                     result.put("canLaunchReviewFlow", true);
                     call.resolve(result);

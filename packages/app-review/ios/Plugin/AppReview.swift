@@ -4,30 +4,37 @@ import StoreKit
 
 @objc public class AppReview: NSObject {
     private let plugin: AppReviewPlugin
-    private let requestCountKey = "reviewRequestCount"
 
     init(plugin: AppReviewPlugin) {
         self.plugin = plugin
     }
 
-    @objc public func openAppStore(appID: String) {
-        if let url = URL(string: "https://apps.apple.com/app/id\(appID)?action=write-review") {
+    @objc public func openAppStore(completion: @escaping (Error?) -> Void) {
+        if let info = Bundle.main.infoDictionary,
+           let bundleId = info["CFBundleIdentifier"] as? String,
+           let url = URL(string: "https://apps.apple.com/app/id\(bundleId)?action=write-review") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            completion(nil)
         } else {
-            CAPLog.print("Could not open App Store with appID: \(appID)")
+            CAPLog.print(self.plugin.bundleIdError)
+            let error = NSError(domain: "AppReview", code: 0, userInfo: [NSLocalizedDescriptionKey: self.plugin.bundleIdError])
+            completion(error)
         }
-
     }
 
-    @objc public func requestReview() {
+    @objc public func requestReview(completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async {
             if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
                 if #available(iOS 18, *) {
                     AppStore.requestReview(in: scene)
+                    completion(nil)
                 } else if #available(iOS 14.0, *) {
                     SKStoreReviewController.requestReview(in: scene)
+                    completion(nil)
                 } else {
-                    CAPLog.print("Review request is not available on this device")
+                    CAPLog.print(self.plugin.reviewRequestNotAvailable)
+                    let error = NSError(domain: "AppReview", code: 0, userInfo: [NSLocalizedDescriptionKey: self.plugin.reviewRequestNotAvailable])
+                    completion(error)
                 }
             }
         }

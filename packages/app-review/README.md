@@ -27,7 +27,7 @@ const echo = async () => {
 
 <docgen-index>
 
-* [`openAppStore(...)`](#openappstore)
+* [`openAppStore()`](#openappstore)
 * [`requestReview()`](#requestreview)
 
 </docgen-index>
@@ -35,19 +35,15 @@ const echo = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### openAppStore(...)
+### openAppStore()
 
 ```typescript
-openAppStore(options?: { appID: string; } | undefined) => Promise<void>
+openAppStore() => Promise<void>
 ```
 
 Open the App Store page for the current app and, if possible, open the dialog to leave a review.
 
 Only available on Android and iOS.
-
-| Param         | Type                            | Description                                                    |
-| ------------- | ------------------------------- | -------------------------------------------------------------- |
-| **`options`** | <code>{ appID: string; }</code> | The options to open the App Store page, only available on iOS. |
 
 **Since:** 6.0.0
 

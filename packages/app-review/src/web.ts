@@ -1,17 +1,20 @@
-import { WebPlugin } from '@capacitor/core';
+import { CapacitorException, ExceptionCode, WebPlugin } from '@capacitor/core';
 
 import type { AppReviewPlugin } from './definitions';
 
 export class AppReviewWeb extends WebPlugin implements AppReviewPlugin {
   openAppStore(): Promise<void> {
-    throw this.throwUnimplementedError();
+    throw this.createUnimplementedException();
   }
 
   requestReview(): Promise<void> {
-    throw this.throwUnimplementedError();
+    throw this.createUnimplementedException();
   }
 
-  private throwUnimplementedError(): never {
-    throw this.unimplemented('Not implemented on web.');
+  private createUnimplementedException(): CapacitorException {
+    return new CapacitorException(
+      'This plugin method is not implemented on web.',
+      ExceptionCode.Unimplemented,
+    );
   }
 }

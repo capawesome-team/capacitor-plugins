@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.appreview;
 
-import android.app.Activity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
 import com.getcapacitor.Logger;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.review.ReviewInfo;
@@ -10,46 +9,49 @@ import com.google.android.play.core.review.ReviewManagerFactory;
 
 public class AppReview {
 
-    private final ReviewManager manager;
-    private final Activity activity;
+    public AppReview(AppReviewPlugin plugin) {}
 
-    public AppReview(Activity activity) {
-        this.activity = activity;
-        this.manager = ReviewManagerFactory.create(activity);
-    }
-
-    public void requestReviewFlow(ReviewResultCallback<ReviewInfo> callback) {
+    public void requestReviewFlow(AppCompatActivity activity, EmptyCallback callback) {
+        final ReviewManager manager = ReviewManagerFactory.create(activity.getApplicationContext());
         manager
             .requestReviewFlow()
             .addOnCompleteListener(
                 task -> {
-                    if (task.isSuccessful()) {
-                        ReviewInfo reviewInfo = task.getResult();
-                        Logger.info("AppReview", "ReviewInfo retrieved successfully.");
-                        callback.success(reviewInfo);
-                    } else {
+                    if (!task.isSuccessful()) {
                         String error = "Failed to retrieve ReviewInfo.";
-                        Logger.error(error, task.getException());
-                        callback.error(task.getException());
+                        Logger.error("AppReview", error, task.getException());
+                        callback.error(new Exception(error, task.getException()));
+                        return;
                     }
+
+                    ReviewInfo reviewInfo = task.getResult();
+                    Logger.info("AppReview", "Review info retrieved successfully.");
+
+                    manager
+                        .launchReviewFlow(activity, reviewInfo)
+                        .addOnCompleteListener(
+                            task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Logger.info("AppReview", "Review flow completed successfully.");
+                                    callback.success();
+                                }
+                            }
+                        )
+                        .addOnFailureListener(
+                            exception -> {
+                                String error = "Unexpected error during review flow launch.";
+                                Logger.error("AppReview", error, exception);
+                                callback.error(new Exception(error, exception));
+                            }
+                        );
+                }
+            )
+            .addOnFailureListener(
+                exception -> {
+                    String error = "Unexpected error retrieving ReviewInfo.";
+                    Logger.error("AppReview", error, exception);
+                    callback.error(new Exception(error, exception));
                 }
             );
-    }
-
-    public void launchReviewFlow(ReviewInfo reviewInfo, ReviewResultCallback<Void> callback) {
-        Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
-        flow.addOnSuccessListener(
-            result -> {
-                Logger.info("AppReview", "Review flow launched successfully.");
-                callback.success(null);
-            }
-        );
-        flow.addOnFailureListener(
-            exception -> {
-                String error = "Failed to launch review flow.";
-                Logger.error(error, exception);
-                callback.error(exception);
-            }
-        );
     }
 }
