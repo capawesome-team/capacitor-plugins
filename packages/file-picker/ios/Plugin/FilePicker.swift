@@ -39,6 +39,23 @@ import MobileCoreServices
         }
     }
 
+    public func openDirectoryPicker() {
+        DispatchQueue.main.async {
+            if #available(iOS 14.0, *) {
+                let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder])
+                picker.delegate = self
+                picker.modalPresentationStyle = .fullScreen
+                self.presentViewController(picker)
+            } else {
+                let documentTypes = [kUTTypeFolder as String]
+                let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .open)
+                picker.delegate = self
+                picker.modalPresentationStyle = .fullScreen
+                self.presentViewController(picker)
+            }
+        }
+    }
+
     public func openImagePicker(limit: Int, skipTranscoding: Bool, ordered: Bool) {
         DispatchQueue.main.async {
             if #available(iOS 14, *) {
@@ -257,17 +274,29 @@ import MobileCoreServices
 
 extension FilePicker: UIDocumentPickerDelegate {
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        do {
-            let temporaryUrls = try urls.map { try saveTemporaryFile($0) }
-            plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
-        } catch {
-            plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
+        if plugin?.invokedMethod == "pickFiles" {
+            do {
+                let temporaryUrls = try urls.map { try saveTemporaryFile($0) }
+                plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
+            } catch {
+                plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
+            }
+        } else if plugin?.invokedMethod == "pickDirectory" {
+            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, error: nil)
+        } else {
+            return
         }
         plugin?.notifyPickerDismissedListener()
     }
 
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        plugin?.handleDocumentPickerResult(urls: nil, error: nil)
+        if plugin?.invokedMethod == "pickFiles" {
+            plugin?.handleDocumentPickerResult(urls: nil, error: nil)
+        } else if plugin?.invokedMethod == "pickDirectory" {
+            plugin?.handleDirectoryPickerResult(path: nil, error: nil)
+        } else {
+            return
+        }
         plugin?.notifyPickerDismissedListener()
     }
 }

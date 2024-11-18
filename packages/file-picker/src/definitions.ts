@@ -24,6 +24,12 @@ export interface FilePickerPlugin {
    */
   pickFiles(options?: PickFilesOptions): Promise<PickFilesResult>;
   /**
+   * Open a picker dialog that allows the user to select a directory.
+   *
+   * @since 6.2.0
+   */
+  pickDirectory(): Promise<PickDirectoryResult>;
+  /**
    * Pick one or more images from the gallery.
    *
    * On iOS 13 and older it only allows to pick one image.
@@ -267,6 +273,15 @@ export interface PickMediaOptions {
    * @since 5.3.0
    */
   ordered?: boolean;
+}
+
+export interface PickDirectoryResult {
+  /**
+   * The path to the selected directory.
+   *
+   * @since 6.2.0
+   */
+  path: string;
 }
 
 /**

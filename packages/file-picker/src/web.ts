@@ -15,6 +15,7 @@ import type {
   PickVideosResult,
   PickedFile,
   RequestPermissionsOptions,
+  PickDirectoryResult,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -53,6 +54,20 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
       result.files.push(file);
     }
     return result;
+  }
+
+  public async pickDirectory(): Promise<PickDirectoryResult> {
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const { name } = (await window['showDirectoryPicker']()) as {
+        name: string;
+        [k: string]: unknown;
+      };
+      return { path: name };
+    } catch (error) {
+      throw this.unavailable(error.message);
+    }
   }
 
   public async pickImages(
