@@ -9,6 +9,14 @@ npm install @capawesome/capacitor-app-review
 npx cap sync
 ```
 
+### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidPlayReviewVersion` version of `com.google.android.play:review` (default: `2.0.2`)
+
 ## Configuration
 
 No configuration required for this plugin.

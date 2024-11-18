@@ -1,65 +1,70 @@
 package io.capawesome.capacitorjs.plugins.appreview;
 
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.net.Uri;
-import androidx.appcompat.app.AppCompatActivity;
-import com.getcapacitor.JSObject;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.appreview.interfaces.EmptyCallback;
 
 @CapacitorPlugin(name = "AppReview")
 public class AppReviewPlugin extends Plugin {
 
-    private AppReview appReview;
+    public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
+    public static final String TAG = "AppReviewPlugin";
+
+    @Nullable
+    private AppReview implementation;
 
     @Override
     public void load() {
-        appReview = new AppReview(this);
+        implementation = new AppReview(this);
     }
 
     @PluginMethod
     public void openAppStore(PluginCall call) {
+        assert implementation != null;
         try {
-            String packageName = this.getContext().getPackageName();
-            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-
-            try {
-                this.getBridge().getActivity().startActivity(launchIntent);
-            } catch (ActivityNotFoundException ex) {
-                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-                this.getBridge().getActivity().startActivity(launchIntent);
-            }
-            call.resolve();
+            implementation.openAppStore();
+            resolveCall(call);
         } catch (Exception exception) {
-            Logger.error(exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
     @PluginMethod
     public void requestReview(PluginCall call) {
-        final AppCompatActivity activity = getActivity();
-        appReview.requestReviewFlow(
-            activity,
-            new EmptyCallback() {
+        assert implementation != null;
+        try {
+            EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    JSObject result = new JSObject();
-                    result.put("canLaunchReviewFlow", true);
-                    call.resolve(result);
+                    resolveCall(call);
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    String message = exception.getMessage();
-                    Logger.error(message, exception);
-                    call.reject(message);
+                    rejectCall(call, exception);
                 }
-            }
-        );
+            };
+            implementation.requestReviewFlow(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    private void resolveCall(@NonNull PluginCall call) {
+        call.resolve();
+    }
+
+    private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
+        String message = exception.getMessage();
+        if (message == null) {
+            message = ERROR_UNKNOWN_ERROR;
+        }
+        Logger.error(TAG, message, exception);
+        call.reject(message);
     }
 }
