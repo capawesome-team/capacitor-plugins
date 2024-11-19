@@ -4,9 +4,11 @@ Capacitor plugin to zip and unzip files.
 
 ## Features
 
-- 🔋 Supports Android and iOS
-- 📁 Zip and unzip single or multiple files
-- 🔑 Encrypt and decrypt files
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📁 **File Compression**: Zip and unzip single or multiple files.
+- 🔑 **Encryption**: Encrypt and decrypt files.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
