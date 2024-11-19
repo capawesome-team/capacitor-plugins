@@ -26,6 +26,8 @@ export interface FilePickerPlugin {
   /**
    * Open a picker dialog that allows the user to select a directory.
    *
+   * Only available on Android and iOS.
+   *
    * @since 6.2.0
    */
   pickDirectory(): Promise<PickDirectoryResult>;

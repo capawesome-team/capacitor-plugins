@@ -18,7 +18,6 @@ public class FilePickerPlugin: CAPPlugin {
     public let errorTemporaryCopyFailed = "An unknown error occurred while creating a temporary copy of the file."
     public let errorUnsupportedFileTypeIdentifier = "Unsupported file type identifier."
     public let pickerDismissedEvent = "pickerDismissed"
-    public var invokedMethod: String?
     private var implementation: FilePicker?
     private var savedCall: CAPPluginCall?
 
@@ -53,7 +52,6 @@ public class FilePickerPlugin: CAPPlugin {
 
     @objc func pickFiles(_ call: CAPPluginCall) {
         savedCall = call
-        invokedMethod = "pickFiles"
 
         let limit = call.getInt("limit", 0)
         let types = call.getArray("types", String.self) ?? []
@@ -65,7 +63,6 @@ public class FilePickerPlugin: CAPPlugin {
 
     @objc func pickDirectory(_ call: CAPPluginCall) {
         savedCall = call
-        invokedMethod = "pickDirectory"
         implementation?.openDirectoryPicker()
     }
 

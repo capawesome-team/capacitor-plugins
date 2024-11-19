@@ -2,4 +2,4 @@
 '@capawesome/capacitor-file-picker': minor
 ---
 
-Implments pickDirectory
+feat: add `pickDirectory()` method

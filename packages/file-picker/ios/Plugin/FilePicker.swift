@@ -7,6 +7,7 @@ import MobileCoreServices
 
 @objc public class FilePicker: NSObject {
     private var plugin: FilePickerPlugin?
+    private var invokedMethod: String?
 
     init(_ plugin: FilePickerPlugin?) {
         super.init()
@@ -30,6 +31,7 @@ import MobileCoreServices
     }
 
     public func openDocumentPicker(limit: Int, documentTypes: [String]) {
+        invokedMethod = "pickFiles"
         DispatchQueue.main.async {
             let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
             picker.delegate = self
@@ -40,6 +42,7 @@ import MobileCoreServices
     }
 
     public func openDirectoryPicker() {
+        invokedMethod = "pickDirectory"
         DispatchQueue.main.async {
             if #available(iOS 14.0, *) {
                 let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder])
@@ -274,14 +277,14 @@ import MobileCoreServices
 
 extension FilePicker: UIDocumentPickerDelegate {
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        if plugin?.invokedMethod == "pickFiles" {
+        if invokedMethod == "pickFiles" {
             do {
                 let temporaryUrls = try urls.map { try saveTemporaryFile($0) }
                 plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
             } catch {
                 plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
             }
-        } else if plugin?.invokedMethod == "pickDirectory" {
+        } else if invokedMethod == "pickDirectory" {
             plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, error: nil)
         } else {
             return
@@ -290,9 +293,9 @@ extension FilePicker: UIDocumentPickerDelegate {
     }
 
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        if plugin?.invokedMethod == "pickFiles" {
+        if invokedMethod == "pickFiles" {
             plugin?.handleDocumentPickerResult(urls: nil, error: nil)
-        } else if plugin?.invokedMethod == "pickDirectory" {
+        } else if invokedMethod == "pickDirectory" {
             plugin?.handleDirectoryPickerResult(path: nil, error: nil)
         } else {
             return

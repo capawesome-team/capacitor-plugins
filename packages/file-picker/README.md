@@ -160,6 +160,8 @@ pickDirectory() => Promise<PickDirectoryResult>
 
 Open a picker dialog that allows the user to select a directory.
 
+Only available on Android and iOS.
+
 **Returns:** <code>Promise&lt;<a href="#pickdirectoryresult">PickDirectoryResult</a>&gt;</code>
 
 **Since:** 6.2.0
