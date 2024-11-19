@@ -1,0 +1,522 @@
+# @capawesome-team/capacitor-speech-synthesis
+
+Capacitor plugin for synthesizing speech from text.
+
+## Features
+
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🌐 **Multiple Languages**: Supports many different languages.
+- 🗣️ **Multiple Voices**: Supports multiple voices for each language.
+- 🎚️ **Customization**: Customize the pitch, rate, volume and voice of the speech.
+- 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
+- 📜 **Queue Strategy**: Add or flush the utterance to the queue.
+- 🎤 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Installation
+
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
+
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-speech-synthesis
+npx cap sync
+```
+
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+
+
+</docgen-config>
+
+## Usage
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
+
+const echo = async () => {
+  await SpeechSynthesis.echo();
+};
+```
+
+## API
+
+<docgen-index>
+
+* [`activateAudioSession(...)`](#activateaudiosession)
+* [`cancel()`](#cancel)
+* [`deactivateAudioSession()`](#deactivateaudiosession)
+* [`getLanguages()`](#getlanguages)
+* [`getVoices()`](#getvoices)
+* [`initialize()`](#initialize)
+* [`isAvailable()`](#isavailable)
+* [`isSpeaking()`](#isspeaking)
+* [`isLanguageAvailable(...)`](#islanguageavailable)
+* [`isVoiceAvailable(...)`](#isvoiceavailable)
+* [`speak(...)`](#speak)
+* [`addListener('boundary', ...)`](#addlistenerboundary-)
+* [`addListener('end', ...)`](#addlistenerend-)
+* [`addListener('error', ...)`](#addlistenererror-)
+* [`addListener('start', ...)`](#addlistenerstart-)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Enums](#enums)
+
+</docgen-index>
+
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### activateAudioSession(...)
+
+```typescript
+activateAudioSession(options: ActivateAudioSessionOptions) => Promise<void>
+```
+
+Activate the audio session. This method is not mandatory.
+It can be used to set the audio session category before speaking.
+
+Only available on iOS.
+
+| Param         | Type                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#activateaudiosessionoptions">ActivateAudioSessionOptions</a></code> |
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### cancel()
+
+```typescript
+cancel() => Promise<void>
+```
+
+Remove all utterances from the utterance queue.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### deactivateAudioSession()
+
+```typescript
+deactivateAudioSession() => Promise<void>
+```
+
+Deactivate the audio session.
+
+Only available on iOS.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### getLanguages()
+
+```typescript
+getLanguages() => Promise<GetLanguagesResult>
+```
+
+Get the available languages for speech synthesis.
+
+**Returns:** <code>Promise&lt;<a href="#getlanguagesresult">GetLanguagesResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### getVoices()
+
+```typescript
+getVoices() => Promise<GetVoicesResult>
+```
+
+Get the available voices for speech synthesis.
+
+**Returns:** <code>Promise&lt;<a href="#getvoicesresult">GetVoicesResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### initialize()
+
+```typescript
+initialize() => Promise<void>
+```
+
+Initialize the plugin. This method must be called before any other method.
+
+Only available on Android and iOS.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check if speech synthesis is available on the current device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### isSpeaking()
+
+```typescript
+isSpeaking() => Promise<IsSpeakingResult>
+```
+
+Check if speech synthesis is currently speaking.
+
+**Returns:** <code>Promise&lt;<a href="#isspeakingresult">IsSpeakingResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### isLanguageAvailable(...)
+
+```typescript
+isLanguageAvailable(options: IsLanguageAvailableOption) => Promise<IsLanguageAvailableResult>
+```
+
+Check if a language is available for speech synthesis.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#islanguageavailableoption">IsLanguageAvailableOption</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#islanguageavailableresult">IsLanguageAvailableResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### isVoiceAvailable(...)
+
+```typescript
+isVoiceAvailable(options: IsVoiceAvailableOption) => Promise<IsVoiceAvailableResult>
+```
+
+Check if a voice is available for speech synthesis.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#isvoiceavailableoption">IsVoiceAvailableOption</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isvoiceavailableresult">IsVoiceAvailableResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### speak(...)
+
+```typescript
+speak(options: SpeakOptions) => Promise<SpeakResult>
+```
+
+Add an utterance to the utterance queue to be spoken.
+
+The `end` event will be emitted when the utterance has finished.
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#speakoptions">SpeakOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#speakresult">SpeakResult</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('boundary', ...)
+
+```typescript
+addListener(eventName: 'boundary', listenerFunc: (event: BoundaryEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called hen the spoken utterance reaches a word boundary.
+
+| Param              | Type                                                                        |
+| ------------------ | --------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'boundary'</code>                                                     |
+| **`listenerFunc`** | <code>(event: <a href="#boundaryevent">BoundaryEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('end', ...)
+
+```typescript
+addListener(eventName: 'end', listenerFunc: (event: EndEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the spoken utterance has finished.
+
+| Param              | Type                                                              |
+| ------------------ | ----------------------------------------------------------------- |
+| **`eventName`**    | <code>'end'</code>                                                |
+| **`listenerFunc`** | <code>(event: <a href="#endevent">EndEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('error', ...)
+
+```typescript
+addListener(eventName: 'error', listenerFunc: (event: ErrorEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when an error occurs during speech synthesis.
+
+| Param              | Type                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| **`eventName`**    | <code>'error'</code>                                                  |
+| **`listenerFunc`** | <code>(event: <a href="#errorevent">ErrorEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('start', ...)
+
+```typescript
+addListener(eventName: 'start', listenerFunc: (event: StartEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the spoken utterance has started.
+
+| Param              | Type                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| **`eventName`**    | <code>'start'</code>                                                  |
+| **`listenerFunc`** | <code>(event: <a href="#startevent">StartEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for the plugin.
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### Interfaces
+
+
+#### ActivateAudioSessionOptions
+
+| Prop           | Type                                                                  | Description                        | Since |
+| -------------- | --------------------------------------------------------------------- | ---------------------------------- | ----- |
+| **`category`** | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to set. | 6.0.0 |
+
+
+#### GetLanguagesResult
+
+| Prop            | Type                  | Description                                     | Since |
+| --------------- | --------------------- | ----------------------------------------------- | ----- |
+| **`languages`** | <code>string[]</code> | The available languages as BC-47 language tags. | 6.0.0 |
+
+
+#### GetVoicesResult
+
+| Prop         | Type                 | Description           | Since |
+| ------------ | -------------------- | --------------------- | ----- |
+| **`voices`** | <code>Voice[]</code> | The available voices. | 6.0.0 |
+
+
+#### Voice
+
+| Prop                              | Type                            | Description                                                           | Since |
+| --------------------------------- | ------------------------------- | --------------------------------------------------------------------- | ----- |
+| **`default`**                     | <code>boolean</code>            | Whether or not the voice is the default voice. Only available on Web. | 6.0.0 |
+| **`gender`**                      | <code>'female' \| 'male'</code> | The gender of the voice. Only available on iOS.                       | 6.0.0 |
+| **`id`**                          | <code>string</code>             | The identifier of the voice.                                          | 6.0.0 |
+| **`isNetworkConnectionRequired`** | <code>boolean</code>            | Whether or not the voice is available via a local or remote service.  | 6.0.0 |
+| **`language`**                    | <code>string</code>             | The BC-47 language tag for the language of the voice.                 | 6.0.0 |
+| **`name`**                        | <code>string</code>             | The name of the voice.                                                | 6.0.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                                         | Since |
+| ----------------- | -------------------- | ------------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not speech synthesis is available on the current device. | 6.0.0 |
+
+
+#### IsSpeakingResult
+
+| Prop             | Type                 | Description                                            | Since |
+| ---------------- | -------------------- | ------------------------------------------------------ | ----- |
+| **`isSpeaking`** | <code>boolean</code> | Whether or not an utterance is currently being spoken. | 6.0.0 |
+
+
+#### IsLanguageAvailableResult
+
+| Prop              | Type                 | Description                                                    | Since |
+| ----------------- | -------------------- | -------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not the language is available for speech synthesis. | 6.0.0 |
+
+
+#### IsLanguageAvailableOption
+
+| Prop           | Type                | Description                                       | Since |
+| -------------- | ------------------- | ------------------------------------------------- | ----- |
+| **`language`** | <code>string</code> | The BC-47 language tag for the language to check. | 6.0.0 |
+
+
+#### IsVoiceAvailableResult
+
+| Prop              | Type                 | Description                                                 | Since |
+| ----------------- | -------------------- | ----------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not the voice is available for speech synthesis. | 6.0.0 |
+
+
+#### IsVoiceAvailableOption
+
+| Prop          | Type                | Description                           | Since |
+| ------------- | ------------------- | ------------------------------------- | ----- |
+| **`voiceId`** | <code>string</code> | The identifier of the voice to check. | 6.0.0 |
+
+
+#### SpeakResult
+
+| Prop              | Type                | Description                                           | Since |
+| ----------------- | ------------------- | ----------------------------------------------------- | ----- |
+| **`utteranceId`** | <code>string</code> | The identifier of the utterance that is being spoken. | 6.0.0 |
+
+
+#### SpeakOptions
+
+| Prop                | Type                                                    | Description                                                                                                                                          | Default                        | Since |
+| ------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ----- |
+| **`language`**      | <code>string</code>                                     | The BC-47 language tag for the language to use for speech synthesis. On **iOS**, this option is only used when the `voiceId` option is not provided. |                                | 6.0.0 |
+| **`pitch`**         | <code>number</code>                                     | The pitch that the utterance will be spoken at.                                                                                                      | <code>1.0</code>               | 6.0.0 |
+| **`queueStrategy`** | <code><a href="#queuestrategy">QueueStrategy</a></code> | The queue strategy to use for the utterance.                                                                                                         | <code>QueueStrategy.Add</code> | 6.0.0 |
+| **`rate`**          | <code>number</code>                                     | The speed at which the utterance will be spoken at.                                                                                                  | <code>1.0</code>               | 6.0.0 |
+| **`text`**          | <code>string</code>                                     | The text that will be synthesized when the utterance is spoken.                                                                                      |                                | 6.0.0 |
+| **`voiceId`**       | <code>string</code>                                     | The identifier of the voice to use for speech synthesis.                                                                                             |                                | 6.0.0 |
+| **`volume`**        | <code>number</code>                                     | The volume that the utterance will be spoken at.                                                                                                     | <code>1.0</code>               | 6.0.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### BoundaryEvent
+
+| Prop              | Type                | Description                                           | Since |
+| ----------------- | ------------------- | ----------------------------------------------------- | ----- |
+| **`endIndex`**    | <code>number</code> | The index of the last character in the word.          | 6.0.0 |
+| **`startIndex`**  | <code>number</code> | The index of the first character in the word.         | 6.0.0 |
+| **`utteranceId`** | <code>string</code> | The identifier of the utterance that is being spoken. | 6.0.0 |
+| **`word`**        | <code>string</code> | The word that was spoken.                             | 6.0.0 |
+
+
+#### EndEvent
+
+| Prop              | Type                | Description                                        | Since |
+| ----------------- | ------------------- | -------------------------------------------------- | ----- |
+| **`utteranceId`** | <code>string</code> | The identifier of the utterance that has finished. | 6.0.0 |
+
+
+#### ErrorEvent
+
+| Prop              | Type                | Description                                            | Since |
+| ----------------- | ------------------- | ------------------------------------------------------ | ----- |
+| **`message`**     | <code>string</code> | The error message.                                     | 6.0.0 |
+| **`utteranceId`** | <code>string</code> | The identifier of the utterance that caused the error. | 6.0.0 |
+
+
+#### StartEvent
+
+| Prop              | Type                | Description                                       | Since |
+| ----------------- | ------------------- | ------------------------------------------------- | ----- |
+| **`utteranceId`** | <code>string</code> | The identifier of the utterance that has started. | 6.0.0 |
+
+
+### Enums
+
+
+#### AudioSessionCategory
+
+| Members        | Value                   | Description                                                                                                                                         | Since |
+| -------------- | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Ambient`**  | <code>'AMBIENT'</code>  | The audio session category for ambient sound. Audio from other apps mixes with your audio. Screen locking and the Silent switch silence your audio. | 6.0.0 |
+| **`Playback`** | <code>'PLAYBACK'</code> | The audio session category for playback. App audio continues with the Silent switch set to silent or when the screen locks.                         | 6.0.0 |
+
+
+#### QueueStrategy
+
+| Members     | Value          | Description                                                          | Since |
+| ----------- | -------------- | -------------------------------------------------------------------- | ----- |
+| **`Add`**   | <code>0</code> | Add the utterance to the end of the queue.                           | 6.0.0 |
+| **`Flush`** | <code>1</code> | Flush the queue and add the utterance to the beginning of the queue. | 6.0.0 |
+
+</docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/speech-synthesis/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/speech-synthesis/LICENSE).
