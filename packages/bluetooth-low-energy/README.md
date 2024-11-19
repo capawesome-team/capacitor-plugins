@@ -4,13 +4,14 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central rol
 
 ## Features
 
-- 🔋 Supports Android and iOS.
-- ⚡️ Capacitor 6 support.
+- 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier. 
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
