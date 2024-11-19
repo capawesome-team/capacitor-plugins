@@ -28,12 +28,12 @@ public class ForegroundService {
         createNotificationChannel();
     }
 
-    public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
-        startOrUpdateForegroundService(body, icon, id, title, buttons, false);
+    public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons, boolean silent) {
+        startOrUpdateForegroundService(body, icon, id, title, buttons, silent, false);
     }
 
-    public void updateForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
-        startOrUpdateForegroundService(body, icon, id, title, buttons, true);
+    public void updateForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons, boolean silent) {
+        startOrUpdateForegroundService(body, icon, id, title, buttons, silent, true);
     }
 
     private void startOrUpdateForegroundService(
@@ -42,6 +42,7 @@ public class ForegroundService {
         int id,
         String title,
         ArrayList<Bundle> buttons,
+        boolean silent,
         boolean isUpdate
     ) {
         if (!isUpdate) {
@@ -54,6 +55,7 @@ public class ForegroundService {
         notificationBundle.putInt("icon", iconResourceId);
         notificationBundle.putInt("id", id);
         notificationBundle.putString("title", title);
+        notificationBundle.putBoolean("silent", silent);
         notificationBundle.putParcelableArrayList("buttons", new ArrayList<Bundle>(buttons));
 
         Context context = plugin.getContext();

@@ -31,6 +31,7 @@ public class AndroidForegroundService extends Service {
             int id = notificationBundle.getInt("id");
             int icon = notificationBundle.getInt("icon");
             String title = notificationBundle.getString("title");
+            boolean silent = notificationBundle.getBoolean("silent", false);
             ArrayList<Bundle> buttonsBundle = notificationBundle.getParcelableArrayList("buttons");
 
             PendingIntent contentIntent = buildContentIntent(id);
@@ -46,7 +47,8 @@ public class AndroidForegroundService extends Service {
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
                 .setSmallIcon(icon)
-                .setPriority(Notification.PRIORITY_HIGH);
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setOnlyAlertOnce(silent);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Notification.Action[] actions = convertBundlesToNotificationActions(
                     buttonsBundle.toArray(new Bundle[buttonsBundle.size()])

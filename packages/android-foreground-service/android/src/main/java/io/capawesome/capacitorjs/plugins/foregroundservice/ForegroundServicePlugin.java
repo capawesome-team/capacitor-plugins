@@ -82,6 +82,7 @@ public class ForegroundServicePlugin extends Plugin {
             String icon = call.getString("smallIcon");
             int id = call.getInt("id");
             String title = call.getString("title");
+            boolean silent = call.getBoolean("silent", false);
             JSArray buttons = call.getArray("buttons", new JSArray());
 
             ArrayList<Bundle> buttonBundles = new ArrayList<>();
@@ -94,9 +95,9 @@ public class ForegroundServicePlugin extends Plugin {
             }
 
             if (isUpdate) {
-                implementation.updateForegroundService(body, icon, id, title, buttonBundles);
+                implementation.updateForegroundService(body, icon, id, title, buttonBundles, silent);
             } else {
-                implementation.startForegroundService(body, icon, id, title, buttonBundles);
+                implementation.startForegroundService(body, icon, id, title, buttonBundles, silent);
             }
             call.resolve();
         } catch (Exception exception) {

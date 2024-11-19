@@ -137,6 +137,14 @@ export interface StartForegroundServiceOptions {
    * @example "This is the title of the notification"
    */
   title: string;
+  /**
+   * If true, will only alert (sound/vibration) on the first notification.
+   * Subsequent updates will be silent.
+   *
+   * @since 6.0.2
+   * @default false
+   */
+  silent?: boolean;
 }
 
 /**
