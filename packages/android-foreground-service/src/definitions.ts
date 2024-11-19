@@ -91,8 +91,9 @@ export interface ForegroundServicePlugin {
    *
    * @since 6.0.2
    */
-  updateForegroundService(options: UpdateForegroundServiceOptions): Promise<void>;
-
+  updateForegroundService(
+    options: UpdateForegroundServiceOptions,
+  ): Promise<void>;
 }
 
 export interface StartForegroundServiceOptions {
@@ -208,4 +209,4 @@ export interface PermissionStatus {
 /**
  * @since 6.0.3
  */
-export type UpdateForegroundServiceOptions = StartForegroundServiceOptions
+export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;

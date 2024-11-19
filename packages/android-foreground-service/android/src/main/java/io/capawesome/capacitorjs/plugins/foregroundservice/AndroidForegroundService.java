@@ -57,8 +57,7 @@ public class AndroidForegroundService extends Service {
             Notification notification = builder.build();
 
             if (ForegroundService.ACTION_UPDATE.equals(action)) {
-                NotificationManager notificationManager =
-                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(id, notification);
             } else {
                 startForeground(id, notification);

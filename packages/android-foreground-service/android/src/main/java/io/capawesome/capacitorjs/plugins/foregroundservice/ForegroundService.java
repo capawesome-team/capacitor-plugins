@@ -36,8 +36,14 @@ public class ForegroundService {
         startOrUpdateForegroundService(body, icon, id, title, buttons, true);
     }
 
-    private void startOrUpdateForegroundService(String body, String icon, int id, String title,
-                                                ArrayList<Bundle> buttons, boolean isUpdate) {
+    private void startOrUpdateForegroundService(
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean isUpdate
+    ) {
         if (!isUpdate) {
             acquireWakeLock();
         }

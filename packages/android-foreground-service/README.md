@@ -78,6 +78,7 @@ const stopForegroundService = async () => {
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
 * [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
 * [`removeAllListeners()`](#removealllisteners)
+* [`updateForegroundService(...)`](#updateforegroundservice)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -247,6 +248,25 @@ Remove all listeners for this plugin.
 --------------------
 
 
+### updateForegroundService(...)
+
+```typescript
+updateForegroundService(options: UpdateForegroundServiceOptions) => Promise<void>
+```
+
+Updates the notification details of the running foreground service.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
+
+**Since:** 6.0.2
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -308,6 +328,11 @@ Remove all listeners for this plugin.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
+
+
+#### UpdateForegroundServiceOptions
+
+<code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code>
 
 </docgen-api>
 
