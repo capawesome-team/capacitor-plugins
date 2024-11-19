@@ -89,7 +89,7 @@ export interface ForegroundServicePlugin {
    *
    * Only available on Android.
    *
-   * @since 6.0.2
+   * @since 6.1.0
    */
   updateForegroundService(
     options: UpdateForegroundServiceOptions,
@@ -141,7 +141,7 @@ export interface StartForegroundServiceOptions {
    * If true, will only alert (sound/vibration) on the first notification.
    * Subsequent updates will be silent.
    *
-   * @since 6.0.2
+   * @since 6.1.0
    * @default false
    */
   silent?: boolean;
@@ -215,6 +215,6 @@ export interface PermissionStatus {
 }
 
 /**
- * @since 6.0.3
+ * @since 6.1.0
  */
 export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;

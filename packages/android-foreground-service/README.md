@@ -262,7 +262,7 @@ Only available on Android.
 | ------------- | --------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
 
-**Since:** 6.0.2
+**Since:** 6.1.0
 
 --------------------
 
@@ -279,7 +279,7 @@ Only available on Android.
 | **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
 | **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
 | **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
-| **`silent`**    | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.0.2 |
+| **`silent`**    | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
 
 
 #### NotificationButton
