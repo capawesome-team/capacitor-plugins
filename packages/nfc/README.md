@@ -4,14 +4,15 @@ Capacitor plugin for reading and writing NFC tags.
 
 ## Features
 
-- 🔋 Supports Android, iOS and Web.
-- ⚡️ Capacitor 6 support.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🔄 **NDEF**: Read and write NFC Data Exchange Format (NDEF) messages.
 - 📳 **HCE**: Emulate an NFC card that other devices can interact with.
 - ⌘ **Raw Commands**: Send raw commands to an NFC tag and receive the response.
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
 - 📚 **Documentation**: Comprehensive documentation to help you get started.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
