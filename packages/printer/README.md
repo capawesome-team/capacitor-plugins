@@ -4,11 +4,12 @@ Capacitor plugin for printing.
 
 ## Features
 
-- 🔋 Supports Android and iOS.
-- ⚡️ Capacitor 6 support.
-- 🖨️ Print PDF files
-- 🖨️ Print custom HTML content
-- 🖨️ Print web view content
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🖨️ **PDF Printer**: Print PDF files.
+- 🖨️ **HTML Printer**: Print custom HTML content.
+- 🖨️ **Web View Printer**: Print web view content.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
