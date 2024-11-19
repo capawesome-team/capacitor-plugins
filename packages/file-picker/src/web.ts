@@ -57,17 +57,7 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   }
 
   public async pickDirectory(): Promise<PickDirectoryResult> {
-    try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const { name } = (await window['showDirectoryPicker']()) as {
-        name: string;
-        [k: string]: unknown;
-      };
-      return { path: name };
-    } catch (error) {
-      throw this.unavailable(error.message);
-    }
+    throw this.unimplemented('Not implemented on web.');
   }
 
   public async pickImages(
