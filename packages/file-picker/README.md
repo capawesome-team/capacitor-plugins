@@ -82,6 +82,7 @@ const requestPermissions = async () => {
 * [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
 * [`pickFiles(...)`](#pickfiles)
+* [`pickDirectory()`](#pickdirectory)
 * [`pickImages(...)`](#pickimages)
 * [`pickMedia(...)`](#pickmedia)
 * [`pickVideos(...)`](#pickvideos)
@@ -147,6 +148,23 @@ Open the file picker that allows the user to select one or more files.
 | **`options`** | <code><a href="#pickfilesoptions">PickFilesOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pickfilesresult">PickFilesResult</a>&gt;</code>
+
+--------------------
+
+
+### pickDirectory()
+
+```typescript
+pickDirectory() => Promise<PickDirectoryResult>
+```
+
+Open a picker dialog that allows the user to select a directory.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#pickdirectoryresult">PickDirectoryResult</a>&gt;</code>
+
+**Since:** 6.2.0
 
 --------------------
 
@@ -331,6 +349,13 @@ Remove all listeners for this plugin.
 | **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
 | **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
 | **`readData`** | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
+
+
+#### PickDirectoryResult
+
+| Prop       | Type                | Description                         | Since |
+| ---------- | ------------------- | ----------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path to the selected directory. | 6.2.0 |
 
 
 #### PickMediaOptions

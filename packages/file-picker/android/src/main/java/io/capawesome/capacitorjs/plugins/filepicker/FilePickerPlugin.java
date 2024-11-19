@@ -34,6 +34,8 @@ public class FilePickerPlugin extends Plugin {
 
     public static final String ERROR_PICK_FILE_FAILED = "pickFiles failed.";
     public static final String ERROR_PICK_FILE_CANCELED = "pickFiles canceled.";
+    public static final String ERROR_PICK_DIRECTORY_FAILED = "pickDirectory failed.";
+    public static final String ERROR_PICK_DIRECTORY_CANCELED = "pickDirectory canceled.";
     public static final String PERMISSION_ACCESS_MEDIA_LOCATION = "accessMediaLocation";
     public static final String PERMISSION_READ_EXTERNAL_STORAGE = "readExternalStorage";
     public static final String TAG = "FilePickerPlugin";
@@ -71,6 +73,18 @@ public class FilePickerPlugin extends Plugin {
             }
 
             startActivityForResult(call, intent, "pickFilesResult");
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
+    }
+
+    @PluginMethod
+    public void pickDirectory(PluginCall call) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            startActivityForResult(call, intent, "pickDirectoryResult");
         } catch (Exception ex) {
             String message = ex.getMessage();
             Log.e(TAG, message);
@@ -200,6 +214,28 @@ public class FilePickerPlugin extends Plugin {
         }
     }
 
+    @ActivityCallback
+    private void pickDirectoryResult(PluginCall call, ActivityResult result) {
+        try {
+            int resultCode = result.getResultCode();
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    JSObject callResult = createPickDirectoryResult(result.getData());
+                    call.resolve(callResult);
+                    break;
+                case Activity.RESULT_CANCELED:
+                    call.reject(ERROR_PICK_DIRECTORY_CANCELED);
+                    break;
+                default:
+                    call.reject(ERROR_PICK_DIRECTORY_FAILED);
+            }
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
+    }
+
     private JSObject createPickFilesResult(@Nullable Intent data, boolean readData) {
         JSObject callResult = new JSObject();
         List<JSObject> filesResultList = new ArrayList<>();
@@ -258,6 +294,17 @@ public class FilePickerPlugin extends Plugin {
             filesResultList.add(fileResult);
         }
         callResult.put("files", JSArray.from(filesResultList.toArray()));
+        return callResult;
+    }
+
+    private JSObject createPickDirectoryResult(@Nullable Intent data) {
+        JSObject callResult = new JSObject();
+        if (data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                callResult.put("path", implementation.getPathFromUri(uri));
+            }
+        }
         return callResult;
     }
 }

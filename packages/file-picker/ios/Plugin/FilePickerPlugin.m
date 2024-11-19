@@ -9,4 +9,5 @@ CAP_PLUGIN(FilePickerPlugin, "FilePicker",
            CAP_PLUGIN_METHOD(pickImages, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(pickMedia, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(pickVideos, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(pickDirectory, CAPPluginReturnPromise);
 )

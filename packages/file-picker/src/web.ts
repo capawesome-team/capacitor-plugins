@@ -15,6 +15,7 @@ import type {
   PickVideosResult,
   PickedFile,
   RequestPermissionsOptions,
+  PickDirectoryResult,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -53,6 +54,10 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
       result.files.push(file);
     }
     return result;
+  }
+
+  public async pickDirectory(): Promise<PickDirectoryResult> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
   public async pickImages(

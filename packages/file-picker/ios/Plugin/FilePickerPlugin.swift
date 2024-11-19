@@ -13,6 +13,7 @@ public class FilePickerPlugin: CAPPlugin {
     public let errorFileNotExist = "File does not exist."
     public let errorConvertFailed = "File could not be converted."
     public let errorPickFileCanceled = "pickFiles canceled."
+    public let errorPickDirectoryCanceled = "pickDirectory canceled."
     public let errorUnknown = "Unknown error occurred."
     public let errorTemporaryCopyFailed = "An unknown error occurred while creating a temporary copy of the file."
     public let errorUnsupportedFileTypeIdentifier = "Unsupported file type identifier."
@@ -58,6 +59,11 @@ public class FilePickerPlugin: CAPPlugin {
         let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
 
         implementation?.openDocumentPicker(limit: limit, documentTypes: documentTypes)
+    }
+
+    @objc func pickDirectory(_ call: CAPPluginCall) {
+        savedCall = call
+        implementation?.openDirectoryPicker()
     }
 
     @objc func pickImages(_ call: CAPPluginCall) {
@@ -138,6 +144,23 @@ public class FilePickerPlugin: CAPPlugin {
             savedCall.reject(error.localizedDescription, nil, error)
             return
         }
+    }
+
+    @objc func handleDirectoryPickerResult(path: String?, error: String?) {
+        guard let savedCall = savedCall else {
+            return
+        }
+        if let error = error {
+            savedCall.reject(error)
+            return
+        }
+        guard let path = path else {
+            savedCall.reject(errorPickDirectoryCanceled)
+            return
+        }
+        var result = JSObject()
+        result["path"] = path
+        savedCall.resolve(result)
     }
 
     private func parseTypesOption(_ types: [String]) -> [String] {
