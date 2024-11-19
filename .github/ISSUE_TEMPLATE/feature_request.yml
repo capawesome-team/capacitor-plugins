@@ -11,6 +11,7 @@ body:
       options:
         - label: Android Foreground Service
         - label: Android Battery Optimization
+        - label: App Review
         - label: App Update
         - label: Background Task
         - label: Badge
