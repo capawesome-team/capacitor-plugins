@@ -4,9 +4,10 @@ Capacitor plugin for compressing files.
 
 ## Features
 
-- 🔋 Supports Android and iOS.
-- ⚡️ Capacitor 6 support.
-- 🌅 **Compress images**: Compress png, jpeg, and webp images.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🌅 **Compress Images**: Compress png, jpeg, and webp images.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
