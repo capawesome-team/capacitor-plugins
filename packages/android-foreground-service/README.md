@@ -78,6 +78,7 @@ const stopForegroundService = async () => {
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
 * [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
 * [`removeAllListeners()`](#removealllisteners)
+* [`updateForegroundService(...)`](#updateforegroundservice)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -247,18 +248,38 @@ Remove all listeners for this plugin.
 --------------------
 
 
+### updateForegroundService(...)
+
+```typescript
+updateForegroundService(options: UpdateForegroundServiceOptions) => Promise<void>
+```
+
+Updates the notification details of the running foreground service.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### Interfaces
 
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                              | Description                                                                                                                                                                                                     | Since |
-| --------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`body`**      | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            | 0.0.1 |
-| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   | 0.2.0 |
-| **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    | 0.0.1 |
-| **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 0.0.1 |
-| **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  | 0.0.1 |
+| Prop            | Type                              | Description                                                                                                                                                                                                     | Default            | Since |
+| --------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`body`**      | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
+| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
+| **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
+| **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
+| **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
+| **`silent`**    | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
 
 
 #### NotificationButton
@@ -308,6 +329,11 @@ Remove all listeners for this plugin.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
+
+
+#### UpdateForegroundServiceOptions
+
+<code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code>
 
 </docgen-api>
 

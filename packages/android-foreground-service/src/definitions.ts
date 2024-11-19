@@ -84,6 +84,16 @@ export interface ForegroundServicePlugin {
    * @since 0.2.0
    */
   removeAllListeners(): Promise<void>;
+  /**
+   * Updates the notification details of the running foreground service.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  updateForegroundService(
+    options: UpdateForegroundServiceOptions,
+  ): Promise<void>;
 }
 
 export interface StartForegroundServiceOptions {
@@ -127,6 +137,14 @@ export interface StartForegroundServiceOptions {
    * @example "This is the title of the notification"
    */
   title: string;
+  /**
+   * If true, will only alert (sound/vibration) on the first notification.
+   * Subsequent updates will be silent.
+   *
+   * @since 6.1.0
+   * @default false
+   */
+  silent?: boolean;
 }
 
 /**
@@ -195,3 +213,8 @@ export interface PermissionStatus {
    */
   display: PermissionState;
 }
+
+/**
+ * @since 6.1.0
+ */
+export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;
