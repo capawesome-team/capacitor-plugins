@@ -7,11 +7,11 @@ Capacitor plugin to transcribe speech into text.
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
 - 🛠 **Permissions**: Check and request permissions for recording audio.
-- 🎧 **Listening**: Check if the speech recognizer is available and currently listening.
 - 🎙 **Events**: Listen for events like `beginningOfSpeech`, `endOfSpeech`, `error`, `partialResults`, `readyForSpeech`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
@@ -126,19 +126,20 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`getSupportedLanguages()`](#getsupportedlanguages)
+* [`getLanguages()`](#getlanguages)
 * [`isAvailable()`](#isavailable)
 * [`isListening()`](#islistening)
 * [`startListening(...)`](#startlistening)
 * [`stopListening()`](#stoplistening)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
-* [`addListener('beginningOfSpeech', ...)`](#addlistenerbeginningofspeech-)
-* [`addListener('endOfSpeech', ...)`](#addlistenerendofspeech-)
+* [`addListener('end', ...)`](#addlistenerend-)
 * [`addListener('error', ...)`](#addlistenererror-)
-* [`addListener('listeningState', ...)`](#addlistenerlisteningstate-)
 * [`addListener('partialResult', ...)`](#addlistenerpartialresult-)
 * [`addListener('result', ...)`](#addlistenerresult-)
+* [`addListener('speechEnd', ...)`](#addlistenerspeechend-)
+* [`addListener('speechStart', ...)`](#addlistenerspeechstart-)
+* [`addListener('start', ...)`](#addlistenerstart-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -148,17 +149,21 @@ const removeAllListeners = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### getSupportedLanguages()
+### getLanguages()
 
 ```typescript
-getSupportedLanguages() => Promise<GetSupportedLanguagesResult>
+getLanguages() => Promise<GetLanguagesResult>
 ```
 
-Get the supported languages for speech recognition.
+Get the available languages for speech recognition.
+
+**Attention**: On Android, this method is unfortunately not supported
+by all devices. If the method is not supported, the promise will never resolve.
+It's recommended to set a timeout for the promise.
 
 Only available on Android and iOS.
 
-**Returns:** <code>Promise&lt;<a href="#getsupportedlanguagesresult">GetSupportedLanguagesResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getlanguagesresult">GetLanguagesResult</a>&gt;</code>
 
 **Since:** 6.0.0
 
@@ -255,41 +260,17 @@ Request permissions for the plugin.
 --------------------
 
 
-### addListener('beginningOfSpeech', ...)
+### addListener('end', ...)
 
 ```typescript
-addListener(eventName: 'beginningOfSpeech', listenerFunc: () => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'end', listenerFunc: () => void) => Promise<PluginListenerHandle>
 ```
 
-Called when the user has started to speak.
-
-Only available on Android and Web.
-
-| Param              | Type                             |
-| ------------------ | -------------------------------- |
-| **`eventName`**    | <code>'beginningOfSpeech'</code> |
-| **`listenerFunc`** | <code>() =&gt; void</code>       |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 6.0.0
-
---------------------
-
-
-### addListener('endOfSpeech', ...)
-
-```typescript
-addListener(eventName: 'endOfSpeech', listenerFunc: () => void) => Promise<PluginListenerHandle>
-```
-
-Called when the user has stopped speaking.
-
-Only available on Android and Web.
+Called when the speech recognizer has stopped listening.
 
 | Param              | Type                       |
 | ------------------ | -------------------------- |
-| **`eventName`**    | <code>'endOfSpeech'</code> |
+| **`eventName`**    | <code>'end'</code>         |
 | **`listenerFunc`** | <code>() =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
@@ -311,26 +292,6 @@ Called when an error occurs.
 | ------------------ | --------------------------------------------------------------------- |
 | **`eventName`**    | <code>'error'</code>                                                  |
 | **`listenerFunc`** | <code>(event: <a href="#errorevent">ErrorEvent</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 6.0.0
-
---------------------
-
-
-### addListener('listeningState', ...)
-
-```typescript
-addListener(eventName: 'listeningState', listenerFunc: (event: ListeningStateEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when the listening state changes.
-
-| Param              | Type                                                                                    |
-| ------------------ | --------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'listeningState'</code>                                                           |
-| **`listenerFunc`** | <code>(event: <a href="#listeningstateevent">ListeningStateEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -379,6 +340,70 @@ Called when the final results are available.
 --------------------
 
 
+### addListener('speechEnd', ...)
+
+```typescript
+addListener(eventName: 'speechEnd', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the user has stopped speaking.
+
+Only available on Android and Web.
+
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>'speechEnd'</code>   |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('speechStart', ...)
+
+```typescript
+addListener(eventName: 'speechStart', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the user has started to speak.
+
+Only available on Android and Web.
+
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>'speechStart'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
+### addListener('start', ...)
+
+```typescript
+addListener(eventName: 'start', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the speech recognizer has started listening.
+
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>'start'</code>       |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.0.0
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -395,7 +420,7 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
-#### GetSupportedLanguagesResult
+#### GetLanguagesResult
 
 | Prop            | Type                  | Description                                                             | Since |
 | --------------- | --------------------- | ----------------------------------------------------------------------- | ----- |
@@ -404,24 +429,24 @@ Remove all listeners for this plugin.
 
 #### IsAvailableResult
 
-| Prop            | Type                 | Description                                                      | Since |
-| --------------- | -------------------- | ---------------------------------------------------------------- | ----- |
-| **`available`** | <code>boolean</code> | Whether or not the speech recognizer is available on the device. | 6.0.0 |
+| Prop              | Type                 | Description                                                      | Since |
+| ----------------- | -------------------- | ---------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not the speech recognizer is available on the device. | 6.0.0 |
 
 
 #### IsListeningResult
 
-| Prop            | Type                 | Description                                                  | Since |
-| --------------- | -------------------- | ------------------------------------------------------------ | ----- |
-| **`listening`** | <code>boolean</code> | Whether or not the speech recognizer is currently listening. | 6.0.0 |
+| Prop              | Type                 | Description                                                  | Since |
+| ----------------- | -------------------- | ------------------------------------------------------------ | ----- |
+| **`isListening`** | <code>boolean</code> | Whether or not the speech recognizer is currently listening. | 6.0.0 |
 
 
 #### StartListeningOptions
 
-| Prop                   | Type                | Description                                                                                                  | Default           | Since |
-| ---------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------- | ----- |
-| **`language`**         | <code>string</code> | The language to use for speech recognition.                                                                  |                   | 6.0.0 |
-| **`silenceThreshold`** | <code>number</code> | The number of milliseconds of silence before the speech recognition ends. Only available on Android and iOS. | <code>2000</code> | 6.0.0 |
+| Prop                   | Type                | Description                                                                                                            | Default           | Since |
+| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
+| **`language`**         | <code>string</code> | The BC-47 language tag for the language to use for speech recognition.                                                 |                   | 6.0.0 |
+| **`silenceThreshold`** | <code>number</code> | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS. | <code>2000</code> | 6.0.0 |
 
 
 #### PermissionStatus
@@ -443,13 +468,6 @@ Remove all listeners for this plugin.
 | Prop          | Type                | Description        | Since |
 | ------------- | ------------------- | ------------------ | ----- |
 | **`message`** | <code>string</code> | The error message. | 6.0.0 |
-
-
-#### ListeningStateEvent
-
-| Prop            | Type                 | Description                                        | Since |
-| --------------- | -------------------- | -------------------------------------------------- | ----- |
-| **`listening`** | <code>boolean</code> | Whether or not the speech recognizer is listening. | 6.0.0 |
 
 
 #### PartialResultEvent
