@@ -26,8 +26,12 @@ No configuration required for this plugin.
 ```typescript
 import { AppReview } from '@capawesome/capacitor-app-review';
 
-const echo = async () => {
-  await AppReview.echo();
+const openAppStore = async () => {
+  await AppReview.openAppStore();
+};
+
+const requestReview = async () => {
+  await AppReview.requestReview();
 };
 ```
 
@@ -66,15 +70,22 @@ requestReview() => Promise<void>
 
 Request an in-app review.
 
-Note: On iOS, review requests are limited to 3 requests per year.
+**Attention**: On iOS, review requests are limited to 3 requests per year.
 
-Only available on Android and iOS.
+Only available on Android and iOS (14+).
 
 **Since:** 6.0.0
 
 --------------------
 
 </docgen-api>
+
+## Testing
+
+In order to test the In-App Review functionality, you need to follow the instructions provided by the respective platform:
+
+- [Android](https://developer.android.com/guide/playcore/in-app-review/test)
+- [iOS](https://developer.apple.com/documentation/storekit/skstorereviewcontroller/3566727-requestreview#4278434)
 
 ## Changelog
 

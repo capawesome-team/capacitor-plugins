@@ -16,9 +16,7 @@ import StoreKit
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
             completion(nil)
         } else {
-            CAPLog.print(self.plugin.bundleIdError)
-            let error = NSError(domain: "AppReview", code: 0, userInfo: [NSLocalizedDescriptionKey: self.plugin.bundleIdError])
-            completion(error)
+            completion(CustomError.bundleIdNotFound)
         }
     }
 
@@ -32,9 +30,7 @@ import StoreKit
                     SKStoreReviewController.requestReview(in: scene)
                     completion(nil)
                 } else {
-                    CAPLog.print(self.plugin.reviewRequestNotAvailable)
-                    let error = NSError(domain: "AppReview", code: 0, userInfo: [NSLocalizedDescriptionKey: self.plugin.reviewRequestNotAvailable])
-                    completion(error)
+                    completion(CustomError.unavailable)
                 }
             }
         }

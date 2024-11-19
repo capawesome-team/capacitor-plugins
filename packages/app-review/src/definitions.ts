@@ -10,9 +10,9 @@ export interface AppReviewPlugin {
   /**
    * Request an in-app review.
    *
-   * Note: On iOS, review requests are limited to 3 requests per year.
+   * **Attention**: On iOS, review requests are limited to 3 requests per year.
    *
-   * Only available on Android and iOS.
+   * Only available on Android and iOS (14+).
    *
    * @since 6.0.0
    */

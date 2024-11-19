@@ -7,8 +7,7 @@ import Capacitor
  */
 @objc(AppReviewPlugin)
 public class AppReviewPlugin: CAPPlugin {
-    public let reviewRequestNotAvailable = "Review request is not available on this device."
-    public let bundleIdError = "Could not open App Store because the bundle ID could not be determined."
+    public static let tag = "AppReviewPlugin"
 
     private var implementation: AppReview?
 
@@ -19,23 +18,29 @@ public class AppReviewPlugin: CAPPlugin {
     @objc func openAppStore(_ call: CAPPluginCall) {
         self.implementation?.openAppStore(completion: { error in
             if let error = error {
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
             } else {
-                call.resolve()
+                self.resolveCall(call)
             }
         })
-
-        call.resolve()
     }
 
     @objc func requestReview(_ call: CAPPluginCall) {
         self.implementation?.requestReview(completion: { error in
             if let error = error {
-                call.reject(error.localizedDescription)
-                return
+                self.rejectCall(call, error)
             } else {
-                call.resolve()
+                self.resolveCall(call)
             }
         })
+    }
+    
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", AppReviewPlugin.tag, "] ", error)
+        call.reject(error.localizedDescription)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall) {
+        call.resolve()
     }
 }
