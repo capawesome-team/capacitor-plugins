@@ -71,6 +71,7 @@ const stopForegroundService = async () => {
 
 * [`moveToForeground()`](#movetoforeground)
 * [`startForegroundService(...)`](#startforegroundservice)
+* [`updateForegroundService(...)`](#updateforegroundservice)
 * [`stopForegroundService()`](#stopforegroundservice)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
@@ -78,7 +79,6 @@ const stopForegroundService = async () => {
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
 * [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
 * [`removeAllListeners()`](#removealllisteners)
-* [`updateForegroundService(...)`](#updateforegroundservice)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -122,6 +122,25 @@ Only available on Android.
 | **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### updateForegroundService(...)
+
+```typescript
+updateForegroundService(options: UpdateForegroundServiceOptions) => Promise<void>
+```
+
+Updates the notification details of the running foreground service.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
+
+**Since:** 6.1.0
 
 --------------------
 
@@ -248,25 +267,6 @@ Remove all listeners for this plugin.
 --------------------
 
 
-### updateForegroundService(...)
-
-```typescript
-updateForegroundService(options: UpdateForegroundServiceOptions) => Promise<void>
-```
-
-Updates the notification details of the running foreground service.
-
-Only available on Android.
-
-| Param         | Type                                                                                    |
-| ------------- | --------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
-
-**Since:** 6.1.0
-
---------------------
-
-
 ### Interfaces
 
 
@@ -321,6 +321,11 @@ Only available on Android.
 ### Type Aliases
 
 
+#### UpdateForegroundServiceOptions
+
+<code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code>
+
+
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
@@ -329,11 +334,6 @@ Only available on Android.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
-
-
-#### UpdateForegroundServiceOptions
-
-<code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code>
 
 </docgen-api>
 
