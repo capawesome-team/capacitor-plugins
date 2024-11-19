@@ -68,6 +68,15 @@ public class ForegroundServicePlugin extends Plugin {
         } catch (Exception exception) {
             // Ignore exception
         }
+        startOrUpdateForegroundService(call, false);
+    }
+
+    @PluginMethod
+    public void updateForegroundService(PluginCall call) {
+        startOrUpdateForegroundService(call, true);
+    }
+
+    private void startOrUpdateForegroundService(PluginCall call, boolean isUpdate) {
         try {
             String body = call.getString("body");
             String icon = call.getString("smallIcon");
@@ -84,7 +93,11 @@ public class ForegroundServicePlugin extends Plugin {
                 buttonBundles.add(buttonBundle);
             }
 
-            implementation.startForegroundService(body, icon, id, title, buttonBundles);
+            if (isUpdate) {
+                implementation.updateForegroundService(body, icon, id, title, buttonBundles);
+            } else {
+                implementation.startForegroundService(body, icon, id, title, buttonBundles);
+            }
             call.resolve();
         } catch (Exception exception) {
             call.reject(exception.getMessage());

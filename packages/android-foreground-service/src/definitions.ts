@@ -84,6 +84,15 @@ export interface ForegroundServicePlugin {
    * @since 0.2.0
    */
   removeAllListeners(): Promise<void>;
+  /**
+   * Updates the notification details of the running foreground service.
+   *
+   * Only available on Android.
+   *
+   * @since 6.0.2
+   */
+  updateForegroundService(options: UpdateForegroundServiceOptions): Promise<void>;
+
 }
 
 export interface StartForegroundServiceOptions {
@@ -195,3 +204,8 @@ export interface PermissionStatus {
    */
   display: PermissionState;
 }
+
+/**
+ * @since 6.0.3
+ */
+export type UpdateForegroundServiceOptions = StartForegroundServiceOptions

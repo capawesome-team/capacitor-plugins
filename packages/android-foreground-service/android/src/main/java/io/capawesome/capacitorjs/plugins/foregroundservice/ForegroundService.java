@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class ForegroundService {
 
     public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "default";
+    public static final String ACTION_UPDATE = "UPDATE_NOTIFICATION";
 
     private final ForegroundServicePlugin plugin;
 
@@ -28,7 +29,19 @@ public class ForegroundService {
     }
 
     public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
-        acquireWakeLock();
+        startOrUpdateForegroundService(body, icon, id, title, buttons, false);
+    }
+
+    public void updateForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
+        startOrUpdateForegroundService(body, icon, id, title, buttons, true);
+    }
+
+    private void startOrUpdateForegroundService(String body, String icon, int id, String title,
+                                                ArrayList<Bundle> buttons, boolean isUpdate) {
+        if (!isUpdate) {
+            acquireWakeLock();
+        }
+
         int iconResourceId = AssetUtil.getResourceID(plugin.getContext(), AssetUtil.getResourceBaseName(icon), "drawable");
         Bundle notificationBundle = new Bundle();
         notificationBundle.putString("body", body);
@@ -40,6 +53,10 @@ public class ForegroundService {
         Context context = plugin.getContext();
         Intent intent = new Intent(context, AndroidForegroundService.class);
         intent.putExtra("notification", notificationBundle);
+
+        if (isUpdate) {
+            intent.setAction(ACTION_UPDATE);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);

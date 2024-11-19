@@ -1,8 +1,10 @@
 package io.capawesome.capacitorjs.plugins.foregroundservice;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ public class AndroidForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
+            String action = intent.getAction();
             Bundle extras = intent.getExtras();
             Bundle notificationBundle = extras.getBundle("notification");
             String body = notificationBundle.getString("body");
@@ -52,7 +55,14 @@ public class AndroidForegroundService extends Service {
             }
 
             Notification notification = builder.build();
-            startForeground(id, notification);
+
+            if (ForegroundService.ACTION_UPDATE.equals(action)) {
+                NotificationManager notificationManager =
+                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(id, notification);
+            } else {
+                startForeground(id, notification);
+            }
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
         }
