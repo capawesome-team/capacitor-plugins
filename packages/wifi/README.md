@@ -4,11 +4,12 @@ Capacitor plugin to manage Wi-Fi connectivity.
 
 ## Features
 
-- 🔋 Supports Android and iOS
-- ⚡️ Capacitor 6 support
-- 🔗 Connect and disconnect networks
-- 📶 Scan for networks
-- 📱 Retrieve device information such as IP address
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🌐 **Network Management**: Connect and disconnect networks.
+- 🔍 **Network Scan**: Perform scans for available networks.
+- 📟 **Device Info**: Retrieve essential device information like IP address.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: First-class support from the Capawesome Team.
 
 ## Installation
 
