@@ -46,10 +46,86 @@ npx cap sync
 ## Usage
 
 ```typescript
-import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
+import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
 
-const echo = async () => {
-  await SpeechSynthesis.echo();
+const activateAudioSession = async () => {
+  await SpeechSynthesis.activateAudioSession({ category: AudioSessionCategory.Ambient });
+};
+
+const cancel = async () => {
+  await SpeechSynthesis.cancel();
+};
+
+const deactivateAudioSession = async () => {
+  await SpeechSynthesis.deactivateAudioSession();
+};
+
+const getLanguages = async () => {
+  const result = await SpeechSynthesis.getLanguages();
+  return result.languages;
+};
+
+const getVoices = async () => {
+  const result = await SpeechSynthesis.getVoices();
+  return result.voices;
+};
+
+const initialize = async () => {
+  await SpeechSynthesis.initialize();
+};
+
+const isAvailable = async () => {
+  const result = await SpeechSynthesis.isAvailable();
+  return result.isAvailable;
+};
+
+const isSpeaking = async () => {
+  const result = await SpeechSynthesis.isSpeaking();
+  return result.isSpeaking;
+};
+
+const isLanguageAvailable = async () => {
+  const result = await SpeechSynthesis.isLanguageAvailable({ language: 'en-US' });
+  return result.isAvailable;
+};
+
+const isVoiceAvailable = async () => {
+  const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
+  return result.isAvailable;
+};
+
+const speak = async () => {
+  await SpeechSynthesis.speak({
+    language: 'en-US',
+    pitch: 1.0,
+    queueStrategy: QueueStrategy.Add,
+    rate: 1.0,
+    text: 'Hello, World!',
+    voiceId: 'com.apple.ttsbundle.Samantha-compact',
+    volume: 1.0,
+  });
+};
+
+const addListeners = () => {
+  SpeechSynthesis.addListener('boundary', (event) => {
+    console.log('boundary', event);
+  });
+
+  SpeechSynthesis.addListener('end', (event) => {
+    console.log('end', event);
+  });
+
+  SpeechSynthesis.addListener('error', (event) => {
+    console.log('error', event);
+  });
+
+  SpeechSynthesis.addListener('start', (event) => {
+    console.log('start', event);
+  });
+};
+
+const removeAllListeners = async () => {
+  await SpeechSynthesis.removeAllListeners();
 };
 ```
 
