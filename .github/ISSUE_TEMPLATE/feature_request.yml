@@ -28,6 +28,7 @@ body:
         - label: Printer
         - label: Screen Orientation
         - label: Speech Recognition
+        - label: Speech Synthesis
         - label: Zip
   - type: textarea
     attributes:
