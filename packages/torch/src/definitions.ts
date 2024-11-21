@@ -1,7 +1,7 @@
 export interface TorchPlugin {
   /**
    * Enable the torch.
-   * 
+   *
    * Only available on Android and iOS.
    *
    * @since 6.0.0
@@ -9,7 +9,7 @@ export interface TorchPlugin {
   enable(): Promise<void>;
   /**
    * Disable the torch.
-   * 
+   *
    * Only available on Android and iOS.
    *
    * @since 6.0.0
@@ -17,7 +17,7 @@ export interface TorchPlugin {
   disable(): Promise<void>;
   /**
    * Check if the torch is available.
-   * 
+   *
    * Only available on Android and iOS.
    *
    * @since 6.0.0
@@ -25,7 +25,7 @@ export interface TorchPlugin {
   isAvailable(): Promise<IsAvailableResult>;
   /**
    * Check if the torch is enabled.
-   * 
+   *
    * Only available on Android and iOS.
    *
    * @since 6.0.0
@@ -33,7 +33,7 @@ export interface TorchPlugin {
   isEnabled(): Promise<IsEnabledResult>;
   /**
    * Toggle the torch.
-   * 
+   *
    * Only available on Android and iOS.
    *
    * @since 6.0.0
