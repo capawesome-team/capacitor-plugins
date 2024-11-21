@@ -92,28 +92,26 @@ const getSupportedLanguages = async () => {
 };
 
 const addListeners = () => {
-  SpeechRecognition.addListener('beginningOfSpeech', () => {
-    console.log('User has started to speak');
+  SpeechRecognition.addListener('start', () => {
+    console.log('Speech recognition started');
   });
-
-  SpeechRecognition.addListener('endOfSpeech', () => {
-    console.log('User has stopped speaking');
+  SpeechRecognition.addListener('end', () => {
+    console.log('Speech recognition ended');
   });
-
   SpeechRecognition.addListener('error', (event) => {
-    console.error(event.message);
+    console.error('Speech recognition error:', event.message);
   });
-
-  SpeechRecognition.addListener('partialResults', (event) => {
-    console.log('Partial results:', event.results);
+  SpeechRecognition.addListener('partialResult', (event) => {
+    console.log('Partial result:', event.result);
   });
-
-  SpeechRecognition.addListener('readyForSpeech', () => {
-    console.log('Speech recognizer is listening');
+  SpeechRecognition.addListener('result', (event) => {
+    console.log('Final result:', event.result);
   });
-
-  SpeechRecognition.addListener('results', (event) => {
-    console.log('Final results:', event.results);
+  SpeechRecognition.addListener('speechStart', () => {
+    console.log('User started speaking');
+  });
+  SpeechRecognition.addListener('speechEnd', () => {
+    console.log('User stopped speaking');
   });
 };
 
