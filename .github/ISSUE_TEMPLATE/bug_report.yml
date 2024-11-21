@@ -29,6 +29,7 @@ body:
         - label: Screen Orientation
         - label: Speech Recognition
         - label: Speech Synthesis
+        - label: Torch
         - label: Zip
   - type: input
     attributes:
