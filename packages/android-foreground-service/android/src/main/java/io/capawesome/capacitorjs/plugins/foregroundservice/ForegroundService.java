@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import com.getcapacitor.plugin.util.AssetUtil;
 import java.util.ArrayList;
 
@@ -19,24 +20,47 @@ public class ForegroundService {
     public static final String ACTION_UPDATE = "UPDATE_NOTIFICATION";
 
     private final ForegroundServicePlugin plugin;
+    private final NotificationManager notificationManager;
 
     @Nullable
     private PowerManager.WakeLock activeWakeLock;
 
     public ForegroundService(ForegroundServicePlugin plugin) {
         this.plugin = plugin;
-        createNotificationChannel();
+        this.notificationManager = (NotificationManager) plugin.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons, boolean silent) {
-        startOrUpdateForegroundService(body, icon, id, title, buttons, silent, false);
+    public void startForegroundService(
+        String channelId,
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean silent
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationManager.getNotificationChannels().isEmpty()) {
+                createDefaultNotificationChannel();
+            }
+        }
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, false);
     }
 
-    public void updateForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons, boolean silent) {
-        startOrUpdateForegroundService(body, icon, id, title, buttons, silent, true);
+    public void updateForegroundService(
+        String channelId,
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean silent
+    ) {
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, true);
     }
 
     private void startOrUpdateForegroundService(
+        String channelId,
         String body,
         String icon,
         int id,
@@ -61,6 +85,7 @@ public class ForegroundService {
         Context context = plugin.getContext();
         Intent intent = new Intent(context, AndroidForegroundService.class);
         intent.putExtra("notification", notificationBundle);
+        intent.putExtra("channelId", channelId != null ? channelId : DEFAULT_NOTIFICATION_CHANNEL_ID);
 
         if (isUpdate) {
             intent.setAction(ACTION_UPDATE);
@@ -101,7 +126,7 @@ public class ForegroundService {
         activeWakeLock = null;
     }
 
-    private void createNotificationChannel() {
+    private void createDefaultNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -115,5 +140,15 @@ public class ForegroundService {
             NotificationManager notificationManager = plugin.getContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotificationChannel(NotificationChannel notificationChannel) {
+        notificationManager.createNotificationChannel(notificationChannel);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void deleteNotificationChannelById(String id) {
+        notificationManager.deleteNotificationChannel(id);
     }
 }

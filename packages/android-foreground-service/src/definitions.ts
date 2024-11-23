@@ -78,6 +78,23 @@ export interface ForegroundServicePlugin {
    */
   requestManageOverlayPermission(): Promise<ManageOverlayPermissionResult>;
   /**
+   * Create a notification channel.
+   * If not invoked, the plugin creates a channel with name and description set to "Default".
+   *
+   * Only available for Android (SDK 26+).
+   *
+   * @since 6.1.0
+   */
+  createNotificationChannel(options: CreateChannelOptions): Promise<void>;
+  /**
+   * Delete a notification channel.
+   *
+   * Only available for Android (SDK 26+).
+   *
+   * @since 6.1.0
+   */
+  deleteNotificationChannel(options: DeleteChannelOptions): Promise<void>;
+  /**
    * Called when a notification button is clicked.
    *
    * Only available on iOS.
@@ -145,6 +162,12 @@ export interface StartForegroundServiceOptions {
    * @default false
    */
   silent?: boolean;
+  /**
+   * The notification channel identifier. If not provided, the default identifier is used.
+   *
+   * @since 6.1.0
+   */
+  notificationChannelId?: string;
 }
 
 /**
@@ -218,3 +241,80 @@ export interface PermissionStatus {
  * @since 6.1.0
  */
 export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;
+
+/**
+ * @since 6.1.0
+ */
+export interface Channel {
+  /**
+   * The description of this channel (presented to the user).
+   *
+   * @since 6.1.0
+   */
+  description?: string;
+  /**
+   * The channel identifier.
+   *
+   * @since 6.1.0
+   */
+  id: string;
+  /**
+   * The level of interruption for notifications posted to this channel.
+   *
+   * @since 6.1.0
+   */
+  importance?: Importance;
+  /**
+   * The name of this channel (presented to the user).
+   *
+   * @since 6.1.0
+   */
+  name: string;
+}
+
+/**
+ * The importance level.
+ *
+ * For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
+ *
+ * @since 6.1.0
+ */
+export enum Importance {
+  /**
+   * @since 6.1.0
+   */
+  Min = 1,
+  /**
+   * @since 6.1.0
+   */
+  Low = 2,
+  /**
+   * @since 6.1.0
+   */
+  Default = 3,
+  /**
+   * @since 6.1.0
+   */
+  High = 4,
+  /**
+   * @since 6.1.0
+   */
+  Max = 5,
+}
+
+/**
+ * @since 6.1.0
+ */
+export type CreateChannelOptions = Channel;
+
+/**
+ * @since 6.1.0
+ */
+export interface DeleteChannelOptions {
+  /**
+   * The channel identifier.
+   *
+   * @since 6.1.0
+   */
+  id: string;
+}

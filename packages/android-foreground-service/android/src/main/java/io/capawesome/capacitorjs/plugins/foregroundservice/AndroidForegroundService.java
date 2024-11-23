@@ -26,6 +26,7 @@ public class AndroidForegroundService extends Service {
         try {
             String action = intent.getAction();
             Bundle extras = intent.getExtras();
+            String channelId = extras.getString("channelId", ForegroundService.DEFAULT_NOTIFICATION_CHANNEL_ID);
             Bundle notificationBundle = extras.getBundle("notification");
             String body = notificationBundle.getString("body");
             int id = notificationBundle.getInt("id");
@@ -37,7 +38,7 @@ public class AndroidForegroundService extends Service {
             PendingIntent contentIntent = buildContentIntent(id);
             Notification.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(getApplicationContext(), ForegroundService.DEFAULT_NOTIFICATION_CHANNEL_ID);
+                builder = new Notification.Builder(getApplicationContext(), channelId);
             } else {
                 builder = new Notification.Builder(getApplicationContext());
             }
