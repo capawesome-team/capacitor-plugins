@@ -85,7 +85,9 @@ export interface ForegroundServicePlugin {
    *
    * @since 6.1.0
    */
-  createNotificationChannel(options: CreateChannelOptions): Promise<void>;
+  createNotificationChannel(
+    options: CreateNotificationChannelOptions,
+  ): Promise<void>;
   /**
    * Delete a notification channel.
    *
@@ -93,7 +95,9 @@ export interface ForegroundServicePlugin {
    *
    * @since 6.1.0
    */
-  deleteNotificationChannel(options: DeleteChannelOptions): Promise<void>;
+  deleteNotificationChannel(
+    options: DeleteNotificationChannelOptions,
+  ): Promise<void>;
   /**
    * Called when a notification button is clicked.
    *
@@ -163,7 +167,7 @@ export interface StartForegroundServiceOptions {
    */
   silent?: boolean;
   /**
-   * The notification channel identifier. If not provided, the default identifier is used.
+   * The notification channel identifier.
    *
    * @since 6.1.0
    */
@@ -245,7 +249,7 @@ export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;
 /**
  * @since 6.1.0
  */
-export interface Channel {
+export interface CreateNotificationChannelOptions {
   /**
    * The description of this channel (presented to the user).
    *
@@ -305,12 +309,7 @@ export enum Importance {
 /**
  * @since 6.1.0
  */
-export type CreateChannelOptions = Channel;
-
-/**
- * @since 6.1.0
- */
-export interface DeleteChannelOptions {
+export interface DeleteNotificationChannelOptions {
   /**
    * The channel identifier.
    *

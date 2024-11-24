@@ -238,7 +238,7 @@ Only available on Android.
 ### createNotificationChannel(...)
 
 ```typescript
-createNotificationChannel(options: CreateChannelOptions) => Promise<void>
+createNotificationChannel(options: CreateNotificationChannelOptions) => Promise<void>
 ```
 
 Create a notification channel.
@@ -246,9 +246,9 @@ If not invoked, the plugin creates a channel with name and description set to "D
 
 Only available for Android (SDK 26+).
 
-| Param         | Type                                        |
-| ------------- | ------------------------------------------- |
-| **`options`** | <code><a href="#channel">Channel</a></code> |
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#createnotificationchanneloptions">CreateNotificationChannelOptions</a></code> |
 
 **Since:** 6.1.0
 
@@ -258,16 +258,16 @@ Only available for Android (SDK 26+).
 ### deleteNotificationChannel(...)
 
 ```typescript
-deleteNotificationChannel(options: DeleteChannelOptions) => Promise<void>
+deleteNotificationChannel(options: DeleteNotificationChannelOptions) => Promise<void>
 ```
 
 Delete a notification channel.
 
 Only available for Android (SDK 26+).
 
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#deletechanneloptions">DeleteChannelOptions</a></code> |
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletenotificationchanneloptions">DeleteNotificationChannelOptions</a></code> |
 
 **Since:** 6.1.0
 
@@ -322,7 +322,7 @@ Remove all listeners for this plugin.
 | **`smallIcon`**             | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
 | **`title`**                 | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
 | **`silent`**                | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
-| **`notificationChannelId`** | <code>string</code>               | The notification channel identifier. If not provided, the default identifier is used.                                                                                                                           |                    | 6.1.0 |
+| **`notificationChannelId`** | <code>string</code>               | The notification channel identifier.                                                                                                                                                                            |                    | 6.1.0 |
 
 
 #### NotificationButton
@@ -347,7 +347,7 @@ Remove all listeners for this plugin.
 | **`granted`** | <code>boolean</code> | Whether the permission is granted. This is always `true` on Android SDK &lt; 23. | 0.3.0 |
 
 
-#### Channel
+#### CreateNotificationChannelOptions
 
 | Prop              | Type                                              | Description                                                         | Since |
 | ----------------- | ------------------------------------------------- | ------------------------------------------------------------------- | ----- |
@@ -357,7 +357,7 @@ Remove all listeners for this plugin.
 | **`name`**        | <code>string</code>                               | The name of this channel (presented to the user).                   | 6.1.0 |
 
 
-#### DeleteChannelOptions
+#### DeleteNotificationChannelOptions
 
 | Prop     | Type                | Description             | Since |
 | -------- | ------------------- | ----------------------- | ----- |
@@ -389,11 +389,6 @@ Remove all listeners for this plugin.
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
-
-
-#### CreateChannelOptions
-
-<code><a href="#channel">Channel</a></code>
 
 
 #### ButtonClickedEventListener
