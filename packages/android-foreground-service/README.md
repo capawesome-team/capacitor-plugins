@@ -77,10 +77,13 @@ const stopForegroundService = async () => {
 * [`requestPermissions()`](#requestpermissions)
 * [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
+* [`createNotificationChannel(...)`](#createnotificationchannel)
+* [`deleteNotificationChannel(...)`](#deletenotificationchannel)
 * [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -232,6 +235,45 @@ Only available on Android.
 --------------------
 
 
+### createNotificationChannel(...)
+
+```typescript
+createNotificationChannel(options: CreateNotificationChannelOptions) => Promise<void>
+```
+
+Create a notification channel.
+If not invoked, the plugin creates a channel with name and description set to "Default".
+
+Only available for Android (SDK 26+).
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#createnotificationchanneloptions">CreateNotificationChannelOptions</a></code> |
+
+**Since:** 6.1.0
+
+--------------------
+
+
+### deleteNotificationChannel(...)
+
+```typescript
+deleteNotificationChannel(options: DeleteNotificationChannelOptions) => Promise<void>
+```
+
+Delete a notification channel.
+
+Only available for Android (SDK 26+).
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletenotificationchanneloptions">DeleteNotificationChannelOptions</a></code> |
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### addListener('buttonClicked', ...)
 
 ```typescript
@@ -272,14 +314,15 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                              | Description                                                                                                                                                                                                     | Default            | Since |
-| --------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`body`**      | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
-| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
-| **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
-| **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
-| **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
-| **`silent`**    | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
+| Prop                        | Type                              | Description                                                                                                                                                                                                     | Default            | Since |
+| --------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`body`**                  | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
+| **`buttons`**               | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
+| **`id`**                    | <code>number</code>               | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
+| **`smallIcon`**             | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
+| **`title`**                 | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
+| **`silent`**                | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
+| **`notificationChannelId`** | <code>string</code>               | The notification channel identifier.                                                                                                                                                                            |                    | 6.1.0 |
 
 
 #### NotificationButton
@@ -302,6 +345,23 @@ Remove all listeners for this plugin.
 | Prop          | Type                 | Description                                                                      | Since |
 | ------------- | -------------------- | -------------------------------------------------------------------------------- | ----- |
 | **`granted`** | <code>boolean</code> | Whether the permission is granted. This is always `true` on Android SDK &lt; 23. | 0.3.0 |
+
+
+#### CreateNotificationChannelOptions
+
+| Prop              | Type                                              | Description                                                         | Since |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------- | ----- |
+| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).            | 6.1.0 |
+| **`id`**          | <code>string</code>                               | The channel identifier.                                             | 6.1.0 |
+| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel. | 6.1.0 |
+| **`name`**        | <code>string</code>                               | The name of this channel (presented to the user).                   | 6.1.0 |
+
+
+#### DeleteNotificationChannelOptions
+
+| Prop     | Type                | Description             | Since |
+| -------- | ------------------- | ----------------------- | ----- |
+| **`id`** | <code>string</code> | The channel identifier. | 6.1.0 |
 
 
 #### PluginListenerHandle
@@ -334,6 +394,20 @@ Remove all listeners for this plugin.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
+
+
+### Enums
+
+
+#### Importance
+
+| Members       | Value          | Since |
+| ------------- | -------------- | ----- |
+| **`Min`**     | <code>1</code> | 6.1.0 |
+| **`Low`**     | <code>2</code> | 6.1.0 |
+| **`Default`** | <code>3</code> | 6.1.0 |
+| **`High`**    | <code>4</code> | 6.1.0 |
+| **`Max`**     | <code>5</code> | 6.1.0 |
 
 </docgen-api>
 
