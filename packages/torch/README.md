@@ -20,6 +20,12 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <uses-permission android:name="android.permission.FLASHLIGHT"/>
 ```
 
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.1.0`)
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -80,7 +86,7 @@ enable() => Promise<void>
 
 Enable the torch.
 
-Only available on Android and iOS.
+Only available on Android (SDK 23+) and iOS.
 
 **Since:** 6.0.0
 
@@ -95,7 +101,7 @@ disable() => Promise<void>
 
 Disable the torch.
 
-Only available on Android and iOS.
+Only available on Android (SDK 23+) and iOS.
 
 **Since:** 6.0.0
 
@@ -144,7 +150,7 @@ toggle() => Promise<void>
 
 Toggle the torch.
 
-Only available on Android and iOS.
+Only available on Android (SDK 23+) and iOS.
 
 **Since:** 6.0.0
 
