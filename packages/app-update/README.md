@@ -239,9 +239,10 @@ Remove all listeners for this plugin.
 
 #### OpenAppStoreOptions
 
-| Prop          | Type                | Description                                                                                                                                                               |
-| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available on iOS. |
+| Prop          | Type                | Description                                                                                                                                                               | Since |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`appId`**   | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). Only available on iOS.                                   | 6.1.0 |
+| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available on iOS. |       |
 
 
 #### AppUpdateResult
