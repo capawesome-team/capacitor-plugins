@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`e3f377a`](https://github.com/capawesome-team/capacitor-plugins/commit/e3f377a7656f2ace20c34be1b566cbce443f538b) ([#326](https://github.com/capawesome-team/capacitor-plugins/pull/326)): feat: add `pickDirectory()` method
+
 ## 6.1.0
 
 ### Minor Changes

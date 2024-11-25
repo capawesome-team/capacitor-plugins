@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [`6051ba5`](https://github.com/capawesome-team/capacitor-plugins/commit/6051ba5c06b8f49b7ec3c5a36f630358bf4d3dc3) ([#328](https://github.com/capawesome-team/capacitor-plugins/pull/328)): feat(android): add `updateForegroundService(...)` method
+
+* [`965d322`](https://github.com/capawesome-team/capacitor-plugins/commit/965d322aa0d8f95dfa3a287df5233caa6a5aac78) ([#334](https://github.com/capawesome-team/capacitor-plugins/pull/334)): feat: add `createNotificationChannel` and `deleteNotificationChannel` methods
+
 ## 6.0.1
 
 ### Patch Changes
