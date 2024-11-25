@@ -58,6 +58,18 @@ public class AppUpdatePlugin: CAPPlugin {
     }
 
     @objc func openAppStore(_ call: CAPPluginCall) {
+        if let appId = call.getString("appId") {
+            guard let url = URL(string: "https://apps.apple.com/app/id\(appId)") else {
+                call.reject("appid is invalid.")
+                return
+            }
+            DispatchQueue.main.async {
+                UIApplication.shared.open(url) { (_) in
+                    call.resolve()
+                }
+            }
+            return
+        }
         DispatchQueue.global().async {
             do {
                 let date = Date.init().timeIntervalSince1970
