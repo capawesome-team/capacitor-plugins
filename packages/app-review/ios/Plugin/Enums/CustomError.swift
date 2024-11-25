@@ -1,16 +1,8 @@
-//
-//  CustomError.swift
-//  Plugin
-//
-//  Created by Robin Genz on 18.11.24.
-//  Copyright © 2024 Max Lynch. All rights reserved.
-//
-
-
 import Foundation
 
 public enum CustomError: Error {
-    case bundleIdNotFound
+    case appIdMissing
+    case appIdInvalid
     case unavailable
     case unknown
 }
@@ -18,8 +10,10 @@ public enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .bundleIdNotFound:
-            return NSLocalizedString("Could not open App Store because the bundle ID could not be determined.", comment: "bundleIdNotFound")
+        case .appIdMissing:
+            return NSLocalizedString("appId must be provided.", comment: "appIdMissing")
+        case .appIdInvalid:
+            return NSLocalizedString("appId is invalid.", comment: "appIdInvalid")
         case .unavailable:
             return NSLocalizedString("This plugin method is not available on this platform.", comment: "unavailable")
         case .unknown:

@@ -25,7 +25,9 @@ window.customElements.define(
       self.shadowRoot
         .querySelector('#open-app-store')
         .addEventListener('click', async function () {
-          await AppReview.openAppStore();
+          await AppReview.openAppStore({
+            appId: '1203299771',
+          });
         });
       self.shadowRoot
         .querySelector('#request-review')

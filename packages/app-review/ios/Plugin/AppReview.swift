@@ -9,14 +9,15 @@ import StoreKit
         self.plugin = plugin
     }
 
-    @objc public func openAppStore(completion: @escaping (Error?) -> Void) {
-        if let info = Bundle.main.infoDictionary,
-           let bundleId = info["CFBundleIdentifier"] as? String,
-           let url = URL(string: "https://apps.apple.com/app/id\(bundleId)?action=write-review") {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            completion(nil)
-        } else {
-            completion(CustomError.bundleIdNotFound)
+    @objc public func openAppStore(_ options: OpenAppStoreOptions, completion: @escaping (Error?) -> Void) {
+        guard let url = URL(string: "https://apps.apple.com/app/id\(options.appId)?action=write-review") else {
+            completion(CustomError.appIdInvalid)
+            return
+        }
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url) { (_) in
+                completion(nil)
+            }
         }
     }
 
