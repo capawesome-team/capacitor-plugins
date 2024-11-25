@@ -7,7 +7,7 @@ Capacitor plugin to transcribe speech into text.
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
 - 🛠 **Permissions**: Check and request permissions for recording audio.
-- 🎙 **Events**: Listen for events like `beginningOfSpeech`, `endOfSpeech`, `error`, `partialResults`, `readyForSpeech`, and `results`.
+- 🎙 **Events**: Listen for events like `start`, `end`, `speechStart`, `speechEnd`, `error`, `partialResults`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
