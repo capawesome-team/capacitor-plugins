@@ -6,7 +6,7 @@ export interface AppReviewPlugin {
    *
    * @since 6.0.0
    */
-  openAppStore(): Promise<void>;
+  openAppStore(options?: OpenAppStoreOptions): Promise<void>;
   /**
    * Request an in-app review.
    *
@@ -17,4 +17,21 @@ export interface AppReviewPlugin {
    * @since 6.0.0
    */
   requestReview(): Promise<void>;
+}
+
+/**
+ * @since 6.0.1
+ */
+export interface OpenAppStoreOptions {
+  /**
+   * The app ID of the app to open in the App Store.
+   *
+   * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
+   *
+   * Only available on iOS.
+   *
+   * @since 6.0.1
+   * @example 123456789
+   */
+  appId: string;
 }

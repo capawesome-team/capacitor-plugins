@@ -16,13 +16,19 @@ public class AppReviewPlugin: CAPPlugin {
     }
 
     @objc func openAppStore(_ call: CAPPluginCall) {
-        self.implementation?.openAppStore(completion: { error in
-            if let error = error {
-                self.rejectCall(call, error)
-            } else {
-                self.resolveCall(call)
-            }
-        })
+        do {
+            let options = try OpenAppStoreOptions(call)
+            
+            self.implementation?.openAppStore(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
     }
 
     @objc func requestReview(_ call: CAPPluginCall) {
