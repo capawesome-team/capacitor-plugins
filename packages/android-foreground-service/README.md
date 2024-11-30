@@ -51,17 +51,52 @@ import { Capacitor } from '@capacitor/core';
 import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
 
 const startForegroundService = async () => {
-  if (Capacitor.getPlatform() !== 'android') {
-    return false;
-  }
-  await ForegroundService.startForegroundService();
+  await ForegroundService.startForegroundService({
+    id: 1,
+    title: 'Title',
+    body: 'Body',
+    smallIcon: 'ic_stat_icon_config_sample',
+    buttons: [
+      {
+        title: 'Button 1',
+        id: 1,
+      },
+      {
+        title: 'Button 2',
+        id: 2,
+      },
+    ],
+    silent: false,
+    notificationChannelId: 'default',
+  });
+};
+
+const updateForegroundService = async () => {
+  await ForegroundService.updateForegroundService({
+    id: 1,
+    title: 'Title',
+    body: 'Body',
+    smallIcon: 'ic_stat_icon_config_sample',
+  });
 };
 
 const stopForegroundService = async () => {
-  if (Capacitor.getPlatform() !== 'android') {
-    return false;
-  }
   await ForegroundService.stopForegroundService();
+};
+
+const createNotificationChannel = async () => {
+  await ForegroundService.createNotificationChannel({
+    id: 'default',
+    name: 'Default',
+    description: 'Default channel',
+    importance: Importance.Default,
+  });
+};
+
+const deleteNotificationChannel = async () => {
+  await ForegroundService.deleteNotificationChannel({
+    id: 'default',
+  });
 };
 ```
 

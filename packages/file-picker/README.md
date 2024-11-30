@@ -58,6 +58,10 @@ const pickFiles = async () => {
   });
 };
 
+const pickDirectory = async () => {
+  const result = await FilePicker.pickDirectory();
+};
+
 const pickImages = async () => {
   const result = await FilePicker.pickImages();
 };
