@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`3902a47`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3902a47ff2a12708b7ce96f2ceb4bd535443eb9c) ([#42](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/42)): feat(web): add support for the `printWebView` method
+
 ## 6.1.0
 
 ### Minor Changes
