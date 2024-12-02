@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.3.0
+
+### Minor Changes
+
+- [`0c43890`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0c438905ff89854f9b7f78b3d8e1b815a21df09c) ([#27](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/27)): feat(android): add `useWifiManager` configuration option
+
 ## 6.2.0
 
 ### Minor Changes
