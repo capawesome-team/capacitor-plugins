@@ -100,7 +100,7 @@ printHtml(options: PrintHtmlOptions) => Promise<void>
 
 Present the printing user interface to print a html document.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -119,7 +119,7 @@ printPdf(options: PrintPdfOptions) => Promise<void>
 
 Present the printing user interface to print a pdf document.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
@@ -138,13 +138,14 @@ printWebView(options?: PrintOptions | undefined) => Promise<void>
 
 Present the printing user interface to print the web view content.
 
+On **Web**, you can use a print style sheet to customize the print
+output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing).
+
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#printoptions">PrintOptions</a></code> |
 
 **Since:** 5.0.0
-
-Only available for Android and iOS.
 
 --------------------
 
