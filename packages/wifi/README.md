@@ -65,7 +65,46 @@ Add the `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseU
 
 ## Configuration
 
-No configuration required for this plugin.
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop                 | Type                 | Description                                                                                                             | Default            | Since |
+| -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`useWifiManager`** | <code>boolean</code> | Whether or not to use the **deprecated** `WifiManager` API for connecting to Wi-Fi networks. Only available on Android. | <code>false</code> | 6.3.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "Wifi": {
+      "useWifiManager": undefined
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capacitor/wifi" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Wifi: {
+      useWifiManager: undefined,
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
 
 ## Demo
 
