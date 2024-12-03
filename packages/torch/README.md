@@ -86,7 +86,7 @@ enable() => Promise<void>
 
 Enable the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Available on Android (SDK 23+), iOS and web.
 
 **Since:** 6.0.0
 
@@ -101,7 +101,7 @@ disable() => Promise<void>
 
 Disable the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Available on Android (SDK 23+), iOS and web.
 
 **Since:** 6.0.0
 
@@ -116,7 +116,7 @@ isAvailable() => Promise<IsAvailableResult>
 
 Check if the torch is available.
 
-Only available on Android and iOS.
+Available on Android, iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
 
@@ -133,7 +133,7 @@ isEnabled() => Promise<IsEnabledResult>
 
 Check if the torch is enabled.
 
-Only available on Android and iOS.
+Available on Android, iOS and web.
 
 **Returns:** <code>Promise&lt;<a href="#isenabledresult">IsEnabledResult</a>&gt;</code>
 
@@ -150,7 +150,7 @@ toggle() => Promise<void>
 
 Toggle the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Available on Android (SDK 23+), iOS and web.
 
 **Since:** 6.0.0
 

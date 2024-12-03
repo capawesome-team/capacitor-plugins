@@ -2,7 +2,7 @@ export interface TorchPlugin {
   /**
    * Enable the torch.
    *
-   * Only available on Android (SDK 23+) and iOS.
+   * Available on Android (SDK 23+), iOS and web.
    *
    * @since 6.0.0
    */
@@ -10,7 +10,7 @@ export interface TorchPlugin {
   /**
    * Disable the torch.
    *
-   * Only available on Android (SDK 23+) and iOS.
+   * Available on Android (SDK 23+), iOS and web.
    *
    * @since 6.0.0
    */
@@ -18,7 +18,7 @@ export interface TorchPlugin {
   /**
    * Check if the torch is available.
    *
-   * Only available on Android and iOS.
+   * Available on Android, iOS and web.
    *
    * @since 6.0.0
    */
@@ -26,7 +26,7 @@ export interface TorchPlugin {
   /**
    * Check if the torch is enabled.
    *
-   * Only available on Android and iOS.
+   * Available on Android, iOS and web.
    *
    * @since 6.0.0
    */
@@ -34,7 +34,7 @@ export interface TorchPlugin {
   /**
    * Toggle the torch.
    *
-   * Only available on Android (SDK 23+) and iOS.
+   * Available on Android (SDK 23+), iOS and web.
    *
    * @since 6.0.0
    */
