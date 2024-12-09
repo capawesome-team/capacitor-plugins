@@ -66,11 +66,11 @@ const toggle = async () => {
 
 <docgen-index>
 
-* [`enable()`](#enable)
-* [`disable()`](#disable)
+* [`enable(...)`](#enable)
+* [`disable(...)`](#disable)
 * [`isAvailable()`](#isavailable)
-* [`isEnabled()`](#isenabled)
-* [`toggle()`](#toggle)
+* [`isEnabled(...)`](#isenabled)
+* [`toggle(...)`](#toggle)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -78,30 +78,38 @@ const toggle = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### enable()
+### enable(...)
 
 ```typescript
-enable() => Promise<void>
+enable(options?: EnableOptions | undefined) => Promise<void>
 ```
 
 Enable the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Only available on Android (SDK 23+), iOS and Web.
+
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#enableoptions">EnableOptions</a></code> |
 
 **Since:** 6.0.0
 
 --------------------
 
 
-### disable()
+### disable(...)
 
 ```typescript
-disable() => Promise<void>
+disable(options?: DisableOptions | undefined) => Promise<void>
 ```
 
 Disable the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Only available on Android (SDK 23+), iOS and Web.
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#disableoptions">DisableOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -116,7 +124,7 @@ isAvailable() => Promise<IsAvailableResult>
 
 Check if the torch is available.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Web.
 
 **Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
 
@@ -125,15 +133,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### isEnabled()
+### isEnabled(...)
 
 ```typescript
-isEnabled() => Promise<IsEnabledResult>
+isEnabled(options?: IsEnabledOptions | undefined) => Promise<IsEnabledResult>
 ```
 
 Check if the torch is enabled.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Web.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#isenabledoptions">IsEnabledOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#isenabledresult">IsEnabledResult</a>&gt;</code>
 
@@ -142,15 +154,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### toggle()
+### toggle(...)
 
 ```typescript
-toggle() => Promise<void>
+toggle(options: ToggleOptions) => Promise<void>
 ```
 
 Toggle the torch.
 
-Only available on Android (SDK 23+) and iOS.
+Only available on Android (SDK 23+), iOS and Web.
+
+| Param         | Type                                                    |
+| ------------- | ------------------------------------------------------- |
+| **`options`** | <code><a href="#toggleoptions">ToggleOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -158,6 +174,20 @@ Only available on Android (SDK 23+) and iOS.
 
 
 ### Interfaces
+
+
+#### EnableOptions
+
+| Prop         | Type                     | Description                                                                                                                                                                                             | Since |
+| ------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`stream`** | <code>MediaStream</code> | The stream of media to enable the torch on. **Attention**: The stream must have a video track. The facing mode of the video track must be the one that corresponds to the torch. Only available on Web. | 6.2.0 |
+
+
+#### DisableOptions
+
+| Prop         | Type                     | Description                                                                                                                                                                                              | Since |
+| ------------ | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`stream`** | <code>MediaStream</code> | The stream of media to disable the torch on. **Attention**: The stream must have a video track. The facing mode of the video track must be the one that corresponds to the torch. Only available on Web. | 6.2.0 |
 
 
 #### IsAvailableResult
@@ -172,6 +202,20 @@ Only available on Android (SDK 23+) and iOS.
 | Prop          | Type                 | Description                          | Since |
 | ------------- | -------------------- | ------------------------------------ | ----- |
 | **`enabled`** | <code>boolean</code> | Whether the torch is enabled or not. | 6.0.0 |
+
+
+#### IsEnabledOptions
+
+| Prop         | Type                     | Description                                                                                                                                                                                                          | Since |
+| ------------ | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`stream`** | <code>MediaStream</code> | The stream of media to check if the torch is enabled on. **Attention**: The stream must have a video track. The facing mode of the video track must be the one that corresponds to the torch. Only available on Web. | 6.2.0 |
+
+
+#### ToggleOptions
+
+| Prop         | Type                     | Description                                                                                                                                                                                             | Since |
+| ------------ | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`stream`** | <code>MediaStream</code> | The stream of media to toggle the torch on. **Attention**: The stream must have a video track. The facing mode of the video track must be the one that corresponds to the torch. Only available on Web. | 6.2.0 |
 
 </docgen-api>
 
