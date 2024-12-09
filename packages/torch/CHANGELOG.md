@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`65fd791`](https://github.com/capawesome-team/capacitor-plugins/commit/65fd79157ea7a6ed03b489b1893216f6a12a51d4) ([#341](https://github.com/capawesome-team/capacitor-plugins/pull/341)): feat(web): add web implementation
+
 ## 6.1.0
 
 ### Minor Changes
