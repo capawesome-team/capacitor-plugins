@@ -18,7 +18,7 @@ export class TorchWeb extends WebPlugin implements TorchPlugin {
     if (!available) {
       throw this.createUnavailableException();
     }
-    const { enabled } = await this.isEnabled();
+    const { enabled } = await this.isEnabled(options);
     if (enabled) {
       return;
     }
