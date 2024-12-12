@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.1
+
+### Patch Changes
+
+- [`00a20f5`](https://github.com/capawesome-team/capacitor-plugins/commit/00a20f554e7865e9ee89a6facd20c0955b4fcf39): fix: mark parameter for `toggle(...)` method as optional
+
 ## 6.2.0
 
 ### Minor Changes
