@@ -38,7 +38,7 @@ export interface TorchPlugin {
    *
    * @since 6.0.0
    */
-  toggle(options: ToggleOptions): Promise<void>;
+  toggle(options?: ToggleOptions): Promise<void>;
 }
 
 /**
