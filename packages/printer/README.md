@@ -138,7 +138,7 @@ printWebView(options?: PrintOptions | undefined) => Promise<void>
 
 Present the printing user interface to print the web view content.
 
-On **Web**, you can use a print style sheet to customize the print
+You can use a print style sheet to customize the print
 output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing).
 
 | Param         | Type                                                  |
