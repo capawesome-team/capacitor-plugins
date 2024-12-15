@@ -53,10 +53,14 @@ export interface SetOptions {
 }
 
 export interface Shortcut {
+  /**
+   * Only supported on Android
+   *
+   * @since 6.0.0
+   */
   description?: string;
   id: string;
   title: string;
-  iosIcon?: number;
 }
 
 export interface OnAppShortcutEvent {

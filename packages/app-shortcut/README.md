@@ -9,6 +9,38 @@ npm install @capawesome/capacitor-app-shortcut
 npx cap sync
 ```
 
+### iOS
+
+On iOS, you must add the following to your app's `AppDelegate.swift`:
+
+```diff
++ import CapawesomeCapacitorAppShortcut
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
++     if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
++         handleOnAppShortcut(shortcutItem)
++         return false
++     }
+      return true
+  }
+  
++ func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
++     handleOnAppShortcut(shortcutItem)
++     completionHandler(true)
++ }
+  
++  private func handleOnAppShortcut(_ shortcutItem: UIApplicationShortcutItem) {
++      NotificationCenter.default.post(
++        name: NSNotification.Name(AppShortcutPlugin.onAppShortcutEvent),
++        object: nil,
++        userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem]
++      )
++  }
+```
+
 ## API
 
 <docgen-index>
@@ -123,12 +155,11 @@ Remove all listeners for this plugin.
 
 #### Shortcut
 
-| Prop              | Type                |
-| ----------------- | ------------------- |
-| **`description`** | <code>string</code> |
-| **`id`**          | <code>string</code> |
-| **`title`**       | <code>string</code> |
-| **`iosIcon`**     | <code>number</code> |
+| Prop              | Type                | Description               | Since |
+| ----------------- | ------------------- | ------------------------- | ----- |
+| **`description`** | <code>string</code> | Only supported on Android | 6.0.0 |
+| **`id`**          | <code>string</code> |                           |       |
+| **`title`**       | <code>string</code> |                           |       |
 
 
 #### SetOptions

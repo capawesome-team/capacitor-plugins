@@ -10,15 +10,15 @@ import UIKit
 
     public func toJSObject() -> AnyObject {
         var result = JSObject()
-        var array = JSArray()
+        var shortcutsResult = JSArray()
         for shortcutItem in shortcutItems {
-            var object = JSObject()
-            object["id"] = shortcutItem.type
-            object["title"] = shortcutItem.localizedTitle
-            object["description"] = shortcutItem.localizedSubtitle
-            array.append(object)
+            var shortcutResult = JSObject()
+            shortcutResult["id"] = shortcutItem.type
+            shortcutResult["title"] = shortcutItem.localizedTitle
+            shortcutResult["description"] = shortcutItem.localizedSubtitle
+            shortcutsResult.append(shortcutResult)
         }
-        result["shortcuts"] = array
+        result["shortcuts"] = shortcutsResult
         return result as AnyObject
     }
 }

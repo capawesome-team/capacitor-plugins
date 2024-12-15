@@ -6,48 +6,65 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppShortcutPlugin)
-public class AppShortcutPlugin: CAPPlugin, UIApplicationDelegate {
+public class AppShortcutPlugin: CAPPlugin {
+    public let tag = "AppShortcuts"
+    public static let onAppShortcutEvent = "onAppShortcut"
+    public static let userInfoShortcutItemKey = "shortcutItem"
     private let implementation = AppShortcut()
 
+    override public init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAppShortcutNotification), name: NSNotification.Name(AppShortcutPlugin.onAppShortcutEvent), object: nil)
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     @objc func get(_ call: CAPPluginCall) {
-        let result = implementation.get()
-        call.resolve(result.toJSObject() as! JSObject)
+        implementation.get(completion: { result in
+            call.resolve(result.toJSObject() as! JSObject)
+        })
     }
 
     @objc func set(_ call: CAPPluginCall) {
         do {
             let options = try SetOptions(call: call)
-            implementation.set(options.getShortcuts)
-            call.resolve()
+            implementation.set(shortcuts: options.getShortcuts, completion: { error in
+                if let error = error {
+                    CAPLog.print("[", self.tag, "] ", error)
+                    call.reject(error.localizedDescription)
+                    return
+                }
+                call.resolve()
+            })
         } catch let error {
+            CAPLog.print("[", self.tag, "] ", error)
             call.reject(error.localizedDescription)
         }
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        implementation.clear()
-        call.resolve()
+        implementation.clear(completion: { error in
+            if let error = error {
+                CAPLog.print("[", self.tag, "] ", error)
+                call.reject(error.localizedDescription)
+                return
+            }
+            call.resolve()
+        })
     }
 
-    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
-            self.onAppShortcut(shortcutItem)
-            return false
+    @objc private func handleAppShortcutNotification(notification: Notification) {
+        guard let userInfo = notification.userInfo, let shortcutItem = userInfo[AppShortcutPlugin.userInfoShortcutItemKey] as? UIApplicationShortcutItem else {
+            return
         }
-        return true
+        notifyonAppShortcutListeners(shortcutItem)
     }
 
-    public func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        self.onAppShortcut(shortcutItem)
-        completionHandler(true)
-    }
-
-    public func scene(_ scene: UIScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        self.onAppShortcut(shortcutItem)
-        completionHandler(true)
-    }
-
-    private func onAppShortcut(_ shortcutItem: UIApplicationShortcutItem) {
-        notifyListeners("onAppShortcut", data: ["id": shortcutItem.type])
+    private func notifyonAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
+        self.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, data: [
+            "id": shortcutItem.type
+        ])
     }
 }

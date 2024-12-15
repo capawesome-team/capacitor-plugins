@@ -2,18 +2,21 @@ import Foundation
 import UIKit
 
 @objc public class AppShortcut: NSObject {
-    @objc public func get() -> GetResult {
+    @objc public func get(completion: @escaping (Result) -> Void) {
         let application = UIApplication.shared
-        return GetResult(shortcutItems: application.shortcutItems)
+        let result = GetResult(shortcutItems: application.shortcutItems)
+        completion(result)
     }
 
-    @objc public func set(_ shortcuts: [UIApplicationShortcutItem]) {
+    @objc public func set(shortcuts: [UIApplicationShortcutItem], completion: @escaping (Error?) -> Void) {
         let application = UIApplication.shared
         application.shortcutItems = shortcuts
+        completion(nil)
     }
 
-    @objc public func clear() {
+    @objc public func clear(completion: @escaping (Error?) -> Void) {
         let application = UIApplication.shared
         application.shortcutItems = nil
+        completion(nil)
     }
 }
