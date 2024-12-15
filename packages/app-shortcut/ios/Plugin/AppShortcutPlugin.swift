@@ -23,7 +23,9 @@ public class AppShortcutPlugin: CAPPlugin {
 
     @objc func get(_ call: CAPPluginCall) {
         implementation.get(completion: { result in
-            call.resolve(result.toJSObject() as! JSObject)
+            if let result = result.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
         })
     }
 
@@ -32,26 +34,21 @@ public class AppShortcutPlugin: CAPPlugin {
             let options = try SetOptions(call: call)
             implementation.set(shortcuts: options.getShortcuts, completion: { error in
                 if let error = error {
-                    CAPLog.print("[", self.tag, "] ", error)
-                    call.reject(error.localizedDescription)
-                    return
+                    self.rejectCall(call, error)
                 }
-                call.resolve()
+                self.resolveCall(call, nil)
             })
         } catch let error {
-            CAPLog.print("[", self.tag, "] ", error)
-            call.reject(error.localizedDescription)
+            rejectCall(call, error)
         }
     }
 
     @objc func clear(_ call: CAPPluginCall) {
         implementation.clear(completion: { error in
             if let error = error {
-                CAPLog.print("[", self.tag, "] ", error)
-                call.reject(error.localizedDescription)
-                return
+                self.rejectCall(call, error)
             }
-            call.resolve()
+            self.resolveCall(call, nil)
         })
     }
 
@@ -66,5 +63,18 @@ public class AppShortcutPlugin: CAPPlugin {
         self.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, data: [
             "id": shortcutItem.type
         ])
+    }
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", self.tag, "] ", error)
+        call.reject(error.localizedDescription)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ result: JSObject?) {
+        if let result {
+            call.resolve(result)
+        } else {
+            call.resolve()
+        }
     }
 }
