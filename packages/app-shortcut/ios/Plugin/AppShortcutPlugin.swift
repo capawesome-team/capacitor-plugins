@@ -35,8 +35,9 @@ public class AppShortcutPlugin: CAPPlugin {
             implementation.set(shortcuts: options.getShortcuts, completion: { error in
                 if let error = error {
                     self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, nil)
                 }
-                self.resolveCall(call, nil)
             })
         } catch let error {
             rejectCall(call, error)
@@ -47,8 +48,9 @@ public class AppShortcutPlugin: CAPPlugin {
         implementation.clear(completion: { error in
             if let error = error {
                 self.rejectCall(call, error)
+            } else {
+                self.resolveCall(call, nil)
             }
-            self.resolveCall(call, nil)
         })
     }
 
@@ -56,10 +58,10 @@ public class AppShortcutPlugin: CAPPlugin {
         guard let userInfo = notification.userInfo, let shortcutItem = userInfo[AppShortcutPlugin.userInfoShortcutItemKey] as? UIApplicationShortcutItem else {
             return
         }
-        notifyonAppShortcutListeners(shortcutItem)
+        notifyOnAppShortcutListeners(shortcutItem)
     }
 
-    private func notifyonAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
+    private func notifyOnAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
         self.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, data: [
             "id": shortcutItem.type
         ])
