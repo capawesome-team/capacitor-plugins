@@ -114,7 +114,7 @@ const deleteNotificationChannel = async () => {
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
 * [`createNotificationChannel(...)`](#createnotificationchannel)
 * [`deleteNotificationChannel(...)`](#deletenotificationchannel)
-* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
+* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
