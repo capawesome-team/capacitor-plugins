@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.5.0](https://github.com/capawesome-team/sponsorware/compare/v6.4.0...v6.5.0) (2024-12-16)
+
+
+### Features
+
+* **ios:** 0x24 command support for the `transceive(...)` method ([#29](https://github.com/capawesome-team/sponsorware/issues/29)) ([2e718cb](https://github.com/capawesome-team/sponsorware/commit/2e718cb9c0d4f35012169986db17ff149ba7c962))
+* **ios:** add `manufacturerCode` property ([#27](https://github.com/capawesome-team/sponsorware/issues/27)) ([f1a25eb](https://github.com/capawesome-team/sponsorware/commit/f1a25ebce5c6a457c9cb6b1a78c0fc27441049a8))
+* support HCE ([#25](https://github.com/capawesome-team/sponsorware/issues/25)) ([ecf4837](https://github.com/capawesome-team/sponsorware/commit/ecf4837975023b985d2e5a9af217d8384bd2227f))
+
 ## [6.4.0](https://github.com/capawesome-team/sponsorware/compare/v6.3.0...v6.4.0) (2024-11-06)
 
 
