@@ -10,7 +10,7 @@ extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .shortcutsMissing:
-            return NSLocalizedString("shortucts must be provided.", comment: "shortcutsMissing")
+            return NSLocalizedString("shortcuts must be provided.", comment: "shortcutsMissing")
         case .titleMissing:
             return NSLocalizedString("title must be provided.", comment: "titleMissing")
         case .idMissing:
