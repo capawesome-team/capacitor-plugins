@@ -89,7 +89,7 @@ In `capacitor.config.json`:
 In `capacitor.config.ts`:
 
 ```ts
-/// <reference types="@capacitor/wifi" />
+/// <reference types="@capawesome-team/capacitor-wifi" />
 
 import { CapacitorConfig } from '@capacitor/cli';
 
@@ -171,7 +171,7 @@ const startScan = async () => {
 * [`startScan()`](#startscan)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('networksScanned', ...)`](#addlistenernetworksscanned)
+* [`addListener('networksScanned', ...)`](#addlistenernetworksscanned-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
