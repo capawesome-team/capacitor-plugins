@@ -8,6 +8,8 @@ import androidx.core.content.pm.ShortcutManagerCompat;
 import io.capawesome.capacitorjs.plugins.appshortcut.classes.results.GetResult;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
+import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.Result;
+
 import java.util.List;
 
 public class AppShortcut {
@@ -18,7 +20,7 @@ public class AppShortcut {
         this.context = context;
     }
 
-    public void get(@NonNull NonEmptyCallback callback) {
+    public void get(@NonNull NonEmptyCallback<Result> callback) {
         List<ShortcutInfoCompat> shortcuts = ShortcutManagerCompat.getDynamicShortcuts(context);
         GetResult result = new GetResult(shortcuts);
         callback.success(result);
