@@ -1,19 +1,17 @@
 package io.capawesome.capacitorjs.plugins.appshortcut;
 
 import android.content.Context;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
-
-import java.util.List;
-
 import io.capawesome.capacitorjs.plugins.appshortcut.classes.results.GetResult;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
+import java.util.List;
 
 public class AppShortcut {
+
     private final Context context;
 
     public AppShortcut(Context context) {

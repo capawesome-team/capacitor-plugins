@@ -148,9 +148,9 @@ Remove all listeners for this plugin.
 
 #### GetResult
 
-| Prop            | Type                    |
-| --------------- | ----------------------- |
-| **`shortcuts`** | <code>Shortcut[]</code> |
+| Prop            | Type                    | Since |
+| --------------- | ----------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | 6.0.0 |
 
 
 #### Shortcut
@@ -158,15 +158,15 @@ Remove all listeners for this plugin.
 | Prop              | Type                | Description               | Since |
 | ----------------- | ------------------- | ------------------------- | ----- |
 | **`description`** | <code>string</code> | Only supported on Android | 6.0.0 |
-| **`id`**          | <code>string</code> |                           |       |
-| **`title`**       | <code>string</code> |                           |       |
+| **`id`**          | <code>string</code> |                           | 6.0.0 |
+| **`title`**       | <code>string</code> |                           | 6.0.0 |
 
 
 #### SetOptions
 
-| Prop            | Type                    |
-| --------------- | ----------------------- |
-| **`shortcuts`** | <code>Shortcut[]</code> |
+| Prop            | Type                    | Since |
+| --------------- | ----------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | 6.0.0 |
 
 
 #### PluginListenerHandle
@@ -178,8 +178,8 @@ Remove all listeners for this plugin.
 
 #### OnAppShortcutEvent
 
-| Prop     | Type                |
-| -------- | ------------------- |
-| **`id`** | <code>string</code> |
+| Prop     | Type                | Since |
+| -------- | ------------------- | ----- |
+| **`id`** | <code>string</code> | 6.0.0 |
 
 </docgen-api>

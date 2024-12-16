@@ -44,14 +44,29 @@ export interface AppShortcutPlugin {
   removeAllListeners(): Promise<void>;
 }
 
+/**
+ * @since 6.0.0
+ */
 export interface GetResult {
+  /**
+   * @since 6.0.0
+   */
   shortcuts: Shortcut[];
 }
 
+/**
+ * @since 6.0.0
+ */
 export interface SetOptions {
+  /**
+   * @since 6.0.0
+   */
   shortcuts: Shortcut[];
 }
 
+/**
+ * @since 6.0.0
+ */
 export interface Shortcut {
   /**
    * Only supported on Android
@@ -59,10 +74,22 @@ export interface Shortcut {
    * @since 6.0.0
    */
   description?: string;
+  /**
+   * @since 6.0.0
+   */
   id: string;
+  /**
+   * @since 6.0.0
+   */
   title: string;
 }
 
+/**
+ * @since 6.0.0
+ */
 export interface OnAppShortcutEvent {
+  /**
+   * @since 6.0.0
+   */
   id: string;
 }
