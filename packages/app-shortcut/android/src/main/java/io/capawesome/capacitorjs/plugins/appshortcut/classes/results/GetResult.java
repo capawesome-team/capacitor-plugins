@@ -24,7 +24,9 @@ public class GetResult implements Result {
             CharSequence title = shortcut.getShortLabel();
             shortcutObject.put("title", title.toString());
             CharSequence description = shortcut.getLongLabel();
-            shortcutObject.put("description", description == null ? "" : description.toString());
+            if (description != null) {
+                shortcutObject.put("description", description.toString());
+            }
             resultArray.put(shortcutObject);
         }
         JSObject result = new JSObject();

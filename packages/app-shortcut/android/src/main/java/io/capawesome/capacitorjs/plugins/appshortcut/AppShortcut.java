@@ -9,7 +9,6 @@ import io.capawesome.capacitorjs.plugins.appshortcut.classes.results.GetResult;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.Result;
-
 import java.util.List;
 
 public class AppShortcut {

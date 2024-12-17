@@ -22,9 +22,15 @@ public class AppShortcutPlugin extends Plugin {
     public static final String ERROR_ID_MISSING = "id must be provided.";
     public static final String TAG = "AppShortcutPlugin";
 
-    private final AppShortcut implementation = new AppShortcut(getContext());
+    private AppShortcut implementation;
 
-    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    @Override
+    public void load() {
+        super.load();
+        this.implementation = new AppShortcut(getContext());
+    }
+
+    @PluginMethod
     public void get(PluginCall call) {
         try {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
@@ -44,10 +50,10 @@ public class AppShortcutPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    @PluginMethod
     public void set(PluginCall call) {
         try {
-            SetOptions options = new SetOptions(call, getContext());
+            SetOptions options = new SetOptions(call, getContext(), getBridge());
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
@@ -65,7 +71,7 @@ public class AppShortcutPlugin extends Plugin {
         }
     }
 
-    @PluginMethod(returnType = PluginMethod.RETURN_PROMISE)
+    @PluginMethod
     public void clear(PluginCall call) {
         try {
             EmptyCallback callback = new EmptyCallback() {
