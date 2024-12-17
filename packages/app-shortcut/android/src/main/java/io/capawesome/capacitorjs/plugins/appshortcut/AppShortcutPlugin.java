@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.appshortcut;
 
+import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
@@ -12,10 +13,13 @@ import io.capawesome.capacitorjs.plugins.appshortcut.classes.options.SetOptions;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.Result;
+import java.util.Objects;
 
 @CapacitorPlugin(name = "AppShortcut")
 public class AppShortcutPlugin extends Plugin {
 
+    public static final String onAppShortcutEvent = "onAppShortcut";
+    public static final String intentExtra = "shortcutId";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String ERROR_SHORTCUTS_MISSING = "shortcuts must be provided.";
     public static final String ERROR_TITLE_MISSING = "title must be provided.";
@@ -106,5 +110,18 @@ public class AppShortcutPlugin extends Plugin {
         }
         Logger.error(TAG, message, exception);
         call.reject(message);
+    }
+
+    @Override
+    protected void handleOnNewIntent(Intent intent) {
+        super.handleOnNewIntent(intent);
+        if (Objects.equals(intent.getAction(), Intent.ACTION_VIEW)) {
+            JSObject result = new JSObject();
+            String shortcutId = intent.getStringExtra(AppShortcutPlugin.intentExtra);
+            if (shortcutId != null) {
+                result.put("id", shortcutId);
+                this.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, result);
+            }
+        }
     }
 }

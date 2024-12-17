@@ -1,6 +1,5 @@
 package io.capawesome.capacitorjs.plugins.appshortcut.classes.options;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
@@ -55,12 +54,8 @@ public class SetOptions {
             shortcutsList.add(
                 shortcutInfoCompat
                     .setIntent(
-                        new Intent(
-                            Intent.EXTRA_SHORTCUT_INTENT,
-                            bridge.getIntentUri(),
-                            bridge.getContext(),
-                            bridge.getActivity().getClass()
-                        )
+                        new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass())
+                            .putExtra(AppShortcutPlugin.intentExtra, id)
                     )
                     .build()
             );
