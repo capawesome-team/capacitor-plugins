@@ -2,7 +2,7 @@
 
 Capacitor plugin to manage app shortcuts and quick actions.
 
-## Install
+## Installation
 
 ```bash
 npm install @capawesome/capacitor-app-shortcuts
@@ -175,3 +175,11 @@ Remove all listeners for this plugin.
 | **`id`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/app-shortcuts/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/app-shortcuts/LICENSE).
