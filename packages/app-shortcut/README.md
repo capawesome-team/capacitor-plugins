@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 clear() => Promise<void>
 ```
 
-Clear the list of app shortcuts.
+Remove all app shortcuts.
 
 Only available on Android and iOS.
 
@@ -70,7 +70,7 @@ Only available on Android and iOS.
 get() => Promise<GetResult>
 ```
 
-Get the list of app shortcuts.
+Get all app shortcuts.
 
 Only available on Android and iOS.
 
@@ -87,7 +87,7 @@ Only available on Android and iOS.
 set(options: SetOptions) => Promise<void>
 ```
 
-Create or update the list of app shortcuts.
+Create or update app shortcuts.
 
 Only available on Android and iOS.
 
@@ -140,25 +140,25 @@ Remove all listeners for this plugin.
 
 #### GetResult
 
-| Prop            | Type                    | Since |
-| --------------- | ----------------------- | ----- |
-| **`shortcuts`** | <code>Shortcut[]</code> | 6.0.0 |
+| Prop            | Type                    | Description                | Since |
+| --------------- | ----------------------- | -------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | The list of app shortcuts. | 6.0.0 |
 
 
 #### Shortcut
 
-| Prop              | Type                | Description               | Since |
-| ----------------- | ------------------- | ------------------------- | ----- |
-| **`description`** | <code>string</code> | Only supported on Android | 6.0.0 |
-| **`id`**          | <code>string</code> |                           | 6.0.0 |
-| **`title`**       | <code>string</code> |                           | 6.0.0 |
+| Prop              | Type                | Description                                 | Since |
+| ----------------- | ------------------- | ------------------------------------------- | ----- |
+| **`description`** | <code>string</code> | The description. Only available on Android. | 6.0.0 |
+| **`id`**          | <code>string</code> | The unique identifier.                      | 6.0.0 |
+| **`title`**       | <code>string</code> | The display name.                           | 6.0.0 |
 
 
 #### SetOptions
 
-| Prop            | Type                    | Since |
-| --------------- | ----------------------- | ----- |
-| **`shortcuts`** | <code>Shortcut[]</code> | 6.0.0 |
+| Prop            | Type                    | Description               | Since |
+| --------------- | ----------------------- | ------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | Th list of app shortcuts. | 6.0.0 |
 
 
 #### PluginListenerHandle
@@ -170,8 +170,8 @@ Remove all listeners for this plugin.
 
 #### OnAppShortcutEvent
 
-| Prop     | Type                | Since |
-| -------- | ------------------- | ----- |
-| **`id`** | <code>string</code> | 6.0.0 |
+| Prop     | Type                | Description                                                 | Since |
+| -------- | ------------------- | ----------------------------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
 
 </docgen-api>

@@ -120,7 +120,7 @@ public class AppShortcutPlugin extends Plugin {
             String shortcutId = intent.getStringExtra(AppShortcutPlugin.intentExtra);
             if (shortcutId != null) {
                 result.put("id", shortcutId);
-                this.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, result);
+                this.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, result, true);
             }
         }
     }

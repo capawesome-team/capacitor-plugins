@@ -2,7 +2,7 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface AppShortcutPlugin {
   /**
-   * Clear the list of app shortcuts.
+   * Remove all app shortcuts.
    *
    * Only available on Android and iOS.
    *
@@ -10,7 +10,7 @@ export interface AppShortcutPlugin {
    */
   clear(): Promise<void>;
   /**
-   * Get the list of app shortcuts.
+   * Get all app shortcuts.
    *
    * Only available on Android and iOS.
    *
@@ -18,7 +18,7 @@ export interface AppShortcutPlugin {
    */
   get(): Promise<GetResult>;
   /**
-   * Create or update the list of app shortcuts.
+   * Create or update app shortcuts.
    *
    * Only available on Android and iOS.
    *
@@ -49,6 +49,8 @@ export interface AppShortcutPlugin {
  */
 export interface GetResult {
   /**
+   * The list of app shortcuts.
+   *
    * @since 6.0.0
    */
   shortcuts: Shortcut[];
@@ -59,6 +61,8 @@ export interface GetResult {
  */
 export interface SetOptions {
   /**
+   * Th list of app shortcuts.
+   *
    * @since 6.0.0
    */
   shortcuts: Shortcut[];
@@ -69,16 +73,22 @@ export interface SetOptions {
  */
 export interface Shortcut {
   /**
-   * Only supported on Android
+   * The description.
+   *
+   * Only available on Android.
    *
    * @since 6.0.0
    */
   description?: string;
   /**
+   * The unique identifier.
+   *
    * @since 6.0.0
    */
   id: string;
   /**
+   * The display name.
+   *
    * @since 6.0.0
    */
   title: string;
@@ -89,6 +99,8 @@ export interface Shortcut {
  */
 export interface OnAppShortcutEvent {
   /**
+   * The unique identifier of the app shortcut that was clicked.
+   *
    * @since 6.0.0
    */
   id: string;
