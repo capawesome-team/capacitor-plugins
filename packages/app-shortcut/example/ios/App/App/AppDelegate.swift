@@ -1,5 +1,6 @@
 import UIKit
 import Capacitor
+import CapawesomeCapacitorAppShortcut
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -8,6 +9,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
+            handleOnAppShortcut(shortcutItem)
+            return true
+        }
         return true
     }
 
@@ -45,5 +50,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
     }
-
+    
+    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
+        handleOnAppShortcut(shortcutItem)
+        completionHandler(true)
+    }
+    
+    private func handleOnAppShortcut(_ shortcutItem: UIApplicationShortcutItem) {
+        NotificationCenter.default.post(
+          name: NSNotification.Name(AppShortcutPlugin.onAppShortcutEvent),
+          object: nil,
+          userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem]
+        )
+    }
 }

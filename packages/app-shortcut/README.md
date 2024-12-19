@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 * [`clear()`](#clear)
 * [`get()`](#get)
 * [`set(...)`](#set)
-* [`addListener('onAppShortcut', ...)`](#addlisteneronappshortcut)
+* [`addListener('onAppShortcut', ...)`](#addlisteneronappshortcut-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
