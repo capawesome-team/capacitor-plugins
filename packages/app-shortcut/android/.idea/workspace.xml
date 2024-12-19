@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="86ed6479-0c3d-4fd8-9255-76aadef2c6e8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../app-shortcuts/CHANGELOG.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../app-shortcuts/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../.changeset/four-paws-guess.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.changeset/four-paws-guess.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../../package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.eslintignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/.eslintignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.npmrc" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/.npmrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.prettierignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/.prettierignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.prettierrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/.prettierrc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../BREAKING.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/BREAKING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../CapawesomeCapacitorAppShortcut.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/CapawesomeCapacitorAppShortcuts.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/proguard-rules.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/androidTest/java/com/getcapacitor/android/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/androidTest/java/com/getcapacitor/android/ExampleInstrumentedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/AppShortcut.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/AppShortcuts.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/AppShortcutHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/AppShortcutsHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/AppShortcutPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/AppShortcutsPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/classes/events/OnAppShortcutEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/classes/events/OnAppShortcutEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/classes/options/SetOptions.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/classes/options/SetOptions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/classes/results/GetResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/classes/results/GetResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/interfaces/Callback.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/interfaces/Callback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/interfaces/EmptyCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/interfaces/EmptyCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/interfaces/NonEmptyCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/interfaces/NonEmptyCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/io/capawesome/capacitorjs/plugins/appshortcut/interfaces/Result.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/java/io/capawesome/capacitorjs/plugins/appshortcuts/interfaces/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/res/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/main/res/.gitkeep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/getcapacitor/ExampleUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/android/src/test/java/com/getcapacitor/ExampleUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/capacitor.build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/capacitor.build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/proguard-rules.pro" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/proguard-rules.pro" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/androidTest/java/com/getcapacitor/myapp/ExampleInstrumentedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/androidTest/java/com/getcapacitor/myapp/ExampleInstrumentedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/java/com/example/plugin/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/java/com/example/plugin/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-land-hdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-land-hdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-land-mdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-land-mdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-land-xhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-land-xhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-land-xxhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-land-xxhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-land-xxxhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-land-xxxhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-port-hdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-port-hdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-port-mdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-port-mdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-port-xhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-port-xhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-port-xxhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-port-xxhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-port-xxxhdpi/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-port-xxxhdpi/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/drawable/splash.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/drawable/splash.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/values/ic_launcher_background.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/values/ic_launcher_background.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/values/styles.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/values/styles.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/main/res/xml/file_paths.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/main/res/xml/file_paths.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/app/src/test/java/com/getcapacitor/myapp/ExampleUnitTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/app/src/test/java/com/getcapacitor/myapp/ExampleUnitTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/capacitor.settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/capacitor.settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/gradle.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/android/variables.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/android/variables.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/capacitor.config.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/capacitor.config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/AppDelegate.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/AppIcon.appiconset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/Splash.imageset/Contents.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/Splash.imageset/Contents.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732-2.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Assets.xcassets/Splash.imageset/splash-2732x2732.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Base.lproj/LaunchScreen.storyboard" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Base.lproj/LaunchScreen.storyboard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Base.lproj/Main.storyboard" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Base.lproj/Main.storyboard" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/App/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/App/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/ios/App/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/ios/App/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/assets/icon/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/assets/icon/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/assets/imgs/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/assets/imgs/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/js/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/js/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/src/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/src/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../example/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/example/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcodeproj/project.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcodeproj/project.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcodeproj/xcshareddata/xcschemes/Plugin.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcodeproj/xcshareddata/xcschemes/Plugin.xcscheme" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcodeproj/xcshareddata/xcschemes/PluginTests.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcodeproj/xcshareddata/xcschemes/PluginTests.xcscheme" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcworkspace/contents.xcworkspacedata" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcworkspace/contents.xcworkspacedata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/AppShortcut.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/AppShortcuts.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/AppShortcutPlugin.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/AppShortcutsPlugin.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/AppShortcutPlugin.m" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/AppShortcutsPlugin.m" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/AppShortcutPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/AppShortcutsPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Classes/Events/OnAppShortcutEvent.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Classes/Events/OnAppShortcutEvent.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Classes/Options/SetOptions.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Classes/Options/SetOptions.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Classes/Results/GetResult.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Classes/Results/GetResult.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Enums/CustomError.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Enums/CustomError.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Plugin/Protocols/Result.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Plugin/Protocols/Result.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/PluginTests/AppShortcutTests.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/PluginTests/AppShortcutTests.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/PluginTests/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/PluginTests/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/ios/Podfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../rollup.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/rollup.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/definitions.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/src/definitions.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/web.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/src/web.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../app-shortcuts/tsconfig.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="2qQudOMDcqKDiUGuAYyiyCx96PI" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "feat/issue-345",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="86ed6479-0c3d-4fd8-9255-76aadef2c6e8" name="Changes" comment="" />
+      <created>1734607207969</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734607207969</updated>
+    </task>
+    <servers />
+  </component>
+</project>

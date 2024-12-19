@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-app-shortcut': major
+'@capawesome/capacitor-app-shortcuts': major
 ---
 
 Initial release 🎉
