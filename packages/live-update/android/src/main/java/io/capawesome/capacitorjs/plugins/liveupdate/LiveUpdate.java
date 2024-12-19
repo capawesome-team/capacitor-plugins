@@ -146,7 +146,9 @@ public class LiveUpdate {
 
     public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) throws Exception {
         GetLatestBundleResponse response = fetchLatestBundle(options);
-        FetchLatestBundleResult result = new FetchLatestBundleResult(response == null ? null : response.getBundleId());
+        String bundleId = response == null ? null : response.getBundleId();
+        String downloadUrl = response == null ? null : response.getUrl();
+        FetchLatestBundleResult result = new FetchLatestBundleResult(bundleId, downloadUrl);
         callback.success(result);
     }
 
