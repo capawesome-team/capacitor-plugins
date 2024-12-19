@@ -37,14 +37,15 @@ public class ForegroundService {
         int id,
         String title,
         ArrayList<Bundle> buttons,
-        boolean silent
+        boolean silent,
+        Integer serviceType
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (notificationManager.getNotificationChannels().isEmpty()) {
                 createDefaultNotificationChannel();
             }
         }
-        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, false);
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, serviceType, false);
     }
 
     public void updateForegroundService(
@@ -54,9 +55,10 @@ public class ForegroundService {
         int id,
         String title,
         ArrayList<Bundle> buttons,
-        boolean silent
+        boolean silent,
+        Integer serviceType
     ) {
-        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, true);
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, serviceType, true);
     }
 
     private void startOrUpdateForegroundService(
@@ -67,6 +69,7 @@ public class ForegroundService {
         String title,
         ArrayList<Bundle> buttons,
         boolean silent,
+        Integer serviceType,
         boolean isUpdate
     ) {
         if (!isUpdate) {
@@ -81,6 +84,7 @@ public class ForegroundService {
         notificationBundle.putString("title", title);
         notificationBundle.putBoolean("silent", silent);
         notificationBundle.putParcelableArrayList("buttons", new ArrayList<Bundle>(buttons));
+        notificationBundle.putInt("serviceType", serviceType == null ? 0 : serviceType);
 
         Context context = plugin.getContext();
         Intent intent = new Intent(context, AndroidForegroundService.class);

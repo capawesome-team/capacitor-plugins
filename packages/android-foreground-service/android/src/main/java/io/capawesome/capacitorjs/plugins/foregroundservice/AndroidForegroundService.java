@@ -34,6 +34,7 @@ public class AndroidForegroundService extends Service {
             String title = notificationBundle.getString("title");
             boolean silent = notificationBundle.getBoolean("silent", false);
             ArrayList<Bundle> buttonsBundle = notificationBundle.getParcelableArrayList("buttons");
+            int serviceType = extras.getInt("serviceType");
 
             PendingIntent contentIntent = buildContentIntent(id);
             Notification.Builder builder;
@@ -63,7 +64,11 @@ public class AndroidForegroundService extends Service {
                 NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(id, notification);
             } else {
-                startForeground(id, notification);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && serviceType != 0) {
+                    startForeground(id, notification, serviceType);
+                } else {
+                    startForeground(id, notification);
+                }
             }
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
