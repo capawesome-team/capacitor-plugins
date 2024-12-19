@@ -1,5 +1,15 @@
 # Changelog
 
+## 6.7.0
+
+### Minor Changes
+
+- [`233889d`](https://github.com/capawesome-team/capacitor-plugins/commit/233889da605192870a0110ce60a402445e5dbc54) ([#364](https://github.com/capawesome-team/capacitor-plugins/pull/364)): feat: add `getCurrentBundle()` and `getNextBundle()` methods
+
+* [`cdc1fdb`](https://github.com/capawesome-team/capacitor-plugins/commit/cdc1fdb00b10c2d3ff263d9de7922e0d387dc9df) ([#361](https://github.com/capawesome-team/capacitor-plugins/pull/361)): feat: add `channel` option to `sync()` and `fetchLatestBundle()` methods
+
+- [`f7b45ac`](https://github.com/capawesome-team/capacitor-plugins/commit/f7b45ac8a8449acd9d3fac9c8853137317708144) ([#363](https://github.com/capawesome-team/capacitor-plugins/pull/363)): feat: add `downloadUrl` property to `FetchLatestBundleResult`
+
 ## 6.6.0
 
 ### Minor Changes
