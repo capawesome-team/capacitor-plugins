@@ -2,4 +2,4 @@
 '@capawesome/capacitor-live-update': minor
 ---
 
-fetch: add `channel` option to `sync()` and `fetchLatestBundle()` methods
+feat: add `channel` option to `sync()` and `fetchLatestBundle()` methods
