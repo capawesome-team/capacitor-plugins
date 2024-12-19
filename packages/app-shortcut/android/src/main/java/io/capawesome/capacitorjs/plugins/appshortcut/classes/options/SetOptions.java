@@ -13,28 +13,30 @@ import io.capawesome.capacitorjs.plugins.appshortcut.AppShortcutPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class SetOptions {
 
-    private final List<JSObject> shortcuts;
-    private final Context context;
-    private final Bridge bridge;
+    private final List<ShortcutInfoCompat> shortcuts;
 
     public SetOptions(@NonNull PluginCall call, @NonNull Context context, @NonNull Bridge bridge) throws Exception {
         JSArray shortcuts = call.getArray("shortcuts");
         if (shortcuts == null) {
             throw new Exception(AppShortcutPlugin.ERROR_SHORTCUTS_MISSING);
         }
-        this.shortcuts = shortcuts.toList();
-        this.context = context;
-        this.bridge = bridge;
+        this.shortcuts = this.createShortcutInfoCompatList(shortcuts, context, bridge);
     }
 
     @NonNull
     public List<ShortcutInfoCompat> getShortcuts() throws Exception {
-        ArrayList<ShortcutInfoCompat> shortcutsList = new ArrayList<>();
-        for (JSONObject shortcut : shortcuts) {
+        return shortcuts;
+    }
+
+    private List<ShortcutInfoCompat> createShortcutInfoCompatList(JSArray shortcuts, Context context, Bridge bridge) throws Exception {
+        ArrayList<ShortcutInfoCompat> shortcutInfoCompatList = new ArrayList<>();
+        List<JSONObject> shortcutsList = shortcuts.toList();
+        for (JSONObject shortcut : shortcutsList) {
             HashMap<String, String> shortcutMap = AppShortcutHelper.createHashMapFromJSONObject(shortcut);
             String id = shortcutMap.get("id");
             if (id == null) {
@@ -51,15 +53,12 @@ public class SetOptions {
             if (description != null) {
                 shortcutInfoCompat.setLongLabel(description);
             }
-            shortcutsList.add(
-                shortcutInfoCompat
-                    .setIntent(
-                        new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass())
-                            .putExtra(AppShortcutPlugin.intentExtra, id)
-                    )
-                    .build()
+            shortcutInfoCompat.setIntent(
+                new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass())
+                    .putExtra(AppShortcutPlugin.INTENT_EXTRA_ITEM_NAME, id)
             );
+            shortcutInfoCompatList.add(shortcutInfoCompat.build());
         }
-        return shortcutsList;
+        return shortcutInfoCompatList;
     }
 }

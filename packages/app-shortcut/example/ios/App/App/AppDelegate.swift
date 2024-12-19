@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // tracking app url opens, make sure to keep this call
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
     }
-    
+
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         NotificationCenter.default.post(name: NSNotification.Name(AppShortcutPlugin.notificationName), object: nil, userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem])
         completionHandler(true)

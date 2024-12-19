@@ -9,6 +9,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.appshortcut.classes.events.OnAppShortcutEvent;
 import io.capawesome.capacitorjs.plugins.appshortcut.classes.options.SetOptions;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
@@ -18,12 +19,12 @@ import java.util.Objects;
 @CapacitorPlugin(name = "AppShortcut")
 public class AppShortcutPlugin extends Plugin {
 
-    public static final String onAppShortcutEvent = "onAppShortcut";
-    public static final String intentExtra = "shortcutId";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String ERROR_SHORTCUTS_MISSING = "shortcuts must be provided.";
     public static final String ERROR_TITLE_MISSING = "title must be provided.";
     public static final String ERROR_ID_MISSING = "id must be provided.";
+    public static final String EVENT_ON_APP_SHORTCUT = "onAppShortcut";
+    public static final String INTENT_EXTRA_ITEM_NAME = "shortcutId"; // DO NOT CHANGE THIS VALUE!
     public static final String TAG = "AppShortcutPlugin";
 
     private AppShortcut implementation;
@@ -95,6 +96,10 @@ public class AppShortcutPlugin extends Plugin {
         }
     }
 
+    private void notifyDeviceScannedListener(@NonNull OnAppShortcutEvent event) {
+        notifyListeners(EVENT_ON_APP_SHORTCUT, event.toJSObject());
+    }
+
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
         if (result == null) {
             call.resolve();
@@ -117,10 +122,10 @@ public class AppShortcutPlugin extends Plugin {
         super.handleOnNewIntent(intent);
         if (Objects.equals(intent.getAction(), Intent.ACTION_VIEW)) {
             JSObject result = new JSObject();
-            String shortcutId = intent.getStringExtra(AppShortcutPlugin.intentExtra);
+            String shortcutId = intent.getStringExtra(AppShortcutPlugin.INTENT_EXTRA_ITEM_NAME);
             if (shortcutId != null) {
                 result.put("id", shortcutId);
-                this.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, result, true);
+                this.notifyListeners(AppShortcutPlugin.EVENT_ON_APP_SHORTCUT, result, true);
             }
         }
     }

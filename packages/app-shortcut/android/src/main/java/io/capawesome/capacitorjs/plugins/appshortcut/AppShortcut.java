@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
+import io.capawesome.capacitorjs.plugins.appshortcut.classes.options.SetOptions;
 import io.capawesome.capacitorjs.plugins.appshortcut.classes.results.GetResult;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcut.interfaces.NonEmptyCallback;
@@ -25,7 +26,9 @@ public class AppShortcut {
         callback.success(result);
     }
 
-    public void set(@NonNull List<ShortcutInfoCompat> shortcuts, @NonNull EmptyCallback callback) {
+    public void set(@NonNull SetOptions options, @NonNull EmptyCallback callback) {
+        List<ShortcutInfoCompat> shortcuts = options.getShortcuts();
+
         ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts);
         callback.success();
     }

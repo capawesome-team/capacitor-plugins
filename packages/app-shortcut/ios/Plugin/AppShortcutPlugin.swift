@@ -9,10 +9,10 @@ import Capacitor
 public class AppShortcutPlugin: CAPPlugin {
     public static let notificationName = "handleAppShortcutNotification"
     public static let userInfoShortcutItemKey = "shortcutItem"
-    
+
     public let eventOnAppShortcut = "onAppShortcut"
     public let tag = "AppShortcuts"
-    
+
     private let implementation = AppShortcut()
 
     override public init() {
@@ -64,7 +64,7 @@ public class AppShortcutPlugin: CAPPlugin {
         let event = OnAppShortcutEvent(shortcutItem)
         notifyDeviceScannedListeners(event: event)
     }
-    
+
     func notifyDeviceScannedListeners(event: OnAppShortcutEvent) {
         if let event = event.toJSObject() as? JSObject {
             notifyListeners(eventOnAppShortcut, data: event, retainUntilConsumed: true)
