@@ -33,6 +33,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 +    }
 ```
 
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
+
+| Android                                                                                                     | iOS                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| <video src="https://github.com/user-attachments/assets/61bcbe71-16fe-47b7-a76f-467bee928a2a" width="324" /> | <video src="https://github.com/user-attachments/assets/e7393a2c-f6f3-42f2-a946-14c7c1e9a72e" width="266" /> |
+
+## Usage
+
+```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
+const clear = async () => {
+  await AppShortcuts.clear();
+};
+
+const get = async () => {
+  const result = await AppShortcuts.get();
+  return result.shortcuts;
+};
+
+const set = async () => {
+  await AppShortcuts.set({
+    shortcuts: [
+      {
+        id: 'feedback',
+        title: 'Feedback',
+        description: 'Send us your feedback',
+      },
+      {
+        id: 'rate',
+        title: 'Rate',
+        description: 'Rate our app',
+      }
+    ],
+  });
+};
+
+const addListener = async () => {
+  AppShortcuts.addListener('onAppShortcut', (event) => {
+    console.log('Shortcut clicked:', event.id);
+  });
+};
+```
+
 ## API
 
 <docgen-index>
