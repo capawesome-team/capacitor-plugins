@@ -13,6 +13,8 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOpt
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -206,6 +208,28 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getCurrentBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetCurrentBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetCurrentBundleResult result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getCurrentBundle(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getCustomId(PluginCall call) {
         try {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
@@ -242,6 +266,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.getDeviceId(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getNextBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetNextBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetNextBundleResult result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getNextBundle(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

@@ -111,6 +111,18 @@ public class LiveUpdatePlugin: CAPPlugin {
         })
     }
 
+    @objc func getCurrentBundle(_ call: CAPPluginCall) {
+        implementation?.getCurrentBundle(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                call.resolve(result)
+            }
+        })
+    }
+
     @objc func getCustomId(_ call: CAPPluginCall) {
         implementation?.getCustomId(completion: { result, error in
             if let error = error {
@@ -125,6 +137,18 @@ public class LiveUpdatePlugin: CAPPlugin {
 
     @objc func getDeviceId(_ call: CAPPluginCall) {
         implementation?.getDeviceId(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                call.resolve(result)
+            }
+        })
+    }
+
+    @objc func getNextBundle(_ call: CAPPluginCall) {
+        implementation?.getNextBundle(completion: { result, error in
             if let error = error {
                 self.rejectCall(call, error)
                 return
