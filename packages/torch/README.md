@@ -157,7 +157,7 @@ Only available on Android, iOS and Web.
 ### toggle(...)
 
 ```typescript
-toggle(options: ToggleOptions) => Promise<void>
+toggle(options?: ToggleOptions | undefined) => Promise<void>
 ```
 
 Toggle the torch.

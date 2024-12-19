@@ -91,7 +91,7 @@ const requestPermissions = async () => {
 * [`pickMedia(...)`](#pickmedia)
 * [`pickVideos(...)`](#pickvideos)
 * [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed)
+* [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)

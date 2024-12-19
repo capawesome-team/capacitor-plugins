@@ -36,6 +36,8 @@ npx cap sync
 
 ### Android
 
+#### Permissions
+
 This API requires the following permissions be added to your `AndroidManifest.xml` before the `application` tag:
 
 ```xml
@@ -47,8 +49,41 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <uses-feature android:name="android.hardware.nfc" android:required="true" />
 ```
 
+#### Intent Filter
+
 If you want to launch your app through an NFC tag, please take a look at the [Android documentation](https://developer.android.com/guide/topics/connectivity/nfc/nfc#dispatching).
 There you will find which changes you have to apply to your `AndroidManifest.xml` ([example](https://developer.android.com/guide/topics/connectivity/nfc/nfc#ndef-disc)).
+
+#### Services
+
+To be able to use Host Card Emulation (HCE), you also need to add the following service **inside** the `application` tag in your `AndroidManifest.xml` (usually `android/app/src/main/AndroidManifest.xml`):
+
+```xml
+<service android:name=".MyHostApduService" android:exported="true"
+         android:permission="android.permission.BIND_NFC_SERVICE">
+    <intent-filter>
+        <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
+    </intent-filter>
+    <meta-data android:name="android.nfc.cardemulation.host_apdu_service"
+               android:resource="@xml/apduservice"/>
+</service>
+```
+
+This meta-data tag points to an `apduservice.xml` file. The following is an example of such a file with a single AID group declaration containing two proprietary AIDs:
+
+```xml
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+           android:description="@string/servicedesc"
+           android:requireDeviceUnlock="false">
+    <aid-group android:description="@string/aiddescription"
+               android:category="other">
+        <aid-filter android:name="F0010203040506"/>
+        <aid-filter android:name="F0394148148100"/>
+    </aid-group>
+</host-apdu-service>
+```
+
+You can find more information about this in the [Android documentation](https://developer.android.com/develop/connectivity/nfc/hce#manifest-declaration).
 
 ### iOS
 
@@ -214,6 +249,7 @@ const removeAllListeners = async () => {
 * [`startScanSession(...)`](#startscansession)
 * [`stopScanSession(...)`](#stopscansession)
 * [`write(...)`](#write)
+* [`respond(...)`](#respond)
 * [`makeReadOnly()`](#makereadonly)
 * [`erase()`](#erase)
 * [`format()`](#format)
@@ -227,6 +263,8 @@ const removeAllListeners = async () => {
 * [`setAlertMessage(...)`](#setalertmessage)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
+* [`addListener('commandReceived', ...)`](#addlistenercommandreceived-)
+* [`addListener('nfcLinkDeactivated', ...)`](#addlistenernfclinkdeactivated-)
 * [`addListener('nfcTagScanned', ...)`](#addlistenernfctagscanned-)
 * [`addListener('scanSessionCanceled', ...)`](#addlistenerscansessioncanceled-)
 * [`addListener('scanSessionError', ...)`](#addlistenerscansessionerror-)
@@ -294,6 +332,25 @@ This method must be called from within a `nfcTagScanned` handler.
 | **`options`** | <code><a href="#writeoptions">WriteOptions</a></code> |
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### respond(...)
+
+```typescript
+respond(options: RespondOptions) => Promise<void>
+```
+
+Send a response APDU back to the remote device.
+
+Only available on Android.
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#respondoptions">RespondOptions</a></code> |
+
+**Since:** 6.3.0
 
 --------------------
 
@@ -541,6 +598,50 @@ On Android and iOS, `granted` is always returned.
 --------------------
 
 
+### addListener('commandReceived', ...)
+
+```typescript
+addListener(eventName: 'commandReceived', listenerFunc: (event: CommandReceivedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called whenever a NFC reader sends an Application Protocol Data Unit (APDU).
+
+Only available on Android.
+
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'commandReceived'</code>                                                            |
+| **`listenerFunc`** | <code>(event: <a href="#commandreceivedevent">CommandReceivedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.3.0
+
+--------------------
+
+
+### addListener('nfcLinkDeactivated', ...)
+
+```typescript
+addListener(eventName: 'nfcLinkDeactivated', listenerFunc: (event: NfcLinkDeactivatedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the NFC link has been deactivated or lost.
+
+Only available on Android.
+
+| Param              | Type                                                                                            |
+| ------------------ | ----------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'nfcLinkDeactivated'</code>                                                               |
+| **`listenerFunc`** | <code>(event: <a href="#nfclinkdeactivatedevent">NfcLinkDeactivatedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 6.3.0
+
+--------------------
+
+
 ### addListener('nfcTagScanned', ...)
 
 ```typescript
@@ -661,6 +762,13 @@ Remove all listeners for this plugin.
 | **`type`**    | <code>number[]</code>                                     | The type of the record payload. This should be used in conjunction with the `tnf` field to determine the payload format. | 0.0.1 |
 
 
+#### RespondOptions
+
+| Prop       | Type                  | Description    | Since |
+| ---------- | --------------------- | -------------- | ----- |
+| **`data`** | <code>number[]</code> | Bytes to send. | 6.3.0 |
+
+
 #### TransceiveResult
 
 | Prop           | Type                  | Description                 | Since |
@@ -670,12 +778,12 @@ Remove all listeners for this plugin.
 
 #### TransceiveOptions
 
-| Prop                       | Type                                                      | Description                                                                                                                                                                                             | Since |
-| -------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on iOS.                                                                                                                                          | 0.3.0 |
-| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                                          | 0.3.0 |
-| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                                                       | 0.3.0 |
-| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively, 0x23 is also supported. Only available on iOS 14+ | 0.3.0 |
+| Prop                       | Type                                                      | Description                                                                                                                                                                                                       | Since |
+| -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`techType`**             | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on iOS.                                                                                                                                                    | 0.3.0 |
+| **`data`**                 | <code>number[]</code>                                     | Bytes to send.                                                                                                                                                                                                    | 0.3.0 |
+| **`iso15693RequestFlags`** | <code>Iso15693RequestFlag[]</code>                        | The request flags for the NFC tag technology type `NfcV` (ISO 15693-3). Only available on iOS 14+                                                                                                                 | 0.3.0 |
+| **`iso15693CommandCode`**  | <code>number</code>                                       | The custom command code defined by the IC manufacturer for the NFC tag technology type `NfcV` (ISO 15693-3). Valid range is 0xA0 to 0xDF inclusively, 0x23 and 0x24 are also supported. Only available on iOS 14+ | 0.3.0 |
 
 
 #### ConnectOptions
@@ -687,9 +795,11 @@ Remove all listeners for this plugin.
 
 #### IsSupportedResult
 
-| Prop              | Type                 | Since |
-| ----------------- | -------------------- | ----- |
-| **`isSupported`** | <code>boolean</code> | 0.0.1 |
+| Prop              | Type                 | Description                                                          | Since |
+| ----------------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`isSupported`** | <code>boolean</code> |                                                                      | 0.0.1 |
+| **`nfc`**         | <code>boolean</code> | Whether or not NFC is supported on the device.                       | 6.3.0 |
+| **`hce`**         | <code>boolean</code> | Whether or not Host Card Emulation (HCE) is supported on the device. | 6.3.0 |
 
 
 #### IsEnabledResult
@@ -738,6 +848,20 @@ Remove all listeners for this plugin.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
+#### CommandReceivedEvent
+
+| Prop       | Type                  | Description                                  | Since |
+| ---------- | --------------------- | -------------------------------------------- | ----- |
+| **`data`** | <code>number[]</code> | The command received from the remote device. | 6.3.0 |
+
+
+#### NfcLinkDeactivatedEvent
+
+| Prop         | Type                                                              | Description                               | Since |
+| ------------ | ----------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`reason`** | <code><a href="#deactivationreason">DeactivationReason</a></code> | The reason why the deactivation occurred. | 6.3.0 |
+
+
 #### NfcTagScannedEvent
 
 | Prop         | Type                                      | Description          | Since |
@@ -747,26 +871,27 @@ Remove all listeners for this plugin.
 
 #### NfcTag
 
-| Prop                  | Type                                                | Description                                                                                        | Since |
-| --------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----- |
-| **`atqa`**            | <code>number[]</code>                               | The ATQA/SENS_RES bytes of an NFC A tag. Only available on Android.                                | 0.0.1 |
-| **`applicationData`** | <code>number[]</code>                               | The Application Data bytes from ATQB/SENSB_RES of an NFC B tag. Only available on Android and iOS. | 0.0.1 |
-| **`barcode`**         | <code>number[]</code>                               | The barcode bytes of an NfcBarcode tag. Only available on Android.                                 | 0.0.1 |
-| **`canMakeReadOnly`** | <code>boolean</code>                                | Whether the NDEF tag can be made read-only or not. Only available on Android.                      | 0.0.1 |
-| **`dsfId`**           | <code>number[]</code>                               | The DSF ID bytes of an NFC V tag. Only available on Android.                                       | 0.0.1 |
-| **`hiLayerResponse`** | <code>number[]</code>                               | The higher layer response bytes of an ISO-DEP tag. Only available on Android.                      | 0.0.1 |
-| **`historicalBytes`** | <code>number[]</code>                               | The historical bytes of an ISO-DEP tag. Only available on Android and iOS.                         | 0.0.1 |
-| **`id`**              | <code>number[]</code>                               | The tag identifier (low level serial number) which is used for anti-collision and identification.  | 0.0.1 |
-| **`isWritable`**      | <code>boolean</code>                                | Whether the NDEF tag is writable or not. Only available on Android and iOS.                        | 0.0.1 |
-| **`manufacturer`**    | <code>number[]</code>                               | The Manufacturer bytes of an NFC F tag. Only available on Android and iOS.                         | 0.0.1 |
-| **`maxSize`**         | <code>number</code>                                 | The maximum NDEF message size in bytes. Only available on Android and iOS.                         | 0.0.1 |
-| **`message`**         | <code><a href="#ndefmessage">NdefMessage</a></code> | The NDEF-formatted message.                                                                        | 0.0.1 |
-| **`protocolInfo`**    | <code>number[]</code>                               | The Protocol Info bytes from ATQB/SENSB_RES of an NFC B tag. Only available on Android.            | 0.0.1 |
-| **`responseFlags`**   | <code>number[]</code>                               | The Response Flag bytes of an NFC V tag. Only available on Android.                                | 0.0.1 |
-| **`sak`**             | <code>number[]</code>                               | The SAK/SEL_RES bytes of an NFC A tag. Only available on Android.                                  | 0.0.1 |
-| **`systemCode`**      | <code>number[]</code>                               | The System Code bytes of an NFC F tag. Only available on Android and iOS.                          | 0.0.1 |
-| **`techTypes`**       | <code>NfcTagTechType[]</code>                       | The technologies available in this tag. Only available on Android and iOS.                         | 0.0.1 |
-| **`type`**            | <code><a href="#nfctagtype">NfcTagType</a></code>   | The NDEF tag type. Only available on Android and iOS.                                              | 0.0.1 |
+| Prop                   | Type                                                | Description                                                                                        | Since |
+| ---------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ----- |
+| **`atqa`**             | <code>number[]</code>                               | The ATQA/SENS_RES bytes of an NFC A tag. Only available on Android.                                | 0.0.1 |
+| **`applicationData`**  | <code>number[]</code>                               | The Application Data bytes from ATQB/SENSB_RES of an NFC B tag. Only available on Android and iOS. | 0.0.1 |
+| **`barcode`**          | <code>number[]</code>                               | The barcode bytes of an NfcBarcode tag. Only available on Android.                                 | 0.0.1 |
+| **`canMakeReadOnly`**  | <code>boolean</code>                                | Whether the NDEF tag can be made read-only or not. Only available on Android.                      | 0.0.1 |
+| **`dsfId`**            | <code>number[]</code>                               | The DSF ID bytes of an NFC V tag. Only available on Android.                                       | 0.0.1 |
+| **`hiLayerResponse`**  | <code>number[]</code>                               | The higher layer response bytes of an ISO-DEP tag. Only available on Android.                      | 0.0.1 |
+| **`historicalBytes`**  | <code>number[]</code>                               | The historical bytes of an ISO-DEP tag. Only available on Android and iOS.                         | 0.0.1 |
+| **`id`**               | <code>number[]</code>                               | The tag identifier (low level serial number) which is used for anti-collision and identification.  | 0.0.1 |
+| **`isWritable`**       | <code>boolean</code>                                | Whether the NDEF tag is writable or not. Only available on Android and iOS.                        | 0.0.1 |
+| **`manufacturer`**     | <code>number[]</code>                               | The manufacturer bytes of an NFC F tag. Only available on Android and iOS.                         | 0.0.1 |
+| **`manufacturerCode`** | <code>number</code>                                 | The Integrated Circuit (IC) manufacturer code of an NFC V tag. Only available on iOS.              | 6.3.0 |
+| **`maxSize`**          | <code>number</code>                                 | The maximum NDEF message size in bytes. Only available on Android and iOS.                         | 0.0.1 |
+| **`message`**          | <code><a href="#ndefmessage">NdefMessage</a></code> | The NDEF-formatted message.                                                                        | 0.0.1 |
+| **`protocolInfo`**     | <code>number[]</code>                               | The Protocol Info bytes from ATQB/SENSB_RES of an NFC B tag. Only available on Android.            | 0.0.1 |
+| **`responseFlags`**    | <code>number[]</code>                               | The Response Flag bytes of an NFC V tag. Only available on Android.                                | 0.0.1 |
+| **`sak`**              | <code>number[]</code>                               | The SAK/SEL_RES bytes of an NFC A tag. Only available on Android.                                  | 0.0.1 |
+| **`systemCode`**       | <code>number[]</code>                               | The System Code bytes of an NFC F tag. Only available on Android and iOS.                          | 0.0.1 |
+| **`techTypes`**        | <code>NfcTagTechType[]</code>                       | The technologies available in this tag. Only available on Android and iOS.                         | 0.0.1 |
+| **`type`**             | <code><a href="#nfctagtype">NfcTagType</a></code>   | The NDEF tag type. Only available on Android and iOS.                                              | 0.0.1 |
 
 
 #### ScanSessionErrorEvent
@@ -839,6 +964,14 @@ Remove all listeners for this plugin.
 | **`option`**              | <code>'option'</code>              | 0.3.0 |
 | **`protocolExtension`**   | <code>'protocolExtension'</code>   | 0.3.0 |
 | **`select`**              | <code>'select'</code>              | 0.3.0 |
+
+
+#### DeactivationReason
+
+| Members          | Value          | Description                                                       | Since |
+| ---------------- | -------------- | ----------------------------------------------------------------- | ----- |
+| **`LinkLoss`**   | <code>0</code> | Indicates deactivation was due to the NFC link being lost.        | 6.3.0 |
+| **`Deselected`** | <code>1</code> | Indicates deactivation was due to a different AID being selected. | 6.3.0 |
 
 
 #### NfcTagType

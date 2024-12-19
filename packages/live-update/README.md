@@ -103,7 +103,7 @@ In `capacitor.config.json`:
 In `capacitor.config.ts`:
 
 ```ts
-/// <reference types="@capacitor/live-update" />
+/// <reference types="@capawesome/capacitor-live-update" />
 
 import { CapacitorConfig } from '@capacitor/cli';
 
