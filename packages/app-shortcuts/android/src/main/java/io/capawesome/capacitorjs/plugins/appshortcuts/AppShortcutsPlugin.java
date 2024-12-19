@@ -96,8 +96,8 @@ public class AppShortcutsPlugin extends Plugin {
         }
     }
 
-    private void notifyDeviceScannedListener(@NonNull OnAppShortcutEvent event) {
-        notifyListeners(EVENT_ON_APP_SHORTCUT, event.toJSObject());
+    private void notifyOnAppShortcutListener(@NonNull OnAppShortcutEvent event) {
+        notifyListeners(EVENT_ON_APP_SHORTCUT, event.toJSObject(), true);
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
@@ -121,11 +121,10 @@ public class AppShortcutsPlugin extends Plugin {
     protected void handleOnNewIntent(Intent intent) {
         super.handleOnNewIntent(intent);
         if (Objects.equals(intent.getAction(), Intent.ACTION_VIEW)) {
-            JSObject result = new JSObject();
             String shortcutId = intent.getStringExtra(AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME);
             if (shortcutId != null) {
-                result.put("id", shortcutId);
-                this.notifyListeners(AppShortcutsPlugin.EVENT_ON_APP_SHORTCUT, result, true);
+                OnAppShortcutEvent event = new OnAppShortcutEvent(shortcutId);
+                this.notifyOnAppShortcutListener(event);
             }
         }
     }
