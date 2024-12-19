@@ -310,6 +310,13 @@ export interface FetchLatestBundleResult {
    * @since 6.6.0
    */
   bundleId: string | null;
+  /**
+   * The URL of the latest bundle to download.
+   * Pass this URL to the `downloadBundle(...)` method to download the bundle.
+   *
+   * @since 6.7.0
+   */
+  downloadUrl?: string;
 }
 
 /**
