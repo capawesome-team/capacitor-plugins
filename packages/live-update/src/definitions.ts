@@ -110,6 +110,7 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getCurrentBundle()` instead.
    */
   getBundle(): Promise<GetBundleResult>;
   /**
@@ -129,6 +130,15 @@ export interface LiveUpdatePlugin {
    */
   getChannel(): Promise<GetChannelResult>;
   /**
+   * Get the bundle identifier of the current bundle.
+   * The current bundle is the bundle that is currently used by the app.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  getCurrentBundle(): Promise<GetCurrentBundleResult>;
+  /**
    * Get the custom identifier of the device.
    *
    * Only available on Android and iOS.
@@ -144,6 +154,16 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
+  /**
+   * Get the bundle identifier of the next bundle.
+   * The next bundle is the bundle that will be used after calling `reload()`
+   * or restarting the app.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  getNextBundle(): Promise<GetNextBundleResult>;
   /**
    * Get the version code of the app.
    *
@@ -362,6 +382,20 @@ export interface GetChannelResult {
 }
 
 /**
+ * @since 6.7.0
+ */
+export interface GetCurrentBundleResult {
+  /**
+   * The unique identifier of the current bundle.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 6.7.0
+   */
+  bundleId: string | null;
+}
+
+/**
  * @since 5.0.0
  */
 export interface GetDeviceIdResult {
@@ -376,6 +410,20 @@ export interface GetDeviceIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   deviceId: string;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface GetNextBundleResult {
+  /**
+   * The unique identifier of the next bundle.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 6.7.0
+   */
+  bundleId: string | null;
 }
 
 /**

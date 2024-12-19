@@ -26,8 +26,10 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestB
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
@@ -173,6 +175,15 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
+        String bundleId = getCurrentBundleId();
+        if (bundleId.equals(defaultWebAssetDir)) {
+            bundleId = null;
+        }
+        GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
+        callback.success(result);
+    }
+
     public void getCustomId(@NonNull NonEmptyCallback callback) {
         String customId = preferences.getCustomId();
         GetCustomIdResult result = new GetCustomIdResult(customId);
@@ -182,6 +193,15 @@ public class LiveUpdate {
     public void getDeviceId(@NonNull NonEmptyCallback callback) {
         String deviceId = getDeviceId();
         GetDeviceIdResult result = new GetDeviceIdResult(deviceId);
+        callback.success(result);
+    }
+
+    public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
+        String bundleId = getNextBundleId();
+        if (bundleId.equals(defaultWebAssetDir)) {
+            bundleId = null;
+        }
+        GetNextBundleResult result = new GetNextBundleResult(bundleId);
         callback.success(result);
     }
 

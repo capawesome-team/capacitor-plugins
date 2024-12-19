@@ -245,8 +245,10 @@ const isNewBundleAvailable = async () => {
 * [`getBundle()`](#getbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
+* [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
 * [`getDeviceId()`](#getdeviceid)
+* [`getNextBundle()`](#getnextbundle)
 * [`getVersionCode()`](#getversioncode)
 * [`getVersionName()`](#getversionname)
 * [`ready()`](#ready)
@@ -373,6 +375,24 @@ Only available on Android and iOS.
 --------------------
 
 
+### getCurrentBundle()
+
+```typescript
+getCurrentBundle() => Promise<GetCurrentBundleResult>
+```
+
+Get the bundle identifier of the current bundle.
+The current bundle is the bundle that is currently used by the app.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getcurrentbundleresult">GetCurrentBundleResult</a>&gt;</code>
+
+**Since:** 6.7.0
+
+--------------------
+
+
 ### getCustomId()
 
 ```typescript
@@ -403,6 +423,25 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getdeviceidresult">GetDeviceIdResult</a>&gt;</code>
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### getNextBundle()
+
+```typescript
+getNextBundle() => Promise<GetNextBundleResult>
+```
+
+Get the bundle identifier of the next bundle.
+The next bundle is the bundle that will be used after calling `reload()`
+or restarting the app.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getnextbundleresult">GetNextBundleResult</a>&gt;</code>
+
+**Since:** 6.7.0
 
 --------------------
 
@@ -629,6 +668,13 @@ Only available on Android and iOS.
 | **`channel`** | <code>string \| null</code> | The channel name. If `null`, the app is using the default channel. | 5.0.0 |
 
 
+#### GetCurrentBundleResult
+
+| Prop           | Type                        | Description                                                                               | Since |
+| -------------- | --------------------------- | ----------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the current bundle. If `null`, the default bundle is being used. | 6.7.0 |
+
+
 #### GetCustomIdResult
 
 | Prop           | Type                        | Description                                                                  | Since |
@@ -641,6 +687,13 @@ Only available on Android and iOS.
 | Prop           | Type                | Description                                                                                                                                                                                                                                                                    | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. | 5.0.0 |
+
+
+#### GetNextBundleResult
+
+| Prop           | Type                        | Description                                                                            | Since |
+| -------------- | --------------------------- | -------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the next bundle. If `null`, the default bundle is being used. | 6.7.0 |
 
 
 #### GetVersionCodeResult

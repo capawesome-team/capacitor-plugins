@@ -7,8 +7,10 @@ import type {
   GetBundleResult,
   GetBundlesResult,
   GetChannelResult,
+  GetCurrentBundleResult,
   GetCustomIdResult,
   GetDeviceIdResult,
+  GetNextBundleResult,
   GetVersionCodeResult,
   GetVersionNameResult,
   LiveUpdatePlugin,
@@ -43,11 +45,19 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
     this.throwUnimplementedError();
   }
 
+  public async getCurrentBundle(): Promise<GetCurrentBundleResult> {
+    this.throwUnimplementedError();
+  }
+
   public async getCustomId(): Promise<GetCustomIdResult> {
     this.throwUnimplementedError();
   }
 
   public async getDeviceId(): Promise<GetDeviceIdResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async getNextBundle(): Promise<GetNextBundleResult> {
     this.throwUnimplementedError();
   }
 

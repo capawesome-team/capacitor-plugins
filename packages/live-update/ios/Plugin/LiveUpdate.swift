@@ -105,6 +105,15 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleId = getCurrentBundleId()
+        if bundleId == defaultWebAssetDir {
+            bundleId = nil
+        }
+        let result = GetCurrentBundleResult(bundleId: bundleId)
+        completion(result, nil)
+    }
+
     @objc public func getCustomId(completion: @escaping (Result?, Error?) -> Void) {
         let customId = preferences.getCustomId()
 
@@ -115,6 +124,15 @@ import CommonCrypto
     @objc public func getDeviceId(completion: @escaping (Result?, Error?) -> Void) {
         let deviceId = getDeviceId()
         let result = GetDeviceIdResult(deviceId: deviceId)
+        completion(result, nil)
+    }
+
+    @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleId: String? = getNextBundleId()
+        if bundleId == defaultWebAssetDir {
+            bundleId = nil
+        }
+        let result = GetNextBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
 

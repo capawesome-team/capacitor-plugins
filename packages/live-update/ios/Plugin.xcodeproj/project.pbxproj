@@ -32,6 +32,8 @@
 		7C33FC452BCBFE3A003AA8B4 /* GetVersionNameResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */; };
 		7C4274D52D1487500066184E /* SyncOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D42D14874E0066184E /* SyncOptions.swift */; };
 		7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */; };
+		7C4F2B122D149290005E2310 /* GetCurrentBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */; };
+		7C4F2B142D149296005E2310 /* GetNextBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */; };
 		7C62B6512BA9AD220025240F /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C62B6502BA9AD220025240F /* CustomError.swift */; };
 		7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */; };
 		7C6715D12BB1BC9E0000878A /* SetCustomIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */; };
@@ -82,6 +84,8 @@
 		7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetVersionNameResult.swift; sourceTree = "<group>"; };
 		7C4274D42D14874E0066184E /* SyncOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOptions.swift; sourceTree = "<group>"; };
 		7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleOptions.swift; sourceTree = "<group>"; };
+		7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentBundleResult.swift; sourceTree = "<group>"; };
+		7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNextBundleResult.swift; sourceTree = "<group>"; };
 		7C62B6502BA9AD220025240F /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChannelOptions.swift; sourceTree = "<group>"; };
 		7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCustomIdOptions.swift; sourceTree = "<group>"; };
@@ -202,6 +206,8 @@
 		7C20114F2BA96529001FABAD /* Results */ = {
 			isa = PBXGroup;
 			children = (
+				7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */,
+				7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */,
 				7CB7B8AD2CC9419000833086 /* FetchLatestBundle.swift */,
 				7C2011522BA96555001FABAD /* GetBundlesResult.swift */,
 				7C6715D22BB1BCAB0000878A /* GetChannelResult.swift */,
@@ -444,6 +450,8 @@
 				2F98D68224C9AAE500613A4C /* LiveUpdate.swift in Sources */,
 				7C62B6512BA9AD220025240F /* CustomError.swift in Sources */,
 				7C0C8C492BAB354A005F76D1 /* LiveUpdateConfig.swift in Sources */,
+				7C4F2B122D149290005E2310 /* GetCurrentBundleResult.swift in Sources */,
+				7C4F2B142D149296005E2310 /* GetNextBundleResult.swift in Sources */,
 				7C2011532BA96555001FABAD /* GetBundlesResult.swift in Sources */,
 				7C29FB5A2CBD414B007DCB06 /* Manifest.swift in Sources */,
 				7C2E4CE72BC29C1100C80C2A /* SyncResult.swift in Sources */,
