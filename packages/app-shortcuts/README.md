@@ -39,7 +39,7 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 | Android                                                                                                     | iOS                                                                                                         |
 | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| <video controls="true" allowfullscreen="true" autoplay="true" width="324"><source src="https://github.com/user-attachments/assets/61bcbe71-16fe-47b7-a76f-467bee928a2a" type="video/mp4"></video> | <video controls="true" allowfullscreen="true" autoplay="true" width="324"><source src="https://github.com/user-attachments/assets/e7393a2c-f6f3-42f2-a946-14c7c1e9a72e" type="video/mp4"></video> |
+| <image src="https://github.com/user-attachments/assets/58ac7272-de12-457f-a047-8f1f1e08ef52" width="324" /> | <image src="https://github.com/user-attachments/assets/6de8e629-8c31-4383-ba1a-faa921117128" width="324" /> |
 
 ## Usage
 
