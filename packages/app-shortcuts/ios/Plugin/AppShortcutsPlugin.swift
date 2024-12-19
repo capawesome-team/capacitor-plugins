@@ -10,7 +10,7 @@ public class AppShortcutsPlugin: CAPPlugin {
     public static let notificationName = "handleAppShortcutNotification"
     public static let userInfoShortcutItemKey = "shortcutItem"
 
-    public let eventOnAppShortcut = "onAppShortcut"
+    public let eventClick = "click"
     public let tag = "AppShortcuts"
 
     private let implementation = AppShortcuts()
@@ -61,13 +61,13 @@ public class AppShortcutsPlugin: CAPPlugin {
         guard let userInfo = notification.userInfo, let shortcutItem = userInfo[AppShortcutsPlugin.userInfoShortcutItemKey] as? UIApplicationShortcutItem else {
             return
         }
-        let event = OnAppShortcutEvent(shortcutItem)
+        let event = ClickEvent(shortcutItem)
         notifyDeviceScannedListeners(event: event)
     }
 
-    func notifyDeviceScannedListeners(event: OnAppShortcutEvent) {
+    func notifyDeviceScannedListeners(event: ClickEvent) {
         if let event = event.toJSObject() as? JSObject {
-            notifyListeners(eventOnAppShortcut, data: event, retainUntilConsumed: true)
+            notifyListeners(eventClick, data: event, retainUntilConsumed: true)
         }
     }
 

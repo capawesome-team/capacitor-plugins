@@ -73,7 +73,7 @@ const set = async () => {
 };
 
 const addListener = async () => {
-  AppShortcuts.addListener('onAppShortcut', (event) => {
+  AppShortcuts.addListener('click', (event) => {
     console.log('Shortcut clicked:', event.id);
   });
 };
@@ -86,7 +86,7 @@ const addListener = async () => {
 * [`clear()`](#clear)
 * [`get()`](#get)
 * [`set(...)`](#set)
-* [`addListener('onAppShortcut', ...)`](#addlisteneronappshortcut-)
+* [`addListener('click', ...)`](#addlistenerclick-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -146,20 +146,20 @@ Only available on Android and iOS.
 --------------------
 
 
-### addListener('onAppShortcut', ...)
+### addListener('click', ...)
 
 ```typescript
-addListener(eventName: 'onAppShortcut', listenerFunc: (event: OnAppShortcutEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'click', listenerFunc: (event: ClickEvent) => void) => Promise<PluginListenerHandle>
 ```
 
 Called when an app shortcut is clicked.
 
 Only available on Android and iOS.
 
-| Param              | Type                                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'onAppShortcut'</code>                                                          |
-| **`listenerFunc`** | <code>(event: <a href="#onappshortcutevent">OnAppShortcutEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                  |
+| ------------------ | --------------------------------------------------------------------- |
+| **`eventName`**    | <code>'click'</code>                                                  |
+| **`listenerFunc`** | <code>(event: <a href="#clickevent">ClickEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -214,11 +214,11 @@ Remove all listeners for this plugin.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
-#### OnAppShortcutEvent
+#### ClickEvent
 
-| Prop     | Type                | Description                                                 | Since |
-| -------- | ------------------- | ----------------------------------------------------------- | ----- |
-| **`id`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
+| Prop             | Type                | Description                                                 | Since |
+| ---------------- | ------------------- | ----------------------------------------------------------- | ----- |
+| **`shortcutId`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
 
 </docgen-api>
 

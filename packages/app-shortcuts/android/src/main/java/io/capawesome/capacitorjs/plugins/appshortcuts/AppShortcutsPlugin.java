@@ -9,7 +9,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import io.capawesome.capacitorjs.plugins.appshortcuts.classes.events.OnAppShortcutEvent;
+import io.capawesome.capacitorjs.plugins.appshortcuts.classes.events.ClickEvent;
 import io.capawesome.capacitorjs.plugins.appshortcuts.classes.options.SetOptions;
 import io.capawesome.capacitorjs.plugins.appshortcuts.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcuts.interfaces.NonEmptyCallback;
@@ -23,7 +23,7 @@ public class AppShortcutsPlugin extends Plugin {
     public static final String ERROR_SHORTCUTS_MISSING = "shortcuts must be provided.";
     public static final String ERROR_TITLE_MISSING = "title must be provided.";
     public static final String ERROR_ID_MISSING = "id must be provided.";
-    public static final String EVENT_ON_APP_SHORTCUT = "onAppShortcut";
+    public static final String EVENT_CLICK = "click";
     public static final String INTENT_EXTRA_ITEM_NAME = "shortcutId"; // DO NOT CHANGE THIS VALUE!
     public static final String TAG = "AppShortcutsPlugin";
 
@@ -96,8 +96,8 @@ public class AppShortcutsPlugin extends Plugin {
         }
     }
 
-    private void notifyOnAppShortcutListener(@NonNull OnAppShortcutEvent event) {
-        notifyListeners(EVENT_ON_APP_SHORTCUT, event.toJSObject(), true);
+    private void notifyClickListener(@NonNull ClickEvent event) {
+        notifyListeners(EVENT_CLICK, event.toJSObject(), true);
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
@@ -123,8 +123,8 @@ public class AppShortcutsPlugin extends Plugin {
         if (Objects.equals(intent.getAction(), Intent.ACTION_VIEW)) {
             String shortcutId = intent.getStringExtra(AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME);
             if (shortcutId != null) {
-                OnAppShortcutEvent event = new OnAppShortcutEvent(shortcutId);
-                this.notifyOnAppShortcutListener(event);
+                ClickEvent event = new ClickEvent(shortcutId);
+                this.notifyClickListener(event);
             }
         }
     }

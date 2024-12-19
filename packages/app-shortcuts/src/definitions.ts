@@ -33,8 +33,8 @@ export interface AppShortcutsPlugin {
    * @since 6.0.0
    */
   addListener(
-    eventName: 'onAppShortcut',
-    listenerFunc: (event: OnAppShortcutEvent) => void,
+    eventName: 'click',
+    listenerFunc: (event: ClickEvent) => void,
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
@@ -97,11 +97,11 @@ export interface Shortcut {
 /**
  * @since 6.0.0
  */
-export interface OnAppShortcutEvent {
+export interface ClickEvent {
   /**
    * The unique identifier of the app shortcut that was clicked.
    *
    * @since 6.0.0
    */
-  id: string;
+  shortcutId: string;
 }

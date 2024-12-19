@@ -3,8 +3,8 @@ import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
 document.addEventListener('DOMContentLoaded', () => {
   const initialize = async () => {
     await AppShortcuts.removeAllListeners().then(() => {
-      void AppShortcuts.addListener('onAppShortcut', event => {
-        alert(`Shortcut: ${event.id}`);
+      void AppShortcuts.addListener('click', event => {
+        alert(`Shortcut clicked: ${event.shortcutId}`);
       });
     });
   };
