@@ -64,7 +64,7 @@ public class AppShortcutPlugin: CAPPlugin {
     private func notifyOnAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
         self.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, data: [
             "id": shortcutItem.type
-        ])
+        ], retainUntilConsumed: true)
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

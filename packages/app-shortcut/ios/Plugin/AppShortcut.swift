@@ -10,8 +10,11 @@ import UIKit
 
     @objc public func set(shortcuts: [UIApplicationShortcutItem], completion: @escaping (Error?) -> Void) {
         let application = UIApplication.shared
-        application.shortcutItems = shortcuts
-        completion(nil)
+        
+        DispatchQueue.main.async {
+            application.shortcutItems = shortcuts
+            completion(nil)
+        }
     }
 
     @objc public func clear(completion: @escaping (Error?) -> Void) {
