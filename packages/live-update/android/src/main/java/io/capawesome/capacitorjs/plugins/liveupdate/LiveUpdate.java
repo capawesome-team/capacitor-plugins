@@ -17,9 +17,11 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
@@ -142,8 +144,8 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void fetchLatestBundle(@NonNull NonEmptyCallback callback) throws Exception {
-        GetLatestBundleResponse response = fetchLatestBundle();
+    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) throws Exception {
+        GetLatestBundleResponse response = fetchLatestBundle(options);
         FetchLatestBundleResult result = new FetchLatestBundleResult(response == null ? null : response.getBundleId());
         callback.success(result);
     }
@@ -240,9 +242,11 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void sync(@NonNull NonEmptyCallback<Result> callback) throws Exception {
+    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) throws Exception {
+        String channel = options.getChannel();
         // Fetch the latest bundle
-        GetLatestBundleResponse response = fetchLatestBundle();
+        FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
+        GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
         if (response == null) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
             SyncResult syncResult = new SyncResult(null);
@@ -546,7 +550,8 @@ public class LiveUpdate {
     }
 
     @Nullable
-    private GetLatestBundleResponse fetchLatestBundle() throws Exception {
+    private GetLatestBundleResponse fetchLatestBundle(@NonNull FetchLatestBundleOptions options) throws Exception {
+        String channel = options.getChannel() == null ? getChannel() : options.getChannel();
         String url = new HttpUrl.Builder()
             .scheme("https")
             .host(host)
@@ -558,7 +563,7 @@ public class LiveUpdate {
             .addQueryParameter("appVersionCode", getVersionCode())
             .addQueryParameter("appVersionName", getVersionName())
             .addQueryParameter("bundleId", getCurrentBundleId())
-            .addQueryParameter("channelName", getChannel())
+            .addQueryParameter("channelName", channel)
             .addQueryParameter("customId", preferences.getCustomId())
             .addQueryParameter("deviceId", getDeviceId())
             .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))

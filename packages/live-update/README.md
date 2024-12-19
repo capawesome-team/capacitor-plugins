@@ -241,7 +241,7 @@ const isNewBundleAvailable = async () => {
 
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
-* [`fetchLatestBundle()`](#fetchlatestbundle)
+* [`fetchLatestBundle(...)`](#fetchlatestbundle)
 * [`getBundle()`](#getbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
@@ -255,7 +255,7 @@ const isNewBundleAvailable = async () => {
 * [`setBundle(...)`](#setbundle)
 * [`setChannel(...)`](#setchannel)
 * [`setCustomId(...)`](#setcustomid)
-* [`sync()`](#sync)
+* [`sync(...)`](#sync)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -301,15 +301,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### fetchLatestBundle()
+### fetchLatestBundle(...)
 
 ```typescript
-fetchLatestBundle() => Promise<FetchLatestBundleResult>
+fetchLatestBundle(options?: FetchLatestBundleOptions | undefined) => Promise<FetchLatestBundleResult>
 ```
 
 Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
 
 Only available on Android and iOS.
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#fetchlatestbundleoptions">FetchLatestBundleOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#fetchlatestbundleresult">FetchLatestBundleResult</a>&gt;</code>
 
@@ -358,7 +362,7 @@ Only available on Android and iOS.
 getChannel() => Promise<GetChannelResult>
 ```
 
-Get the channel of the app.
+Get the channel that is used for the update.
 
 Only available on Android and iOS.
 
@@ -375,7 +379,7 @@ Only available on Android and iOS.
 getCustomId() => Promise<GetCustomIdResult>
 ```
 
-Get the custom identifier of the app.
+Get the custom identifier of the device.
 
 Only available on Android and iOS.
 
@@ -392,7 +396,7 @@ Only available on Android and iOS.
 getDeviceId() => Promise<GetDeviceIdResult>
 ```
 
-Get the device identifier of the app.
+Get the unique device identifier.
 
 Only available on Android and iOS.
 
@@ -514,7 +518,7 @@ Only available on Android and iOS.
 setChannel(options: SetChannelOptions) => Promise<void>
 ```
 
-Set the channel of the app.
+Set the channel to use for the update.
 
 Only available on Android and iOS.
 
@@ -533,7 +537,7 @@ Only available on Android and iOS.
 setCustomId(options: SetCustomIdOptions) => Promise<void>
 ```
 
-Set the custom identifier of the app.
+Set the custom identifier of the device.
 
 Only available on Android and iOS.
 
@@ -546,10 +550,10 @@ Only available on Android and iOS.
 --------------------
 
 
-### sync()
+### sync(...)
 
 ```typescript
-sync() => Promise<SyncResult>
+sync(options?: SyncOptions | undefined) => Promise<SyncResult>
 ```
 
 Automatically download and set the latest bundle for the app using the [Capawesome Cloud](https://capawesome.io/cloud/).
@@ -557,6 +561,10 @@ Automatically download and set the latest bundle for the app using the [Capaweso
 Call `reload()` or restart the app to apply the changes.
 
 Only available on Android and iOS.
+
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#syncoptions">SyncOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#syncresult">SyncResult</a>&gt;</code>
 
@@ -592,6 +600,13 @@ Only available on Android and iOS.
 | **`bundleId`** | <code>string \| null</code> | The unique identifier of the latest bundle. If `null`, no bundle is available. | 6.6.0 |
 
 
+#### FetchLatestBundleOptions
+
+| Prop          | Type                | Description                                                      | Since |
+| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
+
+
 #### GetBundleResult
 
 | Prop           | Type                        | Description                                                                              | Since |
@@ -608,16 +623,16 @@ Only available on Android and iOS.
 
 #### GetChannelResult
 
-| Prop          | Type                        | Description                                                              | Since |
-| ------------- | --------------------------- | ------------------------------------------------------------------------ | ----- |
-| **`channel`** | <code>string \| null</code> | The channel of the app. If `null`, the app is using the default channel. | 5.0.0 |
+| Prop          | Type                        | Description                                                        | Since |
+| ------------- | --------------------------- | ------------------------------------------------------------------ | ----- |
+| **`channel`** | <code>string \| null</code> | The channel name. If `null`, the app is using the default channel. | 5.0.0 |
 
 
 #### GetCustomIdResult
 
-| Prop           | Type                        | Description                                                               | Since |
-| -------------- | --------------------------- | ------------------------------------------------------------------------- | ----- |
-| **`customId`** | <code>string \| null</code> | The custom identifier of the app. If `null`, no custom identifier is set. | 5.0.0 |
+| Prop           | Type                        | Description                                                                  | Since |
+| -------------- | --------------------------- | ---------------------------------------------------------------------------- | ----- |
+| **`customId`** | <code>string \| null</code> | The custom identifier of the device. If `null`, no custom identifier is set. | 5.0.0 |
 
 
 #### GetDeviceIdResult
@@ -650,16 +665,16 @@ Only available on Android and iOS.
 
 #### SetChannelOptions
 
-| Prop          | Type                        | Description                                               | Since |
-| ------------- | --------------------------- | --------------------------------------------------------- | ----- |
-| **`channel`** | <code>string \| null</code> | The channel of the app. Set `null` to remove the channel. | 5.0.0 |
+| Prop          | Type                        | Description                                         | Since |
+| ------------- | --------------------------- | --------------------------------------------------- | ----- |
+| **`channel`** | <code>string \| null</code> | The channel name. Set `null` to remove the channel. | 5.0.0 |
 
 
 #### SetCustomIdOptions
 
-| Prop           | Type                        | Description                                                                   | Since |
-| -------------- | --------------------------- | ----------------------------------------------------------------------------- | ----- |
-| **`customId`** | <code>string \| null</code> | The custom identifier of the app. Set `null` to remove the custom identifier. | 5.0.0 |
+| Prop           | Type                        | Description                                                                      | Since |
+| -------------- | --------------------------- | -------------------------------------------------------------------------------- | ----- |
+| **`customId`** | <code>string \| null</code> | The custom identifier of the device. Set `null` to remove the custom identifier. | 5.0.0 |
 
 
 #### SyncResult
@@ -667,6 +682,13 @@ Only available on Android and iOS.
 | Prop               | Type                        | Description                                                                                                | Since |
 | ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
 | **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+
+
+#### SyncOptions
+
+| Prop          | Type                | Description                                                      | Since |
+| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
 
 </docgen-api>
 

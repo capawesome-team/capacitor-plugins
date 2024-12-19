@@ -8,9 +8,11 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -121,6 +123,7 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void fetchLatestBundle(PluginCall call) {
         try {
+            FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
@@ -133,7 +136,7 @@ public class LiveUpdatePlugin extends Plugin {
                 }
             };
 
-            implementation.fetchLatestBundle(callback);
+            implementation.fetchLatestBundle(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -411,6 +414,7 @@ public class LiveUpdatePlugin extends Plugin {
             }
             syncInProgress = true;
 
+            SyncOptions options = new SyncOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
@@ -425,7 +429,7 @@ public class LiveUpdatePlugin extends Plugin {
                 }
             };
 
-            implementation.sync(callback);
+            implementation.sync(options, callback);
         } catch (Exception exception) {
             syncInProgress = false;
             rejectCall(call, exception);
