@@ -79,8 +79,8 @@ import CommonCrypto
         }
     }
 
-    @objc public func fetchLatestBundle() async throws -> FetchLatestBundleResult {
-        let response: GetLatestBundleResponse? = try await self.fetchLatestBundle()
+    @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
+        let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
         return FetchLatestBundleResult(bundleId: response?.bundleId)
     }
 
@@ -176,9 +176,11 @@ import CommonCrypto
         completion(nil)
     }
 
-    @objc public func sync() async throws -> SyncResult {
+    @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        let channel = options.getChannel()
         // Fetch the latest bundle
-        guard let response = try await fetchLatestBundle() else {
+        let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
+        guard let response = try await fetchLatestBundle(fetchLatestBundleOptions) else {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
             return SyncResult(nextBundleId: nil)
         }
@@ -404,12 +406,13 @@ import CommonCrypto
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
 
-    private func fetchLatestBundle() async throws -> GetLatestBundleResponse? {
+    private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
+        let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
         parameters["bundleId"] = getCurrentBundleId()
-        parameters["channelName"] = getChannel()
+        parameters["channelName"] = channel
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()
         parameters["osVersion"] = await UIDevice.current.systemVersion

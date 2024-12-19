@@ -103,7 +103,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.6.0
    */
-  fetchLatestBundle(): Promise<FetchLatestBundleResult>;
+  fetchLatestBundle(options?: FetchLatestBundleOptions): Promise<FetchLatestBundleResult>;
   /**
    * Get the active bundle identifier.
    *
@@ -121,7 +121,7 @@ export interface LiveUpdatePlugin {
    */
   getBundles(): Promise<GetBundlesResult>;
   /**
-   * Get the channel of the app.
+   * Get the channel that is used for the update.
    *
    * Only available on Android and iOS.
    *
@@ -129,7 +129,7 @@ export interface LiveUpdatePlugin {
    */
   getChannel(): Promise<GetChannelResult>;
   /**
-   * Get the custom identifier of the app.
+   * Get the custom identifier of the device.
    *
    * Only available on Android and iOS.
    *
@@ -137,7 +137,7 @@ export interface LiveUpdatePlugin {
    */
   getCustomId(): Promise<GetCustomIdResult>;
   /**
-   * Get the device identifier of the app.
+   * Get the unique device identifier.
    *
    * Only available on Android and iOS.
    *
@@ -200,7 +200,7 @@ export interface LiveUpdatePlugin {
    */
   setBundle(options: SetBundleOptions): Promise<void>;
   /**
-   * Set the channel of the app.
+   * Set the channel to use for the update.
    *
    * Only available on Android and iOS.
    *
@@ -208,7 +208,7 @@ export interface LiveUpdatePlugin {
    */
   setChannel(options: SetChannelOptions): Promise<void>;
   /**
-   * Set the custom identifier of the app.
+   * Set the custom identifier of the device.
    *
    * Only available on Android and iOS.
    *
@@ -224,7 +224,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 5.0.0
    */
-  sync(): Promise<SyncResult>;
+  sync(options?: SyncOptions): Promise<SyncResult>;
 }
 
 /**
@@ -287,6 +287,18 @@ export interface DownloadBundleOptions {
 }
 
 /**
+ * @since 6.7.0
+ */
+export interface FetchLatestBundleOptions {
+  /**
+   * The name of the channel where the latest bundle is fetched from.
+   *
+   * @since 6.7.0
+   */
+  channel?: string;
+}
+
+/**
  * @since 6.6.0
  */
 export interface FetchLatestBundleResult {
@@ -332,7 +344,7 @@ export interface GetBundlesResult {
  */
 export interface GetChannelResult {
   /**
-   * The channel of the app.
+   * The channel name.
    *
    * If `null`, the app is using the default channel.
    *
@@ -396,7 +408,7 @@ export interface GetVersionNameResult {
  */
 export interface GetCustomIdResult {
   /**
-   * The custom identifier of the app.
+   * The custom identifier of the device.
    *
    * If `null`, no custom identifier is set.
    *
@@ -424,7 +436,7 @@ export interface SetBundleOptions {
  */
 export interface SetChannelOptions {
   /**
-   * The channel of the app.
+   * The channel name.
    *
    * Set `null` to remove the channel.
    *
@@ -438,13 +450,25 @@ export interface SetChannelOptions {
  */
 export interface SetCustomIdOptions {
   /**
-   * The custom identifier of the app.
+   * The custom identifier of the device.
    *
    * Set `null` to remove the custom identifier.
    *
    * @since 5.0.0
    */
   customId: string | null;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface SyncOptions {
+  /**
+   * The name of the channel where the latest bundle is fetched from.
+   *
+   * @since 6.7.0
+   */
+  channel?: string;
 }
 
 /**
