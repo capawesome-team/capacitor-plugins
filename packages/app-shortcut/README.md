@@ -19,26 +19,18 @@ On iOS, you must add the following to your app's `AppDelegate.swift`:
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-+     if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
-+         handleOnAppShortcut(shortcutItem)
-+         return false
-+     }
-      return true
-  }
-  
-+ func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-+     handleOnAppShortcut(shortcutItem)
-+     completionHandler(true)
-+ }
-  
-+  private func handleOnAppShortcut(_ shortcutItem: UIApplicationShortcutItem) {
-+      NotificationCenter.default.post(
-+        name: NSNotification.Name(AppShortcutPlugin.onAppShortcutEvent),
-+        object: nil,
-+        userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem]
-+      )
-+  }
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
++        if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
++            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutPlugin.notificationName), object: nil, userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem])
++            return true
++        }
+        return true
+    }
+    
++    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
++        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutPlugin.notificationName), object: nil, userInfo: [AppShortcutPlugin.userInfoShortcutItemKey: shortcutItem])
++        completionHandler(true)
++    }
 ```
 
 ## API

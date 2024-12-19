@@ -7,14 +7,17 @@ import Capacitor
  */
 @objc(AppShortcutPlugin)
 public class AppShortcutPlugin: CAPPlugin {
-    public let tag = "AppShortcuts"
-    public static let onAppShortcutEvent = "onAppShortcut"
+    public static let notificationName = "handleAppShortcutNotification"
     public static let userInfoShortcutItemKey = "shortcutItem"
+    
+    public let eventOnAppShortcut = "onAppShortcut"
+    public let tag = "AppShortcuts"
+    
     private let implementation = AppShortcut()
 
     override public init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAppShortcutNotification), name: NSNotification.Name(AppShortcutPlugin.onAppShortcutEvent), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleAppShortcutNotification), name: NSNotification.Name(AppShortcutPlugin.notificationName), object: nil)
     }
 
     deinit {
@@ -62,7 +65,7 @@ public class AppShortcutPlugin: CAPPlugin {
     }
 
     private func notifyOnAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
-        self.notifyListeners(AppShortcutPlugin.onAppShortcutEvent, data: [
+        self.notifyListeners(eventOnAppShortcut, data: [
             "id": shortcutItem.type
         ], retainUntilConsumed: true)
     }
