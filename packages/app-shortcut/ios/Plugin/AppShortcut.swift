@@ -4,8 +4,11 @@ import UIKit
 @objc public class AppShortcut: NSObject {
     @objc public func get(completion: @escaping (Result) -> Void) {
         let application = UIApplication.shared
-        let result = GetResult(shortcutItems: application.shortcutItems)
-        completion(result)
+        
+        DispatchQueue.main.async {
+            let result = GetResult(shortcutItems: application.shortcutItems)
+            completion(result)
+        }
     }
 
     @objc public func set(shortcuts: [UIApplicationShortcutItem], completion: @escaping (Error?) -> Void) {
@@ -19,7 +22,10 @@ import UIKit
 
     @objc public func clear(completion: @escaping (Error?) -> Void) {
         let application = UIApplication.shared
-        application.shortcutItems = nil
-        completion(nil)
+        
+        DispatchQueue.main.async {
+            application.shortcutItems = []
+            completion(nil)
+        }
     }
 }
