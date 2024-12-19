@@ -16,6 +16,7 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* AppShortcutPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* AppShortcutPlugin.m */; };
 		50E1A94820377CB70090CE1A /* AppShortcutPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* AppShortcutPlugin.swift */; };
+		7C23F4112D1434F80062E466 /* OnAppShortcutEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C23F4102D1434F00062E466 /* OnAppShortcutEvent.swift */; };
 		7CC437E92D0CCF94007934A8 /* GetResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC437E82D0CCF7A007934A8 /* GetResult.swift */; };
 		7CC437EC2D0CE897007934A8 /* SetOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC437EB2D0CE892007934A8 /* SetOptions.swift */; };
 		7CC437F52D0E3096007934A8 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC437F42D0E3096007934A8 /* CustomError.swift */; };
@@ -45,6 +46,7 @@
 		50ADFFA72020EE4F00D50D53 /* AppShortcutPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppShortcutPlugin.m; sourceTree = "<group>"; };
 		50E1A94720377CB70090CE1A /* AppShortcutPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppShortcutPlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		7C23F4102D1434F00062E466 /* OnAppShortcutEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnAppShortcutEvent.swift; sourceTree = "<group>"; };
 		7CC437E82D0CCF7A007934A8 /* GetResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetResult.swift; sourceTree = "<group>"; };
 		7CC437EB2D0CE892007934A8 /* SetOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetOptions.swift; sourceTree = "<group>"; };
 		7CC437F42D0E3096007934A8 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
@@ -121,9 +123,18 @@
 			path = PluginTests;
 			sourceTree = "<group>";
 		};
+		7C23F40F2D1434E90062E466 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				7C23F4102D1434F00062E466 /* OnAppShortcutEvent.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
 		7CC437E62D0CCF63007934A8 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7C23F40F2D1434E90062E466 /* Events */,
 				7CC437EA2D0CE882007934A8 /* Options */,
 				7CC437E72D0CCF71007934A8 /* Results */,
 			);
@@ -365,6 +376,7 @@
 				2F98D68224C9AAE500613A4C /* AppShortcut.swift in Sources */,
 				7CC437F82D0E30A0007934A8 /* Result.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* AppShortcutPlugin.m in Sources */,
+				7C23F4112D1434F80062E466 /* OnAppShortcutEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

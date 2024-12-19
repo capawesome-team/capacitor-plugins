@@ -61,13 +61,14 @@ public class AppShortcutPlugin: CAPPlugin {
         guard let userInfo = notification.userInfo, let shortcutItem = userInfo[AppShortcutPlugin.userInfoShortcutItemKey] as? UIApplicationShortcutItem else {
             return
         }
-        notifyOnAppShortcutListeners(shortcutItem)
+        let event = OnAppShortcutEvent(shortcutItem)
+        notifyDeviceScannedListeners(event: event)
     }
-
-    private func notifyOnAppShortcutListeners(_ shortcutItem: UIApplicationShortcutItem) {
-        self.notifyListeners(eventOnAppShortcut, data: [
-            "id": shortcutItem.type
-        ], retainUntilConsumed: true)
+    
+    func notifyDeviceScannedListeners(event: OnAppShortcutEvent) {
+        if let event = event.toJSObject() as? JSObject {
+            notifyListeners(eventOnAppShortcut, data: event, retainUntilConsumed: true)
+        }
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
