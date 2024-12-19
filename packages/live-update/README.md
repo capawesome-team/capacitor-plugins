@@ -160,11 +160,6 @@ const fetchLatestBundle = async () => {
   await LiveUpdate.fetchLatestBundle();
 };
 
-const getBundle = async () => {
-  const result = await LiveUpdate.getBundle();
-  return result.bundleId;
-};
-
 const getBundles = async () => {
   const result = await LiveUpdate.getBundles();
   return result.bundleIds;
@@ -175,6 +170,11 @@ const getChannel = async () => {
   return result.channel;
 };
 
+const getCurrentBundle = async () => {
+  const result = await LiveUpdate.getCurrentBundle();
+  return result.bundleId;
+};
+
 const getCustomId = async () => {
   const result = await LiveUpdate.getCustomId();
   return result.customId;
@@ -183,6 +183,11 @@ const getCustomId = async () => {
 const getDeviceId = async () => {
   const result = await LiveUpdate.getDeviceId();
   return result.deviceId;
+};
+
+const getNextBundle = async () => {
+  const result = await LiveUpdate.getNextBundle();
+  return result.bundleId;
 };
 
 const getVersionCode = async () => {
