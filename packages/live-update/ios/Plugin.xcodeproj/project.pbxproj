@@ -43,6 +43,7 @@
 		7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */; };
 		7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */; };
 		7CB7B8AE2CC9419800833086 /* FetchLatestBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundle.swift */; };
+		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdatePreferences.swift; sourceTree = "<group>"; };
 		7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLatestBundleResponse.swift; sourceTree = "<group>"; };
 		7CB7B8AD2CC9419000833086 /* FetchLatestBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundle.swift; sourceTree = "<group>"; };
+		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 		7C20114E2BA96524001FABAD /* Options */ = {
 			isa = PBXGroup;
 			children = (
+				7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */,
 				7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */,
 				7C4274D42D14874E0066184E /* SyncOptions.swift */,
 				7C2011542BA9656E001FABAD /* SetBundleOptions.swift */,
@@ -444,6 +447,7 @@
 				7C2011592BA966F4001FABAD /* DownloadBundleOptions.swift in Sources */,
 				7C29FB502CBAB671007DCB06 /* LiveUpdateHttpClient.swift in Sources */,
 				7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */,
+				7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */,
 				7C29FB532CBCE2B5007DCB06 /* ArtifactType.swift in Sources */,
 				7C6715D32BB1BCAB0000878A /* GetChannelResult.swift in Sources */,
 				7C33FC432BCBFE27003AA8B4 /* GetVersionCodeResult.swift in Sources */,

@@ -22,5 +22,6 @@ CAP_PLUGIN(LiveUpdatePlugin, "LiveUpdate",
            CAP_PLUGIN_METHOD(setBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setChannel, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setCustomId, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(setNextBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(sync, CAPPluginReturnPromise);
 )

@@ -217,6 +217,7 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `setNextBundle()` instead.
    */
   setBundle(options: SetBundleOptions): Promise<void>;
   /**
@@ -235,6 +236,16 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   setCustomId(options: SetCustomIdOptions): Promise<void>;
+  /**
+   * Set the next bundle to use for the app.
+   *
+   * Call `reload()` or restart the app to apply the changes.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  setNextBundle(options: SetNextBundleOptions): Promise<void>;
   /**
    * Automatically download and set the latest bundle for the app using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
@@ -512,6 +523,19 @@ export interface SetCustomIdOptions {
    * @since 5.0.0
    */
   customId: string | null;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface SetNextBundleOptions {
+  /**
+   * The unique identifier of the bundle to use.
+   *
+   * @since 6.7.0
+   * @example '1.0.0'
+   */
+  bundleId: string;
 }
 
 /**

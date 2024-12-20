@@ -212,16 +212,16 @@ const reset = async () => {
   await LiveUpdate.reset();
 };
 
-const setBundle = async () => {
-  await LiveUpdate.setBundle({ bundleId: '1.0.0' });
-};
-
 const setChannel = async () => {
   await LiveUpdate.setChannel({ channel: 'beta' });
 };
 
 const setCustomId = async () => {
   await LiveUpdate.setCustomId({ customId: 'my-custom-id' });
+};
+
+const setNextBundle = async () => {
+  await LiveUpdate.setNextBundle({ bundleId: '1.0.0' });
 };
 
 const sync = async () => {
@@ -262,6 +262,7 @@ const isNewBundleAvailable = async () => {
 * [`setBundle(...)`](#setbundle)
 * [`setChannel(...)`](#setchannel)
 * [`setCustomId(...)`](#setcustomid)
+* [`setNextBundle(...)`](#setnextbundle)
 * [`sync(...)`](#sync)
 * [Interfaces](#interfaces)
 
@@ -594,6 +595,27 @@ Only available on Android and iOS.
 --------------------
 
 
+### setNextBundle(...)
+
+```typescript
+setNextBundle(options: SetNextBundleOptions) => Promise<void>
+```
+
+Set the next bundle to use for the app.
+
+Call `reload()` or restart the app to apply the changes.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnextbundleoptions">SetNextBundleOptions</a></code> |
+
+**Since:** 6.7.0
+
+--------------------
+
+
 ### sync(...)
 
 ```typescript
@@ -734,6 +756,13 @@ Only available on Android and iOS.
 | Prop           | Type                        | Description                                                                      | Since |
 | -------------- | --------------------------- | -------------------------------------------------------------------------------- | ----- |
 | **`customId`** | <code>string \| null</code> | The custom identifier of the device. Set `null` to remove the custom identifier. | 5.0.0 |
+
+
+#### SetNextBundleOptions
+
+| Prop           | Type                | Description                                 | Since |
+| -------------- | ------------------- | ------------------------------------------- | ----- |
+| **`bundleId`** | <code>string</code> | The unique identifier of the bundle to use. | 6.7.0 |
 
 
 #### SyncResult
