@@ -512,19 +512,6 @@ export interface SetChannelOptions {
 }
 
 /**
- * @since 6.7.0
- */
-export interface SetCurrentBundleOptions {
-  /**
-   * The unique identifier of the bundle to use.
-   *
-   * @since 6.7.0
-   * @example '1.0.0'
-   */
-  bundleId: string;
-}
-
-/**
  * @since 5.0.0
  */
 export interface SetCustomIdOptions {
