@@ -33,7 +33,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 self.rejectCall(call, error)
                 return
             }
-            call.resolve()
+            self.resolveCall(call)
         })
     }
 
@@ -54,7 +54,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, checksum: checksum, url: url)
 
                 try await implementation?.downloadBundle(options)
-                call.resolve()
+                self.resolveCall(call)
             } catch {
                 rejectCall(call, error)
             }
@@ -67,7 +67,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 let options = FetchLatestBundleOptions(call)
                 let result = try await implementation?.fetchLatestBundle(options)
                 if let result = result?.toJSObject() as? JSObject {
-                    call.resolve(result)
+                    self.resolveCall(call, result)
                 }
             } catch {
                 rejectCall(call, error)
@@ -82,7 +82,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -94,7 +94,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -106,7 +106,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -118,7 +118,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -130,7 +130,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -142,7 +142,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -154,7 +154,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -166,7 +166,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
@@ -178,24 +178,24 @@ public class LiveUpdatePlugin: CAPPlugin {
                 return
             }
             if let result = result?.toJSObject() as? JSObject {
-                call.resolve(result)
+                self.resolveCall(call, result)
             }
         })
     }
 
     @objc func ready(_ call: CAPPluginCall) {
         implementation?.ready()
-        call.resolve()
+        resolveCall(call)
     }
 
     @objc func reload(_ call: CAPPluginCall) {
         implementation?.reload()
-        call.resolve()
+        resolveCall(call)
     }
 
     @objc func reset(_ call: CAPPluginCall) {
         implementation?.reset()
-        call.resolve()
+        resolveCall(call)
     }
 
     @objc func setBundle(_ call: CAPPluginCall) {
@@ -211,8 +211,8 @@ public class LiveUpdatePlugin: CAPPlugin {
                 self.rejectCall(call, error)
                 return
             }
+            self.resolveCall(call)
         })
-        call.resolve()
     }
 
     @objc func setChannel(_ call: CAPPluginCall) {
@@ -225,8 +225,8 @@ public class LiveUpdatePlugin: CAPPlugin {
                 self.rejectCall(call, error)
                 return
             }
+            self.resolveCall(call)
         })
-        call.resolve()
     }
 
     @objc func setCustomId(_ call: CAPPluginCall) {
@@ -242,8 +242,8 @@ public class LiveUpdatePlugin: CAPPlugin {
                 self.rejectCall(call, error)
                 return
             }
+            self.resolveCall(call)
         })
-        call.resolve()
     }
 
     @objc func setNextBundle(_ call: CAPPluginCall) {
@@ -255,7 +255,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                     self.rejectCall(call, error)
                     return
                 }
-                call.resolve()
+                self.resolveCall(call)
             })
         } catch {
             rejectCall(call, error)
@@ -280,7 +280,7 @@ public class LiveUpdatePlugin: CAPPlugin {
                 let result = try await implementation?.sync(options)
                 self.syncInProgress = false
                 if let result = result?.toJSObject() as? JSObject {
-                    call.resolve(result)
+                    resolveCall(call, result)
                 }
             } catch {
                 self.syncInProgress = false
@@ -314,5 +314,13 @@ public class LiveUpdatePlugin: CAPPlugin {
             }
         }
         call.reject(message)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ result: JSObject) {
+        call.resolve(result)
     }
 }
