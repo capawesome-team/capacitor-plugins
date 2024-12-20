@@ -49,7 +49,7 @@ declare module '@capacitor/cli' {
        * @since 6.2.0
        * @default 'us'
        * @example 'eu'
-       * @see https://capawesome.io/cloud/live-updates/advanced/privacy/
+       * @deprecated This option will be removed in the future.
        */
       location?: 'us' | 'eu';
       /**
