@@ -12,6 +12,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestB
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
@@ -440,6 +441,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.setCustomId(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextBundle(PluginCall call) {
+        try {
+            SetNextBundleOptions options = new SetNextBundleOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    call.resolve();
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.setNextBundle(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

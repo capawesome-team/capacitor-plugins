@@ -17,6 +17,7 @@ import type {
   SetBundleOptions,
   SetChannelOptions,
   SetCustomIdOptions,
+  SetNextBundleOptions,
   SyncResult,
 } from './definitions';
 
@@ -90,6 +91,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async setCustomId(_options: SetCustomIdOptions): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  public async setNextBundle(_options: SetNextBundleOptions): Promise<void> {
     this.throwUnimplementedError();
   }
 

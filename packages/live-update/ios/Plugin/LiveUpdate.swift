@@ -194,6 +194,20 @@ import CommonCrypto
         completion(nil)
     }
 
+    @objc public func setNextBundle(_ options: SetNextBundleOptions, completion: @escaping (Error?) -> Void) {
+        let bundleId = options.getBundleId()
+
+        // Check if the bundle already exists
+        if !hasBundle(bundleId: bundleId) {
+            let error = CustomError.bundleNotFound
+            completion(error)
+            return
+        }
+
+        setNextBundle(bundleId: bundleId)
+        completion(nil)
+    }
+
     @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
         let channel = options.getChannel()
         // Fetch the latest bundle

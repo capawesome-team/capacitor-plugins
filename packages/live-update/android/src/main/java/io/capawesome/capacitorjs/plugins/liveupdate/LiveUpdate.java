@@ -21,6 +21,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestB
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
@@ -261,6 +262,19 @@ public class LiveUpdate {
         String customId = options.getCustomId();
 
         preferences.setCustomId(customId);
+        callback.success();
+    }
+
+    public void setNextBundle(@NonNull SetNextBundleOptions options, @NonNull EmptyCallback callback) {
+        String bundleId = options.getBundleId();
+
+        if (!hasBundle(bundleId)) {
+            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
+            callback.error(exception);
+            return;
+        }
+
+        setNextBundle(bundleId);
         callback.success();
     }
 
