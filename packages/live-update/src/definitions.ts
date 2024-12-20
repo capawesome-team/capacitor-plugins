@@ -334,6 +334,12 @@ export interface FetchLatestBundleOptions {
  */
 export interface FetchLatestBundleResult {
   /**
+   * The artifact type of the bundle.
+   *
+   * @since 6.7.0
+   */
+  artifactType?: 'manifest' | 'zip';
+  /**
    * The unique identifier of the latest bundle.
    *
    * If `null`, no bundle is available.
