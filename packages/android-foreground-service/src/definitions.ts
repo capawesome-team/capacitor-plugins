@@ -141,6 +141,15 @@ export interface StartForegroundServiceOptions {
    */
   id: number;
   /**
+   * The foreground service type.
+   *
+   * Only available on Android (SDK 29+).
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types
+   */
+  serviceType?: ServiceType;
+  /**
    * The status bar icon for the notification.
    *
    * Icons should be placed in your app's `res/drawable` folder. The value for
@@ -316,4 +325,12 @@ export interface DeleteNotificationChannelOptions {
    * @since 6.1.0
    */
   id: string;
+}
+
+/**
+ * @since 6.2.0
+ */
+export enum ServiceType {
+  Location = 8,
+  Microphone = 128,
 }
