@@ -197,14 +197,18 @@ import CommonCrypto
     @objc public func setNextBundle(_ options: SetNextBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
-        // Check if the bundle already exists
-        if !hasBundle(bundleId: bundleId) {
-            let error = CustomError.bundleNotFound
-            completion(error)
-            return
+        if let bundleId = bundleId {
+            if hasBundle(bundleId: bundleId) {
+                setNextBundle(bundleId: bundleId)
+            } else {
+                let error = CustomError.bundleNotFound
+                completion(error)
+                return
+            }
+        } else {
+            reset()
         }
 
-        setNextBundle(bundleId: bundleId)
         completion(nil)
     }
 

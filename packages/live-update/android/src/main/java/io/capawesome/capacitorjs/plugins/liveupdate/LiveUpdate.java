@@ -269,13 +269,17 @@ public class LiveUpdate {
     public void setNextBundle(@NonNull SetNextBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
-        if (!hasBundle(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-            callback.error(exception);
-            return;
+        if (bundleId == null) {
+            reset();
+        } else {
+            if (hasBundle(bundleId)) {
+                setNextBundle(bundleId);
+            } else {
+                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
+                callback.error(exception);
+                return;
+            }
         }
-
-        setNextBundle(bundleId);
         callback.success();
     }
 

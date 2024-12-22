@@ -757,9 +757,9 @@ Only available on Android and iOS.
 
 #### SetNextBundleOptions
 
-| Prop           | Type                | Description                                 | Since |
-| -------------- | ------------------- | ------------------------------------------- | ----- |
-| **`bundleId`** | <code>string</code> | The unique identifier of the bundle to use. | 6.7.0 |
+| Prop           | Type                        | Description                                                                                                   | Since |
+| -------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the bundle to use. Set `null` to use the default bundle (same as calling `reset()`). | 6.7.0 |
 
 
 #### SyncResult

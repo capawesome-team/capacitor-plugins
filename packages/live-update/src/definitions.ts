@@ -538,10 +538,12 @@ export interface SetNextBundleOptions {
   /**
    * The unique identifier of the bundle to use.
    *
+   * Set `null` to use the default bundle (same as calling `reset()`).
+   *
    * @since 6.7.0
    * @example '1.0.0'
    */
-  bundleId: string;
+  bundleId: string | null;
 }
 
 /**

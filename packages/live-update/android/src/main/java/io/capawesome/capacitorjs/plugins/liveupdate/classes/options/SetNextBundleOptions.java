@@ -1,29 +1,20 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes.options;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.PluginCall;
-import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdatePlugin;
 
 public class SetNextBundleOptions {
 
-    @NonNull
+    @Nullable
     private final String bundleId;
 
-    public SetNextBundleOptions(@NonNull PluginCall call) throws Exception {
-        this.bundleId = getBundleId(call);
+    public SetNextBundleOptions(@NonNull PluginCall call) {
+        this.bundleId = call.getString("bundleId");
     }
 
-    @NonNull
+    @Nullable
     public String getBundleId() {
-        return bundleId;
-    }
-
-    @NonNull
-    private String getBundleId(@NonNull PluginCall call) throws Exception {
-        String bundleId = call.getString("bundleId");
-        if (bundleId == null) {
-            throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_ID_MISSING);
-        }
         return bundleId;
     }
 }

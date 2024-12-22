@@ -247,19 +247,15 @@ public class LiveUpdatePlugin: CAPPlugin {
     }
 
     @objc func setNextBundle(_ call: CAPPluginCall) {
-        do {
-            let options = try SetNextBundleOptions(call)
+        let options = SetNextBundleOptions(call)
 
-            implementation?.setNextBundle(options, completion: { error in
-                if let error = error {
-                    self.rejectCall(call, error)
-                    return
-                }
-                self.resolveCall(call)
-            })
-        } catch {
-            rejectCall(call, error)
-        }
+        implementation?.setNextBundle(options, completion: { error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            self.resolveCall(call)
+        })
     }
 
     @objc func sync(_ call: CAPPluginCall) {
