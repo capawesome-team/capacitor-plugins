@@ -128,10 +128,6 @@ export default config;
 
 </docgen-config>
 
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
 ## Starter templates
 
 The following starter templates are available:

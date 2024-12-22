@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Live Update</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js"
+    ></script>
+
+    <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Live Update 2</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item>
+            <ion-select id="artifact-type-select" label="Artifact Type">
+              <ion-select-option value="manifest">Manifest</ion-select-option>
+              <ion-select-option value="zip">Zip</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-input id="bundle-id-input" label="Bundle ID"></ion-input>
+            <ion-button id="present-select-bundle-alert-button" fill="clear" slot="end">
+              <ion-icon slot="icon-only" name="chevron-expand-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+          <ion-item>
+            <ion-input id="custom-id-input" label="Custom ID"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="channel-input" label="Channel"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="download-url-input" label="Download URL"></ion-input>
+          </ion-item>
+          <ion-button id="delete-bundle-button" expand="block">Delete Bundle</ion-button>
+          <ion-button id="download-bundle-button" expand="block">Download Bundle</ion-button>
+          <ion-button id="fetch-latest-bundle-button" expand="block">Fetch Latest Bundle</ion-button>
+          <ion-button id="get-bundles-button" expand="block">Get Bundles</ion-button>
+          <ion-button id="get-channel-button" expand="block">Get Channel</ion-button>
+          <ion-button id="get-current-bundle-button" expand="block">Get Current Bundle</ion-button>
+          <ion-button id="get-custom-id-button" expand="block">Get Custom ID</ion-button>
+          <ion-button id="get-device-id-button" expand="block">Get Device ID</ion-button>
+          <ion-button id="get-next-bundle-button" expand="block">Get Next Bundle</ion-button>
+          <ion-button id="get-version-code-button" expand="block">Get Version Code</ion-button>
+          <ion-button id="get-version-name-button" expand="block">Get Version Name</ion-button>
+          <ion-button id="ready-button" expand="block">Ready</ion-button>
+          <ion-button id="reload-button" expand="block">Reload</ion-button>
+          <ion-button id="reset-button" expand="block">Reset</ion-button>
+          <ion-button id="set-channel-button" expand="block">Set Channel</ion-button>
+          <ion-button id="set-custom-id-button" expand="block">Set Custom ID</ion-button>
+          <ion-button id="set-next-bundle-button" expand="block">Set Next Bundle</ion-button>
+          <ion-button id="sync-button" expand="block">Sync</ion-button>
+        </ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>
