@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.7.1
+
+### Patch Changes
+
+- [`fac67aa`](https://github.com/capawesome-team/capacitor-plugins/commit/fac67aa8c0d16c36716428b28853cded892453d2): fix: set correct plugin version
+
 ## 6.7.0
 
 ### Minor Changes
