@@ -167,6 +167,9 @@ export interface LiveUpdatePlugin {
   /**
    * Get the version code of the app.
    *
+   * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
+   *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
@@ -174,6 +177,9 @@ export interface LiveUpdatePlugin {
   getVersionCode(): Promise<GetVersionCodeResult>;
   /**
    * Get the version name of the app.
+   *
+   * On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
    *
    * Only available on Android and iOS.
    *
