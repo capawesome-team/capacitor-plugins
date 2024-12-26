@@ -27,7 +27,7 @@ public class ScreenshotPlugin: CAPPlugin {
                 if let error {
                     self.rejectCall(call, error)
                 }
-                
+
                 if let result = result?.toJSObject() as? JSObject {
                     self.resolveCall(call, result)
                 }
@@ -36,7 +36,7 @@ public class ScreenshotPlugin: CAPPlugin {
             rejectCall(call, error)
         }
     }
-    
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", self.tag, "] ", error)
         call.reject(error.localizedDescription)

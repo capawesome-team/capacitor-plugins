@@ -7,7 +7,7 @@ import WebKit
     public init(webView: WKWebView) {
         self.webView = webView
     }
-    
+
     @objc public func take(completion: @escaping (Result?, Error?) -> Void) {
         let snapshotConfiguration = WKSnapshotConfiguration()
         snapshotConfiguration.rect = webView.bounds
@@ -15,7 +15,7 @@ import WebKit
             if let error = error {
                 completion(nil, error)
             }
-            
+
             if let image, let imageData = image.jpegData(compressionQuality: 0.9) {
                 let result = TakeResult(b64String: imageData.base64EncodedString())
                 completion(result, nil)
