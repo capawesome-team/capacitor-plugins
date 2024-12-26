@@ -19,7 +19,10 @@ let package = Package(
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/AppShortcutsPlugin"),
+            path: "ios/Sources/AppShortcutsPlugin",
+            resources: [
+                .process("ios/Resources/PrivacyInfo.xcprivacy")
+            ]),
         .testTarget(
             name: "AppShortcutsPluginTests",
             dependencies: ["AppShortcutsPlugin"],

@@ -46,6 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 +    }
 ```
 
+### Privacy Info for iOS
+
+Starting with recent updates, the plugin now includes a **privacy manifest** (`PrivacyInfo.xcprivacy`) file for iOS, which is required for apps that use sensitive APIs. This file provides transparency about the privacy impact of the app's functionalities, such as managing app shortcuts.
+
+To learn more about the privacy manifest, refer to Apple’s official documentation on [Privacy Manifest Files](https://developer.apple.com/documentation/bundleresources/privacy-manifest-files).
+
+Additionally, the plugin ensures that this file is properly bundled with the Swift package, as described in Apple’s guidelines for [bundling resources with a Swift package](https://developer.apple.com/documentation/xcode/bundling-resources-with-a-swift-package).
+
 ## Demo
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
