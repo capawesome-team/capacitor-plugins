@@ -331,6 +331,18 @@ export interface DeleteNotificationChannelOptions {
  * @since 6.2.0
  */
 export enum ServiceType {
+  /**
+   * Long-running use cases that require location access, such as navigation and location sharing.
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types#location
+   */
   Location = 8,
+  /**
+   * Continue microphone capture from the background, such as voice recorders or communication apps.
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types#microphone
+   */
   Microphone = 128,
 }
