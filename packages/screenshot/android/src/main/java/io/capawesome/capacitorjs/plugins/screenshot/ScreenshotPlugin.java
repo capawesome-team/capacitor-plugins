@@ -43,7 +43,7 @@ public class ScreenshotPlugin extends Plugin {
                     rejectCall(call, exception);
                 }
             };
-            implementation.take(callback);
+            implementation.take(getContext(), callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
