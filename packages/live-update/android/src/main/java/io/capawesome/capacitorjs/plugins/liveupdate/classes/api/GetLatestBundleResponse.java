@@ -30,14 +30,17 @@ public class GetLatestBundleResponse {
         this.url = responseJson.optString("url");
     }
 
+    @NonNull
     public ArtifactType getArtifactType() {
         return artifactType;
     }
 
+    @NonNull
     public String getBundleId() {
         return bundleId;
     }
 
+    @NonNull
     public String getUrl() {
         return url;
     }

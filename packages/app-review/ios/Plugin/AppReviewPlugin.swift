@@ -18,7 +18,7 @@ public class AppReviewPlugin: CAPPlugin {
     @objc func openAppStore(_ call: CAPPluginCall) {
         do {
             let options = try OpenAppStoreOptions(call)
-            
+
             self.implementation?.openAppStore(options, completion: { error in
                 if let error = error {
                     self.rejectCall(call, error)
@@ -40,7 +40,7 @@ public class AppReviewPlugin: CAPPlugin {
             }
         })
     }
-    
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", AppReviewPlugin.tag, "] ", error)
         call.reject(error.localizedDescription)

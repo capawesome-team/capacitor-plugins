@@ -128,10 +128,6 @@ export default config;
 
 </docgen-config>
 
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
 ## Starter templates
 
 The following starter templates are available:
@@ -160,11 +156,6 @@ const fetchLatestBundle = async () => {
   await LiveUpdate.fetchLatestBundle();
 };
 
-const getBundle = async () => {
-  const result = await LiveUpdate.getBundle();
-  return result.bundleId;
-};
-
 const getBundles = async () => {
   const result = await LiveUpdate.getBundles();
   return result.bundleIds;
@@ -175,6 +166,11 @@ const getChannel = async () => {
   return result.channel;
 };
 
+const getCurrentBundle = async () => {
+  const result = await LiveUpdate.getCurrentBundle();
+  return result.bundleId;
+};
+
 const getCustomId = async () => {
   const result = await LiveUpdate.getCustomId();
   return result.customId;
@@ -183,6 +179,11 @@ const getCustomId = async () => {
 const getDeviceId = async () => {
   const result = await LiveUpdate.getDeviceId();
   return result.deviceId;
+};
+
+const getNextBundle = async () => {
+  const result = await LiveUpdate.getNextBundle();
+  return result.bundleId;
 };
 
 const getVersionCode = async () => {
@@ -207,16 +208,16 @@ const reset = async () => {
   await LiveUpdate.reset();
 };
 
-const setBundle = async () => {
-  await LiveUpdate.setBundle({ bundleId: '1.0.0' });
-};
-
 const setChannel = async () => {
   await LiveUpdate.setChannel({ channel: 'beta' });
 };
 
 const setCustomId = async () => {
   await LiveUpdate.setCustomId({ customId: 'my-custom-id' });
+};
+
+const setNextBundle = async () => {
+  await LiveUpdate.setNextBundle({ bundleId: '1.0.0' });
 };
 
 const sync = async () => {
@@ -241,12 +242,14 @@ const isNewBundleAvailable = async () => {
 
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
-* [`fetchLatestBundle()`](#fetchlatestbundle)
+* [`fetchLatestBundle(...)`](#fetchlatestbundle)
 * [`getBundle()`](#getbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
+* [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
 * [`getDeviceId()`](#getdeviceid)
+* [`getNextBundle()`](#getnextbundle)
 * [`getVersionCode()`](#getversioncode)
 * [`getVersionName()`](#getversionname)
 * [`ready()`](#ready)
@@ -255,7 +258,8 @@ const isNewBundleAvailable = async () => {
 * [`setBundle(...)`](#setbundle)
 * [`setChannel(...)`](#setchannel)
 * [`setCustomId(...)`](#setcustomid)
-* [`sync()`](#sync)
+* [`setNextBundle(...)`](#setnextbundle)
+* [`sync(...)`](#sync)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -301,15 +305,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### fetchLatestBundle()
+### fetchLatestBundle(...)
 
 ```typescript
-fetchLatestBundle() => Promise<FetchLatestBundleResult>
+fetchLatestBundle(options?: FetchLatestBundleOptions | undefined) => Promise<FetchLatestBundleResult>
 ```
 
 Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
 
 Only available on Android and iOS.
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#fetchlatestbundleoptions">FetchLatestBundleOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#fetchlatestbundleresult">FetchLatestBundleResult</a>&gt;</code>
 
@@ -358,7 +366,7 @@ Only available on Android and iOS.
 getChannel() => Promise<GetChannelResult>
 ```
 
-Get the channel of the app.
+Get the channel that is used for the update.
 
 Only available on Android and iOS.
 
@@ -369,13 +377,31 @@ Only available on Android and iOS.
 --------------------
 
 
+### getCurrentBundle()
+
+```typescript
+getCurrentBundle() => Promise<GetCurrentBundleResult>
+```
+
+Get the bundle identifier of the current bundle.
+The current bundle is the bundle that is currently used by the app.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getcurrentbundleresult">GetCurrentBundleResult</a>&gt;</code>
+
+**Since:** 6.7.0
+
+--------------------
+
+
 ### getCustomId()
 
 ```typescript
 getCustomId() => Promise<GetCustomIdResult>
 ```
 
-Get the custom identifier of the app.
+Get the custom identifier of the device.
 
 Only available on Android and iOS.
 
@@ -392,13 +418,32 @@ Only available on Android and iOS.
 getDeviceId() => Promise<GetDeviceIdResult>
 ```
 
-Get the device identifier of the app.
+Get the unique device identifier.
 
 Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getdeviceidresult">GetDeviceIdResult</a>&gt;</code>
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### getNextBundle()
+
+```typescript
+getNextBundle() => Promise<GetNextBundleResult>
+```
+
+Get the bundle identifier of the next bundle.
+The next bundle is the bundle that will be used after calling `reload()`
+or restarting the app.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getnextbundleresult">GetNextBundleResult</a>&gt;</code>
+
+**Since:** 6.7.0
 
 --------------------
 
@@ -410,6 +455,9 @@ getVersionCode() => Promise<GetVersionCodeResult>
 ```
 
 Get the version code of the app.
+
+On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
+On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
 
 Only available on Android and iOS.
 
@@ -427,6 +475,9 @@ getVersionName() => Promise<GetVersionNameResult>
 ```
 
 Get the version name of the app.
+
+On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
+On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
 
 Only available on Android and iOS.
 
@@ -514,7 +565,7 @@ Only available on Android and iOS.
 setChannel(options: SetChannelOptions) => Promise<void>
 ```
 
-Set the channel of the app.
+Set the channel to use for the update.
 
 Only available on Android and iOS.
 
@@ -533,7 +584,7 @@ Only available on Android and iOS.
 setCustomId(options: SetCustomIdOptions) => Promise<void>
 ```
 
-Set the custom identifier of the app.
+Set the custom identifier of the device.
 
 Only available on Android and iOS.
 
@@ -546,10 +597,31 @@ Only available on Android and iOS.
 --------------------
 
 
-### sync()
+### setNextBundle(...)
 
 ```typescript
-sync() => Promise<SyncResult>
+setNextBundle(options: SetNextBundleOptions) => Promise<void>
+```
+
+Set the next bundle to use for the app.
+
+Call `reload()` or restart the app to apply the changes.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnextbundleoptions">SetNextBundleOptions</a></code> |
+
+**Since:** 6.7.0
+
+--------------------
+
+
+### sync(...)
+
+```typescript
+sync(options?: SyncOptions | undefined) => Promise<SyncResult>
 ```
 
 Automatically download and set the latest bundle for the app using the [Capawesome Cloud](https://capawesome.io/cloud/).
@@ -557,6 +629,10 @@ Automatically download and set the latest bundle for the app using the [Capaweso
 Call `reload()` or restart the app to apply the changes.
 
 Only available on Android and iOS.
+
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#syncoptions">SyncOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#syncresult">SyncResult</a>&gt;</code>
 
@@ -587,9 +663,18 @@ Only available on Android and iOS.
 
 #### FetchLatestBundleResult
 
-| Prop           | Type                        | Description                                                                    | Since |
-| -------------- | --------------------------- | ------------------------------------------------------------------------------ | ----- |
-| **`bundleId`** | <code>string \| null</code> | The unique identifier of the latest bundle. If `null`, no bundle is available. | 6.6.0 |
+| Prop               | Type                             | Description                                                                                                         | Since |
+| ------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle.                                                                                    | 6.7.0 |
+| **`bundleId`**     | <code>string \| null</code>      | The unique identifier of the latest bundle. If `null`, no bundle is available.                                      | 6.6.0 |
+| **`downloadUrl`**  | <code>string</code>              | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle. | 6.7.0 |
+
+
+#### FetchLatestBundleOptions
+
+| Prop          | Type                | Description                                                      | Since |
+| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
 
 
 #### GetBundleResult
@@ -608,16 +693,23 @@ Only available on Android and iOS.
 
 #### GetChannelResult
 
-| Prop          | Type                        | Description                                                              | Since |
-| ------------- | --------------------------- | ------------------------------------------------------------------------ | ----- |
-| **`channel`** | <code>string \| null</code> | The channel of the app. If `null`, the app is using the default channel. | 5.0.0 |
+| Prop          | Type                        | Description                                                        | Since |
+| ------------- | --------------------------- | ------------------------------------------------------------------ | ----- |
+| **`channel`** | <code>string \| null</code> | The channel name. If `null`, the app is using the default channel. | 5.0.0 |
+
+
+#### GetCurrentBundleResult
+
+| Prop           | Type                        | Description                                                                               | Since |
+| -------------- | --------------------------- | ----------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the current bundle. If `null`, the default bundle is being used. | 6.7.0 |
 
 
 #### GetCustomIdResult
 
-| Prop           | Type                        | Description                                                               | Since |
-| -------------- | --------------------------- | ------------------------------------------------------------------------- | ----- |
-| **`customId`** | <code>string \| null</code> | The custom identifier of the app. If `null`, no custom identifier is set. | 5.0.0 |
+| Prop           | Type                        | Description                                                                  | Since |
+| -------------- | --------------------------- | ---------------------------------------------------------------------------- | ----- |
+| **`customId`** | <code>string \| null</code> | The custom identifier of the device. If `null`, no custom identifier is set. | 5.0.0 |
 
 
 #### GetDeviceIdResult
@@ -625,6 +717,13 @@ Only available on Android and iOS.
 | Prop           | Type                | Description                                                                                                                                                                                                                                                                    | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. | 5.0.0 |
+
+
+#### GetNextBundleResult
+
+| Prop           | Type                        | Description                                                                            | Since |
+| -------------- | --------------------------- | -------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the next bundle. If `null`, the default bundle is being used. | 6.7.0 |
 
 
 #### GetVersionCodeResult
@@ -650,16 +749,23 @@ Only available on Android and iOS.
 
 #### SetChannelOptions
 
-| Prop          | Type                        | Description                                               | Since |
-| ------------- | --------------------------- | --------------------------------------------------------- | ----- |
-| **`channel`** | <code>string \| null</code> | The channel of the app. Set `null` to remove the channel. | 5.0.0 |
+| Prop          | Type                        | Description                                         | Since |
+| ------------- | --------------------------- | --------------------------------------------------- | ----- |
+| **`channel`** | <code>string \| null</code> | The channel name. Set `null` to remove the channel. | 5.0.0 |
 
 
 #### SetCustomIdOptions
 
-| Prop           | Type                        | Description                                                                   | Since |
-| -------------- | --------------------------- | ----------------------------------------------------------------------------- | ----- |
-| **`customId`** | <code>string \| null</code> | The custom identifier of the app. Set `null` to remove the custom identifier. | 5.0.0 |
+| Prop           | Type                        | Description                                                                      | Since |
+| -------------- | --------------------------- | -------------------------------------------------------------------------------- | ----- |
+| **`customId`** | <code>string \| null</code> | The custom identifier of the device. Set `null` to remove the custom identifier. | 5.0.0 |
+
+
+#### SetNextBundleOptions
+
+| Prop           | Type                        | Description                                                                                                   | Since |
+| -------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bundleId`** | <code>string \| null</code> | The unique identifier of the bundle to use. Set `null` to use the default bundle (same as calling `reset()`). | 6.7.0 |
 
 
 #### SyncResult
@@ -667,6 +773,13 @@ Only available on Android and iOS.
 | Prop               | Type                        | Description                                                                                                | Since |
 | ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
 | **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+
+
+#### SyncOptions
+
+| Prop          | Type                | Description                                                      | Since |
+| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
+| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
 
 </docgen-api>
 

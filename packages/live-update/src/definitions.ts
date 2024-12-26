@@ -49,7 +49,7 @@ declare module '@capacitor/cli' {
        * @since 6.2.0
        * @default 'us'
        * @example 'eu'
-       * @see https://capawesome.io/cloud/live-updates/advanced/privacy/
+       * @deprecated This option will be removed in the future.
        */
       location?: 'us' | 'eu';
       /**
@@ -103,13 +103,14 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.6.0
    */
-  fetchLatestBundle(): Promise<FetchLatestBundleResult>;
+  fetchLatestBundle(options?: FetchLatestBundleOptions): Promise<FetchLatestBundleResult>;
   /**
    * Get the active bundle identifier.
    *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getCurrentBundle()` instead.
    */
   getBundle(): Promise<GetBundleResult>;
   /**
@@ -121,7 +122,7 @@ export interface LiveUpdatePlugin {
    */
   getBundles(): Promise<GetBundlesResult>;
   /**
-   * Get the channel of the app.
+   * Get the channel that is used for the update.
    *
    * Only available on Android and iOS.
    *
@@ -129,7 +130,16 @@ export interface LiveUpdatePlugin {
    */
   getChannel(): Promise<GetChannelResult>;
   /**
-   * Get the custom identifier of the app.
+   * Get the bundle identifier of the current bundle.
+   * The current bundle is the bundle that is currently used by the app.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  getCurrentBundle(): Promise<GetCurrentBundleResult>;
+  /**
+   * Get the custom identifier of the device.
    *
    * Only available on Android and iOS.
    *
@@ -137,7 +147,7 @@ export interface LiveUpdatePlugin {
    */
   getCustomId(): Promise<GetCustomIdResult>;
   /**
-   * Get the device identifier of the app.
+   * Get the unique device identifier.
    *
    * Only available on Android and iOS.
    *
@@ -145,7 +155,20 @@ export interface LiveUpdatePlugin {
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
   /**
+   * Get the bundle identifier of the next bundle.
+   * The next bundle is the bundle that will be used after calling `reload()`
+   * or restarting the app.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  getNextBundle(): Promise<GetNextBundleResult>;
+  /**
    * Get the version code of the app.
+   *
+   * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
    *
    * Only available on Android and iOS.
    *
@@ -154,6 +177,9 @@ export interface LiveUpdatePlugin {
   getVersionCode(): Promise<GetVersionCodeResult>;
   /**
    * Get the version name of the app.
+   *
+   * On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
+   * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
    *
    * Only available on Android and iOS.
    *
@@ -197,10 +223,11 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `setNextBundle()` instead.
    */
   setBundle(options: SetBundleOptions): Promise<void>;
   /**
-   * Set the channel of the app.
+   * Set the channel to use for the update.
    *
    * Only available on Android and iOS.
    *
@@ -208,13 +235,23 @@ export interface LiveUpdatePlugin {
    */
   setChannel(options: SetChannelOptions): Promise<void>;
   /**
-   * Set the custom identifier of the app.
+   * Set the custom identifier of the device.
    *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
    */
   setCustomId(options: SetCustomIdOptions): Promise<void>;
+  /**
+   * Set the next bundle to use for the app.
+   *
+   * Call `reload()` or restart the app to apply the changes.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.7.0
+   */
+  setNextBundle(options: SetNextBundleOptions): Promise<void>;
   /**
    * Automatically download and set the latest bundle for the app using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
@@ -224,7 +261,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 5.0.0
    */
-  sync(): Promise<SyncResult>;
+  sync(options?: SyncOptions): Promise<SyncResult>;
 }
 
 /**
@@ -287,9 +324,27 @@ export interface DownloadBundleOptions {
 }
 
 /**
+ * @since 6.7.0
+ */
+export interface FetchLatestBundleOptions {
+  /**
+   * The name of the channel where the latest bundle is fetched from.
+   *
+   * @since 6.7.0
+   */
+  channel?: string;
+}
+
+/**
  * @since 6.6.0
  */
 export interface FetchLatestBundleResult {
+  /**
+   * The artifact type of the bundle.
+   *
+   * @since 6.7.0
+   */
+  artifactType?: 'manifest' | 'zip';
   /**
    * The unique identifier of the latest bundle.
    *
@@ -298,6 +353,13 @@ export interface FetchLatestBundleResult {
    * @since 6.6.0
    */
   bundleId: string | null;
+  /**
+   * The URL of the latest bundle to download.
+   * Pass this URL to the `downloadBundle(...)` method to download the bundle.
+   *
+   * @since 6.7.0
+   */
+  downloadUrl?: string;
 }
 
 /**
@@ -332,7 +394,7 @@ export interface GetBundlesResult {
  */
 export interface GetChannelResult {
   /**
-   * The channel of the app.
+   * The channel name.
    *
    * If `null`, the app is using the default channel.
    *
@@ -340,6 +402,20 @@ export interface GetChannelResult {
    * @example 'production'
    */
   channel: string | null;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface GetCurrentBundleResult {
+  /**
+   * The unique identifier of the current bundle.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 6.7.0
+   */
+  bundleId: string | null;
 }
 
 /**
@@ -357,6 +433,20 @@ export interface GetDeviceIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   deviceId: string;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface GetNextBundleResult {
+  /**
+   * The unique identifier of the next bundle.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 6.7.0
+   */
+  bundleId: string | null;
 }
 
 /**
@@ -396,7 +486,7 @@ export interface GetVersionNameResult {
  */
 export interface GetCustomIdResult {
   /**
-   * The custom identifier of the app.
+   * The custom identifier of the device.
    *
    * If `null`, no custom identifier is set.
    *
@@ -424,7 +514,7 @@ export interface SetBundleOptions {
  */
 export interface SetChannelOptions {
   /**
-   * The channel of the app.
+   * The channel name.
    *
    * Set `null` to remove the channel.
    *
@@ -438,13 +528,40 @@ export interface SetChannelOptions {
  */
 export interface SetCustomIdOptions {
   /**
-   * The custom identifier of the app.
+   * The custom identifier of the device.
    *
    * Set `null` to remove the custom identifier.
    *
    * @since 5.0.0
    */
   customId: string | null;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface SetNextBundleOptions {
+  /**
+   * The unique identifier of the bundle to use.
+   *
+   * Set `null` to use the default bundle (same as calling `reset()`).
+   *
+   * @since 6.7.0
+   * @example '1.0.0'
+   */
+  bundleId: string | null;
+}
+
+/**
+ * @since 6.7.0
+ */
+export interface SyncOptions {
+  /**
+   * The name of the channel where the latest bundle is fetched from.
+   *
+   * @since 6.7.0
+   */
+  channel?: string;
 }
 
 /**

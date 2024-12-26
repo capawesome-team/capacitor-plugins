@@ -17,15 +17,20 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
@@ -142,9 +147,12 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void fetchLatestBundle(@NonNull NonEmptyCallback callback) throws Exception {
-        GetLatestBundleResponse response = fetchLatestBundle();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(response == null ? null : response.getBundleId());
+    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) throws Exception {
+        GetLatestBundleResponse response = fetchLatestBundle(options);
+        ArtifactType artifactType = response == null ? null : response.getArtifactType();
+        String bundleId = response == null ? null : response.getBundleId();
+        String downloadUrl = response == null ? null : response.getUrl();
+        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, downloadUrl);
         callback.success(result);
     }
 
@@ -169,6 +177,15 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
+        String bundleId = getCurrentBundleId();
+        if (bundleId.equals(defaultWebAssetDir)) {
+            bundleId = null;
+        }
+        GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
+        callback.success(result);
+    }
+
     public void getCustomId(@NonNull NonEmptyCallback callback) {
         String customId = preferences.getCustomId();
         GetCustomIdResult result = new GetCustomIdResult(customId);
@@ -178,6 +195,15 @@ public class LiveUpdate {
     public void getDeviceId(@NonNull NonEmptyCallback callback) {
         String deviceId = getDeviceId();
         GetDeviceIdResult result = new GetDeviceIdResult(deviceId);
+        callback.success(result);
+    }
+
+    public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
+        String bundleId = getNextBundleId();
+        if (bundleId.equals(defaultWebAssetDir)) {
+            bundleId = null;
+        }
+        GetNextBundleResult result = new GetNextBundleResult(bundleId);
         callback.success(result);
     }
 
@@ -240,9 +266,28 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void sync(@NonNull NonEmptyCallback<Result> callback) throws Exception {
+    public void setNextBundle(@NonNull SetNextBundleOptions options, @NonNull EmptyCallback callback) {
+        String bundleId = options.getBundleId();
+
+        if (bundleId == null) {
+            reset();
+        } else {
+            if (hasBundle(bundleId)) {
+                setNextBundle(bundleId);
+            } else {
+                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
+                callback.error(exception);
+                return;
+            }
+        }
+        callback.success();
+    }
+
+    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) throws Exception {
+        String channel = options.getChannel();
         // Fetch the latest bundle
-        GetLatestBundleResponse response = fetchLatestBundle();
+        FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
+        GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
         if (response == null) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
             SyncResult syncResult = new SyncResult(null);
@@ -546,7 +591,8 @@ public class LiveUpdate {
     }
 
     @Nullable
-    private GetLatestBundleResponse fetchLatestBundle() throws Exception {
+    private GetLatestBundleResponse fetchLatestBundle(@NonNull FetchLatestBundleOptions options) throws Exception {
+        String channel = options.getChannel() == null ? getChannel() : options.getChannel();
         String url = new HttpUrl.Builder()
             .scheme("https")
             .host(host)
@@ -558,7 +604,7 @@ public class LiveUpdate {
             .addQueryParameter("appVersionCode", getVersionCode())
             .addQueryParameter("appVersionName", getVersionName())
             .addQueryParameter("bundleId", getCurrentBundleId())
-            .addQueryParameter("channelName", getChannel())
+            .addQueryParameter("channelName", channel)
             .addQueryParameter("customId", preferences.getCustomId())
             .addQueryParameter("deviceId", getDeviceId())
             .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))

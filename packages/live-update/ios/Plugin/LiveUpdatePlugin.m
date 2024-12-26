@@ -10,8 +10,10 @@ CAP_PLUGIN(LiveUpdatePlugin, "LiveUpdate",
            CAP_PLUGIN_METHOD(getBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getBundles, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getChannel, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(getDeviceId, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getCurrentBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getCustomId, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getDeviceId, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(getNextBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getVersionCode, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getVersionName, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(ready, CAPPluginReturnPromise);
@@ -20,5 +22,6 @@ CAP_PLUGIN(LiveUpdatePlugin, "LiveUpdate",
            CAP_PLUGIN_METHOD(setBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setChannel, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(setCustomId, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(setNextBundle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(sync, CAPPluginReturnPromise);
 )

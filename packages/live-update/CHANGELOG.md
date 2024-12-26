@@ -1,5 +1,29 @@
 # Changelog
 
+## 6.7.1
+
+### Patch Changes
+
+- [`fac67aa`](https://github.com/capawesome-team/capacitor-plugins/commit/fac67aa8c0d16c36716428b28853cded892453d2): fix: set correct plugin version
+
+## 6.7.0
+
+### Minor Changes
+
+- [`a23b782`](https://github.com/capawesome-team/capacitor-plugins/commit/a23b782d5163fb205bb53f8ebad91c792dfa15ce) ([#368](https://github.com/capawesome-team/capacitor-plugins/pull/368)): feat: add `artifactType` property to `FetchLatestBundleResult`
+
+* [`233889d`](https://github.com/capawesome-team/capacitor-plugins/commit/233889da605192870a0110ce60a402445e5dbc54) ([#364](https://github.com/capawesome-team/capacitor-plugins/pull/364)): feat: add `getCurrentBundle()` and `getNextBundle()` methods
+
+- [`cdc1fdb`](https://github.com/capawesome-team/capacitor-plugins/commit/cdc1fdb00b10c2d3ff263d9de7922e0d387dc9df) ([#361](https://github.com/capawesome-team/capacitor-plugins/pull/361)): feat: add `channel` option to `sync()` and `fetchLatestBundle()` methods
+
+* [`f7b45ac`](https://github.com/capawesome-team/capacitor-plugins/commit/f7b45ac8a8449acd9d3fac9c8853137317708144) ([#363](https://github.com/capawesome-team/capacitor-plugins/pull/363)): feat: add `downloadUrl` property to `FetchLatestBundleResult`
+
+- [`685e0c6`](https://github.com/capawesome-team/capacitor-plugins/commit/685e0c61ae064ab5953c30e6f7281d28865e1884) ([#367](https://github.com/capawesome-team/capacitor-plugins/pull/367)): feat: add `setNextBundle()` method
+
+### Patch Changes
+
+- [`e58efa3`](https://github.com/capawesome-team/capacitor-plugins/commit/e58efa3be0e3fa6fec787208c4c18cdf2cd989ad): fix(ios): some plugin calls were resolved too early
+
 ## 6.6.0
 
 ### Minor Changes
