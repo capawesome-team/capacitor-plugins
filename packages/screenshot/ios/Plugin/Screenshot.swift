@@ -16,9 +16,20 @@ import WebKit
                 completion(nil, error)
             }
 
-            if let image, let imageData = image.jpegData(compressionQuality: 0.9) {
-                let result = TakeResult(b64String: imageData.base64EncodedString())
-                completion(result, nil)
+            if let image, let imageData = image.jpegData(compressionQuality: 1.0) {
+                let filename = UUID().uuidString + ".jpg"
+                guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+                    completion(nil, CustomError.imageMissing)
+                    return
+                }
+                let fileURL = cacheDirectory.appendingPathComponent(filename)
+                do {
+                    try imageData.write(to: fileURL)
+                    let result = TakeResult(uri: fileURL.absoluteString)
+                    completion(result, nil)
+                } catch let error {
+                    completion(nil, error)
+                }
             } else {
                 completion(nil, CustomError.imageMissing)
             }
