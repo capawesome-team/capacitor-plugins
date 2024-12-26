@@ -4,8 +4,21 @@ Capacitor plugin to manage app shortcuts and quick actions.
 
 ## Installation
 
+To use npm
+
 ```bash
 npm install @capawesome/capacitor-app-shortcuts
+```
+
+To use yarn
+
+```bash
+yarn add @capawesome/capacitor-app-shortcuts
+```
+
+Sync native files
+
+```bash
 npx cap sync
 ```
 
@@ -101,9 +114,11 @@ const addListener = async () => {
 clear() => Promise<void>
 ```
 
-Remove all app shortcuts.
+Removes all existing app shortcuts from the device.
 
-Only available on Android and iOS.
+This method ensures no app shortcuts remain on the user's home screen.
+
+Available only on Android and iOS platforms.
 
 **Since:** 6.0.0
 
@@ -116,9 +131,11 @@ Only available on Android and iOS.
 get() => Promise<GetResult>
 ```
 
-Get all app shortcuts.
+Retrieves the list of all app shortcuts currently set on the device.
 
-Only available on Android and iOS.
+This method returns a structured result containing the shortcuts information.
+
+Available only on Android and iOS platforms.
 
 **Returns:** <code>Promise&lt;<a href="#getresult">GetResult</a>&gt;</code>
 
@@ -133,9 +150,11 @@ Only available on Android and iOS.
 set(options: SetOptions) => Promise<void>
 ```
 
-Create or update app shortcuts.
+Creates new app shortcuts or updates existing ones based on the provided options.
 
-Only available on Android and iOS.
+Use this method to define or modify the app shortcuts displayed on the user's device.
+
+Available only on Android and iOS platforms.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
@@ -152,9 +171,11 @@ Only available on Android and iOS.
 addListener(eventName: 'click', listenerFunc: (event: ClickEvent) => void) => Promise<PluginListenerHandle>
 ```
 
-Called when an app shortcut is clicked.
+Registers a listener that triggers when an app shortcut is clicked by the user.
 
-Only available on Android and iOS.
+The listener receives an event object containing information about the clicked shortcut.
+
+Available only on Android and iOS platforms.
 
 | Param              | Type                                                                  |
 | ------------------ | --------------------------------------------------------------------- |
@@ -174,7 +195,9 @@ Only available on Android and iOS.
 removeAllListeners() => Promise<void>
 ```
 
-Remove all listeners for this plugin.
+Removes all event listeners associated with this plugin.
+
+Use this to clean up resources or stop listening for app shortcut events.
 
 **Since:** 6.0.0
 
@@ -186,25 +209,33 @@ Remove all listeners for this plugin.
 
 #### GetResult
 
-| Prop            | Type                    | Description                | Since |
-| --------------- | ----------------------- | -------------------------- | ----- |
-| **`shortcuts`** | <code>Shortcut[]</code> | The list of app shortcuts. | 6.0.0 |
+Represents the result returned by the `get` method, containing the current app shortcuts.
+
+| Prop            | Type                    | Description                                                                                                                                            | Since |
+| --------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | An array of app shortcuts currently configured for the application. Each shortcut provides metadata such as title, ID, and description (if available). | 6.0.0 |
 
 
 #### Shortcut
 
-| Prop              | Type                | Description                                 | Since |
-| ----------------- | ------------------- | ------------------------------------------- | ----- |
-| **`description`** | <code>string</code> | The description. Only available on Android. | 6.0.0 |
-| **`id`**          | <code>string</code> | The unique identifier.                      | 6.0.0 |
-| **`title`**       | <code>string</code> | The display name.                           | 6.0.0 |
+Represents the metadata for an individual app shortcut.
+
+App shortcuts are quick actions that can be accessed directly from the app's icon.
+
+| Prop              | Type                | Description                                                                                                                                            | Since |
+| ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`description`** | <code>string</code> | A brief description of the shortcut's functionality. Available only on Android platforms.                                                              | 6.0.0 |
+| **`id`**          | <code>string</code> | A unique identifier for the shortcut. This `id` is used to differentiate between shortcuts and is required for actions like updates or event handling. | 6.0.0 |
+| **`title`**       | <code>string</code> | The display name of the shortcut. This `title` is shown to the user as the shortcut's label on the home screen or app menu.                            | 6.0.0 |
 
 
 #### SetOptions
 
-| Prop            | Type                    | Description               | Since |
-| --------------- | ----------------------- | ------------------------- | ----- |
-| **`shortcuts`** | <code>Shortcut[]</code> | Th list of app shortcuts. | 6.0.0 |
+Represents the options required to create or update app shortcuts using the `set` method.
+
+| Prop            | Type                    | Description                                                                                                                  | Since |
+| --------------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | An array of shortcuts to be created or updated. Each shortcut must include a unique identifier (`id`) and a title (`title`). | 6.0.0 |
 
 
 #### PluginListenerHandle
@@ -216,9 +247,13 @@ Remove all listeners for this plugin.
 
 #### ClickEvent
 
-| Prop             | Type                | Description                                                 | Since |
-| ---------------- | ------------------- | ----------------------------------------------------------- | ----- |
-| **`shortcutId`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
+Represents the event triggered when an app shortcut is clicked by the user.
+
+The event provides the `shortcutId` of the clicked shortcut.
+
+| Prop             | Type                | Description                                                                                                                                                                  | Since |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`shortcutId`** | <code>string</code> | The unique identifier (`id`) of the app shortcut that was clicked. This `shortcutId` can be used to determine which action to perform in response to the user's interaction. | 6.0.0 |
 
 </docgen-api>
 
