@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`b5088c7`](https://github.com/capawesome-team/capacitor-plugins/commit/b5088c73cef1e2be5d915d1ed7a0649865a3d3ca) ([#358](https://github.com/capawesome-team/capacitor-plugins/pull/358)): feat(android): support more Foreground service types
+
 ## 6.1.0
 
 ### Minor Changes
