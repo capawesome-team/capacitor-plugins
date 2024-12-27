@@ -12,17 +12,15 @@ public class ScreenshotPlugin: CAPPlugin {
 
     override public func load() {
         super.load()
-
-        if let webView = self.bridge?.webView {
-            self.implementation = Screenshot(webView: webView)
-        }
+        self.implementation = Screenshot(plugin: self)
     }
 
     @objc func take(_ call: CAPPluginCall) {
         do {
             guard let implementation = self.implementation else {
-                throw CustomError.webviewUnAvailable
+                throw CustomError.implementationUnavailable
             }
+
             implementation.take(completion: { result, error in
                 if let error {
                     self.rejectCall(call, error)

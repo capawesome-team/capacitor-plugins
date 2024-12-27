@@ -12,16 +12,17 @@ import java.io.FileOutputStream;
 
 public class Screenshot {
 
-    private final WebView webView;
+    private final ScreenshotPlugin plugin;
 
-    public Screenshot(WebView webView) {
-        this.webView = webView;
+    public Screenshot(@NonNull ScreenshotPlugin plugin) {
+        this.plugin = plugin;
     }
 
-    public void take(Context context, @NonNull NonEmptyCallback<Result> callback) {
+    public void take(@NonNull NonEmptyCallback<Result> callback) {
+        WebView webView = this.plugin.getBridge().getWebView();
         Bitmap bitmap = Bitmap.createBitmap(webView.getWidth(), webView.getHeight(), Bitmap.Config.ARGB_8888);
         webView.draw(new android.graphics.Canvas(bitmap));
-        File screenshot = ScreenshotHelper.createFileOnCache(context);
+        File screenshot = ScreenshotHelper.createFileOnCache(this.plugin.getContext());
         try (FileOutputStream outputStream = new FileOutputStream(screenshot)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();

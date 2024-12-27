@@ -2,13 +2,18 @@ import Foundation
 import WebKit
 
 @objc public class Screenshot: NSObject {
-    private let webView: WKWebView
+    private let plugin: ScreenshotPlugin
 
-    public init(webView: WKWebView) {
-        self.webView = webView
+    public init(plugin: ScreenshotPlugin) {
+        self.plugin = plugin
     }
 
     @objc public func take(completion: @escaping (Result?, Error?) -> Void) {
+        guard let webView = plugin.bridge?.webView else {
+            completion(nil, CustomError.webviewUnavailable)
+            return
+        }
+
         let snapshotConfiguration = WKSnapshotConfiguration()
         snapshotConfiguration.rect = webView.bounds
         webView.takeSnapshot(with: snapshotConfiguration) { image, error in

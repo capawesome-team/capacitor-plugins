@@ -2,7 +2,6 @@ package io.capawesome.capacitorjs.plugins.screenshot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.Bridge;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -23,10 +22,7 @@ public class ScreenshotPlugin extends Plugin {
     @Override
     public void load() {
         super.load();
-        Bridge bridge = getBridge();
-        if (bridge != null && bridge.getWebView() != null) {
-            this.implementation = new Screenshot(bridge.getWebView());
-        }
+        this.implementation = new Screenshot(this);
     }
 
     @PluginMethod
@@ -43,7 +39,7 @@ public class ScreenshotPlugin extends Plugin {
                     rejectCall(call, exception);
                 }
             };
-            implementation.take(getContext(), callback);
+            implementation.take(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
