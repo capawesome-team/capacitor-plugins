@@ -61,7 +61,7 @@ export interface GetResult {
  */
 export interface SetOptions {
   /**
-   * Th list of app shortcuts.
+   * The list of app shortcuts.
    *
    * @since 6.0.0
    */
@@ -74,8 +74,6 @@ export interface SetOptions {
 export interface Shortcut {
   /**
    * The description.
-   *
-   * Only available on Android.
    *
    * @since 6.0.0
    */
@@ -92,6 +90,21 @@ export interface Shortcut {
    * @since 6.0.0
    */
   title: string;
+  /**
+   * The icon to display.
+   * On Android use the constant value of the icons.
+   * Available Android icons: https://developer.android.com/reference/android/R.drawable
+   *
+   * On iOS, the icon and description can only be used together and the icon is the raw representation of the
+   * UIApplicationShortcutIcon.IconType enum.
+   *
+   *
+   * @since 6.1.0
+   * @example
+   * Android: 17301547 (R.drawable.ic_input_add)
+   * iOS: 6 (.share)
+   */
+  icon?: number;
 }
 
 /**

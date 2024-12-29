@@ -9,12 +9,12 @@ import org.json.JSONObject;
 public class AppShortcutsHelper {
 
     @NonNull
-    public static HashMap<String, String> createHashMapFromJSONObject(@NonNull JSONObject object) throws JSONException {
-        HashMap<String, String> map = new HashMap<>();
+    public static HashMap<String, Object> createHashMapFromJSONObject(@NonNull JSONObject object) throws JSONException {
+        HashMap<String, Object> map = new HashMap<>();
         Iterator<String> keys = object.keys();
         while (keys.hasNext()) {
             String key = keys.next();
-            map.put(key, (String) object.get(key));
+            map.put(key, object.get(key));
         }
         return map;
     }

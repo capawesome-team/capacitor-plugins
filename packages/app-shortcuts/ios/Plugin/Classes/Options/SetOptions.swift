@@ -23,7 +23,18 @@ import Capacitor
             guard let title = shortcut["title"] as? String, !title.isEmpty else {
                 throw CustomError.titleMissing
             }
-            return UIApplicationShortcutItem(type: type, localizedTitle: title)
+            let description = shortcut["description"] as? String
+            let icon = shortcut["icon"] as? Int
+
+            if description != nil && icon != nil {
+                if let iconType = UIApplicationShortcutIcon.IconType(rawValue: icon!) {
+                    return UIApplicationShortcutItem(type: type, localizedTitle: title, localizedSubtitle: description, icon: UIApplicationShortcutIcon(type: iconType))
+                } else {
+                    return UIApplicationShortcutItem(type: type, localizedTitle: title)
+                }
+            } else {
+                return UIApplicationShortcutItem(type: type, localizedTitle: title)
+            }
         }
     }
 }
