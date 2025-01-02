@@ -2,11 +2,30 @@
 
 Capacitor plugin for taking screenshots.
 
-## Install
+## Installation
+
+Install the plugin:
 
 ```bash
 npm install @capawesome/capacitor-screenshot
 npx cap sync
+```
+
+If you are using the Web platform, you must also install the `html2canvas` package:
+
+```bash
+npm i html2canvas
+```
+
+## Usage
+
+```ts
+import { Screenshot } from '@capawesome/capacitor-screenshot';
+
+const take = async () => {
+  const { uri } = await Screenshot.take();
+  console.log('Screenshot saved at:', uri);
+};
 ```
 
 ## API
@@ -46,3 +65,11 @@ Take a screenshot.
 | **`uri`** | <code>string</code> | The file path (Android and iOS) or data URI (Web) of the screenshot. Only available on Android, iOS and Web. | 6.0.0 |
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/screenshot/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/screenshot/LICENSE).
