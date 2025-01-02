@@ -75,6 +75,10 @@ export interface Shortcut {
   /**
    * The description.
    *
+   * On **Android**, the launcher shows this instead of the short title when it has enough space.
+   *
+   * **Attention**: On **iOS**, the icon and the description must be used together.
+   *
    * @since 6.0.0
    */
   description?: string;
@@ -92,17 +96,18 @@ export interface Shortcut {
   title: string;
   /**
    * The icon to display.
-   * On Android use the constant value of the icons.
-   * Available Android icons: https://developer.android.com/reference/android/R.drawable
    *
-   * On iOS, the icon and description can only be used together and the icon is the raw representation of the
-   * UIApplicationShortcutIcon.IconType enum.
+   * On **Android**, the icon is the constant value of the `R.drawable` enum.
    *
+   * On **iOS**, the icon is the constant value of the `UIApplicationShortcutIcon.IconType` enum.
+   *
+   * **Attention**: On **iOS**, the icon and the description must be used together.
    *
    * @since 6.1.0
-   * @example
-   * Android: 17301547 (R.drawable.ic_input_add)
-   * iOS: 6 (.share)
+   * @example 17301547
+   * @example 6
+   * @see https://developer.android.com/reference/android/R.drawable
+   * @see https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype
    */
   icon?: number;
 }
