@@ -60,9 +60,9 @@ Take a screenshot.
 
 #### TakeResult
 
-| Prop      | Type                | Description                                                                                                  | Since |
-| --------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
-| **`uri`** | <code>string</code> | The file path (Android and iOS) or data URI (Web) of the screenshot. Only available on Android, iOS and Web. | 6.0.0 |
+| Prop      | Type                | Description                                                          | Since |
+| --------- | ------------------- | -------------------------------------------------------------------- | ----- |
+| **`uri`** | <code>string</code> | The file path (Android and iOS) or data URI (Web) of the screenshot. | 6.0.0 |
 
 </docgen-api>
 
