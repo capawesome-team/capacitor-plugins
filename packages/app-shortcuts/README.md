@@ -193,18 +193,19 @@ Remove all listeners for this plugin.
 
 #### Shortcut
 
-| Prop              | Type                | Description                                 | Since |
-| ----------------- | ------------------- | ------------------------------------------- | ----- |
-| **`description`** | <code>string</code> | The description. Only available on Android. | 6.0.0 |
-| **`id`**          | <code>string</code> | The unique identifier.                      | 6.0.0 |
-| **`title`**       | <code>string</code> | The display name.                           | 6.0.0 |
+| Prop              | Type                | Description                                                                                                                                                                                                                                                               | Since |
+| ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`description`** | <code>string</code> | The description. On **Android**, the launcher shows this instead of the short title when it has enough space. **Attention**: On **iOS**, the icon and the description must be used together.                                                                              | 6.0.0 |
+| **`id`**          | <code>string</code> | The unique identifier.                                                                                                                                                                                                                                                    | 6.0.0 |
+| **`title`**       | <code>string</code> | The display name.                                                                                                                                                                                                                                                         | 6.0.0 |
+| **`icon`**        | <code>number</code> | The icon to display. On **Android**, the icon is the constant value of the `R.drawable` enum. On **iOS**, the icon is the constant value of the `UIApplicationShortcutIcon.IconType` enum. **Attention**: On **iOS**, the icon and the description must be used together. | 6.1.0 |
 
 
 #### SetOptions
 
-| Prop            | Type                    | Description               | Since |
-| --------------- | ----------------------- | ------------------------- | ----- |
-| **`shortcuts`** | <code>Shortcut[]</code> | Th list of app shortcuts. | 6.0.0 |
+| Prop            | Type                    | Description                | Since |
+| --------------- | ----------------------- | -------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | The list of app shortcuts. | 6.0.0 |
 
 
 #### PluginListenerHandle

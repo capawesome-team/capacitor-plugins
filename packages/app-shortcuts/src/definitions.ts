@@ -61,7 +61,7 @@ export interface GetResult {
  */
 export interface SetOptions {
   /**
-   * Th list of app shortcuts.
+   * The list of app shortcuts.
    *
    * @since 6.0.0
    */
@@ -75,7 +75,9 @@ export interface Shortcut {
   /**
    * The description.
    *
-   * Only available on Android.
+   * On **Android**, the launcher shows this instead of the short title when it has enough space.
+   *
+   * **Attention**: On **iOS**, the icon and the description must be used together.
    *
    * @since 6.0.0
    */
@@ -92,6 +94,22 @@ export interface Shortcut {
    * @since 6.0.0
    */
   title: string;
+  /**
+   * The icon to display.
+   *
+   * On **Android**, the icon is the constant value of the `R.drawable` enum.
+   *
+   * On **iOS**, the icon is the constant value of the `UIApplicationShortcutIcon.IconType` enum.
+   *
+   * **Attention**: On **iOS**, the icon and the description must be used together.
+   *
+   * @since 6.1.0
+   * @example 17301547
+   * @example 6
+   * @see https://developer.android.com/reference/android/R.drawable
+   * @see https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype
+   */
+  icon?: number;
 }
 
 /**

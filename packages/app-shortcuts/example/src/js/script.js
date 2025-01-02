@@ -1,4 +1,5 @@
 import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+import { Capacitor } from '@capacitor/core';
 
 document.addEventListener('DOMContentLoaded', () => {
   const initialize = async () => {
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             description: 'Let us know how we can improve',
             id: 'feedback',
             title: 'Feedback',
+            icon: Capacitor.getPlatform() === 'ios' ? 6 : 17301547,
           },
         ],
       });

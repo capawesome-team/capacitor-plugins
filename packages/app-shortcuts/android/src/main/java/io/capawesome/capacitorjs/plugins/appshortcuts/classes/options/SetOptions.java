@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.graphics.drawable.IconCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
@@ -35,26 +36,31 @@ public class SetOptions {
         ArrayList<ShortcutInfoCompat> shortcutInfoCompatList = new ArrayList<>();
         List<JSONObject> shortcutsList = shortcuts.toList();
         for (JSONObject shortcut : shortcutsList) {
-            HashMap<String, String> shortcutMap = AppShortcutsHelper.createHashMapFromJSONObject(shortcut);
-            String id = shortcutMap.get("id");
+            HashMap<String, Object> shortcutMap = AppShortcutsHelper.createHashMapFromJSONObject(shortcut);
+            Object id = shortcutMap.get("id");
             if (id == null) {
                 throw new Exception(AppShortcutsPlugin.ERROR_ID_MISSING);
             }
-            String title = shortcutMap.get("title");
+            Object title = shortcutMap.get("title");
             if (title == null) {
                 throw new Exception(AppShortcutsPlugin.ERROR_TITLE_MISSING);
             }
-            String description = shortcutMap.get("description");
+            String description = (String) shortcutMap.get("description");
+            Object icon = shortcutMap.get("icon");
 
-            ShortcutInfoCompat.Builder shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, id);
-            shortcutInfoCompat.setShortLabel(title);
+            ShortcutInfoCompat.Builder shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, (String) id);
+            shortcutInfoCompat.setShortLabel((String) title);
             if (description != null) {
                 shortcutInfoCompat.setLongLabel(description);
             }
             shortcutInfoCompat.setIntent(
                 new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass())
-                    .putExtra(AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME, id)
+                    .putExtra(AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME, (String) id)
             );
+            if (icon != null) {
+                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));
+            }
+
             shortcutInfoCompatList.add(shortcutInfoCompat.build());
         }
         return shortcutInfoCompatList;
