@@ -28,6 +28,7 @@ body:
         - label: Photo Editor
         - label: Printer
         - label: Screen Orientation
+        - label: Screenshot
         - label: Speech Recognition
         - label: Speech Synthesis
         - label: Torch
