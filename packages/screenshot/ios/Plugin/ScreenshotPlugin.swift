@@ -16,23 +16,14 @@ public class ScreenshotPlugin: CAPPlugin {
     }
 
     @objc func take(_ call: CAPPluginCall) {
-        do {
-            guard let implementation = self.implementation else {
-                throw CustomError.implementationUnavailable
+        implementation?.take(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
             }
-
-            implementation.take(completion: { result, error in
-                if let error {
-                    self.rejectCall(call, error)
-                }
-
-                if let result = result?.toJSObject() as? JSObject {
-                    self.resolveCall(call, result)
-                }
-            })
-        } catch let error {
-            rejectCall(call, error)
-        }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
