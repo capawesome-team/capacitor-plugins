@@ -7,12 +7,40 @@ import Capacitor
  */
 @objc(ScreenshotPlugin)
 public class ScreenshotPlugin: CAPPlugin {
-    private let implementation = Screenshot()
+    public let tag = "Screenshot"
+    private var implementation: Screenshot?
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    override public func load() {
+        super.load()
+        self.implementation = Screenshot(plugin: self)
+    }
+
+    @objc func take(_ call: CAPPluginCall) {
+        do {
+            guard let implementation = self.implementation else {
+                throw CustomError.implementationUnavailable
+            }
+
+            implementation.take(completion: { result, error in
+                if let error {
+                    self.rejectCall(call, error)
+                }
+
+                if let result = result?.toJSObject() as? JSObject {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch let error {
+            rejectCall(call, error)
+        }
+    }
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", self.tag, "] ", error)
+        call.reject(error.localizedDescription)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ result: JSObject) {
+        call.resolve(result)
     }
 }

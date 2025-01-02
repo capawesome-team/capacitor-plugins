@@ -13,25 +13,36 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`take()`](#take)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### take()
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+take() => Promise<TakeResult>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Take a screenshot.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#takeresult">TakeResult</a>&gt;</code>
+
+**Since:** 6.0.0
 
 --------------------
+
+
+### Interfaces
+
+
+#### TakeResult
+
+| Prop      | Type                | Description                                                                                                  | Since |
+| --------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
+| **`uri`** | <code>string</code> | The file path (Android and iOS) or data URI (Web) of the screenshot. Only available on Android, iOS and Web. | 6.0.0 |
 
 </docgen-api>
