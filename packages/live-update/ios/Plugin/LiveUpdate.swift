@@ -79,9 +79,9 @@ import CommonCrypto
         }
     }
 
-    @objc public func fetchLatestBundle() async throws -> FetchLatestBundleResult {
-        let response: GetLatestBundleResponse? = try await self.fetchLatestBundle()
-        return FetchLatestBundleResult(bundleId: response?.bundleId)
+    @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
+        let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
+        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, downloadUrl: response?.url)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
@@ -105,6 +105,15 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleId = getCurrentBundleId()
+        if bundleId == defaultWebAssetDir {
+            bundleId = nil
+        }
+        let result = GetCurrentBundleResult(bundleId: bundleId)
+        completion(result, nil)
+    }
+
     @objc public func getCustomId(completion: @escaping (Result?, Error?) -> Void) {
         let customId = preferences.getCustomId()
 
@@ -115,6 +124,15 @@ import CommonCrypto
     @objc public func getDeviceId(completion: @escaping (Result?, Error?) -> Void) {
         let deviceId = getDeviceId()
         let result = GetDeviceIdResult(deviceId: deviceId)
+        completion(result, nil)
+    }
+
+    @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleId: String? = getNextBundleId()
+        if bundleId == defaultWebAssetDir {
+            bundleId = nil
+        }
+        let result = GetNextBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
 
@@ -176,9 +194,29 @@ import CommonCrypto
         completion(nil)
     }
 
-    @objc public func sync() async throws -> SyncResult {
+    @objc public func setNextBundle(_ options: SetNextBundleOptions, completion: @escaping (Error?) -> Void) {
+        let bundleId = options.getBundleId()
+
+        if let bundleId = bundleId {
+            if hasBundle(bundleId: bundleId) {
+                setNextBundle(bundleId: bundleId)
+            } else {
+                let error = CustomError.bundleNotFound
+                completion(error)
+                return
+            }
+        } else {
+            reset()
+        }
+
+        completion(nil)
+    }
+
+    @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        let channel = options.getChannel()
         // Fetch the latest bundle
-        guard let response = try await fetchLatestBundle() else {
+        let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
+        guard let response = try await fetchLatestBundle(fetchLatestBundleOptions) else {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
             return SyncResult(nextBundleId: nil)
         }
@@ -404,12 +442,13 @@ import CommonCrypto
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
 
-    private func fetchLatestBundle() async throws -> GetLatestBundleResponse? {
+    private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
+        let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
         parameters["bundleId"] = getCurrentBundleId()
-        parameters["channelName"] = getChannel()
+        parameters["channelName"] = channel
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()
         parameters["osVersion"] = await UIDevice.current.systemVersion

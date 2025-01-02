@@ -8,9 +8,14 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -19,7 +24,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.6.0";
+    public static final String VERSION = "6.7.1";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -121,6 +126,7 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void fetchLatestBundle(PluginCall call) {
         try {
+            FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
@@ -133,7 +139,7 @@ public class LiveUpdatePlugin extends Plugin {
                 }
             };
 
-            implementation.fetchLatestBundle(callback);
+            implementation.fetchLatestBundle(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -203,6 +209,28 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getCurrentBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetCurrentBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetCurrentBundleResult result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getCurrentBundle(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getCustomId(PluginCall call) {
         try {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
@@ -239,6 +267,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.getDeviceId(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getNextBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetNextBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetNextBundleResult result) {
+                    call.resolve(result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getNextBundle(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -397,6 +447,28 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setNextBundle(PluginCall call) {
+        try {
+            SetNextBundleOptions options = new SetNextBundleOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    call.resolve();
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.setNextBundle(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void sync(PluginCall call) {
         try {
             String appId = config.getAppId();
@@ -411,6 +483,7 @@ public class LiveUpdatePlugin extends Plugin {
             }
             syncInProgress = true;
 
+            SyncOptions options = new SyncOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
@@ -425,7 +498,7 @@ public class LiveUpdatePlugin extends Plugin {
                 }
             };
 
-            implementation.sync(callback);
+            implementation.sync(options, callback);
         } catch (Exception exception) {
             syncInProgress = false;
             rejectCall(call, exception);

@@ -16,12 +16,13 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+<!-- Required to keep the app running in the background without any ressource limitations -->
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 <!-- Required to request the manage overlay permission -->
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 ```
 
-**Attention**: Replace `FOREGROUND_SERVICE_LOCATION` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
+**Attention**: Replace `FOREGROUND_SERVICE_LOCATION` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)). See [ServiceType](#servicetype) for the available types.
 
 You also need to add the following receiver and service **inside** the `application` tag in your `AndroidManifest.xml`:
 
@@ -30,7 +31,7 @@ You also need to add the following receiver and service **inside** the `applicat
 <service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" />
 ```
 
-**Attention**: Replace `location` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
+**Attention**: Replace `location` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)). See [ServiceType](#servicetype) for the available types.
 
 ## Configuration
 
@@ -114,7 +115,7 @@ const deleteNotificationChannel = async () => {
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
 * [`createNotificationChannel(...)`](#createnotificationchannel)
 * [`deleteNotificationChannel(...)`](#deletenotificationchannel)
-* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
+* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -349,15 +350,16 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop                        | Type                              | Description                                                                                                                                                                                                     | Default            | Since |
-| --------------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`body`**                  | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
-| **`buttons`**               | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
-| **`id`**                    | <code>number</code>               | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
-| **`smallIcon`**             | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
-| **`title`**                 | <code>string</code>               | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
-| **`silent`**                | <code>boolean</code>              | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
-| **`notificationChannelId`** | <code>string</code>               | The notification channel identifier.                                                                                                                                                                            |                    | 6.1.0 |
+| Prop                        | Type                                                | Description                                                                                                                                                                                                     | Default            | Since |
+| --------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`body`**                  | <code>string</code>                                 | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
+| **`buttons`**               | <code>NotificationButton[]</code>                   | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
+| **`id`**                    | <code>number</code>                                 | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
+| **`serviceType`**           | <code><a href="#servicetype">ServiceType</a></code> | The foreground service type. Only available on Android (SDK 29+).                                                                                                                                               |                    | 6.2.0 |
+| **`smallIcon`**             | <code>string</code>                                 | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
+| **`title`**                 | <code>string</code>                                 | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
+| **`silent`**                | <code>boolean</code>                                | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
+| **`notificationChannelId`** | <code>string</code>                                 | The notification channel identifier.                                                                                                                                                                            |                    | 6.1.0 |
 
 
 #### NotificationButton
@@ -432,6 +434,14 @@ Remove all listeners for this plugin.
 
 
 ### Enums
+
+
+#### ServiceType
+
+| Members          | Value            | Description                                                                                     | Since |
+| ---------------- | ---------------- | ----------------------------------------------------------------------------------------------- | ----- |
+| **`Location`**   | <code>8</code>   | Long-running use cases that require location access, such as navigation and location sharing.   | 6.2.0 |
+| **`Microphone`** | <code>128</code> | Continue microphone capture from the background, such as voice recorders or communication apps. | 6.2.0 |
 
 
 #### Importance
