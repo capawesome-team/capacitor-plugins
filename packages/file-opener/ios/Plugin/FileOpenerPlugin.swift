@@ -6,7 +6,12 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(FileOpenerPlugin)
-public class FileOpenerPlugin: CAPPlugin {
+public class FileOpenerPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "FileOpenerPlugin"
+    public let jsName = "FileOpener"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "openFile", returnType: CAPPluginReturnPromise)
+    ]
     public let errorPathMissing = "path must be provided."
     public let errorFileNotExist = "File does not exist."
     public let errorCannotOpenFile = "File cannot be opened."

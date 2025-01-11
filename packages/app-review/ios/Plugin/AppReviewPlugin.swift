@@ -6,7 +6,13 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppReviewPlugin)
-public class AppReviewPlugin: CAPPlugin {
+public class AppReviewPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppReviewPlugin"
+    public let jsName = "AppReview"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "openAppStore", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestReview", returnType: CAPPluginReturnPromise)
+    ]
     public static let tag = "AppReviewPlugin"
 
     private var implementation: AppReview?

@@ -6,7 +6,16 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(TorchPlugin)
-public class TorchPlugin: CAPPlugin {
+public class TorchPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "TorchPlugin"
+    public let jsName = "Torch"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "enable", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "disable", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isAvailable", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isEnabled", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "toggle", returnType: CAPPluginReturnPromise)
+    ]
     public static let errorNotAvailable = "Not available on this device."
     public static let tag = "Torch"
 

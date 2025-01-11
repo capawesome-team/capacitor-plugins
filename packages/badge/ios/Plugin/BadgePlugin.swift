@@ -6,7 +6,19 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(BadgePlugin)
-public class BadgePlugin: CAPPlugin {
+public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "BadgePlugin"
+    public let jsName = "Badge"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "set", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "increase", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "decrease", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isSupported", returnType: CAPPluginReturnPromise)
+    ]
     private var implementation: Badge?
 
     override public func load() {

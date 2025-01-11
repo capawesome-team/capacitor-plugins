@@ -8,7 +8,17 @@ import MobileCoreServices
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(FilePickerPlugin)
-public class FilePickerPlugin: CAPPlugin {
+public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "FilePickerPlugin"
+    public let jsName = "FilePicker"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "convertHeicToJpeg", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickFiles", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickImages", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickMedia", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickVideos", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickDirectory", returnType: CAPPluginReturnPromise)
+    ]
     public let errorPathMissing = "path must be provided."
     public let errorFileNotExist = "File does not exist."
     public let errorConvertFailed = "File could not be converted."

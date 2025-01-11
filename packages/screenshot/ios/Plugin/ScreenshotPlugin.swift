@@ -6,7 +6,12 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(ScreenshotPlugin)
-public class ScreenshotPlugin: CAPPlugin {
+public class ScreenshotPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "ScreenshotPlugin"
+    public let jsName = "Screenshot"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "take", returnType: CAPPluginReturnPromise)
+    ]
     public let tag = "Screenshot"
     private var implementation: Screenshot?
 

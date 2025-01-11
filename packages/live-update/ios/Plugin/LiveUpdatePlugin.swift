@@ -33,8 +33,8 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setCustomId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise),
-    ] 
+        CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise)
+    ]
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?

@@ -6,7 +6,21 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(PosthogPlugin)
-public class PosthogPlugin: CAPPlugin {
+public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "PosthogPlugin"
+    public let jsName = "Posthog"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "screen", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise)
+    ]
     public let tag = "Posthog"
     public let errorAliasMissing = "alias must be provided."
     public let errorApiKeyMissing = "apiKey must be provided."
