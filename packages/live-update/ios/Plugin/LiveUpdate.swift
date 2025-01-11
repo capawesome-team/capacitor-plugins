@@ -1,6 +1,10 @@
 import Foundation
 import CryptoKit
+#if canImport(ZipArchive)
+import ZipArchive
+#else
 import SSZipArchive
+#endif
 import Capacitor
 import Alamofire
 import CommonCrypto

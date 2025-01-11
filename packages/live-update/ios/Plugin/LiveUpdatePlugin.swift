@@ -6,10 +6,35 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(LiveUpdatePlugin)
-public class LiveUpdatePlugin: CAPPlugin {
+public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "6.7.1"
+    public static let version = "6.8.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
+
+    public let identifier = "LiveUpdatePlugin"
+    public let jsName = "LiveUpdate"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "deleteBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "downloadBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "fetchLatestBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getCurrentBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getCustomId", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDeviceId", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getNextBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getVersionCode", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getVersionName", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "ready", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "reload", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setCustomId", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise),
+    ] 
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
