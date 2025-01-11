@@ -26,6 +26,7 @@ body:
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
+        - label: Posthog
         - label: Printer
         - label: Screen Orientation
         - label: Screenshot
