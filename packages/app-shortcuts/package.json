@@ -11,7 +11,8 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorAppShortcuts.podspec"
+    "CapawesomeCapacitorAppShortcuts.podspec",
+    "Package.swift"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
