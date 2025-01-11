@@ -33,6 +33,7 @@ body:
         - label: Speech Synthesis
         - label: Torch
         - label: Zip
+        - label: PostHog
   - type: textarea
     attributes:
       label: Current problem
