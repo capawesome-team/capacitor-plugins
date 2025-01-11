@@ -9,8 +9,8 @@ body:
       label: Plugin(s)
       description: Select the plugins that this bug affects.
       options:
-        - label: Android Foreground Service
         - label: Android Battery Optimization
+        - label: Android Foreground Service
         - label: App Review
         - label: App Shortcuts
         - label: App Update
@@ -26,6 +26,7 @@ body:
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
+        - label: PostHog
         - label: Printer
         - label: Screen Orientation
         - label: Screenshot
