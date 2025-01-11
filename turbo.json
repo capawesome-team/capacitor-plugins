@@ -13,6 +13,7 @@
       "cache": false
     },
     "version": {},
-    "ios:pod:install": {}
+    "ios:pod:install": {},
+    "ios:spm:install": {}
   }
 }
