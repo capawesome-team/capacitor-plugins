@@ -6,7 +6,14 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(ManagedConfigurationsPlugin)
-public class ManagedConfigurationsPlugin: CAPPlugin {
+public class ManagedConfigurationsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "ManagedConfigurationsPlugin"
+    public let jsName = "ManagedConfigurations"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getString", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getNumber", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBoolean", returnType: CAPPluginReturnPromise)
+    ]
     public let errorKeyMissing = "traceName must be provided."
     private var implementation: ManagedConfigurations?
 

@@ -6,7 +6,14 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppShortcutsPlugin)
-public class AppShortcutsPlugin: CAPPlugin {
+public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppShortcutsPlugin"
+    public let jsName = "AppShortcuts"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "set", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise)
+    ]
     public static let notificationName = "handleAppShortcutNotification"
     public static let userInfoShortcutItemKey = "shortcutItem"
 

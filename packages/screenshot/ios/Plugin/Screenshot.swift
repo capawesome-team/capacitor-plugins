@@ -21,7 +21,7 @@ import WebKit
                 if let error = error {
                     completion(nil, error)
                 }
-                
+
                 if let image, let imageData = image.jpegData(compressionQuality: 1.0) {
                     let filename = UUID().uuidString + ".jpg"
                     guard let cacheDirectory = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {

@@ -6,7 +6,16 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppUpdatePlugin)
-public class AppUpdatePlugin: CAPPlugin {
+public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppUpdatePlugin"
+    public let jsName = "AppUpdate"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getAppUpdateInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openAppStore", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "performImmediateUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startFlexibleUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "completeFlexibleUpdate", returnType: CAPPluginReturnPromise)
+    ]
     private static let updateAvailabilityNotAvailable = 1
     private static let updateAvailabilityAvailable = 2
 

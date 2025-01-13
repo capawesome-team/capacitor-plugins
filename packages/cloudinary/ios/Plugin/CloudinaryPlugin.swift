@@ -6,7 +6,14 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(CloudinaryPlugin)
-public class CloudinaryPlugin: CAPPlugin {
+public class CloudinaryPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "CloudinaryPlugin"
+    public let jsName = "Cloudinary"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "uploadResource", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "downloadResource", returnType: CAPPluginReturnPromise)
+    ]
     public let errorNotInitialized = "Plugin is not initialized."
     public let errorFileNotFound = "The file was not found."
     public let errorUnknown = "An unknown error occurred."
