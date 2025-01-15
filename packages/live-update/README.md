@@ -63,7 +63,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 
 #### Minimum Deployment Target
 
-If you are using **Swift Package Manager (SPM)**, make sure to set the deployment target in your `ios/App/App.xcodeproj/project.pbxproj` to at least 16.0:
+If you are using **Swift Package Manager (SPM)** for your iOS project, make sure to set the deployment target in your `ios/App/App.xcodeproj/project.pbxproj` to at least 16.0:
 
 ```diff
 IPHONEOS_DEPLOYMENT_TARGET = 16.0;
