@@ -356,10 +356,10 @@ export interface FetchLatestBundleResult {
   /**
    * Custom properties that are associated with the latest bundle.
    *
-   * @since 6.8.0
+   * @since 7.0.0
    * @example { "key": "value" }
    */
-  customProperties?: Record<string, string>;
+  customProperties?: { [key: string]: string };
   /**
    * The URL of the latest bundle to download.
    * Pass this URL to the `downloadBundle(...)` method to download the bundle.
