@@ -151,8 +151,9 @@ public class LiveUpdate {
         GetLatestBundleResponse response = fetchLatestBundle(options);
         ArtifactType artifactType = response == null ? null : response.getArtifactType();
         String bundleId = response == null ? null : response.getBundleId();
+        JSONObject customProperties = response == null ? null : response.getCustomProperties();
         String downloadUrl = response == null ? null : response.getUrl();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, downloadUrl);
+        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, customProperties, downloadUrl);
         callback.success(result);
     }
 

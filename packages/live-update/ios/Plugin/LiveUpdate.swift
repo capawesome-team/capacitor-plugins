@@ -85,7 +85,7 @@ import CommonCrypto
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
-        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, downloadUrl: response?.url)
+        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, customProperties: response?.customProperties, downloadUrl: response?.url)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {

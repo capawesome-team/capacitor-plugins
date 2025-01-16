@@ -16,6 +16,9 @@ public class GetLatestBundleResponse {
     @NonNull
     private String bundleId;
 
+    @Nullable
+    private JSONObject customProperties;
+
     @NonNull
     private String url;
 
@@ -27,6 +30,7 @@ public class GetLatestBundleResponse {
             this.artifactType = ArtifactType.ZIP;
         }
         this.bundleId = responseJson.optString("bundleId");
+        this.customProperties = responseJson.optJSONObject("customProperties");
         this.url = responseJson.optString("url");
     }
 
@@ -38,6 +42,11 @@ public class GetLatestBundleResponse {
     @NonNull
     public String getBundleId() {
         return bundleId;
+    }
+
+    @Nullable
+    public JSONObject getCustomProperties() {
+        return customProperties;
     }
 
     @NonNull

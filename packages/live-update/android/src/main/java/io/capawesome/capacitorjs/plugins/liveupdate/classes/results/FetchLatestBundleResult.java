@@ -16,11 +16,20 @@ public class FetchLatestBundleResult implements Result {
     private final String bundleId;
 
     @Nullable
+    private final JSONObject customProperties;
+
+    @Nullable
     private final String downloadUrl;
 
-    public FetchLatestBundleResult(@Nullable ArtifactType artifactType, @Nullable String bundleId, @Nullable String downloadUrl) {
+    public FetchLatestBundleResult(
+        @Nullable ArtifactType artifactType,
+        @Nullable String bundleId,
+        @Nullable JSONObject customProperties,
+        @Nullable String downloadUrl
+    ) {
         this.artifactType = artifactType;
         this.bundleId = bundleId;
+        this.customProperties = customProperties;
         this.downloadUrl = downloadUrl;
     }
 
@@ -33,6 +42,9 @@ public class FetchLatestBundleResult implements Result {
             result.put("artifactType", "zip");
         }
         result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
+        if (customProperties != null) {
+            result.put("customProperties", customProperties);
+        }
         if (downloadUrl != null) {
             result.put("downloadUrl", downloadUrl);
         }

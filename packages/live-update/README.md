@@ -673,11 +673,12 @@ Only available on Android and iOS.
 
 #### FetchLatestBundleResult
 
-| Prop               | Type                             | Description                                                                                                         | Since |
-| ------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle.                                                                                    | 6.7.0 |
-| **`bundleId`**     | <code>string \| null</code>      | The unique identifier of the latest bundle. If `null`, no bundle is available.                                      | 6.6.0 |
-| **`downloadUrl`**  | <code>string</code>              | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle. | 6.7.0 |
+| Prop                   | Type                                    | Description                                                                                                         | Since |
+| ---------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle.                                                                                    | 6.7.0 |
+| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. If `null`, no bundle is available.                                      | 6.6.0 |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the latest bundle.                                                       | 7.0.0 |
+| **`downloadUrl`**      | <code>string</code>                     | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle. | 6.7.0 |
 
 
 #### FetchLatestBundleOptions
