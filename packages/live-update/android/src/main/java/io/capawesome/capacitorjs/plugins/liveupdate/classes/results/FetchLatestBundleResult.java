@@ -21,7 +21,12 @@ public class FetchLatestBundleResult implements Result {
     @Nullable
     private final String downloadUrl;
 
-    public FetchLatestBundleResult(@Nullable ArtifactType artifactType, @Nullable String bundleId, @Nullable JSONObject customProperties, @Nullable String downloadUrl) {
+    public FetchLatestBundleResult(
+        @Nullable ArtifactType artifactType,
+        @Nullable String bundleId,
+        @Nullable JSONObject customProperties,
+        @Nullable String downloadUrl
+    ) {
         this.artifactType = artifactType;
         this.bundleId = bundleId;
         this.customProperties = customProperties;
