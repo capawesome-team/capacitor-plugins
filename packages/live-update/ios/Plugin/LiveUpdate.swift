@@ -91,6 +91,9 @@ import CommonCrypto
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
         let bundleId = getCurrentBundleId()
+        if bundleId == defaultWebAssetDir {
+            bundleId = nil
+        }
         let result = GetBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -152,15 +155,21 @@ import CommonCrypto
 
     @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
+        // Stop the rollback timer
         stopRollbackTimer()
+        // Delete unused bundles
         if config.autoDeleteBundles {
             deleteUnusedBundles()
         }
+        // Get the current and previous bundle IDs
         let currentBundleId = getCurrentBundleId()
         let previousBundleId = getPreviousBundleId()
+        // Return the result
         let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
         completion(result, nil)
+        // Set the new previous bundle ID
         setPreviousBundleId(bundleId: currentBundleId)
+        // Reset the rollback flag
         rollbackPerformed = false
     }
 
@@ -614,14 +623,18 @@ import CommonCrypto
     }
 
     private func rollback() {
+        // Set the rollback flag
         rollbackPerformed = true
+        // Set the new previous bundle ID
         let currentBundleId = getCurrentBundleId()
         setPreviousBundleId(bundleId: currentBundleId)
+        // Log the rollback result
         if currentBundleId == defaultWebAssetDir {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
             return
         }
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
+        // Rollback to the default bundle
         setNextCapacitorServerPathToDefaultWebAssetDir()
         setCurrentCapacitorServerPathToDefaultWebAssetDir()
     }
