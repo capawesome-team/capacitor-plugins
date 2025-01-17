@@ -14,8 +14,8 @@ import Capacitor
 
     public func toJSObject() -> AnyObject {
         var result = JSObject()
-        result["currentBundleId"] = currentBundleId == LiveUpdate.defaultWebAssetDir ? NSNull() : currentBundleId
-        result["previousBundleId"] = previousBundleId == LiveUpdate.defaultWebAssetDir ? NSNull() : previousBundleId
+        result["currentBundleId"] = currentBundleId == nil ? NSNull() : currentBundleId
+        result["previousBundleId"] = previousBundleId == nil ? NSNull() : previousBundleId
         result["rollback"] = rollback
         return result as AnyObject
     }

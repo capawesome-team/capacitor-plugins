@@ -11,11 +11,10 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
-    public static let defaultWebAssetDir = "public" // DO NOT CHANGE (See https://dub.sh/Buvz4yj)
-
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
+    private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
     private let host: String
     private let httpClient: LiveUpdateHttpClient
@@ -110,7 +109,7 @@ import CommonCrypto
 
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId = getCurrentBundleId()
-        if bundleId == LiveUpdate.defaultWebAssetDir {
+        if bundleId == defaultWebAssetDir {
             bundleId = nil
         }
         let result = GetCurrentBundleResult(bundleId: bundleId)
@@ -132,7 +131,7 @@ import CommonCrypto
 
     @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId: String? = getNextBundleId()
-        if bundleId == LiveUpdate.defaultWebAssetDir {
+        if bundleId == defaultWebAssetDir {
             bundleId = nil
         }
         let result = GetNextBundleResult(bundleId: bundleId)
@@ -308,8 +307,8 @@ import CommonCrypto
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
-        if currentBundleId == LiveUpdate.defaultWebAssetDir {
-            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: LiveUpdate.defaultWebAssetDir) else {
+        if currentBundleId == defaultWebAssetDir {
+            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
                 return
             }
             sourceURL = file
@@ -554,7 +553,7 @@ import CommonCrypto
 
     /// - Returns: The absolute path to the next bundle directory.
     private func getNextCapacitorServerPath() -> String {
-        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
+        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
         if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
             return path.isEmpty ? defaultCapacitorServerPath : path
         }
@@ -588,8 +587,8 @@ import CommonCrypto
         guard let currentBundleId = getCurrentBundleId() else {
             return nil
         }
-        if currentBundleId == LiveUpdate.defaultWebAssetDir {
-            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: LiveUpdate.defaultWebAssetDir) ?? []
+        if currentBundleId == defaultWebAssetDir {
+            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
             let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
             if let manifestFileUrl = manifestFileUrl {
                 return try loadManifest(file: manifestFileUrl)
@@ -618,7 +617,7 @@ import CommonCrypto
         rollbackPerformed = true
         let currentBundleId = getCurrentBundleId()
         setPreviousBundleId(bundleId: currentBundleId)
-        if currentBundleId == LiveUpdate.defaultWebAssetDir {
+        if currentBundleId == defaultWebAssetDir {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
             return
         }
@@ -669,7 +668,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
         setCurrentCapacitorServerPath(path: path)
     }
 
@@ -689,7 +688,7 @@ import CommonCrypto
     }
 
     private func setNextCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: LiveUpdate.defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
         setNextCapacitorServerPath(path: path)
     }
 

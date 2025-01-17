@@ -19,7 +19,7 @@ public class GetBundleResult implements Result {
 
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("bundleId", bundleId.equals(LiveUpdate.DEFAULT_WEB_ASSET_DIR) ? JSONObject.NULL : bundleId);
+        result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
         return result;
     }
 }

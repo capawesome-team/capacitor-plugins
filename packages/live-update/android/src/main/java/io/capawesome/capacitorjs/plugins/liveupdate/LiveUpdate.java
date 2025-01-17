@@ -67,10 +67,10 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
-    public static final String DEFAULT_WEB_ASSET_DIR = Bridge.DEFAULT_WEB_ASSET_DIR;
-
     @NonNull
     private final LiveUpdateConfig config;
+
+    private final String defaultWebAssetDir = Bridge.defaultWebAssetDir;
 
     @NonNull
     private final String host;
@@ -162,7 +162,7 @@ public class LiveUpdate {
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (bundleId.equals(defaultWebAssetDir)) {
             // Return null for the built-in bundle
             bundleId = null;
         }
@@ -184,7 +184,7 @@ public class LiveUpdate {
 
     public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (bundleId.equals(defaultWebAssetDir)) {
             bundleId = null;
         }
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
@@ -205,7 +205,7 @@ public class LiveUpdate {
 
     public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
         String bundleId = getNextBundleId();
-        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (bundleId.equals(defaultWebAssetDir)) {
             bundleId = null;
         }
         GetNextBundleResult result = new GetNextBundleResult(bundleId);
@@ -383,10 +383,10 @@ public class LiveUpdate {
 
     private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (currentBundleId.equals(defaultWebAssetDir)) {
             // Create the source input stream
             AssetManager assets = plugin.getContext().getAssets();
-            InputStream inputStream = assets.open(DEFAULT_WEB_ASSET_DIR + "/" + href);
+            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
             // Create the destination file
             File destination = new File(destinationDirectory, href);
             // Create all destination directories if they do not exist
@@ -696,8 +696,8 @@ public class LiveUpdate {
      */
     private String getCurrentBundleId() {
         String currentPath = getCurrentCapacitorServerPath();
-        if (currentPath.equals(DEFAULT_WEB_ASSET_DIR)) {
-            return DEFAULT_WEB_ASSET_DIR;
+        if (currentPath.equals(defaultWebAssetDir)) {
+            return defaultWebAssetDir;
         }
         return new File(currentPath).getName();
     }
@@ -725,8 +725,8 @@ public class LiveUpdate {
     @NonNull
     private String getNextBundleId() {
         String nextPath = getNextCapacitorServerPath();
-        if (nextPath.equals(DEFAULT_WEB_ASSET_DIR)) {
-            return DEFAULT_WEB_ASSET_DIR;
+        if (nextPath.equals(defaultWebAssetDir)) {
+            return defaultWebAssetDir;
         }
         return new File(nextPath).getName();
     }
@@ -739,7 +739,7 @@ public class LiveUpdate {
         return plugin
             .getContext()
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
-            .getString(WebView.CAP_SERVER_PATH, DEFAULT_WEB_ASSET_DIR);
+            .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
     }
 
     @Nullable
@@ -763,11 +763,11 @@ public class LiveUpdate {
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (currentBundleId.equals(defaultWebAssetDir)) {
             AssetManager assets = plugin.getContext().getAssets();
-            Boolean manifestFileExists = Arrays.asList(assets.list(DEFAULT_WEB_ASSET_DIR)).contains(manifestFileName);
+            Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
-                InputStream inputStream = assets.open(DEFAULT_WEB_ASSET_DIR + "/" + manifestFileName);
+                InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
                 BufferedSource source = Okio.buffer(Okio.source(inputStream));
                 return loadManifest(source);
             } else {
@@ -808,7 +808,7 @@ public class LiveUpdate {
         String currentBundleId = getCurrentBundleId();
         setPreviousBundleId(currentBundleId);
         // Log the rollback result
-        if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (currentBundleId.equals(defaultWebAssetDir)) {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
             return;
         }
@@ -849,7 +849,7 @@ public class LiveUpdate {
     }
 
     private void setCurrentCapacitorServerPath(@NonNull String path) {
-        if (path.equals(DEFAULT_WEB_ASSET_DIR)) {
+        if (path.equals(defaultWebAssetDir)) {
             this.plugin.getBridge().setServerAssetPath(path);
         } else {
             this.plugin.getBridge().setServerBasePath(path);
@@ -858,7 +858,7 @@ public class LiveUpdate {
     }
 
     private void setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        setCurrentCapacitorServerPath(DEFAULT_WEB_ASSET_DIR);
+        setCurrentCapacitorServerPath(defaultWebAssetDir);
     }
 
     private void setNextBundle(@NonNull String bundleId) {
@@ -872,7 +872,7 @@ public class LiveUpdate {
     }
 
     private void setNextCapacitorServerPathToDefaultWebAssetDir() {
-        setNextCapacitorServerPath(DEFAULT_WEB_ASSET_DIR);
+        setNextCapacitorServerPath(defaultWebAssetDir);
     }
 
     private void setPreviousBundleId(@Nullable String bundleId) {
