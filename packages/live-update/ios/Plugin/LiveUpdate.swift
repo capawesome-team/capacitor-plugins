@@ -563,7 +563,7 @@ import CommonCrypto
     private func getPreviousBundleId() -> String? {
         return preferences.getPreviousBundleId()
     }
-    
+
     private func getVersionCode() -> String {
         guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
             return ""

@@ -2,7 +2,6 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
