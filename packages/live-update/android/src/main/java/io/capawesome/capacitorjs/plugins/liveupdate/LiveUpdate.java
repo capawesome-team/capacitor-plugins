@@ -95,7 +95,6 @@ public class LiveUpdate {
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
-        this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
         if (config.getLocation() != null && config.getLocation().equals("eu")) {
             this.host = "api.cloud.capawesome.eu";
         } else {
@@ -163,7 +162,7 @@ public class LiveUpdate {
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
+        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             // Return null for the built-in bundle
             bundleId = null;
         }
@@ -185,7 +184,7 @@ public class LiveUpdate {
 
     public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
+        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             bundleId = null;
         }
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
@@ -206,7 +205,7 @@ public class LiveUpdate {
 
     public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
         String bundleId = getNextBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
+        if (bundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             bundleId = null;
         }
         GetNextBundleResult result = new GetNextBundleResult(bundleId);
@@ -384,10 +383,10 @@ public class LiveUpdate {
 
     private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             // Create the source input stream
             AssetManager assets = plugin.getContext().getAssets();
-            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
+            InputStream inputStream = assets.open(DEFAULT_WEB_ASSET_DIR + "/" + href);
             // Create the destination file
             File destination = new File(destinationDirectory, href);
             // Create all destination directories if they do not exist
@@ -764,11 +763,11 @@ public class LiveUpdate {
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             AssetManager assets = plugin.getContext().getAssets();
-            Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+            Boolean manifestFileExists = Arrays.asList(assets.list(DEFAULT_WEB_ASSET_DIR)).contains(manifestFileName);
             if (manifestFileExists) {
-                InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
+                InputStream inputStream = assets.open(DEFAULT_WEB_ASSET_DIR + "/" + manifestFileName);
                 BufferedSource source = Okio.buffer(Okio.source(inputStream));
                 return loadManifest(source);
             } else {
