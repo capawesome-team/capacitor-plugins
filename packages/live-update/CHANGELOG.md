@@ -1,5 +1,8 @@
 # Changelog
 
+## 6.7.2
+
+-[`b7d1393`](https://github.com/capawesome-team/capacitor-plugins/commit/b7d13937f324d838e42be28f7d3be61f532ccf56): fix(live-update): `resetOnUpdate` configuration option only checked the `CFBundleVersion` but not the `CFBundleShortVersionString`
 ## 6.7.1
 
 ### Patch Changes
