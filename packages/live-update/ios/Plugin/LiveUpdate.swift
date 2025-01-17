@@ -39,11 +39,12 @@ import CommonCrypto
 
         if config.enabled {
             if wasUpdated() && config.resetOnUpdate {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App was updated. Resetting to default bundle.")
                 reset()
             } else {
                 startRollbackTimer()
             }
-            saveCurrentBundleVersion()
+            saveCurrentBundleShortVersionStringAndBundleVersion()
         }
     }
 
@@ -615,10 +616,10 @@ import CommonCrypto
         setCurrentCapacitorServerPathToDefaultWebAssetDir()
     }
 
-    private func saveCurrentBundleVersion() {
-        guard let currentBundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
-            return
-        }
+    private func saveCurrentBundleShortVersionStringAndBundleVersion() {
+        let currentBundleShortVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        preferences.setLastBundleShortVersionString(currentBundleShortVersionString)
+        let currentBundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
         preferences.setLastBundleVersion(currentBundleVersion)
     }
 
@@ -790,19 +791,24 @@ import CommonCrypto
     }
 
     private func wasUpdated() -> Bool {
-        guard let lastBundleVersionString = preferences.getLastBundleVersion() else {
-            return false
+        guard let lastBundleShortVersionString = preferences.getLastBundleShortVersionString() else {
+            // If the last bundle short version is not set, the app may have been updated
+            return true
         }
-        guard let lastBundleVersion = Int(lastBundleVersionString) else {
-            return false
+        guard let lastBundleVersionString = preferences.getLastBundleVersion() else {
+            // If the last bundle version is not set, the app may have been updated
+            return true
+        }
+        guard let currentBundleShortVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            // If the current bundle short version is not set, return true for safety reasons
+            return true
         }
         guard let currentBundleVersionString = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
-            return false
+            // If the current bundle version is not set, return true for safety reasons
+            return true
         }
-        guard let currentBundleVersion = Int(currentBundleVersionString) else {
-            return false
-        }
-        return currentBundleVersion > lastBundleVersion
+        // `CFBundleVersion` is not unique across different versions of the app
+        return lastBundleShortVersionString + "_" + lastBundleVersionString != currentBundleShortVersionString + "_" + currentBundleVersionString
     }
 }
 
