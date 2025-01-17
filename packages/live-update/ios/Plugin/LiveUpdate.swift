@@ -39,6 +39,7 @@ import CommonCrypto
 
         if config.enabled {
             if wasUpdated() && config.resetOnUpdate {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App was updated. Resetting to default bundle.")
                 reset()
             } else {
                 startRollbackTimer()
@@ -167,7 +168,6 @@ import CommonCrypto
     }
 
     @objc public func reset() {
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App was updated. Resetting to default bundle.")
         self.setNextCapacitorServerPathToDefaultWebAssetDir()
     }
 
