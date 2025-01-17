@@ -110,7 +110,7 @@ import CommonCrypto
 
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
+        if bundleId == LiveUpdate.defaultWebAssetDir {
             bundleId = nil
         }
         let result = GetCurrentBundleResult(bundleId: bundleId)
@@ -132,7 +132,7 @@ import CommonCrypto
 
     @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId: String? = getNextBundleId()
-        if bundleId == defaultWebAssetDir {
+        if bundleId == LiveUpdate.defaultWebAssetDir {
             bundleId = nil
         }
         let result = GetNextBundleResult(bundleId: bundleId)
@@ -308,8 +308,8 @@ import CommonCrypto
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
-        if currentBundleId == defaultWebAssetDir {
-            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+        if currentBundleId == LiveUpdate.defaultWebAssetDir {
+            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: LiveUpdate.defaultWebAssetDir) else {
                 return
             }
             sourceURL = file
@@ -588,8 +588,8 @@ import CommonCrypto
         guard let currentBundleId = getCurrentBundleId() else {
             return nil
         }
-        if currentBundleId == defaultWebAssetDir {
-            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
+        if currentBundleId == LiveUpdate.defaultWebAssetDir {
+            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: LiveUpdate.defaultWebAssetDir) ?? []
             let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
             if let manifestFileUrl = manifestFileUrl {
                 return try loadManifest(file: manifestFileUrl)
