@@ -163,6 +163,10 @@ public class LiveUpdate {
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
         String bundleId = getCurrentBundleId();
+        if (bundleId.equals(defaultWebAssetDir)) {
+            // Return null for the built-in bundle
+            bundleId = null;
+        }
         GetBundleResult result = new GetBundleResult(bundleId);
         callback.success(result);
     }
@@ -229,11 +233,15 @@ public class LiveUpdate {
         if (config.getAutoDeleteBundles()) {
             deleteUnusedBundles();
         }
+        // Get the current and previous bundle IDs
         String currentBundleId = getCurrentBundleId();
         String previousBundleId = getPreviousBundleId();
+        // Return the result
         ReadyResult result = new ReadyResult(currentBundleId, previousBundleId, rollbackPerformed);
         callback.success(result);
+        // Set the new previous bundle ID
         setPreviousBundleId(currentBundleId);
+        // Reset the rollback flag
         rollbackPerformed = false;
     }
 
@@ -795,14 +803,18 @@ public class LiveUpdate {
     }
 
     private void rollback() {
+        // Set the rollback flag
         rollbackPerformed = true;
+        // Set the new previous bundle ID
         String currentBundleId = getCurrentBundleId();
         setPreviousBundleId(currentBundleId);
+        // Log the rollback result
         if (currentBundleId.equals(DEFAULT_WEB_ASSET_DIR)) {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
             return;
         }
         Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
+        // Rollback to the default bundle
         setNextCapacitorServerPathToDefaultWebAssetDir();
         setCurrentCapacitorServerPathToDefaultWebAssetDir();
     }
