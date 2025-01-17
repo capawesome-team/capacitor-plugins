@@ -237,6 +237,7 @@ public class LiveUpdate {
     }
 
     public void reset() {
+        Logger.debug(LiveUpdatePlugin.TAG, "App was updated. Resetting to default bundle.");
         setNextCapacitorServerPathToDefaultWebAssetDir();
     }
 
