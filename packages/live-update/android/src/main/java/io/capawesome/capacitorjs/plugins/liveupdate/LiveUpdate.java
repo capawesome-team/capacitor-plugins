@@ -70,7 +70,7 @@ public class LiveUpdate {
     @NonNull
     private final LiveUpdateConfig config;
 
-    private final String defaultWebAssetDir = Bridge.defaultWebAssetDir;
+    private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
     private final String host;

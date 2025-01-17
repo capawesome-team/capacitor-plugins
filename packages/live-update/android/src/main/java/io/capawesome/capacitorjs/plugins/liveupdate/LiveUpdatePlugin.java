@@ -1,6 +1,9 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -73,7 +76,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -108,7 +111,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -130,7 +133,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -151,7 +154,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -172,7 +175,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -193,7 +196,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -214,7 +217,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<GetCurrentBundleResult> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(GetCurrentBundleResult result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -236,7 +239,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -257,7 +260,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -278,7 +281,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<GetNextBundleResult> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(GetNextBundleResult result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -300,7 +303,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -321,7 +324,7 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -342,13 +345,12 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
@@ -362,7 +364,7 @@ public class LiveUpdatePlugin extends Plugin {
     public void reload(PluginCall call) {
         try {
             implementation.reload();
-            call.resolve();
+            resolveCall(call);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -372,7 +374,7 @@ public class LiveUpdatePlugin extends Plugin {
     public void reset(PluginCall call) {
         try {
             implementation.reset();
-            call.resolve();
+            resolveCall(call);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -391,7 +393,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -415,7 +417,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -443,7 +445,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -465,7 +467,7 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
@@ -500,7 +502,7 @@ public class LiveUpdatePlugin extends Plugin {
                 @Override
                 public void success(Result result) {
                     syncInProgress = false;
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
@@ -540,6 +542,14 @@ public class LiveUpdatePlugin extends Plugin {
         config.setResetOnUpdate(resetOnUpdate);
 
         return config;
+    }
+
+    private void resolveCall(@NonNull PluginCall call) {
+        call.resolve();
+    }
+
+    private void resolveCall(@NonNull PluginCall call, @NonNull JSObject result) {
+        call.resolve(result);
     }
 
     private void rejectCall(PluginCall call, Exception exception) {
