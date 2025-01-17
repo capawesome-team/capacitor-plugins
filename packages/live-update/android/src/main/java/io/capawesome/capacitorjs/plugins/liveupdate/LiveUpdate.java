@@ -104,6 +104,7 @@ public class LiveUpdate {
 
         if (config.getEnabled()) {
             if (wasUpdated() && config.getResetOnUpdate()) {
+                Logger.debug(LiveUpdatePlugin.TAG, "App was updated. Resetting to default bundle.");
                 reset();
             } else {
                 startRollbackTimer();
