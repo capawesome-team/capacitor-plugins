@@ -11,6 +11,8 @@ body:
       options:
         - label: Android Foreground Service
         - label: Android Battery Optimization
+        - label: App Review
+        - label: App Shortcuts
         - label: App Update
         - label: Background Task
         - label: Badge
@@ -24,8 +26,13 @@ body:
         - label: Managed Configurations
         - label: NFC
         - label: Photo Editor
+        - label: Posthog
         - label: Printer
         - label: Screen Orientation
+        - label: Screenshot
+        - label: Speech Recognition
+        - label: Speech Synthesis
+        - label: Torch
         - label: Zip
   - type: input
     attributes:

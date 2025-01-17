@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-android-foreground-service",
-  "version": "6.0.1",
+  "version": "6.2.0",
   "description": "Capacitor plugin to run a foreground service on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -57,7 +57,7 @@
     "@capacitor/android": "6.0.0",
     "@capacitor/cli": "6.0.0",
     "@capacitor/core": "6.0.0",
-    "@capacitor/docgen": "0.0.18",
+    "@capacitor/docgen": "0.3.0",
     "@ionic/eslint-config": "0.3.0",
     "eslint": "7.32.0",
     "prettier": "2.3.2",

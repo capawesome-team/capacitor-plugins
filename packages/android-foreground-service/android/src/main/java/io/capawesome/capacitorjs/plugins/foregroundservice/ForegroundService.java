@@ -10,36 +10,90 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import com.getcapacitor.plugin.util.AssetUtil;
 import java.util.ArrayList;
 
 public class ForegroundService {
 
     public static final String DEFAULT_NOTIFICATION_CHANNEL_ID = "default";
+    public static final String ACTION_UPDATE = "UPDATE_NOTIFICATION";
 
     private final ForegroundServicePlugin plugin;
+    private final NotificationManager notificationManager;
 
     @Nullable
     private PowerManager.WakeLock activeWakeLock;
 
     public ForegroundService(ForegroundServicePlugin plugin) {
         this.plugin = plugin;
-        createNotificationChannel();
+        this.notificationManager = (NotificationManager) plugin.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void startForegroundService(String body, String icon, int id, String title, ArrayList<Bundle> buttons) {
-        acquireWakeLock();
+    public void startForegroundService(
+        String channelId,
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean silent,
+        Integer serviceType
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationManager.getNotificationChannels().isEmpty()) {
+                createDefaultNotificationChannel();
+            }
+        }
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, serviceType, false);
+    }
+
+    public void updateForegroundService(
+        String channelId,
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean silent,
+        Integer serviceType
+    ) {
+        startOrUpdateForegroundService(channelId, body, icon, id, title, buttons, silent, serviceType, true);
+    }
+
+    private void startOrUpdateForegroundService(
+        String channelId,
+        String body,
+        String icon,
+        int id,
+        String title,
+        ArrayList<Bundle> buttons,
+        boolean silent,
+        Integer serviceType,
+        boolean isUpdate
+    ) {
+        if (!isUpdate) {
+            acquireWakeLock();
+        }
+
         int iconResourceId = AssetUtil.getResourceID(plugin.getContext(), AssetUtil.getResourceBaseName(icon), "drawable");
         Bundle notificationBundle = new Bundle();
         notificationBundle.putString("body", body);
         notificationBundle.putInt("icon", iconResourceId);
         notificationBundle.putInt("id", id);
         notificationBundle.putString("title", title);
+        notificationBundle.putBoolean("silent", silent);
         notificationBundle.putParcelableArrayList("buttons", new ArrayList<Bundle>(buttons));
+        notificationBundle.putInt("serviceType", serviceType == null ? 0 : serviceType);
 
         Context context = plugin.getContext();
         Intent intent = new Intent(context, AndroidForegroundService.class);
         intent.putExtra("notification", notificationBundle);
+        intent.putExtra("channelId", channelId != null ? channelId : DEFAULT_NOTIFICATION_CHANNEL_ID);
+
+        if (isUpdate) {
+            intent.setAction(ACTION_UPDATE);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intent);
@@ -76,7 +130,7 @@ public class ForegroundService {
         activeWakeLock = null;
     }
 
-    private void createNotificationChannel() {
+    private void createDefaultNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -90,5 +144,15 @@ public class ForegroundService {
             NotificationManager notificationManager = plugin.getContext().getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotificationChannel(NotificationChannel notificationChannel) {
+        notificationManager.createNotificationChannel(notificationChannel);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void deleteNotificationChannelById(String id) {
+        notificationManager.deleteNotificationChannel(id);
     }
 }

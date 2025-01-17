@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-update",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "description": "Capacitor plugin that assists with app updates.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,8 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorAppUpdate.podspec"
+    "CapawesomeCapacitorAppUpdate.podspec",
+    "Package.swift"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
@@ -63,7 +64,7 @@
     "@capacitor/android": "6.0.0",
     "@capacitor/cli": "6.0.0",
     "@capacitor/core": "6.0.0",
-    "@capacitor/docgen": "0.2.0",
+    "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "6.0.0",
     "@ionic/eslint-config": "0.3.0",
     "@ionic/swiftlint-config": "1.1.2",

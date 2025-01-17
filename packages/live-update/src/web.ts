@@ -3,11 +3,14 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   DeleteBundleOptions,
   DownloadBundleOptions,
+  FetchLatestBundleResult,
   GetBundleResult,
   GetBundlesResult,
   GetChannelResult,
+  GetCurrentBundleResult,
   GetCustomIdResult,
   GetDeviceIdResult,
+  GetNextBundleResult,
   GetVersionCodeResult,
   GetVersionNameResult,
   LiveUpdatePlugin,
@@ -15,6 +18,7 @@ import type {
   SetBundleOptions,
   SetChannelOptions,
   SetCustomIdOptions,
+  SetNextBundleOptions,
   SyncResult,
 } from './definitions';
 
@@ -24,6 +28,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async downloadBundle(_options: DownloadBundleOptions): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  public async fetchLatestBundle(): Promise<FetchLatestBundleResult> {
     this.throwUnimplementedError();
   }
 
@@ -39,11 +47,19 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
     this.throwUnimplementedError();
   }
 
+  public async getCurrentBundle(): Promise<GetCurrentBundleResult> {
+    this.throwUnimplementedError();
+  }
+
   public async getCustomId(): Promise<GetCustomIdResult> {
     this.throwUnimplementedError();
   }
 
   public async getDeviceId(): Promise<GetDeviceIdResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async getNextBundle(): Promise<GetNextBundleResult> {
     this.throwUnimplementedError();
   }
 
@@ -76,6 +92,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async setCustomId(_options: SetCustomIdOptions): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  public async setNextBundle(_options: SetNextBundleOptions): Promise<void> {
     this.throwUnimplementedError();
   }
 

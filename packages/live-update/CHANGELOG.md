@@ -1,5 +1,77 @@
 # Changelog
 
+## 6.7.1
+
+### Patch Changes
+
+- [`fac67aa`](https://github.com/capawesome-team/capacitor-plugins/commit/fac67aa8c0d16c36716428b28853cded892453d2): fix: set correct plugin version
+
+## 6.7.0
+
+### Minor Changes
+
+- [`a23b782`](https://github.com/capawesome-team/capacitor-plugins/commit/a23b782d5163fb205bb53f8ebad91c792dfa15ce) ([#368](https://github.com/capawesome-team/capacitor-plugins/pull/368)): feat: add `artifactType` property to `FetchLatestBundleResult`
+
+* [`233889d`](https://github.com/capawesome-team/capacitor-plugins/commit/233889da605192870a0110ce60a402445e5dbc54) ([#364](https://github.com/capawesome-team/capacitor-plugins/pull/364)): feat: add `getCurrentBundle()` and `getNextBundle()` methods
+
+- [`cdc1fdb`](https://github.com/capawesome-team/capacitor-plugins/commit/cdc1fdb00b10c2d3ff263d9de7922e0d387dc9df) ([#361](https://github.com/capawesome-team/capacitor-plugins/pull/361)): feat: add `channel` option to `sync()` and `fetchLatestBundle()` methods
+
+* [`f7b45ac`](https://github.com/capawesome-team/capacitor-plugins/commit/f7b45ac8a8449acd9d3fac9c8853137317708144) ([#363](https://github.com/capawesome-team/capacitor-plugins/pull/363)): feat: add `downloadUrl` property to `FetchLatestBundleResult`
+
+- [`685e0c6`](https://github.com/capawesome-team/capacitor-plugins/commit/685e0c61ae064ab5953c30e6f7281d28865e1884) ([#367](https://github.com/capawesome-team/capacitor-plugins/pull/367)): feat: add `setNextBundle()` method
+
+### Patch Changes
+
+- [`e58efa3`](https://github.com/capawesome-team/capacitor-plugins/commit/e58efa3be0e3fa6fec787208c4c18cdf2cd989ad): fix(ios): some plugin calls were resolved too early
+
+## 6.6.0
+
+### Minor Changes
+
+- [`0f4f2fa`](https://github.com/capawesome-team/capacitor-plugins/commit/0f4f2fa40318ad82e14b5bf14f7dd70eec7bbe93) ([#311](https://github.com/capawesome-team/capacitor-plugins/pull/311)): feat: add `fetchLatestBundle()` method
+
+* [`626a01d`](https://github.com/capawesome-team/capacitor-plugins/commit/626a01db4d6c6698c3069a9c2f65465545ae8400) ([#315](https://github.com/capawesome-team/capacitor-plugins/pull/315)): feat: add `artifactType` option to `downloadBundle(...)` method
+
+## 6.5.0
+
+### Minor Changes
+
+- [`afc536c`](https://github.com/capawesome-team/capacitor-plugins/commit/afc536cd4f3b829aa4dc8f68b0b3b5a30abcbbbe) ([#305](https://github.com/capawesome-team/capacitor-plugins/pull/305)): feat: support delta updates
+
+## 6.4.2
+
+### Patch Changes
+
+- [`de9144e`](https://github.com/capawesome-team/capacitor-plugins/commit/de9144eee298e9e80535ebd30086391aad47fc68): fix(android): return `null` if no channel is set
+
+## 6.4.1
+
+### Patch Changes
+
+- [`f2c5a79`](https://github.com/capawesome-team/capacitor-plugins/commit/f2c5a79c41baded4bb5be3939bebde9a72e37ce7) ([#283](https://github.com/capawesome-team/capacitor-plugins/pull/283)): fix: perform a reset when the current bundle is deleted
+
+## 6.4.0
+
+### Minor Changes
+
+- [`4e4fcc0`](https://github.com/capawesome-team/capacitor-plugins/commit/4e4fcc0515f5b55280755766056c86eb2a7442a1) ([#277](https://github.com/capawesome-team/capacitor-plugins/pull/277)): feat: add configuration option `httpTimeout`
+
+### Patch Changes
+
+- [`f4df3ff`](https://github.com/capawesome-team/capacitor-plugins/commit/f4df3ffec7b9a18271be8e0596b8f864de127eff) ([#275](https://github.com/capawesome-team/capacitor-plugins/pull/275)): fix: throw an error if the sync is already in progress
+
+* [`375c857`](https://github.com/capawesome-team/capacitor-plugins/commit/375c8574cf09a7053e35408177eb8b340a648e42) ([#279](https://github.com/capawesome-team/capacitor-plugins/pull/279)): fix: throw error if a http timeout occurs
+
+## 6.3.0
+
+### Minor Changes
+
+- [`826955b`](https://github.com/capawesome-team/capacitor-plugins/commit/826955b5bd40bb17154b4182689ef1216402e2a2) ([#248](https://github.com/capawesome-team/capacitor-plugins/pull/248)): feat: add `defaultChannel` configuration option
+
+### Patch Changes
+
+- [`83f3f7f`](https://github.com/capawesome-team/capacitor-plugins/commit/83f3f7f3ff314a1c69f5280848262bfdb5afbd2d) ([#253](https://github.com/capawesome-team/capacitor-plugins/pull/253)): fix(ios): update possibly failed if more than one `index.html` file exists
+
 ## 6.2.0
 
 ### Minor Changes

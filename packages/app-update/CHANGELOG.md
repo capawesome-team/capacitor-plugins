@@ -1,5 +1,11 @@
 # Changelog
 
+## 6.1.0
+
+### Minor Changes
+
+- [`ad2c68f`](https://github.com/capawesome-team/capacitor-plugins/commit/ad2c68fc84e85275639b8ee7e6b6509980178294) ([#339](https://github.com/capawesome-team/capacitor-plugins/pull/339)): feat(ios): add `appId` property to `OpenAppStoreOptions`
+
 ## 6.0.0
 
 ### Major Changes

@@ -6,7 +6,13 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(BackgroundTaskPlugin)
-public class BackgroundTaskPlugin: CAPPlugin {
+public class BackgroundTaskPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "BackgroundTaskPlugin"
+    public let jsName = "BackgroundTask"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "beforeExit", returnType: CAPPluginReturnCallback),
+        CAPPluginMethod(name: "finish", returnType: CAPPluginReturnNone)
+    ]
     private let implementation = BackgroundTask()
 
     @objc public func beforeExit(_ call: CAPPluginCall) {

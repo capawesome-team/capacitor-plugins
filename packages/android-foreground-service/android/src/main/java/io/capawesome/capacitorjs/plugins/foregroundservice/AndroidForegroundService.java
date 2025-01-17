@@ -1,8 +1,10 @@
 package io.capawesome.capacitorjs.plugins.foregroundservice;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,18 +24,22 @@ public class AndroidForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
+            String action = intent.getAction();
             Bundle extras = intent.getExtras();
+            String channelId = extras.getString("channelId", ForegroundService.DEFAULT_NOTIFICATION_CHANNEL_ID);
             Bundle notificationBundle = extras.getBundle("notification");
             String body = notificationBundle.getString("body");
             int id = notificationBundle.getInt("id");
             int icon = notificationBundle.getInt("icon");
             String title = notificationBundle.getString("title");
+            boolean silent = notificationBundle.getBoolean("silent", false);
             ArrayList<Bundle> buttonsBundle = notificationBundle.getParcelableArrayList("buttons");
+            int serviceType = extras.getInt("serviceType");
 
             PendingIntent contentIntent = buildContentIntent(id);
             Notification.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(getApplicationContext(), ForegroundService.DEFAULT_NOTIFICATION_CHANNEL_ID);
+                builder = new Notification.Builder(getApplicationContext(), channelId);
             } else {
                 builder = new Notification.Builder(getApplicationContext());
             }
@@ -43,7 +49,8 @@ public class AndroidForegroundService extends Service {
                 .setContentIntent(contentIntent)
                 .setOngoing(true)
                 .setSmallIcon(icon)
-                .setPriority(Notification.PRIORITY_HIGH);
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setOnlyAlertOnce(silent);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Notification.Action[] actions = convertBundlesToNotificationActions(
                     buttonsBundle.toArray(new Bundle[buttonsBundle.size()])
@@ -52,7 +59,17 @@ public class AndroidForegroundService extends Service {
             }
 
             Notification notification = builder.build();
-            startForeground(id, notification);
+
+            if (ForegroundService.ACTION_UPDATE.equals(action)) {
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(id, notification);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && serviceType != 0) {
+                    startForeground(id, notification, serviceType);
+                } else {
+                    startForeground(id, notification);
+                }
+            }
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
         }

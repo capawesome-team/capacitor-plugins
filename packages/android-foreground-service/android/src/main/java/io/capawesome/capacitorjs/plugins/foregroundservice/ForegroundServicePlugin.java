@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.foregroundservice;
 
 import android.Manifest;
+import android.app.NotificationChannel;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -37,6 +38,8 @@ public class ForegroundServicePlugin extends Plugin {
 
     private static final String MOVE_TO_FOREGROUND_CALLBACK_NAME = "moveToForegroundResult";
     private static final String REQUEST_MANAGE_OVERLAY_PERMISSION_CALLBACK_NAME = "requestManageOverlayPermissionResult";
+    public static final String ERROR_ID_MISSING = "id must be provided.";
+    public static final String ERROR_ID_OR_NAME_MISSING = "id and name must be provided.";
     private ForegroundService implementation;
 
     @Override
@@ -68,11 +71,23 @@ public class ForegroundServicePlugin extends Plugin {
         } catch (Exception exception) {
             // Ignore exception
         }
+        startOrUpdateForegroundService(call, false);
+    }
+
+    @PluginMethod
+    public void updateForegroundService(PluginCall call) {
+        startOrUpdateForegroundService(call, true);
+    }
+
+    private void startOrUpdateForegroundService(PluginCall call, boolean isUpdate) {
         try {
+            String channelId = call.getString("notificationChannelId");
             String body = call.getString("body");
             String icon = call.getString("smallIcon");
             int id = call.getInt("id");
             String title = call.getString("title");
+            boolean silent = call.getBoolean("silent", false);
+            Integer serviceType = call.getInt("serviceType");
             JSArray buttons = call.getArray("buttons", new JSArray());
 
             ArrayList<Bundle> buttonBundles = new ArrayList<>();
@@ -84,7 +99,11 @@ public class ForegroundServicePlugin extends Plugin {
                 buttonBundles.add(buttonBundle);
             }
 
-            implementation.startForegroundService(body, icon, id, title, buttonBundles);
+            if (isUpdate) {
+                implementation.updateForegroundService(channelId, body, icon, id, title, buttonBundles, silent, serviceType);
+            } else {
+                implementation.startForegroundService(channelId, body, icon, id, title, buttonBundles, silent, serviceType);
+            }
             call.resolve();
         } catch (Exception exception) {
             call.reject(exception.getMessage());
@@ -164,6 +183,50 @@ public class ForegroundServicePlugin extends Plugin {
         } catch (Exception exception) {
             call.reject(exception.getMessage());
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
+        }
+    }
+
+    @PluginMethod
+    public void createNotificationChannel(PluginCall call) {
+        try {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+                call.unavailable();
+                return;
+            }
+            NotificationChannel notificationChannel = ForegroundServiceHelper.createNotificationChannelFromPluginCall(
+                call,
+                getContext().getPackageName()
+            );
+            if (notificationChannel == null) {
+                call.reject(ERROR_ID_OR_NAME_MISSING);
+                return;
+            }
+            implementation.createNotificationChannel(notificationChannel);
+            call.resolve();
+        } catch (Exception exception) {
+            Logger.error(TAG, exception.getMessage(), exception);
+            call.reject(exception.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void deleteNotificationChannel(PluginCall call) {
+        try {
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.O) {
+                call.unavailable();
+                return;
+            }
+            String id = call.getString("id");
+            if (id == null) {
+                call.reject(ERROR_ID_MISSING);
+                return;
+            }
+
+            implementation.deleteNotificationChannelById(id);
+            call.resolve();
+        } catch (Exception exception) {
+            Logger.error(TAG, exception.getMessage(), exception);
+            call.reject(exception.getMessage());
         }
     }
 

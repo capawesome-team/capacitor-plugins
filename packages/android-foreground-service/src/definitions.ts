@@ -24,6 +24,16 @@ export interface ForegroundServicePlugin {
    */
   startForegroundService(options: StartForegroundServiceOptions): Promise<void>;
   /**
+   * Updates the notification details of the running foreground service.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  updateForegroundService(
+    options: UpdateForegroundServiceOptions,
+  ): Promise<void>;
+  /**
    * Stops the foreground service.
    *
    * Only available on Android.
@@ -68,6 +78,27 @@ export interface ForegroundServicePlugin {
    */
   requestManageOverlayPermission(): Promise<ManageOverlayPermissionResult>;
   /**
+   * Create a notification channel.
+   * If not invoked, the plugin creates a channel with name and description set to "Default".
+   *
+   * Only available for Android (SDK 26+).
+   *
+   * @since 6.1.0
+   */
+  createNotificationChannel(
+    options: CreateNotificationChannelOptions,
+  ): Promise<void>;
+  /**
+   * Delete a notification channel.
+   *
+   * Only available for Android (SDK 26+).
+   *
+   * @since 6.1.0
+   */
+  deleteNotificationChannel(
+    options: DeleteNotificationChannelOptions,
+  ): Promise<void>;
+  /**
    * Called when a notification button is clicked.
    *
    * Only available on iOS.
@@ -110,6 +141,15 @@ export interface StartForegroundServiceOptions {
    */
   id: number;
   /**
+   * The foreground service type.
+   *
+   * Only available on Android (SDK 29+).
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types
+   */
+  serviceType?: ServiceType;
+  /**
    * The status bar icon for the notification.
    *
    * Icons should be placed in your app's `res/drawable` folder. The value for
@@ -127,6 +167,20 @@ export interface StartForegroundServiceOptions {
    * @example "This is the title of the notification"
    */
   title: string;
+  /**
+   * If true, will only alert (sound/vibration) on the first notification.
+   * Subsequent updates will be silent.
+   *
+   * @since 6.1.0
+   * @default false
+   */
+  silent?: boolean;
+  /**
+   * The notification channel identifier.
+   *
+   * @since 6.1.0
+   */
+  notificationChannelId?: string;
 }
 
 /**
@@ -194,4 +248,101 @@ export interface PermissionStatus {
    * @since 5.0.0
    */
   display: PermissionState;
+}
+
+/**
+ * @since 6.1.0
+ */
+export type UpdateForegroundServiceOptions = StartForegroundServiceOptions;
+
+/**
+ * @since 6.1.0
+ */
+export interface CreateNotificationChannelOptions {
+  /**
+   * The description of this channel (presented to the user).
+   *
+   * @since 6.1.0
+   */
+  description?: string;
+  /**
+   * The channel identifier.
+   *
+   * @since 6.1.0
+   */
+  id: string;
+  /**
+   * The level of interruption for notifications posted to this channel.
+   *
+   * @since 6.1.0
+   */
+  importance?: Importance;
+  /**
+   * The name of this channel (presented to the user).
+   *
+   * @since 6.1.0
+   */
+  name: string;
+}
+
+/**
+ * The importance level.
+ *
+ * For more details, see the [Android Developer Docs](https://developer.android.com/reference/android/app/NotificationManager#IMPORTANCE_DEFAULT)
+ *
+ * @since 6.1.0
+ */
+export enum Importance {
+  /**
+   * @since 6.1.0
+   */
+  Min = 1,
+  /**
+   * @since 6.1.0
+   */
+  Low = 2,
+  /**
+   * @since 6.1.0
+   */
+  Default = 3,
+  /**
+   * @since 6.1.0
+   */
+  High = 4,
+  /**
+   * @since 6.1.0
+   */
+  Max = 5,
+}
+
+/**
+ * @since 6.1.0
+ */
+export interface DeleteNotificationChannelOptions {
+  /**
+   * The channel identifier.
+   *
+   * @since 6.1.0
+   */
+  id: string;
+}
+
+/**
+ * @since 6.2.0
+ */
+export enum ServiceType {
+  /**
+   * Long-running use cases that require location access, such as navigation and location sharing.
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types#location
+   */
+  Location = 8,
+  /**
+   * Continue microphone capture from the background, such as voice recorders or communication apps.
+   *
+   * @since 6.2.0
+   * @see https://developer.android.com/develop/background-work/services/fgs/service-types#microphone
+   */
+  Microphone = 128,
 }

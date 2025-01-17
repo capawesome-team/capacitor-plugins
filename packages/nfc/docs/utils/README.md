@@ -1,5 +1,47 @@
 # Utils
 
+## Usage
+
+```ts
+import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+
+const convertBytesToHex = () => {
+  const utils = new NfcUtils();
+  const { hex } = utils.convertBytesToHex({ bytes: [0, 1, 2], start: '0x', separator: '' });
+  return hex;
+};
+
+const convertBytesToString = () => {
+  const utils = new NfcUtils();
+  const { text } = utils.convertBytesToString({ bytes: [72, 101, 108, 108, 111] });
+  return text;
+};
+
+const convertHexToBytes = () => {
+  const utils = new NfcUtils();
+  const { bytes } = utils.convertHexToBytes({ hex: '0x000102' });
+  return bytes;
+};
+
+const convertHexToNumber = () => {
+  const utils = new NfcUtils();
+  const { number } = utils.convertHexToNumber({ hex: '0x000102' });
+  return number;
+};
+
+const convertNumberToHex = () => {
+  const utils = new NfcUtils();
+  const { hex } = utils.convertNumberToHex({ number: 258 });
+  return hex;
+};
+
+const convertStringToBytes = () => {
+  const utils = new NfcUtils();
+  const { bytes } = utils.convertStringToBytes({ text: 'Hello' });
+  return bytes;
+};
+```
+
 ## API
 
 <docgen-index>

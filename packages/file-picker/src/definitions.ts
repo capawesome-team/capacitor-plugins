@@ -2,6 +2,14 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface FilePickerPlugin {
   /**
+   * Check permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
    * Convert a HEIC image to JPEG.
    *
    * Only available on iOS.
@@ -15,6 +23,14 @@ export interface FilePickerPlugin {
    * Open the file picker that allows the user to select one or more files.
    */
   pickFiles(options?: PickFilesOptions): Promise<PickFilesResult>;
+  /**
+   * Open a picker dialog that allows the user to select a directory.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.2.0
+   */
+  pickDirectory(): Promise<PickDirectoryResult>;
   /**
    * Pick one or more images from the gallery.
    *
@@ -45,6 +61,16 @@ export interface FilePickerPlugin {
    * @since 0.5.3
    */
   pickVideos(options?: PickVideosOptions): Promise<PickVideosResult>;
+  /**
+   * Request permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  requestPermissions(
+    options?: RequestPermissionsOptions,
+  ): Promise<PermissionStatus>;
   /**
    * Called when the file picker is dismissed.
    *
@@ -88,6 +114,28 @@ export interface ConvertHeicToJpegResult {
    * @since 0.6.0
    */
   path: string;
+}
+
+/**
+ * @since 6.1.0
+ */
+export interface PermissionStatus {
+  /**
+   * Permission state for accessing media location.
+   *
+   * On Android, this requests/checks the `ACCESS_MEDIA_LOCATION` permission.
+   *
+   * @since 6.1.0
+   */
+  accessMediaLocation: PermissionState;
+  /**
+   * Permission state for reading external storage.
+   *
+   * On Android, this requests/checks the `READ_EXTERNAL_STORAGE` permission.
+   *
+   * @since 6.1.0
+   */
+  readExternalStorage: PermissionState;
 }
 
 export interface PickFilesOptions {
@@ -229,6 +277,15 @@ export interface PickMediaOptions {
   ordered?: boolean;
 }
 
+export interface PickDirectoryResult {
+  /**
+   * The path to the selected directory.
+   *
+   * @since 6.2.0
+   */
+  path: string;
+}
+
 /**
  * @since 0.5.3
  */
@@ -253,3 +310,21 @@ export type PickVideosOptions = PickMediaOptions;
  * @since 0.5.3
  */
 export type PickVideosResult = PickMediaResult;
+
+/**
+ * @since 6.1.0
+ */
+export interface RequestPermissionsOptions {
+  /**
+   * The permissions to request.
+   *
+   * @since 6.1.0
+   * @default ["accessMediaLocation", "readExternalStorage"]
+   */
+  permissions?: PermissionType[];
+}
+
+/**
+ * @since 6.1.0
+ */
+export type PermissionType = 'accessMediaLocation' | 'readExternalStorage';

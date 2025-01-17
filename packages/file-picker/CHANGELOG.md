@@ -1,5 +1,21 @@
 # Changelog
 
+## 6.2.0
+
+### Minor Changes
+
+- [`e3f377a`](https://github.com/capawesome-team/capacitor-plugins/commit/e3f377a7656f2ace20c34be1b566cbce443f538b) ([#326](https://github.com/capawesome-team/capacitor-plugins/pull/326)): feat: add `pickDirectory()` method
+
+## 6.1.0
+
+### Minor Changes
+
+- [`ede2704`](https://github.com/capawesome-team/capacitor-plugins/commit/ede2704bf34875c59570e3ef0c016c2730fe57ac) ([#302](https://github.com/capawesome-team/capacitor-plugins/pull/302)): feat(android): add `checkPermissions()` and `requestPermissions(...)` methods
+
+### Patch Changes
+
+- [`7f68534`](https://github.com/capawesome-team/capacitor-plugins/commit/7f68534c84d72952caafa270753a0125147bfbce) ([#295](https://github.com/capawesome-team/capacitor-plugins/pull/295)): fix(android): no files were returned on Android 10 and below with the Samsung Gallery app
+
 ## 6.0.1
 
 ### Patch Changes

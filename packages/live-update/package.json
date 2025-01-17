@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-live-update",
-  "version": "6.2.0-dev.0a2a6a5.1722676620",
+  "version": "6.7.1",
   "description": "Capacitor plugin to update your app remotely in real-time.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,8 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorLiveUpdate.podspec"
+    "CapawesomeCapacitorLiveUpdate.podspec",
+    "Package.swift"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
@@ -67,7 +68,7 @@
     "@capacitor/android": "6.0.0",
     "@capacitor/cli": "6.0.0",
     "@capacitor/core": "6.0.0",
-    "@capacitor/docgen": "0.0.17",
+    "@capacitor/docgen": "0.3.0",
     "@capacitor/ios": "6.0.0",
     "@ionic/eslint-config": "0.3.0",
     "@ionic/prettier-config": "2.0.0",

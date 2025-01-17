@@ -9,7 +9,12 @@ public class LiveUpdateConfig {
     private String appId = null;
 
     private boolean autoDeleteBundles = false;
+
+    @Nullable
+    private String defaultChannel = null;
+
     private boolean enabled = true;
+    private int httpTimeout = 60000;
 
     @Nullable
     private String location = null;
@@ -29,8 +34,17 @@ public class LiveUpdateConfig {
         return autoDeleteBundles;
     }
 
+    @Nullable
+    public String getDefaultChannel() {
+        return defaultChannel;
+    }
+
     public boolean getEnabled() {
         return enabled;
+    }
+
+    public int getHttpTimeout() {
+        return httpTimeout;
     }
 
     @Nullable
@@ -59,8 +73,16 @@ public class LiveUpdateConfig {
         this.autoDeleteBundles = autoDeleteBundles;
     }
 
+    public void setDefaultChannel(@Nullable String defaultChannel) {
+        this.defaultChannel = defaultChannel;
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setHttpTimeout(int httpTimeout) {
+        this.httpTimeout = httpTimeout;
     }
 
     public void setLocation(@Nullable String location) {

@@ -6,7 +6,16 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppUpdatePlugin)
-public class AppUpdatePlugin: CAPPlugin {
+public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppUpdatePlugin"
+    public let jsName = "AppUpdate"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getAppUpdateInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openAppStore", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "performImmediateUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startFlexibleUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "completeFlexibleUpdate", returnType: CAPPluginReturnPromise)
+    ]
     private static let updateAvailabilityNotAvailable = 1
     private static let updateAvailabilityAvailable = 2
 
@@ -58,6 +67,18 @@ public class AppUpdatePlugin: CAPPlugin {
     }
 
     @objc func openAppStore(_ call: CAPPluginCall) {
+        if let appId = call.getString("appId") {
+            guard let url = URL(string: "https://apps.apple.com/app/id\(appId)") else {
+                call.reject("appid is invalid.")
+                return
+            }
+            DispatchQueue.main.async {
+                UIApplication.shared.open(url) { (_) in
+                    call.resolve()
+                }
+            }
+            return
+        }
         DispatchQueue.global().async {
             do {
                 let date = Date.init().timeIntervalSince1970

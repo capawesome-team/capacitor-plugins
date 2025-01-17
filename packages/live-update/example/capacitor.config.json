@@ -1,0 +1,11 @@
+{
+  "appId": "com.example.plugin",
+  "appName": "example",
+  "bundledWebRuntime": false,
+  "webDir": "dist",
+  "plugins": {
+    "LiveUpdate": {
+      "appId": "46d641f5-2703-4e99-b498-006192c70484"
+    }
+  }
+}
