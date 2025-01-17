@@ -807,8 +807,7 @@ import CommonCrypto
             // If the current bundle version is not set, return true for safety reasons
             return true
         }
-        CAPLog.print(lastBundleShortVersionString + "_" + lastBundleVersionString)
-        CAPLog.print(currentBundleShortVersionString + "_" + currentBundleVersionString)
+        // `CFBundleVersion` is not unique across different versions of the app
         return lastBundleShortVersionString + "_" + lastBundleVersionString != currentBundleShortVersionString + "_" + currentBundleVersionString
     }
 }
