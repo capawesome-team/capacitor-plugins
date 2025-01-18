@@ -90,7 +90,7 @@ import CommonCrypto
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId = getCurrentBundleId()
+        let bundleId = getCurrentBundleId()
         let result = GetBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -108,7 +108,7 @@ import CommonCrypto
     }
 
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId = getCurrentBundleId()
+        let bundleId = getCurrentBundleId()
         let result = GetCurrentBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -127,7 +127,7 @@ import CommonCrypto
     }
 
     @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId: String? = getNextBundleId()
+        let bundleId: String? = getNextBundleId()
         let result = GetNextBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -558,7 +558,7 @@ import CommonCrypto
 
     /// - Returns: The absolute path to the next bundle directory.
     private func getNextCapacitorServerPath() -> String {
-        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
+        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: nil)
         if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
             return path.isEmpty ? defaultCapacitorServerPath : path
         }
@@ -623,7 +623,7 @@ import CommonCrypto
         let currentBundleId = getCurrentBundleId()
         setPreviousBundleId(bundleId: currentBundleId)
         // Perform the rollback
-        if let currentBundleId = currentBundleId {
+        if let _ = currentBundleId {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
             setNextBundleById(nil)
             setCurrentBundleById(nil)
@@ -668,7 +668,7 @@ import CommonCrypto
     
     /// - Parameter bundleId: The bundle ID to set as the current bundle. If `nil`, the default bundle will be used.
     private func setCurrentBundleById(_ bundleId: String?) {
-        let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: bundleId)
         setCurrentCapacitorServerPath(path: path)
     }
 
@@ -681,7 +681,7 @@ import CommonCrypto
 
     /// - Parameter bundleId: The bundle ID to set as the next bundle. If `nil`, the default bundle will be used.
     private func setNextBundleById(_ bundleId: String?) {
-        let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
+        let path = buildCapacitorServerPathFor(bundleId: bundleId)
         setNextCapacitorServerPath(path: path)
     }
 

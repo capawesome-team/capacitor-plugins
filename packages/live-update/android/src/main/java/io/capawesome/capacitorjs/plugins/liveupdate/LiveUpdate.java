@@ -373,7 +373,7 @@ public class LiveUpdate {
 
     private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId == null) {
             // Create the source input stream
             AssetManager assets = plugin.getContext().getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
@@ -757,9 +757,9 @@ public class LiveUpdate {
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId == null) {
             AssetManager assets = plugin.getContext().getAssets();
-            Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+            boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
                 InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
                 BufferedSource source = Okio.buffer(Okio.source(inputStream));
@@ -802,14 +802,14 @@ public class LiveUpdate {
         String currentBundleId = getCurrentBundleId();
         setPreviousBundleId(currentBundleId);
         // Log the rollback result
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId == null) {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
-            return;
+        } else {
+            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
+            // Rollback to the default bundle
+            setNextBundleById(null);
+            setCurrentBundleById(null);
         }
-        Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
-        // Rollback to the default bundle
-        setNextBundleById(null);
-        setCurrentBundleById(null);
     }
 
     private void saveCurrentVersionCode() throws PackageManager.NameNotFoundException {
