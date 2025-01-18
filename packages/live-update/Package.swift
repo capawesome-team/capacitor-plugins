@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CapawesomeCapacitorLiveUpdate",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v13)],
     products: [
         .library(
             name: "CapawesomeCapacitorLiveUpdate",
@@ -12,7 +12,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "6.0.0"),
         .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.9.0")),
-        .package(url: "https://github.com/ZipArchive/ZipArchive.git", .upToNextMajor(from: "2.2.3"))
+        .package(url: "https://github.com/ZipArchive/ZipArchive.git", exact: "2.2.3")
     ],
     targets: [
         .target(
