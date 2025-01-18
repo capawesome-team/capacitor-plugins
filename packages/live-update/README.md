@@ -501,7 +501,7 @@ Only available on Android and iOS.
 ### ready()
 
 ```typescript
-ready() => Promise<void>
+ready() => Promise<ReadyResult>
 ```
 
 Notify the plugin that the app is ready to use and no rollback is needed.
@@ -510,6 +510,8 @@ Notify the plugin that the app is ready to use and no rollback is needed.
 to prevent the app from being reset to the default bundle.
 
 Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#readyresult">ReadyResult</a>&gt;</code>
 
 **Since:** 5.0.0
 
@@ -666,7 +668,7 @@ Only available on Android and iOS.
 | Prop               | Type                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Default            | Since |
 | ------------------ | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
 | **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>'zip'</code> | 6.6.0 |
-| **`bundleId`**     | <code>string</code>              | The unique identifier of the bundle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |                    | 5.0.0 |
+| **`bundleId`**     | <code>string</code>              | The unique identifier of the bundle. **Attention**: The value `public` is reserved and cannot be used as a bundle identifier.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |                    | 5.0.0 |
 | **`checksum`**     | <code>string</code>              | The checksum of the bundle to verify the integrity of the ZIP file. Must be a SHA-256 hash in base64 format.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |                    | 6.1.0 |
 | **`url`**          | <code>string</code>              | The URL of the bundle to download. For the `zip` artifact type, the URL must point to a ZIP file. For the `manifest` artifact type, the URL serves as the base URL to download the individual files. For example, if the URL is `https://example.com/download`, the plugin will download the file with the href `index.html` from `https://example.com/download?href=index.html`. To **verify the integrity** of the file, the server must return a `X-Checksum` header with the SHA-256 hash in base64 format. To **verify the signature** of the file, the server must return a `X-Signature` header with the signed SHA-256 hash in base64 format. |                    | 5.0.0 |
 
@@ -749,6 +751,15 @@ Only available on Android and iOS.
 | Prop              | Type                | Description                                                                                                                                                                                       | Since |
 | ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`versionName`** | <code>string</code> | The version name of the app. On **Android**, this is the `versionName` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file. | 5.0.0 |
+
+
+#### ReadyResult
+
+| Prop                   | Type                        | Description                                                                             | Since |
+| ---------------------- | --------------------------- | --------------------------------------------------------------------------------------- | ----- |
+| **`previousBundleId`** | <code>string \| null</code> | The identifier of the previous bundle used. If `null`, the default bundle was used.     | 7.0.0 |
+| **`currentBundleId`**  | <code>string \| null</code> | The identifier of the current bundle used. If `null`, the default bundle is being used. | 7.0.0 |
+| **`rollback`**         | <code>boolean</code>        | Whether or not the app was reset to the default bundle.                                 | 7.0.0 |
 
 
 #### SetBundleOptions

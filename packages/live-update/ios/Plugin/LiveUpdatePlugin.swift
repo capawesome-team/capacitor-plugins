@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "6.8.0"
+    public static let version = "7.0.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
@@ -209,8 +209,15 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func ready(_ call: CAPPluginCall) {
-        implementation?.ready()
-        resolveCall(call)
+        implementation?.ready(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
     }
 
     @objc func reload(_ call: CAPPluginCall) {

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import org.json.JSONObject;
 

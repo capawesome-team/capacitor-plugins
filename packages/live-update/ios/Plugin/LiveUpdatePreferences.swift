@@ -5,6 +5,7 @@ public class LiveUpdatePreferences: NSObject {
     private let customIdKey = "customId" // DO NOT CHANGE
     private let lastBundleShortVersionStringKey = "lastBundleShortVersionString" // DO NOT CHANGE
     private let lastBundleVersionKey = "lastBundleVersion" // DO NOT CHANGE
+    private let previousBundleIdKey = "previousBundleIdKey" // DO NOT CHANGE
 
     public func getChannel() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: channelKey))
@@ -20,6 +21,10 @@ public class LiveUpdatePreferences: NSObject {
 
     public func getLastBundleVersion() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: lastBundleVersionKey))
+    }
+
+    public func getPreviousBundleId() -> String? {
+        return UserDefaults.standard.string(forKey: applyPrefix(to: previousBundleIdKey))
     }
 
     public func setChannel(_ value: String?) {
@@ -50,6 +55,15 @@ public class LiveUpdatePreferences: NSObject {
             UserDefaults.standard.set(value, forKey: applyPrefix(to: lastBundleVersionKey))
         } else {
             UserDefaults.standard.removeObject(forKey: applyPrefix(to: lastBundleVersionKey))
+        }
+        UserDefaults.standard.synchronize()
+    }
+
+    public func setPreviousBundleId(_ value: String?) {
+        if let value = value {
+            UserDefaults.standard.set(value, forKey: applyPrefix(to: previousBundleIdKey))
+        } else {
+            UserDefaults.standard.removeObject(forKey: applyPrefix(to: previousBundleIdKey))
         }
         UserDefaults.standard.synchronize()
     }

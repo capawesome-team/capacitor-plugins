@@ -196,7 +196,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 5.0.0
    */
-  ready(): Promise<void>;
+  ready(): Promise<ReadyResult>;
   /**
    * Reload the app to apply the new bundle.
    *
@@ -288,6 +288,8 @@ export interface DownloadBundleOptions {
   artifactType?: 'manifest' | 'zip';
   /**
    * The unique identifier of the bundle.
+   *
+   * **Attention**: The value `public` is reserved and cannot be used as a bundle identifier.
    *
    * @since 5.0.0
    * @example '1.0.0'
@@ -501,6 +503,34 @@ export interface GetCustomIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   customId: string | null;
+}
+
+/**
+ * @since 7.0.0
+ */
+export interface ReadyResult {
+  /**
+   * The identifier of the previous bundle used.
+   *
+   * If `null`, the default bundle was used.
+   *
+   * @since 7.0.0
+   */
+  previousBundleId: string | null;
+  /**
+   * The identifier of the current bundle used.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 7.0.0
+   */
+  currentBundleId: string | null;
+  /**
+   * Whether or not the app was reset to the default bundle.
+   *
+   * @since 7.0.0
+   */
+  rollback: boolean;
 }
 
 /**
