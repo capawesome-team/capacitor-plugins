@@ -61,16 +61,6 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 
 We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278401) as the reason for accessing the [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults) API.
 
-#### Minimum Deployment Target
-
-If you are using **Swift Package Manager (SPM)** for your iOS project, make sure to set the deployment target in your `ios/App/App.xcodeproj/project.pbxproj` to at least 16.0:
-
-```diff
-IPHONEOS_DEPLOYMENT_TARGET = 16.0;
-```
-
-No changes are required if you are using **CocoaPods**.
-
 ## Configuration
 
 <docgen-config>
