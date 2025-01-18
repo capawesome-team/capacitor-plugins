@@ -1,10 +1,6 @@
 import Foundation
 import CryptoKit
-#if canImport(ZipArchive)
-import ZipArchive
-#else
-import SSZipArchive
-#endif
+import ZIPFoundation
 import Capacitor
 import Alamofire
 import CommonCrypto
@@ -274,9 +270,9 @@ import CommonCrypto
 
     private func addBundleOfTypeZip(bundleId: String, zipFile: URL) async throws {
         // Unzip the bundle
-        let unzippedDirectory = self.unzipFile(zipFile: zipFile)
+        let unzippedDirectory = try unzipFile(zipFile: zipFile)
         // Add the bundle
-        try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
+        try addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
 
     private func buildCapacitorServerPathFor(bundleId: String?) -> String {
@@ -713,10 +709,12 @@ import CommonCrypto
         rollbackDispatchWorkItem?.cancel()
     }
 
-    private func unzipFile(zipFile: URL) -> URL {
-        let destinationDirectory = zipFile.deletingPathExtension()
-        SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
-        return destinationDirectory
+    func unzipFile(zipFile: URL) throws -> URL {
+        let destinationURL = zipFile.deletingPathExtension()
+        let fileManager = FileManager()
+        try fileManager.createDirectory(at: destinationURL, withIntermediateDirectories: true, attributes: nil)
+        try fileManager.unzipItem(at: zipFile, to: destinationURL)
+        return destinationURL
     }
 
     private func verifyFile(url: URL, checksum: String?, signature: String?) throws {
