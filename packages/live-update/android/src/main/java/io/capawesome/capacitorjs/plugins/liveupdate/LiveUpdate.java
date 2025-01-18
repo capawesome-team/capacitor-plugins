@@ -733,6 +733,9 @@ public class LiveUpdate {
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
     }
 
+    /**
+     * @return The previous bundle ID or `null` if the default bundle was used.
+     */
     @Nullable
     private String getPreviousBundleId() {
         return preferences.getPreviousBundleId();
@@ -840,7 +843,7 @@ public class LiveUpdate {
     }
 
     /**
-     * @param bundleId The bundle ID to set as the current bundle. Use `null` for the default bundle.
+     * @param bundleId The bundle ID to set as the current bundle. If `null`, the default bundle will be used.
      */
     private void setCurrentBundleById(@Nullable String bundleId) {
         if (bundleId == null) {
@@ -861,7 +864,7 @@ public class LiveUpdate {
     }
 
     /**
-     * @param bundleId The bundle ID to set as the next bundle. Use `null` for the default bundle.
+     * @param bundleId The bundle ID to set as the next bundle. If `null`, the default bundle will be used.
      */
     private void setNextBundleById(@Nullable String bundleId) {
         if (bundleId == null) {
@@ -877,6 +880,9 @@ public class LiveUpdate {
         this.webViewSettingsEditor.commit();
     }
 
+    /**
+     * @param bundleId The bundle ID to save as the previous bundle. If `null`, the value will be removed.
+     */
     private void setPreviousBundleId(@Nullable String bundleId) {
         preferences.setPreviousBundleId(bundleId);
     }

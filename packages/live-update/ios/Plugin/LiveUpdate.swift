@@ -565,6 +565,7 @@ import CommonCrypto
         return defaultCapacitorServerPath
     }
 
+    /// - Returns: The previous bundle ID or `nil` if the default bundle was used.
     private func getPreviousBundleId() -> String? {
         return preferences.getPreviousBundleId()
     }
@@ -665,6 +666,7 @@ import CommonCrypto
         return nil
     }
     
+    /// - Parameter bundleId: The bundle ID to set as the current bundle. If `nil`, the default bundle will be used.
     private func setCurrentBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
         setCurrentCapacitorServerPath(path: path)
@@ -677,6 +679,7 @@ import CommonCrypto
         viewController.setServerBasePath(path: path)
     }
 
+    /// - Parameter bundleId: The bundle ID to set as the next bundle. If `nil`, the default bundle will be used.
     private func setNextBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
         setNextCapacitorServerPath(path: path)
@@ -692,6 +695,7 @@ import CommonCrypto
         }
     }
 
+    /// - Parameter bundleId: The bundle ID to save as the previous bundle ID. If `nil`, the value will be removed.
     private func setPreviousBundleId(bundleId: String?) {
         preferences.setPreviousBundleId(bundleId)
     }
