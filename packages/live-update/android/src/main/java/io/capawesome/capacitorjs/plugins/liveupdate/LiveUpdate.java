@@ -118,12 +118,12 @@ public class LiveUpdate {
     public void deleteBundle(@NonNull DeleteBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
-        if (!hasBundle(bundleId)) {
+        if (!hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
             callback.error(exception);
             return;
         }
-        deleteBundle(bundleId);
+        deleteBundleById(bundleId);
 
         callback.success();
     }
@@ -135,7 +135,7 @@ public class LiveUpdate {
         String url = options.getUrl();
 
         // Check if the bundle already exists
-        if (hasBundle(bundleId)) {
+        if (hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_EXISTS);
             callback.error(exception);
             return;
@@ -162,10 +162,6 @@ public class LiveUpdate {
 
     public void getBundle(@NonNull NonEmptyCallback callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            // Return null for the built-in bundle
-            bundleId = null;
-        }
         GetBundleResult result = new GetBundleResult(bundleId);
         callback.success(result);
     }
@@ -184,9 +180,6 @@ public class LiveUpdate {
 
     public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            bundleId = null;
-        }
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
         callback.success(result);
     }
@@ -205,9 +198,6 @@ public class LiveUpdate {
 
     public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
         String bundleId = getNextBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            bundleId = null;
-        }
         GetNextBundleResult result = new GetNextBundleResult(bundleId);
         callback.success(result);
     }
@@ -251,19 +241,19 @@ public class LiveUpdate {
     }
 
     public void reset() {
-        setNextCapacitorServerPathToDefaultWebAssetDir();
+        setNextBundleById(null);
     }
 
     public void setBundle(@NonNull SetBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
-        if (!hasBundle(bundleId)) {
+        if (!hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
             callback.error(exception);
             return;
         }
 
-        setNextBundle(bundleId);
+        setNextBundleById(bundleId);
         callback.success();
     }
 
@@ -287,8 +277,8 @@ public class LiveUpdate {
         if (bundleId == null) {
             reset();
         } else {
-            if (hasBundle(bundleId)) {
-                setNextBundle(bundleId);
+            if (hasBundleById(bundleId)) {
+                setNextBundleById(bundleId);
             } else {
                 Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
                 callback.error(exception);
@@ -313,12 +303,12 @@ public class LiveUpdate {
         String latestBundleId = response.getBundleId();
         String url = response.getUrl();
         // Check if the bundle already exists
-        if (hasBundle(latestBundleId)) {
+        if (hasBundleById(latestBundleId)) {
             String nextBundleId = null;
             String currentBundleId = getCurrentBundleId();
             if (!latestBundleId.equals(currentBundleId)) {
                 // Set the next bundle
-                setNextBundle(latestBundleId);
+                setNextBundleById(latestBundleId);
                 nextBundleId = latestBundleId;
             }
             SyncResult syncResult = new SyncResult(nextBundleId);
@@ -332,7 +322,7 @@ public class LiveUpdate {
             downloadBundleOfTypeZip(latestBundleId, url, null);
         }
         // Set the next bundle
-        setNextBundle(latestBundleId);
+        setNextBundleById(latestBundleId);
         SyncResult syncResult = new SyncResult(latestBundleId);
         callback.success(syncResult);
     }
@@ -460,14 +450,14 @@ public class LiveUpdate {
         return file;
     }
 
-    private void deleteBundle(@NonNull String bundleId) {
+    private void deleteBundleById(@NonNull String bundleId) {
         // Delete the bundle directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         deleteFileRecursively(bundleDirectory);
         // Reset the next bundle if it is the deleted bundle
         String nextBundleId = getNextBundleId();
         if (bundleId.equals(nextBundleId)) {
-            setNextCapacitorServerPathToDefaultWebAssetDir();
+            setNextBundleById(null);
         }
     }
 
@@ -484,7 +474,7 @@ public class LiveUpdate {
         String[] bundleIds = getBundleIds();
         for (String bundleId : bundleIds) {
             if (!isBundleInUse(bundleId)) {
-                deleteBundle(bundleId);
+                deleteBundleById(bundleId);
             }
         }
     }
@@ -692,12 +682,13 @@ public class LiveUpdate {
     }
 
     /**
-     * @return The current bundle ID (`public` for the built-in bundle).
+     * @return The current bundle ID or `null` if the default bundle is in use.
      */
+    @Nullable
     private String getCurrentBundleId() {
         String currentPath = getCurrentCapacitorServerPath();
         if (currentPath.equals(defaultWebAssetDir)) {
-            return defaultWebAssetDir;
+            return null;
         }
         return new File(currentPath).getName();
     }
@@ -720,13 +711,13 @@ public class LiveUpdate {
     }
 
     /**
-     * @return The next bundle ID (`public` for the built-in bundle).
+     * @return The next bundle ID or `null` if the default bundle will be used.
      */
-    @NonNull
+    @Nullable
     private String getNextBundleId() {
         String nextPath = getNextCapacitorServerPath();
         if (nextPath.equals(defaultWebAssetDir)) {
-            return defaultWebAssetDir;
+            return null;
         }
         return new File(nextPath).getName();
     }
@@ -755,7 +746,7 @@ public class LiveUpdate {
         return getPackageInfo().versionName;
     }
 
-    private boolean hasBundle(@NonNull String bundleId) {
+    private boolean hasBundleById(@NonNull String bundleId) {
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         return bundleDirectory.exists();
     }
@@ -814,8 +805,8 @@ public class LiveUpdate {
         }
         Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
         // Rollback to the default bundle
-        setNextCapacitorServerPathToDefaultWebAssetDir();
-        setCurrentCapacitorServerPathToDefaultWebAssetDir();
+        setNextBundleById(null);
+        setCurrentBundleById(null);
     }
 
     private void saveCurrentVersionCode() throws PackageManager.NameNotFoundException {
@@ -848,6 +839,18 @@ public class LiveUpdate {
         return null;
     }
 
+    /**
+     * @param bundleId The bundle ID to set as the current bundle. Use `null` for the default bundle.
+     */
+    private void setCurrentBundleById(@Nullable String bundleId) {
+        if (bundleId == null) {
+            setCurrentCapacitorServerPath(defaultWebAssetDir);
+        } else {
+            File bundleDirectory = buildBundleDirectoryFor(bundleId);
+            setCurrentCapacitorServerPath(bundleDirectory.getPath());
+        }
+    }
+
     private void setCurrentCapacitorServerPath(@NonNull String path) {
         if (path.equals(defaultWebAssetDir)) {
             this.plugin.getBridge().setServerAssetPath(path);
@@ -857,22 +860,21 @@ public class LiveUpdate {
         this.plugin.getBridge().reload();
     }
 
-    private void setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        setCurrentCapacitorServerPath(defaultWebAssetDir);
-    }
-
-    private void setNextBundle(@NonNull String bundleId) {
-        File bundleDirectory = buildBundleDirectoryFor(bundleId);
-        setNextCapacitorServerPath(bundleDirectory.getPath());
+    /**
+     * @param bundleId The bundle ID to set as the next bundle. Use `null` for the default bundle.
+     */
+    private void setNextBundleById(@Nullable String bundleId) {
+        if (bundleId == null) {
+            setNextCapacitorServerPath(defaultWebAssetDir);
+        } else {
+            File bundleDirectory = buildBundleDirectoryFor(bundleId);
+            setNextCapacitorServerPath(bundleDirectory.getPath());
+        }
     }
 
     private void setNextCapacitorServerPath(@NonNull String path) {
         this.webViewSettingsEditor.putString(WebView.CAP_SERVER_PATH, path);
         this.webViewSettingsEditor.commit();
-    }
-
-    private void setNextCapacitorServerPathToDefaultWebAssetDir() {
-        setNextCapacitorServerPath(defaultWebAssetDir);
     }
 
     private void setPreviousBundleId(@Nullable String bundleId) {

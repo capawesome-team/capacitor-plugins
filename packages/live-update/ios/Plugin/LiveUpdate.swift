@@ -51,14 +51,14 @@ import CommonCrypto
     @objc public func deleteBundle(_ options: DeleteBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
-        if !hasBundle(bundleId: bundleId) {
+        if !hasBundleById(bundleId) {
             let error = CustomError.bundleNotFound
             completion(error)
             return
         }
 
         do {
-            try deleteBundle(bundleId: bundleId)
+            try deleteBundleById(bundleId)
             completion(nil)
         } catch {
             completion(error)
@@ -72,7 +72,7 @@ import CommonCrypto
         let url = options.getUrl()
 
         // Check if the bundle already exists
-        if hasBundle(bundleId: bundleId) {
+        if hasBundleById(bundleId) {
             throw CustomError.bundleAlreadyExists
         }
 
@@ -90,10 +90,7 @@ import CommonCrypto
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
-        let bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
+        var bundleId = getCurrentBundleId()
         let result = GetBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -112,9 +109,6 @@ import CommonCrypto
 
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
         let result = GetCurrentBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -134,9 +128,6 @@ import CommonCrypto
 
     @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
         var bundleId: String? = getNextBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
         let result = GetNextBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -180,20 +171,20 @@ import CommonCrypto
     }
 
     @objc public func reset() {
-        self.setNextCapacitorServerPathToDefaultWebAssetDir()
+        self.setNextBundleById(nil)
     }
 
     @objc public func setBundle(_ options: SetBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
         // Check if the bundle already exists
-        if !hasBundle(bundleId: bundleId) {
+        if !hasBundleById(bundleId) {
             let error = CustomError.bundleNotFound
             completion(error)
             return
         }
 
-        setNextBundle(bundleId: bundleId)
+        setNextBundleById(bundleId)
         completion(nil)
     }
 
@@ -215,8 +206,8 @@ import CommonCrypto
         let bundleId = options.getBundleId()
 
         if let bundleId = bundleId {
-            if hasBundle(bundleId: bundleId) {
-                setNextBundle(bundleId: bundleId)
+            if hasBundleById(bundleId) {
+                setNextBundleById(bundleId)
             } else {
                 let error = CustomError.bundleNotFound
                 completion(error)
@@ -241,12 +232,12 @@ import CommonCrypto
         let latestBundleId = response.bundleId
         let downloadUrl = response.url
         // Check if bundle already exists
-        if hasBundle(bundleId: latestBundleId) {
+        if hasBundleById(latestBundleId) {
             var nextBundleId: String?
             let currentBundleId = self.getCurrentBundleId()
             if latestBundleId != currentBundleId {
                 // Set the next bundle
-                setNextBundle(bundleId: latestBundleId)
+                setNextBundleById(latestBundleId)
                 nextBundleId = latestBundleId
             }
             return SyncResult(nextBundleId: nextBundleId)
@@ -258,7 +249,7 @@ import CommonCrypto
             try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: nil)
         }
         // Set the next bundle
-        setNextBundle(bundleId: latestBundleId)
+        setNextBundleById(latestBundleId)
         return SyncResult(nextBundleId: latestBundleId)
     }
 
@@ -287,12 +278,12 @@ import CommonCrypto
         try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
 
-    private func buildCapacitorServerPathFor(bundleId: String) -> String {
+    private func buildCapacitorServerPathFor(bundleId: String?) -> String {
         let path: String
-        if bundleId == "public" {
-            path = Bundle.main.bundleURL.appendingPathComponent(bundleId).path
-        } else {
+        if let bundleId = bundleId {
             path = buildBundlePathFor(bundleId: bundleId)
+        } else {
+            path = Bundle.main.bundleURL.appendingPathComponent(defaultWebAssetDir).path
         }
         return path
     }
@@ -307,22 +298,19 @@ import CommonCrypto
     }
 
     private func copyCurrentBundleFile(href: String, toDirectory: URL) throws {
-        guard let currentBundleId = getCurrentBundleId() else {
-            return
-        }
-
+        let currentBundleId = getCurrentBundleId()
         let destination = toDirectory.appendingPathComponent(href)
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
-        if currentBundleId == defaultWebAssetDir {
+        if let currentBundleId = currentBundleId {
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
+        } else {
             guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
                 return
             }
             sourceURL = file
-        } else {
-            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
         }
 
         try FileManager.default.copyItem(at: sourceURL, to: destination)
@@ -352,14 +340,14 @@ import CommonCrypto
         return temporaryDirectory
     }
 
-    private func deleteBundle(bundleId: String) throws {
+    private func deleteBundleById(_ bundleId: String) throws {
         // Delete the bundle directory
         let path = buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.removeItem(atPath: path)
         // Reset the next bundle if it is the deleted bundle
         let nextBundleId = getNextBundleId()
         if bundleId == nextBundleId {
-            setNextCapacitorServerPathToDefaultWebAssetDir()
+            setNextBundleById(nil)
         }
     }
 
@@ -371,7 +359,7 @@ import CommonCrypto
         for bundleId in bundleIds {
             if bundleId != currentBundleId && bundleId != nextBundleId {
                 do {
-                    try deleteBundle(bundleId: bundleId)
+                    try deleteBundleById(bundleId)
                 } catch {
                     CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
                 }
@@ -533,12 +521,16 @@ import CommonCrypto
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
 
-    /// - Returns: The current bundle ID (`public` for the built-in bundle) or `nil` if no view controller was found.
+    /// - Returns: The current bundle ID or `nil` if no view controller was found (should never happen) or the default bundle is in use.
     private func getCurrentBundleId() -> String? {
         guard let path = getCurrentCapacitorServerPath() else {
             return nil
         }
-        return URL(fileURLWithPath: path).lastPathComponent
+        let bundleId = URL(fileURLWithPath: path).lastPathComponent
+        if bundleId == defaultWebAssetDir {
+            return nil
+        }
+        return bundleId
     }
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
@@ -554,10 +546,14 @@ import CommonCrypto
         return deviceId.lowercased()
     }
 
-    /// - Returns: The next bundle ID (`public` for the built-in bundle).
-    private func getNextBundleId() -> String {
+    /// - Returns: The next bundle ID or `nil` if the default bundle will be used.
+    private func getNextBundleId() -> String? {
         let path = getNextCapacitorServerPath()
-        return URL(fileURLWithPath: path).lastPathComponent
+        let bundleId = URL(fileURLWithPath: path).lastPathComponent
+        if bundleId == defaultWebAssetDir {
+            return nil
+        }
+        return bundleId
     }
 
     /// - Returns: The absolute path to the next bundle directory.
@@ -587,27 +583,24 @@ import CommonCrypto
         return appVersionName
     }
 
-    private func hasBundle(bundleId: String) -> Bool {
+    private func hasBundleById(_ bundleId: String) -> Bool {
         let path = buildBundlePathFor(bundleId: bundleId)
         return FileManager.default.fileExists(atPath: path)
     }
 
     private func loadCurrentManifest() throws -> Manifest? {
-        guard let currentBundleId = getCurrentBundleId() else {
-            return nil
-        }
-        if currentBundleId == defaultWebAssetDir {
-            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
-            let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
-            if let manifestFileUrl = manifestFileUrl {
+        if let currentBundleId = getCurrentBundleId() {
+            let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
+            let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
+            if manifestFileExists {
                 return try loadManifest(file: manifestFileUrl)
             } else {
                 return nil
             }
         } else {
-            let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
-            let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
-            if manifestFileExists {
+            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
+            let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
+            if let manifestFileUrl = manifestFileUrl {
                 return try loadManifest(file: manifestFileUrl)
             } else {
                 return nil
@@ -628,15 +621,14 @@ import CommonCrypto
         // Set the new previous bundle ID
         let currentBundleId = getCurrentBundleId()
         setPreviousBundleId(bundleId: currentBundleId)
-        // Log the rollback result
-        if currentBundleId == defaultWebAssetDir {
+        // Perform the rollback
+        if let currentBundleId = currentBundleId {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
+            setNextBundleById(nil)
+            setCurrentBundleById(nil)
+        } else {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
-            return
         }
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
-        // Rollback to the default bundle
-        setNextCapacitorServerPathToDefaultWebAssetDir()
-        setCurrentCapacitorServerPathToDefaultWebAssetDir()
     }
 
     private func saveCurrentBundleVersion() {
@@ -672,6 +664,11 @@ import CommonCrypto
         }
         return nil
     }
+    
+    private func setCurrentBundleById(_ bundleId: String?) {
+        let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
+        setCurrentCapacitorServerPath(path: path)
+    }
 
     private func setCurrentCapacitorServerPath(path: String) {
         guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
@@ -680,13 +677,8 @@ import CommonCrypto
         viewController.setServerBasePath(path: path)
     }
 
-    private func setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
-        setCurrentCapacitorServerPath(path: path)
-    }
-
-    private func setNextBundle(bundleId: String) {
-        let path = buildCapacitorServerPathFor(bundleId: bundleId)
+    private func setNextBundleById(_ bundleId: String?) {
+        let path = buildCapacitorServerPathFor(bundleId: bundleId ?? defaultWebAssetDir)
         setNextCapacitorServerPath(path: path)
     }
 
@@ -698,11 +690,6 @@ import CommonCrypto
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
             KeyValueStore.standard[self.defaultServerPathKey] = path
         }
-    }
-
-    private func setNextCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
-        setNextCapacitorServerPath(path: path)
     }
 
     private func setPreviousBundleId(bundleId: String?) {

@@ -289,6 +289,8 @@ export interface DownloadBundleOptions {
   /**
    * The unique identifier of the bundle.
    *
+   * **Attention**: The value `public` is reserved and cannot be used as a bundle identifier.
+   *
    * @since 5.0.0
    * @example '1.0.0'
    */

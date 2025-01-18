@@ -66,6 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = await LiveUpdate.getBundles();
     console.log(result);
   });
+  document.querySelector('#get-channel-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getChannel();
+    console.log(result);
+  });
   document.querySelector('#ready-button').addEventListener('click', async () => {
     await LiveUpdate.ready();
   });
