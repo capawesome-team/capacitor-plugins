@@ -11,6 +11,8 @@ class LiveUpdateTests: XCTestCase {
 //        let implementation = LiveUpdate(config: .init(), plugin: .init())
 //        let value = "Hello, World!"
 //        let result = implementation.echo(value)
+
+//        XCTAssertEqual(value, result)
     }
 
     func testUnzipFile() {
