@@ -9,8 +9,12 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
 
 import com.posthog.android.PostHogAndroidConfig
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
 class Posthog(private val plugin: PosthogPlugin) {
 
@@ -30,6 +34,13 @@ class Posthog(private val plugin: PosthogPlugin) {
         com.posthog.PostHog.flush()
     }
 
+    fun getFeatureFlag(options: GetFeatureFlagOptions): GetFeatureFlagResult {
+        val key = options.key
+
+        val value = com.posthog.PostHog.getFeatureFlag(key = key)
+        return GetFeatureFlagResult(value)
+    }
+
     fun group(options: GroupOptions) {
         val type = options.type
         val key = options.key
@@ -45,11 +56,22 @@ class Posthog(private val plugin: PosthogPlugin) {
         com.posthog.PostHog.identify(distinctId = distinctId, userProperties = userProperties)
     }
 
+    fun isFeatureEnabled(options: IsFeatureEnabledOptions): IsFeatureEnabledResult {
+        val key = options.key
+
+        val isEnabled = com.posthog.PostHog.isFeatureEnabled(key = key, defaultValue = false)
+        return IsFeatureEnabledResult(isEnabled)
+    }
+
     fun register(options: RegisterOptions) {
         val key = options.key
         val value = options.value
 
         com.posthog.PostHog.register(key = key, value = value)
+    }
+
+    fun reloadFeatureFlags() {
+        com.posthog.PostHog.reloadFeatureFlags()
     }
 
     fun reset() {
