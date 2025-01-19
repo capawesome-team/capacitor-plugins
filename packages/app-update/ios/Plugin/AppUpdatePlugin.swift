@@ -17,6 +17,7 @@ public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "completeFlexibleUpdate", returnType: CAPPluginReturnPromise)
     ]
     public let errorAppIdMissing = "appId must be provided."
+    public let errorAppIdInvalid = "appId is invalid."
     private static let updateAvailabilityNotAvailable = 1
     private static let updateAvailabilityAvailable = 2
 
@@ -73,7 +74,7 @@ public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         guard let url = URL(string: "https://apps.apple.com/app/id\(appId)") else {
-            call.reject("appid is invalid.")
+            call.reject(errorAppIdInvalid)
             return
         }
         DispatchQueue.main.async {
@@ -81,7 +82,6 @@ public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 call.resolve()
             }
         }
-        return
     }
 
     @objc func performImmediateUpdate(_ call: CAPPluginCall) {
