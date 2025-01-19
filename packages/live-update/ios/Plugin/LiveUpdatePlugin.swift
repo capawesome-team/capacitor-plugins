@@ -17,7 +17,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "deleteBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fetchLatestBundle", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCurrentBundle", returnType: CAPPluginReturnPromise),
@@ -29,7 +28,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "ready", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reload", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setCustomId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
@@ -70,13 +68,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                     call.reject(CustomError.bundleIdMissing.localizedDescription)
                     return
                 }
-                let checksum = call.getString("checksum")
                 guard let url = call.getString("url") else {
                     call.reject(CustomError.urlMissing.localizedDescription)
                     return
                 }
 
-                let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, checksum: checksum, url: url)
+                let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, url: url)
 
                 try await implementation?.downloadBundle(options)
                 self.resolveCall(call)
@@ -98,18 +95,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 rejectCall(call, error)
             }
         }
-    }
-
-    @objc func getBundle(_ call: CAPPluginCall) {
-        implementation?.getBundle(completion: { result, error in
-            if let error = error {
-                self.rejectCall(call, error)
-                return
-            }
-            if let result = result?.toJSObject() as? JSObject {
-                self.resolveCall(call, result)
-            }
-        })
     }
 
     @objc func getBundles(_ call: CAPPluginCall) {
@@ -230,23 +215,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         resolveCall(call)
     }
 
-    @objc func setBundle(_ call: CAPPluginCall) {
-        guard let bundleId = call.getString("bundleId") else {
-            call.reject(CustomError.bundleIdMissing.localizedDescription)
-            return
-        }
-
-        let options = SetBundleOptions(bundleId: bundleId)
-
-        implementation?.setBundle(options, completion: { error in
-            if let error = error {
-                self.rejectCall(call, error)
-                return
-            }
-            self.resolveCall(call)
-        })
-    }
-
     @objc func setChannel(_ call: CAPPluginCall) {
         let channel = call.getString("channel")
 
@@ -325,7 +293,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
         config.enabled = getConfig().getBoolean("enabled", config.enabled)
         config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
-        config.location = getConfig().getString("location", config.location)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)
         config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
         config.resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.resetOnUpdate)

@@ -17,9 +17,6 @@ public class LiveUpdateConfig {
     private int httpTimeout = 60000;
 
     @Nullable
-    private String location = null;
-
-    @Nullable
     private String publicKey = null;
 
     private int readyTimeout = 10000;
@@ -45,11 +42,6 @@ public class LiveUpdateConfig {
 
     public int getHttpTimeout() {
         return httpTimeout;
-    }
-
-    @Nullable
-    public String getLocation() {
-        return location;
     }
 
     @Nullable
@@ -83,10 +75,6 @@ public class LiveUpdateConfig {
 
     public void setHttpTimeout(int httpTimeout) {
         this.httpTimeout = httpTimeout;
-    }
-
-    public void setLocation(@Nullable String location) {
-        this.location = location;
     }
 
     public void setPublicKey(@Nullable String publicKey) {

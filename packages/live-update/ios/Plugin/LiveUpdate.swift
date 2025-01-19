@@ -16,7 +16,7 @@ import CommonCrypto
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let host: String
+    private let host = "api.cloud.capawesome.io" // DO NOT CHANGE!
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -28,11 +28,6 @@ import CommonCrypto
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
-        if (config.location != nil) && config.location == "eu" {
-            self.host = "api.cloud.capawesome.eu"
-        } else {
-            self.host = "api.cloud.capawesome.io"
-        }
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
         self.preferences = LiveUpdatePreferences()
@@ -69,7 +64,6 @@ import CommonCrypto
     @objc public func downloadBundle(_ options: DownloadBundleOptions) async throws {
         let artifactType = options.getArtifactType()
         let bundleId = options.getBundleId()
-        let checksum = options.getChecksum()
         let url = options.getUrl()
 
         // Check if the bundle already exists
@@ -81,19 +75,13 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: bundleId, url: url)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
+            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url)
         }
     }
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
         return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, customProperties: response?.customProperties, downloadUrl: response?.url)
-    }
-
-    @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
-        let bundleId = getCurrentBundleId()
-        let result = GetBundleResult(bundleId: bundleId)
-        completion(result, nil)
     }
 
     @objc public func getBundles(completion: @escaping (Result?, Error?) -> Void) {
@@ -175,20 +163,6 @@ import CommonCrypto
         self.setNextBundleById(nil)
     }
 
-    @objc public func setBundle(_ options: SetBundleOptions, completion: @escaping (Error?) -> Void) {
-        let bundleId = options.getBundleId()
-
-        // Check if the bundle already exists
-        if !hasBundleById(bundleId) {
-            let error = CustomError.bundleNotFound
-            completion(error)
-            return
-        }
-
-        setNextBundleById(bundleId)
-        completion(nil)
-    }
-
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {
         let channel = options.getChannel()
 
@@ -247,7 +221,7 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: latestBundleId, url: downloadUrl)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: nil)
+            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl)
         }
         // Set the next bundle
         setNextBundleById(latestBundleId)
@@ -368,7 +342,7 @@ import CommonCrypto
         }
     }
 
-    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?) async throws {
+    private func downloadAndVerifyFile(url: String, file: URL) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
@@ -386,7 +360,7 @@ import CommonCrypto
         guard let response = result.response else {
             throw CustomError.unknown
         }
-        let checksum = checksum == nil ? LiveUpdateHttpClient.getChecksumFromResponse(response: response) : checksum
+        let checksum = LiveUpdateHttpClient.getChecksumFromResponse(response: response)
         let signature = LiveUpdateHttpClient.getSignatureFromResponse(response: response)
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
@@ -398,7 +372,7 @@ import CommonCrypto
         var urlComponents = URLComponents(string: baseUrl)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = urlComponents.string!
-        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil)
+        try await self.downloadAndVerifyFile(url: url, file: fileURL)
         return fileURL
     }
 
@@ -439,11 +413,11 @@ import CommonCrypto
         try await addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
     }
 
-    private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?) async throws {
+    private func downloadBundleOfTypeZip(bundleId: String, url: String) async throws {
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         // Download the bundle
-        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum)
+        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl)
         // Add the bundle
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
