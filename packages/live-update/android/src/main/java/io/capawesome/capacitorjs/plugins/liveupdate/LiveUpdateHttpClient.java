@@ -2,9 +2,7 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.getcapacitor.Logger;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
