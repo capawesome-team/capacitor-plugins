@@ -44,15 +44,6 @@ declare module '@capacitor/cli' {
        */
       httpTimeout?: number;
       /**
-       * The location of the server to use when using [Capawesome Cloud](https://capawesome.io/cloud).
-       *
-       * @since 6.2.0
-       * @default 'us'
-       * @example 'eu'
-       * @deprecated This option will be removed in the future.
-       */
-      location?: 'us' | 'eu';
-      /**
        * The public key to verify the integrity of the bundle.
        *
        * The public key must be a PEM-encoded RSA public key.
@@ -104,15 +95,6 @@ export interface LiveUpdatePlugin {
    * @since 6.6.0
    */
   fetchLatestBundle(options?: FetchLatestBundleOptions): Promise<FetchLatestBundleResult>;
-  /**
-   * Get the active bundle identifier.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 5.0.0
-   * @deprecated Use `getCurrentBundle()` instead.
-   */
-  getBundle(): Promise<GetBundleResult>;
   /**
    * Get all identifiers of bundles that have been downloaded.
    *
@@ -216,17 +198,6 @@ export interface LiveUpdatePlugin {
    */
   reset(): Promise<void>;
   /**
-   * Set the next bundle to use for the app.
-   *
-   * Call `reload()` or restart the app to apply the changes.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 5.0.0
-   * @deprecated Use `setNextBundle()` instead.
-   */
-  setBundle(options: SetBundleOptions): Promise<void>;
-  /**
    * Set the channel to use for the update.
    *
    * Only available on Android and iOS.
@@ -295,15 +266,6 @@ export interface DownloadBundleOptions {
    * @example '1.0.0'
    */
   bundleId: string;
-  /**
-   * The checksum of the bundle to verify the integrity of the ZIP file.
-   *
-   * Must be a SHA-256 hash in base64 format.
-   *
-   * @since 6.1.0
-   * @deprecated The server should return a `X-Checksum` header instead.
-   */
-  checksum?: string;
   /**
    * The URL of the bundle to download.
    *

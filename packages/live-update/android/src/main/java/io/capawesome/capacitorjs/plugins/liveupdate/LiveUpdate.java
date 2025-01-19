@@ -19,13 +19,11 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleR
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
@@ -73,7 +71,7 @@ public class LiveUpdate {
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
-    private final String host;
+    private final String host = "api.cloud.capawesome.io"; // DO NOT CHANGE!
 
     @NonNull
     private final LiveUpdateHttpClient httpClient;
@@ -95,11 +93,6 @@ public class LiveUpdate {
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
-        if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "api.cloud.capawesome.eu";
-        } else {
-            this.host = "api.cloud.capawesome.io";
-        }
         this.httpClient = new LiveUpdateHttpClient(config);
         this.plugin = plugin;
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
@@ -132,7 +125,6 @@ public class LiveUpdate {
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
         ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
-        String checksum = options.getChecksum();
         String url = options.getUrl();
 
         // Check if the bundle already exists
@@ -146,7 +138,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(bundleId, url);
         } else {
-            downloadBundleOfTypeZip(bundleId, url, checksum);
+            downloadBundleOfTypeZip(bundleId, url);
         }
         callback.success();
     }
@@ -158,12 +150,6 @@ public class LiveUpdate {
         JSONObject customProperties = response == null ? null : response.getCustomProperties();
         String downloadUrl = response == null ? null : response.getUrl();
         FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, customProperties, downloadUrl);
-        callback.success(result);
-    }
-
-    public void getBundle(@NonNull NonEmptyCallback callback) {
-        String bundleId = getCurrentBundleId();
-        GetBundleResult result = new GetBundleResult(bundleId);
         callback.success(result);
     }
 
@@ -245,19 +231,6 @@ public class LiveUpdate {
         setNextBundleById(null);
     }
 
-    public void setBundle(@NonNull SetBundleOptions options, @NonNull EmptyCallback callback) {
-        String bundleId = options.getBundleId();
-
-        if (!hasBundleById(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-            callback.error(exception);
-            return;
-        }
-
-        setNextBundleById(bundleId);
-        callback.success();
-    }
-
     public void setChannel(@NonNull SetChannelOptions options, @NonNull EmptyCallback callback) {
         String channel = options.getChannel();
 
@@ -320,7 +293,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(latestBundleId, url);
         } else {
-            downloadBundleOfTypeZip(latestBundleId, url, null);
+            downloadBundleOfTypeZip(latestBundleId, url);
         }
         // Set the next bundle
         setNextBundleById(latestBundleId);
@@ -480,13 +453,13 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file) throws Exception {
         Response response = httpClient.execute(url);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
             // Verify the file
-            checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
+            String checksum = LiveUpdateHttpClient.getChecksumFromResponse(response);
             String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
             verifyFile(file, checksum, signature);
         } else {
@@ -503,7 +476,7 @@ public class LiveUpdate {
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile, null);
+        downloadAndVerifyFile(url, destinationFile);
         return destinationFile;
     }
 
@@ -585,11 +558,10 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl, @Nullable String checksum)
-        throws Exception {
+    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file, checksum);
+        downloadAndVerifyFile(downloadUrl, file);
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file

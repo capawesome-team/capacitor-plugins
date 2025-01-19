@@ -11,7 +11,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
@@ -99,14 +98,13 @@ public class LiveUpdatePlugin extends Plugin {
                 call.reject(ERROR_BUNDLE_ID_MISSING);
                 return;
             }
-            String checksum = call.getString("checksum");
             String url = call.getString("url");
             if (url == null) {
                 call.reject(ERROR_URL_MISSING);
                 return;
             }
 
-            DownloadBundleOptions options = new DownloadBundleOptions(artifactType, bundleId, checksum, url);
+            DownloadBundleOptions options = new DownloadBundleOptions(artifactType, bundleId, url);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
@@ -142,27 +140,6 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.fetchLatestBundle(options, callback);
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void getBundle(PluginCall call) {
-        try {
-            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
-                @Override
-                public void success(Result result) {
-                    resolveCall(call, result.toJSObject());
-                }
-
-                @Override
-                public void error(Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
-
-            implementation.getBundle(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -380,34 +357,6 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
-    public void setBundle(PluginCall call) {
-        try {
-            String bundleId = call.getString("bundleId");
-            if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
-                return;
-            }
-
-            SetBundleOptions options = new SetBundleOptions(bundleId);
-            EmptyCallback callback = new EmptyCallback() {
-                @Override
-                public void success() {
-                    resolveCall(call);
-                }
-
-                @Override
-                public void error(Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
-
-            implementation.setBundle(options, callback);
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
     public void setChannel(PluginCall call) {
         try {
             String channel = call.getString("channel");
@@ -531,8 +480,6 @@ public class LiveUpdatePlugin extends Plugin {
         config.setEnabled(enabled);
         int httpTimeout = getConfig().getInt("httpTimeout", config.getHttpTimeout());
         config.setHttpTimeout(httpTimeout);
-        String location = getConfig().getString("location", config.getLocation());
-        config.setLocation(location);
         String publicKey = getConfig().getString("publicKey", config.getPublicKey());
         config.setPublicKey(publicKey);
         int readyTimeout = getConfig().getInt("readyTimeout", config.getReadyTimeout());

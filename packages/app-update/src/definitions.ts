@@ -165,6 +165,8 @@ export interface OpenAppStoreOptions {
    * The app ID of the app to open in the App Store.
    *
    * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
+   * You can find the ID in the URL of your app store entry
+   * (e.g. `https://apps.apple.com/app/id123456789`).
    *
    * Only available on iOS.
    *
@@ -172,15 +174,6 @@ export interface OpenAppStoreOptions {
    * @example 123456789
    */
   appId?: string;
-  /**
-   * The two-letter country code for the store you want to search.
-   * See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes.
-   *
-   * Only available on iOS.
-   *
-   * @deprecated Use `appId` instead.
-   */
-  country?: string;
 }
 
 export interface FlexibleUpdateState {
