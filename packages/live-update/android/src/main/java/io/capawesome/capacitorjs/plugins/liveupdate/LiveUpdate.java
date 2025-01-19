@@ -71,7 +71,7 @@ public class LiveUpdate {
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
-    private final String host = "api.cloud.capawesome.io";
+    private final String host = "api.cloud.capawesome.io"; // DO NOT CHANGE!
 
     @NonNull
     private final LiveUpdateHttpClient httpClient;

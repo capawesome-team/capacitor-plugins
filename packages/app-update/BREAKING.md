@@ -14,6 +14,8 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 The `country` property has been replaced by the `appId` property in the `OpenAppStoreOptions` interface.
 
+**Attention**: The `appId` is required on **iOS**.
+
 ## Version 6.x.x
 
 ### `currentVersion` property
