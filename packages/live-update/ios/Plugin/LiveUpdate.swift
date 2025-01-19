@@ -640,7 +640,7 @@ import CommonCrypto
         }
         return nil
     }
-    
+
     /// - Parameter bundleId: The bundle ID to set as the current bundle. If `nil`, the default bundle will be used.
     private func setCurrentBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId)

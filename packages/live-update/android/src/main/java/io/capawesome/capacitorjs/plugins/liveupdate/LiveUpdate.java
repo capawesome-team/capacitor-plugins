@@ -558,8 +558,7 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl)
-        throws Exception {
+    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
         downloadAndVerifyFile(downloadUrl, file);
