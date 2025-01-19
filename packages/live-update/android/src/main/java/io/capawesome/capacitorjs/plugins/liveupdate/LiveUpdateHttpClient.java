@@ -2,6 +2,9 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.getcapacitor.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -63,6 +66,7 @@ public class LiveUpdateHttpClient {
             sink.emit();
             totalBytesRead += bytesRead;
             int progress = (int) ((totalBytesRead * 100) / contentLength);
+            Logger.debug(LiveUpdatePlugin.TAG, "Downloading progress: " + progress + "%");
         }
         sink.flush();
         sink.close();

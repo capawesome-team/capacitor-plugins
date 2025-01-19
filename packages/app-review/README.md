@@ -89,9 +89,9 @@ Only available on Android and iOS (14+).
 
 #### OpenAppStoreOptions
 
-| Prop        | Type                | Description                                                                                                                             | Since |
-| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`appId`** | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). Only available on iOS. | 6.0.1 |
+| Prop        | Type                | Description                                                                                                                                                                                                                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`appId`** | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). You can find the ID in the URL of your app store entry (e.g. `https://apps.apple.com/app/id123456789`). Only available on iOS. | 6.0.1 |
 
 </docgen-api>
 
