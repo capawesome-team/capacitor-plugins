@@ -200,6 +200,9 @@ public class LiveUpdate {
 
     public void ready(@NonNull NonEmptyCallback callback) {
         Logger.debug(LiveUpdatePlugin.TAG, "App is ready.");
+        if (config.getReadyTimeout() <= 0) {
+            Logger.warn(LiveUpdatePlugin.TAG, "Ready timeout is set to 0. Automatic rollback is disabled.");
+        }
         // Stop the rollback timer
         stopRollbackTimer();
         // Delete unused bundles
@@ -858,6 +861,9 @@ public class LiveUpdate {
     }
 
     private void startRollbackTimer() {
+        if (config.getReadyTimeout() <= 0) {
+            return;
+        }
         stopRollbackTimer();
         rollbackHandler.postDelayed(() -> rollback(), config.getReadyTimeout());
     }

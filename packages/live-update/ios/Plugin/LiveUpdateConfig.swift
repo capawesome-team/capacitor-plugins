@@ -5,7 +5,7 @@ public struct LiveUpdateConfig {
     var enabled = true
     var httpTimeout = 60000
     var publicKey: String?
-    var readyTimeout = 10000
+    var readyTimeout = 0
     var resetOnUpdate = true
     var serverDomain = "api.cloud.capawesome.io"
 }

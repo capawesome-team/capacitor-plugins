@@ -19,7 +19,7 @@ public class LiveUpdateConfig {
     @Nullable
     private String publicKey = null;
 
-    private int readyTimeout = 10000;
+    private int readyTimeout = 0;
     private boolean resetOnUpdate = true;
     private String serverDomain = "api.cloud.capawesome.io";
 

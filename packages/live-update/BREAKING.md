@@ -23,3 +23,8 @@ The `checksum` property has been removed from the `DownloadBundleOptions` interf
 ### `location` configuration option
 
 The `location` configuration option has been replaced by the `serverDomain` configuration option.
+
+### `readyTimeout` configuration option
+
+The default value of the `readyTimeout` configuration option has been changed from `10000` to `0` to disable the timeout by default.
+However, it is strongly **recommended** to configure this option so that the plugin can roll back to the default bundle in case of problems.

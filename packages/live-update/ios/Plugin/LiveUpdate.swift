@@ -134,6 +134,9 @@ import CommonCrypto
 
     @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
+        if config.readyTimeout <= 0 {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Ready timeout is set to 0. Automatic rollback is disabled.")
+        }
         // Stop the rollback timer
         stopRollbackTimer()
         // Delete unused bundles
@@ -675,6 +678,9 @@ import CommonCrypto
     }
 
     private func startRollbackTimer() {
+        guard config.readyTimeout > 0 else {
+            return
+        }
         stopRollbackTimer()
         rollbackDispatchWorkItem = DispatchWorkItem { [weak self] in
             self?.rollback()
