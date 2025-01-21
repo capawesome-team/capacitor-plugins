@@ -70,6 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = await LiveUpdate.getChannel();
     console.log(result);
   });
+  document.querySelector('#get-current-bundle-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getCurrentBundle();
+    console.log(result);
+  });
   document.querySelector('#ready-button').addEventListener('click', async () => {
     await LiveUpdate.ready();
   });
