@@ -16,7 +16,6 @@ import CommonCrypto
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let host = "api.cloud.capawesome.io" // DO NOT CHANGE!
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -434,7 +433,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(config.appId ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)

@@ -22,4 +22,4 @@ The `checksum` property has been removed from the `DownloadBundleOptions` interf
 
 ### `location` configuration option
 
-The `location` configuration option has been removed. 
+The `location` configuration option has been replaced by the `serverDomain` configuration option.

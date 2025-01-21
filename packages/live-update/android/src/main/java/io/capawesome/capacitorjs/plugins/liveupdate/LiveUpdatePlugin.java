@@ -486,6 +486,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setReadyTimeout(readyTimeout);
         boolean resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.getResetOnUpdate());
         config.setResetOnUpdate(resetOnUpdate);
+        String serverDomain = getConfig().getString("serverDomain", config.getServerDomain());
+        config.setServerDomain(serverDomain);
 
         return config;
     }

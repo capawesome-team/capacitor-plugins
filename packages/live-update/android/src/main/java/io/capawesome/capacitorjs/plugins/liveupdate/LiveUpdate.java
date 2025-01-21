@@ -71,9 +71,6 @@ public class LiveUpdate {
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
-    private final String host = "api.cloud.capawesome.io"; // DO NOT CHANGE!
-
-    @NonNull
     private final LiveUpdateHttpClient httpClient;
 
     @NonNull
@@ -573,7 +570,7 @@ public class LiveUpdate {
         String channel = options.getChannel() == null ? getChannel() : options.getChannel();
         String url = new HttpUrl.Builder()
             .scheme("https")
-            .host(host)
+            .host(config.getServerDomain())
             .addPathSegment("v1")
             .addPathSegment("apps")
             .addPathSegment(config.getAppId())

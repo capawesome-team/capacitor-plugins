@@ -66,6 +66,13 @@ declare module '@capacitor/cli' {
        * @default true
        */
       resetOnUpdate?: boolean;
+      /**
+       * The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server.
+       *
+       * @since 7.0.0
+       * @default 'api.cloud.capawesome.io'
+       */
+      serverDomain?: string;
     };
   }
 }

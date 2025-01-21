@@ -21,6 +21,7 @@ public class LiveUpdateConfig {
 
     private int readyTimeout = 10000;
     private boolean resetOnUpdate = true;
+    private String serverDomain = "api.cloud.capawesome.io";
 
     @Nullable
     public String getAppId() {
@@ -57,6 +58,10 @@ public class LiveUpdateConfig {
         return resetOnUpdate;
     }
 
+    public String getServerDomain() {
+        return serverDomain;
+    }
+
     public void setAppId(@Nullable String appId) {
         this.appId = appId;
     }
@@ -87,5 +92,9 @@ public class LiveUpdateConfig {
 
     public void setResetOnUpdate(boolean resetOnUpdate) {
         this.resetOnUpdate = resetOnUpdate;
+    }
+
+    public void setServerDomain(String serverDomain) {
+        this.serverDomain = serverDomain;
     }
 }

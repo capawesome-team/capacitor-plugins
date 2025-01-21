@@ -296,6 +296,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         config.publicKey = getConfig().getString("publicKey", config.publicKey)
         config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
         config.resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.resetOnUpdate)
+        config.serverDomain = getConfig().getString("serverDomain", config.serverDomain) ?? config.serverDomain
 
         return config
     }
