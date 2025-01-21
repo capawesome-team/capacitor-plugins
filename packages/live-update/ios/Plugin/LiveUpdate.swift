@@ -40,6 +40,10 @@ import CommonCrypto
                 startRollbackTimer()
             }
             saveCurrentBundleShortVersionStringAndBundleVersion()
+        } else if let _ = getCurrentBundleId() {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Plugin is disabled. Resetting to default bundle.")
+            setNextBundleById(nil)
+            setCurrentBundleById(nil)
         }
     }
 
