@@ -24,7 +24,7 @@ public class LiveUpdateHttpClient: NSObject {
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         return try await withCheckedThrowingContinuation { continuation in
             AF.download(request, to: destination).downloadProgress { progress in
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Downloading progress: \(progress.fractionCompleted)%")
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Downloading progress: \(progress.fractionCompleted * 100)%")
             }.responseData { response in
                 continuation.resume(returning: response)
             }
