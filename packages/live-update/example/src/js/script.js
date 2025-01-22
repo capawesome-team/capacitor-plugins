@@ -74,6 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = await LiveUpdate.getCurrentBundle();
     console.log(result);
   });
+  document.querySelector('#get-custom-id-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getCustomId();
+    console.log(result);
+  });
+  document.querySelector('#get-device-id-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getDeviceId();
+    console.log(result);
+  });
+  document.querySelector('#get-next-bundle-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getNextBundle();
+    console.log(result);
+  });
+  document.querySelector('#get-version-code-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getVersionCode();
+    console.log(result);
+  });
+  document.querySelector('#get-version-name-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getVersionName();
+    console.log(result);
+  });
   document.querySelector('#ready-button').addEventListener('click', async () => {
     await LiveUpdate.ready();
   });
