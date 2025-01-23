@@ -14,6 +14,12 @@
 		50ADFF97201F53D600D50D53 /* PosthogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* PosthogTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50E1A94820377CB70090CE1A /* PosthogPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* PosthogPlugin.swift */; };
+		7C27474D2D3BFEF100589048 /* GetFeatureFlagOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C27474C2D3BFEF000589048 /* GetFeatureFlagOptions.swift */; };
+		7C2747502D3BFEFE00589048 /* GetFeatureFlagResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C27474F2D3BFEFD00589048 /* GetFeatureFlagResult.swift */; };
+		7C2747522D3BFF0400589048 /* IsFeatureEnabledOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2747512D3BFF0300589048 /* IsFeatureEnabledOptions.swift */; };
+		7C2747542D3BFF0A00589048 /* IsFeatureEnabledResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2747532D3BFF0A00589048 /* IsFeatureEnabledResult.swift */; };
+		7C27475A2D3BFF7800589048 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2747592D3BFF7200589048 /* Result.swift */; };
+		7C27475D2D3C032D00589048 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C27475C2D3C032A00589048 /* CustomError.swift */; };
 		7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C12C8AE99100271553 /* AliasOptions.swift */; };
 		7C28C8C42C8AE99E00271553 /* CaptureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */; };
 		7C28C8C62C8AE9AC00271553 /* IdentifyOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */; };
@@ -46,6 +52,12 @@
 		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E1A94720377CB70090CE1A /* PosthogPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PosthogPlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		7C27474C2D3BFEF000589048 /* GetFeatureFlagOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFeatureFlagOptions.swift; sourceTree = "<group>"; };
+		7C27474F2D3BFEFD00589048 /* GetFeatureFlagResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFeatureFlagResult.swift; sourceTree = "<group>"; };
+		7C2747512D3BFF0300589048 /* IsFeatureEnabledOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsFeatureEnabledOptions.swift; sourceTree = "<group>"; };
+		7C2747532D3BFF0A00589048 /* IsFeatureEnabledResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsFeatureEnabledResult.swift; sourceTree = "<group>"; };
+		7C2747592D3BFF7200589048 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		7C27475C2D3C032A00589048 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		7C28C8C12C8AE99100271553 /* AliasOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasOptions.swift; sourceTree = "<group>"; };
 		7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureOptions.swift; sourceTree = "<group>"; };
 		7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentifyOptions.swift; sourceTree = "<group>"; };
@@ -106,6 +118,8 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				7C27475B2D3C032400589048 /* Enums */,
+				7C2747582D3BFF6B00589048 /* Protocols */,
 				7C28C8BF2C8AE97B00271553 /* Classes */,
 				50E1A94720377CB70090CE1A /* PosthogPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* Posthog.swift */,
@@ -124,9 +138,35 @@
 			path = PluginTests;
 			sourceTree = "<group>";
 		};
+		7C27474E2D3BFEF900589048 /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				7C2747532D3BFF0A00589048 /* IsFeatureEnabledResult.swift */,
+				7C27474F2D3BFEFD00589048 /* GetFeatureFlagResult.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		7C2747582D3BFF6B00589048 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7C2747592D3BFF7200589048 /* Result.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		7C27475B2D3C032400589048 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				7C27475C2D3C032A00589048 /* CustomError.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
 		7C28C8BF2C8AE97B00271553 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7C27474E2D3BFEF900589048 /* Results */,
 				7C28C8C02C8AE98000271553 /* Options */,
 			);
 			path = Classes;
@@ -135,6 +175,8 @@
 		7C28C8C02C8AE98000271553 /* Options */ = {
 			isa = PBXGroup;
 			children = (
+				7C2747512D3BFF0300589048 /* IsFeatureEnabledOptions.swift */,
+				7C27474C2D3BFEF000589048 /* GetFeatureFlagOptions.swift */,
 				7C28C8C12C8AE99100271553 /* AliasOptions.swift */,
 				7C28C8C32C8AE99E00271553 /* CaptureOptions.swift */,
 				7C28C8C52C8AE9AC00271553 /* IdentifyOptions.swift */,
@@ -345,14 +387,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C28C8C82C8AE9B800271553 /* RegisterOptions.swift in Sources */,
+				7C2747542D3BFF0A00589048 /* IsFeatureEnabledResult.swift in Sources */,
+				7C27475D2D3C032D00589048 /* CustomError.swift in Sources */,
 				50E1A94820377CB70090CE1A /* PosthogPlugin.swift in Sources */,
 				7C28C8CC2C8AE9CD00271553 /* SetupOptions.swift in Sources */,
 				7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */,
+				7C27474D2D3BFEF100589048 /* GetFeatureFlagOptions.swift in Sources */,
+				7C27475A2D3BFF7800589048 /* Result.swift in Sources */,
+				7C2747522D3BFF0400589048 /* IsFeatureEnabledOptions.swift in Sources */,
 				7C28C8CA2C8AE9C300271553 /* ScreenOptions.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* Posthog.swift in Sources */,
 				7C28C8C62C8AE9AC00271553 /* IdentifyOptions.swift in Sources */,
 				7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */,
 				7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */,
+				7C2747502D3BFEFE00589048 /* GetFeatureFlagResult.swift in Sources */,
 				7CFD6A9E2C8B046100FF2B17 /* GroupOptions.swift in Sources */,
 				7C28C8C42C8AE99E00271553 /* CaptureOptions.swift in Sources */,
 			);

@@ -7,29 +7,26 @@ import Capacitor
  */
 @objc(PosthogPlugin)
 public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "PosthogPlugin"
-    public let jsName = "Posthog"
+    public static let tag = "Posthog"
+    
+    public let identifier = "PosthogPlugin" // DO NOT CHANGE THIS
+    public let jsName = "Posthog" // DO NOT CHANGE THIS
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "reloadFeatureFlags", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "screen", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise)
     ]
-    public let tag = "Posthog"
-    public let errorAliasMissing = "alias must be provided."
-    public let errorApiKeyMissing = "apiKey must be provided."
-    public let errorDistinctIdMissing = "distinctId must be provided."
-    public let errorEventMissing = "event must be provided."
-    public let errorKeyMissing = "key must be provided."
-    public let errorScreenTitleMissing = "screenTitle must be provided."
-    public let errorTypeMissing = "type must be provided."
-    public let errorValueMissing = "value must be provided."
+    
     private var implementation: Posthog?
 
     override public func load() {
@@ -38,7 +35,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func alias(_ call: CAPPluginCall) {
         guard let alias = call.getString("alias") else {
-            call.reject(errorAliasMissing)
+            call.reject(CustomError.aliasMissing.localizedDescription)
             return
         }
 
@@ -50,7 +47,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func capture(_ call: CAPPluginCall) {
         guard let event = call.getString("event") else {
-            call.reject(errorEventMissing)
+            call.reject(CustomError.eventMissing.localizedDescription)
             return
         }
         let properties = call.getObject("properties")
@@ -65,14 +62,26 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.flush()
         call.resolve()
     }
+    
+    @objc func getFeatureFlag(_ call: CAPPluginCall) {
+        do {
+            let options = try GetFeatureFlagOptions(call: call)
+            let result = implementation?.getFeatureFlag(options)
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        } catch let error {
+            rejectCall(call, error)
+        }
+    }
 
     @objc func group(_ call: CAPPluginCall) {
         guard let type = call.getString("type") else {
-            call.reject(errorTypeMissing)
+            call.reject(CustomError.typeMissing.localizedDescription)
             return
         }
         guard let key = call.getString("key") else {
-            call.reject(errorKeyMissing)
+            call.reject(CustomError.keyMissing.localizedDescription)
             return
         }
         let groupProperties = call.getObject("groupProperties")
@@ -85,7 +94,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func identify(_ call: CAPPluginCall) {
         guard let distinctId = call.getString("distinctId") else {
-            call.reject(errorDistinctIdMissing)
+            call.reject(CustomError.distinctIdMissing.localizedDescription)
             return
         }
         let userProperties = call.getObject("userProperties")
@@ -95,20 +104,37 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.identify(options)
         call.resolve()
     }
+    
+    @objc func isFeatureEnabled(_ call: CAPPluginCall) {
+        do {
+            let options = try IsFeatureEnabledOptions(call: call)
+            let result = implementation?.isFeatureEnabled(options)
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        } catch let error {
+            rejectCall(call, error)
+        }
+    }
 
     @objc func register(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {
-            call.reject(errorKeyMissing)
+            call.reject(CustomError.keyMissing.localizedDescription)
             return
         }
         guard let value = call.getObject("value") as AnyObject? else {
-            call.reject(errorValueMissing)
+            call.reject(CustomError.valueMissing.localizedDescription)
             return
         }
 
         let options = RegisterOptions(key: key, value: value)
 
         implementation?.register(options)
+        call.resolve()
+    }
+    
+    @objc func reloadFeatureFlags(_ call: CAPPluginCall) {
+        implementation?.reloadFeatureFlags()
         call.resolve()
     }
 
@@ -119,7 +145,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func screen(_ call: CAPPluginCall) {
         guard let screenTitle = call.getString("screenTitle") else {
-            call.reject(errorScreenTitleMissing)
+            call.reject(CustomError.screenTitleMissing.localizedDescription)
             return
         }
         let properties = call.getObject("properties")
@@ -132,7 +158,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func setup(_ call: CAPPluginCall) {
         guard let apiKey = call.getString("apiKey") else {
-            call.reject(errorApiKeyMissing)
+            call.reject(CustomError.apiKeyMissing.localizedDescription)
             return
         }
         let host = call.getString("host", "https://us.i.posthog.com")
@@ -145,7 +171,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func unregister(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {
-            call.reject(errorKeyMissing)
+            call.reject(CustomError.keyMissing.localizedDescription)
             return
         }
 
@@ -153,5 +179,22 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.unregister(options)
         call.resolve()
+    }
+    
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", PosthogPlugin.tag, "] ", error)
+        call.reject(error.localizedDescription)
+    }
+    
+    private func resolveCall(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ result: JSObject?) {
+        if let result = result {
+            call.resolve(result)
+        } else {
+            call.resolve()
+        }
     }
 }

@@ -1,5 +1,7 @@
 package io.capawesome.capacitorjs.plugins.posthog;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -8,28 +10,29 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
-import org.json.JSONObject;
+import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
 
 @CapacitorPlugin(name = "Posthog")
 public class PosthogPlugin extends Plugin {
 
+    public static final String ERROR_ALIAS_MISSING = "alias must be provided.";
+    public static final String ERROR_API_KEY_MISSING = "apiKey must be provided.";
+    public static final String ERROR_DISTINCT_ID_MISSING = "distinctId must be provided.";
+    public static final String ERROR_EVENT_MISSING = "event must be provided.";
+    public static final String ERROR_KEY_MISSING = "key must be provided.";
+    public static final String ERROR_SCREEN_TITLE_MISSING = "screenTitle must be provided.";
+    public static final String ERROR_TYPE_MISSING = "type must be provided.";
+    public static final String ERROR_VALUE_MISSING = "value must be provided.";
+    public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String TAG = "Posthog";
-
-    private static final String ERROR_EVENT_MISSING = "event must be provided.";
-    private static final String ERROR_ALIAS_MISSING = "alias must be provided.";
-    private static final String ERROR_API_KEY_MISSING = "apiKey must be provided.";
-    private static final String ERROR_DISTINCT_ID_MISSING = "distinctId must be provided.";
-    private static final String ERROR_KEY_MISSING = "key must be provided.";
-    private static final String ERROR_SCREEN_TITLE_MISSING = "screenTitle must be provided.";
-    private static final String ERROR_TYPE_MISSING = "type must be provided.";
-    private static final String ERROR_VALUE_MISSING = "value must be provided.";
-    private static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
 
     private Posthog implementation;
 
@@ -90,6 +93,17 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getFeatureFlag(PluginCall call) {
+        try {
+            GetFeatureFlagOptions options = new GetFeatureFlagOptions(call);
+            Result result = implementation.getFeatureFlag(options);
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void group(PluginCall call) {
         try {
             String type = call.getString("type");
@@ -133,6 +147,17 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void isFeatureEnabled(PluginCall call) {
+        try {
+            IsFeatureEnabledOptions options = new IsFeatureEnabledOptions(call);
+            Result result = implementation.isFeatureEnabled(options);
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void register(PluginCall call) {
         try {
             String key = call.getString("key");
@@ -149,6 +174,16 @@ public class PosthogPlugin extends Plugin {
             RegisterOptions options = new RegisterOptions(key, value);
 
             implementation.register(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void reloadFeatureFlags(PluginCall call) {
+        try {
+            implementation.reloadFeatureFlags();
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -218,6 +253,14 @@ public class PosthogPlugin extends Plugin {
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
+        }
+    }
+
+    private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
+        if (result == null) {
+            call.resolve();
+        } else {
+            call.resolve(result);
         }
     }
 

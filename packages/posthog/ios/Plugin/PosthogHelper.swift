@@ -26,7 +26,7 @@ public class PosthogHelper {
         return object
     }
 
-    private static func createJSValue(value: Any?) -> JSValue? {
+    public static func createJSValue(value: Any?) -> JSValue? {
         guard let value = value else {
             return nil
         }

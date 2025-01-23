@@ -4,8 +4,12 @@ import posthog from 'posthog-js';
 import type {
   AliasOptions,
   CaptureOptions,
+  GetFeatureFlagOptions,
+  GetFeatureFlagResult,
   GroupOptions,
   IdentifyOptions,
+  IsFeatureEnabledOptions,
+  IsFeatureEnabledResult,
   PosthogPlugin,
   RegisterOptions,
   ScreenOptions,
@@ -22,6 +26,11 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.capture(options.event, options.properties);
   }
 
+  async getFeatureFlag(options: GetFeatureFlagOptions): Promise<GetFeatureFlagResult> {
+    const value = posthog.getFeatureFlag(options.key);
+    return value === undefined ? { value: null } : { value };
+  }
+
   async flush(): Promise<void> {
     this.throwUnimplementedError();
   }
@@ -34,10 +43,19 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.identify(options.distinctId, options.userProperties);
   }
 
+  async isFeatureEnabled(options: IsFeatureEnabledOptions): Promise<IsFeatureEnabledResult> {
+    const enabled = posthog.isFeatureEnabled(options.key);
+    return { enabled: enabled || false };
+  }
+
   async register(options: RegisterOptions): Promise<void> {
     posthog.register({
       [options.key]: options.value,
     });
+  }
+
+  async reloadFeatureFlags(): Promise<void> {
+    posthog.reloadFeatureFlags();
   }
 
   async reset(): Promise<void> {

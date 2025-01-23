@@ -24,6 +24,13 @@ import PostHog
     @objc public func flush() {
         PostHogSDK.shared.flush()
     }
+    
+    @objc public func getFeatureFlag(_ options: GetFeatureFlagOptions) -> GetFeatureFlagResult {
+        let key = options.getKey()
+        
+        let value = PostHogSDK.shared.getFeatureFlag(key)
+        return GetFeatureFlagResult(value: value)
+    }
 
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
@@ -39,6 +46,14 @@ import PostHog
 
         PostHogSDK.shared.identify(distinctId, userProperties: userProperties)
     }
+    
+    @objc public func isFeatureEnabled(_ options: IsFeatureEnabledOptions) -> IsFeatureEnabledResult {
+        let key = options.getKey()
+        
+        let isEnabled = PostHogSDK.shared.isFeatureEnabled(key)
+        return IsFeatureEnabledResult(enabled: isEnabled)
+    }
+
 
     @objc public func register(_ options: RegisterOptions) {
         let key = options.getKey()
@@ -47,6 +62,10 @@ import PostHog
         let properties = [key: value]
 
         PostHogSDK.shared.register(properties)
+    }
+    
+    @objc public func reloadFeatureFlags() {
+        PostHogSDK.shared.reloadFeatureFlags()
     }
 
     @objc public func reset() {

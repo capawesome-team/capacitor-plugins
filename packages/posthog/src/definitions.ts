@@ -20,6 +20,12 @@ export interface PosthogPlugin {
    */
   flush(): Promise<void>;
   /**
+   * Get the value of a feature flag.
+   *
+   * @since 7.0.0
+   */
+  getFeatureFlag(options: GetFeatureFlagOptions): Promise<GetFeatureFlagResult>;
+  /**
    * Associate the events for that user with a group.
    *
    * @since 6.0.0
@@ -32,11 +38,23 @@ export interface PosthogPlugin {
    */
   identify(options: IdentifyOptions): Promise<void>;
   /**
+   * Check if a feature flag is enabled.
+   *
+   * @since 7.0.0
+   */
+  isFeatureEnabled(options: IsFeatureEnabledOptions): Promise<IsFeatureEnabledResult>;
+  /**
    * Register a new super property. This property will be sent with every event.
    *
    * @since 6.0.0
    */
   register(options: RegisterOptions): Promise<void>;
+  /**
+   * Reload the feature flags.
+   *
+   * @since 7.0.0
+   */
+  reloadFeatureFlags(): Promise<void>;
   /**
    * Reset the current user's ID and anonymous ID.
    *
@@ -98,6 +116,29 @@ export interface CaptureOptions {
 }
 
 /**
+ * @since 7.0.0
+ */
+export interface GetFeatureFlagOptions {
+  /**
+   * The key of the feature flag.
+   *
+   * @since 7.0.0
+   */
+  key: string;
+}
+
+export interface GetFeatureFlagResult {
+  /**
+   * The value of the feature flag.
+   *
+   * If the feature flag does not exist, the value will be `null`.
+   *
+   * @since 7.0.0
+   */
+  value: string | boolean | null;
+}
+
+/**
  * @since 6.0.0
  */
 export interface GroupOptions {
@@ -139,6 +180,32 @@ export interface IdentifyOptions {
    * @since 6.0.0
    */
   userProperties?: Record<string, any>;
+}
+
+/**
+ * @since 7.0.0
+ */
+export interface IsFeatureEnabledOptions {
+  /**
+   * The key of the feature flag.
+   *
+   * @since 7.0.0
+   */
+  key: string;
+}
+
+/**
+ * @since 7.0.0
+ */
+export interface IsFeatureEnabledResult {
+  /**
+   * Whether the feature flag is enabled.
+   *
+   * If the feature flag does not exist, the value will be `false`.
+   *
+   * @since 7.0.0
+   */
+  enabled: boolean;
 }
 
 /**
