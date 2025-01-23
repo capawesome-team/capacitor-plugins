@@ -1,5 +1,27 @@
 # Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [`48f35a3`](https://github.com/capawesome-team/capacitor-plugins/commit/48f35a31bdcddd8a861fe1c28c991d67ce4cf986): refactor: disable automatic rollbacks by default
+
+* [`56367d5`](https://github.com/capawesome-team/capacitor-plugins/commit/56367d5e0deec242e0502bdeb9ea0fdae5947cc7) ([#242](https://github.com/capawesome-team/capacitor-plugins/pull/242)): feat: implement return type `ReadyResult`
+
+- [`8048779`](https://github.com/capawesome-team/capacitor-plugins/commit/80487793c0f452339289ac11f310e26d63e3abc6) ([#390](https://github.com/capawesome-team/capacitor-plugins/pull/390)): refactor: remove deprecated code (see `BREAKING.md`)
+
+### Minor Changes
+
+- [`0dc1492`](https://github.com/capawesome-team/capacitor-plugins/commit/0dc14929935941bf71e1871d8ad7af027cff3fee): feat: add `serverDomain` configuration option
+
+* [`fdbcd81`](https://github.com/capawesome-team/capacitor-plugins/commit/fdbcd817f6ab89525149685045f6ea7b78606b45) ([#382](https://github.com/capawesome-team/capacitor-plugins/pull/382)): feat: add SPM support
+
+- [`e5258d0`](https://github.com/capawesome-team/capacitor-plugins/commit/e5258d03572e5c732de5eadc788a17b9a1b6ec3e) ([#383](https://github.com/capawesome-team/capacitor-plugins/pull/383)): feat: add `customProperties` property to `FetchLatestBundleResult`
+
+### Patch Changes
+
+- [`b7d1393`](https://github.com/capawesome-team/capacitor-plugins/commit/b7d13937f324d838e42be28f7d3be61f532ccf56) ([#385](https://github.com/capawesome-team/capacitor-plugins/pull/385)): fix(ios): `resetOnUpdate` configuration option only checked the `CFBundleVersion` but not the `CFBundleShortVersionString`
+
 ## 6.7.1
 
 ### Patch Changes
