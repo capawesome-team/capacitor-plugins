@@ -8,7 +8,7 @@ import Capacitor
 @objc(PosthogPlugin)
 public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "Posthog"
-    
+
     public let identifier = "PosthogPlugin" // DO NOT CHANGE THIS
     public let jsName = "Posthog" // DO NOT CHANGE THIS
     public let pluginMethods: [CAPPluginMethod] = [
@@ -26,7 +26,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise)
     ]
-    
+
     private var implementation: Posthog?
 
     override public func load() {
@@ -62,7 +62,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.flush()
         call.resolve()
     }
-    
+
     @objc func getFeatureFlag(_ call: CAPPluginCall) {
         do {
             let options = try GetFeatureFlagOptions(call: call)
@@ -104,7 +104,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.identify(options)
         call.resolve()
     }
-    
+
     @objc func isFeatureEnabled(_ call: CAPPluginCall) {
         do {
             let options = try IsFeatureEnabledOptions(call: call)
@@ -132,7 +132,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.register(options)
         call.resolve()
     }
-    
+
     @objc func reloadFeatureFlags(_ call: CAPPluginCall) {
         implementation?.reloadFeatureFlags()
         call.resolve()
@@ -180,12 +180,12 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.unregister(options)
         call.resolve()
     }
-    
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", PosthogPlugin.tag, "] ", error)
         call.reject(error.localizedDescription)
     }
-    
+
     private func resolveCall(_ call: CAPPluginCall) {
         call.resolve()
     }

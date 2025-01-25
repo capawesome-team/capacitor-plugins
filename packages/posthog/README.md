@@ -16,6 +16,7 @@ npx cap sync
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
+- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.10.0`)
 
 ## Configuration
 
@@ -109,9 +110,12 @@ const unregister = async () => {
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
+* [`getFeatureFlag(...)`](#getfeatureflag)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
+* [`isFeatureEnabled(...)`](#isfeatureenabled)
 * [`register(...)`](#register)
+* [`reloadFeatureFlags()`](#reloadfeatureflags)
 * [`reset()`](#reset)
 * [`screen(...)`](#screen)
 * [`setup(...)`](#setup)
@@ -173,6 +177,25 @@ Only available on Android and iOS.
 --------------------
 
 
+### getFeatureFlag(...)
+
+```typescript
+getFeatureFlag(options: GetFeatureFlagOptions) => Promise<GetFeatureFlagResult>
+```
+
+Get the value of a feature flag.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getfeatureflagoptions">GetFeatureFlagOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getfeatureflagresult">GetFeatureFlagResult</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
 ### group(...)
 
 ```typescript
@@ -207,6 +230,25 @@ Identify the current user.
 --------------------
 
 
+### isFeatureEnabled(...)
+
+```typescript
+isFeatureEnabled(options: IsFeatureEnabledOptions) => Promise<IsFeatureEnabledResult>
+```
+
+Check if a feature flag is enabled.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#isfeatureenabledoptions">IsFeatureEnabledOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isfeatureenabledresult">IsFeatureEnabledResult</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
 ### register(...)
 
 ```typescript
@@ -220,6 +262,19 @@ Register a new super property. This property will be sent with every event.
 | **`options`** | <code><a href="#registeroptions">RegisterOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### reloadFeatureFlags()
+
+```typescript
+reloadFeatureFlags() => Promise<void>
+```
+
+Reload the feature flags.
+
+**Since:** 7.0.0
 
 --------------------
 
@@ -310,6 +365,20 @@ Remove a super property.
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### GetFeatureFlagResult
+
+| Prop        | Type                                   | Description                                                                                  | Since |
+| ----------- | -------------------------------------- | -------------------------------------------------------------------------------------------- | ----- |
+| **`value`** | <code>string \| boolean \| null</code> | The value of the feature flag. If the feature flag does not exist, the value will be `null`. | 7.0.0 |
+
+
+#### GetFeatureFlagOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
+
+
 #### GroupOptions
 
 | Prop                  | Type                                                         | Description                                  | Since |
@@ -325,6 +394,20 @@ Remove a super property.
 | -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
 | **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
 | **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+
+
+#### IsFeatureEnabledResult
+
+| Prop          | Type                 | Description                                                                                         | Since |
+| ------------- | -------------------- | --------------------------------------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Whether the feature flag is enabled. If the feature flag does not exist, the value will be `false`. | 7.0.0 |
+
+
+#### IsFeatureEnabledOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
 
 #### RegisterOptions
