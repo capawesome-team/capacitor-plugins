@@ -16,6 +16,7 @@ import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
@@ -35,6 +36,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNa
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -345,7 +347,8 @@ public class LiveUpdate {
         return new File(plugin.getContext().getCacheDir(), fileName);
     }
 
-    private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
+    private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
+        String href = fileToCopy.getHref();
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
             // Create the source input stream
@@ -369,9 +372,9 @@ public class LiveUpdate {
         }
     }
 
-    private void copyCurrentBundleFiles(@NonNull List<String> hrefs, @NonNull File destinationDirectory) throws IOException {
-        for (String href : hrefs) {
-            copyCurrentBundleFile(href, destinationDirectory);
+    private void copyCurrentBundleFiles(@NonNull List<ManifestItem> filesToCopy, @NonNull File destinationDirectory) throws IOException {
+        for (ManifestItem fileToCopy : filesToCopy) {
+            copyCurrentBundleFile(fileToCopy, destinationDirectory);
         }
     }
 
@@ -453,11 +456,12 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file) throws Exception {
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable DownloadProgressCallback callback)
+        throws Exception {
         Response response = httpClient.execute(url);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
-            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
+            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file, callback);
             // Verify the file
             String checksum = LiveUpdateHttpClient.getChecksumFromResponse(response);
             String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
@@ -469,24 +473,39 @@ public class LiveUpdate {
         }
     }
 
-    private File downloadBundleFile(@NonNull String baseUrl, @NonNull String href, @NonNull File destinationDirectory) throws Exception {
+    private File downloadBundleFile(
+        @NonNull String baseUrl,
+        @NonNull String href,
+        @NonNull File destinationDirectory,
+        @Nullable DownloadProgressCallback callback
+    ) throws Exception {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
         urlBuilder.addQueryParameter("href", href);
         String url = urlBuilder.build().toString();
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile);
+        downloadAndVerifyFile(url, destinationFile, callback);
         return destinationFile;
     }
 
-    private void downloadBundleFiles(@NonNull String baseUrl, @NonNull List<String> hrefs, @NonNull File destinationDirectory)
-        throws Exception {
+    private void downloadBundleFiles(
+        @NonNull String baseUrl,
+        @NonNull List<ManifestItem> filesToDownload,
+        @NonNull File destinationDirectory,
+        @Nullable DownloadProgressCallback callback
+    ) throws Exception {
+        // Track the total downloaded bytes and total bytes to download for the progress callback
+        final long[] totalDownloadedBytes = { 0 };
+        long totalBytesToDownload = 0;
+        for (ManifestItem fileToDownload : filesToDownload) {
+            totalBytesToDownload += fileToDownload.getSizeInBytes();
+        }
         // Limit the number of threads to twice the number of processors
         int maxThreads = Runtime.getRuntime().availableProcessors() * 2;
         List<Thread> threads = new ArrayList<>();
         AtomicReference<Exception> exceptionReference = new AtomicReference<>();
-        for (String href : hrefs) {
+        for (ManifestItem fileToDownload : filesToDownload) {
             // Wait until a thread is available
             while (threads.size() >= maxThreads) {
                 for (Thread thread : threads) {
@@ -502,13 +521,31 @@ public class LiveUpdate {
             if (exceptionReference.get() != null) {
                 break;
             }
+            // Final variable that can be accessed from within inner class
+            long finalTotalBytesToDownload = totalBytesToDownload;
             // Start a new thread
             Thread thread = new Thread(() -> {
                 try {
-                    downloadBundleFile(baseUrl, href, destinationDirectory);
+                    downloadBundleFile(
+                        baseUrl,
+                        fileToDownload.getHref(),
+                        destinationDirectory,
+                        new DownloadProgressCallback() {
+                            @Override
+                            public void onProgress(long downloadedBytes, long totalBytes) {
+                                if (callback != null) {
+                                    callback.onProgress(totalDownloadedBytes[0] + downloadedBytes, finalTotalBytesToDownload);
+                                }
+                                if (downloadedBytes == totalBytes) {
+                                    // Bundle file has been downloaded. Update the total downloaded bytes.
+                                    totalDownloadedBytes[0] += downloadedBytes;
+                                }
+                            }
+                        }
+                    );
                 } catch (Exception exception) {
                     exceptionReference.set(exception);
-                    Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + href, exception);
+                    Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + fileToDownload.getHref(), exception);
                 }
             });
             threads.add(thread);
@@ -529,7 +566,7 @@ public class LiveUpdate {
         // Create a temporary directory
         File temporaryDirectory = createTemporaryDirectory();
         // Download the latest manifest
-        File latestManifestFile = downloadBundleFile(downloadUrl, manifestFileName, temporaryDirectory);
+        File latestManifestFile = downloadBundleFile(downloadUrl, manifestFileName, temporaryDirectory, null);
         Manifest latestManifest = loadManifest(latestManifestFile);
         // Load the current manifest
         Manifest currentManifest = loadCurrentManifest();
@@ -543,17 +580,17 @@ public class LiveUpdate {
             itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
         }
         // Copy the files
-        List<String> hrefsToCopy = new ArrayList<>();
-        for (ManifestItem item : itemsToCopy) {
-            hrefsToCopy.add(item.getHref());
-        }
-        copyCurrentBundleFiles(hrefsToCopy, temporaryDirectory);
+        copyCurrentBundleFiles(itemsToCopy, temporaryDirectory);
         // Download the files
-        List<String> hrefsToDownload = new ArrayList<>();
-        for (ManifestItem item : itemsToDownload) {
-            hrefsToDownload.add(item.getHref());
-        }
-        downloadBundleFiles(downloadUrl, hrefsToDownload, temporaryDirectory);
+        downloadBundleFiles(
+            downloadUrl,
+            itemsToDownload,
+            temporaryDirectory,
+            (downloadedBytes, totalBytes) -> {
+                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+                notifyDownloadBundleProgressListeners(event);
+            }
+        );
         // Add the bundle
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
@@ -561,7 +598,14 @@ public class LiveUpdate {
     private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file);
+        downloadAndVerifyFile(
+            downloadUrl,
+            file,
+            (downloadedBytes, totalBytes) -> {
+                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+                notifyDownloadBundleProgressListeners(event);
+            }
+        );
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file
@@ -727,6 +771,12 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
+    private boolean isBundleInUse(@NonNull String bundleId) {
+        String currentBundleId = getCurrentBundleId();
+        String nextBundleId = getNextBundleId();
+        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
+    }
+
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
@@ -762,10 +812,8 @@ public class LiveUpdate {
         return loadManifest(source);
     }
 
-    private boolean isBundleInUse(@NonNull String bundleId) {
-        String currentBundleId = getCurrentBundleId();
-        String nextBundleId = getNextBundleId();
-        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
+    public void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+        plugin.notifyDownloadBundleProgressListeners(event);
     }
 
     private void rollback() {
