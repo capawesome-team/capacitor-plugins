@@ -607,7 +607,7 @@ import CommonCrypto
         let items = try decoder.decode([ManifestItem].self, from: data)
         return Manifest(items: items)
     }
-                                        
+
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
         plugin.notifyDownloadBundleProgressListeners(event)
     }
