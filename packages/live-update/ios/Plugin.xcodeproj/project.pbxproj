@@ -39,6 +39,7 @@
 		7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */; };
 		7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */; };
 		7CA18F442C5E1FFE00D0BE5B /* ReadyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */; };
+		7CA1DA9C2D454C0B001EB3D0 /* DownloadBundleProgressEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */; };
 		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
 		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 /* End PBXBuildFile section */
@@ -89,6 +90,7 @@
 		7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdatePreferences.swift; sourceTree = "<group>"; };
 		7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLatestBundleResponse.swift; sourceTree = "<group>"; };
 		7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyResult.swift; sourceTree = "<group>"; };
+		7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadBundleProgressEvent.swift; sourceTree = "<group>"; };
 		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
 		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 		7C20114C2BA96518001FABAD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7CA1DA9A2D454C04001EB3D0 /* Events */,
 				7C29FB592CBD4148007DCB06 /* Manifest.swift */,
 				7C20114F2BA96529001FABAD /* Results */,
 				7C20114E2BA96524001FABAD /* Options */,
@@ -231,6 +234,14 @@
 				7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */,
 			);
 			path = Api;
+			sourceTree = "<group>";
+		};
+		7CA1DA9A2D454C04001EB3D0 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */,
+			);
+			path = Events;
 			sourceTree = "<group>";
 		};
 		8C8E7744173064A9F6D438E3 /* Pods */ = {
@@ -457,6 +468,7 @@
 				7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */,
 				7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */,
 				7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */,
+				7CA1DA9C2D454C0B001EB3D0 /* DownloadBundleProgressEvent.swift in Sources */,
 				7C2011572BA9661B001FABAD /* DeleteBundleOptions.swift in Sources */,
 				7C29FB582CBCEE4C007DCB06 /* ManifestItem.swift in Sources */,
 				7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */,

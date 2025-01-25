@@ -33,6 +33,8 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise)
     ]
+    
+    private let eventDownloadBundleProgess = "downloadBundleProgress"
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
@@ -282,6 +284,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 self.syncInProgress = false
                 rejectCall(call, error)
             }
+        }
+    }
+    
+    func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
+        if let event = event.toJSObject() as? JSObject {
+            notifyListeners(eventDownloadBundleProgess, data: event, retainUntilConsumed: false)
         }
     }
 

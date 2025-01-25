@@ -18,13 +18,15 @@ public class LiveUpdateHttpClient: NSObject {
         self.config = config
     }
 
-    public func download(url: URL, destination: @escaping DownloadRequest.Destination) async throws -> AFDownloadResponse<Data> {
+    public func download(url: URL, destination: @escaping DownloadRequest.Destination, callback: ((Int64, Int64) -> Void)?) async throws -> AFDownloadResponse<Data> {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         return try await withCheckedThrowingContinuation { continuation in
             AF.download(request, to: destination).downloadProgress { progress in
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Downloading progress: \(progress.fractionCompleted * 100)%")
+                if let callback = callback {
+                    callback(progress.completedUnitCount, progress.totalUnitCount)
+                }
             }.responseData { response in
                 continuation.resume(returning: response)
             }
