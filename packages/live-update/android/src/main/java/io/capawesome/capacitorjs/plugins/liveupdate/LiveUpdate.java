@@ -496,7 +496,7 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback callback
     ) throws Exception {
         // Track the total downloaded bytes and total bytes to download for the progress callback
-        final long[] totalDownloadedBytes = { 0 };
+        final long[] totalBytesDownloaded = { 0 };
         long totalBytesToDownload = 0;
         for (ManifestItem fileToDownload : filesToDownload) {
             totalBytesToDownload += fileToDownload.getSizeInBytes();
@@ -530,19 +530,16 @@ public class LiveUpdate {
                         baseUrl,
                         fileToDownload.getHref(),
                         destinationDirectory,
-                        new DownloadProgressCallback() {
-                            @Override
-                            public void onProgress(long downloadedBytes, long totalBytes) {
-                                if (callback != null) {
-                                    callback.onProgress(totalDownloadedBytes[0] + downloadedBytes, finalTotalBytesToDownload);
-                                }
-                                if (downloadedBytes == totalBytes) {
-                                    // Bundle file has been downloaded. Update the total downloaded bytes.
-                                    totalDownloadedBytes[0] += downloadedBytes;
-                                }
+                        (downloadedBytes, totalBytes) -> {
+                            if (callback != null) {
+                                callback.onProgress(totalBytesDownloaded[0] + downloadedBytes, finalTotalBytesToDownload);
                             }
                         }
                     );
+                    if (callback != null) {
+                        totalBytesDownloaded[0] += fileToDownload.getSizeInBytes();
+                        callback.onProgress(totalBytesDownloaded[0], finalTotalBytesToDownload);
+                    }
                 } catch (Exception exception) {
                     exceptionReference.set(exception);
                     Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + fileToDownload.getHref(), exception);
@@ -559,6 +556,10 @@ public class LiveUpdate {
         Exception exception = exceptionReference.get();
         if (exception != null) {
             throw exception;
+        }
+        // Call the callback one last time to make sure the progress is at 100%
+        if (callback != null) {
+            callback.onProgress(totalBytesToDownload, totalBytesToDownload);
         }
     }
 

@@ -392,6 +392,7 @@ import CommonCrypto
                 group.addTask {
                     _ = try await self.downloadBundleFile(baseUrl: url, href: fileToDownload.href, directory: directory, callback: { progress in
                         Task {
+                            // Progress is only reported if the file is downloaded in chunks
                             if let callback = callback {
                                 let totalBytesDownloaded = await totalBytesDownloaded.value
                                 let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
@@ -400,11 +401,22 @@ import CommonCrypto
                             }
                         }
                     })
-                    await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
+                    // Emit the current progress in case the file was not downloaded in chunks
+                    if let callback = callback {
+                        await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
+                        let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
+                        totalProgress.completedUnitCount = await totalBytesDownloaded.value
+                        callback(totalProgress)
+                    }
                 }
             }
-
             try await group.waitForAll()
+            // Call the callback one last time to make sure the progress is at 100%
+            if let callback = callback {
+                let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
+                totalProgress.completedUnitCount = totalBytesToDownload
+                callback(totalProgress)
+            }
         }
     }
 

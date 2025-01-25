@@ -11,13 +11,13 @@ public class DownloadBundleProgressEvent implements Result {
 
     private final long downloadedBytes;
     private final long totalBytes;
-    private final int progress;
+    private final double progress;
 
     public DownloadBundleProgressEvent(@NonNull String bundleId, long downloadedBytes, long totalBytes) {
         this.bundleId = bundleId;
         this.downloadedBytes = downloadedBytes;
         this.totalBytes = totalBytes;
-        this.progress = (int) ((downloadedBytes * 100) / totalBytes);
+        this.progress = (double) downloadedBytes / (double) totalBytes;
     }
 
     @NonNull
