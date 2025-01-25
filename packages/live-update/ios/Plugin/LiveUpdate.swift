@@ -379,8 +379,8 @@ import CommonCrypto
     }
 
     private func downloadBundleFiles(url: String, filesToDownload: [ManifestItem], directory: URL, callback: ((Int64, Int64) -> Void)?) async throws {
+        let totalBytesToDownload = Int64(filesToDownload.map { $0.sizeInBytes }.reduce(0, +))
         var totalDownloadedBytes = Int64(0)
-        var totalBytesToDownload = Int64(filesToDownload.map { $0.sizeInBytes }.reduce(0, +))
         try await withThrowingTaskGroup(of: Void.self) { group in
             for fileToDownload in filesToDownload {
                 group.addTask {
