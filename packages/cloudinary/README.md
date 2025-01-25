@@ -40,7 +40,7 @@ You also need to add the following receiver **inside** the `application` tag in 
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$cloudinaryAndroidVersion` version of `com.cloudinary:cloudinary-android` (default: `2.3.0`)
+- `$cloudinaryAndroidVersion` version of `com.cloudinary:cloudinary-android` (default: `3.0.2`)
 
 ## Configuration
 

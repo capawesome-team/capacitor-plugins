@@ -4,7 +4,14 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 7.x.x](#version-7xx)
 - [Version 5.x.x](#version-5xx)
+
+## Version 7.x.x
+
+### Variables
+
+- On Android, the `cloudinaryAndroidVersion` variable has been updated to `3.0.2`.
 
 ## Version 5.x.x
 
