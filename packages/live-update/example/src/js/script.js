@@ -1,6 +1,15 @@
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const addListeners = async () => {
+    await LiveUpdate.removeAllListeners().then(() => {
+      void LiveUpdate.addListener('downloadBundleProgress', (event) => {
+        console.log('downloadBundleProgress', event);
+      });
+    });
+  };
+  void addListeners();
+
   document.querySelector('#present-select-bundle-alert-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getBundles();
     const alertInputs = [];
