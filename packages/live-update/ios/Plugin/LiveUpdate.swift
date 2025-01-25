@@ -380,29 +380,27 @@ import CommonCrypto
 
     private func downloadBundleFiles(url: String, filesToDownload: [ManifestItem], directory: URL, callback: ((Progress) -> Void)?) async throws {
         let totalBytesToDownload = Int64(filesToDownload.map { $0.sizeInBytes }.reduce(0, +))
-        actor TotalDownloadedBytes {
+        actor TotalBytesDownloaded {
             var value: Int64 = 0
             func add(_ amount: Int64) {
                 value += amount
             }
         }
-        let totalDownloadedBytes = TotalDownloadedBytes()
+        let totalBytesDownloaded = TotalBytesDownloaded()
         try await withThrowingTaskGroup(of: Void.self) { group in
             for fileToDownload in filesToDownload {
                 group.addTask {
                     _ = try await self.downloadBundleFile(baseUrl: url, href: fileToDownload.href, directory: directory, callback: { progress in
                         Task {
                             if let callback = callback {
-                                let totalDownloaded = await totalDownloadedBytes.value
+                                let totalBytesDownloaded = await totalBytesDownloaded.value
                                 let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
-                                totalProgress.completedUnitCount = totalDownloaded + progress.completedUnitCount
+                                totalProgress.completedUnitCount = progress.completedUnitCount + totalBytesDownloaded
                                 callback(totalProgress)
-                            }
-                            if progress.completedUnitCount == progress.totalUnitCount {
-                                await totalDownloadedBytes.add(progress.completedUnitCount)
                             }
                         }
                     })
+                    await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
                 }
             }
 
