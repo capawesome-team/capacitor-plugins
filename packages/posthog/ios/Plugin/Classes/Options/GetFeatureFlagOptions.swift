@@ -7,7 +7,7 @@ import Capacitor
     init(call: CAPPluginCall) throws {
         self.key = try GetFeatureFlagOptions.getKeyFromCall(call)
     }
-    
+
     private static func getKeyFromCall(_ call: CAPPluginCall) throws -> String {
         guard let key = call.getString("key") else {
             throw CustomError.keyMissing
