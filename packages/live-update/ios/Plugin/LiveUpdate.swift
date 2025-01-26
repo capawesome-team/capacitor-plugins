@@ -395,8 +395,7 @@ import CommonCrypto
                             // Progress is only reported if the file is downloaded in chunks
                             if let callback = callback {
                                 let totalBytesDownloaded = await totalBytesDownloaded.value
-                                let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
-                                totalProgress.completedUnitCount = progress.completedUnitCount + totalBytesDownloaded
+                                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: progress.completedUnitCount + totalBytesDownloaded)
                                 callback(totalProgress)
                             }
                         }
@@ -404,8 +403,8 @@ import CommonCrypto
                     // Emit the current progress in case the file was not downloaded in chunks
                     if let callback = callback {
                         await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
-                        let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
-                        totalProgress.completedUnitCount = await totalBytesDownloaded.value
+                        let totalBytesDownloaded = await totalBytesDownloaded.value
+                        let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesDownloaded)
                         callback(totalProgress)
                     }
                 }
@@ -413,8 +412,7 @@ import CommonCrypto
             try await group.waitForAll()
             // Call the callback one last time to make sure the progress is at 100%
             if let callback = callback {
-                let totalProgress = Progress(totalUnitCount: totalBytesToDownload)
-                totalProgress.completedUnitCount = totalBytesToDownload
+                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesToDownload)
                 callback(totalProgress)
             }
         }
@@ -860,5 +858,12 @@ extension DispatchQueue {
                 }
             }
         }
+    }
+}
+
+extension Progress {
+    convenience init(totalUnitCount: Int64, completedUnitCount: Int64) {
+        self.init(totalUnitCount: totalUnitCount)
+        self.completedUnitCount = completedUnitCount
     }
 }
