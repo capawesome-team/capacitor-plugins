@@ -54,8 +54,10 @@ public class SetOptions {
                 shortcutInfoCompat.setLongLabel(description);
             }
             shortcutInfoCompat.setIntent(
-                new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass())
-                    .putExtra(AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME, (String) id)
+                new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass()).putExtra(
+                    AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME,
+                    (String) id
+                )
             );
             if (icon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));

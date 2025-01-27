@@ -526,16 +526,11 @@ public class LiveUpdate {
             // Start a new thread
             Thread thread = new Thread(() -> {
                 try {
-                    downloadBundleFile(
-                        baseUrl,
-                        fileToDownload.getHref(),
-                        destinationDirectory,
-                        (downloadedBytes, totalBytes) -> {
-                            if (callback != null) {
-                                callback.onProgress(totalBytesDownloaded[0] + downloadedBytes, finalTotalBytesToDownload);
-                            }
+                    downloadBundleFile(baseUrl, fileToDownload.getHref(), destinationDirectory, (downloadedBytes, totalBytes) -> {
+                        if (callback != null) {
+                            callback.onProgress(totalBytesDownloaded[0] + downloadedBytes, finalTotalBytesToDownload);
                         }
-                    );
+                    });
                     if (callback != null) {
                         totalBytesDownloaded[0] += fileToDownload.getSizeInBytes();
                         callback.onProgress(totalBytesDownloaded[0], finalTotalBytesToDownload);
@@ -583,15 +578,10 @@ public class LiveUpdate {
         // Copy the files
         copyCurrentBundleFiles(itemsToCopy, temporaryDirectory);
         // Download the files
-        downloadBundleFiles(
-            downloadUrl,
-            itemsToDownload,
-            temporaryDirectory,
-            (downloadedBytes, totalBytes) -> {
-                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
-                notifyDownloadBundleProgressListeners(event);
-            }
-        );
+        downloadBundleFiles(downloadUrl, itemsToDownload, temporaryDirectory, (downloadedBytes, totalBytes) -> {
+            DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+            notifyDownloadBundleProgressListeners(event);
+        });
         // Add the bundle
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
@@ -599,14 +589,10 @@ public class LiveUpdate {
     private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(
-            downloadUrl,
-            file,
-            (downloadedBytes, totalBytes) -> {
-                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
-                notifyDownloadBundleProgressListeners(event);
-            }
-        );
+        downloadAndVerifyFile(downloadUrl, file, (downloadedBytes, totalBytes) -> {
+            DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+            notifyDownloadBundleProgressListeners(event);
+        });
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file

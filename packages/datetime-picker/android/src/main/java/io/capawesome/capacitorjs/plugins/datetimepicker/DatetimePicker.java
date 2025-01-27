@@ -36,24 +36,22 @@ public class DatetimePicker {
         @Nullable AndroidTimePickerMode androidTimePickerMode
     ) {
         PresentResultCallback dateResultCallback = new PresentResultCallback();
-        dateResultCallback.setSuccessListener(
-            selectedDate -> {
-                PresentResultCallback timeResultCallback = new PresentResultCallback();
-                timeResultCallback.setSuccessListener((Date selectedDateAndTime) -> resultCallback.success(selectedDateAndTime));
-                timeResultCallback.setCancelListener(() -> resultCallback.cancel());
-                timeResultCallback.setDismissListener(() -> resultCallback.dismiss());
-                presentTimePicker(
-                    selectedDate,
-                    locale,
-                    cancelButtonText,
-                    doneButtonText,
-                    theme,
-                    timeResultCallback,
-                    androidDatePickerMode,
-                    androidTimePickerMode
-                );
-            }
-        );
+        dateResultCallback.setSuccessListener(selectedDate -> {
+            PresentResultCallback timeResultCallback = new PresentResultCallback();
+            timeResultCallback.setSuccessListener((Date selectedDateAndTime) -> resultCallback.success(selectedDateAndTime));
+            timeResultCallback.setCancelListener(() -> resultCallback.cancel());
+            timeResultCallback.setDismissListener(() -> resultCallback.dismiss());
+            presentTimePicker(
+                selectedDate,
+                locale,
+                cancelButtonText,
+                doneButtonText,
+                theme,
+                timeResultCallback,
+                androidDatePickerMode,
+                androidTimePickerMode
+            );
+        });
         dateResultCallback.setCancelListener(() -> resultCallback.cancel());
         dateResultCallback.setDismissListener(() -> resultCallback.dismiss());
         presentDatePicker(
@@ -107,12 +105,10 @@ public class DatetimePicker {
 
         Button cancelButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         cancelButton.setText(cancelButtonText);
-        cancelButton.setOnClickListener(
-            view -> {
-                resultCallback.cancel();
-                dialog.dismiss();
-            }
-        );
+        cancelButton.setOnClickListener(view -> {
+            resultCallback.cancel();
+            dialog.dismiss();
+        });
 
         DatePicker picker = dialog.getDatePicker();
         if (minDate != null) {
@@ -170,12 +166,10 @@ public class DatetimePicker {
 
         Button cancelButton = dialog.getButton(Dialog.BUTTON_NEGATIVE);
         cancelButton.setText(cancelButtonText);
-        cancelButton.setOnClickListener(
-            view -> {
-                resultCallback.cancel();
-                dialog.dismiss();
-            }
-        );
+        cancelButton.setOnClickListener(view -> {
+            resultCallback.cancel();
+            dialog.dismiss();
+        });
 
         dialog.show();
     }
@@ -202,19 +196,17 @@ public class DatetimePicker {
                     return R.style.MaterialLightTheme;
                 case DARK:
                     return R.style.MaterialDarkTheme;
-                case AUTO:
-                    {
-                        int nightModeFlags =
-                            plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                        switch (nightModeFlags) {
-                            case Configuration.UI_MODE_NIGHT_YES:
-                                return R.style.MaterialDarkTheme;
-                            case Configuration.UI_MODE_NIGHT_NO:
-                                return R.style.MaterialLightTheme;
-                            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                                return R.style.MaterialLightTheme;
-                        }
+                case AUTO: {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkTheme;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightTheme;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightTheme;
                     }
+                }
             }
         }
         if (androidDatePickerMode == AndroidDatePickerMode.SPINNER && androidTimePickerMode != AndroidTimePickerMode.SPINNER) {
@@ -223,19 +215,17 @@ public class DatetimePicker {
                     return R.style.MaterialLightTheme_DatePickerStyleSpinner;
                 case DARK:
                     return R.style.MaterialDarkTheme_DatePickerStyleSpinner;
-                case AUTO:
-                    {
-                        int nightModeFlags =
-                            plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                        switch (nightModeFlags) {
-                            case Configuration.UI_MODE_NIGHT_YES:
-                                return R.style.MaterialDarkTheme_DatePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_NO:
-                                return R.style.MaterialLightTheme_DatePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                                return R.style.MaterialLightTheme_DatePickerStyleSpinner;
-                        }
+                case AUTO: {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkTheme_DatePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightTheme_DatePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightTheme_DatePickerStyleSpinner;
                     }
+                }
             }
         }
         if (androidDatePickerMode != AndroidDatePickerMode.SPINNER && androidTimePickerMode == AndroidTimePickerMode.SPINNER) {
@@ -244,19 +234,17 @@ public class DatetimePicker {
                     return R.style.MaterialLightTheme_TimePickerStyleSpinner;
                 case DARK:
                     return R.style.MaterialDarkTheme_TimePickerStyleSpinner;
-                case AUTO:
-                    {
-                        int nightModeFlags =
-                            plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                        switch (nightModeFlags) {
-                            case Configuration.UI_MODE_NIGHT_YES:
-                                return R.style.MaterialDarkTheme_TimePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_NO:
-                                return R.style.MaterialLightTheme_TimePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                                return R.style.MaterialLightTheme_TimePickerStyleSpinner;
-                        }
+                case AUTO: {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkTheme_TimePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightTheme_TimePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightTheme_TimePickerStyleSpinner;
                     }
+                }
             }
         }
         if (androidDatePickerMode == AndroidDatePickerMode.SPINNER && androidTimePickerMode == AndroidTimePickerMode.SPINNER) {
@@ -265,19 +253,17 @@ public class DatetimePicker {
                     return R.style.MaterialLightTheme_DateTimePickerStyleSpinner;
                 case DARK:
                     return R.style.MaterialDarkTheme_DateTimePickerStyleSpinner;
-                case AUTO:
-                    {
-                        int nightModeFlags =
-                            plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-                        switch (nightModeFlags) {
-                            case Configuration.UI_MODE_NIGHT_YES:
-                                return R.style.MaterialDarkTheme_DateTimePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_NO:
-                                return R.style.MaterialLightTheme_DateTimePickerStyleSpinner;
-                            case Configuration.UI_MODE_NIGHT_UNDEFINED:
-                                return R.style.MaterialLightTheme_DateTimePickerStyleSpinner;
-                        }
+                case AUTO: {
+                    int nightModeFlags = plugin.getContext().getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                    switch (nightModeFlags) {
+                        case Configuration.UI_MODE_NIGHT_YES:
+                            return R.style.MaterialDarkTheme_DateTimePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_NO:
+                            return R.style.MaterialLightTheme_DateTimePickerStyleSpinner;
+                        case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                            return R.style.MaterialLightTheme_DateTimePickerStyleSpinner;
                     }
+                }
             }
         }
         return R.style.MaterialLightTheme;

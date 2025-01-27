@@ -1,4 +1,4 @@
-platform :ios, '13.0'
+platform :ios, '14.0'
 
 def assertDeploymentTarget(installer)
   installer.pods_project.targets.each do |target|
@@ -7,7 +7,7 @@ def assertDeploymentTarget(installer)
       deployment_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f
       should_upgrade = deployment_target < 13.0 && deployment_target != 0.0
       if should_upgrade
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '14.0'
       end
     end
   end

@@ -26,7 +26,9 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.capture(options.event, options.properties);
   }
 
-  async getFeatureFlag(options: GetFeatureFlagOptions): Promise<GetFeatureFlagResult> {
+  async getFeatureFlag(
+    options: GetFeatureFlagOptions,
+  ): Promise<GetFeatureFlagResult> {
     const value = posthog.getFeatureFlag(options.key);
     return value === undefined ? { value: null } : { value };
   }
@@ -43,7 +45,9 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.identify(options.distinctId, options.userProperties);
   }
 
-  async isFeatureEnabled(options: IsFeatureEnabledOptions): Promise<IsFeatureEnabledResult> {
+  async isFeatureEnabled(
+    options: IsFeatureEnabledOptions,
+  ): Promise<IsFeatureEnabledResult> {
     const enabled = posthog.isFeatureEnabled(options.key);
     return { enabled: enabled || false };
   }

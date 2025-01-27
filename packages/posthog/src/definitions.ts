@@ -42,7 +42,9 @@ export interface PosthogPlugin {
    *
    * @since 7.0.0
    */
-  isFeatureEnabled(options: IsFeatureEnabledOptions): Promise<IsFeatureEnabledResult>;
+  isFeatureEnabled(
+    options: IsFeatureEnabledOptions,
+  ): Promise<IsFeatureEnabledResult>;
   /**
    * Register a new super property. This property will be sent with every event.
    *

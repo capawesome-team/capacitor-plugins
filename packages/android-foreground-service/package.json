@@ -48,26 +48,26 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "docgen": "docgen --api ForegroundServicePlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "6.0.0",
-    "@capacitor/cli": "6.0.0",
-    "@capacitor/core": "6.0.0",
+    "@capacitor/android": "7.0.0",
+    "@capacitor/cli": "7.0.0",
+    "@capacitor/core": "7.0.0",
     "@capacitor/docgen": "0.3.0",
-    "@ionic/eslint-config": "0.3.0",
-    "eslint": "7.32.0",
-    "prettier": "2.3.2",
-    "prettier-plugin-java": "1.0.2",
-    "rimraf": "3.0.2",
-    "rollup": "2.77.2",
+    "@ionic/eslint-config": "0.4.0",
+    "eslint": "8.57.0",
+    "prettier": "3.4.2",
+    "prettier-plugin-java": "2.6.7",
+    "rimraf": "6.0.1",
+    "rollup": "4.30.1",
     "typescript": "4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": ">=7.0.0"
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"

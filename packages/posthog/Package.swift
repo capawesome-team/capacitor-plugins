@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CapawesomeCapacitorPosthog",
-    platforms: [.iOS(.v13)],
+    platforms: [.iOS(.v14)],
     products: [
         .library(
             name: "CapawesomeCapacitorPosthog",

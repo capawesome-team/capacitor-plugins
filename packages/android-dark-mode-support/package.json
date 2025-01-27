@@ -39,13 +39,13 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\""
   },
   "devDependencies": {
-    "@capacitor/android": "6.0.0",
-    "@capacitor/cli": "6.0.0",
-    "prettier": "2.3.2",
-    "prettier-plugin-java": "1.0.2"
+    "@capacitor/android": "7.0.0",
+    "@capacitor/cli": "7.0.0",
+    "prettier": "3.4.2",
+    "prettier-plugin-java": "2.6.7"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0"
+    "@capacitor/core": ">=7.0.0"
   },
   "capacitor": {
     "android": {
