@@ -2,4 +2,4 @@
 '@capawesome/capacitor-live-update': major
 ---
 
-refactor: disable automatic rollbacks by default
+refactor: disable automatic rollbacks by default (see `BREAKING.md`)
