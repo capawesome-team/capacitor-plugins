@@ -35,25 +35,21 @@ public class AppReview {
         final ReviewManager manager = ReviewManagerFactory.create(plugin.getActivity());
         manager
             .requestReviewFlow()
-            .addOnCompleteListener(
-                task -> {
-                    if (task.isSuccessful()) {
-                        ReviewInfo reviewInfo = task.getResult();
-                        manager
-                            .launchReviewFlow(plugin.getActivity(), reviewInfo)
-                            .addOnCompleteListener(
-                                task1 -> {
-                                    if (task1.isSuccessful()) {
-                                        callback.success();
-                                    } else {
-                                        callback.error(task1.getException());
-                                    }
-                                }
-                            );
-                    } else {
-                        callback.error(task.getException());
-                    }
+            .addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ReviewInfo reviewInfo = task.getResult();
+                    manager
+                        .launchReviewFlow(plugin.getActivity(), reviewInfo)
+                        .addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                callback.success();
+                            } else {
+                                callback.error(task1.getException());
+                            }
+                        });
+                } else {
+                    callback.error(task.getException());
                 }
-            );
+            });
     }
 }

@@ -112,7 +112,9 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.6.0
    */
-  fetchLatestBundle(options?: FetchLatestBundleOptions): Promise<FetchLatestBundleResult>;
+  fetchLatestBundle(
+    options?: FetchLatestBundleOptions,
+  ): Promise<FetchLatestBundleResult>;
   /**
    * Get all identifiers of bundles that have been downloaded.
    *
@@ -260,7 +262,7 @@ export interface LiveUpdatePlugin {
    */
   addListener(
     eventName: 'downloadBundleProgress',
-    listenerFunc: DownloadBundleProgressListener
+    listenerFunc: DownloadBundleProgressListener,
   ): Promise<PluginListenerHandle>;
 }
 
@@ -611,7 +613,9 @@ export interface SyncResult {
  *
  * @since 7.0.0
  */
-export type DownloadBundleProgressListener = (event: DownloadBundleProgressEvent) => void;
+export type DownloadBundleProgressListener = (
+  event: DownloadBundleProgressEvent,
+) => void;
 
 /**
  * Event that is triggered when the download progress of a bundle changes.
