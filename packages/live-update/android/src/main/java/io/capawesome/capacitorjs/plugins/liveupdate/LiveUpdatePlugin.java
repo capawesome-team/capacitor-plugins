@@ -8,6 +8,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
@@ -43,6 +44,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
     public static final String ERROR_SYNC_IN_PROGRESS = "Sync is already in progress.";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
+    public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
 
     private boolean syncInProgress = false;
 
@@ -465,6 +467,10 @@ public class LiveUpdatePlugin extends Plugin {
             syncInProgress = false;
             rejectCall(call, exception);
         }
+    }
+
+    public void notifyDownloadBundleProgressListeners(@NonNull DownloadBundleProgressEvent event) {
+        notifyListeners(EVENT_DOWNLOAD_BUNDLE_PROGRESS, event.toJSObject(), false);
     }
 
     private LiveUpdateConfig getLiveUpdateConfig() {

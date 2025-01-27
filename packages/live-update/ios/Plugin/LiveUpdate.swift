@@ -274,17 +274,17 @@ import CommonCrypto
         return url
     }
 
-    private func copyCurrentBundleFile(href: String, toDirectory: URL) throws {
+    private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
         let currentBundleId = getCurrentBundleId()
-        let destination = toDirectory.appendingPathComponent(href)
+        let destination = toDirectory.appendingPathComponent(fileToCopy.href)
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
         if let currentBundleId = currentBundleId {
-            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(fileToCopy.href)
         } else {
-            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+            guard let file = Bundle.main.url(forResource: fileToCopy.href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
                 return
             }
             sourceURL = file
@@ -293,9 +293,9 @@ import CommonCrypto
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
-    private func copyCurrentBundleFiles(hrefs: [String], toDirectory: URL) throws {
-        for href in hrefs {
-            try copyCurrentBundleFile(href: href, toDirectory: toDirectory)
+    private func copyCurrentBundleFiles(filesToCopy: [ManifestItem], toDirectory: URL) throws {
+        for fileToCopy in filesToCopy {
+            try copyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
         }
     }
 
@@ -344,12 +344,12 @@ import CommonCrypto
         }
     }
 
-    private func downloadAndVerifyFile(url: String, file: URL) async throws {
+    private func downloadAndVerifyFile(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
         let urlComponents = URLComponents(string: url)!
-        let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination)
+        let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
             if let urlError = error.underlyingError as? URLError {
@@ -367,26 +367,54 @@ import CommonCrypto
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
 
-    private func downloadBundleFile(baseUrl: String, href: String, directory: URL) async throws -> URL {
+    private func downloadBundleFile(baseUrl: String, href: String, directory: URL, callback: ((Progress) -> Void)?) async throws -> URL {
         let fileURL = directory.appendingPathComponent(href)
         var parameters = [String: String]()
         parameters["href"] = href
         var urlComponents = URLComponents(string: baseUrl)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = urlComponents.string!
-        try await self.downloadAndVerifyFile(url: url, file: fileURL)
+        try await self.downloadAndVerifyFile(url: url, file: fileURL, callback: callback)
         return fileURL
     }
 
-    private func downloadBundleFiles(url: String, hrefs: [String], directory: URL) async throws {
+    private func downloadBundleFiles(url: String, filesToDownload: [ManifestItem], directory: URL, callback: ((Progress) -> Void)?) async throws {
+        let totalBytesToDownload = Int64(filesToDownload.map { $0.sizeInBytes }.reduce(0, +))
+        actor TotalBytesDownloaded {
+            var value: Int64 = 0
+            func add(_ amount: Int64) {
+                value += amount
+            }
+        }
+        let totalBytesDownloaded = TotalBytesDownloaded()
         try await withThrowingTaskGroup(of: Void.self) { group in
-            for href in hrefs {
+            for fileToDownload in filesToDownload {
                 group.addTask {
-                    _ = try await self.downloadBundleFile(baseUrl: url, href: href, directory: directory)
+                    _ = try await self.downloadBundleFile(baseUrl: url, href: fileToDownload.href, directory: directory, callback: { progress in
+                        Task {
+                            // Progress is only reported if the file is downloaded in chunks
+                            if let callback = callback {
+                                let totalBytesDownloaded = await totalBytesDownloaded.value
+                                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: progress.completedUnitCount + totalBytesDownloaded)
+                                callback(totalProgress)
+                            }
+                        }
+                    })
+                    // Emit the current progress in case the file was not downloaded in chunks
+                    if let callback = callback {
+                        await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
+                        let totalBytesDownloaded = await totalBytesDownloaded.value
+                        let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesDownloaded)
+                        callback(totalProgress)
+                    }
                 }
             }
-
             try await group.waitForAll()
+            // Call the callback one last time to make sure the progress is at 100%
+            if let callback = callback {
+                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesToDownload)
+                callback(totalProgress)
+            }
         }
     }
 
@@ -394,7 +422,7 @@ import CommonCrypto
         // Create a temporary directory
         let temporaryDirectory = try createTemporaryDirectory()
         // Download the latest manifest
-        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory)
+        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory, callback: nil)
         let latestManifest = try loadManifest(file: latestManifestFile)
         // Load the current manifest
         let currentManifest = try loadCurrentManifest()
@@ -408,9 +436,12 @@ import CommonCrypto
             itemsToDownload.append(contentsOf: latestManifest.items)
         }
         // Copy the files
-        try self.copyCurrentBundleFiles(hrefs: itemsToCopy.map { $0.href }, toDirectory: temporaryDirectory)
+        try self.copyCurrentBundleFiles(filesToCopy: itemsToCopy, toDirectory: temporaryDirectory)
         // Download the files
-        try await self.downloadBundleFiles(url: url, hrefs: itemsToDownload.map { $0.href }, directory: temporaryDirectory)
+        try await self.downloadBundleFiles(url: url, filesToDownload: itemsToDownload, directory: temporaryDirectory, callback: { progress in
+            let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
+            self.notifyDownloadBundleProgressListeners(event)
+        })
         // Add the bundle
         try await addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
     }
@@ -419,7 +450,10 @@ import CommonCrypto
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         // Download the bundle
-        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl)
+        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, callback: { progress in
+            let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
+            self.notifyDownloadBundleProgressListeners(event)
+        })
         // Add the bundle
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
@@ -591,6 +625,10 @@ import CommonCrypto
         let decoder = JSONDecoder()
         let items = try decoder.decode([ManifestItem].self, from: data)
         return Manifest(items: items)
+    }
+
+    private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
+        plugin.notifyDownloadBundleProgressListeners(event)
     }
 
     private func rollback() {
@@ -820,5 +858,12 @@ extension DispatchQueue {
                 }
             }
         }
+    }
+}
+
+extension Progress {
+    convenience init(totalUnitCount: Int64, completedUnitCount: Int64) {
+        self.init(totalUnitCount: totalUnitCount)
+        self.completedUnitCount = completedUnitCount
     }
 }

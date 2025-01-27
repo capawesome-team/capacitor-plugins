@@ -258,7 +258,9 @@ const isNewBundleAvailable = async () => {
 * [`setCustomId(...)`](#setcustomid)
 * [`setNextBundle(...)`](#setnextbundle)
 * [`sync(...)`](#sync)
+* [`addListener('downloadBundleProgress', ...)`](#addlistenerdownloadbundleprogress-)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -603,6 +605,28 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('downloadBundleProgress', ...)
+
+```typescript
+addListener(eventName: 'downloadBundleProgress', listenerFunc: DownloadBundleProgressListener) => Promise<PluginListenerHandle>
+```
+
+Listen for the download progress of a bundle.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'downloadBundleProgress'</code>                                                     |
+| **`listenerFunc`** | <code><a href="#downloadbundleprogresslistener">DownloadBundleProgressListener</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -737,6 +761,35 @@ Only available on Android and iOS.
 | Prop          | Type                | Description                                                      | Since |
 | ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
 | **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### DownloadBundleProgressEvent
+
+Event that is triggered when the download progress of a bundle changes.
+
+| Prop                  | Type                | Description                                                             | Since |
+| --------------------- | ------------------- | ----------------------------------------------------------------------- | ----- |
+| **`bundleId`**        | <code>string</code> | The unique identifier of the bundle that is being downloaded.           | 7.0.0 |
+| **`downloadedBytes`** | <code>number</code> | The number of bytes that have been downloaded.                          | 7.0.0 |
+| **`progress`**        | <code>number</code> | The progress of the download in percent as a value between `0` and `1`. | 7.0.0 |
+| **`totalBytes`**      | <code>number</code> | The total number of bytes to download.                                  | 7.0.0 |
+
+
+### Type Aliases
+
+
+#### DownloadBundleProgressListener
+
+Listener for the download progress of a bundle.
+
+<code>(event: <a href="#downloadbundleprogressevent">DownloadBundleProgressEvent</a>): void</code>
 
 </docgen-api>
 

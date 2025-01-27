@@ -3,6 +3,7 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -53,7 +54,8 @@ public class LiveUpdateHttpClient {
         return okHttpClient.newCall(request).execute();
     }
 
-    public static void writeResponseBodyToFile(ResponseBody body, File file) throws IOException {
+    public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
+        throws IOException {
         long contentLength = body.contentLength();
         BufferedSource source = body.source();
         BufferedSink sink = Okio.buffer(Okio.sink(file));
@@ -63,8 +65,9 @@ public class LiveUpdateHttpClient {
         for (long bytesRead; (bytesRead = source.read(sinkBuffer, bufferSize)) != -1;) {
             sink.emit();
             totalBytesRead += bytesRead;
-            int progress = (int) ((totalBytesRead * 100) / contentLength);
-            Logger.debug(LiveUpdatePlugin.TAG, "Downloading progress: " + progress + "%");
+            if (callback != null) {
+                callback.onProgress(totalBytesRead, contentLength);
+            }
         }
         sink.flush();
         sink.close();

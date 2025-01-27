@@ -1,5 +1,7 @@
 /// <reference types="@capacitor/cli" />
 
+import type { PluginListenerHandle } from '@capacitor/core';
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     LiveUpdate?: {
@@ -249,6 +251,17 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   sync(options?: SyncOptions): Promise<SyncResult>;
+  /**
+   * Listen for the download progress of a bundle.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.0.0
+   */
+  addListener(
+    eventName: 'downloadBundleProgress',
+    listenerFunc: DownloadBundleProgressListener
+  ): Promise<PluginListenerHandle>;
 }
 
 /**
@@ -591,4 +604,44 @@ export interface SyncResult {
    * @since 5.0.0
    */
   nextBundleId: string | null;
+}
+
+/**
+ * Listener for the download progress of a bundle.
+ *
+ * @since 7.0.0
+ */
+export type DownloadBundleProgressListener = (event: DownloadBundleProgressEvent) => void;
+
+/**
+ * Event that is triggered when the download progress of a bundle changes.
+ *
+ * @since 7.0.0
+ */
+export interface DownloadBundleProgressEvent {
+  /**
+   * The unique identifier of the bundle that is being downloaded.
+   *
+   * @since 7.0.0
+   */
+  bundleId: string;
+  /**
+   * The number of bytes that have been downloaded.
+   *
+   * @since 7.0.0
+   */
+  downloadedBytes: number;
+  /**
+   * The progress of the download in percent as a value between `0` and `1`.
+   *
+   * @since 7.0.0
+   * @example 0.5
+   */
+  progress: number;
+  /**
+   * The total number of bytes to download.
+   *
+   * @since 7.0.0
+   */
+  totalBytes: number;
 }
