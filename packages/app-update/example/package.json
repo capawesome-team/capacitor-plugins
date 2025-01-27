@@ -13,10 +13,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "latest",
     "@capacitor/core": "latest",
-    "@capawesome/capacitor-app-update": "file:..",
-    "@capacitor/ios": "^6.0.0",
-    "@capacitor/android": "^6.0.0"
+    "@capacitor/ios": "latest",
+    "@capawesome/capacitor-app-update": "file:.."
   },
   "devDependencies": {
     "@capacitor/cli": "latest",

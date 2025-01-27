@@ -15,12 +15,12 @@ on:
 
 env:
   NODE_VERSION: 20
-  JAVA_VERSION: 17
+  JAVA_VERSION: 21
 
 jobs:
   build:
     name: Build
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
         run: npm run verify
   lint:
     name: Lint
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
