@@ -1,5 +1,19 @@
 # Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
+- [`d5d0d711a2aa16c2ea6fd1c88b3156225dd08933`](https://github.com/capawesome-team/capacitor-plugins/commit/d5d0d711a2aa16c2ea6fd1c88b3156225dd08933) ([#400](https://github.com/capawesome-team/capacitor-plugins/pull/400)): chore(deps): update third party SDKs to the latest version
+
+### Minor Changes
+
+- [`b301d031f9a6a1455ab35d735e7b2349584b8371`](https://github.com/capawesome-team/capacitor-plugins/commit/b301d031f9a6a1455ab35d735e7b2349584b8371) ([#388](https://github.com/capawesome-team/capacitor-plugins/pull/388)): feat: support feature flags
+
+- [`fdbcd817f6ab89525149685045f6ea7b78606b45`](https://github.com/capawesome-team/capacitor-plugins/commit/fdbcd817f6ab89525149685045f6ea7b78606b45) ([#382](https://github.com/capawesome-team/capacitor-plugins/pull/382)): feat: add SPM support
+
 ## 6.0.0
 
 ### Major Changes
