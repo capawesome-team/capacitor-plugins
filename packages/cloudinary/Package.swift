@@ -10,7 +10,7 @@ let package = Package(
             targets: ["CloudinaryPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", branch: "6.0.0"),
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0"),
         .package(url: "https://github.com/cloudinary/cloudinary_ios.git", .upToNextMajor(from: "5.1.0"))
     ],
     targets: [
