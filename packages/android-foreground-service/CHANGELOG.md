@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
 ## 6.2.0
 
 ### Minor Changes

@@ -1,5 +1,29 @@
 # Changelog
 
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
+- [`48f35a31bdcddd8a861fe1c28c991d67ce4cf986`](https://github.com/capawesome-team/capacitor-plugins/commit/48f35a31bdcddd8a861fe1c28c991d67ce4cf986): refactor: disable automatic rollbacks by default (see `BREAKING.md`)
+
+- [`56367d5e0deec242e0502bdeb9ea0fdae5947cc7`](https://github.com/capawesome-team/capacitor-plugins/commit/56367d5e0deec242e0502bdeb9ea0fdae5947cc7) ([#242](https://github.com/capawesome-team/capacitor-plugins/pull/242)): feat: implement return type `ReadyResult`
+
+- [`80487793c0f452339289ac11f310e26d63e3abc6`](https://github.com/capawesome-team/capacitor-plugins/commit/80487793c0f452339289ac11f310e26d63e3abc6) ([#390](https://github.com/capawesome-team/capacitor-plugins/pull/390)): refactor: remove deprecated code (see `BREAKING.md`)
+
+- [`f90c1b92e6d371801b36fb36e0c0a9123343afd7`](https://github.com/capawesome-team/capacitor-plugins/commit/f90c1b92e6d371801b36fb36e0c0a9123343afd7) ([#404](https://github.com/capawesome-team/capacitor-plugins/pull/404)): refactor: remove the `enabled` and `resetOnUpdate` configuration options
+
+### Minor Changes
+
+- [`0dc14929935941bf71e1871d8ad7af027cff3fee`](https://github.com/capawesome-team/capacitor-plugins/commit/0dc14929935941bf71e1871d8ad7af027cff3fee): feat: add `serverDomain` configuration option
+
+- [`fdbcd817f6ab89525149685045f6ea7b78606b45`](https://github.com/capawesome-team/capacitor-plugins/commit/fdbcd817f6ab89525149685045f6ea7b78606b45) ([#382](https://github.com/capawesome-team/capacitor-plugins/pull/382)): feat: add SPM support
+
+- [`e5258d03572e5c732de5eadc788a17b9a1b6ec3e`](https://github.com/capawesome-team/capacitor-plugins/commit/e5258d03572e5c732de5eadc788a17b9a1b6ec3e) ([#383](https://github.com/capawesome-team/capacitor-plugins/pull/383)): feat: add `customProperties` property to `FetchLatestBundleResult`
+
+- [`c9156f7a3331a4c4db4152d7c9abe4311d4a8d05`](https://github.com/capawesome-team/capacitor-plugins/commit/c9156f7a3331a4c4db4152d7c9abe4311d4a8d05) ([#399](https://github.com/capawesome-team/capacitor-plugins/pull/399)): feat: add `downloadBundleProgress` listener
+
 ## 6.7.1
 
 ### Patch Changes
