@@ -299,11 +299,9 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         config.appId = getConfig().getString("appId", config.appId)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
-        config.enabled = getConfig().getBoolean("enabled", config.enabled)
         config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)
         config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
-        config.resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.resetOnUpdate)
         config.serverDomain = getConfig().getString("serverDomain", config.serverDomain) ?? config.serverDomain
 
         return config

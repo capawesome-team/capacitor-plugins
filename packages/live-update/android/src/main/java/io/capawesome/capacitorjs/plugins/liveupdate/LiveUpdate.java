@@ -97,15 +97,9 @@ public class LiveUpdate {
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
         this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
-        if (config.getEnabled()) {
-            if (wasUpdated() && config.getResetOnUpdate()) {
-                Logger.debug(LiveUpdatePlugin.TAG, "App was updated. Resetting to default bundle.");
-                reset();
-            } else {
-                startRollbackTimer();
-            }
-            saveCurrentVersionCode();
-        }
+        // Start the rollback timer to rollback to the default bundle
+        // if the app is not ready after a certain time
+        startRollbackTimer();
     }
 
     public void deleteBundle(@NonNull DeleteBundleOptions options, @NonNull EmptyCallback callback) {
@@ -820,11 +814,6 @@ public class LiveUpdate {
         }
     }
 
-    private void saveCurrentVersionCode() throws PackageManager.NameNotFoundException {
-        int currentVersionCode = getPackageInfo().versionCode;
-        preferences.setLastVersionCode(currentVersionCode);
-    }
-
     @Nullable
     private File searchIndexHtmlFile(@NonNull File directory) {
         File[] files = directory.listFiles();
@@ -963,12 +952,6 @@ public class LiveUpdate {
             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
         }
-    }
-
-    private boolean wasUpdated() throws PackageManager.NameNotFoundException {
-        int lastVersionCode = preferences.getLastVersionCode();
-        int currentVersionCode = getPackageInfo().versionCode;
-        return lastVersionCode != currentVersionCode;
     }
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {

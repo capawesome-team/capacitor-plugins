@@ -5,7 +5,8 @@
   "webDir": "dist",
   "plugins": {
     "LiveUpdate": {
-      "appId": "46d641f5-2703-4e99-b498-006192c70484"
+      "appId": "46d641f5-2703-4e99-b498-006192c70484",
+      "readyTimeout": 10000
     }
   }
 }
