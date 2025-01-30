@@ -32,13 +32,6 @@ declare module '@capacitor/cli' {
        */
       defaultChannel?: string;
       /**
-       * Whether or not the plugin is enabled.
-       *
-       * @since 5.0.0
-       * @default true
-       */
-      enabled?: boolean;
-      /**
        * The timeout in milliseconds for HTTP requests.
        *
        * @since 6.4.0
@@ -70,13 +63,6 @@ declare module '@capacitor/cli' {
        * @example 10000
        */
       readyTimeout?: number;
-      /**
-       * Whether or not the app should be reset to the default bundle during an update.
-       *
-       * @since 5.0.0
-       * @default true
-       */
-      resetOnUpdate?: boolean;
       /**
        * The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server.
        *

@@ -482,16 +482,12 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAutoDeleteBundles(autoDeleteBundles);
         String defaultChannel = getConfig().getString("defaultChannel", config.getDefaultChannel());
         config.setDefaultChannel(defaultChannel);
-        boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
-        config.setEnabled(enabled);
         int httpTimeout = getConfig().getInt("httpTimeout", config.getHttpTimeout());
         config.setHttpTimeout(httpTimeout);
         String publicKey = getConfig().getString("publicKey", config.getPublicKey());
         config.setPublicKey(publicKey);
         int readyTimeout = getConfig().getInt("readyTimeout", config.getReadyTimeout());
         config.setReadyTimeout(readyTimeout);
-        boolean resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.getResetOnUpdate());
-        config.setResetOnUpdate(resetOnUpdate);
         String serverDomain = getConfig().getString("serverDomain", config.getServerDomain());
         config.setServerDomain(serverDomain);
 
