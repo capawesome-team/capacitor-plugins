@@ -37,6 +37,40 @@ public class AssetManagerPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
     
+    @objc func list(_ call: CAPPluginCall) {
+        do {
+            let options = try ListOptions(call)
+            
+            try implementation?.list(options, completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                }
+                if let result = result?.toJSObject() as? JSObject {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
+    }
+                    
+    @objc func read(_ call: CAPPluginCall) {
+        do {
+            let options = try ReadOptions(call)
+            
+            try implementation?.read(options, completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                }
+                if let result = result?.toJSObject() as? JSObject {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
+    }
+
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", AssetManagerPlugin.tag, "] ", error)
         var message = error.localizedDescription

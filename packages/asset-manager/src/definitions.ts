@@ -1,6 +1,31 @@
 export interface AssetManagerPlugin {
+  /**
+   * Copy a file or directory from the app bundle to the app's data directory.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.0.0
+   */
   copy(options: CopyOptions): Promise<void>;
+  /**
+   * List files in a directory.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.0.0
+   */
   list(options?: ListOptions): Promise<ListResult>;
+  /**
+   * Read a file from the app bundle.
+   *
+   * **Attention**: Reading large files can cause out of memory (OOM) issues.
+   * It is therefore recommended to copy files to the app's data directory
+   * using the `copy` method and read them from there using the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch).
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.0.0
+   */
   read(options: ReadOptions): Promise<ReadResult>;
 }
 
@@ -45,6 +70,7 @@ export interface ListResult {
    * The list of files in the directory.
    *
    * @since 7.0.0
+   * @example ['/private/var/containers/Bundle/Application/D83E2C08-BBA1-4963-8ED8-806FD92E15B3/App.app/public/index.html']
    */
   files: string[];
 }

@@ -31,10 +31,7 @@ public class AssetManager {
         String from = options.getFrom();
         String to = options.getTo();
 
-        android.content.res.AssetManager assets = plugin.getContext().getAssets();
-        InputStream inputStream = assets.open(from);
-        File file = new File(to);
-        copyFile(inputStream, file);
+        copy(from, to);
 
         callback.success();
     }
@@ -68,6 +65,37 @@ public class AssetManager {
 
         ReadResult result = new ReadResult(data);
         callback.success(result);
+    }
+
+    private void copy(String from, String to) throws IOException {
+        android.content.res.AssetManager assets = plugin.getContext().getAssets();
+
+        String fromLastSegment = from.substring(from.lastIndexOf("/") + 1);
+        boolean isFromDirectory = !fromLastSegment.contains(".");
+
+        if (isFromDirectory) {
+            copyDirectory(from, to);
+        } else {
+            copyFile(from, to);
+        }
+    }
+
+    private void copyDirectory(String from, String to) throws IOException {
+        android.content.res.AssetManager assets = plugin.getContext().getAssets();
+        String[] files = assets.list(from);
+        for (String file : files) {
+            String fromPath = from + "/" + file;
+            String toPath = to + "/" + file;
+            copy(fromPath, toPath);
+        }
+    }
+
+    private void copyFile(String from, String to) throws IOException {
+        android.content.res.AssetManager assets = plugin.getContext().getAssets();
+        InputStream inputStream = assets.open(from);
+        File file = new File(to);
+        file.getParentFile().mkdirs();
+        copyFile(inputStream, file);
     }
 
     private void copyFile(InputStream input, File output) throws IOException {

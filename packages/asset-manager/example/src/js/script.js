@@ -3,9 +3,10 @@ import { AssetManager } from '@capawesome/capacitor-asset-manager';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#copy').addEventListener('click', async () => {
+    const path = Date.now() + '.json';
     const { uri } = await Filesystem.getUri({
       directory: Directory.Cache,
-      path: 'capacitor.config.json',
+      path: path,
     });
     await AssetManager.copy({
       from: 'capacitor.config.json',
@@ -17,7 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document.querySelector('#list').addEventListener('click', async () => {
-    await AssetManager.list();
+    await AssetManager.list({
+      path: 'public',
+    });
   });
   document.querySelector('#read').addEventListener('click', async () => {
     await AssetManager.read({

@@ -9,7 +9,7 @@ import Foundation
     }
     
     @objc public func copy(_ options: CopyOptions, completion: @escaping (Error?) -> Void) throws {
-        guard let fromURL = Bundle.main.resourceURL?.appendingPathComponent(options.from) else {
+        guard let fromURL = Bundle.main.url(forResource: options.from, withExtension: nil) else {
             return
         }
         guard let toURL = URL.init(string: options.to) else {
@@ -31,7 +31,6 @@ import Foundation
         guard let url = Bundle.main.resourceURL?.appendingPathComponent(options.path) else {
             return
         }
-        // url.startAccessingSecurityScopedResource()
         var result: ReadResult?
         if options.encoding == "utf8" {
             let data = try String(contentsOf: url, encoding: .utf8)
@@ -40,7 +39,6 @@ import Foundation
             let data = try Data(contentsOf: url)
             result = ReadResult(data: data.base64EncodedString())
         }
-        // url.stopAccessingSecurityScopedResource()
         completion(result, nil)
     }
 }

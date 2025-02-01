@@ -42,6 +42,9 @@ public class CopyOptions {
         if (to == null) {
             throw new Exception(AssetManagerPlugin.ERROR_TO_MISSING);
         }
+        if (to.contains("file://")) {
+            to = to.replace("file://", "");
+        }
         return to;
     }
 }
