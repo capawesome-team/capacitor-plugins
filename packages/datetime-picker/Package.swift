@@ -19,10 +19,10 @@ let package = Package(
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/DatetimePickerPlugin"),
+            path: "ios/Plugin"),
         .testTarget(
             name: "DatetimePickerPluginTests",
             dependencies: ["DatetimePickerPlugin"],
-            path: "ios/Tests/DatetimePickerPluginTests")
+            path: "ios/PluginTests")
     ]
 )

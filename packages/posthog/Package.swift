@@ -21,10 +21,10 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "PostHog", package: "posthog-ios")
             ],
-            path: "ios/Sources/PosthogPlugin"),
+            path: "ios/Plugin"),
         .testTarget(
             name: "PosthogPluginTests",
             dependencies: ["PosthogPlugin"],
-            path: "ios/Tests/PosthogPluginTests")
+            path: "ios/PluginTests")
     ]
 )
