@@ -44,6 +44,9 @@ export interface CopyOptions {
   /**
    * The destination path to copy to.
    *
+   * **Tip**: Generate this path using the [`getUri(...)`](https://capacitorjs.com/docs/apis/filesystem#geturi) method
+   * of the Capacitor Filesystem plugin.
+   *
    * @since 7.0.0
    */
   to: string;
@@ -86,7 +89,7 @@ export interface ReadOptions {
    * @default 'base64'
    * @example 'utf8'
    */
-  encoding?: 'base64' | 'utf8';
+  encoding?: Encoding;
   /**
    * The path to read the file from.
    *
@@ -107,4 +110,18 @@ export interface ReadResult {
    * @since 7.0.0
    */
   data: string;
+}
+
+/**
+ * @since 7.0.0
+ */
+export enum Encoding {
+  /**
+   * @since 7.0.0
+   */
+  Base64 = 'base64',
+  /**
+   * @since 7.0.0
+   */
+  Utf8 = 'utf8',
 }

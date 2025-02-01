@@ -1,5 +1,5 @@
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { AssetManager } from '@capawesome/capacitor-asset-manager';
+import { AssetManager, Encoding } from '@capawesome/capacitor-asset-manager';
 
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#copy').addEventListener('click', async () => {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#read').addEventListener('click', async () => {
     await AssetManager.read({
       path: 'capacitor.config.json',
-      encoding: 'utf8',
+      encoding: Encoding.Utf8,
     });
   });
 });
