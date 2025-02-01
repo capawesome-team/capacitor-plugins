@@ -33,10 +33,11 @@ const list = async () => {
 };
 
 const read = async () => {
-  await AssetManager.read({
+  const { data } = await AssetManager.read({
     encoding: Encoding.Utf8,
     path: 'capacitor.config.json'
   });
+  return JSON.parse(data);
 };
 ```
 
