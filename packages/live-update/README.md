@@ -5,7 +5,7 @@ Capacitor plugin to update your app remotely in real-time.
 ## Features
 
 - 🔋 Supports **Android and iOS**
-- ⚡️ **Capacitor 6** support
+- ⚡️ **Capacitor 7** support
 - 📦 **Bundle Management**: Download, set, and delete bundles.
 - ☁️ **Cloud Support**: Use the [Capawesome Cloud](https://capawesome.io/cloud/live-updates/) to manage your app updates.
 - 📺 **Channel Support**: Set a channel for the app to manage different versions.
