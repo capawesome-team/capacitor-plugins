@@ -171,3 +171,11 @@ Only available on Android and iOS.
 | **`Utf8`**   | <code>'utf8'</code>   | 7.0.0 |
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/asset-manager/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/asset-manager/LICENSE).
