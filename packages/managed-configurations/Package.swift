@@ -19,10 +19,10 @@ let package = Package(
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/ManagedConfigurationsPlugin"),
+            path: "ios/Plugin"),
         .testTarget(
             name: "ManagedConfigurationsPluginTests",
             dependencies: ["ManagedConfigurationsPlugin"],
-            path: "ios/Tests/ManagedConfigurationsPluginTests")
+            path: "ios/PluginTests")
     ]
 )

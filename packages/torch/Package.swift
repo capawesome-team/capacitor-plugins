@@ -19,10 +19,10 @@ let package = Package(
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/TorchPlugin"),
+            path: "ios/Plugin"),
         .testTarget(
             name: "TorchPluginTests",
             dependencies: ["TorchPlugin"],
-            path: "ios/Tests/TorchPluginTests")
+            path: "ios/PluginTests")
     ]
 )
