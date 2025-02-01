@@ -5,6 +5,8 @@ import type {
   CopyOptions,
   ListOptions,
   ListResult,
+  ReadOptions,
+  ReadResult,
 } from './definitions';
 
 export class AssetManagerWeb extends WebPlugin implements AssetManagerPlugin {
@@ -13,6 +15,10 @@ export class AssetManagerWeb extends WebPlugin implements AssetManagerPlugin {
   }
 
   async list(_options?: ListOptions): Promise<ListResult> {
+    throw this.createUnimplementedError();
+  }
+
+  async read(_options: ReadOptions): Promise<ReadResult> {
     throw this.createUnimplementedError();
   }
 

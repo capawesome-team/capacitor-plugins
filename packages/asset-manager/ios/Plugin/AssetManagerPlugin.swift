@@ -7,17 +7,47 @@ import Capacitor
  */
 @objc(AssetManagerPlugin)
 public class AssetManagerPlugin: CAPPlugin, CAPBridgedPlugin {
-    public let identifier = "AssetManagerPlugin"
-    public let jsName = "AssetManager"
+    public static let tag = "AssetManager"
+    public let identifier = "AssetManagerPlugin" // DO NOT CHANGE
+    public let jsName = "AssetManager" // DO NOT CHANGE
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "copy", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "list", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "read", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = AssetManager()
+    private var implementation: AssetManager?
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    override public func load() {
+        self.implementation = AssetManager(plugin: self)
+    }
+
+    @objc func copy(_ call: CAPPluginCall) {
+        do {
+            let options = try CopyOptions(call)
+            
+            try implementation?.copy(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
+    }
+    
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", AssetManagerPlugin.tag, "] ", error)
+        var message = error.localizedDescription
+        call.reject(message)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ result: JSObject) {
+        call.resolve(result)
     }
 }

@@ -100,17 +100,17 @@ public class AssetManagerPlugin extends Plugin {
         }
     }
 
+    private void rejectCall(PluginCall call, Exception exception) {
+        String message = exception.getMessage();
+        Logger.error(TAG, message, exception);
+        call.reject(message);
+    }
+
     private void resolveCall(PluginCall call) {
         call.resolve();
     }
 
     private void resolveCall(PluginCall call, JSObject result) {
         call.resolve(result);
-    }
-
-    private void rejectCall(PluginCall call, Exception exception) {
-        String message = exception.getMessage();
-        Logger.error(TAG, message, exception);
-        call.reject(message);
     }
 }
