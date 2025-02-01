@@ -1,10 +1,6 @@
 {
   "appId": "com.example.plugin",
   "appName": "example",
-  "webDir": "dist",
-  "plugins": {
-    "SplashScreen": {
-      "launchAutoHide": false
-    }
-  }
+  "bundledWebRuntime": false,
+  "webDir": "dist"
 }
