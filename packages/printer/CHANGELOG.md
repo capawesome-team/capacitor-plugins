@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- [`9c89d10bccaf946a1a19e859e642c6c1d2eb09bf`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9c89d10bccaf946a1a19e859e642c6c1d2eb09bf) ([#56](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/56)): fix: set correct target paths for SPM support
+
 ## 7.0.0
 
 ### Major Changes
