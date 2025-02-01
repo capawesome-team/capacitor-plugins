@@ -24,7 +24,7 @@ public class AssetManagerPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func copy(_ call: CAPPluginCall) {
         do {
             let options = try CopyOptions(call)
-            
+
             try implementation?.copy(options, completion: { error in
                 if let error = error {
                     self.rejectCall(call, error)
@@ -36,11 +36,11 @@ public class AssetManagerPlugin: CAPPlugin, CAPBridgedPlugin {
             self.rejectCall(call, error)
         }
     }
-    
+
     @objc func list(_ call: CAPPluginCall) {
         do {
             let options = try ListOptions(call)
-            
+
             try implementation?.list(options, completion: { result, error in
                 if let error = error {
                     self.rejectCall(call, error)
@@ -53,11 +53,11 @@ public class AssetManagerPlugin: CAPPlugin, CAPBridgedPlugin {
             self.rejectCall(call, error)
         }
     }
-                    
+
     @objc func read(_ call: CAPPluginCall) {
         do {
             let options = try ReadOptions(call)
-            
+
             try implementation?.read(options, completion: { result, error in
                 if let error = error {
                     self.rejectCall(call, error)

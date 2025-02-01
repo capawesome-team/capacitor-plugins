@@ -13,7 +13,7 @@ import Capacitor
         for file in files {
             filesResult.append(file)
         }
-        
+
         var result = JSObject()
         result["files"] = filesResult
         return result as AnyObject

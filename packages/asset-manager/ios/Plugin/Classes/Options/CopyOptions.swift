@@ -9,14 +9,14 @@ import Capacitor
         self.from = try CopyOptions.getFromFromCall(call)
         self.to = try CopyOptions.getToFromCall(call)
     }
-    
+
     private static func getFromFromCall(_ call: CAPPluginCall) throws -> String {
         guard let from = call.getString("from") else {
             throw CustomError.fromMissing
         }
         return from
     }
-    
+
     private static func getToFromCall(_ call: CAPPluginCall) throws -> String {
         guard let to = call.getString("to") else {
             throw CustomError.toMissing
