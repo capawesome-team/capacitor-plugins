@@ -9,6 +9,10 @@ npm install @capawesome/capacitor-asset-manager
 npx cap sync
 ```
 
+## Configuration
+
+No configuration required for this plugin.
+
 ## Usage
 
 ```typescript
