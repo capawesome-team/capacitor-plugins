@@ -90,7 +90,8 @@ const isVoiceAvailable = async () => {
 };
 
 const speak = async () => {
-  await SpeechSynthesis.speak({
+  // Add an utterance to the utterance queue to be spoken
+  const { utteranceId } = await SpeechSynthesis.speak({
     language: 'en-US',
     pitch: 1.0,
     queueStrategy: QueueStrategy.Add,
@@ -99,7 +100,39 @@ const speak = async () => {
     voiceId: 'com.apple.ttsbundle.Samantha-compact',
     volume: 1.0,
   });
+  // Wait for the utterance to finish
+  await new Promise(resolve => {
+    void SpeechSynthesis.addListener('end', event => {
+      if (event.utteranceId === utteranceId) {
+        resolve();
+      }
+    });
+  });
 };
+
+const synthesizeToFile = async () => {
+  // Add an utterance to the utterance queue to be synthesized to a file
+  const { path, utteranceId } = await SpeechSynthesis.synthesizeToFile({
+    language: 'en-US',
+    pitch: 1.0,
+    queueStrategy: QueueStrategy.Add,
+    rate: 1.0,
+    text: 'Hello, World!',
+    voiceId: 'com.apple.ttsbundle.Samantha-compact',
+    volume: 1.0,
+  });
+  // Wait for the utterance to finish
+  await new Promise(resolve => {
+    void SpeechSynthesis.addListener('end', event => {
+      if (event.utteranceId === utteranceId) {
+        resolve();
+      }
+    });
+  });
+  // Return the path to the synthesized audio file
+  return path;
+};
+
 
 const addListeners = () => {
   SpeechSynthesis.addListener('boundary', (event) => {
@@ -139,12 +172,14 @@ const removeAllListeners = async () => {
 * [`isLanguageAvailable(...)`](#islanguageavailable)
 * [`isVoiceAvailable(...)`](#isvoiceavailable)
 * [`speak(...)`](#speak)
+* [`synthesizeToFile(...)`](#synthesizetofile)
 * [`addListener('boundary', ...)`](#addlistenerboundary-)
 * [`addListener('end', ...)`](#addlistenerend-)
 * [`addListener('error', ...)`](#addlistenererror-)
 * [`addListener('start', ...)`](#addlistenerstart-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -330,6 +365,29 @@ The `end` event will be emitted when the utterance has finished.
 **Returns:** <code>Promise&lt;<a href="#speakresult">SpeakResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### synthesizeToFile(...)
+
+```typescript
+synthesizeToFile(options: SynthesizeToFileOptions) => Promise<SynthesizeToFileResult>
+```
+
+Add an utterance to the utterance queue to be synthesized to a file.
+
+The `end` event will be emitted when the utterance has finished.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                  |
+| ------------- | ----------------------------------------------------- |
+| **`options`** | <code><a href="#speakoptions">SpeakOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#synthesizetofileresult">SynthesizeToFileResult</a>&gt;</code>
+
+**Since:** 7.1.0
 
 --------------------
 
@@ -525,6 +583,13 @@ Remove all listeners for the plugin.
 | **`volume`**        | <code>number</code>                                     | The volume that the utterance will be spoken at.                                                                                                     | <code>1.0</code>               | 6.0.0 |
 
 
+#### SynthesizeToFileResult
+
+| Prop       | Type                | Description                                                                                                                                                 | Since |
+| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path to which the synthesized audio file will be saved. The file is available as soon as the `end` event is emitted. Only available on Android and iOS. | 7.1.0 |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -562,6 +627,14 @@ Remove all listeners for the plugin.
 | Prop              | Type                | Description                                       | Since |
 | ----------------- | ------------------- | ------------------------------------------------- | ----- |
 | **`utteranceId`** | <code>string</code> | The identifier of the utterance that has started. | 6.0.0 |
+
+
+### Type Aliases
+
+
+#### SynthesizeToFileOptions
+
+<code><a href="#speakoptions">SpeakOptions</a></code>
 
 
 ### Enums
