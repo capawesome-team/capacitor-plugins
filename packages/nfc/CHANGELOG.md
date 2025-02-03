@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.2
+
+### Patch Changes
+
+- [`b5eccc31fc96ce56011f219c66fbab4c531300a5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b5eccc31fc96ce56011f219c66fbab4c531300a5) ([#58](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/58)): fix(ios): `scanSessionError` event was not emitted in certain cases
+
 ## 7.0.1
 
 ### Patch Changes
