@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.2
+
+### Patch Changes
+
+- [`adc86aadec4661aef43a1a2dfed41690c6ad8d98`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/adc86aadec4661aef43a1a2dfed41690c6ad8d98): fix(android): create default notification channel if necessary
+
 ## 7.0.1
 
 ### Patch Changes
