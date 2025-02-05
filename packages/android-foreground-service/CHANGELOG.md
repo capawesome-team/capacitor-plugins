@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- [`82a40bae6703d829d4017da007e8f175842e9bf7`](https://github.com/capawesome-team/capacitor-plugins/commit/82a40bae6703d829d4017da007e8f175842e9bf7) ([#418](https://github.com/capawesome-team/capacitor-plugins/pull/418)): fix(android): `serviceType` property was ignored
+
 ## 7.0.0
 
 ### Major Changes
