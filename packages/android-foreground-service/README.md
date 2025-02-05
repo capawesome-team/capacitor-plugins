@@ -456,6 +456,12 @@ Remove all listeners for this plugin.
 
 </docgen-api>
 
+## FAQ
+
+### Why can the user dismiss the notification?
+
+Android 14 has changed the behavior to allow users to dismiss such notifications, see [Changes to how users experience non-dismissible notifications](https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications).
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-foreground-service/CHANGELOG.md).

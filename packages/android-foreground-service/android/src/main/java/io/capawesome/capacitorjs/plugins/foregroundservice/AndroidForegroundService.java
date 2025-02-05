@@ -34,7 +34,7 @@ public class AndroidForegroundService extends Service {
             String title = notificationBundle.getString("title");
             boolean silent = notificationBundle.getBoolean("silent", false);
             ArrayList<Bundle> buttonsBundle = notificationBundle.getParcelableArrayList("buttons");
-            int serviceType = extras.getInt("serviceType");
+            int serviceType = notificationBundle.getInt("serviceType", 0);
 
             PendingIntent contentIntent = buildContentIntent(id);
             Notification.Builder builder;
