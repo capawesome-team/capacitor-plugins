@@ -5,7 +5,7 @@
 <h3 align="center">Capacitor Plugins</h3>
 <br />
 <p align="center">
-  <a href="https://github.com/capawesome-team/capacitor-plugins"><img src="https://img.shields.io/maintenance/yes/2024?style=flat-square" /></a>
+  <a href="https://github.com/capawesome-team/capacitor-plugins"><img src="https://img.shields.io/maintenance/yes/2025?style=flat-square" /></a>
   <a href="https://github.com/capawesome-team/capacitor-plugins/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/capawesome-team/capacitor-plugins/ci.yml?branch=main&style=flat-square" /></a>
   <a href="https://github.com/capawesome-team"><img src="https://img.shields.io/badge/part%20of-capawesome-%234f46e5?style=flat-square" /></a>
   <a href="https://turborepo.org/"><img src="https://img.shields.io/badge/maintained%20with-turborepo-%237f6ab2?style=flat-square" /></a>
