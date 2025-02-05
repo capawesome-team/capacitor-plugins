@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073) ([#55](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/55)): feat: add `synthesizeToFile(...)` method
+
+### Patch Changes
+
+- [`a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073) ([#55](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/55)): fix(android): the `speak(...)` method now throws an error if the call has failed
+
+- [`a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a9dcc8c37e720eb2cbee34e6e4cca7d39aba0073) ([#55](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/55)): fix(ios): `queueStrategy` property was ignored
+
 ## 7.0.1
 
 ### Patch Changes
