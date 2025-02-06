@@ -1,10 +1,8 @@
-import { registerPlugin } from "@capacitor/core";
+import { registerPlugin } from '@capacitor/core';
 
-import type { EdgeToEdgePlugin } from "./definitions";
+import type { EdgeToEdgePlugin } from './definitions';
 
-const EdgeToEdge = registerPlugin<EdgeToEdgePlugin>("EdgeToEdge", {
-  web: () => import("./web").then((m) => new m.EdgeToEdgeWeb()),
-});
+const EdgeToEdge = registerPlugin<EdgeToEdgePlugin>('EdgeToEdge', {});
 
-export * from "./definitions";
+export * from './definitions';
 export { EdgeToEdge };
