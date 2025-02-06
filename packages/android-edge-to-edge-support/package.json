@@ -37,8 +37,9 @@
     "native"
   ],
   "scripts": {
-    "verify": "npm run verify:android",
+    "verify": "npm run verify:android && npm run verify:web",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "verify:web": "npm run build",
     "lint": "npm run prettier -- --check",
     "fmt": "npm run prettier -- --write",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
