@@ -9,8 +9,10 @@ body:
       label: Plugin(s)
       description: Select the plugins that this bug affects.
       options:
-        - label: Android Foreground Service
         - label: Android Battery Optimization
+        - label: Android Dark Mode Support
+        - label: Android Edge-to-Edge Support
+        - label: Android Foreground Service
         - label: App Review
         - label: App Shortcuts
         - label: App Update
