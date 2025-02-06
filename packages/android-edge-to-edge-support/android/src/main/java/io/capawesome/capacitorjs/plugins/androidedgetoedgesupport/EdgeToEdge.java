@@ -16,7 +16,7 @@ public class EdgeToEdge {
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin) {
         this.plugin = plugin;
         // Apply insets to disable the edge-to-edge feature
-        // applyInsets();
+        applyInsets();
     }
 
     public void setBackgroundColor(String color) {
