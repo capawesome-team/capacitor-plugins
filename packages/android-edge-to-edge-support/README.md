@@ -1,6 +1,6 @@
 # @capawesome/capacitor-android-edge-to-edge-support
 
-Capacitor plugin to support edge-to-edge display on Android.
+Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) display on Android.
 
 | Before                                                                                                      | After                                                                                                       | Before                                                                                                      | After                                                                                                       |
 | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
