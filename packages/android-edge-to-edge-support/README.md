@@ -11,13 +11,15 @@ npx cap sync
 
 ## Usage
 
-The plugin only needs to be installed. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar.
+The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [Status Bar](https://capacitorjs.com/docs/apis/status-bar) plugin.
 
 ```typescript
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+import { StatusBar, Style } from '@capacitor/status-bar';
 
 const setBackgroundColor = async () => {
   await EdgeToEdge.setBackgroundColor({ color: '#ffffff' });
+  await StatusBar.setStyle({ style: Style.Light });
 };
 ```
 
