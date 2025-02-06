@@ -1,4 +1,4 @@
-package io.capawesome.capacitorjs.plugins.androidedgetoedge;
+package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import androidx.annotation.Nullable;
 import com.getcapacitor.Plugin;

@@ -16,7 +16,7 @@
     "@capacitor/android": "7.0.0",
     "@capacitor/core": "7.0.0",
     "@capacitor/status-bar": "7.0.0",
-    "@capawesome/capacitor-android-edge-to-edge": "file:.."
+    "@capawesome/capacitor-android-edge-to-edge-support": "file:.."
   },
   "devDependencies": {
     "@capacitor/cli": "7.0.0",

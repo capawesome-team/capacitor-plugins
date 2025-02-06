@@ -1,5 +1,5 @@
 import { StatusBar, Style } from '@capacitor/status-bar';
-import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge';
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 
 document.addEventListener('DOMContentLoaded', () => {
   StatusBar.setStyle({ style: Style.Light });

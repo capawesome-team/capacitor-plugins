@@ -1,21 +1,23 @@
-# @capawesome/capacitor-android-edge-to-edge
+# @capawesome/capacitor-android-edge-to-edge-support
 
 Capacitor plugin to support edge-to-edge display on Android.
 
 ## Installation
 
 ```bash
-npm install @capawesome/capacitor-android-edge-to-edge
+npm install @capawesome/capacitor-android-edge-to-edge-support
 npx cap sync
 ```
 
 ## Usage
 
-```typescript
-import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge';
+The plugin only needs to be installed. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar.
 
-const echo = async () => {
-  await EdgeToEdge.echo();
+```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+
+const setBackgroundColor = async () => {
+  await EdgeToEdge.setBackgroundColor({ color: '#ffffff' });
 };
 ```
 
@@ -63,8 +65,8 @@ Only available on Android.
 
 ## Changelog
 
-See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge/CHANGELOG.md).
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge-support/CHANGELOG.md).
 
 ## License
 
-See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge/LICENSE).
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge-support/LICENSE).
