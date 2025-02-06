@@ -9,10 +9,7 @@
   "files": [
     "android/src/main/",
     "android/build.gradle",
-    "dist/",
-    "ios/Plugin/",
-    "CapawesomeCapacitorAndroidEdgeToEdge.podspec",
-    "Package.swift"
+    "dist/"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
