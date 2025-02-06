@@ -1,22 +1,6 @@
 export interface EdgeToEdgePlugin {
   /**
-   * Disable edge-to-edge mode.
-   *
-   * Only available on Android.
-   *
-   * @since 7.0.0
-   */
-  disable(): Promise<void>;
-  /**
-   * Enable edge-to-edge mode.
-   *
-   * Only available on Android.
-   *
-   * @since 7.0.0
-   */
-  enable(): Promise<void>;
-  /**
-   * Set the background color of the status bar and navigation bar if edge-to-edge mode is disabled.
+   * Set the background color of the status bar and navigation bar.
    *
    * Only available on Android.
    *

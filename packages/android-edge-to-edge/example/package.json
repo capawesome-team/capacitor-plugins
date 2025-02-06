@@ -13,16 +13,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
-    "@capacitor/camera": "latest",
-    "@capacitor/splash-screen": "latest",
-    "@capawesome/capacitor-android-edge-to-edge": "file:..",
-    "@capacitor/ios": "7.0.0",
-    "@capacitor/android": "7.0.0"
+    "@capacitor/android": "7.0.0",
+    "@capacitor/core": "7.0.0",
+    "@capacitor/status-bar": "7.0.0",
+    "@capawesome/capacitor-android-edge-to-edge": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
-    "vite": "^5.4.2"
+    "@capacitor/cli": "7.0.0",
+    "vite": "5.4.2"
   },
   "author": "",
   "license": "ISC"

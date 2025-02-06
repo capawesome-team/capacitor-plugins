@@ -23,25 +23,48 @@ const echo = async () => {
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`setBackgroundColor(...)`](#setbackgroundcolor)
+* [Interfaces](#interfaces)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### setBackgroundColor(...)
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+setBackgroundColor(options: SetBackgroundColorOptions) => Promise<void>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+Set the background color of the status bar and navigation bar.
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+Only available on Android.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setbackgroundcoloroptions">SetBackgroundColorOptions</a></code> |
+
+**Since:** 7.0.0
 
 --------------------
 
+
+### Interfaces
+
+
+#### SetBackgroundColorOptions
+
+| Prop        | Type                | Description                                                                                | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
+| **`color`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.0.0 |
+
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-edge-to-edge/LICENSE).
