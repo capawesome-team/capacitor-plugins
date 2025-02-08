@@ -222,7 +222,7 @@ const sync = async () => {
 const isNewBundleAvailable = async () => {
   const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle();
   if (latestBundleId) {
-    const { bundleId: currentBundleId } = await LiveUpdate.getBundle();
+    const { bundleId: currentBundleId } = await LiveUpdate.getCurrentBundle();
     return latestBundleId !== currentBundleId;
   } else {
     return false;
