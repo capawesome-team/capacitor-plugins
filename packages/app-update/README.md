@@ -309,7 +309,7 @@ Remove all listeners for this plugin.
 
 ## Test with internal app-sharing
 
-The Android Developers documentation describes how to test [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) using [internal app sharing](https://support.google.com/googleplay/android-developer/answer/9303479): https://developer.android.com/guide/playcore/in-app-updates/test
+The Android Developers documentation describes how to test [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) using [internal app sharing](https://developer.android.com/guide/playcore/in-app-updates/test).
 
 ## Changelog
 
