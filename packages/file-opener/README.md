@@ -11,9 +11,7 @@ npx cap sync
 
 ### Android
 
-You need to specify the directories that contain the files you want to open.
-To specify the directories, start by creating the file `file_paths.xml` in the `res/xml/` subdirectory of your project (see [Android docs](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData)).  
-This is an example:
+You need to specify the directories that contain the files you want to open. To do this, create a new file named `file_paths.xml` in the `res/xml` directory of your Android project (e.g. `android/app/src/main/res/xml/file_paths.xml`). Here is an example of the content of the file:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -25,6 +23,8 @@ This is an example:
     <external-path name="external" path="." />
 </paths>
 ```
+
+More information can be found in the [Android documentation](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData).
 
 #### Variables
 
