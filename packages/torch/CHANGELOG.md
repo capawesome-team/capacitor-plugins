@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.2
+
+### Patch Changes
+
+- [`e832f92cffcc5e58fc096a1c630c4e5069f8b017`](https://github.com/capawesome-team/capacitor-plugins/commit/e832f92cffcc5e58fc096a1c630c4e5069f8b017) ([#431](https://github.com/capawesome-team/capacitor-plugins/pull/431)): fix(android): calls have not been resolved
+
 ## 7.0.1
 
 ### Patch Changes
