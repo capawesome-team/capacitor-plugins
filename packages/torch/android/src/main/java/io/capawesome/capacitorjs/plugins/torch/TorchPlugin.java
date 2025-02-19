@@ -36,6 +36,7 @@ public class TorchPlugin extends Plugin {
             }
 
             implementation.enable();
+            call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -51,6 +52,7 @@ public class TorchPlugin extends Plugin {
             }
 
             implementation.disable();
+            call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -92,6 +94,7 @@ public class TorchPlugin extends Plugin {
             }
 
             implementation.toggle();
+            call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
