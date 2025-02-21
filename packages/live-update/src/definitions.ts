@@ -284,6 +284,24 @@ export interface DownloadBundleOptions {
    */
   bundleId: string;
   /**
+   * The checksum of the self-hosted bundle as a SHA-256 hash
+   * in base64 format to verify the integrity of the bundle.
+   *
+   * **Attention**: Only supported for the `zip` artifact type.
+   *
+   * @since 7.1.0
+   */
+  checksum?: string;
+  /**
+   * The signature of the self-hosted bundle as a signed SHA-256 hash
+   * in base64 format to verify the integrity of the bundle.
+   *
+   * **Attention**: Only supported for the `zip` artifact type.
+   *
+   * @since 7.1.0
+   */
+  signature?: string;
+  /**
    * The URL of the bundle to download.
    *
    * For the `zip` artifact type, the URL must point to a ZIP file.
@@ -292,10 +310,10 @@ export interface DownloadBundleOptions {
    * `https://example.com/download`, the plugin will download the file
    * with the href `index.html` from `https://example.com/download?href=index.html`.
    *
-   * To **verify the integrity** of the file, the server must return
+   * To **verify the integrity** of the file, the server should return
    * a `X-Checksum` header with the SHA-256 hash in base64 format.
    *
-   * To **verify the signature** of the file, the server must return
+   * To **verify the signature** of the file, the server should return
    * a `X-Signature` header with the signed SHA-256 hash in base64 format.
    *
    * @since 5.0.0
@@ -335,6 +353,15 @@ export interface FetchLatestBundleResult {
    */
   bundleId: string | null;
   /**
+   * The checksum of the latest bundle if the bundle is self-hosted.
+   *
+   * If the bundle is hosted on Capawesome Cloud, the checksum will be
+   * returned as response header when downloading the bundle.
+   *
+   * @since 7.1.0
+   */
+  checksum?: string;
+  /**
    * Custom properties that are associated with the latest bundle.
    *
    * @since 7.0.0
@@ -348,6 +375,15 @@ export interface FetchLatestBundleResult {
    * @since 6.7.0
    */
   downloadUrl?: string;
+  /**
+   * The signature of the latest bundle if the bundle is self-hosted.
+   *
+   * If the bundle is hosted on Capawesome Cloud, the signature will be
+   * returned as response header when downloading the bundle.
+   *
+   * @since 7.1.0
+   */
+  signature?: string;
 }
 
 /**
