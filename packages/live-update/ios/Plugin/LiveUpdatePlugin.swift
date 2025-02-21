@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "7.0.0"
+    public static let version = "7.1.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
@@ -70,12 +70,14 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                     call.reject(CustomError.bundleIdMissing.localizedDescription)
                     return
                 }
+                let checksum = call.getString("checksum")
+                let signature = call.getString("signature")
                 guard let url = call.getString("url") else {
                     call.reject(CustomError.urlMissing.localizedDescription)
                     return
                 }
 
-                let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, url: url)
+                let options = DownloadBundleOptions(artifactType: artifactType, bundleId: bundleId, checksum: checksum, signature: signature, url: url)
 
                 try await implementation?.downloadBundle(options)
                 self.resolveCall(call)

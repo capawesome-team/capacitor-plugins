@@ -118,6 +118,8 @@ public class LiveUpdate {
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
         ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
+        String checksum = options.getChecksum();
+        String signature = options.getSignature();
         String url = options.getUrl();
 
         // Check if the bundle already exists
@@ -131,7 +133,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(bundleId, url);
         } else {
-            downloadBundleOfTypeZip(bundleId, url);
+            downloadBundleOfTypeZip(bundleId, checksum, signature, url);
         }
         callback.success();
     }
@@ -140,9 +142,18 @@ public class LiveUpdate {
         GetLatestBundleResponse response = fetchLatestBundle(options);
         ArtifactType artifactType = response == null ? null : response.getArtifactType();
         String bundleId = response == null ? null : response.getBundleId();
+        String checksum = response == null ? null : response.getChecksum();
         JSONObject customProperties = response == null ? null : response.getCustomProperties();
         String downloadUrl = response == null ? null : response.getUrl();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, customProperties, downloadUrl);
+        String signature = response == null ? null : response.getSignature();
+        FetchLatestBundleResult result = new FetchLatestBundleResult(
+            artifactType,
+            bundleId,
+            checksum,
+            customProperties,
+            downloadUrl,
+            signature
+        );
         callback.success(result);
     }
 
@@ -271,6 +282,8 @@ public class LiveUpdate {
         }
         ArtifactType artifactType = response.getArtifactType();
         String latestBundleId = response.getBundleId();
+        String checksum = response.getChecksum();
+        String signature = response.getSignature();
         String url = response.getUrl();
         // Check if the bundle already exists
         if (hasBundleById(latestBundleId)) {
@@ -289,7 +302,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(latestBundleId, url);
         } else {
-            downloadBundleOfTypeZip(latestBundleId, url);
+            downloadBundleOfTypeZip(latestBundleId, checksum, signature, url);
         }
         // Set the next bundle
         setNextBundleById(latestBundleId);
@@ -450,15 +463,24 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable DownloadProgressCallback callback)
-        throws Exception {
+    private void downloadAndVerifyFile(
+        @NonNull String url,
+        @NonNull File file,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @Nullable DownloadProgressCallback callback
+    ) throws Exception {
         Response response = httpClient.execute(url);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file, callback);
             // Verify the file
-            String checksum = LiveUpdateHttpClient.getChecksumFromResponse(response);
-            String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
+            if (checksum == null) {
+                checksum = LiveUpdateHttpClient.getChecksumFromResponse(response);
+            }
+            if (signature == null) {
+                signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
+            }
             verifyFile(file, checksum, signature);
         } else {
             Exception exception = new Exception(responseBody.string());
@@ -479,7 +501,7 @@ public class LiveUpdate {
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile, callback);
+        downloadAndVerifyFile(url, destinationFile, null, null, callback);
         return destinationFile;
     }
 
@@ -580,10 +602,15 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
+    private void downloadBundleOfTypeZip(
+        @NonNull String bundleId,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull String downloadUrl
+    ) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file, (downloadedBytes, totalBytes) -> {
+        downloadAndVerifyFile(downloadUrl, file, checksum, signature, (downloadedBytes, totalBytes) -> {
             DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
             notifyDownloadBundleProgressListeners(event);
         });

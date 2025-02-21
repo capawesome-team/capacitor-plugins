@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '#artifact-type-select',
       ).value;
       const bundleId = document.querySelector('#bundle-id-input').value;
+      const checksum = document.querySelector('#checksum-input').value;
+      const signature = document.querySelector('#signature-input').value;
       const downloadUrl = document.querySelector('#download-url-input').value;
       if (!bundleId || !downloadUrl) {
         return;
@@ -71,6 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
       await LiveUpdate.downloadBundle({
         artifactType,
         bundleId,
+        checksum,
+        signature,
         url: downloadUrl,
       });
     });
@@ -84,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#artifact-type-select').value =
         result.artifactType || '';
       document.querySelector('#bundle-id-input').value = result.bundleId || '';
+      document.querySelector('#checksum-input').value = result.checksum;
+      document.querySelector('#signature-input').value = result.signature;
       document.querySelector('#download-url-input').value =
         result.downloadUrl || '';
     });
