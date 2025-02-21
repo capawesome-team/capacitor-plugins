@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`083233300c173475340874f00ba19afd0f72eb8a`](https://github.com/capawesome-team/capacitor-plugins/commit/083233300c173475340874f00ba19afd0f72eb8a) ([#435](https://github.com/capawesome-team/capacitor-plugins/pull/435)): feat: support code signing for self-hosted bundles
+
 ## 7.0.0
 
 ### Major Changes
