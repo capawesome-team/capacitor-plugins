@@ -1,3 +1,5 @@
+import type { JsonType } from 'posthog-js';
+
 export interface PosthogPlugin {
   /**
    * Assign another distinct ID to the current user.
@@ -25,6 +27,12 @@ export interface PosthogPlugin {
    * @since 7.0.0
    */
   getFeatureFlag(options: GetFeatureFlagOptions): Promise<GetFeatureFlagResult>;
+  /**
+   * Get the payload of a feature flag.
+   *
+   * @since 7.1.0
+   */
+  getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): Promise<GetFeatureFlagPayloadResult>;
   /**
    * Associate the events for that user with a group.
    *
@@ -129,6 +137,18 @@ export interface GetFeatureFlagOptions {
   key: string;
 }
 
+/**
+ * @since 7.1.0
+ */
+export interface GetFeatureFlagPayloadOptions {
+  /**
+   * The key of the feature flag.
+   *
+   * @since 7.1.0
+   */
+  key: string;
+}
+
 export interface GetFeatureFlagResult {
   /**
    * The value of the feature flag.
@@ -138,6 +158,15 @@ export interface GetFeatureFlagResult {
    * @since 7.0.0
    */
   value: string | boolean | null;
+}
+
+export interface GetFeatureFlagPayloadResult {
+  /**
+   * The value of the feature flag payload.
+   *
+   * @since 7.1.0
+   */
+  value: JsonType;
 }
 
 /**

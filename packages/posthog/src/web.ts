@@ -5,6 +5,8 @@ import type {
   AliasOptions,
   CaptureOptions,
   GetFeatureFlagOptions,
+  GetFeatureFlagPayloadOptions,
+  GetFeatureFlagPayloadResult,
   GetFeatureFlagResult,
   GroupOptions,
   IdentifyOptions,
@@ -31,6 +33,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   ): Promise<GetFeatureFlagResult> {
     const value = posthog.getFeatureFlag(options.key);
     return value === undefined ? { value: null } : { value };
+  }
+
+  async getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): Promise<GetFeatureFlagPayloadResult> {
+    return { value: posthog.getFeatureFlagPayload(options.key)};
   }
 
   async flush(): Promise<void> {
