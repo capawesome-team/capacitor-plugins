@@ -14,6 +14,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetSessionIdResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
 class Posthog(private val plugin: PosthogPlugin) {
@@ -103,5 +104,10 @@ class Posthog(private val plugin: PosthogPlugin) {
         val key = options.key
 
         com.posthog.PostHog.unregister(key = key)
+    }
+
+    fun getSessionId(): GetSessionIdResult {
+        val sessionId = com.posthog.PostHog.getSessionId()
+        return GetSessionIdResult(sessionId)
     }
 }
