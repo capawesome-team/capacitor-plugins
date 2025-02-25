@@ -256,6 +256,16 @@ public class PosthogPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void getSessionId(PluginCall call) {
+        try {
+            Result result = implementation.getSessionId();
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
         if (result == null) {
             call.resolve();

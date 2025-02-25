@@ -16,6 +16,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getSessionId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
@@ -179,6 +180,15 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.unregister(options)
         call.resolve()
+    }
+
+    @objc func getSessionId(_ call: CAPPluginCall) {
+        let result = implementation?.getSessionId()
+        if let result = result?.toJSObject() as? JSObject {
+            self.resolveCall(call, result)
+        } else {
+            call.resolve(["sessionId": nil])
+        }
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

@@ -26,6 +26,14 @@ export interface PosthogPlugin {
    */
   getFeatureFlag(options: GetFeatureFlagOptions): Promise<GetFeatureFlagResult>;
   /**
+   * Get the current session ID.
+   * 
+   * Only available on Android and iOS.
+   * 
+   * @since 7.0.1
+   */
+  getSessionId(): Promise<GetSessionIdResult>;
+  /**
    * Associate the events for that user with a group.
    *
    * @since 6.0.0
@@ -277,4 +285,18 @@ export interface UnregisterOptions {
    * @since 6.0.0
    */
   key: string;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface GetSessionIdResult {
+  /**
+   * The current session ID.
+   * 
+   * If no session is active, the value will be null.
+   * 
+   * @since 8.0.0
+   */
+  sessionId: string | null;
 }

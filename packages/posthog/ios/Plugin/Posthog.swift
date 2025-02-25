@@ -94,4 +94,9 @@ import PostHog
 
         PostHogSDK.shared.unregister(key)
     }
+
+    @objc public func getSessionId() -> GetSessionIdResult {
+        let sessionId = PostHogSDK.shared.getSessionId()
+        return GetSessionIdResult(sessionId: sessionId)
+    }
 }

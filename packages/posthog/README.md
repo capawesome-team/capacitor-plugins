@@ -111,6 +111,7 @@ const unregister = async () => {
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
 * [`getFeatureFlag(...)`](#getfeatureflag)
+* [`getSessionId()`](#getsessionid)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
@@ -190,6 +191,23 @@ Get the value of a feature flag.
 | **`options`** | <code><a href="#getfeatureflagoptions">GetFeatureFlagOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#getfeatureflagresult">GetFeatureFlagResult</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### getSessionId()
+
+```typescript
+getSessionId() => Promise<GetSessionIdResult>
+```
+
+Get the current session ID.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getsessionidresult">GetSessionIdResult</a>&gt;</code>
 
 **Since:** 7.0.0
 
@@ -377,6 +395,13 @@ Remove a super property.
 | Prop      | Type                | Description                  | Since |
 | --------- | ------------------- | ---------------------------- | ----- |
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
+
+
+#### GetSessionIdResult
+
+| Prop            | Type                        | Description                                                              | Since |
+| --------------- | --------------------------- | ------------------------------------------------------------------------ | ----- |
+| **`sessionId`** | <code>string \| null</code> | The current session ID. If no session is active, the value will be null. | 8.0.0 |
 
 
 #### GroupOptions
