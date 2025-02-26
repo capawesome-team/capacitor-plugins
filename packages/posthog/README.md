@@ -13,7 +13,7 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
 - `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.10.0`)
@@ -209,7 +209,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getsessionidresult">GetSessionIdResult</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 7.1.0
 
 --------------------
 
@@ -401,7 +401,7 @@ Remove a super property.
 
 | Prop            | Type                        | Description                                                              | Since |
 | --------------- | --------------------------- | ------------------------------------------------------------------------ | ----- |
-| **`sessionId`** | <code>string \| null</code> | The current session ID. If no session is active, the value will be null. | 8.0.0 |
+| **`sessionId`** | <code>string \| null</code> | The current session ID. If no session is active, the value will be null. | 7.1.0 |
 
 
 #### GroupOptions
@@ -473,7 +473,9 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
+<code>{
+ [P in K]: T;
+ }</code>
 
 </docgen-api>
 
