@@ -186,8 +186,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let result = implementation?.getSessionId()
         if let result = result?.toJSObject() as? JSObject {
             self.resolveCall(call, result)
-        } else {
-            call.resolve(["sessionId": nil])
         }
     }
 

@@ -18,11 +18,7 @@ public class GetSessionIdResult implements Result {
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        if (sessionId != null) {
-            result.put("sessionId", this.sessionId);
-        } else {
-            result.put("sessionId", JSONObject.NULL);
-        }
+        result.put("sessionId", this.sessionId == null ? JSONObject.NULL : this.sessionId);
         return result;
     }
 } 

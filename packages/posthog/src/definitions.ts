@@ -30,7 +30,7 @@ export interface PosthogPlugin {
    * 
    * Only available on Android and iOS.
    * 
-   * @since 7.0.1
+   * @since 7.1.0
    */
   getSessionId(): Promise<GetSessionIdResult>;
   /**
@@ -288,7 +288,7 @@ export interface UnregisterOptions {
 }
 
 /**
- * @since 8.0.0
+ * @since 7.1.0
  */
 export interface GetSessionIdResult {
   /**
@@ -296,7 +296,7 @@ export interface GetSessionIdResult {
    * 
    * If no session is active, the value will be null.
    * 
-   * @since 8.0.0
+   * @since 7.1.0
    */
   sessionId: string | null;
 }
