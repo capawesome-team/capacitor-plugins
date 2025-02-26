@@ -288,14 +288,23 @@ export interface DownloadBundleOptions {
    */
   bundleId: string;
   /**
-   * The checksum of the bundle to verify the integrity of the ZIP file.
-   *
-   * Must be a SHA-256 hash in base64 format.
+   * The checksum of the self-hosted bundle as a SHA-256 hash
+   * in base64 format to verify the integrity of the bundle.
+   * 
+   * **Attention**: Only supported for the `zip` artifact type.
    *
    * @since 6.1.0
-   * @deprecated The server should return a `X-Checksum` header instead.
    */
   checksum?: string;
+  /**
+   * The signature of the self-hosted bundle as a signed SHA-256 hash
+   * in base64 format to verify the integrity of the bundle.
+   * 
+   * **Attention**: Only supported for the `zip` artifact type.
+   * 
+   * @since 6.8.0
+   */
+  signature?: string;
   /**
    * The URL of the bundle to download.
    *
@@ -348,12 +357,30 @@ export interface FetchLatestBundleResult {
    */
   bundleId: string | null;
   /**
+   * The checksum of the latest bundle if the bundle is self-hosted.
+   *
+   * If the bundle is hosted on Capawesome Cloud, the checksum will be
+   * returned as response header when downloading the bundle.
+   *
+   * @since 6.8.0
+   */
+  checksum?: string;
+  /**
    * The URL of the latest bundle to download.
    * Pass this URL to the `downloadBundle(...)` method to download the bundle.
    *
    * @since 6.7.0
    */
   downloadUrl?: string;
+  /**
+   * The signature of the latest bundle if the bundle is self-hosted.
+   *
+   * If the bundle is hosted on Capawesome Cloud, the signature will be
+   * returned as response header when downloading the bundle.
+   *
+   * @since 6.8.0
+   */
+  signature?: string;
 }
 
 /**

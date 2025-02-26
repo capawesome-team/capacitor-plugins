@@ -16,12 +16,20 @@ public class FetchLatestBundleResult implements Result {
     private final String bundleId;
 
     @Nullable
+    private final String checksum;
+
+    @Nullable
     private final String downloadUrl;
 
-    public FetchLatestBundleResult(@Nullable ArtifactType artifactType, @Nullable String bundleId, @Nullable String downloadUrl) {
+    @Nullable
+    private final String signature;
+
+    public FetchLatestBundleResult(@Nullable ArtifactType artifactType, @Nullable String bundleId, @Nullable String checksum, @Nullable String downloadUrl, @Nullable String signature) {
         this.artifactType = artifactType;
         this.bundleId = bundleId;
+        this.checksum = checksum;
         this.downloadUrl = downloadUrl;
+        this.signature = signature;
     }
 
     @NonNull
@@ -33,8 +41,14 @@ public class FetchLatestBundleResult implements Result {
             result.put("artifactType", "zip");
         }
         result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
+        if (checksum != null) {
+            result.put("checksum", checksum);
+        }
         if (downloadUrl != null) {
             result.put("downloadUrl", downloadUrl);
+        }
+        if (signature != null) {
+            result.put("signature", signature);
         }
         return result;
     }

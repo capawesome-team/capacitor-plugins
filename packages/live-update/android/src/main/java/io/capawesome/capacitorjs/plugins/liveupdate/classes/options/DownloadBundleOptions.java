@@ -15,10 +15,13 @@ public class DownloadBundleOptions {
     @Nullable
     private String checksum;
 
+    @Nullable
+    private String signature;
+
     @NonNull
     private String url;
 
-    public DownloadBundleOptions(@NonNull String artifactType, @NonNull String bundleId, @Nullable String checksum, @NonNull String url) {
+    public DownloadBundleOptions(@NonNull String artifactType, @NonNull String bundleId, @Nullable String checksum, @Nullable String signature, @NonNull String url) {
         if (artifactType.equals("manifest")) {
             this.artifactType = ArtifactType.MANIFEST;
         } else {
@@ -26,6 +29,7 @@ public class DownloadBundleOptions {
         }
         this.bundleId = bundleId;
         this.checksum = checksum;
+        this.signature = signature;
         this.url = url;
     }
 
@@ -42,6 +46,11 @@ public class DownloadBundleOptions {
     @Nullable
     public String getChecksum() {
         return checksum;
+    }
+
+    @Nullable
+    public String getSignature() {
+        return signature;
     }
 
     @NonNull
