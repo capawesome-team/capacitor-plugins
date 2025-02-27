@@ -32,6 +32,13 @@ import PostHog
         return GetFeatureFlagResult(value: value)
     }
 
+    @objc public func getFeatureFlagPayload(_ options: GetFeatureFlagPayloadOptions) -> GetFeatureFlagPayloadResult {
+            let key = options.getKey()
+
+            let value = PostHogSDK.shared.getFeatureFlagPayload(key)
+            return GetFeatureFlagPayloadResult(value: value)
+        }
+
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
         let key = options.getKey()

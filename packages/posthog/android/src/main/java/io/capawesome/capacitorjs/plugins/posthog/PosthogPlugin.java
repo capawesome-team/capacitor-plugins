@@ -104,6 +104,17 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getFeatureFlagPayload(PluginCall call) {
+        try {
+            GetFeatureFlagPayloadOptions options = new GetFeatureFlagPayloadOptions(call);
+            Result result = implementation.getFeatureFlagPayload(options);
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void group(PluginCall call) {
         try {
             String type = call.getString("type");

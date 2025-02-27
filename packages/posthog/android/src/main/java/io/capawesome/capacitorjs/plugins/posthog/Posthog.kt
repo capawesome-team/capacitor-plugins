@@ -41,6 +41,13 @@ class Posthog(private val plugin: PosthogPlugin) {
         return GetFeatureFlagResult(value)
     }
 
+    fun getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): getFeatureFlagPayloadResult {
+        val key = options.key
+
+        val value = com.posthog.PostHog.getFeatureFlagPayload(key = key)
+        return getFeatureFlagPayloadResult(value)
+    }
+
     fun group(options: GroupOptions) {
         val type = options.type
         val key = options.key
@@ -95,7 +102,7 @@ class Posthog(private val plugin: PosthogPlugin) {
         )
         config.captureScreenViews = false
         config.optOut = false
-        
+
         PostHogAndroid.setup(plugin.context, config)
     }
 

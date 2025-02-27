@@ -16,6 +16,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
@@ -74,6 +75,18 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             rejectCall(call, error)
         }
     }
+
+    @objc func getFeatureFlagPayload(_ call: CAPPluginCall) {
+            do {
+                let options = try GetFeatureFlagPayloadOptions(call: call)
+                let result = implementation?.getFeatureFlagPayload(options)
+                if let result = result?.toJSObject() as? JSObject {
+                    self.resolveCall(call, result)
+                }
+            } catch let error {
+                rejectCall(call, error)
+            }
+        }
 
     @objc func group(_ call: CAPPluginCall) {
         guard let type = call.getString("type") else {
