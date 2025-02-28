@@ -106,6 +106,11 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
+## Guides
+
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
+
 ## Usage
 
 ```typescript
