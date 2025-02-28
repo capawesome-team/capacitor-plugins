@@ -107,7 +107,7 @@ class Posthog(private val plugin: PosthogPlugin) {
     }
 
     fun getSessionId(): GetSessionIdResult {
-        val sessionId = com.posthog.PostHog.getSessionId()
+        val sessionId = com.posthog.PostHog.getSessionId()?.toString()
         return GetSessionIdResult(sessionId)
     }
 }
