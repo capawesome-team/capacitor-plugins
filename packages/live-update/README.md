@@ -191,7 +191,16 @@ const getVersionName = async () => {
 };
 
 const ready = async () => {
-  await LiveUpdate.ready();
+  const result = await LiveUpdate.ready();
+  if (result.currentBundleId) {
+    console.log(`The app is now using the bundle with the identifier ${result.currentBundleId}.`);
+  }
+  if (result.previousBundleId) {
+    console.log(`The app was using the bundle with the identifier ${result.previousBundleId}.`);
+  }
+  if (result.rollback) {
+    console.log('The app was reset to the default bundle.');
+  }
 };
 
 const reload = async () => {
@@ -203,7 +212,7 @@ const reset = async () => {
 };
 
 const setChannel = async () => {
-  await LiveUpdate.setChannel({ channel: 'beta' });
+  await LiveUpdate.setChannel({ channel: 'production-5' });
 };
 
 const setCustomId = async () => {
@@ -211,16 +220,20 @@ const setCustomId = async () => {
 };
 
 const setNextBundle = async () => {
-  await LiveUpdate.setNextBundle({ bundleId: '1.0.0' });
+  await LiveUpdate.setNextBundle({ bundleId: '7f0b9bf2-dff6-4be2-bcac-b068cc5ea756' });
 };
 
 const sync = async () => {
-  const result = await LiveUpdate.sync();
+  const result = await LiveUpdate.sync({
+    channel: 'production-5',
+  });
   return result.nextBundleId;
 };
 
 const isNewBundleAvailable = async () => {
-  const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle();
+  const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle({
+    channel: 'production-5',
+  });
   if (latestBundleId) {
     const { bundleId: currentBundleId } = await LiveUpdate.getCurrentBundle();
     return latestBundleId !== currentBundleId;
@@ -793,7 +806,7 @@ Listener for the download progress of a bundle.
 
 ## Testing
 
-When testing the plugin, you must make sure that you do not use the [Live Reload](https://ionicframework.com/docs/cli/livereload) option, as in this case a development server is used to load the bundle.
+When testing the plugin, you must make sure that you do not use the [Live Reload](https://ionicframework.com/docs/cli/livereload) option, as in this case a development server is used to load the bundle and not the local file system.
 
 Therefore, simply start your app without the live reload option, for example with the following command:
 
@@ -801,7 +814,17 @@ Therefore, simply start your app without the live reload option, for example wit
 npx ionic cap run android --open
 ```
 
-If you want to disable the plugin to test other parts of your app, you can set the [`enabled`](#configuration) configuration option to `false`.
+If you want to **not** receive live updates to test other parts of your app, you can simply set a non-existent channel, for example:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const sync = async () => {
+  await LiveUpdate.sync({ channel: 'non-existent-channel' });
+};
+```
+
+This way, the app will check for updates, but no updates will be found.
 
 ## Limitations
 
