@@ -8,7 +8,6 @@ declare module '@capacitor/cli' {
        *
        * @since 7.1.0
        * @example "#ffffff"
-       * @example "#000000"
        */
       backgroundColor?: string;
     };
