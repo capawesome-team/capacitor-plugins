@@ -12,6 +12,7 @@ public class EdgeToEdge {
 
     @NonNull
     private final EdgeToEdgePlugin plugin;
+
     private final EdgeToEdgeConfig config;
 
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin) {
