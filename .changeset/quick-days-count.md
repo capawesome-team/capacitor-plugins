@@ -2,4 +2,4 @@
 '@capawesome/capacitor-android-edge-to-edge-support': minor
 ---
 
-feat: support styling options with plugin configs 
+feat: add `backgroundColor` configuration option
