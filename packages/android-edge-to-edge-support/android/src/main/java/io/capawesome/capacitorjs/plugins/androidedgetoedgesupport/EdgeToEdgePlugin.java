@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
+import android.graphics.Color;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -17,7 +18,8 @@ public class EdgeToEdgePlugin extends Plugin {
 
     @Override
     public void load() {
-        implementation = new EdgeToEdge(this);
+        EdgeToEdgeConfig config = getEdgeToEdgeConfig();
+        implementation = new EdgeToEdge(this, config);
     }
 
     @PluginMethod
@@ -29,5 +31,15 @@ public class EdgeToEdgePlugin extends Plugin {
         }
         implementation.setBackgroundColor(color);
         call.resolve();
+    }
+
+    private EdgeToEdgeConfig getEdgeToEdgeConfig() {
+        EdgeToEdgeConfig config = new EdgeToEdgeConfig();
+
+        String backgroundColor = getConfig().getString("backgroundColor");
+        if (backgroundColor != null) {
+            config.setBackgroundColor(Color.parseColor(backgroundColor));
+        }
+        return config;
     }
 }

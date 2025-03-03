@@ -11,13 +11,14 @@ import androidx.core.view.WindowInsetsCompat;
 public class EdgeToEdge {
 
     @NonNull
-    private final EdgeToEdgePlugin plugin;
-
     private final EdgeToEdgeConfig config;
 
-    public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin) {
+    @NonNull
+    private final EdgeToEdgePlugin plugin;
+
+    public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
+        this.config = config;
         this.plugin = plugin;
-        this.config = new EdgeToEdgeConfig(plugin.getConfig());
         // Apply insets to disable the edge-to-edge feature
         applyInsets();
     }
