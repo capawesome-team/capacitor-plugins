@@ -12,9 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 public class EdgeToEdge {
 
     @NonNull
+    private final EdgeToEdgeConfig config;
+
+    @NonNull
     private final EdgeToEdgePlugin plugin;
 
-    public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin) {
+    public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
+        this.config = config;
         this.plugin = plugin;
         // Apply insets to disable the edge-to-edge feature
         applyInsets();
@@ -39,7 +43,7 @@ public class EdgeToEdge {
         // Get parent view
         ViewGroup parent = (ViewGroup) view.getParent();
         // Set background color to black
-        parent.setBackgroundColor(Color.WHITE);
+        parent.setBackgroundColor(this.config.getBackgroundColor());
         // Apply insets to disable the edge-to-edge feature
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());

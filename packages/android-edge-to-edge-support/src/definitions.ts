@@ -1,3 +1,19 @@
+/// <reference types="@capacitor/cli" />
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    EdgeToEdge?: {
+      /**
+       * The hexadecimal color to set as the background color of the status bar and navigation bar.
+       *
+       * @since 7.1.0
+       * @example "#ffffff"
+       */
+      backgroundColor?: string;
+    };
+  }
+}
+
 export interface EdgeToEdgePlugin {
   /**
    * Set the background color of the status bar and navigation bar.

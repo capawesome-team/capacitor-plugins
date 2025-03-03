@@ -13,6 +13,49 @@ npm install @capawesome/capacitor-android-edge-to-edge-support
 npx cap sync
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop                  | Type                | Description                                                                                | Since |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
+| **`backgroundColor`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "EdgeToEdge": {
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-android-edge-to-edge-support" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    EdgeToEdge: {
+      backgroundColor: "#ffffff",
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ## Usage
 
 The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [Status Bar](https://capacitorjs.com/docs/apis/status-bar) plugin.
