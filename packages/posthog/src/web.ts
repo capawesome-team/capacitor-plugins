@@ -6,6 +6,7 @@ import type {
   CaptureOptions,
   GetFeatureFlagOptions,
   GetFeatureFlagResult,
+  GetSessionIdResult,
   GroupOptions,
   IdentifyOptions,
   IsFeatureEnabledOptions,
@@ -79,6 +80,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async unregister(options: UnregisterOptions): Promise<void> {
     posthog.unregister(options.key);
+  }
+
+  async getSessionId(): Promise<GetSessionIdResult> {
+    this.throwUnimplementedError();
   }
 
   private throwUnimplementedError(): never {
