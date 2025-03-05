@@ -18,12 +18,10 @@ public class GetFeatureFlagPayloadResult implements Result {
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        if (value instanceof Boolean) {
-            result.put("value", (Boolean) this.value);
-        } else if (value instanceof String) {
-            result.put("value", (String) this.value);
-        } else {
+        if (value == null) {
             result.put("value", JSONObject.NULL);
+        } else {
+            result.put("value", this.value);
         }
         return result;
     }
