@@ -2,4 +2,4 @@
 '@capawesome/capacitor-posthog': major
 ---
 
-add getFeatureFlagPayload method
+feat: add `getFeatureFlagPayload(...)` method
