@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import com.getcapacitor.PluginCall;
 import io.capawesome.capacitorjs.plugins.posthog.PosthogPlugin;
 
-public class GetFeatureFlagOptions {
+public class GetFeatureFlagPayloadOptions {
 
     @NonNull
     private final String key;

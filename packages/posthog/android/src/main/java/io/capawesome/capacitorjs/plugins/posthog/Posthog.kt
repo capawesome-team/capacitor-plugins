@@ -10,10 +10,12 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
 import com.posthog.android.PostHogAndroidConfig
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
 class Posthog(private val plugin: PosthogPlugin) {
@@ -41,11 +43,11 @@ class Posthog(private val plugin: PosthogPlugin) {
         return GetFeatureFlagResult(value)
     }
 
-    fun getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): getFeatureFlagPayloadResult {
+    fun getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): GetFeatureFlagPayloadResult {
         val key = options.key
 
         val value = com.posthog.PostHog.getFeatureFlagPayload(key = key)
-        return getFeatureFlagPayloadResult(value)
+        return GetFeatureFlagPayloadResult(value)
     }
 
     fun group(options: GroupOptions) {
