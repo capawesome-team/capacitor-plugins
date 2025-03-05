@@ -11,6 +11,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions;
@@ -97,6 +98,17 @@ public class PosthogPlugin extends Plugin {
         try {
             GetFeatureFlagOptions options = new GetFeatureFlagOptions(call);
             Result result = implementation.getFeatureFlag(options);
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getFeatureFlagPayload(PluginCall call) {
+        try {
+            GetFeatureFlagPayloadOptions options = new GetFeatureFlagPayloadOptions(call);
+            Result result = implementation.getFeatureFlagPayload(options);
             resolveCall(call, result.toJSObject());
         } catch (Exception exception) {
             rejectCall(call, exception);

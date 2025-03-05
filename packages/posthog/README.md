@@ -111,6 +111,7 @@ const unregister = async () => {
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
 * [`getFeatureFlag(...)`](#getfeatureflag)
+* [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
@@ -192,6 +193,25 @@ Get the value of a feature flag.
 **Returns:** <code>Promise&lt;<a href="#getfeatureflagresult">GetFeatureFlagResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### getFeatureFlagPayload(...)
+
+```typescript
+getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions) => Promise<GetFeatureFlagPayloadResult>
+```
+
+Get the payload of a feature flag.
+
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getfeatureflagpayloadoptions">GetFeatureFlagPayloadOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getfeatureflagpayloadresult">GetFeatureFlagPayloadResult</a>&gt;</code>
+
+**Since:** 7.1.0
 
 --------------------
 
@@ -379,6 +399,20 @@ Remove a super property.
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
 
+#### GetFeatureFlagPayloadResult
+
+| Prop        | Type                                          | Description                            | Since |
+| ----------- | --------------------------------------------- | -------------------------------------- | ----- |
+| **`value`** | <code><a href="#jsontype">JsonType</a></code> | The value of the feature flag payload. | 7.1.0 |
+
+
+#### GetFeatureFlagPayloadOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.1.0 |
+
+
 #### GroupOptions
 
 | Prop                  | Type                                                         | Description                                  | Since |
@@ -449,6 +483,11 @@ Remove a super property.
 Construct a type with a set of properties K of type T
 
 <code>{ [P in K]: T; }</code>
+
+
+#### JsonType
+
+<code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
 
