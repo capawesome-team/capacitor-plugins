@@ -2,4 +2,4 @@
 '@capawesome/capacitor-posthog': minor
 ---
 
-add getFeatureFlagPayload method
+feat: add `getFeatureFlagPayload(...)` method
