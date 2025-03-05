@@ -30,7 +30,9 @@ npm install @capawesome-team/capacitor-zip
 npx cap sync
 ```
 
-### Android Variables
+### Android 
+
+#### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
