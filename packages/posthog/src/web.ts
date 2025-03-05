@@ -35,8 +35,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     return value === undefined ? { value: null } : { value };
   }
 
-  async getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): Promise<GetFeatureFlagPayloadResult> {
-    return { value: posthog.getFeatureFlagPayload(options.key)};
+  async getFeatureFlagPayload(
+    options: GetFeatureFlagPayloadOptions,
+  ): Promise<GetFeatureFlagPayloadResult> {
+    return { value: posthog.getFeatureFlagPayload(options.key) };
   }
 
   async flush(): Promise<void> {

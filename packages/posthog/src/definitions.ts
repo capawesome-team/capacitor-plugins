@@ -1,5 +1,3 @@
-import type { JsonType } from 'posthog-js';
-
 export interface PosthogPlugin {
   /**
    * Assign another distinct ID to the current user.
@@ -32,7 +30,9 @@ export interface PosthogPlugin {
    *
    * @since 7.1.0
    */
-  getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): Promise<GetFeatureFlagPayloadResult>;
+  getFeatureFlagPayload(
+    options: GetFeatureFlagPayloadOptions,
+  ): Promise<GetFeatureFlagPayloadResult>;
   /**
    * Associate the events for that user with a group.
    *
@@ -307,3 +307,16 @@ export interface UnregisterOptions {
    */
   key: string;
 }
+
+/**
+ * @since 7.1.0
+ */
+export type JsonType =
+  | string
+  | number
+  | boolean
+  | null
+  | {
+      [key: string]: JsonType;
+    }
+  | JsonType[];
