@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`6722e170d19d2ef5a5c40820aecbe8a0a8d77cac`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6722e170d19d2ef5a5c40820aecbe8a0a8d77cac) ([#69](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/69)): feat: add `audioRecording` and `speechRecognition` permission types
+
 ## 7.0.1
 
 ### Patch Changes

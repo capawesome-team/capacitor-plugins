@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.0.3
+
+### Patch Changes
+
+- [`937c8628923097ceee3808790142d1e5b255f3d0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/937c8628923097ceee3808790142d1e5b255f3d0): fix(android): remove error logs for non-configured headless task
+
+- [`3bfb4cb48d98d7e07c8561cd9e591000df09830b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3bfb4cb48d98d7e07c8561cd9e591000df09830b): fix: request permissions options were ignored
+
 ## 7.0.2
 
 ### Patch Changes

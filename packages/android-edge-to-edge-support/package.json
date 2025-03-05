@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-android-edge-to-edge-support",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Capacitor plugin to support edge-to-edge display on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
