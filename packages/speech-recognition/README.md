@@ -130,7 +130,7 @@ const removeAllListeners = async () => {
 * [`startListening(...)`](#startlistening)
 * [`stopListening()`](#stoplistening)
 * [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
+* [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('end', ...)`](#addlistenerend-)
 * [`addListener('error', ...)`](#addlistenererror-)
 * [`addListener('partialResult', ...)`](#addlistenerpartialresult-)
@@ -243,13 +243,17 @@ Check permissions for the plugin.
 --------------------
 
 
-### requestPermissions()
+### requestPermissions(...)
 
 ```typescript
-requestPermissions() => Promise<PermissionStatus>
+requestPermissions(permissions?: SpeechRecognitionPluginPermission | undefined) => Promise<PermissionStatus>
 ```
 
 Request permissions for the plugin.
+
+| Param             | Type                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| **`permissions`** | <code><a href="#speechrecognitionpluginpermission">SpeechRecognitionPluginPermission</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
@@ -449,9 +453,18 @@ Remove all listeners for this plugin.
 
 #### PermissionStatus
 
-| Prop              | Type                                                        | Description                           | Since |
-| ----------------- | ----------------------------------------------------------- | ------------------------------------- | ----- |
-| **`recordAudio`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for recording audio. | 6.0.0 |
+| Prop                    | Type                                                        | Description                                                     | Since |
+| ----------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- | ----- |
+| **`audioRecording`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for recording audio.                           | 7.1.0 |
+| **`recordAudio`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition.                        | 6.0.0 |
+| **`speechRecognition`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition. Only available on iOS. | 7.1.0 |
+
+
+#### SpeechRecognitionPluginPermission
+
+| Prop              | Type                                           |
+| ----------------- | ---------------------------------------------- |
+| **`permissions`** | <code>SpeechRecognitionPermissionType[]</code> |
 
 
 #### PluginListenerHandle
@@ -488,6 +501,11 @@ Remove all listeners for this plugin.
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### SpeechRecognitionPermissionType
+
+<code>'audioRecording' | 'speechRecognition'</code>
 
 </docgen-api>
 
