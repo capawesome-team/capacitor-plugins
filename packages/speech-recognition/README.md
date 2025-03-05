@@ -67,13 +67,13 @@ const stopListening = async () => {
 };
 
 const checkPermissions = async () => {
-  const { recordAudio } = await SpeechRecognition.checkPermissions();
-  return recordAudio;
+  const { audioRecording, speechRecognition } = await SpeechRecognition.checkPermissions();
 };
 
 const requestPermissions = async () => {
-  const { recordAudio } = await SpeechRecognition.requestPermissions();
-  return recordAudio;
+  const { audioRecording, speechRecognition } = await SpeechRecognition.requestPermissions({
+    permissions: ['audioRecording', 'speechRecognition'],
+  });
 };
 
 const isAvailable = async () => {
