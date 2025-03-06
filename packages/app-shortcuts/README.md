@@ -199,6 +199,7 @@ Remove all listeners for this plugin.
 | **`id`**          | <code>string</code> | The unique identifier.                                                                                                                                                                                                                                                    | 6.0.0 |
 | **`title`**       | <code>string</code> | The display name.                                                                                                                                                                                                                                                         | 6.0.0 |
 | **`icon`**        | <code>number</code> | The icon to display. On **Android**, the icon is the constant value of the `R.drawable` enum. On **iOS**, the icon is the constant value of the `UIApplicationShortcutIcon.IconType` enum. **Attention**: On **iOS**, the icon and the description must be used together. | 6.1.0 |
+| **`imageName`**   | <code>string</code> | Name of an asset from the assets catalogue. It overrides `icon` when used together. Only available on iOS.                                                                                                                                                                | 7.1.0 |
 
 
 #### SetOptions

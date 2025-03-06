@@ -110,6 +110,16 @@ export interface Shortcut {
    * @see https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype
    */
   icon?: number;
+  /**
+   * Name of an asset from the assets catalogue.
+   * It overrides `icon` when used together.
+   * Only available on iOS.
+   *
+   * @since 7.1.0
+   * @example "star.fill"  // system symbol
+   * @example "asset_name"  // Assets catalogue
+   */
+  imageName?: string;
 }
 
 /**

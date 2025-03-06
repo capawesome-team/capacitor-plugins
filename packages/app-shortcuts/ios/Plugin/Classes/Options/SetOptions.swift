@@ -25,8 +25,12 @@ import Capacitor
             }
             let description = shortcut["description"] as? String
             let icon = shortcut["icon"] as? Int
+            let imageName = shortcut["imageName"] as? String
 
-            if description != nil && icon != nil {
+            if description != nil {
+                if let imageName = imageName {
+                    return UIApplicationShortcutItem(type: type, localizedTitle: title, localizedSubtitle: description, icon: UIApplicationShortcutIcon(templateImageName: imageName))
+                }
                 if let iconType = UIApplicationShortcutIcon.IconType(rawValue: icon!) {
                     return UIApplicationShortcutItem(type: type, localizedTitle: title, localizedSubtitle: description, icon: UIApplicationShortcutIcon(type: iconType))
                 } else {
