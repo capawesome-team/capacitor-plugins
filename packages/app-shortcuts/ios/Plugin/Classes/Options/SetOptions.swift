@@ -24,18 +24,26 @@ import Capacitor
                 throw CustomError.titleMissing
             }
             let description = shortcut["description"] as? String
-            let icon = shortcut["icon"] as? Int
-            let imageName = shortcut["imageName"] as? String
+            let iconInt = shortcut["icon"] as? Int
+            let iconString = shortcut["icon"] as? String
+
+            var icon: UIApplicationShortcutIcon?
+
+            if let iconString = iconString {
+                icon = UIImage(systemName: iconString) != nil
+                    ? UIApplicationShortcutIcon(systemImageName: iconString)
+                    : UIApplicationShortcutIcon(templateImageName: iconString)
+            } else if let iconInt = iconInt, let iconType = UIApplicationShortcutIcon.IconType(rawValue: iconInt) {
+                icon = UIApplicationShortcutIcon(type: iconType)
+            }
 
             if description != nil {
-                if let imageName = imageName {
-                    return UIApplicationShortcutItem(type: type, localizedTitle: title, localizedSubtitle: description, icon: UIApplicationShortcutIcon(templateImageName: imageName))
-                }
-                if let iconType = UIApplicationShortcutIcon.IconType(rawValue: icon!) {
-                    return UIApplicationShortcutItem(type: type, localizedTitle: title, localizedSubtitle: description, icon: UIApplicationShortcutIcon(type: iconType))
-                } else {
-                    return UIApplicationShortcutItem(type: type, localizedTitle: title)
-                }
+                return UIApplicationShortcutItem(
+                    type: type,
+                    localizedTitle: title,
+                    localizedSubtitle: description,
+                    icon: icon
+                )
             } else {
                 return UIApplicationShortcutItem(type: type, localizedTitle: title)
             }

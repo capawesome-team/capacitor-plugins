@@ -99,27 +99,21 @@ export interface Shortcut {
    *
    * On **Android**, the icon is the constant value of the `R.drawable` enum.
    *
-   * On **iOS**, the icon is the constant value of the `UIApplicationShortcutIcon.IconType` enum.
+   * On **iOS**, the icon can be one of the following:
+   * - The constant value of the `UIApplicationShortcutIcon.IconType` enum.
+   * - A system symbol name.
+   * - Name of the image asset from the asset catalogue.
    *
    * **Attention**: On **iOS**, the icon and the description must be used together.
    *
    * @since 6.1.0
    * @example 17301547
    * @example 6
+   * @example "star.fill"
    * @see https://developer.android.com/reference/android/R.drawable
    * @see https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype
    */
-  icon?: number;
-  /**
-   * Name of an asset from the assets catalogue.
-   * It overrides `icon` when used together.
-   * Only available on iOS.
-   *
-   * @since 7.1.0
-   * @example "star.fill"  // system symbol
-   * @example "asset_name"  // Assets catalogue
-   */
-  imageName?: string;
+  icon?: number | string;
 }
 
 /**
