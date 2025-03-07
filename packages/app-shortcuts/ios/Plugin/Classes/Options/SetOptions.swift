@@ -37,16 +37,12 @@ import Capacitor
                 icon = UIApplicationShortcutIcon(type: iconType)
             }
 
-            if description != nil && icon != nil {
-                return UIApplicationShortcutItem(
-                    type: type,
-                    localizedTitle: title,
-                    localizedSubtitle: description,
-                    icon: icon
-                )
-            } else {
-                return UIApplicationShortcutItem(type: type, localizedTitle: title)
-            }
+            return UIApplicationShortcutItem(
+                type: type,
+                localizedTitle: title,
+                localizedSubtitle: description,
+                icon: icon
+            )
         }
     }
 }

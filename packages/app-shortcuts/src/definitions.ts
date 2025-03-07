@@ -104,8 +104,6 @@ export interface Shortcut {
    * - A system symbol name (e.g. `star.fill`).
    * - Name of the image asset from the asset catalogue.
    *
-   * **Attention**: On **iOS**, the icon and the description must be used together.
-   *
    * @since 6.1.0
    * @example 17301547
    * @example 6
