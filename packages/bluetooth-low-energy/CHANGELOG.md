@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.4
+
+### Patch Changes
+
+- [`7f16adf59c9d34b57b63cd9d87fa646796bc7794`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7f16adf59c9d34b57b63cd9d87fa646796bc7794) ([#72](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/72)): fix(android): support older Android devices
+
 ## 7.0.3
 
 ### Patch Changes
