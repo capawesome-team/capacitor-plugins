@@ -10,8 +10,16 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central rol
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier. 
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 7.x.x          | >=7.x.x           | Active support |
 
 ## Installation
 
@@ -40,6 +48,9 @@ npx cap sync
 This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
+<!-- Request legacy Bluetooth permissions on older devices. -->
+<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
 <!-- Needed only if your app looks for Bluetooth devices.  -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
@@ -53,6 +64,17 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 ```
 
 You can read more about Bluetooth permissions in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
+
+#### Features
+
+Add the following feature to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+```
+
+Set it to `true` if BLE is required for your app. Then the Google Play store will hide your app from users on devices lacking those features.
+You can read more about Bluetooth features in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions#features).
 
 #### Services
 
@@ -74,6 +96,10 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import androidx.annotation.NonNull;
 
 public class BluetoothLowEnergyHeadlessTask {
+  public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic) {
+    // Your code here
+  }
+
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
     // Your code here
   }
@@ -299,40 +325,95 @@ const convertBytesToHex = (bytes: number[]) => {
 
 <docgen-index>
 
-* [`connect(...)`](#connect)
-* [`createBond(...)`](#createbond)
-* [`disconnect(...)`](#disconnect)
-* [`discoverServices(...)`](#discoverservices)
-* [`getConnectedDevices()`](#getconnecteddevices)
-* [`getServices(...)`](#getservices)
-* [`initialize()`](#initialize)
-* [`isBonded(...)`](#isbonded)
-* [`isEnabled()`](#isenabled)
-* [`openAppSettings()`](#openappsettings)
-* [`openBluetoothSettings()`](#openbluetoothsettings)
-* [`openLocationSettings()`](#openlocationsettings)
-* [`readCharacteristic(...)`](#readcharacteristic)
-* [`readDescriptor(...)`](#readdescriptor)
-* [`readRssi(...)`](#readrssi)
-* [`requestConnectionPriority(...)`](#requestconnectionpriority)
-* [`requestMtu(...)`](#requestmtu)
-* [`startCharacteristicNotifications(...)`](#startcharacteristicnotifications)
-* [`startForegroundService(...)`](#startforegroundservice)
-* [`startScan(...)`](#startscan)
-* [`stopCharacteristicNotifications(...)`](#stopcharacteristicnotifications)
-* [`stopForegroundService()`](#stopforegroundservice)
-* [`stopScan()`](#stopscan)
-* [`writeCharacteristic(...)`](#writecharacteristic)
-* [`writeDescriptor(...)`](#writedescriptor)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('characteristicChanged', ...)`](#addlistenercharacteristicchanged-)
-* [`addListener('deviceDisconnected', ...)`](#addlistenerdevicedisconnected-)
-* [`addListener('deviceScanned', ...)`](#addlistenerdevicescanned-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-bluetooth-low-energy](#capawesome-teamcapacitor-bluetooth-low-energy)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+      - [Permissions](#permissions)
+      - [Services](#services)
+      - [Headless Task](#headless-task)
+    - [iOS](#ios)
+  - [Configuration](#configuration)
+  - [Demo](#demo)
+  - [Guides](#guides)
+  - [Usage](#usage)
+  - [API](#api)
+    - [connect(...)](#connect)
+    - [createBond(...)](#createbond)
+    - [disconnect(...)](#disconnect)
+    - [discoverServices(...)](#discoverservices)
+    - [getConnectedDevices()](#getconnecteddevices)
+    - [getServices(...)](#getservices)
+    - [initialize()](#initialize)
+    - [isBonded(...)](#isbonded)
+    - [isEnabled()](#isenabled)
+    - [openAppSettings()](#openappsettings)
+    - [openBluetoothSettings()](#openbluetoothsettings)
+    - [openLocationSettings()](#openlocationsettings)
+    - [readCharacteristic(...)](#readcharacteristic)
+    - [readDescriptor(...)](#readdescriptor)
+    - [readRssi(...)](#readrssi)
+    - [requestConnectionPriority(...)](#requestconnectionpriority)
+    - [requestMtu(...)](#requestmtu)
+    - [startCharacteristicNotifications(...)](#startcharacteristicnotifications)
+    - [startForegroundService(...)](#startforegroundservice)
+    - [startScan(...)](#startscan)
+    - [stopCharacteristicNotifications(...)](#stopcharacteristicnotifications)
+    - [stopForegroundService()](#stopforegroundservice)
+    - [stopScan()](#stopscan)
+    - [writeCharacteristic(...)](#writecharacteristic)
+    - [writeDescriptor(...)](#writedescriptor)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions(...)](#requestpermissions)
+    - [addListener('characteristicChanged', ...)](#addlistenercharacteristicchanged-)
+    - [addListener('deviceDisconnected', ...)](#addlistenerdevicedisconnected-)
+    - [addListener('deviceScanned', ...)](#addlistenerdevicescanned-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [ConnectOptions](#connectoptions)
+      - [CreateBondOptions](#createbondoptions)
+      - [DisconnectOptions](#disconnectoptions)
+      - [DiscoverServiceOptions](#discoverserviceoptions)
+      - [GetConnectedDevicesResult](#getconnecteddevicesresult)
+      - [Device](#device)
+      - [GetServicesResult](#getservicesresult)
+      - [Service](#service)
+      - [Characteristic](#characteristic)
+      - [Descriptor](#descriptor)
+      - [CharacteristicProperties](#characteristicproperties)
+      - [GetServicesOptions](#getservicesoptions)
+      - [IsBondedResult](#isbondedresult)
+      - [IsBondedOptions](#isbondedoptions)
+      - [IsEnabledResult](#isenabledresult)
+      - [ReadCharacteristicResult](#readcharacteristicresult)
+      - [ReadCharacteristicOptions](#readcharacteristicoptions)
+      - [ReadDescriptorResult](#readdescriptorresult)
+      - [ReadDescriptorOptions](#readdescriptoroptions)
+      - [ReadRssiResult](#readrssiresult)
+      - [ReadRssiOptions](#readrssioptions)
+      - [RequestConnectionPriorityOptions](#requestconnectionpriorityoptions)
+      - [RequestMtuOptions](#requestmtuoptions)
+      - [StartCharacteristicNotificationsOptions](#startcharacteristicnotificationsoptions)
+      - [StartForegroundServiceOptions](#startforegroundserviceoptions)
+      - [StartScanOptions](#startscanoptions)
+      - [StopCharacteristicNotificationsOptions](#stopcharacteristicnotificationsoptions)
+      - [WriteCharacteristicOptions](#writecharacteristicoptions)
+      - [WriteDescriptorOptions](#writedescriptoroptions)
+      - [PermissionStatus](#permissionstatus)
+      - [BluetoothLowEnergyPluginPermission](#bluetoothlowenergypluginpermission)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [CharacteristicChangedEvent](#characteristicchangedevent)
+      - [DeviceDisconnectedEvent](#devicedisconnectedevent)
+      - [DeviceScannedEvent](#devicescannedevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+      - [BluetoothLowEnergyPermissionType](#bluetoothlowenergypermissiontype)
+    - [Enums](#enums)
+      - [ConnectionPriority](#connectionpriority)
+  - [Utils](#utils)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
