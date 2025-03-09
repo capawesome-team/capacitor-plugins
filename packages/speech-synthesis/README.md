@@ -11,8 +11,16 @@ Capacitor plugin for synthesizing speech from text.
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🎤 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 7.x.x          | >=7.x.x           | Active support |
 
 ## Installation
 
@@ -161,26 +169,56 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`activateAudioSession(...)`](#activateaudiosession)
-* [`cancel()`](#cancel)
-* [`deactivateAudioSession()`](#deactivateaudiosession)
-* [`getLanguages()`](#getlanguages)
-* [`getVoices()`](#getvoices)
-* [`initialize()`](#initialize)
-* [`isAvailable()`](#isavailable)
-* [`isSpeaking()`](#isspeaking)
-* [`isLanguageAvailable(...)`](#islanguageavailable)
-* [`isVoiceAvailable(...)`](#isvoiceavailable)
-* [`speak(...)`](#speak)
-* [`synthesizeToFile(...)`](#synthesizetofile)
-* [`addListener('boundary', ...)`](#addlistenerboundary-)
-* [`addListener('end', ...)`](#addlistenerend-)
-* [`addListener('error', ...)`](#addlistenererror-)
-* [`addListener('start', ...)`](#addlistenerstart-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-speech-synthesis](#capawesome-teamcapacitor-speech-synthesis)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [API](#api)
+    - [activateAudioSession(...)](#activateaudiosession)
+    - [cancel()](#cancel)
+    - [deactivateAudioSession()](#deactivateaudiosession)
+    - [getLanguages()](#getlanguages)
+    - [getVoices()](#getvoices)
+    - [initialize()](#initialize)
+    - [isAvailable()](#isavailable)
+    - [isSpeaking()](#isspeaking)
+    - [isLanguageAvailable(...)](#islanguageavailable)
+    - [isVoiceAvailable(...)](#isvoiceavailable)
+    - [speak(...)](#speak)
+    - [synthesizeToFile(...)](#synthesizetofile)
+    - [addListener('boundary', ...)](#addlistenerboundary-)
+    - [addListener('end', ...)](#addlistenerend-)
+    - [addListener('error', ...)](#addlistenererror-)
+    - [addListener('start', ...)](#addlistenerstart-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [ActivateAudioSessionOptions](#activateaudiosessionoptions)
+      - [GetLanguagesResult](#getlanguagesresult)
+      - [GetVoicesResult](#getvoicesresult)
+      - [Voice](#voice)
+      - [IsAvailableResult](#isavailableresult)
+      - [IsSpeakingResult](#isspeakingresult)
+      - [IsLanguageAvailableResult](#islanguageavailableresult)
+      - [IsLanguageAvailableOption](#islanguageavailableoption)
+      - [IsVoiceAvailableResult](#isvoiceavailableresult)
+      - [IsVoiceAvailableOption](#isvoiceavailableoption)
+      - [SpeakResult](#speakresult)
+      - [SpeakOptions](#speakoptions)
+      - [SynthesizeToFileResult](#synthesizetofileresult)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [BoundaryEvent](#boundaryevent)
+      - [EndEvent](#endevent)
+      - [ErrorEvent](#errorevent)
+      - [StartEvent](#startevent)
+    - [Type Aliases](#type-aliases)
+      - [SynthesizeToFileOptions](#synthesizetofileoptions)
+    - [Enums](#enums)
+      - [AudioSessionCategory](#audiosessioncategory)
+      - [QueueStrategy](#queuestrategy)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
