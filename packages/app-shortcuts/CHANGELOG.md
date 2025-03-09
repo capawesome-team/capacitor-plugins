@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`c3c715e2031266251451c818eb7cffa5c5f3fb46`](https://github.com/capawesome-team/capacitor-plugins/commit/c3c715e2031266251451c818eb7cffa5c5f3fb46) ([#448](https://github.com/capawesome-team/capacitor-plugins/pull/448)): feat(ios): add support for system symbols and assets from assets catalogue as icon
+
 ## 7.0.1
 
 ### Patch Changes
