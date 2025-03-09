@@ -10,8 +10,16 @@ Capacitor plugin to transcribe speech into text.
 - 🎙 **Events**: Listen for events like `start`, `end`, `speechStart`, `speechEnd`, `error`, `partialResults`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 7.x.x          | >=7.x.x           | Active support |
 
 ## Installation
 
@@ -124,23 +132,46 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`getLanguages()`](#getlanguages)
-* [`isAvailable()`](#isavailable)
-* [`isListening()`](#islistening)
-* [`startListening(...)`](#startlistening)
-* [`stopListening()`](#stoplistening)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('end', ...)`](#addlistenerend-)
-* [`addListener('error', ...)`](#addlistenererror-)
-* [`addListener('partialResult', ...)`](#addlistenerpartialresult-)
-* [`addListener('result', ...)`](#addlistenerresult-)
-* [`addListener('speechEnd', ...)`](#addlistenerspeechend-)
-* [`addListener('speechStart', ...)`](#addlistenerspeechstart-)
-* [`addListener('start', ...)`](#addlistenerstart-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [@capawesome-team/capacitor-speech-recognition](#capawesome-teamcapacitor-speech-recognition)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [iOS](#ios)
+      - [Privacy Descriptions](#privacy-descriptions)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [API](#api)
+    - [getLanguages()](#getlanguages)
+    - [isAvailable()](#isavailable)
+    - [isListening()](#islistening)
+    - [startListening(...)](#startlistening)
+    - [stopListening()](#stoplistening)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions(...)](#requestpermissions)
+    - [addListener('end', ...)](#addlistenerend-)
+    - [addListener('error', ...)](#addlistenererror-)
+    - [addListener('partialResult', ...)](#addlistenerpartialresult-)
+    - [addListener('result', ...)](#addlistenerresult-)
+    - [addListener('speechEnd', ...)](#addlistenerspeechend-)
+    - [addListener('speechStart', ...)](#addlistenerspeechstart-)
+    - [addListener('start', ...)](#addlistenerstart-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [GetLanguagesResult](#getlanguagesresult)
+      - [IsAvailableResult](#isavailableresult)
+      - [IsListeningResult](#islisteningresult)
+      - [StartListeningOptions](#startlisteningoptions)
+      - [PermissionStatus](#permissionstatus)
+      - [SpeechRecognitionPluginPermission](#speechrecognitionpluginpermission)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [ErrorEvent](#errorevent)
+      - [PartialResultEvent](#partialresultevent)
+      - [ResultEvent](#resultevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+      - [SpeechRecognitionPermissionType](#speechrecognitionpermissiontype)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
