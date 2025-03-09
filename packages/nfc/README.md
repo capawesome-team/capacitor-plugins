@@ -11,8 +11,17 @@ Capacitor plugin for reading and writing NFC tags.
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
 - 📚 **Documentation**: Comprehensive documentation to help you get started.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 5.x.x          | 5.x.x             | Deprecated     |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 7.x.x          | >=7.x.x           | Active support |
 
 ## Installation
 
@@ -246,32 +255,77 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`startScanSession(...)`](#startscansession)
-* [`stopScanSession(...)`](#stopscansession)
-* [`write(...)`](#write)
-* [`respond(...)`](#respond)
-* [`makeReadOnly()`](#makereadonly)
-* [`erase()`](#erase)
-* [`format()`](#format)
-* [`transceive(...)`](#transceive)
-* [`connect(...)`](#connect)
-* [`close()`](#close)
-* [`isSupported()`](#issupported)
-* [`isEnabled()`](#isenabled)
-* [`openSettings()`](#opensettings)
-* [`getAntennaInfo()`](#getantennainfo)
-* [`setAlertMessage(...)`](#setalertmessage)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`addListener('commandReceived', ...)`](#addlistenercommandreceived-)
-* [`addListener('nfcLinkDeactivated', ...)`](#addlistenernfclinkdeactivated-)
-* [`addListener('nfcTagScanned', ...)`](#addlistenernfctagscanned-)
-* [`addListener('scanSessionCanceled', ...)`](#addlistenerscansessioncanceled-)
-* [`addListener('scanSessionError', ...)`](#addlistenerscansessionerror-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-nfc](#capawesome-teamcapacitor-nfc)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+      - [Permissions](#permissions)
+      - [Intent Filter](#intent-filter)
+      - [Services](#services)
+    - [iOS](#ios)
+  - [Configuration](#configuration)
+  - [Demo](#demo)
+  - [Guides](#guides)
+  - [Usage](#usage)
+  - [API](#api)
+    - [startScanSession(...)](#startscansession)
+    - [stopScanSession(...)](#stopscansession)
+    - [write(...)](#write)
+    - [respond(...)](#respond)
+    - [makeReadOnly()](#makereadonly)
+    - [erase()](#erase)
+    - [format()](#format)
+    - [transceive(...)](#transceive)
+    - [connect(...)](#connect)
+    - [close()](#close)
+    - [isSupported()](#issupported)
+    - [isEnabled()](#isenabled)
+    - [openSettings()](#opensettings)
+    - [getAntennaInfo()](#getantennainfo)
+    - [setAlertMessage(...)](#setalertmessage)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions()](#requestpermissions)
+    - [addListener('commandReceived', ...)](#addlistenercommandreceived-)
+    - [addListener('nfcLinkDeactivated', ...)](#addlistenernfclinkdeactivated-)
+    - [addListener('nfcTagScanned', ...)](#addlistenernfctagscanned-)
+    - [addListener('scanSessionCanceled', ...)](#addlistenerscansessioncanceled-)
+    - [addListener('scanSessionError', ...)](#addlistenerscansessionerror-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [StartScanSessionOptions](#startscansessionoptions)
+      - [StopScanSessionOptions](#stopscansessionoptions)
+      - [WriteOptions](#writeoptions)
+      - [NdefMessage](#ndefmessage)
+      - [NdefRecord](#ndefrecord)
+      - [RespondOptions](#respondoptions)
+      - [TransceiveResult](#transceiveresult)
+      - [TransceiveOptions](#transceiveoptions)
+      - [ConnectOptions](#connectoptions)
+      - [IsSupportedResult](#issupportedresult)
+      - [IsEnabledResult](#isenabledresult)
+      - [GetAntennaInfoResult](#getantennainforesult)
+      - [Antenna](#antenna)
+      - [SetAlertMessageOptions](#setalertmessageoptions)
+      - [PermissionResult](#permissionresult)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [CommandReceivedEvent](#commandreceivedevent)
+      - [NfcLinkDeactivatedEvent](#nfclinkdeactivatedevent)
+      - [NfcTagScannedEvent](#nfctagscannedevent)
+      - [NfcTag](#nfctag)
+      - [ScanSessionErrorEvent](#scansessionerrorevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+    - [Enums](#enums)
+      - [NfcTagTechType](#nfctagtechtype)
+      - [PollingOption](#pollingoption)
+      - [TypeNameFormat](#typenameformat)
+      - [Iso15693RequestFlag](#iso15693requestflag)
+      - [DeactivationReason](#deactivationreason)
+      - [NfcTagType](#nfctagtype)
+  - [Utils](#utils)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
