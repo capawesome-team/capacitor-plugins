@@ -6,8 +6,16 @@ Capacitor plugin for compressing files.
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌅 **Compress Images**: Compress png, jpeg, and webp images.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 7.x.x          | >=7.x.x           | Active support |
 
 ## Installation
 
