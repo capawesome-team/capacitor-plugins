@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.1
+
+### Patch Changes
+
+- [`06ea44f774ba466c4ac07c0458ebd056a4a8cc13`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/06ea44f774ba466c4ac07c0458ebd056a4a8cc13): fix(ios): activate audio session before speaking
+
 ## 7.1.0
 
 ### Minor Changes
