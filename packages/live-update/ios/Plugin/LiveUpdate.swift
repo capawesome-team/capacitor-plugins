@@ -65,6 +65,7 @@ import CommonCrypto
         let artifactType = options.getArtifactType()
         let bundleId = options.getBundleId()
         let checksum = options.getChecksum()
+        let signature = options.getSignature()
         let url = options.getUrl()
 
         // Check if the bundle already exists
@@ -76,13 +77,13 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: bundleId, url: url)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum)
+            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum, signature: signature)
         }
     }
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
-        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, downloadUrl: response?.url)
+        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, downloadUrl: response?.url, signature: response?.signature)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
@@ -223,6 +224,8 @@ import CommonCrypto
         }
         let artifactType = response.artifactType
         let latestBundleId = response.bundleId
+        let checksum = response.checksum
+        let signature = response.signature
         let downloadUrl = response.url
         // Check if bundle already exists
         if hasBundle(bundleId: latestBundleId) {
@@ -239,7 +242,7 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: latestBundleId, url: downloadUrl)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: nil)
+            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: checksum, signature: signature)
         }
         // Set the next bundle
         setNextBundle(bundleId: latestBundleId)
@@ -363,7 +366,7 @@ import CommonCrypto
         }
     }
 
-    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?) async throws {
+    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?, signature: String?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
@@ -381,8 +384,8 @@ import CommonCrypto
         guard let response = result.response else {
             throw CustomError.unknown
         }
-        let checksum = checksum == nil ? LiveUpdateHttpClient.getChecksumFromResponse(response: response) : checksum
-        let signature = LiveUpdateHttpClient.getSignatureFromResponse(response: response)
+        let checksum = checksum ?? LiveUpdateHttpClient.getChecksumFromResponse(response: response)
+        let signature = signature ?? LiveUpdateHttpClient.getSignatureFromResponse(response: response)
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
 
@@ -393,7 +396,7 @@ import CommonCrypto
         var urlComponents = URLComponents(string: baseUrl)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = urlComponents.string!
-        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil)
+        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil, signature: nil)
         return fileURL
     }
 
@@ -434,11 +437,11 @@ import CommonCrypto
         try await addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
     }
 
-    private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?) async throws {
+    private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?, signature: String?) async throws {
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         // Download the bundle
-        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum)
+        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum, signature: signature)
         // Add the bundle
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }

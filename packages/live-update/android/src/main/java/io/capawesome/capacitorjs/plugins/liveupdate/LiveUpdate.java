@@ -130,6 +130,7 @@ public class LiveUpdate {
         ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
         String checksum = options.getChecksum();
+        String signature = options.getSignature();
         String url = options.getUrl();
 
         // Check if the bundle already exists
@@ -143,7 +144,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(bundleId, url);
         } else {
-            downloadBundleOfTypeZip(bundleId, url, checksum);
+            downloadBundleOfTypeZip(bundleId, url, checksum, signature);
         }
         callback.success();
     }
@@ -152,8 +153,10 @@ public class LiveUpdate {
         GetLatestBundleResponse response = fetchLatestBundle(options);
         ArtifactType artifactType = response == null ? null : response.getArtifactType();
         String bundleId = response == null ? null : response.getBundleId();
+        String checksum = response == null ? null : response.getChecksum();
         String downloadUrl = response == null ? null : response.getUrl();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, downloadUrl);
+        String signature = response == null ? null : response.getSignature();
+        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, checksum, downloadUrl, signature);
         callback.success(result);
     }
 
@@ -296,6 +299,8 @@ public class LiveUpdate {
             return;
         }
         ArtifactType artifactType = response.getArtifactType();
+        String checksum = response.getChecksum();
+        String signature = response.getSignature();
         String latestBundleId = response.getBundleId();
         String url = response.getUrl();
         // Check if the bundle already exists
@@ -315,7 +320,7 @@ public class LiveUpdate {
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(latestBundleId, url);
         } else {
-            downloadBundleOfTypeZip(latestBundleId, url, null);
+            downloadBundleOfTypeZip(latestBundleId, url, checksum, signature);
         }
         // Set the next bundle
         setNextBundle(latestBundleId);
@@ -475,14 +480,15 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum) throws Exception {
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum, @Nullable String signature)
+        throws Exception {
         Response response = httpClient.execute(url);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
             // Verify the file
             checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
-            String signature = LiveUpdateHttpClient.getSignatureFromResponse(response);
+            signature = signature == null ? LiveUpdateHttpClient.getSignatureFromResponse(response) : signature;
             verifyFile(file, checksum, signature);
         } else {
             Exception exception = new Exception(responseBody.string());
@@ -498,7 +504,7 @@ public class LiveUpdate {
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile, null);
+        downloadAndVerifyFile(url, destinationFile, null, null);
         return destinationFile;
     }
 
@@ -580,11 +586,15 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl, @Nullable String checksum)
-        throws Exception {
+    private void downloadBundleOfTypeZip(
+        @NonNull String bundleId,
+        @NonNull String downloadUrl,
+        @Nullable String checksum,
+        @Nullable String signature
+    ) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file, checksum);
+        downloadAndVerifyFile(downloadUrl, file, checksum, signature);
         // Add the bundle
         addBundleOfTypeZip(bundleId, file);
         // Delete the temporary file

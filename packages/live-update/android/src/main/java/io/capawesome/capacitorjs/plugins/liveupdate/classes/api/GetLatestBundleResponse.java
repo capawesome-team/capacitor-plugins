@@ -16,6 +16,12 @@ public class GetLatestBundleResponse {
     @NonNull
     private String bundleId;
 
+    @Nullable
+    private String checksum;
+
+    @Nullable
+    private String signature;
+
     @NonNull
     private String url;
 
@@ -27,6 +33,8 @@ public class GetLatestBundleResponse {
             this.artifactType = ArtifactType.ZIP;
         }
         this.bundleId = responseJson.optString("bundleId");
+        this.checksum = responseJson.optString("checksum");
+        this.signature = responseJson.optString("signature");
         this.url = responseJson.optString("url");
     }
 
@@ -38,6 +46,16 @@ public class GetLatestBundleResponse {
     @NonNull
     public String getBundleId() {
         return bundleId;
+    }
+
+    @Nullable
+    public String getChecksum() {
+        return checksum;
+    }
+
+    @Nullable
+    public String getSignature() {
+        return signature;
     }
 
     @NonNull
