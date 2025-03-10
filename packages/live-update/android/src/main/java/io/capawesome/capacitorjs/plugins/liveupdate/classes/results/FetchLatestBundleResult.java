@@ -24,7 +24,13 @@ public class FetchLatestBundleResult implements Result {
     @Nullable
     private final String signature;
 
-    public FetchLatestBundleResult(@Nullable ArtifactType artifactType, @Nullable String bundleId, @Nullable String checksum, @Nullable String downloadUrl, @Nullable String signature) {
+    public FetchLatestBundleResult(
+        @Nullable ArtifactType artifactType,
+        @Nullable String bundleId,
+        @Nullable String checksum,
+        @Nullable String downloadUrl,
+        @Nullable String signature
+    ) {
         this.artifactType = artifactType;
         this.bundleId = bundleId;
         this.checksum = checksum;

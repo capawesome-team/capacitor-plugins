@@ -290,7 +290,7 @@ export interface DownloadBundleOptions {
   /**
    * The checksum of the self-hosted bundle as a SHA-256 hash
    * in base64 format to verify the integrity of the bundle.
-   * 
+   *
    * **Attention**: Only supported for the `zip` artifact type.
    *
    * @since 6.1.0
@@ -299,9 +299,9 @@ export interface DownloadBundleOptions {
   /**
    * The signature of the self-hosted bundle as a signed SHA-256 hash
    * in base64 format to verify the integrity of the bundle.
-   * 
+   *
    * **Attention**: Only supported for the `zip` artifact type.
-   * 
+   *
    * @since 6.8.0
    */
   signature?: string;

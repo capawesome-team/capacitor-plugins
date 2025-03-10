@@ -13,7 +13,7 @@ public class LiveUpdatePreferences: NSObject {
     public func getCustomId() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: customIdKey))
     }
-    
+
     public func getLastBundleShortVersionString() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: lastBundleShortVersionStringKey))
     }
@@ -35,7 +35,7 @@ public class LiveUpdatePreferences: NSObject {
         UserDefaults.standard.set(value, forKey: applyPrefix(to: customIdKey))
         UserDefaults.standard.synchronize()
     }
-    
+
     public func setLastBundleShortVersionString(_ value: String?) {
         if let value = value {
             UserDefaults.standard.set(value, forKey: applyPrefix(to: lastBundleShortVersionStringKey))

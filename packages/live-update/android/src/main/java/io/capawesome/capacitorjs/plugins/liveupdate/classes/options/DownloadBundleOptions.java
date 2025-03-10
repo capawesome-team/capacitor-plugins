@@ -21,7 +21,13 @@ public class DownloadBundleOptions {
     @NonNull
     private String url;
 
-    public DownloadBundleOptions(@NonNull String artifactType, @NonNull String bundleId, @Nullable String checksum, @Nullable String signature, @NonNull String url) {
+    public DownloadBundleOptions(
+        @NonNull String artifactType,
+        @NonNull String bundleId,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull String url
+    ) {
         if (artifactType.equals("manifest")) {
             this.artifactType = ArtifactType.MANIFEST;
         } else {

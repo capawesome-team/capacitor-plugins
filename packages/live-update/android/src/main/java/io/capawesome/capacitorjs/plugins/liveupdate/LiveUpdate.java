@@ -480,7 +480,8 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum, @Nullable String signature) throws Exception {
+    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum, @Nullable String signature)
+        throws Exception {
         Response response = httpClient.execute(url);
         ResponseBody responseBody = response.body();
         if (response.isSuccessful()) {
@@ -585,8 +586,12 @@ public class LiveUpdate {
         addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
-    private void downloadBundleOfTypeZip(@NonNull String bundleId, @NonNull String downloadUrl, @Nullable String checksum, @Nullable String signature)
-        throws Exception {
+    private void downloadBundleOfTypeZip(
+        @NonNull String bundleId,
+        @NonNull String downloadUrl,
+        @Nullable String checksum,
+        @Nullable String signature
+    ) throws Exception {
         File file = buildTemporaryZipFile();
         // Download the bundle
         downloadAndVerifyFile(downloadUrl, file, checksum, signature);
