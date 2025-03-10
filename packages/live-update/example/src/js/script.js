@@ -47,11 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#download-bundle-button').addEventListener('click', async () => {
     const artifactType = document.querySelector('#artifact-type-select').value;
     const bundleId = document.querySelector('#bundle-id-input').value;
+    const checksum = document.querySelector('#checksum-input').value;
+    const signature = document.querySelector('#signature-input').value;
     const downloadUrl = document.querySelector('#download-url-input').value;
     if (!bundleId || !downloadUrl) {
       return;
     }
-    await LiveUpdate.downloadBundle({ artifactType, bundleId, url: downloadUrl });
+    await LiveUpdate.downloadBundle({
+      artifactType,
+      bundleId,
+      checksum,
+      signature,
+      url: downloadUrl,
+    });
   });
   document.querySelector('#fetch-latest-bundle-button').addEventListener('click', async () => {
     const channel = document.querySelector('#channel-input').value;
@@ -60,10 +68,40 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelector('#artifact-type-select').value = result.artifactType || '';
     document.querySelector('#bundle-id-input').value = result.bundleId || '';
+    document.querySelector('#checksum-input').value = result.checksum;
+    document.querySelector('#signature-input').value = result.signature;
     document.querySelector('#download-url-input').value = result.downloadUrl || '';
   });
   document.querySelector('#get-bundles-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getBundles();
+    console.log(result);
+  });
+  document.querySelector('#get-channel-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getChannel();
+    console.log(result);
+  });
+  document.querySelector('#get-current-bundle-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getCurrentBundle();
+    console.log(result);
+  });
+  document.querySelector('#get-custom-id-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getCustomId();
+    console.log(result);
+  });
+  document.querySelector('#get-device-id-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getDeviceId();
+    console.log(result);
+  });
+  document.querySelector('#get-next-bundle-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getNextBundle();
+    console.log(result);
+  });
+  document.querySelector('#get-version-code-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getVersionCode();
+    console.log(result);
+  });
+  document.querySelector('#get-version-name-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getVersionName();
     console.log(result);
   });
   document.querySelector('#ready-button').addEventListener('click', async () => {

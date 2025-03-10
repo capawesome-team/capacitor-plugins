@@ -2,7 +2,7 @@
 
 ## 6.8.0
 
--[``](): feat: support code signing for self-hosted bundles
+- [#451](https://github.com/capawesome-team/capacitor-plugins/pull/451): feat: support code signing for self-hosted bundles
 
 ## 6.7.2
 
