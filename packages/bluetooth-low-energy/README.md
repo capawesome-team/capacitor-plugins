@@ -106,6 +106,14 @@ public class BluetoothLowEnergyHeadlessTask {
 }
 ```
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 ### iOS
 
 Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
