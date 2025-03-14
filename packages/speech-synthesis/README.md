@@ -11,6 +11,7 @@ Capacitor plugin for synthesizing speech from text.
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🎤 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
+- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
@@ -40,6 +41,16 @@ Next, install the package:
 ```
 npm install @capawesome-team/capacitor-speech-synthesis
 npx cap sync
+```
+
+### Android
+
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
 
 ## Configuration
