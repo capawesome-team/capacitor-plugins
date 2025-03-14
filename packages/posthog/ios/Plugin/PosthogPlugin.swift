@@ -77,16 +77,16 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func getFeatureFlagPayload(_ call: CAPPluginCall) {
-            do {
-                let options = try GetFeatureFlagPayloadOptions(call: call)
-                let result = implementation?.getFeatureFlagPayload(options)
-                if let result = result?.toJSObject() as? JSObject {
-                    self.resolveCall(call, result)
-                }
-            } catch let error {
-                rejectCall(call, error)
+        do {
+            let options = try GetFeatureFlagPayloadOptions(call: call)
+            let result = implementation?.getFeatureFlagPayload(options)
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
             }
+        } catch let error {
+            rejectCall(call, error)
         }
+    }
 
     @objc func group(_ call: CAPPluginCall) {
         guard let type = call.getString("type") else {
