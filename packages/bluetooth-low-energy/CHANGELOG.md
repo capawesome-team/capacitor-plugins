@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.5
+
+### Patch Changes
+
+- [`a6a52740acfbf438e965429772386ace6ceda714`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a6a52740acfbf438e965429772386ace6ceda714): fix(android): `type` in `WriteCharacteristicOptions` was ignored
+
 ## 7.0.4
 
 ### Patch Changes
