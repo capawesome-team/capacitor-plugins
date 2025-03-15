@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`06c5318c6d476bb3a434ce076ff970fca137ec3e`](https://github.com/capawesome-team/capacitor-plugins/commit/06c5318c6d476bb3a434ce076ff970fca137ec3e) ([#445](https://github.com/capawesome-team/capacitor-plugins/pull/445)): feat: add `getFeatureFlagPayload(...)` method
+
 ## 7.0.1
 
 ### Patch Changes
