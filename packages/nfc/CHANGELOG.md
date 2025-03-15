@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.3
+
+### Patch Changes
+
+- [`9c4046836cac1019d89e0bcac3961e7de18ddfb7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9c4046836cac1019d89e0bcac3961e7de18ddfb7) ([#78](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/78)): fix(ios): do not throw `NDEF tag does not contain any NDEF message` error
+
 ## 7.0.2
 
 ### Patch Changes
