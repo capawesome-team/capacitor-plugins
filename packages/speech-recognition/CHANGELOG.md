@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`247d50e9896cd3494755dd3d17231b10d964c709`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/247d50e9896cd3494755dd3d17231b10d964c709) ([#82](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/82)): feat: support contextual strings
+
 ## 7.2.0
 
 ### Minor Changes
