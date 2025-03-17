@@ -10,6 +10,7 @@ Capacitor plugin to transcribe speech into text.
 - 🎙 **Events**: Listen for events like `start`, `end`, `speechStart`, `speechEnd`, `error`, `partialResults`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
+- 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
 - 🤝 **Compatibility**: Compatible with the [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -469,12 +470,13 @@ Remove all listeners for this plugin.
 
 #### StartListeningOptions
 
-| Prop                               | Type                                                                  | Description                                                                                                            | Default                                  | Since |
-| ---------------------------------- | --------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----- |
-| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                       | <code>AudioSessionCategory.Record</code> | 7.2.0 |
-| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                  | <code>true</code>                        | 7.2.0 |
-| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                 |                                          | 6.0.0 |
-| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS. | <code>2000</code>                        | 6.0.0 |
+| Prop                               | Type                                                                  | Description                                                                                                                                | Default                                  | Since |
+| ---------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ----- |
+| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                           | <code>AudioSessionCategory.Record</code> | 7.2.0 |
+| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS. |                                          | 7.3.0 |
+| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                      | <code>true</code>                        | 7.2.0 |
+| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                     |                                          | 6.0.0 |
+| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS.                     | <code>2000</code>                        | 6.0.0 |
 
 
 #### StopListeningOptions
