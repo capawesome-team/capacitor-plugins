@@ -9,6 +9,49 @@ npm install @capawesome/capacitor-app-shortcuts
 npx cap sync
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop            | Type                    | Description                                                                                 | Since |
+| --------------- | ----------------------- | ------------------------------------------------------------------------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | The list of app shortcuts that should be set by default. Only available on Android and iOS. | 7.2.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "AppShortcuts": {
+      "shortcuts": [{ id: 'feedback', title: 'Feedback' }]
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-app-shortcuts" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    AppShortcuts: {
+      shortcuts: [{ id: 'feedback', title: 'Feedback' }],
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ### iOS
 
 On iOS, you must add the following to your app's `AppDelegate.swift`:
