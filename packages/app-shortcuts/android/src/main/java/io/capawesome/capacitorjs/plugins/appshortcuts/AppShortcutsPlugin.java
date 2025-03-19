@@ -10,14 +10,14 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import io.capawesome.capacitorjs.plugins.appshortcuts.classes.events.ClickEvent;
 import io.capawesome.capacitorjs.plugins.appshortcuts.classes.options.SetOptions;
 import io.capawesome.capacitorjs.plugins.appshortcuts.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcuts.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.appshortcuts.interfaces.Result;
 import java.util.Objects;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "AppShortcuts")
 public class AppShortcutsPlugin extends Plugin {
@@ -134,16 +134,16 @@ public class AppShortcutsPlugin extends Plugin {
     private AppShortcutsConfig getAppShortcutsConfig() {
         AppShortcutsConfig config = new AppShortcutsConfig();
         JSONObject configJSON = getConfig().getConfigJSON();
-      try {
-          JSONArray shortcutsJSON = configJSON.getJSONArray("shortcuts");
-          JSArray shortcuts = new JSArray();
-          for (int i = 0; i < shortcutsJSON.length(); i++) {
-              shortcuts.put(shortcutsJSON.get(i));
-          }
-          config.setShortcuts(AppShortcutsHelper.createShortcutInfoCompatList(shortcuts, getContext(), getBridge()));
-      } catch (Exception e) {
+        try {
+            JSONArray shortcutsJSON = configJSON.getJSONArray("shortcuts");
+            JSArray shortcuts = new JSArray();
+            for (int i = 0; i < shortcutsJSON.length(); i++) {
+                shortcuts.put(shortcutsJSON.get(i));
+            }
+            config.setShortcuts(AppShortcutsHelper.createShortcutInfoCompatList(shortcuts, getContext(), getBridge()));
+        } catch (Exception e) {
+            return config;
+        }
         return config;
-      }
-      return config;
     }
 }

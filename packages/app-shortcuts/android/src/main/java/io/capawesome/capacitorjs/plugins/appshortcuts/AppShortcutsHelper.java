@@ -28,7 +28,8 @@ public class AppShortcutsHelper {
     }
 
     @NonNull
-    public static List<ShortcutInfoCompat> createShortcutInfoCompatList(JSArray shortcuts, Context context, Bridge bridge) throws Exception {
+    public static List<ShortcutInfoCompat> createShortcutInfoCompatList(JSArray shortcuts, Context context, Bridge bridge)
+        throws Exception {
         ArrayList<ShortcutInfoCompat> shortcutInfoCompatList = new ArrayList<>();
         List<JSONObject> shortcutsList = shortcuts.toList();
         for (JSONObject shortcut : shortcutsList) {
