@@ -2,6 +2,16 @@ import Foundation
 import UIKit
 
 @objc public class AppShortcuts: NSObject {
+    let config: AppShortcutsConfig
+
+    public init(_ config: AppShortcutsConfig) {
+        self.config = config
+        super.init()
+        if let configShortcuts = self.config.shortcuts {
+            self.set(shortcuts: configShortcuts, completion: { _ in })
+        }
+    }
+
     @objc public func get(completion: @escaping (Result) -> Void) {
         let application = UIApplication.shared
 

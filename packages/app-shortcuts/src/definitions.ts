@@ -1,4 +1,22 @@
+/// <reference types="@capacitor/cli" />
+
 import type { PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    AppShortcuts?: {
+      /**
+       * The list of app shortcuts that should be set by default.
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.2.0
+       * @example [{ id: 'feedback', title: 'Feedback' }]
+       */
+      shortcuts?: Shortcut[];
+    };
+  }
+}
 
 export interface AppShortcutsPlugin {
   /**
