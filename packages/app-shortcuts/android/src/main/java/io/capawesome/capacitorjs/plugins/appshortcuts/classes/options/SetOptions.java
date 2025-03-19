@@ -24,47 +24,11 @@ public class SetOptions {
         if (shortcuts == null) {
             throw new Exception(AppShortcutsPlugin.ERROR_SHORTCUTS_MISSING);
         }
-        this.shortcuts = this.createShortcutInfoCompatList(shortcuts, context, bridge);
+        this.shortcuts = AppShortcutsHelper.createShortcutInfoCompatList(shortcuts, context, bridge);
     }
 
     @NonNull
     public List<ShortcutInfoCompat> getShortcuts() {
         return shortcuts;
-    }
-
-    private List<ShortcutInfoCompat> createShortcutInfoCompatList(JSArray shortcuts, Context context, Bridge bridge) throws Exception {
-        ArrayList<ShortcutInfoCompat> shortcutInfoCompatList = new ArrayList<>();
-        List<JSONObject> shortcutsList = shortcuts.toList();
-        for (JSONObject shortcut : shortcutsList) {
-            HashMap<String, Object> shortcutMap = AppShortcutsHelper.createHashMapFromJSONObject(shortcut);
-            Object id = shortcutMap.get("id");
-            if (id == null) {
-                throw new Exception(AppShortcutsPlugin.ERROR_ID_MISSING);
-            }
-            Object title = shortcutMap.get("title");
-            if (title == null) {
-                throw new Exception(AppShortcutsPlugin.ERROR_TITLE_MISSING);
-            }
-            String description = (String) shortcutMap.get("description");
-            Object icon = shortcutMap.get("icon");
-
-            ShortcutInfoCompat.Builder shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, (String) id);
-            shortcutInfoCompat.setShortLabel((String) title);
-            if (description != null) {
-                shortcutInfoCompat.setLongLabel(description);
-            }
-            shortcutInfoCompat.setIntent(
-                new Intent(Intent.ACTION_VIEW, bridge.getIntentUri(), bridge.getContext(), bridge.getActivity().getClass()).putExtra(
-                    AppShortcutsPlugin.INTENT_EXTRA_ITEM_NAME,
-                    (String) id
-                )
-            );
-            if (icon != null) {
-                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));
-            }
-
-            shortcutInfoCompatList.add(shortcutInfoCompat.build());
-        }
-        return shortcutInfoCompatList;
     }
 }
