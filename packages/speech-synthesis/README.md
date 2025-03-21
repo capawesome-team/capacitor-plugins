@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-speech-synthesis
 
-Capacitor plugin for synthesizing speech from text.
+Capacitor plugin for synthesizing speech from text (also known as text-to-speech).
 
 ## Features
 
