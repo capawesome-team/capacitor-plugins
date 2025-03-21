@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.4
+
+### Patch Changes
+
+- [`34f00cd7b4969c309778bf7093986fb4c7295d2f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/34f00cd7b4969c309778bf7093986fb4c7295d2f) ([#97](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/97)): fix(ios): non-NDEF formatted tags could not be read
+
 ## 7.0.3
 
 ### Patch Changes
