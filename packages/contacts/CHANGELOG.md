@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- [`d0f9edc89803f71635a113cfa306db99834b3410`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d0f9edc89803f71635a113cfa306db99834b3410): fix(android): calls to the `createContact(...)` method were never resolved if no permission was granted
+
 ## 7.0.0
 
 ### Major Changes
