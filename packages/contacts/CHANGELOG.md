@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`50c2176a1489736dd04776aa78ce57ec067d6398`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/50c2176a1489736dd04776aa78ce57ec067d6398) ([#99](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/99)): feat: add `fields` option
+
 ## 7.0.1
 
 ### Patch Changes
