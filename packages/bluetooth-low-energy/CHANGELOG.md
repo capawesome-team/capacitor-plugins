@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`cb22e50c95adfedbd5b5891b58c3ca40c03a0560`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb22e50c95adfedbd5b5891b58c3ca40c03a0560) ([#85](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/85)): feat(android): add `autoConnect` option
+
+### Patch Changes
+
+- [`cb22e50c95adfedbd5b5891b58c3ca40c03a0560`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb22e50c95adfedbd5b5891b58c3ca40c03a0560) ([#85](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/85)): fix: `deviceId` in `deviceDisconnected` event was undefined
+
 ## 7.0.6
 
 ### Patch Changes
