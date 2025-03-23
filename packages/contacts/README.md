@@ -71,6 +71,12 @@ Add the `NSContactsUsageDescription` key to the `ios/App/App/Info.plist` file, w
 <string>We need access to your contacts to display them in the app.</string>
 ```
 
+#### Entitlements
+
+To access the `note` field of a contact, your app must have the `com.apple.developer.contacts.notes` entitlement. Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.contacts.notes) for more information.
+
+If you don't need access to the `note` field, you can skip this step.
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -154,7 +160,7 @@ const requestPermissions = async () => {
 * [`createContact(...)`](#createcontact)
 * [`deleteContactById(...)`](#deletecontactbyid)
 * [`getContactById(...)`](#getcontactbyid)
-* [`getContacts()`](#getcontacts)
+* [`getContacts(...)`](#getcontacts)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
 * [`checkPermissions()`](#checkpermissions)
@@ -229,15 +235,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### getContacts()
+### getContacts(...)
 
 ```typescript
-getContacts() => Promise<GetContactsResult>
+getContacts(options?: GetContactsOptions | undefined) => Promise<GetContactsResult>
 ```
 
 List all contacts on the device.
 
 Only available on Android and iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#getcontactsoptions">GetContactsOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#getcontactsresult">GetContactsResult</a>&gt;</code>
 
@@ -418,9 +428,10 @@ Only available on Android and iOS.
 
 #### GetContactByIdOptions
 
-| Prop     | Type                | Description                     | Since |
-| -------- | ------------------- | ------------------------------- | ----- |
-| **`id`** | <code>string</code> | The identifier for the contact. | 7.0.0 |
+| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
+| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| **`id`**     | <code>string</code>                                   | The identifier for the contact.       |                                                                                                                                                                                               | 7.0.0 |
 
 
 #### GetContactsResult
@@ -428,6 +439,13 @@ Only available on Android and iOS.
 | Prop           | Type                   | Description                                                                                       | Since |
 | -------------- | ---------------------- | ------------------------------------------------------------------------------------------------- | ----- |
 | **`contacts`** | <code>Contact[]</code> | The list of contacts on the device. **Note**: No photos are returned to avoid performance issues. | 7.0.0 |
+
+
+#### GetContactsOptions
+
+| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
+| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
 
 
 #### IsSupportedResult
@@ -488,6 +506,11 @@ From T, pick a set of properties whose keys are in the union K
 <a href="#exclude">Exclude</a> from T those types that are assignable to U
 
 <code>T extends U ? never : T</code>
+
+
+#### ContactField
+
+<code>keyof <a href="#contact">Contact</a></code>
 
 
 #### ContactsPermissionState
