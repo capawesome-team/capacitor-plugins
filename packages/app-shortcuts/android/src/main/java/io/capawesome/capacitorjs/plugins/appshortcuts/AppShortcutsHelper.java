@@ -43,7 +43,9 @@ public class AppShortcutsHelper {
                 throw new Exception(AppShortcutsPlugin.ERROR_TITLE_MISSING);
             }
             String description = (String) shortcutMap.get("description");
-            Object icon = shortcutMap.get("icon");
+            Object icon = shortcutMap.get("icon");  // deprecated
+            Object androidIcon = shortcutMap.get("androidIcon");
+
 
             ShortcutInfoCompat.Builder shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, (String) id);
             shortcutInfoCompat.setShortLabel((String) title);
@@ -56,7 +58,9 @@ public class AppShortcutsHelper {
                     (String) id
                 )
             );
-            if (icon != null) {
+            if (androidIcon != null) {
+                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
+            } else if (icon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));
             }
 
