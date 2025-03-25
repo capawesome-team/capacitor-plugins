@@ -10,18 +10,34 @@ public class AppShortcutsPluginHelper {
                 throw CustomError.titleMissing
             }
             let description = shortcut["description"] as? String
+            let iosIconInt = shortcut["iosIcon"] as? Int
+            let iosIconString = shortcut["iosIcon"] as? String
             let iconInt = shortcut["icon"] as? Int
             let iconString = shortcut["icon"] as? String
 
-            var icon: UIApplicationShortcutIcon?
+            let icon: UIApplicationShortcutIcon? = {
+                if let iosIconString = shortcut["iosIcon"] as? String {
+                    return UIImage(systemName: iosIconString) != nil
+                        ? UIApplicationShortcutIcon(systemImageName: iosIconString)
+                        : UIApplicationShortcutIcon(templateImageName: iosIconString)
+                }
 
-            if let iconString = iconString {
-                icon = UIImage(systemName: iconString) != nil
-                    ? UIApplicationShortcutIcon(systemImageName: iconString)
-                    : UIApplicationShortcutIcon(templateImageName: iconString)
-            } else if let iconInt = iconInt, let iconType = UIApplicationShortcutIcon.IconType(rawValue: iconInt) {
-                icon = UIApplicationShortcutIcon(type: iconType)
-            }
+                if let iosIconInt = shortcut["iosIcon"] as? Int, let iconType = UIApplicationShortcutIcon.IconType(rawValue: iosIconInt) {
+                    return UIApplicationShortcutIcon(type: iconType)
+                }
+
+                if let iconString = shortcut["icon"] as? String {
+                    return UIImage(systemName: iconString) != nil
+                        ? UIApplicationShortcutIcon(systemImageName: iconString)
+                        : UIApplicationShortcutIcon(templateImageName: iconString)
+                }
+
+                if let iconInt = shortcut["icon"] as? Int, let iconType = UIApplicationShortcutIcon.IconType(rawValue: iconInt) {
+                    return UIApplicationShortcutIcon(type: iconType)
+                }
+
+                return nil
+            }()
 
             return UIApplicationShortcutItem(
                 type: type,

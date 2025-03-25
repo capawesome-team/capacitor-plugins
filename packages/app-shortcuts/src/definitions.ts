@@ -134,7 +134,7 @@ export interface Shortcut {
    *
    * The icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
    *
-   * @since 7.3.0
+   * @since 7.2.0
    * @example 17301547
    */
   androidIcon?: number;
@@ -146,7 +146,7 @@ export interface Shortcut {
    * - A system symbol name (e.g. `star.fill`).
    * - Name of the image asset from the asset catalogue.
    *
-   * @since 7.3.0
+   * @since 7.2.0
    * @example 6
    * @example "star.fill"
    */
