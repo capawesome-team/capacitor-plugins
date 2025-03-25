@@ -123,11 +123,34 @@ export interface Shortcut {
    * - Name of the image asset from the asset catalogue.
    *
    * @since 6.1.0
+   * @deprecated If provided, the icon will fall back to this property if `androidIcon` or `iosIcon` are not set.
    * @example 17301547
    * @example 6
    * @example "star.fill"
    */
   icon?: number | string;
+  /**
+   * The icon to display on Android.
+   *
+   * The icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   *
+   * @since 7.3.0
+   * @example 17301547
+   */
+  androidIcon?: number;
+  /**
+   * The icon to display on iOS.
+   *
+   * The icon can be one of the following:
+   * - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`).
+   * - A system symbol name (e.g. `star.fill`).
+   * - Name of the image asset from the asset catalogue.
+   *
+   * @since 7.3.0
+   * @example 6
+   * @example "star.fill"
+   */
+  iosIcon?: number | string;
 }
 
 /**
