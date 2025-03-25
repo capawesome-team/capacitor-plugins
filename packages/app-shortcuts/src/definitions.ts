@@ -123,7 +123,7 @@ export interface Shortcut {
    * - Name of the image asset from the asset catalogue.
    *
    * @since 6.1.0
-   * @deprecated If provided, the icon will fall back to this property if `androidIcon` or `iosIcon` are not set.
+   * @deprecated Use `androidIcon` and `iosIcon` instead.
    * @example 17301547
    * @example 6
    * @example "star.fill"
