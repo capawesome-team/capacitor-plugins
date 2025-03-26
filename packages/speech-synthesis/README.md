@@ -10,8 +10,8 @@ Capacitor plugin for synthesizing speech from text (also known as text-to-speech
 - 🎚️ **Customization**: Customize the pitch, rate, volume and voice of the speech.
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
-- 🎤 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
-- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
