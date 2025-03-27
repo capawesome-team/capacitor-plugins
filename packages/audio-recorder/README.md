@@ -76,7 +76,6 @@ No configuration required for this plugin.
 
 ```typescript
 import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
-import { Capacitor } from '@capacitor/core';
 import { NativeAudio } from '@capacitor-community/native-audio';
 
 const cancelRecording = async () => {
@@ -147,19 +146,41 @@ const addRecordingStoppedListener = async () => {
 
 <docgen-index>
 
-* [`cancelRecording()`](#cancelrecording)
-* [`getRecordingStatus()`](#getrecordingstatus)
-* [`pauseRecording()`](#pauserecording)
-* [`resumeRecording()`](#resumerecording)
-* [`startRecording()`](#startrecording)
-* [`stopRecording()`](#stoprecording)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
-* [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-audio-recorder](#capawesome-teamcapacitor-audio-recorder)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+      - [Permissions](#permissions)
+      - [Proguard](#proguard)
+    - [iOS](#ios)
+      - [Privacy Descriptions](#privacy-descriptions)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [API](#api)
+    - [cancelRecording()](#cancelrecording)
+    - [getRecordingStatus()](#getrecordingstatus)
+    - [pauseRecording()](#pauserecording)
+    - [resumeRecording()](#resumerecording)
+    - [startRecording()](#startrecording)
+    - [stopRecording()](#stoprecording)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions()](#requestpermissions)
+    - [addListener('recordingError', ...)](#addlistenerrecordingerror-)
+    - [addListener('recordingStopped', ...)](#addlistenerrecordingstopped-)
+    - [Interfaces](#interfaces)
+      - [GetRecordingStatusResult](#getrecordingstatusresult)
+      - [StopRecordingResult](#stoprecordingresult)
+      - [PermissionStatus](#permissionstatus)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [RecordingErrorEvent](#recordingerrorevent)
+      - [RecordingStoppedEvent](#recordingstoppedevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+    - [Enums](#enums)
+      - [RecordingStatus](#recordingstatus)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 
