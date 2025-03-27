@@ -8,7 +8,6 @@ Capacitor plugin for audio recording using the device's microphone.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError` or `recordingStopped`.
-- 🎚️ **Audio Metrics**: Access the decibels full-scale (dBFS) in real-time.
 - 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
