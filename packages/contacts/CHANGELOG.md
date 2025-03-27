@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`d03690c844b942225bf4e8472c9f774ae3e50a63`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d03690c844b942225bf4e8472c9f774ae3e50a63) ([#110](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/110)): feat: add `displayCreateContact(...)` method
+
 ## 7.1.0
 
 ### Minor Changes
