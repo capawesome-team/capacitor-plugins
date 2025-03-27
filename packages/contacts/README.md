@@ -161,6 +161,7 @@ const requestPermissions = async () => {
 
 * [`createContact(...)`](#createcontact)
 * [`deleteContactById(...)`](#deletecontactbyid)
+* [`displayCreateContact(...)`](#displaycreatecontact)
 * [`getContactById(...)`](#getcontactbyid)
 * [`getContacts(...)`](#getcontacts)
 * [`isSupported()`](#issupported)
@@ -212,6 +213,25 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#deletecontactbyidoptions">DeleteContactByIdOptions</a></code> |
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### displayCreateContact(...)
+
+```typescript
+displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promise<void>
+```
+
+Open a native modal to create a new device contact.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#displaycreatecontactoptions">DisplayCreateContactOptions</a></code> |
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -394,9 +414,9 @@ Only available on Android and iOS.
 
 | Prop                 | Type                                                            | Description                                                                                                                                                                              | Default                              | Since |
 | -------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----- |
-| **`city`**           | <code>string</code>                                             |                                                                                                                                                                                          |                                      |       |
-| **`country`**        | <code>string</code>                                             |                                                                                                                                                                                          |                                      |       |
-| **`formatted`**      | <code>string</code>                                             | The formatted postal address. **Note:** This property can not be set. It is only available when reading contacts.                                                                        |                                      | 7.0.0 |
+| **`city`**           | <code>string</code>                                             | The city for the postal address.                                                                                                                                                         |                                      | 7.0.0 |
+| **`country`**        | <code>string</code>                                             | The country for the postal address.                                                                                                                                                      |                                      | 7.0.0 |
+| **`formatted`**      | <code>string</code>                                             | The formatted postal address.                                                                                                                                                            |                                      | 7.0.0 |
 | **`isoCountryCode`** | <code>string</code>                                             | The ISO country code for the postal address. Only available on iOS.                                                                                                                      |                                      | 7.0.0 |
 | **`isPrimary`**      | <code>boolean</code>                                            | Whether this postal address is the primary one for the contact. Only available on Android and iOS.                                                                                       | <code>false</code>                   | 7.0.0 |
 | **`label`**          | <code>string</code>                                             | A custom label for the postal address. On **iOS**, this label is only set if the type is <a href="#postaladdresstype">`PostalAddressType.Custom`</a>. Only available on Android and iOS. |                                      | 7.0.0 |
@@ -419,6 +439,13 @@ Only available on Android and iOS.
 | Prop     | Type                | Description                     | Since |
 | -------- | ------------------- | ------------------------------- | ----- |
 | **`id`** | <code>string</code> | The identifier for the contact. | 7.0.0 |
+
+
+#### DisplayCreateContactOptions
+
+| Prop          | Type                                                                              | Description                                         | Since |
+| ------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
+| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
 
 
 #### GetContactByIdResult
@@ -500,9 +527,7 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{
- [P in K]: T[P];
- }</code>
+<code>{ [P in K]: T[P]; }</code>
 
 
 #### Exclude
