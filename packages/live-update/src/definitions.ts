@@ -250,6 +250,12 @@ export interface LiveUpdatePlugin {
     eventName: 'downloadBundleProgress',
     listenerFunc: DownloadBundleProgressListener,
   ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 7.2.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

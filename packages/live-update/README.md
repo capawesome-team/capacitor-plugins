@@ -266,6 +266,7 @@ const isNewBundleAvailable = async () => {
 * [`setNextBundle(...)`](#setnextbundle)
 * [`sync(...)`](#sync)
 * [`addListener('downloadBundleProgress', ...)`](#addlistenerdownloadbundleprogress-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -630,6 +631,19 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 7.2.0
 
 --------------------
 
