@@ -1,5 +1,23 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`247d50e9896cd3494755dd3d17231b10d964c709`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/247d50e9896cd3494755dd3d17231b10d964c709) ([#82](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/82)): feat: support contextual strings
+
+## 7.2.0
+
+### Minor Changes
+
+- [`4c941a5211c23bd8af7dc6b52683a68b26d851bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4c941a5211c23bd8af7dc6b52683a68b26d851bc) ([#77](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/77)): feat(ios): add option for audio session category
+
+- [`c7b073809adbcd0ebd2c8802848a2f6bd64458e4`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c7b073809adbcd0ebd2c8802848a2f6bd64458e4) ([#77](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/77)): feat(ios): keep audio session active on stop
+
+### Patch Changes
+
+- [`3515b9fff218256ba104ecb46afb13fce538d7b9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3515b9fff218256ba104ecb46afb13fce538d7b9) ([#77](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/77)): fix(ios): restore previous audio session on stop
+
 ## 7.1.0
 
 ### Minor Changes

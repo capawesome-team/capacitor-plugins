@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.1
+
+### Patch Changes
+
+- [`1bce8e114fdeffc0160c49e0e4da591fdc61d7d1`](https://github.com/capawesome-team/capacitor-plugins/commit/1bce8e114fdeffc0160c49e0e4da591fdc61d7d1) ([#454](https://github.com/capawesome-team/capacitor-plugins/pull/454)): chore(ios): allow all versions of Alamofire up to the next major release
+
 ## 7.1.0
 
 ### Minor Changes

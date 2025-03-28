@@ -106,6 +106,14 @@ public class BluetoothLowEnergyHeadlessTask {
 }
 ```
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 ### iOS
 
 Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
@@ -353,6 +361,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('characteristicChanged', ...)`](#addlistenercharacteristicchanged-)
+* [`addListener('deviceConnected', ...)`](#addlistenerdeviceconnected-)
 * [`addListener('deviceDisconnected', ...)`](#addlistenerdevicedisconnected-)
 * [`addListener('deviceScanned', ...)`](#addlistenerdevicescanned-)
 * [`removeAllListeners()`](#removealllisteners)
@@ -886,6 +895,28 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('deviceConnected', ...)
+
+```typescript
+addListener(eventName: 'deviceConnected', listenerFunc: (event: DeviceConnectedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a device is connected.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'deviceConnected'</code>                                                            |
+| **`listenerFunc`** | <code>(event: <a href="#deviceconnectedevent">DeviceConnectedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### addListener('deviceDisconnected', ...)
 
 ```typescript
@@ -948,10 +979,11 @@ Remove all listeners for this plugin.
 
 #### ConnectOptions
 
-| Prop           | Type                | Description                                                                                                                         | Default            | Since |
-| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`deviceId`** | <code>string</code> | The address of the device to connect to.                                                                                            |                    | 6.0.0 |
-| **`timeout`**  | <code>number</code> | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>10000</code> | 6.0.0 |
+| Prop              | Type                 | Description                                                                                                                                                            | Default            | Since |
+| ----------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`autoConnect`** | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
+| **`deviceId`**    | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
+| **`timeout`**     | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
 
 
 #### CreateBondOptions
@@ -1232,6 +1264,14 @@ Remove all listeners for this plugin.
 | **`deviceId`**         | <code>string</code>   | The address of the device.                     | 6.0.0 |
 | **`serviceId`**        | <code>string</code>   | The UUID of the service.                       | 6.0.0 |
 | **`value`**            | <code>number[]</code> | The changed value bytes of the characteristic. | 6.0.0 |
+
+
+#### DeviceConnectedEvent
+
+| Prop           | Type                | Description                          | Since |
+| -------------- | ------------------- | ------------------------------------ | ----- |
+| **`deviceId`** | <code>string</code> | The address of the connected device. | 7.1.0 |
+| **`name`**     | <code>string</code> | The name of the connected device.    | 7.1.0 |
 
 
 #### DeviceDisconnectedEvent

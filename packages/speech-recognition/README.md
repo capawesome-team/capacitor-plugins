@@ -1,15 +1,17 @@
 # @capawesome-team/capacitor-speech-recognition
 
-Capacitor plugin to transcribe speech into text.
+Capacitor plugin to transcribe speech into text (also known as speech-to-text).
 
 ## Features
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
-- 🛠 **Permissions**: Check and request permissions for recording audio.
-- 🎙 **Events**: Listen for events like `start`, `end`, `speechStart`, `speechEnd`, `error`, `partialResults`, and `results`.
+- 🔑 **Permissions**: Check and request permissions for recording audio.
+- 🔊 **Events**: Listen for events like `start`, `end`, `speechStart`, `speechEnd`, `error`, `partialResults`, and `results`.
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
+- 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
@@ -39,6 +41,16 @@ Next, install the package:
 ```
 npm install @capawesome-team/capacitor-speech-recognition
 npx cap sync
+```
+
+### Android
+
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
 
 ### iOS
@@ -136,7 +148,7 @@ const removeAllListeners = async () => {
 * [`isAvailable()`](#isavailable)
 * [`isListening()`](#islistening)
 * [`startListening(...)`](#startlistening)
-* [`stopListening()`](#stoplistening)
+* [`stopListening(...)`](#stoplistening)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('end', ...)`](#addlistenerend-)
@@ -149,6 +161,7 @@ const removeAllListeners = async () => {
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -223,13 +236,17 @@ Start listening for speech.
 --------------------
 
 
-### stopListening()
+### stopListening(...)
 
 ```typescript
-stopListening() => Promise<void>
+stopListening(options?: StopListeningOptions | undefined) => Promise<void>
 ```
 
 Stop listening for speech.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#stoplisteningoptions">StopListeningOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -453,10 +470,20 @@ Remove all listeners for this plugin.
 
 #### StartListeningOptions
 
-| Prop                   | Type                | Description                                                                                                            | Default           | Since |
-| ---------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
-| **`language`**         | <code>string</code> | The BC-47 language tag for the language to use for speech recognition.                                                 |                   | 6.0.0 |
-| **`silenceThreshold`** | <code>number</code> | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS. | <code>2000</code> | 6.0.0 |
+| Prop                               | Type                                                                  | Description                                                                                                                                | Default                                  | Since |
+| ---------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ----- |
+| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                           | <code>AudioSessionCategory.Record</code> | 7.2.0 |
+| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS. |                                          | 7.3.0 |
+| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                      | <code>true</code>                        | 7.2.0 |
+| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                     |                                          | 6.0.0 |
+| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS.                     | <code>2000</code>                        | 6.0.0 |
+
+
+#### StopListeningOptions
+
+| Prop                         | Type                 | Description                                                                   | Default           | Since |
+| ---------------------------- | -------------------- | ----------------------------------------------------------------------------- | ----------------- | ----- |
+| **`deactivateAudioSession`** | <code>boolean</code> | Whether or not to deactivate your app's audio session. Only available on iOS. | <code>true</code> | 7.2.0 |
 
 
 #### PermissionStatus
@@ -514,6 +541,17 @@ Remove all listeners for this plugin.
 #### SpeechRecognitionPermissionType
 
 <code>'audioRecording' | 'speechRecognition'</code>
+
+
+### Enums
+
+
+#### AudioSessionCategory
+
+| Members             | Value                          | Description                                                           | Since |
+| ------------------- | ------------------------------ | --------------------------------------------------------------------- | ----- |
+| **`Record`**        | <code>'RECORD'</code>          | The category for recording audio while also silencing playback audio. | 7.2.0 |
+| **`PlayAndRecord`** | <code>'PLAY_AND_RECORD'</code> | The category for recording (input) and playback (output) of audio.    | 7.2.0 |
 
 </docgen-api>
 

@@ -1,4 +1,22 @@
+/// <reference types="@capacitor/cli" />
+
 import type { PluginListenerHandle } from '@capacitor/core';
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    AppShortcuts?: {
+      /**
+       * The list of app shortcuts that should be set by default.
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.2.0
+       * @example [{ id: 'feedback', title: 'Feedback' }]
+       */
+      shortcuts?: Shortcut[];
+    };
+  }
+}
 
 export interface AppShortcutsPlugin {
   /**
@@ -105,11 +123,34 @@ export interface Shortcut {
    * - Name of the image asset from the asset catalogue.
    *
    * @since 6.1.0
+   * @deprecated Use `androidIcon` and `iosIcon` instead.
    * @example 17301547
    * @example 6
    * @example "star.fill"
    */
   icon?: number | string;
+  /**
+   * The icon to display on Android.
+   *
+   * The icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   *
+   * @since 7.2.0
+   * @example 17301547
+   */
+  androidIcon?: number;
+  /**
+   * The icon to display on iOS.
+   *
+   * The icon can be one of the following:
+   * - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`).
+   * - A system symbol name (e.g. `star.fill`).
+   * - Name of the image asset from the asset catalogue.
+   *
+   * @since 7.2.0
+   * @example 6
+   * @example "star.fill"
+   */
+  iosIcon?: number | string;
 }
 
 /**

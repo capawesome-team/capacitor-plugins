@@ -94,6 +94,14 @@ This meta-data tag points to an `apduservice.xml` file. The following is an exam
 
 You can find more information about this in the [Android documentation](https://developer.android.com/develop/connectivity/nfc/hce#manifest-declaration).
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 ### iOS
 
 Ensure `Near Field Communication Tag Reading` capabilities have been enabled in your application in Xcode.

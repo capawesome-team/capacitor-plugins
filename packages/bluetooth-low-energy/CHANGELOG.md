@@ -1,5 +1,33 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`cb22e50c95adfedbd5b5891b58c3ca40c03a0560`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb22e50c95adfedbd5b5891b58c3ca40c03a0560) ([#85](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/85)): feat(android): add `autoConnect` option
+
+### Patch Changes
+
+- [`cb22e50c95adfedbd5b5891b58c3ca40c03a0560`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb22e50c95adfedbd5b5891b58c3ca40c03a0560) ([#85](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/85)): fix: `deviceId` in `deviceDisconnected` event was undefined
+
+## 7.0.6
+
+### Patch Changes
+
+- [`002e1a739e77ad166bf7b35e0a1d75d0bc470bd0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/002e1a739e77ad166bf7b35e0a1d75d0bc470bd0) ([#80](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/80)): fix(android): `startCharacteristicNotifications(...)` and `stopCharacteristicNotifications(...)` calls were resolved too early
+
+- [`dde8eeae462ed32aa4577738b5919209ce873386`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/dde8eeae462ed32aa4577738b5919209ce873386): fix(android): add missing null check
+
+- [`9992144e3596121b63467087261d5f973225e0c3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9992144e3596121b63467087261d5f973225e0c3): fix(android): `writeCharacteristic(...)` and `writeDescriptor(...)` calls were not resolved
+
+- [`b931617713c99a4b1e580ed7d551af6e998a1055`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b931617713c99a4b1e580ed7d551af6e998a1055) ([#81](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/81)): fix(ios): handle invalid UUIDs
+
+## 7.0.5
+
+### Patch Changes
+
+- [`a6a52740acfbf438e965429772386ace6ceda714`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a6a52740acfbf438e965429772386ace6ceda714): fix(android): `type` in `WriteCharacteristicOptions` was ignored
+
 ## 7.0.4
 
 ### Patch Changes
