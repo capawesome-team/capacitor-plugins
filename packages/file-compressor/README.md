@@ -39,6 +39,14 @@ npx cap sync
 
 ### Android
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 #### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):

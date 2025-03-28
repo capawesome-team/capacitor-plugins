@@ -9,6 +9,49 @@ npm install @capawesome/capacitor-app-shortcuts
 npx cap sync
 ```
 
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop            | Type                    | Description                                                                                 | Since |
+| --------------- | ----------------------- | ------------------------------------------------------------------------------------------- | ----- |
+| **`shortcuts`** | <code>Shortcut[]</code> | The list of app shortcuts that should be set by default. Only available on Android and iOS. | 7.2.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "AppShortcuts": {
+      "shortcuts": [{ id: 'feedback', title: 'Feedback' }]
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-app-shortcuts" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    AppShortcuts: {
+      shortcuts: [{ id: 'feedback', title: 'Feedback' }],
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
+
 ### iOS
 
 On iOS, you must add the following to your app's `AppDelegate.swift`:
@@ -199,6 +242,8 @@ Remove all listeners for this plugin.
 | **`id`**          | <code>string</code>           | The unique identifier.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 6.0.0 |
 | **`title`**       | <code>string</code>           | The display name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | 6.0.0 |
 | **`icon`**        | <code>string \| number</code> | The icon to display. On **Android**, the icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`). On **iOS**, the icon can be one of the following: - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`). - A system symbol name (e.g. `star.fill`). - Name of the image asset from the asset catalogue. | 6.1.0 |
+| **`androidIcon`** | <code>number</code>           | The icon to display on Android. The icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).                                                                                                                                                                                                                                                                                                                                     | 7.2.0 |
+| **`iosIcon`**     | <code>string \| number</code> | The icon to display on iOS. The icon can be one of the following: - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`). - A system symbol name (e.g. `star.fill`). - Name of the image asset from the asset catalogue.                                                                                                                                                                     | 7.2.0 |
 
 
 #### SetOptions

@@ -20,11 +20,16 @@ public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
     public let eventClick = "click"
     public let tag = "AppShortcuts"
 
-    private let implementation = AppShortcuts()
+    private var implementation: AppShortcuts?
 
     override public init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(self.handleAppShortcutNotification), name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil)
+    }
+
+    override public func load() {
+        super.load()
+        self.implementation = AppShortcuts(getAppShortcutConfig())
     }
 
     deinit {
@@ -32,7 +37,7 @@ public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func get(_ call: CAPPluginCall) {
-        implementation.get(completion: { result in
+        implementation?.get(completion: { result in
             if let result = result.toJSObject() as? JSObject {
                 self.resolveCall(call, result)
             }
@@ -42,7 +47,7 @@ public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func set(_ call: CAPPluginCall) {
         do {
             let options = try SetOptions(call: call)
-            implementation.set(shortcuts: options.getShortcuts, completion: { error in
+            implementation?.set(shortcuts: options.getShortcuts, completion: { error in
                 if let error = error {
                     self.rejectCall(call, error)
                 } else {
@@ -55,7 +60,7 @@ public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        implementation.clear(completion: { error in
+        implementation?.clear(completion: { error in
             if let error = error {
                 self.rejectCall(call, error)
             } else {
@@ -89,5 +94,17 @@ public class AppShortcutsPlugin: CAPPlugin, CAPBridgedPlugin {
         } else {
             call.resolve()
         }
+    }
+
+    private func getAppShortcutConfig() -> AppShortcutsConfig {
+        var config = AppShortcutsConfig()
+        if let shortcuts = getConfig().getArray("shortcuts") as? [JSObject] {
+            do {
+                config.shortcuts = try AppShortcutsPluginHelper.getShortcutItemsFromJSArray(shortcuts: shortcuts)
+            } catch {
+                return config
+            }
+        }
+        return config
     }
 }
