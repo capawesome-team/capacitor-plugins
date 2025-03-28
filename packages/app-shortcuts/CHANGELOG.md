@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`82692dc0ced9b563b6fa78805b66c68cf028e05d`](https://github.com/capawesome-team/capacitor-plugins/commit/82692dc0ced9b563b6fa78805b66c68cf028e05d) ([#469](https://github.com/capawesome-team/capacitor-plugins/pull/469)): feat: add separate icon properties for ios and android
+
+- [`d4c12bc72b2d52f47395926006fb9ff723e99c0f`](https://github.com/capawesome-team/capacitor-plugins/commit/d4c12bc72b2d52f47395926006fb9ff723e99c0f) ([#459](https://github.com/capawesome-team/capacitor-plugins/pull/459)): feat: add configuration option
+
 ## 7.1.0
 
 ### Minor Changes

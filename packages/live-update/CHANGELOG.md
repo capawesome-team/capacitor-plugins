@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`2c5d6ab30e8f95b4cc0a69814539aff8ee530805`](https://github.com/capawesome-team/capacitor-plugins/commit/2c5d6ab30e8f95b4cc0a69814539aff8ee530805): feat: add `removeAllListeners()` method
+
 ## 7.1.1
 
 ### Patch Changes
