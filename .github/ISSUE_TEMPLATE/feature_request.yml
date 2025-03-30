@@ -17,10 +17,12 @@ body:
         - label: App Shortcuts
         - label: App Update
         - label: Asset Manager
+        - label: Audio Recorder
         - label: Background Task
         - label: Badge
         - label: Bluetooth Low Energy
         - label: Cloudinary
+        - label: Contacts
         - label: Datetime Picker
         - label: File Compressor
         - label: File Opener
