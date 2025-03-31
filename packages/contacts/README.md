@@ -225,6 +225,9 @@ displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promi
 
 Open a native modal to create a new device contact.
 
+This allows the user to update the contact information before saving it
+and does not require any permissions.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                                                |
