@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`92f34d2b5db51571544f8c3a8b20169f98dfe90a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/92f34d2b5db51571544f8c3a8b20169f98dfe90a): fix: throw error if `displayCreateContact(...)` is canceled
+
 ## 7.2.0
 
 ### Minor Changes
