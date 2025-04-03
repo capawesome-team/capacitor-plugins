@@ -55,6 +55,7 @@ If you are using Proguard, you need to add the following rules to your `proguard
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
 - `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+- `$androidxPrintVersion` version of `androidx.print:print` (default: `1.0.0`)
 
 ## Configuration
 
@@ -98,6 +99,7 @@ const printWebView = async () => {
 
 <docgen-index>
 
+* [`printBase64(...)`](#printbase64)
 * [`printHtml(...)`](#printhtml)
 * [`printPdf(...)`](#printpdf)
 * [`printWebView(...)`](#printwebview)
@@ -108,6 +110,23 @@ const printWebView = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### printBase64(...)
+
+```typescript
+printBase64(options: PrintBase64Options) => Promise<void>
+```
+
+Present the printing user interface to print files encoded as base64 strings.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#printbase64options">PrintBase64Options</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
 
 ### printHtml(...)
 
@@ -168,6 +187,14 @@ output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/P
 
 
 ### Interfaces
+
+
+#### PrintBase64Options
+
+| Prop           | Type                | Description                                                                                                                                               | Since |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`data`**     | <code>string</code> | A valid base 64 encoded string.                                                                                                                           | 7.1.0 |
+| **`mimeType`** | <code>string</code> | The mime type of the data. The following mime types are supported: `application/pdf`, `image/gif`, `image/heic`, `image/heif`, `image/jpeg`, `image/png`. | 7.1.0 |
 
 
 #### PrintHtmlOptions
