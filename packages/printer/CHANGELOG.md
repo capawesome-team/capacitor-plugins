@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`041fbf75318ad420a95d77447a26d95261449206`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/041fbf75318ad420a95d77447a26d95261449206) ([#118](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/118)): feat: implement `printBase64(...)` method
+
+- [`9f2cc60e9278de92e512e1985c64f0339cc9bbb2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9f2cc60e9278de92e512e1985c64f0339cc9bbb2) ([#120](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/120)): feat: implement `printFile(...)` method
+
 ## 7.0.1
 
 ### Patch Changes
