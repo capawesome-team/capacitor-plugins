@@ -74,6 +74,20 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 ```typescript
 import { Printer } from '@capawesome-team/capacitor-printer';
 
+const printBase64 = async () => {
+  await Printer.printBase64({
+    name: 'My Document',
+    data: 'JVBERi0...',
+  });
+}
+
+const printFile = async () => {
+  await Printer.printFile({
+    mimeType: 'application/pdf',
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
+  });
+};
+
 const printHtml = async () => {
   await Printer.printHtml({
     name: 'My Document',
@@ -100,6 +114,7 @@ const printWebView = async () => {
 <docgen-index>
 
 * [`printBase64(...)`](#printbase64)
+* [`printFile(...)`](#printfile)
 * [`printHtml(...)`](#printhtml)
 * [`printPdf(...)`](#printpdf)
 * [`printWebView(...)`](#printwebview)
@@ -119,9 +134,32 @@ printBase64(options: PrintBase64Options) => Promise<void>
 
 Present the printing user interface to print files encoded as base64 strings.
 
+**Attention**: Large files can lead to app crashes. It's therefore recommended to use the `printFile` method instead.
+
+Only available on Android and iOS.
+
 | Param         | Type                                                              |
 | ------------- | ----------------------------------------------------------------- |
 | **`options`** | <code><a href="#printbase64options">PrintBase64Options</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
+### printFile(...)
+
+```typescript
+printFile(options: PrintFileOptions) => Promise<void>
+```
+
+Present the printing user interface to print files.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#printfileoptions">PrintFileOptions</a></code> |
 
 **Since:** 7.1.0
 
@@ -195,6 +233,14 @@ output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/P
 | -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`data`**     | <code>string</code> | A valid base 64 encoded string.                                                                                                                           | 7.1.0 |
 | **`mimeType`** | <code>string</code> | The mime type of the data. The following mime types are supported: `application/pdf`, `image/gif`, `image/heic`, `image/heif`, `image/jpeg`, `image/png`. | 7.1.0 |
+
+
+#### PrintFileOptions
+
+| Prop           | Type                | Description                                           | Since |
+| -------------- | ------------------- | ----------------------------------------------------- | ----- |
+| **`mimeType`** | <code>string</code> | The mime type of the file. Only available on Android. | 7.1.0 |
+| **`path`**     | <code>string</code> | The path to the file.                                 | 7.1.0 |
 
 
 #### PrintHtmlOptions
