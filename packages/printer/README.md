@@ -10,6 +10,7 @@ Capacitor plugin for printing.
 - 🖨️ **HTML Printer**: Print custom HTML content.
 - 🖨️ **PDF Printer**: Print PDF files.
 - 🖨️ **Web View Printer**: Print web view content.
+- ⚔️ **Battle-Tested**: Used in more than 100 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
