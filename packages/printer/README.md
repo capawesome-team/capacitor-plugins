@@ -5,8 +5,10 @@ Capacitor plugin for printing.
 ## Features
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
-- 🖨️ **PDF Printer**: Print PDF files.
+- 🖨️ **Base64 Printer**: Print base64 encoded files.
+- 🖨️ **File Printer**: Print files from the device.
 - 🖨️ **HTML Printer**: Print custom HTML content.
+- 🖨️ **PDF Printer**: Print PDF files.
 - 🖨️ **Web View Printer**: Print web view content.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
