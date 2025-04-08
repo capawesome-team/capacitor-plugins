@@ -12,6 +12,7 @@ Capacitor plugin to transcribe speech into text (also known as speech-to-text).
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
 - 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
