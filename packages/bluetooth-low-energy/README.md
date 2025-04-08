@@ -10,6 +10,7 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central rol
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier. 
+- ⚔️ **Battle-Tested**: Used in more than 30 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
