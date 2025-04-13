@@ -96,6 +96,11 @@ import {
 const createContact = async () => {
   return Contacts.createContact({
     contact: {
+      birthday: {
+        day: 1,
+        month: 1,
+        year: 1990
+      },
       givenName: 'John',
       familyName: 'Doe',
       emailAddresses: [
@@ -374,23 +379,33 @@ Only available on Android and iOS.
 
 #### Contact
 
-| Prop                   | Type                         | Description                                                                     | Since |
-| ---------------------- | ---------------------------- | ------------------------------------------------------------------------------- | ----- |
-| **`emailAddresses`**   | <code>EmailAddress[]</code>  | The list of email addresses for the contact.                                    | 7.0.0 |
-| **`familyName`**       | <code>string</code>          | The family name of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`givenName`**        | <code>string</code>          | The given name of the contact. Only available on Android and iOS.               | 7.0.0 |
-| **`id`**               | <code>string</code>          | The identifier for the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`jobTitle`**         | <code>string</code>          | The job title of the contact. Only available on Android and iOS.                | 7.0.0 |
-| **`middleName`**       | <code>string</code>          | The middle name of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`fullName`**         | <code>string</code>          | The full name of the contact. Only available on Web.                            | 7.0.0 |
-| **`namePrefix`**       | <code>string</code>          | The name prefix of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`nameSuffix`**       | <code>string</code>          | The name suffix of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`note`**             | <code>string</code>          | A note about the contact. Only available on Android and iOS.                    | 7.0.0 |
-| **`organizationName`** | <code>string</code>          | The organization name of the contact. Only available on Android and iOS.        | 7.0.0 |
-| **`phoneNumbers`**     | <code>PhoneNumber[]</code>   | The list of phone numbers for the contact.                                      | 7.0.0 |
-| **`photo`**            | <code>string</code>          | The photo of the contact as a base64 string. Only available on Android and iOS. | 7.0.0 |
-| **`postalAddresses`**  | <code>PostalAddress[]</code> | The list of postal addresses for the contact.                                   | 7.0.0 |
-| **`urlAddresses`**     | <code>UrlAddress[]</code>    | The list of URL addresses for the contact. Only available on Android and iOS.   | 7.0.0 |
+| Prop                   | Type                                          | Description                                                                     | Since |
+| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`birthday`**         | <code><a href="#birthday">Birthday</a></code> | The birthday of the contact.                                                    | 7.3.0 |
+| **`emailAddresses`**   | <code>EmailAddress[]</code>                   | The list of email addresses for the contact.                                    | 7.0.0 |
+| **`familyName`**       | <code>string</code>                           | The family name of the contact. Only available on Android and iOS.              | 7.0.0 |
+| **`givenName`**        | <code>string</code>                           | The given name of the contact. Only available on Android and iOS.               | 7.0.0 |
+| **`id`**               | <code>string</code>                           | The identifier for the contact. Only available on Android and iOS.              | 7.0.0 |
+| **`jobTitle`**         | <code>string</code>                           | The job title of the contact. Only available on Android and iOS.                | 7.0.0 |
+| **`middleName`**       | <code>string</code>                           | The middle name of the contact. Only available on Android and iOS.              | 7.0.0 |
+| **`fullName`**         | <code>string</code>                           | The full name of the contact. Only available on Web.                            | 7.0.0 |
+| **`namePrefix`**       | <code>string</code>                           | The name prefix of the contact. Only available on Android and iOS.              | 7.0.0 |
+| **`nameSuffix`**       | <code>string</code>                           | The name suffix of the contact. Only available on Android and iOS.              | 7.0.0 |
+| **`note`**             | <code>string</code>                           | A note about the contact. Only available on Android and iOS.                    | 7.0.0 |
+| **`organizationName`** | <code>string</code>                           | The organization name of the contact. Only available on Android and iOS.        | 7.0.0 |
+| **`phoneNumbers`**     | <code>PhoneNumber[]</code>                    | The list of phone numbers for the contact.                                      | 7.0.0 |
+| **`photo`**            | <code>string</code>                           | The photo of the contact as a base64 string. Only available on Android and iOS. | 7.0.0 |
+| **`postalAddresses`**  | <code>PostalAddress[]</code>                  | The list of postal addresses for the contact.                                   | 7.0.0 |
+| **`urlAddresses`**     | <code>UrlAddress[]</code>                     | The list of URL addresses for the contact. Only available on Android and iOS.   | 7.0.0 |
+
+
+#### Birthday
+
+| Prop        | Type                | Description                                                                                                                                               | Since |
+| ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`day`**   | <code>number</code> | The day of the birthdate.                                                                                                                                 | 7.3.0 |
+| **`month`** | <code>number</code> | The month of the birthdate.                                                                                                                               | 7.3.0 |
+| **`year`**  | <code>number</code> | The year of the birthdate. On **Android**, this must be provided if the `day` and `month` are provided when using the `displayCreateContact(...)` method. | 7.3.0 |
 
 
 #### EmailAddress
@@ -460,10 +475,10 @@ Only available on Android and iOS.
 
 #### GetContactByIdOptions
 
-| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
-| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
-| **`id`**     | <code>string</code>                                   | The identifier for the contact.       |                                                                                                                                                                                               | 7.0.0 |
+| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                                   | Since |
+| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| **`id`**     | <code>string</code>                                   | The identifier for the contact.       |                                                                                                                                                                                                           | 7.0.0 |
 
 
 #### GetContactsResult
@@ -530,7 +545,9 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 #### Exclude
