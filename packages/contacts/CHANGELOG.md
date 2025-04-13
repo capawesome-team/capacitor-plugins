@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`edfb205e04f57f5a76959e6ce46a515aa5ea8404`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/edfb205e04f57f5a76959e6ce46a515aa5ea8404) ([#121](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/121)): feat: add `birthday` property to `Contact`
+
 ## 7.2.1
 
 ### Patch Changes
