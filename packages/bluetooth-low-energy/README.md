@@ -1,10 +1,12 @@
 # @capawesome-team/capacitor-bluetooth-low-energy
 
-Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central role.
+Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role.
 
 ## Features
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
+- 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
@@ -52,6 +54,8 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <!-- Request legacy Bluetooth permissions on older devices. -->
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+<!-- Needed only if your app uses advertising -->
+<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
 <!-- Needed only if your app looks for Bluetooth devices.  -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 <!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
@@ -241,6 +245,40 @@ const requestMtu = async () => {
   });
 };
 
+const setCharacteristicValue = async () => {
+  await BluetoothLowEnergy.setCharacteristicValue({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [1, 2, 3],
+  });
+};
+
+const startAdvertising = async () => {
+  await BluetoothLowEnergy.startAdvertising({
+        services: [
+          {
+            id: '0000180A-0000-1000-8000-00805F9B34FB',
+            characteristics: [
+              {
+                id: '00002A29-0000-1000-8000-00805F9B34FB',
+                descriptors: [], // Descriptors are ignored for now
+                permissions: {
+                  read: true,
+                  write: true,
+                },
+                properties: {
+                  read: true,
+                  write: true,
+                  notify: true,
+                  indicate: true,
+                },
+              },
+            ],
+          },
+        ],
+      });
+};
+
 const startCharacteristicNotifications = async () => {
   await BluetoothLowEnergy.startCharacteristicNotifications({
     characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
@@ -260,6 +298,10 @@ const startForegroundService = async () => {
 
 const startScan = async () => {
   await BluetoothLowEnergy.startScan();
+};
+
+const stopAdvertising = async () => {
+  await BluetoothLowEnergy.stopAdvertising();
 };
 
 const stopCharacteristicNotifications = async () => {
@@ -312,6 +354,10 @@ const addListener = () => {
     console.log('Characteristic changed', event);
   });
 
+  BluetoothLowEnergy.addListener('characteristicWriteRequest', async (event) => {
+    console.log('Characteristic write request', event);
+  });
+
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
     console.log('Device disconnected', event);
   });
@@ -340,7 +386,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`discoverServices(...)`](#discoverservices)
 * [`getConnectedDevices()`](#getconnecteddevices)
 * [`getServices(...)`](#getservices)
-* [`initialize()`](#initialize)
+* [`initialize(...)`](#initialize)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
 * [`openAppSettings()`](#openappsettings)
@@ -351,9 +397,12 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`readRssi(...)`](#readrssi)
 * [`requestConnectionPriority(...)`](#requestconnectionpriority)
 * [`requestMtu(...)`](#requestmtu)
+* [`setCharacteristicValue(...)`](#setcharacteristicvalue)
+* [`startAdvertising(...)`](#startadvertising)
 * [`startCharacteristicNotifications(...)`](#startcharacteristicnotifications)
 * [`startForegroundService(...)`](#startforegroundservice)
 * [`startScan(...)`](#startscan)
+* [`stopAdvertising()`](#stopadvertising)
 * [`stopCharacteristicNotifications(...)`](#stopcharacteristicnotifications)
 * [`stopForegroundService()`](#stopforegroundservice)
 * [`stopScan()`](#stopscan)
@@ -362,6 +411,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('characteristicChanged', ...)`](#addlistenercharacteristicchanged-)
+* [`addListener('characteristicWriteRequest', ...)`](#addlistenercharacteristicwriterequest-)
 * [`addListener('deviceConnected', ...)`](#addlistenerdeviceconnected-)
 * [`addListener('deviceDisconnected', ...)`](#addlistenerdevicedisconnected-)
 * [`addListener('deviceScanned', ...)`](#addlistenerdevicescanned-)
@@ -491,10 +541,10 @@ Only available on Android and iOS.
 --------------------
 
 
-### initialize()
+### initialize(...)
 
 ```typescript
-initialize() => Promise<void>
+initialize(options?: InitializeOptions | undefined) => Promise<void>
 ```
 
 Initialize the plugin. This method must be called before any other method.
@@ -502,6 +552,10 @@ Initialize the plugin. This method must be called before any other method.
 On **iOS**, this will prompt the user for Bluetooth permissions.
 
 Only available on iOS.
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
 
 **Since:** 6.0.0
 
@@ -692,6 +746,44 @@ Only available on Android.
 --------------------
 
 
+### setCharacteristicValue(...)
+
+```typescript
+setCharacteristicValue(options: SetCharacteristicValueOptions) => Promise<void>
+```
+
+Set the value of a characteristic.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setcharacteristicvalueoptions">SetCharacteristicValueOptions</a></code> |
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### startAdvertising(...)
+
+```typescript
+startAdvertising(options: StartAdvertisingOptions) => Promise<void>
+```
+
+Start advertising as a BLE device.
+
+Only available on Android.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startadvertisingoptions">StartAdvertisingOptions</a></code> |
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### startCharacteristicNotifications(...)
 
 ```typescript
@@ -745,6 +837,21 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#startscanoptions">StartScanOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### stopAdvertising()
+
+```typescript
+stopAdvertising() => Promise<void>
+```
+
+Stop advertising as a BLE device.
+
+Only available on Android.
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -896,6 +1003,28 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('characteristicWriteRequest', ...)
+
+```typescript
+addListener(eventName: 'characteristicWriteRequest', listenerFunc: (event: CharacteristicWriteRequestEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a characteristic write request is received.
+
+Only available on Android.
+
+| Param              | Type                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'characteristicWriteRequest'</code>                                                                       |
+| **`listenerFunc`** | <code>(event: <a href="#characteristicwriterequestevent">CharacteristicWriteRequestEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### addListener('deviceConnected', ...)
 
 ```typescript
@@ -1043,11 +1172,12 @@ Remove all listeners for this plugin.
 
 #### Characteristic
 
-| Prop              | Type                                                                          | Description                            | Since |
-| ----------------- | ----------------------------------------------------------------------------- | -------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                                                           | The UUID of the characteristic.        | 6.0.0 |
-| **`descriptors`** | <code>Descriptor[]</code>                                                     | The descriptors of the characteristic. | 6.0.0 |
-| **`properties`**  | <code><a href="#characteristicproperties">CharacteristicProperties</a></code> | The properties of the characteristic.  | 6.0.0 |
+| Prop              | Type                                                                            | Description                                                                                                            | Since |
+| ----------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**          | <code>string</code>                                                             | The UUID of the characteristic.                                                                                        | 6.0.0 |
+| **`descriptors`** | <code>Descriptor[]</code>                                                       | The descriptors of the characteristic. **Note**: This property is currently ignored when advertising a characteristic. | 6.0.0 |
+| **`permissions`** | <code><a href="#characteristicpermissions">CharacteristicPermissions</a></code> | The permissions of the characteristic. Only available on Android.                                                      | 7.2.0 |
+| **`properties`**  | <code><a href="#characteristicproperties">CharacteristicProperties</a></code>   | The properties of the characteristic.                                                                                  | 6.0.0 |
 
 
 #### Descriptor
@@ -1055,6 +1185,20 @@ Remove all listeners for this plugin.
 | Prop     | Type                | Description                 | Since |
 | -------- | ------------------- | --------------------------- | ----- |
 | **`id`** | <code>string</code> | The UUID of the descriptor. | 6.0.0 |
+
+
+#### CharacteristicPermissions
+
+| Prop                     | Type                 | Description                                                                                                      | Since |
+| ------------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| **`read`**               | <code>boolean</code> | Whether or not the characteristic can be read.                                                                   | 7.2.0 |
+| **`readEncrypted`**      | <code>boolean</code> | Whether or not the characteristic can be read with encryption.                                                   | 7.2.0 |
+| **`readEncryptedMitm`**  | <code>boolean</code> | Whether or not the characteristic can be read with encryption and MITM protection. Only available on Android.    | 7.2.0 |
+| **`write`**              | <code>boolean</code> | Whether or not the characteristic can be written.                                                                | 7.2.0 |
+| **`writeEncrypted`**     | <code>boolean</code> | Whether or not the characteristic can be written with encryption.                                                | 7.2.0 |
+| **`writeEncryptedMitm`** | <code>boolean</code> | Whether or not the characteristic can be written with encryption and MITM protection. Only available on Android. | 7.2.0 |
+| **`writeSigned`**        | <code>boolean</code> | Whether or not the characteristic can be written signed. Only available on Android.                              | 7.2.0 |
+| **`writeSignedMitm`**    | <code>boolean</code> | Whether or not the characteristic can be written signed with encryption. Only available on Android.              | 7.2.0 |
 
 
 #### CharacteristicProperties
@@ -1079,6 +1223,13 @@ Remove all listeners for this plugin.
 | -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
 | **`deviceId`** | <code>string</code> | The address of the device to get the services for.                                                                                       |                   | 6.0.0 |
 | **`timeout`**  | <code>number</code> | The timeout for the get services operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code> | 6.0.0 |
+
+
+#### InitializeOptions
+
+| Prop       | Type                                   | Description                                                         | Default                | Since |
+| ---------- | -------------------------------------- | ------------------------------------------------------------------- | ---------------------- | ----- |
+| **`mode`** | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS. | <code>'central'</code> | 7.2.0 |
 
 
 #### IsBondedResult
@@ -1171,6 +1322,23 @@ Remove all listeners for this plugin.
 | **`timeout`**  | <code>number</code> | The timeout for the request MTU operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | 6.0.0 |
 
 
+#### SetCharacteristicValueOptions
+
+| Prop                   | Type                  | Description                                          | Since |
+| ---------------------- | --------------------- | ---------------------------------------------------- | ----- |
+| **`characteristicId`** | <code>string</code>   | The UUID of the characteristic to set the value for. | 7.2.0 |
+| **`serviceId`**        | <code>string</code>   | The UUID of the service to set the value for.        | 7.2.0 |
+| **`value`**            | <code>number[]</code> | The value bytes to set for the characteristic.       | 7.2.0 |
+
+
+#### StartAdvertisingOptions
+
+| Prop           | Type                   | Description                                                       | Default                | Since |
+| -------------- | ---------------------- | ----------------------------------------------------------------- | ---------------------- | ----- |
+| **`name`**     | <code>string</code>    | The name of the local device to advertise. Only available on iOS. | <code>"Unknown"</code> | 7.2.0 |
+| **`services`** | <code>Service[]</code> | The services to advertise.                                        |                        | 7.2.0 |
+
+
 #### StartCharacteristicNotificationsOptions
 
 | Prop                   | Type                | Description                                                                                                                                     | Default           | Since |
@@ -1245,9 +1413,9 @@ Remove all listeners for this plugin.
 
 #### BluetoothLowEnergyPluginPermission
 
-| Prop              | Type                                            |
-| ----------------- | ----------------------------------------------- |
-| **`permissions`** | <code>BluetoothLowEnergyPermissionType[]</code> |
+| Prop              | Type                                            | Description                 | Default                                                                                                        |
+| ----------------- | ----------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **`permissions`** | <code>BluetoothLowEnergyPermissionType[]</code> | The permissions to request. | <code>['bluetooth', 'bluetoothAdmin', 'bluetoothConnect', 'bluetoothScan', 'location', 'notifications']</code> |
 
 
 #### PluginListenerHandle
@@ -1265,6 +1433,15 @@ Remove all listeners for this plugin.
 | **`deviceId`**         | <code>string</code>   | The address of the device.                     | 6.0.0 |
 | **`serviceId`**        | <code>string</code>   | The UUID of the service.                       | 6.0.0 |
 | **`value`**            | <code>number[]</code> | The changed value bytes of the characteristic. | 6.0.0 |
+
+
+#### CharacteristicWriteRequestEvent
+
+| Prop                   | Type                  | Description                                     | Since |
+| ---------------------- | --------------------- | ----------------------------------------------- | ----- |
+| **`characteristicId`** | <code>string</code>   | The UUID of the characteristic.                 | 7.2.0 |
+| **`serviceId`**        | <code>string</code>   | The address of the device.                      | 7.2.0 |
+| **`value`**            | <code>number[]</code> | The value bytes to write to the characteristic. | 7.2.0 |
 
 
 #### DeviceConnectedEvent
@@ -1302,7 +1479,7 @@ Remove all listeners for this plugin.
 
 #### BluetoothLowEnergyPermissionType
 
-<code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'location' | 'notifications'</code>
+<code>'bluetooth' | 'bluetoothAdmin' | 'bluetoothAdvertise' | 'bluetoothConnect' | 'bluetoothScan' | 'location' | 'notifications'</code>
 
 
 ### Enums
