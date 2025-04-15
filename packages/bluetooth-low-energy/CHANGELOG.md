@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`ed5409bb636bd5fde9cd601546202a2c79385596`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ed5409bb636bd5fde9cd601546202a2c79385596) ([#109](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/109)): feat: support peripheral role
+
 ## 7.1.0
 
 ### Minor Changes
