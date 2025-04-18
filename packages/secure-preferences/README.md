@@ -61,8 +61,33 @@ No configuration required for this plugin.
 ```typescript
 import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
 
-const echo = async () => {
-  await SecurePreferences.echo();
+const clear = async () => {
+  await SecurePreferences.clear();
+};
+
+const get = async () => {
+  const { value } = await SecurePreferences.get({
+    key: 'password',
+  });
+  console.log(value);
+};
+
+const keys = async () => {
+  const { keys } = await SecurePreferences.keys();
+  console.log(keys);
+};
+
+const remove = async () => {
+  await SecurePreferences.remove({
+    key: 'password',
+  });
+};
+
+const set = async () => {
+  await SecurePreferences.set({
+    key: 'password',
+    value: '123456',
+  });
 };
 ```
 
