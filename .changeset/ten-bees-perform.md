@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-android-edge-to-edge-support': minor
+'@capawesome/capacitor-android-edge-to-edge-support': patch
 ---
 
-feat: add resize webview when keyboard is shown
+fix: resize webview when keyboard is shown
