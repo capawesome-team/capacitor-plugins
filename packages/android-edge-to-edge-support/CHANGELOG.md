@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.1
+
+### Patch Changes
+
+- [`94c8d30c16c88e3a3497811bed78cd7a0045831e`](https://github.com/capawesome-team/capacitor-plugins/commit/94c8d30c16c88e3a3497811bed78cd7a0045831e) ([#485](https://github.com/capawesome-team/capacitor-plugins/pull/485)): fix: resize webview when keyboard is shown
+
 ## 7.1.0
 
 ### Minor Changes
