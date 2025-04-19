@@ -46,25 +46,24 @@ public class EdgeToEdge {
         parent.setBackgroundColor(this.config.getBackgroundColor());
         // Apply insets to disable the edge-to-edge feature
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-            Boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
+            // Retrieve system bars insets (for status/navigation bars)
+            Insets systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Retrieve keyboard (IME) insets
+            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
+            boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                if (keyboardVisible) {
-                    mlp.bottomMargin = 0;
-                } else {
-                    mlp.bottomMargin = insets.bottom;
-                }
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                mlp.bottomMargin = insets.bottom;
-            }
+            // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
+            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
 
-            mlp.leftMargin = insets.left;
-            mlp.rightMargin = insets.right;
-            mlp.topMargin = insets.top;
+            // Set the other margins using system bars insets
+            mlp.topMargin = systemBarsInsets.top;
+            mlp.leftMargin = systemBarsInsets.left;
+            mlp.rightMargin = systemBarsInsets.right;
+
             v.setLayoutParams(mlp);
+
             return WindowInsetsCompat.CONSUMED;
         });
     }
