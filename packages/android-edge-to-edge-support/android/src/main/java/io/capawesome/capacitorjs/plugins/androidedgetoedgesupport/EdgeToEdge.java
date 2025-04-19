@@ -63,7 +63,7 @@ public class EdgeToEdge {
             mlp.rightMargin = systemBarsInsets.right;
 
             v.setLayoutParams(mlp);
-            
+
             return WindowInsetsCompat.CONSUMED;
         });
     }
