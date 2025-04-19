@@ -14,8 +14,6 @@
   },
   "dependencies": {
     "@capacitor/core": "latest",
-    "@capacitor/camera": "latest",
-    "@capacitor/splash-screen": "latest",
     "@capawesome/capacitor-libsql": "file:..",
     "@capacitor/ios": "7.0.0",
     "@capacitor/android": "7.0.0"
