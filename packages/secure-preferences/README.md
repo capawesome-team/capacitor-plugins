@@ -5,7 +5,8 @@ Capacitor plugin to securely store key/value pairs such as passwords, tokens or 
 ## Features
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
-- 🔑 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
+- 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: First-class support from the Capawesome Team.
