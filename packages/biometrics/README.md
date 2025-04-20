@@ -101,8 +101,10 @@ const isAvailable = async () => {
 <docgen-index>
 
 * [`authenticate(...)`](#authenticate)
+* [`getAndroidBiometricStrengthLevel()`](#getandroidbiometricstrengthlevel)
 * [`isAvailable(...)`](#isavailable)
 * [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -127,6 +129,23 @@ Only available on Android and iOS.
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
 | **`options`** | <code><a href="#authenticateoptions">AuthenticateOptions</a></code> |
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### getAndroidBiometricStrengthLevel()
+
+```typescript
+getAndroidBiometricStrengthLevel() => Promise<GetAndroidBiometricStrengthLevelResult>
+```
+
+Returns the biometric strength level of the device.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#getandroidbiometricstrengthlevelresult">GetAndroidBiometricStrengthLevelResult</a>&gt;</code>
 
 **Since:** 7.0.0
 
@@ -159,13 +178,21 @@ Only available on Android and iOS.
 
 #### AuthenticateOptions
 
-| Prop                        | Type                 | Description                                                                                                                                                   | Default            | Since |
-| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`allowDeviceCredential`** | <code>boolean</code> | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails. | <code>false</code> | 7.0.0 |
-| **`cancelButtonText`**      | <code>string</code>  | The negative button text of the authentication prompt.                                                                                                        |                    | 7.0.0 |
-| **`iosFallbackButtonText`** | <code>string</code>  | The fallback button text of the authentication prompt. Only available on iOS.                                                                                 |                    | 7.0.0 |
-| **`subtitle`**              | <code>string</code>  | The subtitle of the authentication prompt.                                                                                                                    |                    | 7.0.0 |
-| **`title`**                 | <code>string</code>  | The title of the authentication prompt.                                                                                                                       |                    | 7.0.0 |
+| Prop                           | Type                                                                          | Description                                                                                                                                                                                                                                                                                          | Default                                    | Since |
+| ------------------------------ | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----- |
+| **`allowDeviceCredential`**    | <code>boolean</code>                                                          | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.                                                                                                                                        | <code>false</code>                         | 7.0.0 |
+| **`androidBiometricStrength`** | <code><a href="#androidbiometricstrength">AndroidBiometricStrength</a></code> | The Android biometric strength to use for authentication. **Note**: On Android API Level 28 and 29, this will always be set to `AndroidBiometricStrength.WEAK` regardless of the value passed in if `allowDeviceCredential` is set to `true`. This is a known limitation. Only available on Android. | <code>AndroidBiometricStrength.WEAK</code> | 7.0.0 |
+| **`cancelButtonText`**         | <code>string</code>                                                           | The negative button text of the authentication prompt.                                                                                                                                                                                                                                               |                                            | 7.0.0 |
+| **`iosFallbackButtonText`**    | <code>string</code>                                                           | The fallback button text of the authentication prompt. Only available on iOS.                                                                                                                                                                                                                        |                                            | 7.0.0 |
+| **`subtitle`**                 | <code>string</code>                                                           | The subtitle of the authentication prompt.                                                                                                                                                                                                                                                           |                                            | 7.0.0 |
+| **`title`**                    | <code>string</code>                                                           | The title of the authentication prompt.                                                                                                                                                                                                                                                              |                                            | 7.0.0 |
+
+
+#### GetAndroidBiometricStrengthLevelResult
+
+| Prop                | Type                                                                          | Description                                           | Since |
+| ------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------- | ----- |
+| **`strengthLevel`** | <code><a href="#androidbiometricstrength">AndroidBiometricStrength</a></code> | The supported biometric strength level of the device. | 7.0.0 |
 
 
 #### IsAvailableResult
@@ -177,8 +204,20 @@ Only available on Android and iOS.
 
 #### IsAvailableOptions
 
-| Prop                        | Type                 | Description                                                                                                                                                   | Default            | Since |
-| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`allowDeviceCredential`** | <code>boolean</code> | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails. | <code>false</code> | 7.0.0 |
+| Prop                           | Type                                                                          | Description                                                                                                                                                                                                                                                                                          | Default                                    | Since |
+| ------------------------------ | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----- |
+| **`allowDeviceCredential`**    | <code>boolean</code>                                                          | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.                                                                                                                                        | <code>false</code>                         | 7.0.0 |
+| **`androidBiometricStrength`** | <code><a href="#androidbiometricstrength">AndroidBiometricStrength</a></code> | The Android biometric strength to use for authentication. **Note**: On Android API Level 28 and 29, this will always be set to `AndroidBiometricStrength.WEAK` regardless of the value passed in if `allowDeviceCredential` is set to `true`. This is a known limitation. Only available on Android. | <code>AndroidBiometricStrength.WEAK</code> | 7.0.0 |
+
+
+### Enums
+
+
+#### AndroidBiometricStrength
+
+| Members      | Value                 | Since |
+| ------------ | --------------------- | ----- |
+| **`Strong`** | <code>'STRONG'</code> | 7.0.0 |
+| **`Weak`**   | <code>'WEAK'</code>   | 7.0.0 |
 
 </docgen-api>
