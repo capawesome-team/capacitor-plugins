@@ -39,6 +39,53 @@ npx cap sync
 
 ### Android
 
+#### Backup rules
+
+To prevent the preferences file from being backed up to the cloud, you need to add backup rules to your Android project.
+You can read more about this in the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles).
+
+##### Android 11 and lower
+
+Add the `android:fullBackupContent` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<application
+  android:fullBackupContent="@xml/full_backup_content">
+</application>
+```
+
+Create a new file `res/xml/full_backup_content.xml` with the following content:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+  <include domain="sharedpref" path="."/>
+  <exclude domain="sharedpref" path="CAPAWESOME_SECURE_PREFERENCES.xml"/>
+</full-backup-content>
+```
+
+##### Android 12 and higher
+
+Add the `android:dataExtractionRules` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<application
+  android:dataExtractionRules="@xml/data_extraction_rules">
+</application>
+```
+
+Create a new file `res/xml/data_extraction_rules.xml` with the following content:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+ <cloud-backup [disableIfNoEncryptionCapabilities="true|false"]>
+   <include domain="sharedpref" path="."/>
+   <exclude domain="sharedpref" path="device.xml"/>
+ </cloud-backup>
+</data-extraction-rules>
+```
+
 #### Proguard
 
 If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
@@ -46,12 +93,6 @@ If you are using Proguard, you need to add the following rules to your `proguard
 ```
 -keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
-
-#### Variables
-
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
-
-- `$androidxSecurityCryptoVersion` version of `androidx.security:security-crypto` (default: `1.0.0`)
 
 ## Configuration
 
