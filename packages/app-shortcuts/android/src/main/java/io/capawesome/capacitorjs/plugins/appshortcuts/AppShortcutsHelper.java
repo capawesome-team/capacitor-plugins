@@ -45,6 +45,7 @@ public class AppShortcutsHelper {
             String description = (String) shortcutMap.get("description");
             Object icon = shortcutMap.get("icon");
             Object androidIcon = shortcutMap.get("androidIcon");
+            Object androidIconName = shortcutMap.get("androidIconName");
 
             ShortcutInfoCompat.Builder shortcutInfoCompat = new ShortcutInfoCompat.Builder(context, (String) id);
             shortcutInfoCompat.setShortLabel((String) title);
@@ -57,7 +58,11 @@ public class AppShortcutsHelper {
                     (String) id
                 )
             );
-            if (androidIcon != null) {
+
+            if (androidIconName != null) {
+                int iconResId = context.getResources().getIdentifier((String) androidIconName, "drawable", "android");
+                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, iconResId));
+            } else if (androidIcon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
             } else if (icon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));

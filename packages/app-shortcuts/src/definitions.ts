@@ -123,7 +123,7 @@ export interface Shortcut {
    * - Name of the image asset from the asset catalogue.
    *
    * @since 6.1.0
-   * @deprecated Use `androidIcon` and `iosIcon` instead.
+   * @deprecated Use `androidIcon`, `androidIconName` and `iosIcon` instead.
    * @example 17301547
    * @example 6
    * @example "star.fill"
@@ -138,6 +138,15 @@ export interface Shortcut {
    * @example 17301547
    */
   androidIcon?: number;
+  /**
+   * The icon to display on Android.
+   *
+   * The icon is the constants of [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `"alert_dark_frame"`).
+   *
+   * @since 7.3.0
+   * @example "alert_dark_frame"
+   */
+  androidIconName?: string;
   /**
    * The icon to display on iOS.
    *
