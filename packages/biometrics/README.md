@@ -89,8 +89,8 @@ const authenticate = async () => {
 };
 
 const getBiometricStrengthLevel = async () => {
-  const { level } = await Biometrics.getBiometricStrengthLevel();
-  return level;
+  const { strengthLevel } = await Biometrics.getBiometricStrengthLevel();
+  return strengthLevel;
 };
 
 const hasDeviceCredential = async () => {
@@ -245,9 +245,9 @@ Only available on Android and iOS.
 
 #### GetBiometricStrengthLevelResult
 
-| Prop        | Type                                                            | Description                                           | Since |
-| ----------- | --------------------------------------------------------------- | ----------------------------------------------------- | ----- |
-| **`level`** | <code><a href="#biometricstrength">BiometricStrength</a></code> | The supported biometric strength level of the device. | 7.0.0 |
+| Prop                | Type                                                            | Description                                           | Since |
+| ------------------- | --------------------------------------------------------------- | ----------------------------------------------------- | ----- |
+| **`strengthLevel`** | <code><a href="#biometricstrength">BiometricStrength</a></code> | The supported biometric strength level of the device. | 7.0.0 |
 
 
 #### HasDeviceCredentialResult
