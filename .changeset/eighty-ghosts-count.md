@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-app-shortcuts': minor
+'@capawesome/capacitor-app-shortcuts': patch
 ---
 
 fix(android): add `androidIconName` to `Shortcut`

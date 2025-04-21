@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'feedback',
             title: 'Feedback',
             iosIcon: 6,
-            androidIconName: 'btn_plus',
+            androidIcon: 17301547,
           },
         ],
       });
