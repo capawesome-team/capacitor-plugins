@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document
     .querySelector('#fetch-latest-bundle-button')
     .addEventListener('click', async () => {
-      const channel = document.querySelector('#channel-input').value;
+      const channel =
+        document.querySelector('#channel-input').value || undefined;
       const result = await LiveUpdate.fetchLatestBundle({
         channel,
       });
