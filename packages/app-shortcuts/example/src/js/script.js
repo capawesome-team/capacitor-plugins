@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: 'feedback',
             title: 'Feedback',
             iosIcon: 6,
-            androidIcon: 17301547,
+            androidIcon: 17301547, // 'alert_dark_frame'
           },
         ],
       });

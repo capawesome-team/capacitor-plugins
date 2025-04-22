@@ -123,7 +123,7 @@ export interface Shortcut {
    * - Name of the image asset from the asset catalogue.
    *
    * @since 6.1.0
-   * @deprecated Use `androidIcon`, `androidIconName` and `iosIcon` instead.
+   * @deprecated Use `androidIcon` and `iosIcon` instead.
    * @example 17301547
    * @example 6
    * @example "star.fill"
