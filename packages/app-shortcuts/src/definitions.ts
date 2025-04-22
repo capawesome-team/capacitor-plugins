@@ -132,12 +132,13 @@ export interface Shortcut {
   /**
    * The icon to display on Android.
    *
-   * The icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   * The icon is the constant name or the integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`, `"alert_dark_frame"`).
    *
    * @since 7.2.0
    * @example 17301547
+   * @example "alert_dark_frame"
    */
-  androidIcon?: number;
+  androidIcon?: number | string;
   /**
    * The icon to display on iOS.
    *

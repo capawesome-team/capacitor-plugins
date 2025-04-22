@@ -57,8 +57,14 @@ public class AppShortcutsHelper {
                     (String) id
                 )
             );
+
             if (androidIcon != null) {
-                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
+                try {
+                    int iconResId = context.getResources().getIdentifier((String) androidIcon, "drawable", "android");
+                    shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, iconResId));
+                } catch (Exception exception) {
+                    shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
+                }
             } else if (icon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));
             }
