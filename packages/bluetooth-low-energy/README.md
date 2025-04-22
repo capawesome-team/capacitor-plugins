@@ -773,7 +773,7 @@ startAdvertising(options: StartAdvertisingOptions) => Promise<void>
 
 Start advertising as a BLE device.
 
-Only available on Android.
+Only available on Android and iOS.
 
 | Param         | Type                                                                        |
 | ------------- | --------------------------------------------------------------------------- |
@@ -849,7 +849,7 @@ stopAdvertising() => Promise<void>
 
 Stop advertising as a BLE device.
 
-Only available on Android.
+Only available on Android and iOS.
 
 **Since:** 7.2.0
 
