@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`34f5bc451c2476ba69bc5cbd2c5232aaf58b1849`](https://github.com/capawesome-team/capacitor-plugins/commit/34f5bc451c2476ba69bc5cbd2c5232aaf58b1849) ([#489](https://github.com/capawesome-team/capacitor-plugins/pull/489)): feat(android): string type support for `androidIcon`
+
 ## 7.2.0
 
 ### Minor Changes
