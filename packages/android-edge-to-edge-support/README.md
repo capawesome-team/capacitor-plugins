@@ -13,6 +13,22 @@ npm install @capawesome/capacitor-android-edge-to-edge-support
 npx cap sync
 ```
 
+### Android
+
+If you are using the [Capacitor Keyboard](https://capacitorjs.com/docs/apis/keyboard) plugin, make sure to set the `resizeOnFullScreen` property to `false` (default) in your Capacitor Configuration file:
+
+```json
+{
+  "plugins": {
+    "Keyboard": {
+      "resizeOnFullScreen": false
+    }
+  }
+}
+```
+
+Otherwise, the web view will be resized to fit the screen, which may cause issues with this plugin, see [this comment](https://github.com/capawesome-team/capacitor-plugins/issues/490#issuecomment-2826435796).
+
 ## Configuration
 
 <docgen-config>
