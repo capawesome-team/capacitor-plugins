@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`e124b2bf721fc9182b9f59221833bb7df1398776`](https://github.com/capawesome-team/capacitor-plugins/commit/e124b2bf721fc9182b9f59221833bb7df1398776) ([#495](https://github.com/capawesome-team/capacitor-plugins/pull/495)): feat(android): support custom icons
+
 ## 7.3.0
 
 ### Minor Changes
