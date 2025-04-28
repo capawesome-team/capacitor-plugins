@@ -40,11 +40,7 @@ public class EdgeToEdge {
     }
 
     public void setBackgroundColor(String color) {
-        View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color
-        parent.setBackgroundColor(Color.parseColor(color));
+        setBackgroundColor(Color.parseColor(color));
     }
 
     private void applyInsets() {
@@ -104,5 +100,13 @@ public class EdgeToEdge {
         view.setLayoutParams(mlp);
         // Reset listener
         ViewCompat.setOnApplyWindowInsetsListener(view, null);
+    }
+
+    private void setBackgroundColor(int color) {
+        View view = plugin.getBridge().getWebView();
+        // Get parent view
+        ViewGroup parent = (ViewGroup) view.getParent();
+        // Set background color
+        parent.setBackgroundColor(color);
     }
 }
