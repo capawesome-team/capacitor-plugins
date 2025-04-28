@@ -35,7 +35,13 @@ public class EdgeToEdge {
 
     public ViewGroup.MarginLayoutParams getInsets() {
         View view = plugin.getBridge().getWebView();
-        return (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        if (layoutParams instanceof ViewGroup.MarginLayoutParams) {
+            return (ViewGroup.MarginLayoutParams) layoutParams;
+        } else {
+            Logger.warn("LayoutParams is not an instance of MarginLayoutParams. Returning null.");
+            return null;
+        }
     }
 
     public void setBackgroundColor(String color) {
