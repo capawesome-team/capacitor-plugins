@@ -45,8 +45,6 @@ public class EdgeToEdge {
 
     private void applyInsets() {
         View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
@@ -56,7 +54,11 @@ public class EdgeToEdge {
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
-            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                mlp.bottomMargin = systemBarsInsets.bottom;
+            }
             mlp.topMargin = systemBarsInsets.top;
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
@@ -73,10 +75,11 @@ public class EdgeToEdge {
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
-            // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
-            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
-
-            // Set the other margins using system bars insets
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                mlp.bottomMargin = systemBarsInsets.bottom;
+            }
             mlp.topMargin = systemBarsInsets.top;
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
