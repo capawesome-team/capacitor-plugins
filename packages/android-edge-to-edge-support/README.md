@@ -90,6 +90,9 @@ const setBackgroundColor = async () => {
 
 <docgen-index>
 
+* [`enable()`](#enable)
+* [`disable()`](#disable)
+* [`getInsets()`](#getinsets)
 * [`setBackgroundColor(...)`](#setbackgroundcolor)
 * [Interfaces](#interfaces)
 
@@ -97,6 +100,53 @@ const setBackgroundColor = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### enable()
+
+```typescript
+enable() => Promise<void>
+```
+
+Enable the edge-to-edge mode.
+
+Only available on Android.
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### disable()
+
+```typescript
+disable() => Promise<void>
+```
+
+Disable the edge-to-edge mode.
+
+Only available on Android.
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### getInsets()
+
+```typescript
+getInsets() => Promise<GetInsetsResult>
+```
+
+Return the insets that are currently applied to the webview.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#getinsetsresult">GetInsetsResult</a>&gt;</code>
+
+**Since:** 7.2.0
+
+--------------------
+
 
 ### setBackgroundColor(...)
 
@@ -118,6 +168,16 @@ Only available on Android.
 
 
 ### Interfaces
+
+
+#### GetInsetsResult
+
+| Prop         | Type                | Description                                                                  | Since |
+| ------------ | ------------------- | ---------------------------------------------------------------------------- | ----- |
+| **`bottom`** | <code>number</code> | The bottom inset that was applied to the webview. Only available on Android. | 7.2.0 |
+| **`left`**   | <code>number</code> | The left inset that was applied to the webview. Only available on Android.   | 7.2.0 |
+| **`right`**  | <code>number</code> | The right inset that was applied to the webview. Only available on Android.  | 7.2.0 |
+| **`top`**    | <code>number</code> | The top inset that was applied to the webview. Only available on Android.    | 7.2.0 |
 
 
 #### SetBackgroundColorOptions

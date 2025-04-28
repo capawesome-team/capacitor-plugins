@@ -5,7 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
   StatusBar.setStyle({ style: Style.Light });
 
   document
-    .querySelector('#set-background-color')
+    .querySelector('#enable-button')
+    .addEventListener('click', async () => {
+      await EdgeToEdge.enable();
+    }
+  );
+  document
+    .querySelector('#disable-button')
+    .addEventListener('click', async () => {
+      await EdgeToEdge.disable();
+    });
+    document
+    .querySelector('#get-insets-button')
+    .addEventListener('click', async () => {
+      const result = await EdgeToEdge.getInsets();
+      console.log(result);
+    });
+  document
+    .querySelector('#set-background-color-button')
     .addEventListener('click', async () => {
       const color = document.querySelector('#color-input').value;
       if (!color) {
