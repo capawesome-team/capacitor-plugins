@@ -150,7 +150,7 @@ const addRecordingStoppedListener = async () => {
 * [`getRecordingStatus()`](#getrecordingstatus)
 * [`pauseRecording()`](#pauserecording)
 * [`resumeRecording()`](#resumerecording)
-* [`startRecording()`](#startrecording)
+* [`startRecording(...)`](#startrecording)
 * [`stopRecording()`](#stoprecording)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
@@ -223,13 +223,17 @@ This method is only available on Android (SDK 24+), iOS and Web.
 --------------------
 
 
-### startRecording()
+### startRecording(...)
 
 ```typescript
-startRecording() => Promise<void>
+startRecording(options: StartRecordingOptions) => Promise<void>
 ```
 
 Start recording audio in AAC format.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startrecordingoptions">StartRecordingOptions</a></code> |
 
 **Since:** 7.0.0
 
@@ -336,12 +340,20 @@ or paused or if an error occurs.
 | **`status`** | <code><a href="#recordingstatus">RecordingStatus</a></code> | The current recording status. | <code>RecordingStatus.Inactive</code> | 7.0.0 |
 
 
+#### StartRecordingOptions
+
+| Prop             | Type                | Description                                                                    | Default            | Since |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
+| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS. | <code>44100</code> | 7.1.0 |
+
+
 #### StopRecordingResult
 
-| Prop       | Type                | Description                                                       | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------- | ----- |
-| **`blob`** | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
-| **`uri`**  | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
+| Prop           | Type                | Description                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
+| **`duration`** | <code>number</code> | The duration of the recorded audio in milliseconds.               | 7.1.0 |
+| **`uri`**      | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
 
 
 #### PermissionStatus
@@ -367,10 +379,11 @@ or paused or if an error occurs.
 
 #### RecordingStoppedEvent
 
-| Prop       | Type                | Description                                                       | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------- | ----- |
-| **`blob`** | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
-| **`uri`**  | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
+| Prop           | Type                | Description                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
+| **`duration`** | <code>number</code> | The duration of the recorded audio in milliseconds.               | 7.1.0 |
+| **`uri`**      | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
 
 
 ### Type Aliases
