@@ -8,14 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     .querySelector('#enable-button')
     .addEventListener('click', async () => {
       await EdgeToEdge.enable();
-    }
-  );
+    });
   document
     .querySelector('#disable-button')
     .addEventListener('click', async () => {
       await EdgeToEdge.disable();
     });
-    document
+  document
     .querySelector('#get-insets-button')
     .addEventListener('click', async () => {
       const result = await EdgeToEdge.getInsets();

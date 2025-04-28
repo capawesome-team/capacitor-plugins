@@ -17,25 +17,25 @@ declare module '@capacitor/cli' {
 export interface EdgeToEdgePlugin {
   /**
    * Enable the edge-to-edge mode.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   enable(): Promise<void>;
   /**
    * Disable the edge-to-edge mode.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   disable(): Promise<void>;
   /**
    * Return the insets that are currently applied to the webview.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   getInsets(): Promise<GetInsetsResult>;
@@ -55,33 +55,33 @@ export interface EdgeToEdgePlugin {
 export interface GetInsetsResult {
   /**
    * The bottom inset that was applied to the webview.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   bottom: number;
   /**
    * The left inset that was applied to the webview.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   left: number;
   /**
    * The right inset that was applied to the webview.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   right: number;
   /**
    * The top inset that was applied to the webview.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * @since 7.2.0
    */
   top: number;

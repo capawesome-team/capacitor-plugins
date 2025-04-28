@@ -2,9 +2,7 @@ package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
 import android.view.ViewGroup;
-
 import androidx.annotation.Nullable;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -27,18 +25,20 @@ public class EdgeToEdgePlugin extends Plugin {
 
     @PluginMethod
     public void enable(PluginCall call) {
-        getActivity().runOnUiThread(() -> {
-            implementation.enable();
-            call.resolve();
-        });
+        getActivity()
+            .runOnUiThread(() -> {
+                implementation.enable();
+                call.resolve();
+            });
     }
 
     @PluginMethod
     public void disable(PluginCall call) {
-        getActivity().runOnUiThread(() -> {
-            implementation.disable();
-            call.resolve();
-        });
+        getActivity()
+            .runOnUiThread(() -> {
+                implementation.disable();
+                call.resolve();
+            });
     }
 
     @PluginMethod
