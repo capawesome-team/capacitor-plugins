@@ -22,6 +22,7 @@ public class EdgeToEdge {
         this.config = config;
         this.plugin = plugin;
         // Apply insets to disable the edge-to-edge feature
+        setBackgroundColor(config.getBackgroundColor());
         applyInsets();
     }
 
@@ -42,7 +43,7 @@ public class EdgeToEdge {
         View view = plugin.getBridge().getWebView();
         // Get parent view
         ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color to black
+        // Set background color
         parent.setBackgroundColor(Color.parseColor(color));
     }
 
@@ -50,8 +51,6 @@ public class EdgeToEdge {
         View view = plugin.getBridge().getWebView();
         // Get parent view
         ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color to black
-        parent.setBackgroundColor(this.config.getBackgroundColor());
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
@@ -96,8 +95,6 @@ public class EdgeToEdge {
         View view = plugin.getBridge().getWebView();
         // Get parent view
         ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color to black
-        parent.setBackgroundColor(this.config.getBackgroundColor());
         // Reset insets
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.topMargin = 0;
