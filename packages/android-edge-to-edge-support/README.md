@@ -80,6 +80,19 @@ The plugin **only needs to be installed**. It applies insets to the web view to 
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
+const enable = async () => {
+  await EdgeToEdge.enable();
+};
+
+const disable = async () => {
+  await EdgeToEdge.disable();
+};
+
+const getInsets = async () => {
+  const result = await EdgeToEdge.getInsets();
+  console.log('Insets:', result);
+};
+
 const setBackgroundColor = async () => {
   await EdgeToEdge.setBackgroundColor({ color: '#ffffff' });
   await StatusBar.setStyle({ style: Style.Light });
