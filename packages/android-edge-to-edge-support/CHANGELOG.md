@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`eea01ec10d6fae1601e54830fde8394b7a4b0ffd`](https://github.com/capawesome-team/capacitor-plugins/commit/eea01ec10d6fae1601e54830fde8394b7a4b0ffd) ([#502](https://github.com/capawesome-team/capacitor-plugins/pull/502)): fix: run `setBackgroundColor(...)` on ui thread
+
 ## 7.2.0
 
 ### Minor Changes
