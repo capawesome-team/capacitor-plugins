@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`abb0d1e3b783f91fe1858701b258ecb886b75f15`](https://github.com/capawesome-team/capacitor-plugins/commit/abb0d1e3b783f91fe1858701b258ecb886b75f15) ([#498](https://github.com/capawesome-team/capacitor-plugins/pull/498)): feat: add `enable()`, `disable()` and `getInsets()` methods
+
 ## 7.1.1
 
 ### Patch Changes
