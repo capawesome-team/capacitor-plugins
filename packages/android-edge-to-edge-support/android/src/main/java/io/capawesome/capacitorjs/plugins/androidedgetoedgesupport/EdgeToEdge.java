@@ -104,9 +104,12 @@ public class EdgeToEdge {
 
     private void setBackgroundColor(int color) {
         View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color
-        parent.setBackgroundColor(color);
+        // Ensure to use the main thread insted of background thread
+        plugin.getActivity().runOnUiThread(() -> {
+            // Get parent view
+            ViewGroup parent = (ViewGroup) view.getParent();
+            // Set background color
+            parent.setBackgroundColor(color);
+        });
     }
 }
