@@ -59,8 +59,11 @@ public class EdgeToEdgePlugin extends Plugin {
             call.reject(ERROR_COLOR_MISSING);
             return;
         }
-        implementation.setBackgroundColor(color);
-        call.resolve();
+        getActivity()
+            .runOnUiThread(() -> {
+                implementation.setBackgroundColor(color);
+                call.resolve();
+            });
     }
 
     private EdgeToEdgeConfig getEdgeToEdgeConfig() {
