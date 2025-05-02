@@ -7,7 +7,7 @@ Capacitor plugin for audio recording using the device's microphone.
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
 - 🔑 **Permissions**: Check and request microphone permissions.
-- 🔊 **Events**: Listen for events like `recordingError` or `recordingStopped`.
+- 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
 - 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -135,6 +135,12 @@ const addRecordingErrorListener = async () => {
   });
 };
 
+const addRecordingPausedListener = async () => {
+  await AudioRecorder.addListener('recordingPaused', () => {
+    console.log('Recording paused');
+  });
+};
+
 const addRecordingStoppedListener = async () => {
   await AudioRecorder.addListener('recordingStopped', (event) => {
     console.log('Recording stopped:', event.uri);
@@ -155,6 +161,7 @@ const addRecordingStoppedListener = async () => {
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
+* [`addListener('recordingPaused', ...)`](#addlistenerrecordingpaused-)
 * [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -303,6 +310,26 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### addListener('recordingPaused', ...)
+
+```typescript
+addListener(eventName: 'recordingPaused', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the recording is paused (e.g. when the recording is interrupted by a phone call).
+
+| Param              | Type                           |
+| ------------------ | ------------------------------ |
+| **`eventName`**    | <code>'recordingPaused'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.1.0
 
 --------------------
 
