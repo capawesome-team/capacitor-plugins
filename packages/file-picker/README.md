@@ -93,6 +93,7 @@ const requestPermissions = async () => {
 * [`requestPermissions(...)`](#requestpermissions)
 * [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed-)
 * [`removeAllListeners()`](#removealllisteners)
+* [`copyVideoToCache(...)`](#copyvideotocache)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -298,6 +299,27 @@ Remove all listeners for this plugin.
 --------------------
 
 
+### copyVideoToCache(...)
+
+```typescript
+copyVideoToCache(options: CopyVideoToCacheOptions) => Promise<CopyVideoToCacheResult>
+```
+
+Convert a picked video to a file:// path by copying it to the local cache folder.
+
+Only available on Android.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#copyvideotocacheoptions">CopyVideoToCacheOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#copyvideotocacheresult">CopyVideoToCacheResult</a>&gt;</code>
+
+**Since:** 7.0.2
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -384,6 +406,20 @@ Remove all listeners for this plugin.
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### CopyVideoToCacheResult
+
+| Prop          | Type                | Description                                        |
+| ------------- | ------------------- | -------------------------------------------------- |
+| **`newPath`** | <code>string</code> | The file:// path of the video in the cache folder. |
+
+
+#### CopyVideoToCacheOptions
+
+| Prop       | Type                | Description                                                                                             |
+| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------- |
+| **`path`** | <code>string</code> | The path of the video to convert. (same as `path` recieved from <a href="#pickedfile">`PickedFile`</a>) |
 
 
 ### Type Aliases
