@@ -12,7 +12,9 @@ import androidx.annotation.Nullable;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -136,6 +138,46 @@ public class FilePicker {
             return new FileResolution(height, width);
         }
         return null;
+    }
+
+    public String copyVideoToCache(@NonNull Uri uri) {
+        if (uri == null) {
+            Logger.error(TAG, "URI is null.");
+            return null;
+        }
+
+        try {
+            // Get the cache directory
+            File cacheDir = bridge.getContext().getCacheDir();
+
+            // Generate a unique file name in the cache directory
+            String fileName = getNameFromUri(uri);
+            File cacheFile = new File(cacheDir, fileName);
+            int counter = 1;
+            while (cacheFile.exists()) {
+                String baseName = fileName.contains(".") ? fileName.substring(0, fileName.lastIndexOf('.')) : fileName;
+                String extension = fileName.contains(".") ? fileName.substring(fileName.lastIndexOf('.')) : "";
+                cacheFile = new File(cacheDir, baseName + "_" + counter + extension);
+                counter++;
+            }
+
+            // Copy the file from the URI to the cache file
+            try (InputStream inputStream = bridge.getContext().getContentResolver().openInputStream(uri);
+                 FileOutputStream outputStream = new FileOutputStream(cacheFile)) {
+
+                byte[] buffer = new byte[1024];
+                int length;
+                while ((length = inputStream.read(buffer)) > 0) {
+                    outputStream.write(buffer, 0, length);
+                }
+            }
+
+            // Return the file:// path
+            return cacheFile.toURI().toString();
+        } catch (IOException e) {
+            Logger.error(TAG, "Failed to copy video to cache: " + e.getMessage(), e);
+            return null;
+        }
     }
 
     private boolean isImageUri(Uri uri) {

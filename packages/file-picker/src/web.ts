@@ -16,6 +16,8 @@ import type {
   PickedFile,
   RequestPermissionsOptions,
   PickDirectoryResult,
+  CopyVideoToCacheOptions,
+  CopyVideoToCacheResult,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -28,6 +30,12 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   public async convertHeicToJpeg(
     _options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  public async copyVideoToCache(
+    _options: CopyVideoToCacheOptions,
+  ): Promise<CopyVideoToCacheResult> {
     throw this.unimplemented('Not implemented on web.');
   }
 

@@ -88,6 +88,14 @@ export interface FilePickerPlugin {
    * @since 0.6.2
    */
   removeAllListeners(): Promise<void>;
+  /**
+   * Convert a picked video to a file:// path by copying it to the local cache folder.
+   *
+   * Only available on Android.
+   *
+   * @since 7.0.2
+   */
+  copyVideoToCache(options: CopyVideoToCacheOptions): Promise<CopyVideoToCacheResult>;
 }
 
 /**
@@ -333,3 +341,27 @@ export interface RequestPermissionsOptions {
  * @since 6.1.0
  */
 export type PermissionType = 'accessMediaLocation' | 'readExternalStorage';
+
+/**
+ * @since 7.0.2
+ */
+export interface CopyVideoToCacheOptions {
+  /**
+   * The path of the video to convert. (same as `path` recieved from `PickedFile`)
+   *
+   * @example 'content://path/to/video.mp4'
+   */
+  path: string;
+}
+
+/**
+ * @since 7.0.2
+ */
+export interface CopyVideoToCacheResult {
+  /**
+   * The file:// path of the video in the cache folder.
+   *
+   * @example 'file:///data/user/0/com.example.app/cache/video.mp4'
+   */
+  newPath: string;
+}

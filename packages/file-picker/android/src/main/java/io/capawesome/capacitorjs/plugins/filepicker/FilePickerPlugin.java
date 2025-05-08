@@ -236,6 +236,33 @@ public class FilePickerPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void convertVideoToCachePath(PluginCall call) {
+        try {
+            String path = call.getString("path");
+            if (path == null) {
+                call.reject("A path must be provided.");
+                return;
+            }
+
+            Uri uri = Uri.parse(path);
+            String cachePath = implementation.copyVideoToCache(uri);
+
+            if (cachePath == null) {
+                call.reject("Failed to copy video to cache.");
+                return;
+            }
+
+            JSObject result = new JSObject();
+            result.put("newPath", cachePath);
+            call.resolve(result);
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
+    }
+
     private JSObject createPickFilesResult(@Nullable Intent data, boolean readData) {
         JSObject callResult = new JSObject();
         List<JSObject> filesResultList = new ArrayList<>();
