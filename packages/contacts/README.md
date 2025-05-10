@@ -6,7 +6,7 @@ Capacitor plugin to read, write, or select device contacts.
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
-- 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS. (Coming soon!)
+- 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS.
 - 🎫 **Accounts**: Add contacts to specific accounts on Android. (Coming soon!)
 - 📖 **Pagination**: Paginate through contacts to avoid performance issues. (Coming soon!)
 - 🔍 **Filtering**: Filter contacts by ID, email, phone number, etc. (Coming soon!)
@@ -165,10 +165,15 @@ const requestPermissions = async () => {
 <docgen-index>
 
 * [`createContact(...)`](#createcontact)
+* [`createGroup(...)`](#creategroup)
 * [`deleteContactById(...)`](#deletecontactbyid)
+* [`deleteGroupById(...)`](#deletegroupbyid)
 * [`displayCreateContact(...)`](#displaycreatecontact)
+* [`getAccounts()`](#getaccounts)
 * [`getContactById(...)`](#getcontactbyid)
 * [`getContacts(...)`](#getcontacts)
+* [`getGroupById(...)`](#getgroupbyid)
+* [`getGroups()`](#getgroups)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
 * [`checkPermissions()`](#checkpermissions)
@@ -203,6 +208,27 @@ Only available on Android and iOS.
 --------------------
 
 
+### createGroup(...)
+
+```typescript
+createGroup(options: CreateGroupOptions) => Promise<CreateGroupResult>
+```
+
+Create a new contact group on the device.
+
+Only available on iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#creategroupoptions">CreateGroupOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#creategroupresult">CreateGroupResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
 ### deleteContactById(...)
 
 ```typescript
@@ -218,6 +244,25 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#deletecontactbyidoptions">DeleteContactByIdOptions</a></code> |
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### deleteGroupById(...)
+
+```typescript
+deleteGroupById(options: DeleteGroupByIdOptions) => Promise<void>
+```
+
+Delete a contact group from the device.
+
+Only available on iOS.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletegroupbyidoptions">DeleteGroupByIdOptions</a></code> |
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -240,6 +285,23 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#displaycreatecontactoptions">DisplayCreateContactOptions</a></code> |
 
 **Since:** 7.2.0
+
+--------------------
+
+
+### getAccounts()
+
+```typescript
+getAccounts() => Promise<GetAccountsResult>
+```
+
+List all accounts on the device.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#getaccountsresult">GetAccountsResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -282,6 +344,44 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getcontactsresult">GetContactsResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### getGroupById(...)
+
+```typescript
+getGroupById(options: GetGroupByIdOptions) => Promise<GetGroupByIdResult>
+```
+
+Find a contact group by identifier.
+
+Only available on iOS.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getgroupbyidoptions">GetGroupByIdOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getgroupbyidresult">GetGroupByIdResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### getGroups()
+
+```typescript
+getGroups() => Promise<GetGroupsResult>
+```
+
+List all contact groups on the device.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getgroupsresult">GetGroupsResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -381,10 +481,12 @@ Only available on Android and iOS.
 
 | Prop                   | Type                                          | Description                                                                     | Since |
 | ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`account`**          | <code><a href="#account">Account</a></code>   | The account associated with the contact. Only available on Android.             | 7.4.0 |
 | **`birthday`**         | <code><a href="#birthday">Birthday</a></code> | The birthday of the contact.                                                    | 7.3.0 |
 | **`emailAddresses`**   | <code>EmailAddress[]</code>                   | The list of email addresses for the contact.                                    | 7.0.0 |
 | **`familyName`**       | <code>string</code>                           | The family name of the contact. Only available on Android and iOS.              | 7.0.0 |
 | **`givenName`**        | <code>string</code>                           | The given name of the contact. Only available on Android and iOS.               | 7.0.0 |
+| **`groupIds`**         | <code>string[]</code>                         | The identifier of the groups the contact belongs to. Only available on iOS.     | 7.4.0 |
 | **`id`**               | <code>string</code>                           | The identifier for the contact. Only available on Android and iOS.              | 7.0.0 |
 | **`jobTitle`**         | <code>string</code>                           | The job title of the contact. Only available on Android and iOS.                | 7.0.0 |
 | **`middleName`**       | <code>string</code>                           | The middle name of the contact. Only available on Android and iOS.              | 7.0.0 |
@@ -397,6 +499,14 @@ Only available on Android and iOS.
 | **`photo`**            | <code>string</code>                           | The photo of the contact as a base64 string. Only available on Android and iOS. | 7.0.0 |
 | **`postalAddresses`**  | <code>PostalAddress[]</code>                  | The list of postal addresses for the contact.                                   | 7.0.0 |
 | **`urlAddresses`**     | <code>UrlAddress[]</code>                     | The list of URL addresses for the contact. Only available on Android and iOS.   | 7.0.0 |
+
+
+#### Account
+
+| Prop       | Type                | Description                                  | Since |
+| ---------- | ------------------- | -------------------------------------------- | ----- |
+| **`name`** | <code>string</code> | The account name. Only available on Android. | 7.4.0 |
+| **`type`** | <code>string</code> | The account type. Only available on Android. | 7.4.0 |
 
 
 #### Birthday
@@ -452,6 +562,28 @@ Only available on Android and iOS.
 | **`value`** | <code>string</code> | The URL address. |
 
 
+#### CreateGroupResult
+
+| Prop     | Type                | Description                           | Since |
+| -------- | ------------------- | ------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the created group. | 7.4.0 |
+
+
+#### CreateGroupOptions
+
+| Prop        | Type                                                                          | Description          | Since |
+| ----------- | ----------------------------------------------------------------------------- | -------------------- | ----- |
+| **`group`** | <code><a href="#omit">Omit</a>&lt;<a href="#group">Group</a>, 'id'&gt;</code> | The group to create. | 7.4.0 |
+
+
+#### Group
+
+| Prop       | Type                | Description                   | Since |
+| ---------- | ------------------- | ----------------------------- | ----- |
+| **`id`**   | <code>string</code> | The identifier for the group. | 7.4.0 |
+| **`name`** | <code>string</code> | The name of the group.        | 7.4.0 |
+
+
 #### DeleteContactByIdOptions
 
 | Prop     | Type                | Description                     | Since |
@@ -459,11 +591,25 @@ Only available on Android and iOS.
 | **`id`** | <code>string</code> | The identifier for the contact. | 7.0.0 |
 
 
+#### DeleteGroupByIdOptions
+
+| Prop     | Type                | Description                   | Since |
+| -------- | ------------------- | ----------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
 #### DisplayCreateContactOptions
 
 | Prop          | Type                                                                              | Description                                         | Since |
 | ------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
 | **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
+
+
+#### GetAccountsResult
+
+| Prop           | Type                   | Description                                   | Since |
+| -------------- | ---------------------- | --------------------------------------------- | ----- |
+| **`accounts`** | <code>Account[]</code> | An array of available accounts on the device. | 7.4.0 |
 
 
 #### GetContactByIdResult
@@ -493,6 +639,27 @@ Only available on Android and iOS.
 | Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
 | ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+
+
+#### GetGroupByIdResult
+
+| Prop        | Type                                            | Description                              | Since |
+| ----------- | ----------------------------------------------- | ---------------------------------------- | ----- |
+| **`group`** | <code><a href="#group">Group</a> \| null</code> | The group with the specified identifier. | 7.4.0 |
+
+
+#### GetGroupByIdOptions
+
+| Prop     | Type                | Description                   | Since |
+| -------- | ------------------- | ----------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
+#### GetGroupsResult
+
+| Prop         | Type                 | Description                       | Since |
+| ------------ | -------------------- | --------------------------------- | ----- |
+| **`groups`** | <code>Group[]</code> | The list of groups on the device. | 7.4.0 |
 
 
 #### IsSupportedResult
