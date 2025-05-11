@@ -7,7 +7,7 @@ Capacitor plugin to read, write, or select device contacts.
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
 - 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS.
-- 🎫 **Accounts**: Add contacts to specific accounts on Android. (Coming soon!)
+- 🎫 **Accounts**: Add contacts to specific accounts on Android.
 - 📖 **Pagination**: Paginate through contacts to avoid performance issues. (Coming soon!)
 - 🔍 **Filtering**: Filter contacts by ID, email, phone number, etc. (Coming soon!)
 - 📱 **Native Modals**: Create, update and display contacts in native modals. (Coming soon!)
@@ -164,6 +164,7 @@ const requestPermissions = async () => {
 
 <docgen-index>
 
+* [`countContacts()`](#countcontacts)
 * [`createContact(...)`](#createcontact)
 * [`createGroup(...)`](#creategroup)
 * [`deleteContactById(...)`](#deletecontactbyid)
@@ -176,6 +177,7 @@ const requestPermissions = async () => {
 * [`getGroups()`](#getgroups)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
+* [`pickContacts(...)`](#pickcontacts)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -186,6 +188,23 @@ const requestPermissions = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### countContacts()
+
+```typescript
+countContacts() => Promise<CountContactsResult>
+```
+
+Count the number of contacts on the device.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#countcontactsresult">CountContactsResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
 
 ### createContact(...)
 
@@ -404,20 +423,37 @@ Check if the contacts API is available on the device.
 ### pickContact(...)
 
 ```typescript
-pickContact(options?: PickContactOptions | undefined) => Promise<PickContactResult>
+pickContact(options?: PickContactsOptions | undefined) => Promise<PickContactResult>
 ```
 
 Open the contact picker to select a contact from the device.
 
-Only available on web.
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#pickcontactoptions">PickContactOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#pickcontactresult">PickContactResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#pickcontactsresult">PickContactsResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### pickContacts(...)
+
+```typescript
+pickContacts(options?: PickContactsOptions | undefined) => Promise<PickContactsResult>
+```
+
+Open the contact picker to select a contact from the device.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pickcontactsresult">PickContactsResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -461,6 +497,13 @@ Only available on Android and iOS.
 
 
 ### Interfaces
+
+
+#### CountContactsResult
+
+| Prop        | Type                | Description             | Since |
+| ----------- | ------------------- | ----------------------- | ----- |
+| **`total`** | <code>number</code> | The number of contacts. | 7.4.0 |
 
 
 #### CreateContactResult
@@ -669,18 +712,19 @@ Only available on Android and iOS.
 | **`isSupported`** | <code>boolean</code> | Whether the contacts API is available on the device. This is always `true` on Android and iOS. | 7.0.0 |
 
 
-#### PickContactResult
+#### PickContactsResult
 
 | Prop           | Type                   | Description                                         | Since |
 | -------------- | ---------------------- | --------------------------------------------------- | ----- |
 | **`contacts`** | <code>Contact[]</code> | The selected contacts. Empty if none were selected. | 7.0.0 |
 
 
-#### PickContactOptions
+#### PickContactsOptions
 
-| Prop           | Type                 | Description                                                          | Default            | Since |
-| -------------- | -------------------- | -------------------------------------------------------------------- | ------------------ | ----- |
-| **`multiple`** | <code>boolean</code> | Whether to allow selecting multiple contacts. Only available on Web. | <code>false</code> | 7.0.0 |
+| Prop           | Type                                                  | Description                                                              | Default                                                                                                                                                                                                   | Since |
+| -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`**   | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. Only available on Android and iOS. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.4.0 |
+| **`multiple`** | <code>boolean</code>                                  | Whether to allow selecting multiple contacts. Only available on Web.     | <code>false</code>                                                                                                                                                                                        | 7.0.0 |
 
 
 #### PermissionStatus
@@ -725,6 +769,16 @@ From T, pick a set of properties whose keys are in the union K
 #### ContactField
 
 <code>keyof <a href="#contact">Contact</a></code>
+
+
+#### PickContactOptions
+
+<code><a href="#pickcontactsoptions">PickContactsOptions</a></code>
+
+
+#### PickContactResult
+
+<code><a href="#pickcontactsresult">PickContactsResult</a></code>
 
 
 #### ContactsPermissionState
