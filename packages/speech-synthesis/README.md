@@ -21,8 +21,8 @@ Capacitor plugin for synthesizing speech from text (also known as text-to-speech
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 6.x.x          | 6.x.x             | Deprecated     |
 | 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
 
 ## Installation
 
