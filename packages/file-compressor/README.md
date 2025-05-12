@@ -14,8 +14,8 @@ Capacitor plugin for compressing files.
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 6.x.x          | 6.x.x             | Deprecated     |
 | 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
 
 ## Installation
 
