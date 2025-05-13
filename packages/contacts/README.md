@@ -679,9 +679,11 @@ Only available on Android and iOS.
 
 #### GetContactsOptions
 
-| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
-| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| Prop         | Type                                                  | Description                             | Default                                                                                                                                                                                       | Since |
+| ------------ | ----------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact.   | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| **`limit`**  | <code>number</code>                                   | Limit the number of contacts returned.  | <code>1000</code>                                                                                                                                                                             | 7.4.0 |
+| **`offset`** | <code>number</code>                                   | Offset the number of contacts returned. | <code>0</code>                                                                                                                                                                                | 7.4.0 |
 
 
 #### GetGroupByIdResult
