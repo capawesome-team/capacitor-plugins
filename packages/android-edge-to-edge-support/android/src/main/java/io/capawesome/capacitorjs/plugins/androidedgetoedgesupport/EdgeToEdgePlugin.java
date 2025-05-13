@@ -2,8 +2,8 @@ package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
 import android.view.ViewGroup;
-import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
+import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
@@ -27,8 +27,12 @@ public class EdgeToEdgePlugin extends Plugin {
     public void enable(PluginCall call) {
         getActivity()
             .runOnUiThread(() -> {
-                implementation.enable();
-                call.resolve();
+                try {
+                    implementation.enable();
+                    call.resolve();
+                } catch (Exception exception) {
+                    call.reject(exception.getMessage());
+                }
             });
     }
 
@@ -36,20 +40,28 @@ public class EdgeToEdgePlugin extends Plugin {
     public void disable(PluginCall call) {
         getActivity()
             .runOnUiThread(() -> {
-                implementation.disable();
-                call.resolve();
+                try {
+                    implementation.disable();
+                    call.resolve();
+                } catch (Exception exception) {
+                    call.reject(exception.getMessage());
+                }
             });
     }
 
     @PluginMethod
     public void getInsets(PluginCall call) {
-        ViewGroup.MarginLayoutParams insets = implementation.getInsets();
-        JSObject result = new JSObject();
-        result.put("bottom", insets.bottomMargin);
-        result.put("left", insets.leftMargin);
-        result.put("right", insets.rightMargin);
-        result.put("top", insets.topMargin);
-        call.resolve(result);
+        try {
+            ViewGroup.MarginLayoutParams insets = implementation.getInsets();
+            JSObject result = new JSObject();
+            result.put("bottom", insets.bottomMargin);
+            result.put("left", insets.leftMargin);
+            result.put("right", insets.rightMargin);
+            result.put("top", insets.topMargin);
+            call.resolve(result);
+        } catch (Exception exception) {
+            call.reject(exception.getMessage());
+        }
     }
 
     @PluginMethod
@@ -61,17 +73,25 @@ public class EdgeToEdgePlugin extends Plugin {
         }
         getActivity()
             .runOnUiThread(() -> {
-                implementation.setBackgroundColor(color);
-                call.resolve();
+                try {
+                    implementation.setBackgroundColor(color);
+                    call.resolve();
+                } catch (Exception exception) {
+                    call.reject(exception.getMessage());
+                }
             });
     }
 
     private EdgeToEdgeConfig getEdgeToEdgeConfig() {
         EdgeToEdgeConfig config = new EdgeToEdgeConfig();
 
-        String backgroundColor = getConfig().getString("backgroundColor");
-        if (backgroundColor != null) {
-            config.setBackgroundColor(Color.parseColor(backgroundColor));
+        try {
+            String backgroundColor = getConfig().getString("backgroundColor");
+            if (backgroundColor != null) {
+                config.setBackgroundColor(Color.parseColor(backgroundColor));
+            }
+        } catch (Exception exception) {
+            Logger.error(TAG, "Set config failed.", exception);
         }
         return config;
     }
