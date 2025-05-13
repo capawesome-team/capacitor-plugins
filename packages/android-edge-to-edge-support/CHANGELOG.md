@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.2
+
+### Patch Changes
+
+- [`0bc2bb87b59b2825d01ed6347b4af110a94d9b1f`](https://github.com/capawesome-team/capacitor-plugins/commit/0bc2bb87b59b2825d01ed6347b4af110a94d9b1f) ([#512](https://github.com/capawesome-team/capacitor-plugins/pull/512)): fix: catch exceptions
+
 ## 7.2.1
 
 ### Patch Changes
