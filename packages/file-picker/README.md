@@ -52,6 +52,13 @@ const checkPermissions = async () => {
   const result = await FilePicker.checkPermissions();
 };
 
+const copyFile = async () => {
+  const result = await FilePicker.copyFile({
+    from: 'path/to/file',
+    to: 'path/to/destination',
+  });
+};
+
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles({
     types: ['image/png'],
@@ -85,6 +92,7 @@ const requestPermissions = async () => {
 
 * [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
+* [`copyFile(...)`](#copyfile)
 * [`pickFiles(...)`](#pickfiles)
 * [`pickDirectory()`](#pickdirectory)
 * [`pickImages(...)`](#pickimages)
@@ -135,6 +143,25 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#convertheictojpegresult">ConvertHeicToJpegResult</a>&gt;</code>
 
 **Since:** 0.6.0
+
+--------------------
+
+
+### copyFile(...)
+
+```typescript
+copyFile(options: CopyFileOptions) => Promise<void>
+```
+
+Copy a file to a new location.
+
+Only available on Android.
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#copyfileoptions">CopyFileOptions</a></code> |
+
+**Since:** 7.1.0
 
 --------------------
 
@@ -321,6 +348,14 @@ Remove all listeners for this plugin.
 | Prop       | Type                | Description                 | Since |
 | ---------- | ------------------- | --------------------------- | ----- |
 | **`path`** | <code>string</code> | The path of the HEIC image. | 0.6.0 |
+
+
+#### CopyFileOptions
+
+| Prop       | Type                | Description                   | Since |
+| ---------- | ------------------- | ----------------------------- | ----- |
+| **`from`** | <code>string</code> | The path of the file to copy. | 7.1.0 |
+| **`to`**   | <code>string</code> | The path to copy the file to. | 7.1.0 |
 
 
 #### PickFilesResult
