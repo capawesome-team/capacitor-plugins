@@ -8,7 +8,7 @@ Capacitor plugin to read, write, or select device contacts.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
 - 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS.
 - 🎫 **Accounts**: Add contacts to specific accounts on Android.
-- 📖 **Pagination**: Paginate through contacts to avoid performance issues. (Coming soon!)
+- 📖 **Pagination**: Paginate through contacts to avoid performance issues.
 - 🔍 **Filtering**: Filter contacts by ID, email, phone number, etc. (Coming soon!)
 - 📱 **Native Modals**: Create, update and display contacts in native modals. (Coming soon!)
 - 🎯 **Picking**: Let the user select a device contact.
@@ -289,7 +289,7 @@ Only available on iOS.
 ### displayCreateContact(...)
 
 ```typescript
-displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promise<void>
+displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promise<DisplayCreateContactResult>
 ```
 
 Open a native modal to create a new device contact.
@@ -302,6 +302,8 @@ Only available on Android and iOS.
 | Param         | Type                                                                                |
 | ------------- | ----------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#displaycreatecontactoptions">DisplayCreateContactOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#displaycreatecontactresult">DisplayCreateContactResult</a>&gt;</code>
 
 **Since:** 7.2.0
 
@@ -639,6 +641,13 @@ Only available on Android and iOS.
 | Prop     | Type                | Description                   | Since |
 | -------- | ------------------- | ----------------------------- | ----- |
 | **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
+#### DisplayCreateContactResult
+
+| Prop     | Type                | Description                                                                                                              | Since |
+| -------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`id`** | <code>string</code> | The identifier for the created contact. On **Android**, you need the `readContacts` permission to return the identifier. | 7.4.0 |
 
 
 #### DisplayCreateContactOptions
