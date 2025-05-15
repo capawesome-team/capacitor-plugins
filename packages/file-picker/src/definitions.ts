@@ -20,6 +20,14 @@ export interface FilePickerPlugin {
     options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult>;
   /**
+   * Copy a file to a new location.
+   *
+   * Only available on Android.
+   *
+   * @since 7.1.0
+   */
+  copyFile(options: CopyFileOptions): Promise<void>;
+  /**
    * Open the file picker that allows the user to select one or more files.
    */
   pickFiles(options?: PickFilesOptions): Promise<PickFilesResult>;
@@ -114,6 +122,26 @@ export interface ConvertHeicToJpegResult {
    * @since 0.6.0
    */
   path: string;
+}
+
+/**
+ * @since 7.1.0
+ */
+export interface CopyFileOptions {
+  /**
+   * The path of the file to copy.
+   *
+   * @example '/path/to/file.txt'
+   * @since 7.1.0
+   */
+  from: string;
+  /**
+   * The path to copy the file to.
+   *
+   * @example '/path/to/new-file.txt'
+   * @since 7.1.0
+   */
+  to: string;
 }
 
 /**

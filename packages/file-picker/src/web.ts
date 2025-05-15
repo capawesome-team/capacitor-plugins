@@ -3,8 +3,10 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   ConvertHeicToJpegOptions,
   ConvertHeicToJpegResult,
+  CopyFileOptions,
   FilePickerPlugin,
   PermissionStatus,
+  PickDirectoryResult,
   PickFilesOptions,
   PickFilesResult,
   PickImagesOptions,
@@ -15,7 +17,6 @@ import type {
   PickVideosResult,
   PickedFile,
   RequestPermissionsOptions,
-  PickDirectoryResult,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
@@ -28,6 +29,10 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   public async convertHeicToJpeg(
     _options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  public async copyFile(_options: CopyFileOptions): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
