@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`0b995f2215a273bd76c13b8930d39a9b7c7bacf3`](https://github.com/capawesome-team/capacitor-plugins/commit/0b995f2215a273bd76c13b8930d39a9b7c7bacf3) ([#514](https://github.com/capawesome-team/capacitor-plugins/pull/514)): feat(android): add `copyFile(...)` method
+
 ## 7.0.1
 
 ### Patch Changes
