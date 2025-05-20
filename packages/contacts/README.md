@@ -169,6 +169,7 @@ const requestPermissions = async () => {
 * [`createGroup(...)`](#creategroup)
 * [`deleteContactById(...)`](#deletecontactbyid)
 * [`deleteGroupById(...)`](#deletegroupbyid)
+* [`displayContactById(...)`](#displaycontactbyid)
 * [`displayCreateContact(...)`](#displaycreatecontact)
 * [`getAccounts()`](#getaccounts)
 * [`getContactById(...)`](#getcontactbyid)
@@ -280,6 +281,25 @@ Only available on iOS.
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#deletegroupbyidoptions">DeleteGroupByIdOptions</a></code> |
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### displayContactById(...)
+
+```typescript
+displayContactById(options: DisplayContactByIdOptions) => Promise<void>
+```
+
+Display an existing contact by identifier.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#displaycontactbyidoptions">DisplayContactByIdOptions</a></code> |
 
 **Since:** 7.4.0
 
@@ -641,6 +661,13 @@ Only available on Android and iOS.
 | Prop     | Type                | Description                   | Since |
 | -------- | ------------------- | ----------------------------- | ----- |
 | **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
+#### DisplayContactByIdOptions
+
+| Prop     | Type                | Description                               | Since |
+| -------- | ------------------- | ----------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier of the contact to display. | 7.4.0 |
 
 
 #### DisplayCreateContactResult
