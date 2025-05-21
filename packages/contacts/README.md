@@ -171,6 +171,7 @@ const requestPermissions = async () => {
 * [`deleteGroupById(...)`](#deletegroupbyid)
 * [`displayContactById(...)`](#displaycontactbyid)
 * [`displayCreateContact(...)`](#displaycreatecontact)
+* [`displayUpdateContactById(...)`](#displayupdatecontactbyid)
 * [`getAccounts()`](#getaccounts)
 * [`getContactById(...)`](#getcontactbyid)
 * [`getContacts(...)`](#getcontacts)
@@ -179,6 +180,7 @@ const requestPermissions = async () => {
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
 * [`pickContacts(...)`](#pickcontacts)
+* [`updateContactById(...)`](#updatecontactbyid)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -330,6 +332,25 @@ Only available on Android and iOS.
 --------------------
 
 
+### displayUpdateContactById(...)
+
+```typescript
+displayUpdateContactById(options: DisplayUpdateContactByIdOptions) => Promise<void>
+```
+
+Open a native modal to update a contact.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#displayupdatecontactbyidoptions">DisplayUpdateContactByIdOptions</a></code> |
+
+**Since:** 7.4.0
+
+--------------------
+
+
 ### getAccounts()
 
 ```typescript
@@ -474,6 +495,25 @@ Open the contact picker to select a contact from the device.
 | **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pickcontactsresult">PickContactsResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### updateContactById(...)
+
+```typescript
+updateContactById(options: UpdateContactByIdOptions) => Promise<void>
+```
+
+Update an existing contact on the device.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#updatecontactbyidoptions">UpdateContactByIdOptions</a></code> |
 
 **Since:** 7.4.0
 
@@ -684,6 +724,13 @@ Only available on Android and iOS.
 | **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
 
 
+#### DisplayUpdateContactByIdOptions
+
+| Prop     | Type                | Description                              | Since |
+| -------- | ------------------- | ---------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier of the contact to update. | 7.4.0 |
+
+
 #### GetAccountsResult
 
 | Prop           | Type                   | Description                                   | Since |
@@ -763,6 +810,14 @@ Only available on Android and iOS.
 | -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`fields`**   | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. Only available on Android and iOS. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.4.0 |
 | **`multiple`** | <code>boolean</code>                                  | Whether to allow selecting multiple contacts. Only available on Web.     | <code>false</code>                                                                                                                                                                                        | 7.0.0 |
+
+
+#### UpdateContactByIdOptions
+
+| Prop          | Type                                                                              | Description                                                                                                                                                                          | Since |
+| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The updated contact information. **Attention**: All fields are required to be provided, even if they are not updated. Fields that are not provided will be removed from the contact. | 7.4.0 |
+| **`id`**      | <code>string</code>                                                               | The identifier for the contact.                                                                                                                                                      | 7.4.0 |
 
 
 #### PermissionStatus
