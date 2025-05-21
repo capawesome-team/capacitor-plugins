@@ -93,6 +93,11 @@ import {
   PostalAddressType
 } from '@capawesome-team/capacitor-contacts';
 
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
 const createContact = async () => {
   return Contacts.createContact({
     contact: {
@@ -132,9 +137,43 @@ const createContact = async () => {
   });
 };
 
-const getContacts = async () => {
-  const { contacts } = await Contacts.getContacts();
-  return contacts;
+const createGroup = async () => {
+  return Contacts.createGroup({
+    group: {
+      name: 'My Group'
+    }
+  });
+};
+
+const deleteContactById = async (id: string) => {
+  await Contacts.deleteContactById({ id });
+};
+
+const deleteGroupById = async (id: string) => {
+  await Contacts.deleteGroupById({ id });
+};
+
+const displayContactById = async (id: string) => {
+  await Contacts.displayContactById({ id });
+};
+
+const displayCreateContact = async () => {
+  const { id } = await Contacts.displayCreateContact({
+    contact: {
+      givenName: 'John',
+      familyName: 'Doe'
+    }
+  });
+  return id;
+};
+
+const displayUpdateContactById = async (id: string) => {
+  await Contacts.displayUpdateContactById({ id });
+};
+
+const getAccounts = async () => {
+  const { accounts } = await Contacts.getAccounts();
+  return accounts;
 };
 
 const getContactById = async (id: string) => {
@@ -142,13 +181,39 @@ const getContactById = async (id: string) => {
   return contact;
 };
 
-const deleteContactById = async (id: string) => {
-  await Contacts.deleteContactById({ id });
+const getContacts = async () => {
+  const { contacts } = await Contacts.getContacts();
+  return contacts;
+};
+
+const getGroupById = async (id: string) => {
+  const { group } = await Contacts.getGroupById({ id });
+  return group;
+};
+
+const getGroups = async () => {
+  const { groups } = await Contacts.getGroups();
+  return groups;
 };
 
 const isSupported = async () => {
   const { isSupported } = await Contacts.isSupported();
   return isSupported;
+};
+
+const pickContacts = async () => {
+  const { contacts } = await Contacts.pickContacts();
+  return contacts;
+};
+
+const updateContactById = async (id: string) => {
+  await Contacts.updateContactById({
+    id,
+    contact: {
+      givenName: 'John',
+      familyName: 'Doe'
+    }
+  });
 };
 
 const checkPermissions = async () => {
