@@ -10,7 +10,7 @@ Capacitor plugin to read, write, or select device contacts.
 - 🎫 **Accounts**: Add contacts to specific accounts on Android.
 - 📖 **Pagination**: Paginate through contacts to avoid performance issues.
 - 🔍 **Filtering**: Filter contacts by ID, email, phone number, etc. (Coming soon!)
-- 📱 **Native Modals**: Create, update and display contacts in native modals. (Coming soon!)
+- 📱 **Native Modals**: Create, update and display contacts in native modals.
 - 🎯 **Picking**: Let the user select a device contact.
 - 🖼️ **Photos**: Set, update and retrieve contact photos.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
@@ -914,7 +914,9 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 #### Exclude
