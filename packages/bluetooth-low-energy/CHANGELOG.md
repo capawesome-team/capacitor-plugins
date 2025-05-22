@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`d827b67678b042f551b39a820bfd4d785f8f49bb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d827b67678b042f551b39a820bfd4d785f8f49bb) ([#155](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/155)): fix(android): `Context.startForegroundService() did not then call Service.startForeground()` error
+
+- [`8ccb9d8429aded24b5df83cc1b9cc52c89106bab`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8ccb9d8429aded24b5df83cc1b9cc52c89106bab) ([#162](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/162)): fix(android): create the notification channel if it does not exist
+
 ## 7.2.0
 
 ### Minor Changes
