@@ -809,7 +809,10 @@ Only available on Android and iOS.
 startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
 ```
 
-Start the foreground service.
+Start the foreground service and show a notification.
+
+This method should be called when the app is moved to the background to
+keep the Bluetooth connections alive.
 
 Only available on Android.
 
@@ -881,7 +884,10 @@ Only available on Android and iOS.
 stopForegroundService() => Promise<void>
 ```
 
-Stop the foreground service.
+Stop the foreground service and remove the notification.
+
+This method should be called when the app is moved to the foreground
+since the foreground service is no longer needed.
 
 Only available on Android.
 
