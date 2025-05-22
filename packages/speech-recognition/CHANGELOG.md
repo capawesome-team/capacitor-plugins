@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.1
+
+### Patch Changes
+
+- [`53094fea7979fd6b56a06ed2cb5b9c90a9163547`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/53094fea7979fd6b56a06ed2cb5b9c90a9163547) ([#161](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/161)): fix(web): `partialResult` and `result` listeners did not fire
+
 ## 7.3.0
 
 ### Minor Changes
