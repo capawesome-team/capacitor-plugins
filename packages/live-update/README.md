@@ -14,6 +14,7 @@ Capacitor plugin to update your app remotely in real-time.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
+- ⚔️ **Battle-Tested**: Used in more than 500 projects.
 - 🌐 **Open Source**: Licensed under the MIT License.
 
 ## Installation
