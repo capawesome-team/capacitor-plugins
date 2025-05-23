@@ -4,6 +4,8 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
 - 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
@@ -15,7 +17,9 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and
 - ⚔️ **Battle-Tested**: Used in more than 30 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
 ## Compatibility
 
