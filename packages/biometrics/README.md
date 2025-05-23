@@ -4,6 +4,8 @@ Capacitor plugin to request biometric authentication, such as using face recogni
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for biometric authentication. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 👁️ **Fingerprint, Face and Iris**: Supports fingerprint, face and iris recognition.
 - 🔑 **Device Credential**: Optionally allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.
@@ -12,7 +14,9 @@ Capacitor plugin to request biometric authentication, such as using face recogni
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
 ## Compatibility
 
