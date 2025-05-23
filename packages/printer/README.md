@@ -4,6 +4,8 @@ Capacitor plugin for printing.
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for printing. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🖨️ **Base64 Printer**: Print base64 encoded files.
 - 🖨️ **File Printer**: Print files from the device.
@@ -13,7 +15,9 @@ Capacitor plugin for printing.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
 ## Compatibility
 
