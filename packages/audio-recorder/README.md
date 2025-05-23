@@ -4,6 +4,8 @@ Capacitor plugin for audio recording using the device's microphone.
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio recording. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
 - 🔑 **Permissions**: Check and request microphone permissions.
@@ -11,7 +13,9 @@ Capacitor plugin for audio recording using the device's microphone.
 - 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
 ## Compatibility
 
