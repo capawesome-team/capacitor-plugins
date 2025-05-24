@@ -1020,6 +1020,10 @@ See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/CHANGELOG.md).
 
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/BREAKING.md).
+
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/LICENSE).
