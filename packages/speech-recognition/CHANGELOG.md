@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.2
+
+### Patch Changes
+
+- [`7e02e9e1ac7fcbe4621f242f64440e99e736dac8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7e02e9e1ac7fcbe4621f242f64440e99e736dac8) ([#164](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/164)): fix(android): `end` listener was not called on SDK 32 and below if no match was found
+
 ## 7.3.1
 
 ### Patch Changes
