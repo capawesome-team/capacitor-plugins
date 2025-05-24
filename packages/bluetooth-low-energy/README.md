@@ -28,6 +28,14 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | 7.x.x          | >=7.x.x           | Active support |
 | 6.x.x          | 6.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-heart-rate-monitor-app).
+
+| Android                                                                                                   | iOS                                                                                                       |
+| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" /> |
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
@@ -144,10 +152,6 @@ If the app wants to use Bluetooth in the background, add the `UIBackgroundModes`
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Guides
 
