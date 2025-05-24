@@ -284,6 +284,10 @@ output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/P
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/printer/CHANGELOG.md).
 
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/printer/BREAKING.md).
+
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/printer/LICENSE).
