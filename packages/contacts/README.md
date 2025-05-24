@@ -918,9 +918,7 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{
- [P in K]: T[P];
- }</code>
+<code>{ [P in K]: T[P]; }</code>
 
 
 #### Exclude
@@ -1018,6 +1016,10 @@ From T, pick a set of properties whose keys are in the union K
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/contacts/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/contacts/BREAKING.md).
 
 ## License
 
