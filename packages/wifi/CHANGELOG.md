@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`e09db429b5cecdf8400481999bc3d08b6b728584`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e09db429b5cecdf8400481999bc3d08b6b728584) ([#156](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/156)): feat: add `addNetwork(...)` method
+
 ## 7.0.1
 
 ### Patch Changes
