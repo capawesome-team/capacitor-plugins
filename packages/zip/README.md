@@ -22,6 +22,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | 7.x.x          | >=7.x.x           | Active support |
 | 6.x.x          | 6.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found [here](https://github.com/robingenz/capacitor-plugin-demo).
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
@@ -61,10 +65,6 @@ This plugin will use the following project variables (defined in your app’s `v
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 
