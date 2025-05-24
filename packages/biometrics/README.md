@@ -286,3 +286,15 @@ Only available on Android and iOS.
 | **`Weak`**   | <code>'WEAK'</code>   | 7.0.0 |
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/biometrics/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/biometrics/BREAKING.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/biometrics/LICENSE).
