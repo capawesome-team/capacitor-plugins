@@ -685,6 +685,10 @@ Remove all listeners for the plugin.
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/speech-synthesis/CHANGELOG.md).
 
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/speech-synthesis/BREAKING.md).
+
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/speech-synthesis/LICENSE).
