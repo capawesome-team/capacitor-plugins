@@ -281,6 +281,10 @@ This is for development purposes only and should not be used in production.
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/secure-preferences/CHANGELOG.md).
 
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/secure-preferences/BREAKING.md).
+
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/secure-preferences/LICENSE).
