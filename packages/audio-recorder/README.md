@@ -442,6 +442,10 @@ or paused or if an error occurs.
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/CHANGELOG.md).
 
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/BREAKING.md).
+
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/LICENSE).
