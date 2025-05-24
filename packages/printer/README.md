@@ -27,6 +27,14 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found [here](https://github.com/robingenz/capacitor-plugin-demo).
+
+| Android                                                                                                                             | iOS                                                                                                                                 |
+| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/7de4bcb3-aa59-43bc-a882-2796964be539" width="324" /> | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/d796d9f0-32c1-4d5c-b38f-ab46509a5eda" width="324" /> |
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
@@ -67,14 +75,6 @@ This plugin will use the following project variables (defined in your app’s `v
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                             | iOS                                                                                                                                 |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/7de4bcb3-aa59-43bc-a882-2796964be539" width="324" /> | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/d796d9f0-32c1-4d5c-b38f-ab46509a5eda" width="324" /> |
 
 ## Usage
 
