@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`40ceb68d347f5f48a09ead80c622bf80c141a5c6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/40ceb68d347f5f48a09ead80c622bf80c141a5c6) ([#172](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/172)): feat(android): add `getAuthenticationType()` method
+
 ## 0.1.0
 
 ### Minor Changes
