@@ -118,6 +118,7 @@ const isEnrolled = async () => {
 <docgen-index>
 
 * [`authenticate(...)`](#authenticate)
+* [`cancelAuthentication()`](#cancelauthentication)
 * [`getAuthenticationType()`](#getauthenticationtype)
 * [`getBiometricStrengthLevel()`](#getbiometricstrengthlevel)
 * [`hasDeviceCredential()`](#hasdevicecredential)
@@ -159,6 +160,21 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#authenticateoptions">AuthenticateOptions</a></code> |
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### cancelAuthentication()
+
+```typescript
+cancelAuthentication() => Promise<void>
+```
+
+Cancel the ongoing authentication session and dismisses the prompt.
+
+This method is only available on Android (SDK 29+) and iOS.
+
+**Since:** 7.0.0
 
 --------------------
 
