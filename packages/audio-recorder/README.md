@@ -373,9 +373,10 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop             | Type                | Description                                                                    | Default            | Since |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS. | <code>44100</code> | 7.1.0 |
+| Prop             | Type                | Description                                                                              | Default             | Since |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`bitRate`**    | <code>number</code> | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code> | 7.2.0 |
+| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>  | 7.1.0 |
 
 
 #### StopRecordingResult
