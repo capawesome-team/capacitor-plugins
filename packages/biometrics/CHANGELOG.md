@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`6ed65c991bd76f025eeab4a396b0501c01f9c722`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6ed65c991bd76f025eeab4a396b0501c01f9c722) ([#174](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/174)): feat: add `cancelAuthentication()` method
+
 ## 0.2.0
 
 ### Minor Changes
