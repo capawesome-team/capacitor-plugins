@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`85e73689fa22d15e04c242dc512801b22a4465b0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/85e73689fa22d15e04c242dc512801b22a4465b0) ([#175](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/175)): feat: add `bitRate` option to `StartRecordingOptions`
+
 ## 7.1.0
 
 ### Minor Changes
