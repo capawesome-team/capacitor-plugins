@@ -1,20 +1,12 @@
 export interface LibsqlPlugin {
-  beginTransaction(): Promise<BeginTransactionResult>;
-  commitTransaction(options: CommitTransactionOptions): Promise<void>;
+  beginTransaction(): Promise<void>;
+  commitTransaction(): Promise<void>;
   connect(options: ConnectOptions): Promise<ConnectResult>;
   execute(options: ExecuteOptions): Promise<void>;
   executeBatch(options: ExecuteBatchOptions): Promise<void>;
   query(options: QueryOptions): Promise<QueryResult>;
-  rollbackTransaction(options: RollbackTransactionOptions): Promise<void>;
+  rollbackTransaction(): Promise<void>;
   sync(): Promise<void>;
-}
-
-export interface BeginTransactionResult {
-  transactionId: string;
-}
-
-export interface CommitTransactionOptions {
-  transactionId: string;
 }
 
 export interface ConnectOptions {
@@ -66,10 +58,6 @@ export interface QueryOptions {
 export interface QueryResult {
   columns: string[];
   rows: Record<string, Value>[];
-}
-
-export interface RollbackTransactionOptions {
-  transactionId: string;
 }
 
 export type Value = string | number | null;
