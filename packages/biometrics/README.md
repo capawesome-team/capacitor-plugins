@@ -92,6 +92,10 @@ const authenticate = async () => {
   }
 };
 
+const cancelAuthentication = async () => {
+  await Biometrics.cancelAuthentication();
+};
+
 const getBiometricStrengthLevel = async () => {
   const { strengthLevel } = await Biometrics.getBiometricStrengthLevel();
   return strengthLevel;
