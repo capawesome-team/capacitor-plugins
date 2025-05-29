@@ -72,4 +72,4 @@ export interface RollbackTransactionOptions {
   transactionId: string;
 }
 
-export type Value = string | number;
+export type Value = string | number | null;
