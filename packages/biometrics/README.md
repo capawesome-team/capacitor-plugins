@@ -40,7 +40,7 @@ npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 Next, install the package:
 
 ```
-npm install @capawesome-team/capacitor-secure-preferences
+npm install @capawesome-team/capacitor-biometrics
 npx cap sync
 ```
 
