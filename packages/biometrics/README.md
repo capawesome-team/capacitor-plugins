@@ -123,6 +123,7 @@ const isEnrolled = async () => {
 
 * [`authenticate(...)`](#authenticate)
 * [`cancelAuthentication()`](#cancelauthentication)
+* [`enroll()`](#enroll)
 * [`getAuthenticationType()`](#getauthenticationtype)
 * [`getBiometricStrengthLevel()`](#getbiometricstrengthlevel)
 * [`hasDeviceCredential()`](#hasdevicecredential)
@@ -177,6 +178,21 @@ cancelAuthentication() => Promise<void>
 Cancel the ongoing authentication session and dismisses the prompt.
 
 This method is only available on Android (SDK 29+) and iOS.
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### enroll()
+
+```typescript
+enroll() => Promise<void>
+```
+
+Prompt the user to enroll their biometrics.
+
+This method is only available on Android.
 
 **Since:** 7.0.0
 
