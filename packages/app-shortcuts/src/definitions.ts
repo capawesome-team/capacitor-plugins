@@ -137,6 +137,7 @@ export interface Shortcut {
    * @since 7.2.0
    * @example 17301547
    * @example "alert_dark_frame"
+   * @example "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC..."
    */
   androidIcon?: number | string;
   /**
