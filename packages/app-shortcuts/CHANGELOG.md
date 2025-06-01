@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`a2526e851b8a21524c610e4cad757c17700d7805`](https://github.com/capawesome-team/capacitor-plugins/commit/a2526e851b8a21524c610e4cad757c17700d7805) ([#522](https://github.com/capawesome-team/capacitor-plugins/pull/522)): feat(android): support base64 string for `androidIcon`
+
 ## 7.4.0
 
 ### Minor Changes
