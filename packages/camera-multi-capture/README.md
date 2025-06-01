@@ -9,6 +9,49 @@ npm install camera-multi-capture
 npx cap sync
 ```
 
+## Usage
+
+```typescript
+import { initialize, CameraOverlayResult } from 'camera-multi-capture';
+
+const result = await initialize({
+  containerId: 'camera-overlay',
+  quality: 90,
+  thumbnailStyle: {
+    width: '100px',
+    height: '100px'
+  },
+
+  /** more options */
+}).then((result: CameraOverlayResult) => {
+  if (result.cancelled) {
+    console.log('User cancelled the camera overlay');
+  } else {
+    console.log('Captured images:', result.images);
+  }
+
+  // normally you'd want go back to previous screen
+
+  // this.navCtrl.pop();
+  // this.navCtrl.navigateBack();
+});
+```
+
+```html
+<div id="camera-overlay"></div>
+```
+
+```css
+#camera-overlay {
+  width: 100%; // or any other value for custom container
+  height: 100%;
+
+   background-color: transparent !important;
+  --background: transparent !important;
+  --ion-background-color: transparent !important;
+}
+```
+
 ## API
 
 <docgen-index>
@@ -192,3 +235,4 @@ Defines the style properties for camera buttons
 <code>'minimizeLatency' | 'maxQuality'</code>
 
 </docgen-api>
+
