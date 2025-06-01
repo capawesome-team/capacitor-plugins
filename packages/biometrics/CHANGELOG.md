@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- [`79c956c7faa04f998d5725a2d780fda0aad7822e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/79c956c7faa04f998d5725a2d780fda0aad7822e) ([#177](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/177)): feat(android): add `enroll()` method
+
 ## 0.3.0
 
 ### Minor Changes
