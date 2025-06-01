@@ -28,6 +28,7 @@ export class OverlayManager {
   private galleryController: GalleryController | null = null;
   private isActive = false;
   private resolvePromise: ((value: CameraOverlayResult) => void) | null = null;
+  private bodyBackgroundColor: string | null = null;
 
   constructor(plugin: CameraMultiCapturePlugin, options: CameraOverlayUIOptions) {
     this.options = options;
@@ -56,10 +57,14 @@ export class OverlayManager {
           throw new Error(`Container with ID ${this.options.containerId} not found`);
         }
 
+        this.bodyBackgroundColor = document.body.style.backgroundColor;
+        document.body.style.backgroundColor = 'transparent';
+
         await this.cameraController.initialize(
           container,
           this.options.quality ?? 90,
         );
+
       } catch (error) {
         console.error('Failed to initialize camera overlay', error);
         resolve({ images: [], cancelled: true });
@@ -217,5 +222,8 @@ export class OverlayManager {
     this.overlayElement = null;
     this.galleryController = null;
     this.isActive = false;
+    if (this.bodyBackgroundColor) {
+      document.body.style.backgroundColor = this.bodyBackgroundColor;
+    }
   }
 }
