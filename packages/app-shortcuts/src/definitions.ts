@@ -115,7 +115,10 @@ export interface Shortcut {
   /**
    * The icon to display.
    *
-   * On **Android**, the icon is the constant integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   * On **Android**, the icon can be one of the following:
+   * - An integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   * - A string that represents the name of the drawable resource (e.g. `"alert_dark_frame"`).
+   * - A base64 encoded image string (e.g. `"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC..."`).
    *
    * On **iOS**, the icon can be one of the following:
    * - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`).
@@ -132,7 +135,10 @@ export interface Shortcut {
   /**
    * The icon to display on Android.
    *
-   * The icon is the constant name or the integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`, `"alert_dark_frame"`).
+   * The icon can be one of the following:
+   * - An integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`).
+   * - A string that represents the name of the drawable resource (e.g. `"alert_dark_frame"`).
+   * - A base64 encoded image string (e.g. `"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC..."`).
    *
    * @since 7.2.0
    * @example 17301547
