@@ -91,7 +91,7 @@ public class AppShortcutsHelper {
     }
 
     @Nullable
-    public static Bitmap decodeBase64(@NonNull String base64) {
+    private static Bitmap decodeBase64(@NonNull String base64) {
         base64 = base64.replaceFirst("data:[a-zA-Z+/]+;base64,", "");
         byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
