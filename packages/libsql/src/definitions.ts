@@ -2,11 +2,17 @@ export interface LibsqlPlugin {
   /**
    * Begin a transaction on the specified database connection.
    *
+   * Only available on Android.
+   *
    * @since 0.1.0
    */
-  beginTransaction(options: BeginTransactionOptions): Promise<void>;
+  beginTransaction(
+    options: BeginTransactionOptions,
+  ): Promise<BeginTransactionResult>;
   /**
    * Commit the current transaction on the specified database connection.
+   *
+   * Only available on Android.
    *
    * @since 0.1.0
    */
@@ -48,6 +54,8 @@ export interface LibsqlPlugin {
    *
    * This method will undo all changes made in the current transaction.
    *
+   * Only available on Android.
+   *
    * @since 0.1.0
    */
   rollbackTransaction(options: RollbackTransactionOptions): Promise<void>;
@@ -63,8 +71,13 @@ export interface BeginTransactionOptions {
   connectionId: string;
 }
 
+export interface BeginTransactionResult {
+  transactionId: string;
+}
+
 export interface CommitTransactionOptions {
   connectionId: string;
+  transactionId: string;
 }
 
 export interface ConnectOptions {
@@ -96,6 +109,9 @@ export interface ConnectResult {
 export interface ExecuteOptions {
   connectionId: string;
   statement: string;
+  /**
+   * Only available on Android.
+   */
   transactionId?: string;
   values?: Value[];
 }
@@ -109,6 +125,9 @@ export interface ExecuteBatchOptions {
 export interface QueryOptions {
   connectionId: string;
   statement: string;
+  /**
+   * Only available on Android.
+   */
   transactionId?: string;
   values?: Value[];
 }
@@ -120,6 +139,7 @@ export interface QueryResult {
 
 export interface RollbackTransactionOptions {
   connectionId: string;
+  transactionId: string;
 }
 
 export interface SyncOptions {
