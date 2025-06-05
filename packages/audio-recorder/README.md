@@ -8,6 +8,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
+- 🚀 **Performance**: Record long audio sessions without any performance issues.
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
 - 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
