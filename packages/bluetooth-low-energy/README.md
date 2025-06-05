@@ -133,12 +133,16 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
-Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
+#### Privacy Descriptions
+
+Add the `NSBluetoothAlwaysUsageDescription` key to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
 <string>The app needs access to Bluetooth peripherals to communicate with Bluetooth devices.</string>
 ```
+
+#### Background Modes
 
 If the app wants to use Bluetooth in the background, add the `UIBackgroundModes` key with the `bluetooth-central` value:
 
