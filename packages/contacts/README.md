@@ -731,9 +731,11 @@ Only available on Android and iOS.
 
 #### UrlAddress
 
-| Prop        | Type                | Description      |
-| ----------- | ------------------- | ---------------- |
-| **`value`** | <code>string</code> | The URL address. |
+| Prop        | Type                                                      | Description                         | Default                           | Since |
+| ----------- | --------------------------------------------------------- | ----------------------------------- | --------------------------------- | ----- |
+| **`label`** | <code>string</code>                                       | A custom label for the URL address. |                                   | 7.5.0 |
+| **`type`**  | <code><a href="#urladdresstype">UrlAddressType</a></code> | The type of URL address.            | <code>UrlAddressType.Other</code> | 7.5.0 |
+| **`value`** | <code>string</code>                                       | The URL address.                    |                                   |       |
 
 
 #### CreateGroupResult
@@ -1010,6 +1012,21 @@ From T, pick a set of properties whose keys are in the union K
 | **`Home`**   | <code>'HOME'</code>   | 7.0.0 |
 | **`Other`**  | <code>'OTHER'</code>  | 7.0.0 |
 | **`Work`**   | <code>'WORK'</code>   | 7.0.0 |
+
+
+#### UrlAddressType
+
+| Members        | Value                   | Description                | Since |
+| -------------- | ----------------------- | -------------------------- | ----- |
+| **`Blog`**     | <code>'BLOG'</code>     | Only available on Android. | 7.5.0 |
+| **`Custom`**   | <code>'CUSTOM'</code>   |                            | 7.5.0 |
+| **`Ftp`**      | <code>'FTP'</code>      | Only available on Android. | 7.5.0 |
+| **`Home`**     | <code>'HOME'</code>     |                            | 7.5.0 |
+| **`Homepage`** | <code>'HOMEPAGE'</code> |                            | 7.5.0 |
+| **`Other`**    | <code>'OTHER'</code>    |                            | 7.5.0 |
+| **`Profile`**  | <code>'PROFILE'</code>  | Only available on Android. | 7.5.0 |
+| **`School`**   | <code>'SCHOOL'</code>   | Only available on iOS.     | 7.5.0 |
+| **`Work`**     | <code>'WORK'</code>     |                            | 7.5.0 |
 
 </docgen-api>
 
