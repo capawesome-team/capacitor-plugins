@@ -116,15 +116,21 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
+#### Capabilities
+
 Ensure `Near Field Communication Tag Reading` capabilities have been enabled in your application in Xcode.
 See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
-Finally, add the `NFCReaderUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why the app needs to use NFC:
+#### Privacy Descriptions
+
+Add the `NFCReaderUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why the app needs to use NFC:
 
 ```diff
 + <key>NFCReaderUsageDescription</key>
 + <string>The app enables the reading and writing of various NFC tags.</string>
 ```
+
+#### Universal Links
 
 If you want to launch your app through an NFC tag, please take a look at the [Core NFC documentation](https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading#3032598).
 The NFC tag requires a [URI record](https://w3c.github.io/web-nfc/#uri-record) (see [`createNdefUriRecord(...)`](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/nfc/docs/utils#createndefurirecord)) that must contain either a universal link (see [Deep Linking with Universal and App Links](https://capacitorjs.com/docs/guides/deep-links)) or a [supported URL scheme](https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading#3032600).
