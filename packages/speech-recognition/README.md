@@ -62,7 +62,7 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 #### Privacy Descriptions
 
-Add the `NSSpeechRecognitionUsageDescription` and `NSMicrophoneUsageDescription` keys to the `ios/App/App/Info.plist` file, which tells the user why your app is requesting location information:
+Add the `NSSpeechRecognitionUsageDescription` and `NSMicrophoneUsageDescription` keys to the `ios/App/App/Info.plist` file, which tells the user why the app needs access to speech recognition and the microphone:
 
 ```xml
 <key>NSSpeechRecognitionUsageDescription</key>
