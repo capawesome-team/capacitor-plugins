@@ -399,6 +399,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`getConnectedDevices()`](#getconnecteddevices)
 * [`getServices(...)`](#getservices)
 * [`initialize(...)`](#initialize)
+* [`isAvailable()`](#isavailable)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
 * [`openAppSettings()`](#openappsettings)
@@ -570,6 +571,21 @@ Only available on iOS.
 | **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not Bluetooth Low Energy is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.3.0
 
 --------------------
 
@@ -1248,6 +1264,13 @@ Remove all listeners for this plugin.
 | Prop       | Type                                   | Description                                                         | Default                | Since |
 | ---------- | -------------------------------------- | ------------------------------------------------------------------- | ---------------------- | ----- |
 | **`mode`** | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS. | <code>'central'</code> | 7.2.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                                     | Since |
+| ----------------- | -------------------- | --------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not Bluetooth Low Energy is available on the device. | 7.3.0 |
 
 
 #### IsBondedResult
