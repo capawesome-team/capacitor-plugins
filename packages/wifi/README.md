@@ -51,14 +51,11 @@ npx cap sync
 
 #### Permissions
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
+<!-- Required if you want retrieve information about nearby Wi-Fi networks. -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 ```
 
 #### Proguard
