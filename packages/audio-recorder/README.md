@@ -46,14 +46,6 @@ npx cap sync
 
 ### Android
 
-#### Permissions
-
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
-
-```xml
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-```
-
 #### Proguard
 
 If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
