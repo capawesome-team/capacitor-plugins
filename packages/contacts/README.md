@@ -51,10 +51,12 @@ npx cap sync
 
 #### Permissions
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
+<!-- Required if you want to read contacts. -->
 <uses-permission android:name="android.permission.READ_CONTACTS" />
+<!-- Required if you want to write contacts. -->
 <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
 
