@@ -57,18 +57,15 @@ npx cap sync
 
 ### Android
 
-#### Permissions
+#### Features
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before the `application` tag:
+Add the following element to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
-<!-- To get access to the NFC hardware. -->
-<uses-permission android:name="android.permission.NFC" />
-<!-- The minimum SDK version that your application can support. -->
-<uses-sdk android:minSdkVersion="10"/>
-<!-- (Optional) This will ensure that your app appears in Google Play only for devices with NFC hardware. -->
 <uses-feature android:name="android.hardware.nfc" android:required="true" />
 ```
+
+Set the `android:required` attribute to `true` if your app can't function, or isn't designed to function, when NFC is not available on the device. If your app can function without NFC, set the `android:required` attribute to `false`. This will allow your app to be installed on devices that do not support NFC.
 
 #### Intent Filter
 
