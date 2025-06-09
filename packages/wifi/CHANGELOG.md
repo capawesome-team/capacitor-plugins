@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`4972c2f85d305836804eea23f2342e7bbd287aa5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4972c2f85d305836804eea23f2342e7bbd287aa5) ([#194](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/194)): feat(android): automatically apply certain permission elements in app manifest
+
+### Patch Changes
+
+- [`e304408abd4dba89d111475794483bea2ab68c62`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e304408abd4dba89d111475794483bea2ab68c62) ([#167](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/167)): fix(ios): reject plugin call if privacy descriptions are missing
+
 ## 7.1.0
 
 ### Minor Changes
