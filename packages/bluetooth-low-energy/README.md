@@ -58,40 +58,38 @@ npx cap sync
 
 ### Android
 
-#### Permissions
+#### Features
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+Add the following element to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
-<!-- Request legacy Bluetooth permissions on older devices. -->
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+```
+
+Set the `android:required` attribute to `true` if your app can't function, or isn't designed to function, when Bluetooth Low Energy is not available on the device. If your app can function without Bluetooth Low Energy, set the `android:required` attribute to `false`. This will allow your app to be installed on devices that do not support Bluetooth Low Energy.
+
+#### Permissions
+
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<!-- Required if you want to support Android 11 and below. -->
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-<!-- Needed only if your app uses advertising -->
+<!-- Required if you want to advertise as a BLE device. -->
 <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-<!-- Needed only if your app looks for Bluetooth devices.  -->
+<!-- Required if you want to scan for BLE devices. -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-<!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
-<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-<!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<!-- Needed only if your app uses the foreground service. -->
+<!-- Required if you want to be able to connect to paired Bluetooth devices. -->
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+<!--Required if you want to start a foreground service.-->
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 ```
 
 You can read more about Bluetooth permissions in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
-
-#### Features
-
-Add the following feature to your `AndroidManifest.xml` before or after the `application` tag:
-
-```xml
-<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
-```
-
-Set it to `true` if BLE is required for your app. Then the Google Play store will hide your app from users on devices lacking those features.
-You can read more about Bluetooth features in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions#features).
 
 #### Services
 
