@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.3.3
+
+### Patch Changes
+
+- [`e304408abd4dba89d111475794483bea2ab68c62`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e304408abd4dba89d111475794483bea2ab68c62) ([#167](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/167)): fix(ios): reject plugin call if privacy descriptions are missing
+
+- [`a14dddad070e929c5700ccef3a3015c70d775d66`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a14dddad070e929c5700ccef3a3015c70d775d66) ([#196](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/196)): fix(ios): gracefully handle audio session activation errors
+
 ## 7.3.2
 
 ### Patch Changes
