@@ -56,6 +56,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -138,23 +140,36 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) throws Exception {
-        GetLatestBundleResponse response = fetchLatestBundle(options);
-        ArtifactType artifactType = response == null ? null : response.getArtifactType();
-        String bundleId = response == null ? null : response.getBundleId();
-        String checksum = response == null ? null : response.getChecksum();
-        JSONObject customProperties = response == null ? null : response.getCustomProperties();
-        String downloadUrl = response == null ? null : response.getUrl();
-        String signature = response == null ? null : response.getSignature();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(
-            artifactType,
-            bundleId,
-            checksum,
-            customProperties,
-            downloadUrl,
-            signature
-        );
-        callback.success(result);
+    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<Result> callback) {
+        try {
+            fetchLatestBundleInternal(options, new NonEmptyCallback<>() {
+                @Override
+                public void success(GetLatestBundleResponse response) {
+                    ArtifactType artifactType = response == null ? null : response.getArtifactType();
+                    String bundleId = response == null ? null : response.getBundleId();
+                    String checksum = response == null ? null : response.getChecksum();
+                    JSONObject customProperties = response == null ? null : response.getCustomProperties();
+                    String downloadUrl = response == null ? null : response.getUrl();
+                    String signature = response == null ? null : response.getSignature();
+                    FetchLatestBundleResult result = new FetchLatestBundleResult(
+                            artifactType,
+                            bundleId,
+                            checksum,
+                            customProperties,
+                            downloadUrl,
+                            signature
+                    );
+                    callback.success(result);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    callback.error(exception);
+                }
+            });
+        } catch (Exception e) {
+            callback.error(e);
+        }
     }
 
     public void getBundles(@NonNull NonEmptyCallback callback) {
@@ -269,45 +284,70 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) throws Exception {
+    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) {
         String channel = options.getChannel();
-        // Fetch the latest bundle
-        FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
-        GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
-        if (response == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
-            SyncResult syncResult = new SyncResult(null);
-            callback.success(syncResult);
-            return;
+
+        try {
+            // Fetch the latest bundle
+            FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
+            fetchLatestBundleInternal(fetchLatestBundleOptions, new NonEmptyCallback<GetLatestBundleResponse>() {
+                @Override
+                public void success(GetLatestBundleResponse response) {
+                    if (response == null) {
+                        Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+                        SyncResult syncResult = new SyncResult(null);
+                        callback.success(syncResult);
+                        return;
+                    }
+                    ArtifactType artifactType = response.getArtifactType();
+                    String latestBundleId = response.getBundleId();
+                    String checksum = response.getChecksum();
+                    String signature = response.getSignature();
+                    String url = response.getUrl();
+                    // Check if the bundle already exists
+                    if (hasBundleById(latestBundleId)) {
+                        String nextBundleId = null;
+                        String currentBundleId = getCurrentBundleId();
+                        if (!latestBundleId.equals(currentBundleId)) {
+                            // Set the next bundle
+                            setNextBundleById(latestBundleId);
+                            nextBundleId = latestBundleId;
+                        }
+                        SyncResult syncResult = new SyncResult(nextBundleId);
+                        callback.success(syncResult);
+                        return;
+                    }
+                    // Download the bundle
+                    try {
+                        if (artifactType == ArtifactType.MANIFEST) {
+                            downloadBundleOfTypeManifest(latestBundleId, url);
+                        } else {
+                            downloadBundleOfTypeZip(latestBundleId, checksum, signature, url);
+                        }
+                        // Set the next bundle
+                        setNextBundleById(latestBundleId);
+                        SyncResult syncResult = new SyncResult(latestBundleId);
+                        callback.success(syncResult);
+                    } catch (Exception e) {
+                        Logger.error(LiveUpdatePlugin.TAG, "Failed to download bundle: " + e.getMessage(), e);
+                        callback.error(e);
+                    }
+
+                    // Set the next bundle
+                    setNextBundleById(latestBundleId);
+                    SyncResult syncResult = new SyncResult(latestBundleId);
+                    callback.success(syncResult);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    Logger.error(LiveUpdatePlugin.TAG, "Failed to fetch latest bundle: " + exception.getMessage(), exception);
+                    callback.error(exception);
+                }
+            });
+        } catch (Exception e) {
+            callback.error(e);
         }
-        ArtifactType artifactType = response.getArtifactType();
-        String latestBundleId = response.getBundleId();
-        String checksum = response.getChecksum();
-        String signature = response.getSignature();
-        String url = response.getUrl();
-        // Check if the bundle already exists
-        if (hasBundleById(latestBundleId)) {
-            String nextBundleId = null;
-            String currentBundleId = getCurrentBundleId();
-            if (!latestBundleId.equals(currentBundleId)) {
-                // Set the next bundle
-                setNextBundleById(latestBundleId);
-                nextBundleId = latestBundleId;
-            }
-            SyncResult syncResult = new SyncResult(nextBundleId);
-            callback.success(syncResult);
-            return;
-        }
-        // Download the bundle
-        if (artifactType == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(latestBundleId, url);
-        } else {
-            downloadBundleOfTypeZip(latestBundleId, checksum, signature, url);
-        }
-        // Set the next bundle
-        setNextBundleById(latestBundleId);
-        SyncResult syncResult = new SyncResult(latestBundleId);
-        callback.success(syncResult);
     }
 
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
@@ -620,8 +660,7 @@ public class LiveUpdate {
         file.delete();
     }
 
-    @Nullable
-    private GetLatestBundleResponse fetchLatestBundle(@NonNull FetchLatestBundleOptions options) throws Exception {
+    private void fetchLatestBundleInternal(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<GetLatestBundleResponse> callback) throws Exception {
         String channel = options.getChannel() == null ? getChannel() : options.getChannel();
         String url = new HttpUrl.Builder()
             .scheme("https")
@@ -643,15 +682,31 @@ public class LiveUpdate {
             .build()
             .toString();
         Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
-        Response response = httpClient.execute(url);
-        String responseBodyString = response.body().string();
-        Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
-        if (response.isSuccessful()) {
-            JSONObject responseJson = new JSONObject(responseBodyString);
-            return new GetLatestBundleResponse(responseJson);
-        } else {
-            return null;
-        }
+        httpClient.executeAsync(url, new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Logger.error(LiveUpdatePlugin.TAG, "Failed to fetch latest bundle: " + e.getMessage(), e);
+                callback.error(e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Logger.debug(LiveUpdatePlugin.TAG, "Fetched latest bundle: " + response.request().url());
+                try {
+                    String responseBodyString = response.body().string();
+                    Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
+                    if (response.isSuccessful()) {
+                        JSONObject responseJson = new JSONObject(responseBodyString);
+                        callback.success(new GetLatestBundleResponse(responseJson));
+                    } else {
+                        callback.success(null);
+                    }
+                } catch (Exception e) {
+                    Logger.error(LiveUpdatePlugin.TAG, "Error processing response: " + e.getMessage(), e);
+                    callback.error(e);
+                }
+            }
+        });
     }
 
     private String[] getBundleIds() {
