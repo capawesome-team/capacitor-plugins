@@ -22,6 +22,19 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
 
+### iOS
+
+#### Entitlements
+
+To use this plugin with Mac Catalyst, your app must have the `com.apple.security.files.user-selected.read-only` entitlement enabled. This allows the app to read files selected by the user. Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.files.user-selected.read-only) for more information.
+
+```xml
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
+
+If you don't want to use the plugin with Mac Catalyst, you can skip this step.
+
 ## Configuration
 
 No configuration required for this plugin.
