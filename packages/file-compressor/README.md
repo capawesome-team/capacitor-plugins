@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-file-compressor
 
-Capacitor plugin for compressing files.
+Capacitor plugin for efficient file compression with support for image formats like PNG, JPEG, and WebP.
 
 ## Features
 
@@ -12,7 +12,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -135,9 +135,11 @@ Only png, jpeg, and webp images are supported.
 | Prop           | Type                | Description                                                                                                                                                                                                                    | Default                   | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | ----- |
 | **`blob`**     | <code>Blob</code>   | The blob of the file to compress. Only available on Web.                                                                                                                                                                       |                           | 5.0.0 |
+| **`height`**   | <code>number</code> | The height of the resulting image.                                                                                                                                                                                             |                           | 7.1.0 |
 | **`mimeType`** | <code>string</code> | The mime type of the compressed file. On Android, only `image/jpeg` and `image/webp` are supported. On iOS, only `image/jpeg` is supported. On Web, only `image/jpeg` and `image/webp` are supported.                          | <code>'image/jpeg'</code> | 5.0.0 |
 | **`path`**     | <code>string</code> | The path of the file to compress. Only available on Android and iOS.                                                                                                                                                           |                           | 5.0.0 |
 | **`quality`**  | <code>number</code> | The quality of the resulting image, expressed as a value from `0.0` to `1.0`. The value `0.0` represents the maximum compression (or lowest quality) while the value `1.0` represents the least compression (or best quality). | <code>0.6</code>          | 5.0.0 |
+| **`width`**    | <code>number</code> | The width of the resulting image.                                                                                                                                                                                              |                           | 7.1.0 |
 
 </docgen-api>
 
