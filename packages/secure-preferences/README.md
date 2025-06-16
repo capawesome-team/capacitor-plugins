@@ -8,7 +8,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
-- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics) plugin.
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -23,7 +23,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -32,7 +32,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
