@@ -13,7 +13,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -30,7 +30,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -39,7 +39,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -149,24 +149,52 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`getLanguages()`](#getlanguages)
-* [`isAvailable()`](#isavailable)
-* [`isListening()`](#islistening)
-* [`startListening(...)`](#startlistening)
-* [`stopListening(...)`](#stoplistening)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('end', ...)`](#addlistenerend-)
-* [`addListener('error', ...)`](#addlistenererror-)
-* [`addListener('partialResult', ...)`](#addlistenerpartialresult-)
-* [`addListener('result', ...)`](#addlistenerresult-)
-* [`addListener('speechEnd', ...)`](#addlistenerspeechend-)
-* [`addListener('speechStart', ...)`](#addlistenerspeechstart-)
-* [`addListener('start', ...)`](#addlistenerstart-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-speech-recognition](#capawesome-teamcapacitor-speech-recognition)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+      - [Proguard](#proguard)
+    - [iOS](#ios)
+      - [Privacy Descriptions](#privacy-descriptions)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [API](#api)
+    - [getLanguages()](#getlanguages)
+    - [isAvailable()](#isavailable)
+    - [isListening()](#islistening)
+    - [startListening(...)](#startlistening)
+    - [stopListening(...)](#stoplistening)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions(...)](#requestpermissions)
+    - [addListener('end', ...)](#addlistenerend-)
+    - [addListener('error', ...)](#addlistenererror-)
+    - [addListener('partialResult', ...)](#addlistenerpartialresult-)
+    - [addListener('result', ...)](#addlistenerresult-)
+    - [addListener('speechEnd', ...)](#addlistenerspeechend-)
+    - [addListener('speechStart', ...)](#addlistenerspeechstart-)
+    - [addListener('start', ...)](#addlistenerstart-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [GetLanguagesResult](#getlanguagesresult)
+      - [IsAvailableResult](#isavailableresult)
+      - [IsListeningResult](#islisteningresult)
+      - [StartListeningOptions](#startlisteningoptions)
+      - [StopListeningOptions](#stoplisteningoptions)
+      - [PermissionStatus](#permissionstatus)
+      - [SpeechRecognitionPluginPermission](#speechrecognitionpluginpermission)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [ErrorEvent](#errorevent)
+      - [PartialResultEvent](#partialresultevent)
+      - [ResultEvent](#resultevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+      - [SpeechRecognitionPermissionType](#speechrecognitionpermissiontype)
+    - [Enums](#enums)
+      - [AudioSessionCategory](#audiosessioncategory)
+  - [Changelog](#changelog)
+  - [Breaking Changes](#breaking-changes)
+  - [License](#license)
 
 </docgen-index>
 
