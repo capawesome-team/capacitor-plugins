@@ -31,9 +31,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-nfc-demo).
 
-| Android                                                                                                                         | iOS                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" /> |
+| Android                                                                                                                                            | iOS                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
