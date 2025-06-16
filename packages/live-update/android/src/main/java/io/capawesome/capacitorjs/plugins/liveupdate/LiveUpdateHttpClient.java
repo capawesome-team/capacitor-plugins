@@ -2,11 +2,11 @@ package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.Logger;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -52,6 +52,17 @@ public class LiveUpdateHttpClient {
             .build();
         Request request = new Request.Builder().url(url).build();
         return okHttpClient.newCall(request).execute();
+    }
+
+    public void executeAsync(String url, Callback callback) {
+        int httpTimeout = config.getHttpTimeout();
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .build();
+        Request request = new Request.Builder().url(url).build();
+        okHttpClient.newCall(request).enqueue(callback);
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
