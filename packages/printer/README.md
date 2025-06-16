@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-printer
 
-Capacitor plugin for printing.
+Capacitor plugin for seamless printing on Android and iOS. Supports base64, files, HTML, PDFs, and web views.
 
 ## Features
 
@@ -17,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
