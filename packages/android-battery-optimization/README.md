@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-android-battery-optimization
 
-Capacitor plugin to access battery optimization settings on Android. 
+Capacitor plugin for Android to manage battery optimization settings, request exemptions, and enhance app performance under Doze and App Standby modes.
 
 ## Installation
 
@@ -64,10 +64,20 @@ const requestIgnoreBatteryOptimization = async () => {
 
 <docgen-index>
 
-* [`isBatteryOptimizationEnabled()`](#isbatteryoptimizationenabled)
-* [`openBatteryOptimizationSettings()`](#openbatteryoptimizationsettings)
-* [`requestIgnoreBatteryOptimization()`](#requestignorebatteryoptimization)
-* [Interfaces](#interfaces)
+- [@capawesome-team/capacitor-android-battery-optimization](#capawesome-teamcapacitor-android-battery-optimization)
+  - [Installation](#installation)
+    - [Android](#android)
+  - [Configuration](#configuration)
+  - [Demo](#demo)
+  - [Usage](#usage)
+  - [API](#api)
+    - [isBatteryOptimizationEnabled()](#isbatteryoptimizationenabled)
+    - [openBatteryOptimizationSettings()](#openbatteryoptimizationsettings)
+    - [requestIgnoreBatteryOptimization()](#requestignorebatteryoptimization)
+    - [Interfaces](#interfaces)
+      - [IsBatteryOptimizationEnabledResult](#isbatteryoptimizationenabledresult)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 

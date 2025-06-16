@@ -1,6 +1,6 @@
 # @capawesome/capacitor-android-dark-mode-support
 
-Capacitor plugin to support dark mode on Android.
+Capacitor plugin for seamless Android dark mode support. Enhance user experience with `prefers-color-scheme` CSS media feature compatibility.
 
 ## Installation
 
