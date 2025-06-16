@@ -11,7 +11,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔑 **Device Credential**: Optionally allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - ✨ **Customizable**: Customize the authentication prompt with a title, subtitle, and button text.
-- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences) plugin.
+- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
