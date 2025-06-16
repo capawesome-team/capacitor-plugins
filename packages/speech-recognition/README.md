@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-speech-recognition
 
-Capacitor plugin to transcribe speech into text (also known as speech-to-text).
+Capacitor plugin to transcribe speech into text (also known as speech-to-text) with advanced features like silence detection, contextual strings, and more.
 
 ## Features
 
@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
