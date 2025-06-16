@@ -41,9 +41,9 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
-| Android                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/188438969-fcbf02d3-0db2-4277-8039-ddfb6bce42ae.gif" width="324" /> |
+| Android                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/188438969-fcbf02d3-0db2-4277-8039-ddfb6bce42ae.gif" width="324" alt="Android Demo" /> |
 
 ## Usage
 
