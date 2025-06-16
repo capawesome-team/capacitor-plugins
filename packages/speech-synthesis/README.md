@@ -13,7 +13,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -30,7 +30,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -39,7 +39,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
