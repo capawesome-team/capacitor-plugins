@@ -23,9 +23,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Demo
 
-| Android                                                                                                   | iOS                                                                                                       |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/38f75f55-141d-4073-b81b-fdb4dae0fcc7" width="324" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1" width="266" /> |
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/38f75f55-141d-4073-b81b-fdb4dae0fcc7" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
