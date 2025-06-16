@@ -25,9 +25,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-plugin-demo).
 
-| Android                                                                                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" /> |
+| Android                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" alt="Android Demo" /> |
 
 ## Installation
 
