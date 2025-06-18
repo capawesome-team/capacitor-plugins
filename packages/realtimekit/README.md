@@ -15,7 +15,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$androidRealtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.1.1`)
+- `$realtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.1.1`)
 
 ### iOS
 
