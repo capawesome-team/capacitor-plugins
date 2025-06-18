@@ -2,4 +2,4 @@
 '@capawesome/capacitor-realtimekit': patch
 ---
 
-feat(realtkit): initial implementation
+feat(realtimekit): initial implementation
