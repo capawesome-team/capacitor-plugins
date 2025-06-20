@@ -7,8 +7,10 @@ public class ConnectOptions {
 
     @Nullable
     private final String authToken;
+
     @Nullable
     private final String path;
+
     @Nullable
     private final String url;
 

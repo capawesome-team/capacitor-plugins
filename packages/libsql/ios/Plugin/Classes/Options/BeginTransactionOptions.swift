@@ -8,7 +8,7 @@ import Capacitor
         guard let connectionId = call.getString("connectionId") else {
             throw LibsqlError.connectionIdMissing
         }
-        
+
         self.connectionId = connectionId
     }
 }

@@ -2,17 +2,19 @@ package io.capawesome.capacitorjs.plugins.libsql.classes.options;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.PluginCall;
 import com.getcapacitor.JSArray;
-import java.util.List;
+import com.getcapacitor.PluginCall;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExecuteBatchOptions {
 
     @NonNull
     private final String connectionId;
+
     @NonNull
     private final List<String> statement;
+
     @Nullable
     private final List<List<Object>> values;
 
@@ -52,7 +54,7 @@ public class ExecuteBatchOptions {
         if (statementArray == null) {
             throw new Exception("statement must be provided.");
         }
-        
+
         List<String> statements = new ArrayList<>();
         for (int i = 0; i < statementArray.length(); i++) {
             Object item = statementArray.get(i);
@@ -71,7 +73,7 @@ public class ExecuteBatchOptions {
         if (valuesArray == null) {
             return null;
         }
-        
+
         List<List<Object>> allValues = new ArrayList<>();
         for (int i = 0; i < valuesArray.length(); i++) {
             Object item = valuesArray.get(i);

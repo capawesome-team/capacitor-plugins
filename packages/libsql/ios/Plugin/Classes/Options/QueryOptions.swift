@@ -14,7 +14,7 @@ import Capacitor
         guard let statement = call.getString("statement") else {
             throw LibsqlError.statementMissing
         }
-        
+
         self.connectionId = connectionId
         self.statement = statement
         self.transactionId = call.getString("transactionId")

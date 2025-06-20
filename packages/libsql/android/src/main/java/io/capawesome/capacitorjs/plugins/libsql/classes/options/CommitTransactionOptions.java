@@ -7,6 +7,7 @@ public class CommitTransactionOptions {
 
     @NonNull
     private final String connectionId;
+
     @NonNull
     private final String transactionId;
 

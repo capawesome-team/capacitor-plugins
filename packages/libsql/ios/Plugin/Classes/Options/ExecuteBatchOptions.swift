@@ -13,7 +13,7 @@ import Capacitor
         guard let statementArray = call.getArray("statement") else {
             throw LibsqlError.statementMissing
         }
-        
+
         var statements: [String] = []
         for item in statementArray.capacitor.replacingNullValues() {
             guard let statement = item as? String else {
@@ -21,10 +21,10 @@ import Capacitor
             }
             statements.append(statement)
         }
-        
+
         self.connectionId = connectionId
         self.statement = statements
-        
+
         if let valuesArray = call.getArray("values") {
             var allValues: [[Any]] = []
             for item in valuesArray.capacitor.replacingNullValues() {

@@ -1,15 +1,14 @@
 package io.capawesome.capacitorjs.plugins.libsql.classes.results;
 
 import androidx.annotation.NonNull;
-import com.getcapacitor.JSObject;
 import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
 import io.capawesome.capacitorjs.plugins.libsql.interfaces.Result;
-import tech.turso.libsql.Rows;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import tech.turso.libsql.Rows;
 
 public class QueryResult implements Result {
 

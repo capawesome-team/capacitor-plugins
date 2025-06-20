@@ -2,19 +2,22 @@ package io.capawesome.capacitorjs.plugins.libsql.classes.options;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.PluginCall;
 import com.getcapacitor.JSArray;
-import java.util.List;
+import com.getcapacitor.PluginCall;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ExecuteOptions {
 
     @NonNull
     private final String connectionId;
+
     @NonNull
     private final String statement;
+
     @Nullable
     private final String transactionId;
+
     @Nullable
     private final List<Object> values;
 
@@ -69,7 +72,7 @@ public class ExecuteOptions {
         if (valuesArray == null) {
             return null;
         }
-        
+
         List<Object> values = new ArrayList<>();
         for (int i = 0; i < valuesArray.length(); i++) {
             values.add(valuesArray.get(i));

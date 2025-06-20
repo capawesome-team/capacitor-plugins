@@ -14,7 +14,7 @@ import Libsql
         result["rows"] = rows
         return result as AnyObject
     }
-    
+
     private static func convertRowsToAnyArray(_ rows: Rows) -> [[Any]] {
         var rowsResult: [[Any]] = []
         while let row = rows.next() {

@@ -15,7 +15,7 @@ public class LibsqlPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "rollbackTransaction", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise)
     ]
-    
+
     public static let tag = "Libsql"
     private let implementation = Libsql()
 

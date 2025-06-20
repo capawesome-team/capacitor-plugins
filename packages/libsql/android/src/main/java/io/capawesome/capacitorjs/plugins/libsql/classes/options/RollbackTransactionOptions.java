@@ -7,6 +7,7 @@ public class RollbackTransactionOptions {
 
     @NonNull
     private final String connectionId;
+
     @NonNull
     private final String transactionId;
 

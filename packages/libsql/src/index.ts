@@ -1,10 +1,10 @@
-import { registerPlugin } from "@capacitor/core";
+import { registerPlugin } from '@capacitor/core';
 
-import type { LibsqlPlugin } from "./definitions";
+import type { LibsqlPlugin } from './definitions';
 
-const Libsql = registerPlugin<LibsqlPlugin>("Libsql", {
-  web: () => import("./web").then((m) => new m.LibsqlWeb()),
+const Libsql = registerPlugin<LibsqlPlugin>('Libsql', {
+  web: () => import('./web').then(m => new m.LibsqlWeb()),
 });
 
-export * from "./definitions";
+export * from './definitions';
 export { Libsql };
