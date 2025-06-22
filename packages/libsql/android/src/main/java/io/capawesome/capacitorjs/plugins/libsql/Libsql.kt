@@ -4,6 +4,7 @@ import io.capawesome.capacitorjs.plugins.libsql.classes.options.*
 import io.capawesome.capacitorjs.plugins.libsql.classes.results.*
 import io.capawesome.capacitorjs.plugins.libsql.interfaces.*
 import tech.turso.libsql.Database
+import java.io.File
 import tech.turso.libsql.Connection as LibsqlConnection
 import java.util.concurrent.ConcurrentHashMap
 import java.util.UUID
@@ -25,7 +26,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!,
-                        path = options.path!!
+                        path = resolvePath(options.path!!)
                     )
                 }
                 options.url != null -> {
@@ -37,7 +38,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                 }
                 options.path != null -> {
                     // Local-only mode
-                    tech.turso.libsql.Libsql.open(path = options.path!!)
+                    tech.turso.libsql.Libsql.open(path = resolvePath(options.path!!))
                 }
                 else -> {
                     // In-memory database
@@ -87,7 +88,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                 val statement = options.statement[i]
                 val values = options.values?.getOrNull(i)?.toTypedArray()
                 
-                if (values != null && values.isNotEmpty()) {
+                if (!values.isNullOrEmpty()) {
                     connection.execute(statement, *values)
                 } else {
                     connection.execute(statement)
@@ -175,5 +176,13 @@ class Libsql(private val plugin: LibsqlPlugin) {
         } catch (exception: Exception) {
             callback.error(exception)
         }
+    }
+
+    private fun resolvePath(path: String): String {
+        var file = File(path)
+        if (!file.isAbsolute) {
+            file = File(plugin.context.getDatabasePath(path).absolutePath)
+        }
+        return file.absolutePath
     }
 }
