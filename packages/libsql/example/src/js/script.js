@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document
     .querySelector('#commit-transaction-button')
     .addEventListener('click', async () => {
-      await Libsql.commitTransaction({ transactionId });
+      await Libsql.commitTransaction({ connectionId, transactionId });
     });
   document
     .querySelector('#connect-button')
