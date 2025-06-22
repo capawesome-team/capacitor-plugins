@@ -4,11 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
-
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 
 public class ExecuteBatchOptions {
 

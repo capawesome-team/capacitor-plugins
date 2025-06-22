@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         connectionId,
         statement: [
           'CREATE TABLE IF NOT EXISTS test (key TEXT PRIMARY KEY, value TEXT)',
-          'INSERT OR REPLACE INTO test (key, value) VALUES (?, ?)'
+          'INSERT OR REPLACE INTO test (key, value) VALUES (?, ?)',
         ],
         values: [[], ['key1', 'value1']],
       });
@@ -66,9 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       console.log('Query result:', result);
     });
-  document
-    .querySelector('#sync-button')
-    .addEventListener('click', async () => {
-      await Libsql.sync({ connectionId })
-    })
+  document.querySelector('#sync-button').addEventListener('click', async () => {
+    await Libsql.sync({ connectionId });
+  });
 });

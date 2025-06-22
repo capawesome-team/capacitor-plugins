@@ -17,7 +17,7 @@ import Capacitor
         }
         self.url = call.getString("url")
     }
-    
+
     func getPath() -> String? {
         return path
     }
