@@ -13,7 +13,7 @@ import Libsql
 
             let database: Database
 
-            if let url = options.url, let path = options.path, let authToken = options.authToken {
+            if let url = options.url, let path = options.getPath(), let authToken = options.authToken {
                 // Embedded replica mode
                 database = try Database(
                     path: path,
@@ -26,7 +26,7 @@ import Libsql
                     url: url,
                     authToken: authToken
                 )
-            } else if let path = options.path {
+            } else if let path = options.getPath() {
                 // Local-only mode
                 database = try Database(path)
             } else {
