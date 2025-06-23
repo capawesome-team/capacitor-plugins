@@ -3,6 +3,7 @@ import Foundation
 enum LibsqlError: Error {
     case connectionIdMissing
     case statementMissing
+    case tableNameNotRecognized
     case transactionIdMissing
     case connectionNotFound
     case databaseNotFound
@@ -15,6 +16,8 @@ enum LibsqlError: Error {
         case .connectionIdMissing:
             return nil
         case .statementMissing:
+            return nil
+        case .tableNameNotRecognized:
             return nil
         case .transactionIdMissing:
             return nil
@@ -39,6 +42,8 @@ extension LibsqlError: LocalizedError {
             return NSLocalizedString("connectionId must be provided.", comment: "connectionIdMissing")
         case .statementMissing:
             return NSLocalizedString("statement must be provided.", comment: "statementMissing")
+        case .tableNameNotRecognized:
+            return NSLocalizedString("Table name not recognized.", comment: "tableNameNotRecognized")
         case .transactionIdMissing:
             return NSLocalizedString("transactionId must be provided.", comment: "transactionIdMissing")
         case .connectionNotFound:

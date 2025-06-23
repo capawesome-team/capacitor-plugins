@@ -5,8 +5,8 @@ import Libsql
 @objc public class QueryResult: NSObject, Result {
     let rows: [[Any]]
 
-    init(rows: Rows) {
-        self.rows = QueryResult.convertRowsToAnyArray(rows)
+    init(rows: Rows, columns: [String]) {
+        self.rows = QueryResult.convertRowsToAnyArray(rows, columns)
     }
 
     @objc public func toJSObject() -> AnyObject {
@@ -15,12 +15,12 @@ import Libsql
         return result as AnyObject
     }
 
-    private static func convertRowsToAnyArray(_ rows: Rows) -> [[Any]] {
+    private static func convertRowsToAnyArray(_ rows: Rows, _ columns: [String]) -> [[Any]] {
         var rowsResult: [[Any]] = []
         while let row = rows.next() {
             var rowResult: [Any] = []
             var index = Int32(0)
-            while true {
+            for _ in columns {
                 do {
                     let value = try row.get(index)
                     rowResult.append(value)
