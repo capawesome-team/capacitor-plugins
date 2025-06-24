@@ -140,7 +140,7 @@ export interface CopyFileOptions {
    * @example false
    * @since 7.2.0
    */
-  overwrite: boolean;
+  overwrite?: boolean;
   /**
    * The path to copy the file to.
    *
