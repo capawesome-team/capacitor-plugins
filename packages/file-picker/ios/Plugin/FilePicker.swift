@@ -29,7 +29,7 @@ import MobileCoreServices
             if shouldOverwrite {
                 try fileManager.removeItem(at: toUrl)
             } else {
-                completion(CustomError.directoryNotEmpty)
+                completion(CustomError.fileAlreadyExists)
                 return
             }
         }

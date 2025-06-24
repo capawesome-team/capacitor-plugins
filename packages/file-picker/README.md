@@ -363,11 +363,11 @@ Remove all listeners for this plugin.
 
 #### CopyFileOptions
 
-| Prop            | Type                 | Description                                                                            | Default           | Since |
-| --------------- | -------------------- | -------------------------------------------------------------------------------------- | ----------------- | ----- |
-| **`from`**      | <code>string</code>  | The path of the file to copy.                                                          |                   | 7.1.0 |
-| **`overwrite`** | <code>boolean</code> | Whether to overwrite if the file at destination already exists. Only available on iOS. | <code>true</code> | 7.2.0 |
-| **`to`**        | <code>string</code>  | The path to copy the file to.                                                          |                   | 7.1.0 |
+| Prop            | Type                 | Description                                                     | Default           | Since |
+| --------------- | -------------------- | --------------------------------------------------------------- | ----------------- | ----- |
+| **`from`**      | <code>string</code>  | The path of the file to copy.                                   |                   | 7.1.0 |
+| **`overwrite`** | <code>boolean</code> | Whether to overwrite if the file at destination already exists. | <code>true</code> | 7.2.0 |
+| **`to`**        | <code>string</code>  | The path to copy the file to.                                   |                   | 7.1.0 |
 
 
 #### PickFilesResult

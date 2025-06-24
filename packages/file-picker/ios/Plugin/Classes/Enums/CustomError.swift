@@ -1,7 +1,7 @@
 import Foundation
 
 public enum CustomError: Error {
-    case directoryNotEmpty
+    case fileAlreadyExists
     case fromMissing
     case invalidPath
     case toMissing
@@ -11,8 +11,8 @@ public enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .directoryNotEmpty:
-            return NSLocalizedString("Directory is not empty.", comment: "directoryNotEmpty")
+        case .fileAlreadyExists:
+            return NSLocalizedString("File already exists.", comment: "fileAlreadyExists")
         case .fromMissing:
             return NSLocalizedString("from must be provided.", comment: "fromMissing")
         case .invalidPath:

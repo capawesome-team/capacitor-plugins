@@ -33,7 +33,7 @@ public class FilePicker {
         if (!shouldOverwrite) {
             File file = new File(Objects.requireNonNull(to.getPath()));
             if (!file.exists()) {
-                throw new Exception(FilePickerPlugin.ERROR_DIRECTORY_NOT_EMPTY);
+                throw new Exception(FilePickerPlugin.ERROR_FILE_ALREADY_EXISTS);
             }
         }
         InputStream inputStream = plugin.getBridge().getContext().getContentResolver().openInputStream(from);

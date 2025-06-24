@@ -136,8 +136,6 @@ export interface CopyFileOptions {
   /**
    * Whether to overwrite if the file at destination already exists.
    *
-   * Only available on iOS.
-   *
    * @default true
    * @example false
    * @since 7.2.0

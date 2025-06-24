@@ -33,7 +33,7 @@ import org.json.JSONException;
 public class FilePickerPlugin extends Plugin {
 
     public static final String ERROR_COPY_FILE_FAILED = "copyFile failed.";
-    public static final String ERROR_DIRECTORY_NOT_EMPTY = "Directory is not empty.";
+    public static final String ERROR_FILE_ALREADY_EXISTS = "File already exists.";
     public static final String ERROR_FROM_MISSING = "from must be provided.";
     public static final String ERROR_TO_MISSING = "to must be provided.";
     public static final String ERROR_PICK_FILE_FAILED = "pickFiles failed.";
