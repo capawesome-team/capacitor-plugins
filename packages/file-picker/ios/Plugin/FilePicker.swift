@@ -14,6 +14,31 @@ import MobileCoreServices
         self.plugin = plugin
     }
 
+    @objc func copyFile(_ options: CopyFileOptions, completion: @escaping (Error?) -> Void) throws {
+        let fileManager = FileManager.default
+        let fromUrl = options.getFromUrl()
+        let toFolderUrl = options.getToUrl()
+        let fileName = fromUrl.lastPathComponent
+        let toUrl = toFolderUrl.appendingPathComponent(fileName)
+        let shouldOverwrite = options.getOverwrite()
+
+        if !fileManager.fileExists(atPath: toFolderUrl.path) {
+            try fileManager.createDirectory(at: toFolderUrl, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        if fileManager.fileExists(atPath: toUrl.path) {
+            if shouldOverwrite {
+                try fileManager.removeItem(at: toUrl)
+            } else {
+                completion(CustomError.directoryNotEmpty)
+                return
+            }
+        }
+
+        try fileManager.copyItem(at: fromUrl, to: toUrl)
+        completion(nil)
+    }
+
     public func convertHeicToJpeg(_ sourceUrl: URL) throws -> URL? {
         let heicImage = UIImage(named: sourceUrl.path)
         guard let heicImage = heicImage else {
