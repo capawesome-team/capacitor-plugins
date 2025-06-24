@@ -138,8 +138,8 @@ export interface CopyFileOptions {
    *
    * Only available on iOS.
    *
-   * @default false
-   * @example true
+   * @default true
+   * @example false
    * @since 7.2.0
    */
   overwrite: boolean;

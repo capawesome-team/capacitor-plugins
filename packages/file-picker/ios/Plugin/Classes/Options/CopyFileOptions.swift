@@ -2,7 +2,7 @@ import Capacitor
 
 @objc public class CopyFileOptions: NSObject {
     private let fromUrl: URL
-    private var overwrite = false
+    private var overwrite = true
     private let toUrl: URL
 
     init(_ call: CAPPluginCall) throws {
