@@ -17,9 +17,8 @@ import MobileCoreServices
     @objc func copyFile(_ options: CopyFileOptions, completion: @escaping (Error?) -> Void) throws {
         let fileManager = FileManager.default
         let fromUrl = options.getFromUrl()
-        let toFolderUrl = options.getToUrl()
-        let fileName = fromUrl.lastPathComponent
-        let toUrl = toFolderUrl.appendingPathComponent(fileName)
+        let toUrl = options.getToUrl()
+        let toFolderUrl = toUrl.deletingLastPathComponent()
         let shouldOverwrite = options.getOverwrite()
 
         if !fileManager.fileExists(atPath: toFolderUrl.path) {
