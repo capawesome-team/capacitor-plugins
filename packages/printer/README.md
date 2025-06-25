@@ -72,7 +72,7 @@ If needed, you can define the following project variable in your app’s `variab
 - `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
 - `$androidxPrintVersion` version of `androidx.print:print` (default: `1.0.0`)
 
-This can be useful if you encounter dependency version conflicts with other plugins or libraries in your project.
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
