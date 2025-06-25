@@ -52,7 +52,7 @@ If needed, you can define the following project variable in your app’s `variab
 
 - `$androidxBiometricVersion` version of `androidx.biometric:biometric` (default: `1.1.0`)
 
-This can be useful if you encounter dependency version conflicts with other plugins or libraries in your project.
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
 
