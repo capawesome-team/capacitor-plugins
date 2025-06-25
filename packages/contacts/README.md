@@ -248,6 +248,7 @@ const requestPermissions = async () => {
 * [`getContacts(...)`](#getcontacts)
 * [`getGroupById(...)`](#getgroupbyid)
 * [`getGroups()`](#getgroups)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
 * [`pickContacts(...)`](#pickcontacts)
@@ -515,6 +516,21 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#getgroupsresult">GetGroupsResult</a>&gt;</code>
 
 **Since:** 7.4.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not contacts is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.6.0
 
 --------------------
 
@@ -861,6 +877,13 @@ Only available on Android and iOS.
 | Prop         | Type                 | Description                       | Since |
 | ------------ | -------------------- | --------------------------------- | ----- |
 | **`groups`** | <code>Group[]</code> | The list of groups on the device. | 7.4.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                         | Since |
+| ----------------- | -------------------- | --------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not contacts is available on the device. | 7.6.0 |
 
 
 #### IsSupportedResult
