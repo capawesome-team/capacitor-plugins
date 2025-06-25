@@ -58,9 +58,11 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+
+This can be useful if you encounter dependency version conflicts with other plugins or libraries in your project.
 
 ## Configuration
 
