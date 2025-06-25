@@ -280,6 +280,7 @@ const removeAllListeners = async () => {
 * [`transceive(...)`](#transceive)
 * [`connect(...)`](#connect)
 * [`close()`](#close)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`isEnabled()`](#isenabled)
 * [`openSettings()`](#opensettings)
@@ -499,6 +500,21 @@ This method must be called from within a `nfcTagScanned` handler.
 Only available on Android.
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Returns whether or not NFC is available.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -815,6 +831,14 @@ Remove all listeners for this plugin.
 | Prop           | Type                                                      | Description                                                        | Since |
 | -------------- | --------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
 | **`techType`** | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on Android. | 6.0.0 |
+
+
+#### IsAvailableResult
+
+| Prop      | Type                 | Description                                                          | Since |
+| --------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`hce`** | <code>boolean</code> | Whether or not Host Card Emulation (HCE) is available on the device. | 7.2.0 |
+| **`nfc`** | <code>boolean</code> | Whether or not NFC is available on the device.                       | 7.2.0 |
 
 
 #### IsSupportedResult
