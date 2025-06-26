@@ -6,6 +6,7 @@ import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 
 public class ExecuteBatchOptions {
 
@@ -68,7 +69,7 @@ public class ExecuteBatchOptions {
     }
 
     @Nullable
-    private static List<List<Object>> getValuesFromCall(@NonNull PluginCall call) throws Exception {
+    private List<List<Object>> getValuesFromCall(@NonNull PluginCall call) throws Exception {
         JSArray valuesArray = call.getArray("values");
         if (valuesArray == null) {
             return null;
@@ -77,8 +78,8 @@ public class ExecuteBatchOptions {
         List<List<Object>> allValues = new ArrayList<>();
         for (int i = 0; i < valuesArray.length(); i++) {
             Object item = valuesArray.get(i);
-            if (item instanceof JSArray) {
-                JSArray subArray = (JSArray) item;
+            if (item instanceof JSONArray) {
+                JSArray subArray = convertToJSArray((JSONArray) item);
                 List<Object> subValues = new ArrayList<>();
                 for (int j = 0; j < subArray.length(); j++) {
                     subValues.add(subArray.get(j));
@@ -89,5 +90,14 @@ public class ExecuteBatchOptions {
             }
         }
         return allValues;
+    }
+
+    private JSArray convertToJSArray(JSONArray jsonArray) throws Exception {
+        JSArray jsArray = new JSArray();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            Object item = jsonArray.get(i);
+            jsArray.put(item);
+        }
+        return jsArray;
     }
 }

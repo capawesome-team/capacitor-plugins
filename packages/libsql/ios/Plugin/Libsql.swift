@@ -13,7 +13,7 @@ import Libsql
 
             let database: Database
 
-            if let url = options.url, let path = options.path, let authToken = options.authToken {
+            if let url = options.url, let path = options.getPath(), let authToken = options.authToken {
                 // Embedded replica mode
                 database = try Database(
                     path: path,
@@ -26,7 +26,7 @@ import Libsql
                     url: url,
                     authToken: authToken
                 )
-            } else if let path = options.path {
+            } else if let path = options.getPath() {
                 // Local-only mode
                 database = try Database(path)
             } else {
@@ -96,6 +96,21 @@ import Libsql
             }
 
             let rows: Rows
+            let tableName = extractTableName(from: options.statement)
+
+            guard let tableName = tableName else {
+                throw LibsqlError.tableNameNotRecognized
+            }
+
+            let columns = try connection.query("PRAGMA table_info(\(tableName))")
+            var columnNames: [String] = []
+
+            while let column = columns.next() {
+                let nameValue = try column.get(1)
+                if case .text(let columnName) = nameValue {
+                    columnNames.append(columnName)
+                }
+            }
 
             if let values = options.values, !values.isEmpty {
                 rows = try connection.query(options.statement, values as! [ValueRepresentable])
@@ -103,7 +118,7 @@ import Libsql
                 rows = try connection.query(options.statement)
             }
 
-            let result = QueryResult(rows: rows)
+            let result = QueryResult(rows: rows, columns: columnNames)
             completion(result, nil)
         } catch {
             completion(nil, error)
@@ -181,6 +196,19 @@ import Libsql
         } catch {
             completion(error)
         }
+    }
+
+    private func extractTableName(from query: String) -> String? {
+        let pattern = #"(?i)SELECT\s+\*\s+FROM\s+([a-zA-Z0-9_]+)"#
+
+        if let regex = try? NSRegularExpression(pattern: pattern) {
+            let range = NSRange(query.startIndex..., in: query)
+            if let match = regex.firstMatch(in: query, range: range),
+               let tableRange = Range(match.range(at: 1), in: query) {
+                return String(query[tableRange])
+            }
+        }
+        return nil
     }
 }
 
