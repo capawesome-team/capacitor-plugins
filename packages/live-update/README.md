@@ -1,6 +1,6 @@
 # @capawesome/capacitor-live-update
 
-Capacitor plugin to update your app remotely in real-time.
+Capacitor plugin that allows you to update your app remotely in real-time without requiring users to download a new version from the app store, known as Over-the-Air (OTA) updates.
 
 ## Features
 
