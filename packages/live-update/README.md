@@ -4,6 +4,8 @@ Capacitor plugin to update your app remotely in real-time.
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Over-the-Air (OTA) updates. Here are some of the key features:
+
 - 🔋 Supports **Android and iOS**
 - ⚡️ **Capacitor 7** support
 - 📦 **Bundle Management**: Download, set, and delete bundles.
@@ -16,6 +18,8 @@ Capacitor plugin to update your app remotely in real-time.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 500 projects.
 - 🌐 **Open Source**: Licensed under the MIT License.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Installation
 
