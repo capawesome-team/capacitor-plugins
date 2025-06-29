@@ -22,9 +22,11 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.1.0`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 

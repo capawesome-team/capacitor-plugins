@@ -28,10 +28,12 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `22.3.1`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
 
