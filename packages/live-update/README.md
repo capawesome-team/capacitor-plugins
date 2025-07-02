@@ -16,7 +16,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
-- ⚔️ **Battle-Tested**: Used in more than 500 projects.
+- ⚔️ **Battle-Tested**: Used in more than 500 projects to update apps on more than 10,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
