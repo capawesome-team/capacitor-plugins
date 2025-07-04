@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`af423bacb185d0a15b8fa7de8070a45c8be4fae7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/af423bacb185d0a15b8fa7de8070a45c8be4fae7) ([#192](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/192)): feat: add `width` and `height` to `CompressImageOptions`
+
 ## 7.0.1
 
 ### Patch Changes
