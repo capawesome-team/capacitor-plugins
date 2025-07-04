@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`d8c8c4cdca6b177615563d770feded3df762083a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d8c8c4cdca6b177615563d770feded3df762083a) ([#201](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/201)): feat: add `isAvailable()` method
+
 ## 7.1.0
 
 ### Minor Changes
