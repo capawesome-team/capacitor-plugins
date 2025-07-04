@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.6.0
+
+### Minor Changes
+
+- [`d8c8c4cdca6b177615563d770feded3df762083a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d8c8c4cdca6b177615563d770feded3df762083a) ([#201](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/201)): feat: add `isAvailable()` method
+
+### Patch Changes
+
+- [`02c56dc5274498d028ab5e8340c4d990f4da026d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/02c56dc5274498d028ab5e8340c4d990f4da026d) ([#199](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/199)): fix(android): some contact information was ignored on various devices when using the `displayCreateContact(...)` method
+
 ## 7.5.0
 
 ### Minor Changes
