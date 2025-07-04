@@ -139,6 +139,9 @@ The following starter templates are available:
 ## Guides
 
 - [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
+- [How Live Updates for Capacitor work](https://capawesome.io/blog/how-live-updates-for-capacitor-work/)
+- [How to restrict Capacitor Live Updates to Native Versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/)
+- [How to gradually roll out Capacitor Live Updates](https://capawesome.io/blog/how-to-gradually-roll-out-capacitor-live-updates/)
 
 ## Usage
 
