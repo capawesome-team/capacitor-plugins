@@ -8,6 +8,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌅 **Compress Images**: Compress png, jpeg, and webp images.
+- 🤝 **Compatibility**: Compatible with the [Zip](https://capawesome.io/plugins/zip/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
