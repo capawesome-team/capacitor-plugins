@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [Cloudinary SDK](https://cloudinary.com/documentation/cloudinary_sdks).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 Capacitor Cloudinary allows you to use the native Cloudinary SDKs to upload files directly from the filesystem without going through the WebView.

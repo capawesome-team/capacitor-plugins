@@ -2,6 +2,12 @@
 
 Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:

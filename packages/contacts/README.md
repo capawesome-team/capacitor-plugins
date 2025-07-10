@@ -2,6 +2,12 @@
 
 Capacitor plugin to read, write, or select device contacts. Supports Android, iOS and Web with advanced features like contact groups, pagination, and native modals.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for contacts. Here are some of the key features:
@@ -945,7 +951,9 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 #### Exclude
