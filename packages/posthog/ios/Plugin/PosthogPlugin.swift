@@ -32,6 +32,16 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
     override public func load() {
         self.implementation = Posthog(plugin: self)
+        // Posthog SDK initialized early with config from capacitor.config.
+        // This is needed for the SDK to capture application lifecycle events such as Application Installed and Update
+        guard let apiKey = getConfig().getString("apiKey") else {
+            CAPLog.print(CustomError.apiKeyMissing.localizedDescription)
+            return
+        }
+        let host = getConfig().getString("host") ?? "https://us.i.posthog.com"
+
+        let options = SetupOptions(apiKey: apiKey, host: host)
+        implementation?.setup(options)
     }
 
     @objc func alias(_ call: CAPPluginCall) {
