@@ -1047,7 +1047,19 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md).
+This plugin provides a utility class `NfcUtils` that can be used for various NFC-related operations, for example, creating NDEF records:
+
+```ts
+import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+
+const createNdefTextRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
+  return record;
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md) for more information.
 
 ## Changelog
 
