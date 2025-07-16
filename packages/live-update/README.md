@@ -87,7 +87,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`httpTimeout`**       | <code>number</code>  | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                  | <code>60000</code>                     | 6.4.0 |
 | **`publicKey`**         | <code>string</code>  | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                      |                                        | 6.1.0 |
 | **`readyTimeout`**      | <code>number</code>  | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout. | <code>0</code>                         | 5.0.0 |
-| **`serverDomain`**      | <code>string</code>  | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server.                                                                                                                                                                                                                                                                                                                   | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
+| **`serverDomain`**      | <code>string</code>  | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.                                                                                                                                                                                                                                                                                        | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
 
 ### Examples
 
@@ -103,7 +103,7 @@ In `capacitor.config.json`:
       "httpTimeout": undefined,
       "publicKey": '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       "readyTimeout": 10000,
-      "serverDomain": undefined
+      "serverDomain": 'api.cloud.capawesome.eu'
     }
   }
 }
@@ -125,7 +125,7 @@ const config: CapacitorConfig = {
       httpTimeout: undefined,
       publicKey: '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       readyTimeout: 10000,
-      serverDomain: undefined,
+      serverDomain: 'api.cloud.capawesome.eu',
     },
   },
 };
