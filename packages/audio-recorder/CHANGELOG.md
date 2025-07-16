@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.2
+
+### Patch Changes
+
+- [`cd337f11490c4463ed77a93a0abd7c92a0a776d7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cd337f11490c4463ed77a93a0abd7c92a0a776d7): fix: `options` parameter in `startRecording` method is now optional
+
 ## 7.3.1
 
 ### Patch Changes
