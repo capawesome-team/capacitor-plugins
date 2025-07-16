@@ -283,6 +283,8 @@ import CommonCrypto
             sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(fileToCopy.href)
         } else {
             guard let file = Bundle.main.url(forResource: fileToCopy.href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+                // If the file does not exist in the current bundle, throw an error
+                // We can use CustomError.unknown here since this error will not be handled by the user
                 throw CustomError.unknown
             }
             sourceURL = file
