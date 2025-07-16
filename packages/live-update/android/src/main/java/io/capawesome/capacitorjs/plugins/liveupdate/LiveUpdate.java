@@ -937,10 +937,7 @@ public class LiveUpdate {
         rollbackHandler.removeCallbacksAndMessages(null);
     }
 
-    private boolean tryCopyCurrentBundleFile(
-        @NonNull ManifestItem fileToCopy,
-        @NonNull File destinationDirectory
-    ) {
+    private boolean tryCopyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) {
         try {
             copyCurrentBundleFile(fileToCopy, destinationDirectory);
             return true;
