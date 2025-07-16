@@ -236,7 +236,7 @@ This method is only available on Android (SDK 24+), iOS and Web.
 ### startRecording(...)
 
 ```typescript
-startRecording(options: StartRecordingOptions) => Promise<void>
+startRecording(options?: StartRecordingOptions | undefined) => Promise<void>
 ```
 
 Start recording audio in AAC format.
