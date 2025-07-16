@@ -379,10 +379,20 @@ public class LiveUpdate {
         }
     }
 
-    private void copyCurrentBundleFiles(@NonNull List<ManifestItem> filesToCopy, @NonNull File destinationDirectory) throws IOException {
+    private List<ManifestItem> copyCurrentBundleFilesAndReturnFailures(
+        @NonNull List<ManifestItem> filesToCopy,
+        @NonNull File destinationDirectory
+    ) {
+        List<ManifestItem> missingItems = new ArrayList<>();
         for (ManifestItem fileToCopy : filesToCopy) {
-            copyCurrentBundleFile(fileToCopy, destinationDirectory);
+            boolean success = tryCopyCurrentBundleFile(fileToCopy, destinationDirectory);
+            if (!success) {
+                Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + fileToCopy.getHref());
+                // If the file could not be copied, add it to the list of missing items
+                missingItems.add(fileToCopy);
+            }
         }
+        return missingItems;
     }
 
     private void copyFile(File input, File output) throws IOException {
@@ -592,7 +602,11 @@ public class LiveUpdate {
             itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
         }
         // Copy the files
-        copyCurrentBundleFiles(itemsToCopy, temporaryDirectory);
+        List<ManifestItem> missingItems = copyCurrentBundleFilesAndReturnFailures(itemsToCopy, temporaryDirectory);
+        // If items could not be copied, add them to the list of items to download
+        if (!missingItems.isEmpty()) {
+            itemsToDownload.addAll(missingItems);
+        }
         // Download the files
         downloadBundleFiles(downloadUrl, itemsToDownload, temporaryDirectory, (downloadedBytes, totalBytes) -> {
             DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
@@ -921,6 +935,18 @@ public class LiveUpdate {
 
     private void stopRollbackTimer() {
         rollbackHandler.removeCallbacksAndMessages(null);
+    }
+
+    private boolean tryCopyCurrentBundleFile(
+        @NonNull ManifestItem fileToCopy,
+        @NonNull File destinationDirectory
+    ) {
+        try {
+            copyCurrentBundleFile(fileToCopy, destinationDirectory);
+            return true;
+        } catch (IOException exception) {
+            return false;
+        }
     }
 
     private File unzipFile(@NonNull File zipFile) throws IOException {
