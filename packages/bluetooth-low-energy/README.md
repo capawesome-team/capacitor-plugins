@@ -1543,7 +1543,17 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md).
+This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
+
+```ts
+import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+
+const convertBytesToHex = (bytes: number[]) => {
+  return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
 
 ## Changelog
 
