@@ -283,7 +283,7 @@ import CommonCrypto
             sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(fileToCopy.href)
         } else {
             guard let file = Bundle.main.url(forResource: fileToCopy.href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
-                return
+                throw CustomError.unknown
             }
             sourceURL = file
         }
@@ -291,10 +291,20 @@ import CommonCrypto
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
-    private func copyCurrentBundleFiles(filesToCopy: [ManifestItem], toDirectory: URL) throws {
+    private func copyCurrentBundleFilesAndReturnFailures(
+        filesToCopy: [ManifestItem],
+        toDirectory: URL
+    ) -> [ManifestItem] {
+        var missingItems = [ManifestItem]()
         for fileToCopy in filesToCopy {
-            try copyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
+            let success = tryCopyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
+            if !success {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(fileToCopy.href)")
+                // If the file could not be copied, add it to the list of missing items
+                missingItems.append(fileToCopy)
+            }
         }
+        return missingItems
     }
 
     private func createBundlesDirectory() {
@@ -434,7 +444,11 @@ import CommonCrypto
             itemsToDownload.append(contentsOf: latestManifest.items)
         }
         // Copy the files
-        try self.copyCurrentBundleFiles(filesToCopy: itemsToCopy, toDirectory: temporaryDirectory)
+        let missingItems = copyCurrentBundleFilesAndReturnFailures(filesToCopy: itemsToCopy, toDirectory: temporaryDirectory)
+        // If items could not be copied, add them to the list of items to download
+        if !missingItems.isEmpty {
+            itemsToDownload.append(contentsOf: missingItems)
+        }
         // Download the files
         try await self.downloadBundleFiles(url: url, filesToDownload: itemsToDownload, directory: temporaryDirectory, callback: { progress in
             let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
@@ -719,6 +733,18 @@ import CommonCrypto
 
     private func stopRollbackTimer() {
         rollbackDispatchWorkItem?.cancel()
+    }
+
+    private func tryCopyCurrentBundleFile(
+        fileToCopy: ManifestItem,
+        toDirectory: URL
+    ) -> Bool {
+        do {
+            try copyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
+            return true
+        } catch {
+            return false
+        }
     }
 
     private func unzipFile(zipFile: URL) -> URL {
