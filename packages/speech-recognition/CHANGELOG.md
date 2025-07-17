@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`052dc408e3e72059620eccf1acd07a53dc6c32f5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/052dc408e3e72059620eccf1acd07a53dc6c32f5) ([#223](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/223)): feat: add support for punctuation
+
 ## 7.3.3
 
 ### Patch Changes
