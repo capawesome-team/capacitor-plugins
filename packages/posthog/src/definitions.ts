@@ -1,3 +1,27 @@
+/// <reference types="@capacitor/cli" />
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    Posthog?: {
+      /**
+       * The API key of your PostHog project.
+       *
+       * @since 7.1.0
+       * @example 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy'
+       */
+      apiKey?: string;
+      /**
+       * The host of your PostHog instance.
+       *
+       * @since 7.1.0
+       * @default 'https://us.i.posthog.com'
+       * @example 'https://eu.i.posthog.com'
+       */
+      host?: string;
+    };
+  }
+}
+
 export interface PosthogPlugin {
   /**
    * Assign another distinct ID to the current user.
@@ -83,6 +107,8 @@ export interface PosthogPlugin {
    * Setup the PostHog SDK with the provided options.
    *
    * **Attention**: This method should be called before any other method.
+   * Alternatively, on Android and iOS, you can configure this plugin in
+   * your Capacitor Configuration file. In this case, you must not call this method.
    *
    * @since 6.0.0
    */
@@ -290,8 +316,8 @@ export interface SetupOptions {
    * The host of your PostHog instance.
    *
    * @since 6.0.0
-   * @example 'https://eu.i.posthog.com'
    * @default 'https://us.i.posthog.com'
+   * @example 'https://eu.i.posthog.com'
    */
   host?: string;
 }

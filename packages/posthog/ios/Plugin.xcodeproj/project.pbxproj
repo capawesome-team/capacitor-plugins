@@ -30,6 +30,7 @@
 		7C28C8CC2C8AE9CD00271553 /* SetupOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CB2C8AE9CD00271553 /* SetupOptions.swift */; };
 		7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CD2C8AE9D800271553 /* UnregisterOptions.swift */; };
 		7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */; };
+		7C645E762E2B82E200E5559D /* PosthogConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C645E752E2B82DE00E5559D /* PosthogConfig.swift */; };
 		7CFD6A9E2C8B046100FF2B17 /* GroupOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFD6A9D2C8B046100FF2B17 /* GroupOptions.swift */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		7C28C8CB2C8AE9CD00271553 /* SetupOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupOptions.swift; sourceTree = "<group>"; };
 		7C28C8CD2C8AE9D800271553 /* UnregisterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnregisterOptions.swift; sourceTree = "<group>"; };
 		7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosthogHelper.swift; sourceTree = "<group>"; };
+		7C645E752E2B82DE00E5559D /* PosthogConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PosthogConfig.swift; sourceTree = "<group>"; };
 		7CFD6A9D2C8B046100FF2B17 /* GroupOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				7C645E752E2B82DE00E5559D /* PosthogConfig.swift */,
 				7C27475B2D3C032400589048 /* Enums */,
 				7C2747582D3BFF6B00589048 /* Protocols */,
 				7C28C8BF2C8AE97B00271553 /* Classes */,
@@ -396,6 +399,7 @@
 				7C2747542D3BFF0A00589048 /* IsFeatureEnabledResult.swift in Sources */,
 				030596DF2D798515001EC5F7 /* GetFeatureFlagPayloadOptions.swift in Sources */,
 				7C27475D2D3C032D00589048 /* CustomError.swift in Sources */,
+				7C645E762E2B82E200E5559D /* PosthogConfig.swift in Sources */,
 				50E1A94820377CB70090CE1A /* PosthogPlugin.swift in Sources */,
 				7C28C8CC2C8AE9CD00271553 /* SetupOptions.swift in Sources */,
 				7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */,

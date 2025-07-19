@@ -18,7 +18,14 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagR
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
-class Posthog(private val plugin: PosthogPlugin) {
+class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
+
+    init {
+        val apiKey = config.getApiKey()
+        if (apiKey != null) {
+            setup(apiKey, config.getHost())
+        }
+    }
 
     fun alias(options: AliasOptions) {
         val alias = options.alias
@@ -98,19 +105,23 @@ class Posthog(private val plugin: PosthogPlugin) {
         val apiKey = options.apiKey
         val host = options.host
 
-        val config = PostHogAndroidConfig(
-            apiKey = apiKey,
-            host = host
-        )
-        config.captureScreenViews = false
-        config.optOut = false
-
-        PostHogAndroid.setup(plugin.context, config)
+        setup(apiKey, host)
     }
 
     fun unregister(options: UnregisterOptions) {
         val key = options.key
 
         com.posthog.PostHog.unregister(key = key)
+    }
+
+    private fun setup(apiKey: String, host: String) {
+        val posthogConfig = PostHogAndroidConfig(
+            apiKey = apiKey,
+            host = host
+        )
+        posthogConfig.captureScreenViews = false
+        posthogConfig.optOut = false
+
+        PostHogAndroid.setup(plugin.context, posthogConfig)
     }
 }

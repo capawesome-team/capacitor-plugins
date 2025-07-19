@@ -40,7 +40,7 @@ public class PosthogPlugin extends Plugin {
     @Override
     public void load() {
         try {
-            implementation = new Posthog(this);
+            implementation = new Posthog(getPosthogConfig(), this);
         } catch (Exception exception) {
             Logger.error(PosthogPlugin.TAG, exception.getMessage(), exception);
         }
@@ -266,6 +266,17 @@ public class PosthogPlugin extends Plugin {
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    private PosthogConfig getPosthogConfig() {
+        PosthogConfig config = new PosthogConfig();
+
+        String apiKey = getConfig().getString("apiKey", config.getApiKey());
+        config.setApiKey(apiKey);
+        String host = getConfig().getString("host", config.getHost());
+        config.setHost(host);
+
+        return config;
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
