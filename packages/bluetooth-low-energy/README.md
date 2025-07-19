@@ -202,7 +202,12 @@ const getServices = async () => {
 };
 
 const initialize = async () => {
-  await BluetoothLowEnergy.initialize();
+  await BluetoothLowEnergy.initialize({ mode: 'central' });
+};
+
+const isAvailable = async () => {
+  const result = await BluetoothLowEnergy.isAvailable();
+  return result.isAvailable;
 };
 
 const isBonded = async () => {
@@ -376,6 +381,10 @@ const addListener = () => {
 
   BluetoothLowEnergy.addListener('characteristicWriteRequest', async (event) => {
     console.log('Characteristic write request', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceConnected', (event) => {
+    console.log('Device connected', event);
   });
 
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
