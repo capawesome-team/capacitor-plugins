@@ -41,6 +41,18 @@ public class PosthogPlugin extends Plugin {
     public void load() {
         try {
             implementation = new Posthog(this);
+
+            // Fetch config from capacitor.config
+            String apiKey = getConfig().getString("apiKey");
+            if (apiKey == null || apiKey.isEmpty()) {
+                Logger.error(ERROR_API_KEY_MISSING);
+                return;
+            }
+
+            String host = getConfig().getString("host", "https://us.i.posthog.com");
+            SetupOptions options = new SetupOptions(apiKey, host);
+
+            implementation.setup(options);
         } catch (Exception exception) {
             Logger.error(PosthogPlugin.TAG, exception.getMessage(), exception);
         }
