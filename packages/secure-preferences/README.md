@@ -14,7 +14,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
-- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) and [SQLite](https://capawesome.io/plugins/sqlite/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
