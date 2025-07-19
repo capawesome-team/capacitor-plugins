@@ -59,9 +59,9 @@ npx cap sync
 
 If you want to use encryption, you must include the SQLCipher dependency in your app's `variables.gradle` file by setting the `capawesomeCapacitorSqliteIncludeSqlcipher` variable to `true`:
 
-```groovy
+```diff
 ext {
-    capawesomeCapacitorSqliteIncludeSqlcipher = true // Default: false
++  capawesomeCapacitorSqliteIncludeSqlcipher = true // Default: false
 }
 ```
 
