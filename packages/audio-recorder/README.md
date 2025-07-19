@@ -17,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🚀 **Performance**: Record long audio sessions without any performance issues.
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
-- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
