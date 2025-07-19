@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
