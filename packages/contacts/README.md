@@ -149,6 +149,11 @@ const createContact = async () => {
   });
 };
 
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
 const createGroup = async () => {
   return Contacts.createGroup({
     group: {
@@ -206,6 +211,11 @@ const getGroupById = async (id: string) => {
 const getGroups = async () => {
   const { groups } = await Contacts.getGroups();
   return groups;
+};
+
+const isAvailable = async () => {
+  const { isAvailable } = await Contacts.isAvailable();
+  return isAvailable;
 };
 
 const isSupported = async () => {
