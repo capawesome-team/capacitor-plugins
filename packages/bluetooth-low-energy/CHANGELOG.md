@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`ea415660204bc01eea67b502c1584886223bb948`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ea415660204bc01eea67b502c1584886223bb948) ([#171](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/171)): feat(android): add `onConnectionStateChange` method to headless task
+
 ## 7.3.0
 
 ### Minor Changes
