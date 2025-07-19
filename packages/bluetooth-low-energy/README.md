@@ -109,7 +109,7 @@ You also need to add the following service **inside** the `application` tag in y
 
 If you want to run your own native code when a specific event occurs, you can create a headless task.
 For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
-Then you need to add the `onCharacteristicChanged` method to your class:
+Then implement the following methods:
 
 ```java
 import android.bluetooth.BluetoothGatt;
@@ -122,6 +122,10 @@ public class BluetoothLowEnergyHeadlessTask {
   }
 
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
     // Your code here
   }
 }
