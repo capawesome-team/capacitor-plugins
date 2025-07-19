@@ -22,6 +22,8 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔍 **Querying**: Execute SQL queries with `query(...)` and `execute(...)`.
 - 🔢 **Data Types**: Supports all SQLite data types: `NULL`, `INTEGER`, `REAL`, `TEXT`, and `BLOB`.
 - 🛡️ **Prepared Statements**: Uses prepared statements to prevent SQL injection attacks.
+- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
