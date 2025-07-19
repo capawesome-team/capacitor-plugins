@@ -31,7 +31,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     private var implementation: Posthog?
 
     override public func load() {
-        self.implementation = Posthog(plugin: self)
+        self.implementation = Posthog(config: posthogConfig(), plugin: self)
     }
 
     @objc func alias(_ call: CAPPluginCall) {
@@ -192,6 +192,15 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.unregister(options)
         call.resolve()
+    }
+
+    private func posthogConfig() -> PosthogConfig {
+        var config = PosthogConfig()
+
+        config.apiKey = getConfig().getString("apiKey", config.apiKey)
+        config.host = getConfig().getString("host") ?? config.host
+
+        return config
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
