@@ -108,17 +108,17 @@ const requestPermissions = async () => {
 };
 
 const isAvailable = async () => {
-  const { available } = await SpeechRecognition.isAvailable();
-  return available;
+  const { isAvailable } = await SpeechRecognition.isAvailable();
+  return isAvailable;
 };
 
 const isListening = async () => {
-  const { listening } = await SpeechRecognition.isListening();
-  return listening;
+  const { isListening } = await SpeechRecognition.isListening();
+  return isListening;
 };
 
-const getSupportedLanguages = async () => {
-  const { languages } = await SpeechRecognition.getSupportedLanguages();
+const getLanguages = async () => {
+  const { languages } = await SpeechRecognition.getLanguages();
   return languages;
 };
 
