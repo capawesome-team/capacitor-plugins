@@ -2,10 +2,16 @@ import Foundation
 import PostHog
 
 @objc public class Posthog: NSObject {
+    private let config: PosthogConfig
     private let plugin: PosthogPlugin
 
-    init(plugin: PosthogPlugin) {
+    init(config: PosthogConfig, plugin: PosthogPlugin) {
+        self.config = config
         self.plugin = plugin
+        super.init()
+        if let apiKey = config.apiKey {
+            self.setup(apiKey: apiKey, host: config.host)
+        }
     }
 
     @objc public func alias(_ options: AliasOptions) {
@@ -89,6 +95,10 @@ import PostHog
         let apiKey = options.getApiKey()
         let host = options.getHost()
 
+        setup(apiKey: apiKey, host: host)
+    }
+
+    private func setup(apiKey: String, host: String) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         config.captureScreenViews = false
         config.optOut = false

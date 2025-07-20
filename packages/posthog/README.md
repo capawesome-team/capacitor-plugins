@@ -348,6 +348,8 @@ setup(options: SetupOptions) => Promise<void>
 Setup the PostHog SDK with the provided options.
 
 **Attention**: This method should be called before any other method.
+Alternatively, on Android and iOS, you can configure this plugin in
+your Capacitor Configuration file. In this case, you must not call this method.
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
@@ -490,9 +492,7 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 
 #### JsonType
