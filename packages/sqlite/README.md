@@ -111,6 +111,49 @@ end
 
 This plugin uses the [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) package to provide SQLite support on the web platform. It will automatically load the SQLite WASM module when needed.
 
+#### Usage with Angular
+
+If you are using Angular, you need to add the following configuration to your `angular.json` file to ensure the SQLite WASM module is copied to the assets folder during the build process:
+
+```diff
+{
+  "projects": {
+    "your-app-name": {
+      "architect": {
+        "build": {
+          "options": {
+            "assets": [
++              {
++                "glob": "**/*",
++                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm/",
++                "output": "/assets/sqlite-wasm/"
++              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Finally, you need to initialize the SQLite WASM module before using the plugin. You can do this in your `main.ts` file or in a service that is loaded at the start of your application:
+
+```typescript
+import { Capacitor } from '@capacitor/core';
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+
+const initialize = async () => {
+  const isWeb = Capacitor.getPlatform() === 'web';
+  if (isWeb) {
+    // Initialize the SQLite WASM module
+    await Sqlite.initialize({
+      worker: new Worker('/assets/sqlite-wasm/sqlite3-worker1-bundler-friendly.mjs', { type: 'module' })
+    });
+  }
+};
+```
+
 #### Usage with Vite
 
 If you are using Vite, you need to add the following configuration to your `vite.config.ts` file to ensure the SQLite WASM module is loaded correctly:
@@ -237,6 +280,7 @@ const vacuum = async () => {
 * [`commitTransaction(...)`](#committransaction)
 * [`execute(...)`](#execute)
 * [`getVersion()`](#getversion)
+* [`initialize(...)`](#initialize)
 * [`open(...)`](#open)
 * [`query(...)`](#query)
 * [`rollbackTransaction(...)`](#rollbacktransaction)
@@ -355,6 +399,30 @@ To get the version of the database schema, simply run the `PRAGMA user_version;`
 **Returns:** <code>Promise&lt;<a href="#getversionresult">GetVersionResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### initialize(...)
+
+```typescript
+initialize(options?: InitializeOptions | undefined) => Promise<void>
+```
+
+Initialize the plugin with optional configuration.
+
+This method is should be called before using any other methods of the plugin.
+
+On **Android** and **iOS**, this method is a no-op.
+
+On **Web**, this method allows you to pass a `Worker` instance
+that will be used for the SQLite WebAssembly initialization.
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
+
+**Since:** 0.1.3
 
 --------------------
 
@@ -497,6 +565,13 @@ This command can be used to reclaim unused space and optimize the database file.
 | Prop          | Type                | Description                                           | Since |
 | ------------- | ------------------- | ----------------------------------------------------- | ----- |
 | **`version`** | <code>string</code> | The version of the SQLite library used by the plugin. | 0.1.0 |
+
+
+#### InitializeOptions
+
+| Prop         | Type                | Description                                                                                                                                                                                                                                | Since |
+| ------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`worker`** | <code>Worker</code> | The Worker to use for the SQLite WebAssembly initialization. If provided, this worker will be passed to the sqlite3Worker1Promiser method for initializing the SQLite WebAssembly module in the web implementation. Only available on Web. | 0.1.3 |
 
 
 #### OpenResult
