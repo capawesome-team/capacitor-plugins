@@ -37,6 +37,7 @@ body:
         - label: Screenshot
         - label: Speech Recognition
         - label: Speech Synthesis
+        - label: SQLite
         - label: Torch
         - label: Zip
   - type: input
