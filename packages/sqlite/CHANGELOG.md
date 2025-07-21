@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`3a114b12ee616ef56c76b7dd0ade8035a8548c99`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3a114b12ee616ef56c76b7dd0ade8035a8548c99): fix(web): column names were returned several times
+
+- [`9ed07e69b65790549891a7b95d86657fc6b34f56`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9ed07e69b65790549891a7b95d86657fc6b34f56): feat(web): add `initialize` method
+
 ## 0.1.1
 
 ### Patch Changes
