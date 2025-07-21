@@ -324,7 +324,7 @@ Commit the current transaction on the specified database.
 ### execute(...)
 
 ```typescript
-execute(options: ExecuteOptions) => Promise<void>
+execute(options: ExecuteOptions) => Promise<ExecuteResult>
 ```
 
 Execute a single SQL statement on the specified database.
@@ -334,6 +334,8 @@ This method can be used to execute any SQL statement, including `INSERT`, `UPDAT
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#executeoptions">ExecuteOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#executeresult">ExecuteResult</a>&gt;</code>
 
 **Since:** 0.1.0
 
@@ -471,13 +473,23 @@ This command can be used to reclaim unused space and optimize the database file.
 | **`databaseId`** | <code>string</code> | The unique identifier for the database to commit a transaction on. | 0.1.0 |
 
 
+#### ExecuteResult
+
+| Prop          | Type                | Description                                                                                                         | Since |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`changes`** | <code>number</code> | The number of rows modified by the statement. This property is set for `INSERT`, `UPDATE`, and `DELETE` statements. | 0.1.1 |
+| **`rowId`**   | <code>number</code> | The row ID of the last inserted row. This property is only set when executing an `INSERT` statement.                | 0.1.1 |
+
+
 #### ExecuteOptions
 
-| Prop             | Type                 | Description                                                                                                                 | Since |
-| ---------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`databaseId`** | <code>string</code>  | The unique identifier for the database to execute the statement on.                                                         | 0.1.0 |
-| **`statement`**  | <code>string</code>  | The SQL statement to execute. This can be any valid SQL statement, such as `INSERT`, `UPDATE`, `DELETE`, or `CREATE TABLE`. | 0.1.0 |
-| **`values`**     | <code>Value[]</code> | Only available on Android.                                                                                                  |       |
+| Prop                | Type                 | Description                                                                                                                                                                   | Default           | Since |
+| ------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
+| **`databaseId`**    | <code>string</code>  | The unique identifier for the database to execute the statement on.                                                                                                           |                   | 0.1.0 |
+| **`returnChanges`** | <code>boolean</code> | Whether to return the number of rows modified by the statement. Disabling this option can improve performance for statements that do not require the number of modified rows. | <code>true</code> | 0.1.2 |
+| **`returnRowId`**   | <code>boolean</code> | Whether to return the row ID of the last inserted row. Disabling this option can improve performance for statements that do not require the row ID of the last inserted row.  | <code>true</code> | 0.1.2 |
+| **`statement`**     | <code>string</code>  | The SQL statement to execute. This can be any valid SQL statement, such as `INSERT`, `UPDATE`, `DELETE`, or `CREATE TABLE`.                                                   |                   | 0.1.0 |
+| **`values`**        | <code>Value[]</code> | Only available on Android.                                                                                                                                                    |                   |       |
 
 
 #### GetVersionResult
