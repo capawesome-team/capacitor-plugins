@@ -115,7 +115,7 @@ This plugin uses the [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sq
 
 #### Usage with Angular
 
-If you are using Angular, you need to add the following configuration to your `angular.json` file to ensure the SQLite WASM module is copied to the assets folder during the build process:
+If you are using Angular, you need to add the following configuration to your `angular.json` file to ensure the SQLite WASM module is copied to the assets folder during the build process and to set the necessary headers for the web worker:
 
 ```diff
 {
@@ -132,6 +132,14 @@ If you are using Angular, you need to add the following configuration to your `a
 +              }
             ]
           }
+        },
+        "serve": {
++          "options": {
++            "headers": {
++              "Cross-Origin-Embedder-Policy": "require-corp",
++              "Cross-Origin-Opener-Policy": "same-origin"
++            }
++          }
         }
       }
     }
