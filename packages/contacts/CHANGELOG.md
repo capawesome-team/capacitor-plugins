@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.6.1
+
+### Patch Changes
+
+- [`e882655143d6eb07fb7b574622c448c0c51d2eda`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e882655143d6eb07fb7b574622c448c0c51d2eda): fix(ios): do not allow editing when calling the `displayContactById` method
+
 ## 7.6.0
 
 ### Minor Changes
