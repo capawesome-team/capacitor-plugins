@@ -672,6 +672,17 @@ The web implementation of this plugin has the following limitations:
 
 - **BLOBs**: Arrays of numbers (BLOBs) are not supported. You can only use strings, numbers, and `null` as values in SQL statements.
 
+## Common Issues
+
+##### `SQLITE_ERROR: sqlite3 result code 1: no such vfs: opfs`
+
+This error occurs when OPFS (Origin Private File System) cannot be instantiated. This is likely due to the server not sending the required headers for the web worker to be able to access the OPFS. To fix this, you need to add the following headers to your server configuration:
+
+```
+'Cross-Origin-Embedder-Policy': 'require-corp'
+'Cross-Origin-Opener-Policy': 'same-origin'
+```
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/sqlite/CHANGELOG.md).
