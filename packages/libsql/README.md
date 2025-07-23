@@ -1,6 +1,6 @@
 # @capawesome/capacitor-libsql
 
-Capacitor plugin for libSQL databases.
+Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
 
 ## Installation
 
@@ -299,3 +299,5 @@ Only available on iOS.
 <code>string | number | null</code>
 
 </docgen-api>
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by CHISELSTRIKE INC. or any of their affiliates or subsidiaries.
