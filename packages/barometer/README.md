@@ -67,8 +67,38 @@ Add the `NSMotionUsageDescription` key to the `ios/App/App/Info.plist` file, whi
 ```typescript
 import { Barometer } from '@capawesome-team/capacitor-barometer';
 
-const echo = async () => {
-  await Barometer.echo();
+const getMeasurement = async () => {
+  const { measurement } = await Barometer.getMeasurement();
+  console.log('Pressure:', measurement.pressure, 'hPa');
+  console.log('Relative Altitude:', measurement.relativeAltitude, 'm');
+  console.log('Timestamp:', new Date(measurement.timestamp));
+};
+
+const isAvailable = async () => {
+  const result = await Barometer.isAvailable();
+  console.log('Barometer is available:', result.isAvailable);
+};
+
+const startMeasurementUpdates = async () => {
+  Barometer.addListener('measurement', (event) => {
+    console.log('New measurement:', event);
+  });
+  await Barometer.startMeasurementUpdates();
+};
+
+const stopMeasurementUpdates = async () => {
+  await Barometer.stopMeasurementUpdates();
+  Barometer.removeAllListeners();
+};
+
+const checkPermissions = async () => {
+  const status = await Barometer.checkPermissions();
+  console.log('Barometer permission status:', status.barometer);
+};
+
+const requestPermissions = async () => {
+  const status = await Barometer.requestPermissions();
+  console.log('Barometer permission status after request:', status.barometer);
 };
 ```
 
