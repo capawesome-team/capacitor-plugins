@@ -2,13 +2,24 @@
 
 Capacitor plugin to securely store key/value pairs such as passwords, tokens or other sensitive information.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for secure storage. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
-- 🔑 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
+- 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) and [SQLite](https://capawesome.io/plugins/sqlite/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -18,7 +29,7 @@ Capacitor plugin to securely store key/value pairs such as passwords, tokens or 
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -27,7 +38,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -38,6 +49,53 @@ npx cap sync
 
 ### Android
 
+#### Backup rules
+
+To prevent the preferences file from being backed up to the cloud, you need to add backup rules to your Android project.
+You can read more about this in the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles).
+
+##### Android 11 and lower
+
+Add the `android:fullBackupContent` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<application
+  android:fullBackupContent="@xml/full_backup_content">
+</application>
+```
+
+Create a new file `res/xml/full_backup_content.xml` with the following content:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+  <include domain="sharedpref" path="."/>
+  <exclude domain="sharedpref" path="CAPAWESOME_SECURE_PREFERENCES.xml"/>
+</full-backup-content>
+```
+
+##### Android 12 and higher
+
+Add the `android:dataExtractionRules` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
+
+```xml
+<application
+  android:dataExtractionRules="@xml/data_extraction_rules">
+</application>
+```
+
+Create a new file `res/xml/data_extraction_rules.xml` with the following content:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+ <cloud-backup [disableIfNoEncryptionCapabilities="true|false"]>
+   <include domain="sharedpref" path="."/>
+   <exclude domain="sharedpref" path="device.xml"/>
+ </cloud-backup>
+</data-extraction-rules>
+```
+
 #### Proguard
 
 If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
@@ -45,12 +103,6 @@ If you are using Proguard, you need to add the following rules to your `proguard
 ```
 -keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
-
-#### Variables
-
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
-
-- `$androidxSecurityCryptoVersion` version of `androidx.security:security-crypto` (default: `1.0.0`)
 
 ## Configuration
 
@@ -234,6 +286,10 @@ This is for development purposes only and should not be used in production.
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/secure-preferences/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/secure-preferences/BREAKING.md).
 
 ## License
 

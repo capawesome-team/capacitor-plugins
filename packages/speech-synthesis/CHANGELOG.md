@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.2
+
+### Patch Changes
+
+- [`a14dddad070e929c5700ccef3a3015c70d775d66`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a14dddad070e929c5700ccef3a3015c70d775d66) ([#196](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/196)): fix(ios): gracefully handle audio session activation errors
+
 ## 7.1.1
 
 ### Patch Changes

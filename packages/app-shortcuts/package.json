@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-shortcuts",
-  "version": "7.2.0",
+  "version": "7.5.0",
   "description": "Capacitor plugin to manage app shortcuts and quick actions.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

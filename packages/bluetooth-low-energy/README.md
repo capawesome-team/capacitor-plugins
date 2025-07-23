@@ -1,8 +1,16 @@
 # @capawesome-team/capacitor-bluetooth-low-energy
 
-Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role.
+Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
@@ -15,18 +23,28 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and
 - ⚔️ **Battle-Tested**: Used in more than 30 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 6.x.x          | 6.x.x             | Deprecated     |
 | 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
+
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-heart-rate-monitor-app).
+
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -35,7 +53,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -46,40 +64,38 @@ npx cap sync
 
 ### Android
 
-#### Permissions
+#### Features
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+Add the following element to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
-<!-- Request legacy Bluetooth permissions on older devices. -->
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+```
+
+Set the `android:required` attribute to `true` if your app can't function, or isn't designed to function, when Bluetooth Low Energy is not available on the device. If your app can function without Bluetooth Low Energy, set the `android:required` attribute to `false`. This will allow your app to be installed on devices that do not support Bluetooth Low Energy.
+
+#### Permissions
+
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<!-- Required if you want to support Android 11 and below. -->
 <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
 <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-<!-- Needed only if your app uses advertising -->
+<!-- Required if you want to advertise as a BLE device. -->
 <uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
-<!-- Needed only if your app looks for Bluetooth devices.  -->
+<!-- Required if you want to scan for BLE devices. -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-<!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
-<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-<!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<!-- Needed only if your app uses the foreground service. -->
+<!-- Required if you want to be able to connect to paired Bluetooth devices. -->
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+<!--Required if you want to start a foreground service.-->
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 ```
 
 You can read more about Bluetooth permissions in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
-
-#### Features
-
-Add the following feature to your `AndroidManifest.xml` before or after the `application` tag:
-
-```xml
-<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
-```
-
-Set it to `true` if BLE is required for your app. Then the Google Play store will hide your app from users on devices lacking those features.
-You can read more about Bluetooth features in the [Android documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions#features).
 
 #### Services
 
@@ -93,7 +109,7 @@ You also need to add the following service **inside** the `application` tag in y
 
 If you want to run your own native code when a specific event occurs, you can create a headless task.
 For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
-Then you need to add the `onCharacteristicChanged` method to your class:
+Then implement the following methods:
 
 ```java
 import android.bluetooth.BluetoothGatt;
@@ -106,6 +122,10 @@ public class BluetoothLowEnergyHeadlessTask {
   }
 
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
     // Your code here
   }
 }
@@ -121,12 +141,16 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
-Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
+#### Privacy Descriptions
+
+Add the `NSBluetoothAlwaysUsageDescription` key to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
 <string>The app needs access to Bluetooth peripherals to communicate with Bluetooth devices.</string>
 ```
+
+#### Background Modes
 
 If the app wants to use Bluetooth in the background, add the `UIBackgroundModes` key with the `bluetooth-central` value:
 
@@ -140,10 +164,6 @@ If the app wants to use Bluetooth in the background, add the `UIBackgroundModes`
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Guides
 
@@ -182,7 +202,12 @@ const getServices = async () => {
 };
 
 const initialize = async () => {
-  await BluetoothLowEnergy.initialize();
+  await BluetoothLowEnergy.initialize({ mode: 'central' });
+};
+
+const isAvailable = async () => {
+  const result = await BluetoothLowEnergy.isAvailable();
+  return result.isAvailable;
 };
 
 const isBonded = async () => {
@@ -358,6 +383,10 @@ const addListener = () => {
     console.log('Characteristic write request', event);
   });
 
+  BluetoothLowEnergy.addListener('deviceConnected', (event) => {
+    console.log('Device connected', event);
+  });
+
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
     console.log('Device disconnected', event);
   });
@@ -387,6 +416,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`getConnectedDevices()`](#getconnecteddevices)
 * [`getServices(...)`](#getservices)
 * [`initialize(...)`](#initialize)
+* [`isAvailable()`](#isavailable)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
 * [`openAppSettings()`](#openappsettings)
@@ -558,6 +588,21 @@ Only available on iOS.
 | **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not Bluetooth Low Energy is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.3.0
 
 --------------------
 
@@ -773,7 +818,7 @@ startAdvertising(options: StartAdvertisingOptions) => Promise<void>
 
 Start advertising as a BLE device.
 
-Only available on Android.
+Only available on Android and iOS.
 
 | Param         | Type                                                                        |
 | ------------- | --------------------------------------------------------------------------- |
@@ -809,7 +854,10 @@ Only available on Android and iOS.
 startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
 ```
 
-Start the foreground service.
+Start the foreground service and show a notification.
+
+This method should be called when the app is moved to the background to
+keep the Bluetooth connections alive.
 
 Only available on Android.
 
@@ -849,7 +897,7 @@ stopAdvertising() => Promise<void>
 
 Stop advertising as a BLE device.
 
-Only available on Android.
+Only available on Android and iOS.
 
 **Since:** 7.2.0
 
@@ -881,7 +929,10 @@ Only available on Android and iOS.
 stopForegroundService() => Promise<void>
 ```
 
-Stop the foreground service.
+Stop the foreground service and remove the notification.
+
+This method should be called when the app is moved to the foreground
+since the foreground service is no longer needed.
 
 Only available on Android.
 
@@ -1232,6 +1283,13 @@ Remove all listeners for this plugin.
 | **`mode`** | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS. | <code>'central'</code> | 7.2.0 |
 
 
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                                     | Since |
+| ----------------- | -------------------- | --------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not Bluetooth Low Energy is available on the device. | 7.3.0 |
+
+
 #### IsBondedResult
 
 | Prop         | Type                 | Description                          | Since |
@@ -1498,11 +1556,25 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md).
+This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
+
+```ts
+import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+
+const convertBytesToHex = (bytes: number[]) => {
+  return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
 
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/BREAKING.md).
 
 ## License
 

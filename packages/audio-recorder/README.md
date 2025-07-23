@@ -1,17 +1,28 @@
 # @capawesome-team/capacitor-audio-recorder
 
-Capacitor plugin for audio recording using the device's microphone.
+Capacitor plugin for seamless audio recording using the device's microphone. Supports Android, iOS, and Web with advanced features and high performance.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio recording. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
+- 🚀 **Performance**: Record long audio sessions without any performance issues.
 - 🔑 **Permissions**: Check and request microphone permissions.
-- 🔊 **Events**: Listen for events like `recordingError` or `recordingStopped`.
-- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
+- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -21,7 +32,7 @@ Capacitor plugin for audio recording using the device's microphone.
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -30,7 +41,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -40,14 +51,6 @@ npx cap sync
 ```
 
 ### Android
-
-#### Permissions
-
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
-
-```xml
-<uses-permission android:name="android.permission.RECORD_AUDIO" />
-```
 
 #### Proguard
 
@@ -135,6 +138,12 @@ const addRecordingErrorListener = async () => {
   });
 };
 
+const addRecordingPausedListener = async () => {
+  await AudioRecorder.addListener('recordingPaused', () => {
+    console.log('Recording paused');
+  });
+};
+
 const addRecordingStoppedListener = async () => {
   await AudioRecorder.addListener('recordingStopped', (event) => {
     console.log('Recording stopped:', event.uri);
@@ -150,11 +159,12 @@ const addRecordingStoppedListener = async () => {
 * [`getRecordingStatus()`](#getrecordingstatus)
 * [`pauseRecording()`](#pauserecording)
 * [`resumeRecording()`](#resumerecording)
-* [`startRecording()`](#startrecording)
+* [`startRecording(...)`](#startrecording)
 * [`stopRecording()`](#stoprecording)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
+* [`addListener('recordingPaused', ...)`](#addlistenerrecordingpaused-)
 * [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -223,13 +233,17 @@ This method is only available on Android (SDK 24+), iOS and Web.
 --------------------
 
 
-### startRecording()
+### startRecording(...)
 
 ```typescript
-startRecording() => Promise<void>
+startRecording(options?: StartRecordingOptions | undefined) => Promise<void>
 ```
 
 Start recording audio in AAC format.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startrecordingoptions">StartRecordingOptions</a></code> |
 
 **Since:** 7.0.0
 
@@ -303,6 +317,26 @@ Only available on iOS.
 --------------------
 
 
+### addListener('recordingPaused', ...)
+
+```typescript
+addListener(eventName: 'recordingPaused', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the recording is paused (e.g. when the recording is interrupted by a phone call).
+
+| Param              | Type                           |
+| ------------------ | ------------------------------ |
+| **`eventName`**    | <code>'recordingPaused'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>     |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### addListener('recordingStopped', ...)
 
 ```typescript
@@ -336,12 +370,21 @@ or paused or if an error occurs.
 | **`status`** | <code><a href="#recordingstatus">RecordingStatus</a></code> | The current recording status. | <code>RecordingStatus.Inactive</code> | 7.0.0 |
 
 
+#### StartRecordingOptions
+
+| Prop             | Type                | Description                                                                              | Default             | Since |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`bitRate`**    | <code>number</code> | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code> | 7.2.0 |
+| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>  | 7.1.0 |
+
+
 #### StopRecordingResult
 
-| Prop       | Type                | Description                                                       | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------- | ----- |
-| **`blob`** | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
-| **`uri`**  | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
+| Prop           | Type                | Description                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
+| **`duration`** | <code>number</code> | The duration of the recorded audio in milliseconds.               | 7.1.0 |
+| **`uri`**      | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
 
 
 #### PermissionStatus
@@ -367,10 +410,11 @@ or paused or if an error occurs.
 
 #### RecordingStoppedEvent
 
-| Prop       | Type                | Description                                                       | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------- | ----- |
-| **`blob`** | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
-| **`uri`**  | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
+| Prop           | Type                | Description                                                       | Since |
+| -------------- | ------------------- | ----------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>   | The recorded audio as a Blob. Only available on Web.              | 7.0.0 |
+| **`duration`** | <code>number</code> | The duration of the recorded audio in milliseconds.               | 7.1.0 |
+| **`uri`**      | <code>string</code> | The URI of the recorded audio. Only available on Android and iOS. | 7.0.0 |
 
 
 ### Type Aliases
@@ -397,6 +441,10 @@ or paused or if an error occurs.
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/BREAKING.md).
 
 ## License
 

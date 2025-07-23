@@ -32,6 +32,10 @@ import org.json.JSONException;
 )
 public class FilePickerPlugin extends Plugin {
 
+    public static final String ERROR_COPY_FILE_FAILED = "copyFile failed.";
+    public static final String ERROR_FILE_ALREADY_EXISTS = "File already exists.";
+    public static final String ERROR_FROM_MISSING = "from must be provided.";
+    public static final String ERROR_TO_MISSING = "to must be provided.";
     public static final String ERROR_PICK_FILE_FAILED = "pickFiles failed.";
     public static final String ERROR_PICK_FILE_CANCELED = "pickFiles canceled.";
     public static final String ERROR_PICK_DIRECTORY_FAILED = "pickDirectory failed.";
@@ -43,7 +47,7 @@ public class FilePickerPlugin extends Plugin {
     private FilePicker implementation;
 
     public void load() {
-        implementation = new FilePicker(this.getBridge());
+        implementation = new FilePicker(this);
     }
 
     @Override
@@ -55,6 +59,33 @@ public class FilePickerPlugin extends Plugin {
     @PluginMethod
     public void convertHeicToJpeg(PluginCall call) {
         call.unimplemented("Not implemented on Android.");
+    }
+
+    @PluginMethod
+    public void copyFile(PluginCall call) {
+        try {
+            String from = call.getString("from");
+            if (from == null) {
+                call.reject(ERROR_FROM_MISSING);
+                return;
+            }
+            Uri fromUri = implementation.getUriByPath(from);
+            String to = call.getString("to");
+            if (to == null) {
+                call.reject(ERROR_TO_MISSING);
+                return;
+            }
+            Uri toUri = implementation.getUriByPath(to);
+            Boolean shouldOverwrite = call.getBoolean("overwrite", true);
+
+            implementation.copyFile(fromUri, toUri, shouldOverwrite);
+
+            call.resolve();
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
     }
 
     @PluginMethod

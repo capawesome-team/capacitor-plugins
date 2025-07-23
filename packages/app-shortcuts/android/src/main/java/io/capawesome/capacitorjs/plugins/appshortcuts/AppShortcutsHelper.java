@@ -2,7 +2,11 @@ package io.capawesome.capacitorjs.plugins.appshortcuts;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.graphics.drawable.IconCompat;
 import com.getcapacitor.Bridge;
@@ -57,8 +61,26 @@ public class AppShortcutsHelper {
                     (String) id
                 )
             );
+
             if (androidIcon != null) {
-                shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
+                try {
+                    // First try to get drawable from app resources
+                    int iconResId = context.getResources().getIdentifier((String) androidIcon, "drawable", context.getPackageName());
+                    if (iconResId == 0) {
+                        // If not found in app resources, try system resources
+                        iconResId = context.getResources().getIdentifier((String) androidIcon, "drawable", "android");
+                    }
+                    if (iconResId != 0) {
+                        shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, iconResId));
+                    } else {
+                        Bitmap bitmap = AppShortcutsHelper.decodeBase64((String) androidIcon);
+                        if (bitmap != null) {
+                            shortcutInfoCompat.setIcon(IconCompat.createWithBitmap(bitmap));
+                        }
+                    }
+                } catch (Exception exception) {
+                    shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) androidIcon));
+                }
             } else if (icon != null) {
                 shortcutInfoCompat.setIcon(IconCompat.createWithResource(context, (int) icon));
             }
@@ -66,5 +88,12 @@ public class AppShortcutsHelper {
             shortcutInfoCompatList.add(shortcutInfoCompat.build());
         }
         return shortcutInfoCompatList;
+    }
+
+    @Nullable
+    private static Bitmap decodeBase64(@NonNull String base64) {
+        base64 = base64.replaceFirst("data:[a-zA-Z+/]+;base64,", "");
+        byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 }

@@ -1,21 +1,31 @@
 # @capawesome-team/capacitor-contacts
 
-Capacitor plugin to read, write, or select device contacts.
+Capacitor plugin to read, write, or select device contacts. Supports Android, iOS and Web with advanced features like contact groups, pagination, and native modals.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for contacts. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
-- 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS. (Coming soon!)
-- 🎫 **Accounts**: Add contacts to specific accounts on Android. (Coming soon!)
-- 📖 **Pagination**: Paginate through contacts to avoid performance issues. (Coming soon!)
+- 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS.
+- 🎫 **Accounts**: Add contacts to specific accounts on Android.
+- 📖 **Pagination**: Paginate through contacts to avoid performance issues.
 - 🔍 **Filtering**: Filter contacts by ID, email, phone number, etc. (Coming soon!)
-- 📱 **Native Modals**: Create, update and display contacts in native modals. (Coming soon!)
+- 📱 **Native Modals**: Create, update and display contacts in native modals.
 - 🎯 **Picking**: Let the user select a device contact.
 - 🖼️ **Photos**: Set, update and retrieve contact photos.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -25,7 +35,7 @@ Capacitor plugin to read, write, or select device contacts.
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -34,7 +44,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -47,10 +57,12 @@ npx cap sync
 
 #### Permissions
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
+<!-- Required if you want to read contacts. -->
 <uses-permission android:name="android.permission.READ_CONTACTS" />
+<!-- Required if you want to write contacts. -->
 <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
 
@@ -93,6 +105,11 @@ import {
   PostalAddressType
 } from '@capawesome-team/capacitor-contacts';
 
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
 const createContact = async () => {
   return Contacts.createContact({
     contact: {
@@ -132,9 +149,48 @@ const createContact = async () => {
   });
 };
 
-const getContacts = async () => {
-  const { contacts } = await Contacts.getContacts();
-  return contacts;
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
+const createGroup = async () => {
+  return Contacts.createGroup({
+    group: {
+      name: 'My Group'
+    }
+  });
+};
+
+const deleteContactById = async (id: string) => {
+  await Contacts.deleteContactById({ id });
+};
+
+const deleteGroupById = async (id: string) => {
+  await Contacts.deleteGroupById({ id });
+};
+
+const displayContactById = async (id: string) => {
+  await Contacts.displayContactById({ id });
+};
+
+const displayCreateContact = async () => {
+  const { id } = await Contacts.displayCreateContact({
+    contact: {
+      givenName: 'John',
+      familyName: 'Doe'
+    }
+  });
+  return id;
+};
+
+const displayUpdateContactById = async (id: string) => {
+  await Contacts.displayUpdateContactById({ id });
+};
+
+const getAccounts = async () => {
+  const { accounts } = await Contacts.getAccounts();
+  return accounts;
 };
 
 const getContactById = async (id: string) => {
@@ -142,13 +198,44 @@ const getContactById = async (id: string) => {
   return contact;
 };
 
-const deleteContactById = async (id: string) => {
-  await Contacts.deleteContactById({ id });
+const getContacts = async () => {
+  const { contacts } = await Contacts.getContacts();
+  return contacts;
+};
+
+const getGroupById = async (id: string) => {
+  const { group } = await Contacts.getGroupById({ id });
+  return group;
+};
+
+const getGroups = async () => {
+  const { groups } = await Contacts.getGroups();
+  return groups;
+};
+
+const isAvailable = async () => {
+  const { isAvailable } = await Contacts.isAvailable();
+  return isAvailable;
 };
 
 const isSupported = async () => {
   const { isSupported } = await Contacts.isSupported();
   return isSupported;
+};
+
+const pickContacts = async () => {
+  const { contacts } = await Contacts.pickContacts();
+  return contacts;
+};
+
+const updateContactById = async (id: string) => {
+  await Contacts.updateContactById({
+    id,
+    contact: {
+      givenName: 'John',
+      familyName: 'Doe'
+    }
+  });
 };
 
 const checkPermissions = async () => {
@@ -164,13 +251,24 @@ const requestPermissions = async () => {
 
 <docgen-index>
 
+* [`countContacts()`](#countcontacts)
 * [`createContact(...)`](#createcontact)
+* [`createGroup(...)`](#creategroup)
 * [`deleteContactById(...)`](#deletecontactbyid)
+* [`deleteGroupById(...)`](#deletegroupbyid)
+* [`displayContactById(...)`](#displaycontactbyid)
 * [`displayCreateContact(...)`](#displaycreatecontact)
+* [`displayUpdateContactById(...)`](#displayupdatecontactbyid)
+* [`getAccounts()`](#getaccounts)
 * [`getContactById(...)`](#getcontactbyid)
 * [`getContacts(...)`](#getcontacts)
+* [`getGroupById(...)`](#getgroupbyid)
+* [`getGroups()`](#getgroups)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
+* [`pickContacts(...)`](#pickcontacts)
+* [`updateContactById(...)`](#updatecontactbyid)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
 * [Interfaces](#interfaces)
@@ -181,6 +279,23 @@ const requestPermissions = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### countContacts()
+
+```typescript
+countContacts() => Promise<CountContactsResult>
+```
+
+Count the number of contacts on the device.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#countcontactsresult">CountContactsResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
 
 ### createContact(...)
 
@@ -199,6 +314,27 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#createcontactresult">CreateContactResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### createGroup(...)
+
+```typescript
+createGroup(options: CreateGroupOptions) => Promise<CreateGroupResult>
+```
+
+Create a new contact group on the device.
+
+Only available on iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#creategroupoptions">CreateGroupOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#creategroupresult">CreateGroupResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -222,10 +358,48 @@ Only available on Android and iOS.
 --------------------
 
 
+### deleteGroupById(...)
+
+```typescript
+deleteGroupById(options: DeleteGroupByIdOptions) => Promise<void>
+```
+
+Delete a contact group from the device.
+
+Only available on iOS.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletegroupbyidoptions">DeleteGroupByIdOptions</a></code> |
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### displayContactById(...)
+
+```typescript
+displayContactById(options: DisplayContactByIdOptions) => Promise<void>
+```
+
+Display an existing contact by identifier.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#displaycontactbyidoptions">DisplayContactByIdOptions</a></code> |
+
+**Since:** 7.4.0
+
+--------------------
+
+
 ### displayCreateContact(...)
 
 ```typescript
-displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promise<void>
+displayCreateContact(options?: DisplayCreateContactOptions | undefined) => Promise<DisplayCreateContactResult>
 ```
 
 Open a native modal to create a new device contact.
@@ -239,7 +413,45 @@ Only available on Android and iOS.
 | ------------- | ----------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#displaycreatecontactoptions">DisplayCreateContactOptions</a></code> |
 
+**Returns:** <code>Promise&lt;<a href="#displaycreatecontactresult">DisplayCreateContactResult</a>&gt;</code>
+
 **Since:** 7.2.0
+
+--------------------
+
+
+### displayUpdateContactById(...)
+
+```typescript
+displayUpdateContactById(options: DisplayUpdateContactByIdOptions) => Promise<void>
+```
+
+Open a native modal to update a contact.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                        |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#displayupdatecontactbyidoptions">DisplayUpdateContactByIdOptions</a></code> |
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### getAccounts()
+
+```typescript
+getAccounts() => Promise<GetAccountsResult>
+```
+
+List all accounts on the device.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#getaccountsresult">GetAccountsResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -286,6 +498,59 @@ Only available on Android and iOS.
 --------------------
 
 
+### getGroupById(...)
+
+```typescript
+getGroupById(options: GetGroupByIdOptions) => Promise<GetGroupByIdResult>
+```
+
+Find a contact group by identifier.
+
+Only available on iOS.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getgroupbyidoptions">GetGroupByIdOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getgroupbyidresult">GetGroupByIdResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### getGroups()
+
+```typescript
+getGroups() => Promise<GetGroupsResult>
+```
+
+List all contact groups on the device.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getgroupsresult">GetGroupsResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not contacts is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.6.0
+
+--------------------
+
+
 ### isSupported()
 
 ```typescript
@@ -304,20 +569,56 @@ Check if the contacts API is available on the device.
 ### pickContact(...)
 
 ```typescript
-pickContact(options?: PickContactOptions | undefined) => Promise<PickContactResult>
+pickContact(options?: PickContactsOptions | undefined) => Promise<PickContactResult>
 ```
 
 Open the contact picker to select a contact from the device.
 
-Only available on web.
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
 
-| Param         | Type                                                              |
-| ------------- | ----------------------------------------------------------------- |
-| **`options`** | <code><a href="#pickcontactoptions">PickContactOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#pickcontactresult">PickContactResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#pickcontactsresult">PickContactsResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### pickContacts(...)
+
+```typescript
+pickContacts(options?: PickContactsOptions | undefined) => Promise<PickContactsResult>
+```
+
+Open the contact picker to select a contact from the device.
+
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#pickcontactsresult">PickContactsResult</a>&gt;</code>
+
+**Since:** 7.4.0
+
+--------------------
+
+
+### updateContactById(...)
+
+```typescript
+updateContactById(options: UpdateContactByIdOptions) => Promise<void>
+```
+
+Update an existing contact on the device.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#updatecontactbyidoptions">UpdateContactByIdOptions</a></code> |
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -363,6 +664,13 @@ Only available on Android and iOS.
 ### Interfaces
 
 
+#### CountContactsResult
+
+| Prop        | Type                | Description             | Since |
+| ----------- | ------------------- | ----------------------- | ----- |
+| **`total`** | <code>number</code> | The number of contacts. | 7.4.0 |
+
+
 #### CreateContactResult
 
 | Prop     | Type                | Description                             | Since |
@@ -381,10 +689,12 @@ Only available on Android and iOS.
 
 | Prop                   | Type                                          | Description                                                                     | Since |
 | ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`account`**          | <code><a href="#account">Account</a></code>   | The account associated with the contact. Only available on Android.             | 7.4.0 |
 | **`birthday`**         | <code><a href="#birthday">Birthday</a></code> | The birthday of the contact.                                                    | 7.3.0 |
 | **`emailAddresses`**   | <code>EmailAddress[]</code>                   | The list of email addresses for the contact.                                    | 7.0.0 |
 | **`familyName`**       | <code>string</code>                           | The family name of the contact. Only available on Android and iOS.              | 7.0.0 |
 | **`givenName`**        | <code>string</code>                           | The given name of the contact. Only available on Android and iOS.               | 7.0.0 |
+| **`groupIds`**         | <code>string[]</code>                         | The identifier of the groups the contact belongs to. Only available on iOS.     | 7.4.0 |
 | **`id`**               | <code>string</code>                           | The identifier for the contact. Only available on Android and iOS.              | 7.0.0 |
 | **`jobTitle`**         | <code>string</code>                           | The job title of the contact. Only available on Android and iOS.                | 7.0.0 |
 | **`middleName`**       | <code>string</code>                           | The middle name of the contact. Only available on Android and iOS.              | 7.0.0 |
@@ -397,6 +707,14 @@ Only available on Android and iOS.
 | **`photo`**            | <code>string</code>                           | The photo of the contact as a base64 string. Only available on Android and iOS. | 7.0.0 |
 | **`postalAddresses`**  | <code>PostalAddress[]</code>                  | The list of postal addresses for the contact.                                   | 7.0.0 |
 | **`urlAddresses`**     | <code>UrlAddress[]</code>                     | The list of URL addresses for the contact. Only available on Android and iOS.   | 7.0.0 |
+
+
+#### Account
+
+| Prop       | Type                | Description                                  | Since |
+| ---------- | ------------------- | -------------------------------------------- | ----- |
+| **`name`** | <code>string</code> | The account name. Only available on Android. | 7.4.0 |
+| **`type`** | <code>string</code> | The account type. Only available on Android. | 7.4.0 |
 
 
 #### Birthday
@@ -447,9 +765,33 @@ Only available on Android and iOS.
 
 #### UrlAddress
 
-| Prop        | Type                | Description      |
-| ----------- | ------------------- | ---------------- |
-| **`value`** | <code>string</code> | The URL address. |
+| Prop        | Type                                                      | Description                         | Default                           | Since |
+| ----------- | --------------------------------------------------------- | ----------------------------------- | --------------------------------- | ----- |
+| **`label`** | <code>string</code>                                       | A custom label for the URL address. |                                   | 7.5.0 |
+| **`type`**  | <code><a href="#urladdresstype">UrlAddressType</a></code> | The type of URL address.            | <code>UrlAddressType.Other</code> | 7.5.0 |
+| **`value`** | <code>string</code>                                       | The URL address.                    |                                   |       |
+
+
+#### CreateGroupResult
+
+| Prop     | Type                | Description                           | Since |
+| -------- | ------------------- | ------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the created group. | 7.4.0 |
+
+
+#### CreateGroupOptions
+
+| Prop        | Type                                                                          | Description          | Since |
+| ----------- | ----------------------------------------------------------------------------- | -------------------- | ----- |
+| **`group`** | <code><a href="#omit">Omit</a>&lt;<a href="#group">Group</a>, 'id'&gt;</code> | The group to create. | 7.4.0 |
+
+
+#### Group
+
+| Prop       | Type                | Description                   | Since |
+| ---------- | ------------------- | ----------------------------- | ----- |
+| **`id`**   | <code>string</code> | The identifier for the group. | 7.4.0 |
+| **`name`** | <code>string</code> | The name of the group.        | 7.4.0 |
 
 
 #### DeleteContactByIdOptions
@@ -459,11 +801,46 @@ Only available on Android and iOS.
 | **`id`** | <code>string</code> | The identifier for the contact. | 7.0.0 |
 
 
+#### DeleteGroupByIdOptions
+
+| Prop     | Type                | Description                   | Since |
+| -------- | ------------------- | ----------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
+#### DisplayContactByIdOptions
+
+| Prop     | Type                | Description                               | Since |
+| -------- | ------------------- | ----------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier of the contact to display. | 7.4.0 |
+
+
+#### DisplayCreateContactResult
+
+| Prop     | Type                | Description                                                                                                              | Since |
+| -------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`id`** | <code>string</code> | The identifier for the created contact. On **Android**, you need the `readContacts` permission to return the identifier. | 7.4.0 |
+
+
 #### DisplayCreateContactOptions
 
 | Prop          | Type                                                                              | Description                                         | Since |
 | ------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
 | **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
+
+
+#### DisplayUpdateContactByIdOptions
+
+| Prop     | Type                | Description                              | Since |
+| -------- | ------------------- | ---------------------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier of the contact to update. | 7.4.0 |
+
+
+#### GetAccountsResult
+
+| Prop           | Type                   | Description                                   | Since |
+| -------------- | ---------------------- | --------------------------------------------- | ----- |
+| **`accounts`** | <code>Account[]</code> | An array of available accounts on the device. | 7.4.0 |
 
 
 #### GetContactByIdResult
@@ -490,9 +867,39 @@ Only available on Android and iOS.
 
 #### GetContactsOptions
 
-| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                       | Since |
-| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| Prop         | Type                                                  | Description                             | Default                                                                                                                                                                                       | Since |
+| ------------ | ----------------------------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact.   | <code>['emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| **`limit`**  | <code>number</code>                                   | Limit the number of contacts returned.  | <code>1000</code>                                                                                                                                                                             | 7.4.0 |
+| **`offset`** | <code>number</code>                                   | Offset the number of contacts returned. | <code>0</code>                                                                                                                                                                                | 7.4.0 |
+
+
+#### GetGroupByIdResult
+
+| Prop        | Type                                            | Description                              | Since |
+| ----------- | ----------------------------------------------- | ---------------------------------------- | ----- |
+| **`group`** | <code><a href="#group">Group</a> \| null</code> | The group with the specified identifier. | 7.4.0 |
+
+
+#### GetGroupByIdOptions
+
+| Prop     | Type                | Description                   | Since |
+| -------- | ------------------- | ----------------------------- | ----- |
+| **`id`** | <code>string</code> | The identifier for the group. | 7.4.0 |
+
+
+#### GetGroupsResult
+
+| Prop         | Type                 | Description                       | Since |
+| ------------ | -------------------- | --------------------------------- | ----- |
+| **`groups`** | <code>Group[]</code> | The list of groups on the device. | 7.4.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                         | Since |
+| ----------------- | -------------------- | --------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not contacts is available on the device. | 7.6.0 |
 
 
 #### IsSupportedResult
@@ -502,18 +909,27 @@ Only available on Android and iOS.
 | **`isSupported`** | <code>boolean</code> | Whether the contacts API is available on the device. This is always `true` on Android and iOS. | 7.0.0 |
 
 
-#### PickContactResult
+#### PickContactsResult
 
 | Prop           | Type                   | Description                                         | Since |
 | -------------- | ---------------------- | --------------------------------------------------- | ----- |
 | **`contacts`** | <code>Contact[]</code> | The selected contacts. Empty if none were selected. | 7.0.0 |
 
 
-#### PickContactOptions
+#### PickContactsOptions
 
-| Prop           | Type                 | Description                                                          | Default            | Since |
-| -------------- | -------------------- | -------------------------------------------------------------------- | ------------------ | ----- |
-| **`multiple`** | <code>boolean</code> | Whether to allow selecting multiple contacts. Only available on Web. | <code>false</code> | 7.0.0 |
+| Prop           | Type                                                  | Description                                                              | Default                                                                                                                                                                                                   | Since |
+| -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`fields`**   | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. Only available on Android and iOS. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.4.0 |
+| **`multiple`** | <code>boolean</code>                                  | Whether to allow selecting multiple contacts. Only available on Web.     | <code>false</code>                                                                                                                                                                                        | 7.0.0 |
+
+
+#### UpdateContactByIdOptions
+
+| Prop          | Type                                                                              | Description                                                                                                                                                                          | Since |
+| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The updated contact information. **Attention**: All fields are required to be provided, even if they are not updated. Fields that are not provided will be removed from the contact. | 7.4.0 |
+| **`id`**      | <code>string</code>                                                               | The identifier for the contact.                                                                                                                                                      | 7.4.0 |
 
 
 #### PermissionStatus
@@ -545,9 +961,7 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{
- [P in K]: T[P];
- }</code>
+<code>{ [P in K]: T[P]; }</code>
 
 
 #### Exclude
@@ -560,6 +974,16 @@ From T, pick a set of properties whose keys are in the union K
 #### ContactField
 
 <code>keyof <a href="#contact">Contact</a></code>
+
+
+#### PickContactOptions
+
+<code><a href="#pickcontactsoptions">PickContactsOptions</a></code>
+
+
+#### PickContactResult
+
+<code><a href="#pickcontactsresult">PickContactsResult</a></code>
 
 
 #### ContactsPermissionState
@@ -630,11 +1054,30 @@ From T, pick a set of properties whose keys are in the union K
 | **`Other`**  | <code>'OTHER'</code>  | 7.0.0 |
 | **`Work`**   | <code>'WORK'</code>   | 7.0.0 |
 
+
+#### UrlAddressType
+
+| Members        | Value                   | Description                | Since |
+| -------------- | ----------------------- | -------------------------- | ----- |
+| **`Blog`**     | <code>'BLOG'</code>     | Only available on Android. | 7.5.0 |
+| **`Custom`**   | <code>'CUSTOM'</code>   |                            | 7.5.0 |
+| **`Ftp`**      | <code>'FTP'</code>      | Only available on Android. | 7.5.0 |
+| **`Home`**     | <code>'HOME'</code>     |                            | 7.5.0 |
+| **`Homepage`** | <code>'HOMEPAGE'</code> |                            | 7.5.0 |
+| **`Other`**    | <code>'OTHER'</code>    |                            | 7.5.0 |
+| **`Profile`**  | <code>'PROFILE'</code>  | Only available on Android. | 7.5.0 |
+| **`School`**   | <code>'SCHOOL'</code>   | Only available on iOS.     | 7.5.0 |
+| **`Work`**     | <code>'WORK'</code>     |                            | 7.5.0 |
+
 </docgen-api>
 
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/contacts/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/contacts/BREAKING.md).
 
 ## License
 

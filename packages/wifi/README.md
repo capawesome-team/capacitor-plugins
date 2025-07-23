@@ -1,19 +1,41 @@
 # @capawesome-team/capacitor-wifi
 
-Capacitor plugin to manage Wi-Fi connectivity.
+Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks. Supports both Android and iOS.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Wi-Fi connectivity. Here are some of the key features:
+
 - 🖥️ **Cross-platform**: Supports Android and iOS.
-- 🌐 **Network Management**: Connect and disconnect networks.
+- 🌐 **Network Management**: Add, connect and disconnect networks.
 - 🔍 **Network Scan**: Perform scans for available networks.
 - 📟 **Device Info**: Retrieve essential device information like IP address.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- ⭐️ **Support**: First-class support from the Capawesome Team.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+
+## Demo
+
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/38f75f55-141d-4073-b81b-fdb4dae0fcc7" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -22,7 +44,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -35,14 +57,11 @@ npx cap sync
 
 #### Permissions
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
+<!-- Required if you want retrieve information about nearby Wi-Fi networks. -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 ```
 
 #### Proguard
@@ -76,9 +95,9 @@ Add the `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseU
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                 | Type                 | Description                                                                                                             | Default            | Since |
-| -------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`useWifiManager`** | <code>boolean</code> | Whether or not to use the **deprecated** `WifiManager` API for connecting to Wi-Fi networks. Only available on Android. | <code>false</code> | 6.3.0 |
+| Prop                 | Type                 | Description                                                                                                                                             | Default            | Since |
+| -------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`useWifiManager`** | <code>boolean</code> | Whether or not to use the **deprecated** `WifiManager` API for connecting to Wi-Fi networks using the `connect(...)` method. Only available on Android. | <code>false</code> | 6.3.0 |
 
 ### Examples
 
@@ -113,10 +132,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 
@@ -169,6 +184,7 @@ const startScan = async () => {
 
 <docgen-index>
 
+* [`addNetwork(...)`](#addnetwork)
 * [`connect(...)`](#connect)
 * [`disconnect(...)`](#disconnect)
 * [`getAvailableNetworks()`](#getavailablenetworks)
@@ -190,6 +206,28 @@ const startScan = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+### addNetwork(...)
+
+```typescript
+addNetwork(options: AddNetworkOptions) => Promise<void>
+```
+
+Show a system dialog to add a Wi-Fi network to the device.
+
+If the user accepts, the network will be added to the device's list of known networks
+and the traffic will be routed through it.
+
+Only available on Android (SDK 30+) and iOS.
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#addnetworkoptions">AddNetworkOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### connect(...)
 
 ```typescript
@@ -197,6 +235,12 @@ connect(options: ConnectOptions) => Promise<void>
 ```
 
 Connect to a Wi-Fi network.
+
+On **Android**, the network will NOT be added to the device's list of known networks
+and NO traffic will be routed through it.
+If you want to route traffic through the network, use `addNetwork(...)` instead.
+
+On **iOS**, this is the same as `addNetwork()`.
 
 Only available on Android and iOS.
 
@@ -415,13 +459,23 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
+#### AddNetworkOptions
+
+| Prop               | Type                                                                                                                                  | Description                                                                                                                                                                                                                                     | Default                              | Since |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----- |
+| **`ssid`**         | <code>string</code>                                                                                                                   | The SSID of the network to add.                                                                                                                                                                                                                 |                                      | 7.1.0 |
+| **`isHiddenSsid`** | <code>boolean</code>                                                                                                                  | Whether or not the SSID is hidden. Only available on Android.                                                                                                                                                                                   | <code>false</code>                   | 6.0.0 |
+| **`password`**     | <code>string</code>                                                                                                                   | The password of the network to add.                                                                                                                                                                                                             |                                      | 7.1.0 |
+| **`securityType`** | <code><a href="#networksecuritytype">NetworkSecurityType.PSK</a> \| <a href="#networksecuritytype">NetworkSecurityType.SAE</a></code> | The security type of the network to add. Use <a href="#networksecuritytype">`NetworkSecurityType.PSK`</a> for WPA/WPA2 networks. Use <a href="#networksecuritytype">`NetworkSecurityType.SAE`</a> for WPA3 networks. Only available on Android. | <code>NetworkSecurityType.PSK</code> | 7.1.0 |
+
+
 #### ConnectOptions
 
 | Prop               | Type                 | Description                                                   | Default            | Since |
 | ------------------ | -------------------- | ------------------------------------------------------------- | ------------------ | ----- |
-| **`ssid`**         | <code>string</code>  | The SSID of the network to connect to.                        |                    |       |
-| **`password`**     | <code>string</code>  | The password of the network to connect to.                    |                    | 6.0.0 |
+| **`ssid`**         | <code>string</code>  | The SSID of the network to connect to.                        |                    | 6.0.0 |
 | **`isHiddenSsid`** | <code>boolean</code> | Whether or not the SSID is hidden. Only available on Android. | <code>false</code> | 6.0.0 |
+| **`password`**     | <code>string</code>  | The password of the network to connect to.                    |                    | 6.0.0 |
 
 
 #### DisconnectOptions
@@ -526,9 +580,9 @@ Remove all listeners for this plugin.
 | **`UNKNOWN`**                     | <code>-1</code> | Unknown security type.                                                                     | 6.1.0 |
 | **`OPEN`**                        | <code>0</code>  | Open network.                                                                              | 6.1.0 |
 | **`WEP`**                         | <code>1</code>  | WEP network.                                                                               | 6.1.0 |
-| **`PSK`**                         | <code>2</code>  | PSK network.                                                                               | 6.1.0 |
-| **`EAP`**                         | <code>3</code>  | EAP network.                                                                               | 6.1.0 |
-| **`SAE`**                         | <code>4</code>  | SAE network.                                                                               | 6.1.0 |
+| **`PSK`**                         | <code>2</code>  | PSK (Pre-Shared Key) network. This includes WPA/WPA2/WPA3-Personal networks.               | 6.1.0 |
+| **`EAP`**                         | <code>3</code>  | EAP (Extensible Authentication Protocol) network.                                          | 6.1.0 |
+| **`SAE`**                         | <code>4</code>  | SAE (Simultaneous Authentication of Equals) network.                                       | 6.1.0 |
 | **`EAP_WPA3_ENTERPRISE_192_BIT`** | <code>5</code>  | WPA3-Enterprise in 192-bit security network.                                               | 6.1.0 |
 | **`OWE`**                         | <code>6</code>  | OWE network.                                                                               | 6.1.0 |
 | **`WAPI_PSK`**                    | <code>7</code>  | WAPI PSK network.                                                                          | 6.1.0 |
@@ -544,6 +598,10 @@ Remove all listeners for this plugin.
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/wifi/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/wifi/BREAKING.md).
 
 ## License
 

@@ -2,6 +2,12 @@
 
 Capacitor plugin that allows the user to select a file.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -21,6 +27,19 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <!-- Needed if you want to read files from external storage -->
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
+
+### iOS
+
+#### Entitlements
+
+To use this plugin with Mac Catalyst, your app must have the `com.apple.security.files.user-selected.read-only` entitlement enabled. This allows the app to read files selected by the user. Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.files.user-selected.read-only) for more information.
+
+```xml
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
+
+If you don't want to use the plugin with Mac Catalyst, you can skip this step.
 
 ## Configuration
 
@@ -50,6 +69,13 @@ const appendFileToFormData = async () => {
 
 const checkPermissions = async () => {
   const result = await FilePicker.checkPermissions();
+};
+
+const copyFile = async () => {
+  const result = await FilePicker.copyFile({
+    from: 'path/to/file',
+    to: 'path/to/destination',
+  });
 };
 
 const pickFiles = async () => {
@@ -85,6 +111,7 @@ const requestPermissions = async () => {
 
 * [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
+* [`copyFile(...)`](#copyfile)
 * [`pickFiles(...)`](#pickfiles)
 * [`pickDirectory()`](#pickdirectory)
 * [`pickImages(...)`](#pickimages)
@@ -135,6 +162,23 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#convertheictojpegresult">ConvertHeicToJpegResult</a>&gt;</code>
 
 **Since:** 0.6.0
+
+--------------------
+
+
+### copyFile(...)
+
+```typescript
+copyFile(options: CopyFileOptions) => Promise<void>
+```
+
+Copy a file to a new location.
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#copyfileoptions">CopyFileOptions</a></code> |
+
+**Since:** 7.1.0
 
 --------------------
 
@@ -321,6 +365,15 @@ Remove all listeners for this plugin.
 | Prop       | Type                | Description                 | Since |
 | ---------- | ------------------- | --------------------------- | ----- |
 | **`path`** | <code>string</code> | The path of the HEIC image. | 0.6.0 |
+
+
+#### CopyFileOptions
+
+| Prop            | Type                 | Description                                                     | Default           | Since |
+| --------------- | -------------------- | --------------------------------------------------------------- | ----------------- | ----- |
+| **`from`**      | <code>string</code>  | The path of the file to copy.                                   |                   | 7.1.0 |
+| **`overwrite`** | <code>boolean</code> | Whether to overwrite if the file at destination already exists. | <code>true</code> | 7.2.0 |
+| **`to`**        | <code>string</code>  | The path to copy the file to.                                   |                   | 7.1.0 |
 
 
 #### PickFilesResult
