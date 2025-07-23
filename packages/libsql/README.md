@@ -14,8 +14,62 @@ npx cap sync
 ```typescript
 import { Libsql } from '@capawesome/capacitor-libsql';
 
-const echo = async () => {
-  await Libsql.echo();
+const connect = async () => {
+  const { connectionId } = await Libsql.connect({
+    database: 'my-database',
+    user: 'my-user',
+    password: 'my-password',
+  });
+  console.log('Connected to database with ID:', connectionId);
+};
+
+const query = async () => {
+  const result = await Libsql.query({
+    connectionId: 'my-connection-id',
+    statement: 'SELECT * FROM my_table',
+  });
+  console.log('Query result:', result.rows);
+};
+
+const execute = async () => {
+  await Libsql.execute({
+    connectionId: 'my-connection-id',
+    statement: 'INSERT INTO my_table (column1, column2) VALUES (?, ?)',
+    values: ['value1', 'value2'],
+  });
+  console.log('Insert executed successfully');
+};
+
+const performTransaction = async () => {
+  const { transactionId } = await Libsql.beginTransaction({
+    connectionId: 'my-connection-id',
+  });
+  try {
+    await Libsql.execute({
+      connectionId: 'my-connection-id',
+      statement: 'UPDATE my_table SET column1 = ? WHERE column2 = ?',
+      values: ['new_value', 'value2'],
+      transactionId,
+    });
+    await Libsql.commitTransaction({
+      connectionId: 'my-connection-id',
+      transactionId,
+    });
+    console.log('Transaction committed successfully');
+  } catch (error) {
+    await Libsql.rollbackTransaction({
+      connectionId: 'my-connection-id',
+      transactionId,
+    });
+    console.error('Transaction rolled back due to error:', error);
+  }
+};
+
+const sync = async () => {
+  await Libsql.sync({
+    connectionId: 'my-connection-id',
+  });
+  console.log('Database synchronized successfully');
 };
 ```
 
