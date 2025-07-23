@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-libsql",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Capacitor plugin for libSQL databases.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
