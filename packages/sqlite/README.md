@@ -686,6 +686,7 @@ const createDataSource = async () => {
     type: 'capacitor'
   });
 };
+```
 
 ## Limitations
 
