@@ -51,6 +51,16 @@ npm install @capawesome-team/capacitor-barometer
 npx cap sync
 ```
 
+### Android
+
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 ### iOS
 
 #### Privacy Descriptions
