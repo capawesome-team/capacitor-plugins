@@ -199,7 +199,18 @@ const getContactById = async (id: string) => {
 };
 
 const getContacts = async () => {
-  const { contacts } = await Contacts.getContacts();
+  const { contacts } = await Contacts.getContacts({
+    fields: [
+      'id',
+      'givenName',
+      'familyName',
+      'emailAddresses',
+      'phoneNumbers',
+      'postalAddresses'
+    ],
+    limit: 10,
+    offset: 0
+  });
   return contacts;
 };
 
@@ -224,7 +235,17 @@ const isSupported = async () => {
 };
 
 const pickContacts = async () => {
-  const { contacts } = await Contacts.pickContacts();
+  const { contacts } = await Contacts.pickContacts({
+    fields: [
+      'id',
+      'givenName',
+      'familyName',
+      'emailAddresses',
+      'phoneNumbers',
+      'postalAddresses'
+    ],
+    multiple: true
+  });
   return contacts;
 };
 
@@ -961,7 +982,9 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 #### Exclude
