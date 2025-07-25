@@ -85,9 +85,11 @@ import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
 const compressImage = async () => {
   const { path } = await FileCompressor.compressImage({
+    height: 1000,
     mimeType: 'image/jpeg',
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
     quality: 0.7,
+    width: 1000,
   });
   return path;
 };
