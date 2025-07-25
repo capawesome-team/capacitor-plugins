@@ -24,6 +24,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🛡️ **Prepared Statements**: Uses prepared statements to prevent SQL injection attacks.
 - 🕸️ **SQLite WASM**: Uses SQLite WebAssembly for web platform support.
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
+- 🗃️ **ORM Support**: Works with popular ORMs like TypeORM, Drizzle, and Kysely.
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -664,6 +665,28 @@ This can include strings, numbers, arrays of numbers (for BLOBs), or `null`.
 
 </docgen-api>
 
+## ORMs
+
+### TypeORM
+
+This plugin is compatible with [TypeORM](https://typeorm.io/), a popular ORM for TypeScript and JavaScript. 
+
+```typescript
+import { Sqlite, SQLiteConnection } from '@capawesome-team/capacitor-sqlite';
+import { DataSource, DataSourceOptions } from 'typeorm';
+
+const createDataSource = async () => {
+  return new DataSource({
+    database: 'db',
+    driver: new SQLiteConnection(Sqlite),
+    entities: [
+      // Your TypeORM entities here
+    ],
+    migrationsRun: false, // Required with capacitor type
+    type: 'capacitor'
+  });
+};
+
 ## Limitations
 
 This plugin has some limitations on certain platforms.
@@ -690,6 +713,24 @@ This error occurs when OPFS (Origin Private File System) cannot be instantiated.
 'Cross-Origin-Embedder-Policy': 'require-corp'
 'Cross-Origin-Opener-Policy': 'same-origin'
 ```
+
+##### `No such module 'SQLite'`
+
+This error occurs when the `SQLite` module is not found in your iOS project. To fix this, make sure you have added the `CapawesomeTeamCapacitorSqlite/Plain` or `CapawesomeTeamCapacitorSqlite/SQLCipher` pod to your `Podfile` as described in the [Installation](#ios) section:
+
+```diff
+def capacitor_pods
+  pod 'CapawesomeTeamCapacitorSqlite', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
+end
+
+target 'App' do
+  capacitor_pods
+  # Add your Pods here
++  pod 'CapawesomeTeamCapacitorSqlite/Plain', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
+end
+```
+
+**Attention**: Both `CapawesomeTeamCapacitorSqlite` and `CapawesomeTeamCapacitorSqlite/Plain` or `CapawesomeTeamCapacitorSqlite/SQLCipher` must be included in the `Podfile`. The first one is required for the plugin to work, while the second one is required for the specific implementation (Plain or SQLCipher).
 
 ## Changelog
 
