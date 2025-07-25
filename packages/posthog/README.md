@@ -28,7 +28,49 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ## Configuration
 
-No configuration required for this plugin.
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop         | Type                | Description                          | Default                                 | Since |
+| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
+| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 7.1.0 |
+| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "Posthog": {
+      "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      "host": 'https://eu.i.posthog.com'
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-posthog" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Posthog: {
+      apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      host: 'https://eu.i.posthog.com',
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
 
 ## Demo
 
