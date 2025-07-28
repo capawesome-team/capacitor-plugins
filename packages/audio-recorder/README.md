@@ -62,6 +62,17 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
+#### Background Modes
+
+If the app wants to record Audio in the background, add the `UIBackgroundModes` key with the `audio` value:
+
+```xml
+<key>UIBackgroundModes</key>
+<array>
+    <string>audio</string>
+</array>
+```
+
 #### Privacy Descriptions
 
 Add the `NSMicrophoneUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why your app needs access to the user's contacts:
@@ -155,20 +166,45 @@ const addRecordingStoppedListener = async () => {
 
 <docgen-index>
 
-* [`cancelRecording()`](#cancelrecording)
-* [`getRecordingStatus()`](#getrecordingstatus)
-* [`pauseRecording()`](#pauserecording)
-* [`resumeRecording()`](#resumerecording)
-* [`startRecording(...)`](#startrecording)
-* [`stopRecording()`](#stoprecording)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
-* [`addListener('recordingPaused', ...)`](#addlistenerrecordingpaused-)
-* [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-audio-recorder](#capawesome-teamcapacitor-audio-recorder)
+  - [Features](#features)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+      - [Proguard](#proguard)
+    - [iOS](#ios)
+      - [Background Modes](#background-modes)
+      - [Privacy Descriptions](#privacy-descriptions)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [API](#api)
+    - [cancelRecording()](#cancelrecording)
+    - [getRecordingStatus()](#getrecordingstatus)
+    - [pauseRecording()](#pauserecording)
+    - [resumeRecording()](#resumerecording)
+    - [startRecording(...)](#startrecording)
+    - [stopRecording()](#stoprecording)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions()](#requestpermissions)
+    - [addListener('recordingError', ...)](#addlistenerrecordingerror-)
+    - [addListener('recordingPaused', ...)](#addlistenerrecordingpaused-)
+    - [addListener('recordingStopped', ...)](#addlistenerrecordingstopped-)
+    - [Interfaces](#interfaces)
+      - [GetRecordingStatusResult](#getrecordingstatusresult)
+      - [StartRecordingOptions](#startrecordingoptions)
+      - [StopRecordingResult](#stoprecordingresult)
+      - [PermissionStatus](#permissionstatus)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [RecordingErrorEvent](#recordingerrorevent)
+      - [RecordingStoppedEvent](#recordingstoppedevent)
+    - [Type Aliases](#type-aliases)
+      - [PermissionState](#permissionstate)
+    - [Enums](#enums)
+      - [RecordingStatus](#recordingstatus)
+      - [AudioSessionMode](#audiosessionmode)
+  - [Changelog](#changelog)
+  - [Breaking Changes](#breaking-changes)
+  - [License](#license)
 
 </docgen-index>
 
