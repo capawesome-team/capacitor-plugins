@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`eeb5e5d13dbebb5b26d8964eb215b413b2eedb84`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/eeb5e5d13dbebb5b26d8964eb215b413b2eedb84) ([#243](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/243)): feat(ios): add `audioSessionMode` property
+
 ## 7.3.2
 
 ### Patch Changes
