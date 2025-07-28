@@ -14,13 +14,19 @@ npx cap sync
 ```typescript
 import { Libsql } from '@capawesome/capacitor-libsql';
 
-const connect = async () => {
+const connectToLocalDatabase = async () => {
   const { connectionId } = await Libsql.connect({
-    database: 'my-database',
-    user: 'my-user',
-    password: 'my-password',
+    path: 'database.db',
   });
   console.log('Connected to database with ID:', connectionId);
+};
+
+const connectToRemoteDatabase = async () => {
+  const { connectionId } = await Libsql.connect({
+    url: 'https://example.com/my-database',
+    authToken: 'your-auth-token',
+  });
+  console.log('Connected to remote database with ID:', connectionId);
 };
 
 const query = async () => {
