@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`be279c2608ac04d0aad880a13dad50449bcfb49c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/be279c2608ac04d0aad880a13dad50449bcfb49c) ([#230](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/230)): feat: add `SQLiteConnection` and `SQLiteDBConnection` APIs
+
 ## 0.1.2
 
 ### Patch Changes
