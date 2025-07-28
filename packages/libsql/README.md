@@ -17,7 +17,12 @@ import { Libsql } from '@capawesome/capacitor-libsql';
 const connect = async () => {
   const { connectionId } = await Libsql.connect({
     url: 'libsql://your-database-url.turso.io',
-    authToken: 'your-auth-token-here'
+    authToken: 'your-auth-token-here',
+
+    // Or use a local file
+    // path: './local-database.db'
+
+    // Or in-memory: (no path or url)
   });
   console.log('Connected to database with ID:', connectionId);
 };
