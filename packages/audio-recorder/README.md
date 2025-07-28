@@ -372,10 +372,11 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop             | Type                | Description                                                                              | Default             | Since |
-| ---------------- | ------------------- | ---------------------------------------------------------------------------------------- | ------------------- | ----- |
-| **`bitRate`**    | <code>number</code> | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code> | 7.2.0 |
-| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>  | 7.1.0 |
+| Prop                   | Type                                                          | Description                                                                              | Default                                   | Since |
+| ---------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`audioSessionMode`** | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Measurement</code> | 7.4.0 |
+| **`bitRate`**          | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                       | 7.2.0 |
+| **`sampleRate`**       | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                        | 7.1.0 |
 
 
 #### StopRecordingResult
@@ -435,6 +436,19 @@ or paused or if an error occurs.
 | **`Inactive`**  | <code>'INACTIVE'</code>  | The recording is inactive. | 7.0.0 |
 | **`Recording`** | <code>'RECORDING'</code> | The recording is active.   | 7.0.0 |
 | **`Paused`**    | <code>'PAUSED'</code>    | The recording is paused.   | 7.0.0 |
+
+
+#### AudioSessionMode
+
+| Members              | Value                          | Description                                                                   | Since |
+| -------------------- | ------------------------------ | ----------------------------------------------------------------------------- | ----- |
+| **`Default`**        | <code>'DEFAULT'</code>         | Default mode that doesn't enable additional audio session features.           | 7.4.0 |
+| **`GameChat`**       | <code>'GAME_CHAT'</code>       | Mode for chat communication over VoIP or internet, optimized for low latency. | 7.4.0 |
+| **`Measurement`**    | <code>'MEASUREMENT'</code>     | Mode for high-quality measurement recordings with maximum dynamic range.      | 7.4.0 |
+| **`SpokenAudio`**    | <code>'SPOKEN_AUDIO'</code>    | Mode for speech recording and transcription with optimized voice processing.  | 7.4.0 |
+| **`VideoChat`**      | <code>'VIDEO_CHAT'</code>      | Mode for two-way video chat communications.                                   | 7.4.0 |
+| **`VideoRecording`** | <code>'VIDEO_RECORDING'</code> | Mode for recording video content with high-quality audio.                     | 7.4.0 |
+| **`VoiceChat`**      | <code>'VOICE_CHAT'</code>      | Mode for voice chat communications.                                           | 7.4.0 |
 
 </docgen-api>
 
