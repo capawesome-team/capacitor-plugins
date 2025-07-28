@@ -21,8 +21,6 @@ const connectToLocalDatabase = async () => {
 
     // Or use a local file
     // path: 'database.db',
-
-    // Or in-memory: (no path or url)
   });
   console.log('Connected to database with ID:', connectionId);
 };
