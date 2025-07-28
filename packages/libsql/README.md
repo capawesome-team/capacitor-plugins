@@ -23,7 +23,7 @@ const connectToLocalDatabase = async () => {
 
 const connectToRemoteDatabase = async () => {
   const { connectionId } = await Libsql.connect({
-    url: 'https://example.com/my-database',
+    url: 'libsql://your-database-url.turso.io',
     authToken: 'your-auth-token',
   });
   console.log('Connected to remote database with ID:', connectionId);
