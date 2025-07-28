@@ -14,17 +14,25 @@ npx cap sync
 ```typescript
 import { Libsql } from '@capawesome/capacitor-libsql';
 
-const connect = async () => {
+const connectToLocalDatabase = async () => {
   const { connectionId } = await Libsql.connect({
     url: 'libsql://your-database-url.turso.io',
     authToken: 'your-auth-token-here',
 
     // Or use a local file
-    // path: './local-database.db'
+    // path: 'database.db',
 
     // Or in-memory: (no path or url)
   });
   console.log('Connected to database with ID:', connectionId);
+};
+
+const connectToRemoteDatabase = async () => {
+  const { connectionId } = await Libsql.connect({
+    url: 'https://example.com/my-database',
+    authToken: 'your-auth-token',
+  });
+  console.log('Connected to remote database with ID:', connectionId);
 };
 
 const query = async () => {
