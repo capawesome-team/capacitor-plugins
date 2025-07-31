@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`598014ad485495ce74dc6fd1da97b9780a809a24`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/598014ad485495ce74dc6fd1da97b9780a809a24) ([#245](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/245)): fix(web): multiple open databases had the same ID
+
 ## 0.1.3
 
 ### Patch Changes
