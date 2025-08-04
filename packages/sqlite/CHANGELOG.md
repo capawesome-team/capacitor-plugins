@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`b75d2147be22ae7b45477017334dc588d38eec33`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b75d2147be22ae7b45477017334dc588d38eec33) ([#248](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/248)): fix(android): encrypted database without full path thrown error
+
 ## 0.1.4
 
 ### Patch Changes
