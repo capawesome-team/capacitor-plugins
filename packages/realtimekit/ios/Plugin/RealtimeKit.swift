@@ -1,13 +1,19 @@
 import Foundation
+import RealtimeKit
 import RealtimeKitUI
-import RealtimeKitCore
 
 @objc public class RealtimeKit: NSObject {
+    private let plugin: RealtimeKitPlugin
+
+    init(plugin: RealtimeKitPlugin) {
+        self.plugin = plugin
+    }
+
     @objc public func startMeeting(_ options: StartMeetingOptions, completion: @escaping (Error?) -> Void) {
         let meetingInfo = RtkMeetingInfo(authToken: options.authToken,
                                          enableAudio: options.enableAudio,
                                          enableVideo: options.enableVideo)
-        let rtkUikit = RealtimeKitUI.init(meetingInfo: rtkMeetingInfo)
+        let rtkUikit = RealtimeKitUI.init(meetingInfo: meetingInfo)
 
         guard let viewController = plugin.bridge?.viewController else {
             completion(CustomError.viewControllerUnavailable)
@@ -16,9 +22,7 @@ import RealtimeKitCore
 
         Task { @MainActor in
             let controller = rtkUikit.startMeeting {
-                [weak self] in
-                guard let self = self else {return}
-                self.dismiss(animated: true)
+                viewController.dismiss(animated: true)
             }
             controller.modalPresentationStyle = .fullScreen
             viewController.present(controller, animated: true)

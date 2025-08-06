@@ -14,7 +14,11 @@ public class RealtimeKitPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
     public static let tag = "RealtimeKit"
 
-    private let implementation = RealtimeKit()
+    private var implementation: RealtimeKit?
+
+    override public func load() {
+        self.implementation = RealtimeKit(plugin: self)
+    }
 
     @objc func initialize(_ call: CAPPluginCall) {
         if !hasUsageDescription(forKey: "NSBluetoothPeripheralUsageDescription") {
@@ -47,13 +51,13 @@ public class RealtimeKitPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func startMeeting(_ call: CAPPluginCall) {
         do {
-            let options = StartMeetingOptions(call)
-            implementation.startMeeting(options) { error in
+            let options = try StartMeetingOptions(call)
+            implementation?.startMeeting(options) { error in
                 if let error = error {
                     self.rejectCall(call, error)
                     return
                 }
-                resolveCall(call)
+                self.resolveCall(call)
             }
         } catch {
             rejectCall(call, error)
