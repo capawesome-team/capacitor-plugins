@@ -337,3 +337,15 @@ Remove all listeners for this plugin.
 <code><a href="#measurement">Measurement</a></code>
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/pedometer/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/pedometer/BREAKING.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/pedometer/LICENSE).
