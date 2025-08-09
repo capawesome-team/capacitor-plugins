@@ -33,6 +33,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
 
+## Guides
+
+- [Alternative to the Capacitor Community Contacts plugin](https://capawesome.io/blog/alternative-to-capacitor-community-contacts-plugin/)
+- [Announcing the Capacitor Contacts Plugin](https://capawesome.io/blog/announcing-the-capacitor-contacts-plugin/)
+- [Exploring the Capacitor Contacts API](https://capawesome.io/blog/exploring-the-capacitor-contacts-api/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
@@ -982,7 +988,9 @@ Construct a type with the properties of T except for those in type K.
 
 From T, pick a set of properties whose keys are in the union K
 
-<code>{ [P in K]: T[P]; }</code>
+<code>{
+ [P in K]: T[P];
+ }</code>
 
 
 #### Exclude

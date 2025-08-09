@@ -36,6 +36,10 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" alt="Android Demo" /> |
 
+## Guides
+
+- [Exploring the Capacitor File Compressor API](https://capawesome.io/blog/exploring-the-capacitor-file-compressor-api/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 

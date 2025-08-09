@@ -34,6 +34,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | 7.x.x          | >=7.x.x           | Active support |
 | 6.x.x          | 6.x.x             | Deprecated     |
 
+## Guides
+
+- [Exploring the Capacitor Speech Recognition API](https://capawesome.io/blog/exploring-the-capacitor-speech-recognition-api/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
