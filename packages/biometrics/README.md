@@ -30,6 +30,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
 
+## Guides
+
+- [Announcing the Capacitor Biometrics Plugin](https://capawesome.io/blog/announcing-the-capacitor-biometrics-plugin/)
+- [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
+- [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
