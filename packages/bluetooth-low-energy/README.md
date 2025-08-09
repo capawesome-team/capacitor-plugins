@@ -42,6 +42,11 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" alt="iOS Demo" /> |
 
+## Guides
+
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 

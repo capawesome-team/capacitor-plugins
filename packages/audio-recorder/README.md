@@ -30,6 +30,11 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
 
+## Guides
+
+- [Announcing the Capacitor Audio Recorder Plugin](https://capawesome.io/blog/announcing-the-capacitor-audio-recorder-plugin/)
+- [Exploring the Capacitor Audio Recorder API](https://capawesome.io/blog/exploring-the-capacitor-audio-recorder-api/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
