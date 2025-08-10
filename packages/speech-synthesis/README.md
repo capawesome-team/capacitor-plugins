@@ -201,6 +201,8 @@ const removeAllListeners = async () => {
 * [`isSpeaking()`](#isspeaking)
 * [`isLanguageAvailable(...)`](#islanguageavailable)
 * [`isVoiceAvailable(...)`](#isvoiceavailable)
+* [`pause()`](#pause)
+* [`resume()`](#resume)
 * [`speak(...)`](#speak)
 * [`synthesizeToFile(...)`](#synthesizetofile)
 * [`addListener('boundary', ...)`](#addlistenerboundary-)
@@ -374,6 +376,32 @@ Check if a voice is available for speech synthesis.
 **Returns:** <code>Promise&lt;<a href="#isvoiceavailableresult">IsVoiceAvailableResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### pause()
+
+```typescript
+pause() => Promise<void>
+```
+
+Pause speech immediately.
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### resume()
+
+```typescript
+resume() => Promise<void>
+```
+
+Resume speech.
+
+**Since:** 7.2.0
 
 --------------------
 
