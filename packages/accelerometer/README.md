@@ -141,7 +141,7 @@ This method returns the most recent measurement from the accelerometer sensor.
 
 **Returns:** <code>Promise&lt;<a href="#measurement">Measurement</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -156,7 +156,7 @@ Check if the accelerometer sensor is available on the device.
 
 **Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -169,7 +169,7 @@ startMeasurementUpdates() => Promise<void>
 
 Starts emitting `measurement` events.
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -182,7 +182,7 @@ stopMeasurementUpdates() => Promise<void>
 
 Stops emitting `measurement` events.
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -197,7 +197,7 @@ Check if the app has permission to access the accelerometer sensor.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -212,7 +212,7 @@ Request permission to access the accelerometer sensor.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -232,7 +232,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -245,7 +245,7 @@ removeAllListeners() => Promise<void>
 
 Remove all listeners for this plugin.
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -257,23 +257,23 @@ Remove all listeners for this plugin.
 
 | Prop    | Type                | Description                                           | Since |
 | ------- | ------------------- | ----------------------------------------------------- | ----- |
-| **`x`** | <code>number</code> | The x-axis acceleration in G's (gravitational force). | 7.0.0 |
-| **`y`** | <code>number</code> | The y-axis acceleration in G's (gravitational force). | 7.0.0 |
-| **`z`** | <code>number</code> | The z-axis acceleration in G's (gravitational force). | 7.0.0 |
+| **`x`** | <code>number</code> | The x-axis acceleration in G's (gravitational force). | 0.1.0 |
+| **`y`** | <code>number</code> | The y-axis acceleration in G's (gravitational force). | 0.1.0 |
+| **`z`** | <code>number</code> | The z-axis acceleration in G's (gravitational force). | 0.1.0 |
 
 
 #### IsAvailableResult
 
 | Prop              | Type                 | Description                                                  | Since |
 | ----------------- | -------------------- | ------------------------------------------------------------ | ----- |
-| **`isAvailable`** | <code>boolean</code> | Whether the accelerometer sensor is available on the device. | 7.0.0 |
+| **`isAvailable`** | <code>boolean</code> | Whether the accelerometer sensor is available on the device. | 0.1.0 |
 
 
 #### PermissionStatus
 
 | Prop                | Type                                                                                  | Description                             | Since |
 | ------------------- | ------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
-| **`accelerometer`** | <code><a href="#accelerometerpermissionstate">AccelerometerPermissionState</a></code> | The permission status of accelerometer. | 7.0.0 |
+| **`accelerometer`** | <code><a href="#accelerometerpermissionstate">AccelerometerPermissionState</a></code> | The permission status of accelerometer. | 0.1.0 |
 
 
 #### PluginListenerHandle
