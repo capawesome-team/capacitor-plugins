@@ -1,5 +1,7 @@
 # Utils
 
+This plugin provides a utility class `NfcUtils` that can be used for various NFC-related operations, for example, creating NDEF records:
+
 ## Usage
 
 ```ts
@@ -39,6 +41,18 @@ const convertStringToBytes = () => {
   const utils = new NfcUtils();
   const { bytes } = utils.convertStringToBytes({ text: 'Hello' });
   return bytes;
+};
+
+const createNdefTextRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
+  return record;
+};
+
+const createNdefUriRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefUriRecord({ uri: 'capacitorjs.com' });
+  return record;
 };
 ```
 
