@@ -9,6 +9,7 @@ body:
       label: Plugin(s)
       description: Select the plugins that this feature request affects.
       options:
+        - label: Accelerometer
         - label: Android Battery Optimization
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
@@ -20,6 +21,7 @@ body:
         - label: Audio Recorder
         - label: Background Task
         - label: Badge
+        - label: Barometer
         - label: Bluetooth Low Energy
         - label: Cloudinary
         - label: Contacts
@@ -30,6 +32,7 @@ body:
         - label: Live Update
         - label: Managed Configurations
         - label: NFC
+        - label: Pedometer
         - label: Photo Editor
         - label: Posthog
         - label: Printer
