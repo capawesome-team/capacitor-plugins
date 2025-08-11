@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`609ed6afd6d6f850b793499def6398f8dffa1c08`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/609ed6afd6d6f850b793499def6398f8dffa1c08) ([#253](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/253)): feat: implement `pause` and `resume` methods
+
 ## 7.1.2
 
 ### Patch Changes
