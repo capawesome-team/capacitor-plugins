@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6
+
+### Patch Changes
+
+- [`8048efac385f5b69cf0510fcbfe72d3eb6829b07`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8048efac385f5b69cf0510fcbfe72d3eb6829b07): fix(ios): numeric values were ignored in the query
+
 ## 0.1.5
 
 ### Patch Changes
