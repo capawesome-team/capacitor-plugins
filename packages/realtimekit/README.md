@@ -11,44 +11,13 @@ npx cap sync
 
 ### Android
 
-#### Setup
-
-In [build.gradle (android)](example/android/build.gradle) add the following to `allprojects.repositories`:
-
-```groovy
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }  // Add this line
-    }
-}
-```
-
-If your app targets to lower versions of android (android api <= 24), enable core desugering the [build.gradle (:app)](example/android/app/build.gradle):
-
-```groovy
-android {
-    // ...
-    compileOptions {    // add this block if it does not exist
-        coreLibraryDesugaringEnabled = true
-    }
-}
-
-dependencies {
-    // ...
-
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.4"
-
-    // ...
-}
-```
+This plugin is supported on Android SDK +24.
 
 #### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$realtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.1.1`)
+- `$realtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.2.2`)
 
 ### iOS
 
