@@ -21,9 +21,7 @@ import RealtimeKitUI
         }
 
         Task { @MainActor in
-            let controller = rtkUikit.startMeeting {
-                viewController.dismiss(animated: true)
-            }
+            let controller = rtkUikit.startMeeting(completion: {})
             controller.modalPresentationStyle = .fullScreen
             viewController.present(controller, animated: true)
         }
