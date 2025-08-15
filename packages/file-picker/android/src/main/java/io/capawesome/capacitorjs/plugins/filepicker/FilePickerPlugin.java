@@ -33,6 +33,7 @@ import org.json.JSONException;
 public class FilePickerPlugin extends Plugin {
 
     public static final String ERROR_COPY_FILE_FAILED = "copyFile failed.";
+    public static final String ERROR_FILE_ALREADY_EXISTS = "File already exists.";
     public static final String ERROR_FROM_MISSING = "from must be provided.";
     public static final String ERROR_TO_MISSING = "to must be provided.";
     public static final String ERROR_PICK_FILE_FAILED = "pickFiles failed.";
@@ -75,8 +76,9 @@ public class FilePickerPlugin extends Plugin {
                 return;
             }
             Uri toUri = implementation.getUriByPath(to);
+            Boolean shouldOverwrite = call.getBoolean("overwrite", true);
 
-            implementation.copyFile(fromUri, toUri);
+            implementation.copyFile(fromUri, toUri, shouldOverwrite);
 
             call.resolve();
         } catch (Exception ex) {

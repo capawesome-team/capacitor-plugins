@@ -5,6 +5,12 @@ It supports retrieving app update information on **Android** and **iOS** and sup
 
 > Check out the [Capacitor Live Update](https://capawesome.io/plugins/live-update/) plugin to update your app remotely in real-time without submitting a new version to the app store. 🚀
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -14,10 +20,12 @@ npx cap sync
 
 ### Android Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidPlayAppUpdateVersion` version of `com.google.android.play:app-update` (default: `2.1.0`)
 - `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.0.1`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 

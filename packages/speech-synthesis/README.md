@@ -2,6 +2,12 @@
 
 Capacitor plugin for synthesizing speech from text (also known as text-to-speech) with advanced features like voice selection, pitch, and rate control.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for speech synthesis. Here are some of the key features:
@@ -13,7 +19,8 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- ⏸️ **Pause/Resume**: Pause and resume speech synthesis.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -157,6 +164,13 @@ const synthesizeToFile = async () => {
   return path;
 };
 
+const pause = async () => {
+  await SpeechSynthesis.pause();
+};
+
+const resume = async () => {
+  await SpeechSynthesis.resume();
+};
 
 const addListeners = () => {
   SpeechSynthesis.addListener('boundary', (event) => {
@@ -195,6 +209,8 @@ const removeAllListeners = async () => {
 * [`isSpeaking()`](#isspeaking)
 * [`isLanguageAvailable(...)`](#islanguageavailable)
 * [`isVoiceAvailable(...)`](#isvoiceavailable)
+* [`pause()`](#pause)
+* [`resume()`](#resume)
 * [`speak(...)`](#speak)
 * [`synthesizeToFile(...)`](#synthesizetofile)
 * [`addListener('boundary', ...)`](#addlistenerboundary-)
@@ -368,6 +384,32 @@ Check if a voice is available for speech synthesis.
 **Returns:** <code>Promise&lt;<a href="#isvoiceavailableresult">IsVoiceAvailableResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### pause()
+
+```typescript
+pause() => Promise<void>
+```
+
+Pause speech immediately.
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### resume()
+
+```typescript
+resume() => Promise<void>
+```
+
+Resume speech.
+
+**Since:** 7.2.0
 
 --------------------
 

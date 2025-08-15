@@ -2,6 +2,12 @@
 
 Capacitor plugin to request biometric authentication, such as using face recognition or fingerprint recognition.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for biometric authentication. Here are some of the key features:
@@ -23,6 +29,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
+
+## Guides
+
+- [Announcing the Capacitor Biometrics Plugin](https://capawesome.io/blog/announcing-the-capacitor-biometrics-plugin/)
+- [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
+- [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
 
 ## Installation
 
@@ -46,11 +58,21 @@ npx cap sync
 
 ### Android
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxBiometricVersion` version of `androidx.biometric:biometric` (default: `1.1.0`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
 

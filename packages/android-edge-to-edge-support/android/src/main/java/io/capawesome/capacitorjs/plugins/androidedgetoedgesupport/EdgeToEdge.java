@@ -50,7 +50,9 @@ public class EdgeToEdge {
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            Insets systemBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBarsInsets = currentInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
+            );
             Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
 
@@ -66,7 +68,9 @@ public class EdgeToEdge {
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             // Retrieve system bars insets (for status/navigation bars)
-            Insets systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets systemBarsInsets = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
+            );
             // Retrieve keyboard (IME) insets
             Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());

@@ -2,6 +2,12 @@
 
 Capacitor plugin to transcribe speech into text (also known as speech-to-text) with advanced features like silence detection, contextual strings, and more.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for speech recognition. Here are some of the key features:
@@ -13,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -27,6 +33,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
 | 6.x.x          | 6.x.x             | Deprecated     |
+
+## Guides
+
+- [Exploring the Capacitor Speech Recognition API](https://capawesome.io/blog/exploring-the-capacitor-speech-recognition-api/)
 
 ## Installation
 
@@ -102,17 +112,17 @@ const requestPermissions = async () => {
 };
 
 const isAvailable = async () => {
-  const { available } = await SpeechRecognition.isAvailable();
-  return available;
+  const { isAvailable } = await SpeechRecognition.isAvailable();
+  return isAvailable;
 };
 
 const isListening = async () => {
-  const { listening } = await SpeechRecognition.isListening();
-  return listening;
+  const { isListening } = await SpeechRecognition.isListening();
+  return isListening;
 };
 
-const getSupportedLanguages = async () => {
-  const { languages } = await SpeechRecognition.getSupportedLanguages();
+const getLanguages = async () => {
+  const { languages } = await SpeechRecognition.getLanguages();
   return languages;
 };
 
@@ -475,13 +485,14 @@ Remove all listeners for this plugin.
 
 #### StartListeningOptions
 
-| Prop                               | Type                                                                  | Description                                                                                                                                | Default                                  | Since |
-| ---------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- | ----- |
-| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                           | <code>AudioSessionCategory.Record</code> | 7.2.0 |
-| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS. |                                          | 7.3.0 |
-| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                      | <code>true</code>                        | 7.2.0 |
-| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                     |                                          | 6.0.0 |
-| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS.                     | <code>2000</code>                        | 6.0.0 |
+| Prop                               | Type                                                                  | Description                                                                                                                                                                                                                | Default                                  | Since |
+| ---------------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----- |
+| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                                                                                                           | <code>AudioSessionCategory.Record</code> | 7.2.0 |
+| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS.                                                                                 |                                          | 7.3.0 |
+| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                                                                                                      | <code>true</code>                        | 7.2.0 |
+| **`enableFormatting`**             | <code>boolean</code>                                                  | Whether to add punctuation to speech recognition results. **Note**: On Android, this option does not work reliably as it varies depending on the device and TTS engine. Only available on Android (SDK 33+) and iOS (+16). | <code>false</code>                       | 7.4.0 |
+| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                                                                                                     |                                          | 6.0.0 |
+| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS.                                                                                                     | <code>2000</code>                        | 6.0.0 |
 
 
 #### StopListeningOptions

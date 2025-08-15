@@ -62,7 +62,18 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func copyFile(_ call: CAPPluginCall) {
-        call.reject("Not implemented on iOS.")
+        do {
+            let options = try CopyFileOptions(call)
+            try implementation?.copyFile(options) { error in
+                if let error = error {
+                    call.reject(error.localizedDescription)
+                    return
+                }
+                call.resolve()
+            }
+        } catch {
+            call.reject(error.localizedDescription)
+        }
     }
 
     @objc func pickFiles(_ call: CAPPluginCall) {

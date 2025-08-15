@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`5bcf4245be157420c425b8539c7e55652625ae7b`](https://github.com/capawesome-team/capacitor-plugins/commit/5bcf4245be157420c425b8539c7e55652625ae7b) ([#542](https://github.com/capawesome-team/capacitor-plugins/pull/542)): feat(ios): add `copyFile(...)` method
+
 ## 7.1.0
 
 ### Minor Changes

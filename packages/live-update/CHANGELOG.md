@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`66f4cb8a2f76582c8d8bda8df356800232d7c018`](https://github.com/capawesome-team/capacitor-plugins/commit/66f4cb8a2f76582c8d8bda8df356800232d7c018) ([#557](https://github.com/capawesome-team/capacitor-plugins/pull/557)): fix: missing bundle files in the asset folder are now downloaded
+
 ## 7.2.0
 
 ### Minor Changes

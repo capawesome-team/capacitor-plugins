@@ -64,10 +64,11 @@ declare module '@capacitor/cli' {
        */
       readyTimeout?: number;
       /**
-       * The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server.
+       * The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.
        *
        * @since 7.0.0
        * @default 'api.cloud.capawesome.io'
+       * @example 'api.cloud.capawesome.eu'
        */
       serverDomain?: string;
     };
