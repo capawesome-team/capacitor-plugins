@@ -1,5 +1,23 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`3021277c47c659bcc5553d27b1b14c979759bbeb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3021277c47c659bcc5553d27b1b14c979759bbeb) ([#252](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/252)): feat: new `mapUriIdentifierCodeToString(...)` utility function
+
+- [`3021277c47c659bcc5553d27b1b14c979759bbeb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3021277c47c659bcc5553d27b1b14c979759bbeb) ([#252](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/252)): feat: `convertBytesToString(...)` method now also accept `Uint8Array` type
+
+### Patch Changes
+
+- [`3021277c47c659bcc5553d27b1b14c979759bbeb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3021277c47c659bcc5553d27b1b14c979759bbeb) ([#252](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/252)): fix(web): `The data for url NDEFRecord must be a String` error
+
+## 7.2.0
+
+### Minor Changes
+
+- [`d8c8c4cdca6b177615563d770feded3df762083a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d8c8c4cdca6b177615563d770feded3df762083a) ([#201](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/201)): feat: add `isAvailable()` method
+
 ## 7.1.0
 
 ### Minor Changes

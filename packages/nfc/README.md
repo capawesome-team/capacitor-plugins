@@ -2,6 +2,12 @@
 
 Capacitor plugin for NFC tag reading, writing, and emulation. Supports Android, iOS, and Web with advanced features like HCE and raw command handling.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for NFC. Here are some of the key features:
@@ -34,6 +40,11 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 | Android                                                                                                                                            | iOS                                                                                                                                            |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" alt="iOS Demo" /> |
+
+## Guides
+
+- [Announcing the Capacitor NFC Plugin](https://capawesome.io/blog/announcing-the-capacitor-nfc-plugin/)
+- [Exploring the Capacitor NFC API](https://capawesome.io/blog/exploring-the-capacitor-nfc-api/)
 
 ## Installation
 
@@ -280,6 +291,7 @@ const removeAllListeners = async () => {
 * [`transceive(...)`](#transceive)
 * [`connect(...)`](#connect)
 * [`close()`](#close)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`isEnabled()`](#isenabled)
 * [`openSettings()`](#opensettings)
@@ -499,6 +511,21 @@ This method must be called from within a `nfcTagScanned` handler.
 Only available on Android.
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Returns whether or not NFC is available.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -817,6 +844,14 @@ Remove all listeners for this plugin.
 | **`techType`** | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on Android. | 6.0.0 |
 
 
+#### IsAvailableResult
+
+| Prop      | Type                 | Description                                                          | Since |
+| --------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`hce`** | <code>boolean</code> | Whether or not Host Card Emulation (HCE) is available on the device. | 7.2.0 |
+| **`nfc`** | <code>boolean</code> | Whether or not NFC is available on the device.                       | 7.2.0 |
+
+
 #### IsSupportedResult
 
 | Prop              | Type                 | Description                                                          | Since |
@@ -1017,7 +1052,19 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md).
+This plugin provides a utility class `NfcUtils` that can be used for various NFC-related operations, for example, creating NDEF records:
+
+```ts
+import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+
+const createNdefTextRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
+  return record;
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md) for more information.
 
 ## Changelog
 

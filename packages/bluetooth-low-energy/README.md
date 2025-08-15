@@ -2,6 +2,12 @@
 
 Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:
@@ -35,6 +41,11 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 | Android                                                                                                                      | iOS                                                                                                                      |
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" alt="iOS Demo" /> |
+
+## Guides
+
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
 
 ## Installation
 
@@ -103,7 +114,7 @@ You also need to add the following service **inside** the `application` tag in y
 
 If you want to run your own native code when a specific event occurs, you can create a headless task.
 For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
-Then you need to add the `onCharacteristicChanged` method to your class:
+Then implement the following methods:
 
 ```java
 import android.bluetooth.BluetoothGatt;
@@ -116,6 +127,10 @@ public class BluetoothLowEnergyHeadlessTask {
   }
 
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
     // Your code here
   }
 }
@@ -192,7 +207,12 @@ const getServices = async () => {
 };
 
 const initialize = async () => {
-  await BluetoothLowEnergy.initialize();
+  await BluetoothLowEnergy.initialize({ mode: 'central' });
+};
+
+const isAvailable = async () => {
+  const result = await BluetoothLowEnergy.isAvailable();
+  return result.isAvailable;
 };
 
 const isBonded = async () => {
@@ -366,6 +386,10 @@ const addListener = () => {
 
   BluetoothLowEnergy.addListener('characteristicWriteRequest', async (event) => {
     console.log('Characteristic write request', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceConnected', (event) => {
+    console.log('Device connected', event);
   });
 
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
@@ -1537,7 +1561,17 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md).
+This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
+
+```ts
+import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+
+const convertBytesToHex = (bytes: number[]) => {
+  return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
 
 ## Changelog
 

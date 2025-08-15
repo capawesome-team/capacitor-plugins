@@ -1,8 +1,16 @@
 # @capawesome/capacitor-live-update
 
-Capacitor plugin to update your app remotely in real-time.
+Capacitor plugin that allows you to update your app remotely in real-time without requiring users to download a new version from the app store, known as Over-the-Air (OTA) updates.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Over-the-Air (OTA) updates. Here are some of the key features:
 
 - 🔋 Supports **Android and iOS**
 - ⚡️ **Capacitor 7** support
@@ -14,8 +22,20 @@ Capacitor plugin to update your app remotely in real-time.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
-- ⚔️ **Battle-Tested**: Used in more than 500 projects.
+- ⚔️ **Battle-Tested**: Used in more than 500 projects to update apps on more than 10,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Guides
+
+- [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
+- [Exploring the Capacitor Live Update API](https://capawesome.io/blog/exploring-the-capacitor-live-update-api/)
+- [How Live Updates for Capacitor work](https://capawesome.io/blog/how-live-updates-for-capacitor-work/)
+- [How to gradually roll out Capacitor Live Updates](https://capawesome.io/blog/how-to-gradually-roll-out-capacitor-live-updates/#update-a-bundle)
+- [How to restrict Capacitor Live Updates to Native Versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/)
+- [Live Updates for Nuxt Capacitor Apps with Capawesome Cloud](https://capawesome.io/blog/live-updates-for-nuxt-capacitor/)
+- [Migrating from App Center to Capawesome Cloud](https://capawesome.io/blog/migrating-from-app-center-to-capawesome-cloud/)
 
 ## Installation
 
@@ -28,10 +48,12 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `22.3.1`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
 
@@ -75,7 +97,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`httpTimeout`**       | <code>number</code>  | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                  | <code>60000</code>                     | 6.4.0 |
 | **`publicKey`**         | <code>string</code>  | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                      |                                        | 6.1.0 |
 | **`readyTimeout`**      | <code>number</code>  | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout. | <code>0</code>                         | 5.0.0 |
-| **`serverDomain`**      | <code>string</code>  | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server.                                                                                                                                                                                                                                                                                                                   | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
+| **`serverDomain`**      | <code>string</code>  | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.                                                                                                                                                                                                                                                                                        | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
 
 ### Examples
 
@@ -91,7 +113,7 @@ In `capacitor.config.json`:
       "httpTimeout": undefined,
       "publicKey": '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       "readyTimeout": 10000,
-      "serverDomain": undefined
+      "serverDomain": 'api.cloud.capawesome.eu'
     }
   }
 }
@@ -113,7 +135,7 @@ const config: CapacitorConfig = {
       httpTimeout: undefined,
       publicKey: '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       readyTimeout: 10000,
-      serverDomain: undefined,
+      serverDomain: 'api.cloud.capawesome.eu',
     },
   },
 };
@@ -133,6 +155,9 @@ The following starter templates are available:
 ## Guides
 
 - [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
+- [How Live Updates for Capacitor work](https://capawesome.io/blog/how-live-updates-for-capacitor-work/)
+- [How to restrict Capacitor Live Updates to Native Versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/)
+- [How to gradually roll out Capacitor Live Updates](https://capawesome.io/blog/how-to-gradually-roll-out-capacitor-live-updates/)
 
 ## Usage
 

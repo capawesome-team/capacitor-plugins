@@ -2,6 +2,12 @@
 
 Capacitor plugin for seamless audio recording using the device's microphone. Supports Android, iOS, and Web with advanced features and high performance.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio recording. Here are some of the key features:
@@ -11,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🚀 **Performance**: Record long audio sessions without any performance issues.
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
-- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -23,6 +29,11 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
+
+## Guides
+
+- [Announcing the Capacitor Audio Recorder Plugin](https://capawesome.io/blog/announcing-the-capacitor-audio-recorder-plugin/)
+- [Exploring the Capacitor Audio Recorder API](https://capawesome.io/blog/exploring-the-capacitor-audio-recorder-api/)
 
 ## Installation
 
@@ -55,6 +66,17 @@ If you are using Proguard, you need to add the following rules to your `proguard
 ```
 
 ### iOS
+
+#### Background Modes
+
+If the app wants to record Audio in the background, add the `UIBackgroundModes` key with the `audio` value:
+
+```xml
+<key>UIBackgroundModes</key>
+<array>
+    <string>audio</string>
+</array>
+```
 
 #### Privacy Descriptions
 
@@ -230,7 +252,7 @@ This method is only available on Android (SDK 24+), iOS and Web.
 ### startRecording(...)
 
 ```typescript
-startRecording(options: StartRecordingOptions) => Promise<void>
+startRecording(options?: StartRecordingOptions | undefined) => Promise<void>
 ```
 
 Start recording audio in AAC format.
@@ -366,10 +388,11 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop             | Type                | Description                                                                              | Default             | Since |
-| ---------------- | ------------------- | ---------------------------------------------------------------------------------------- | ------------------- | ----- |
-| **`bitRate`**    | <code>number</code> | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code> | 7.2.0 |
-| **`sampleRate`** | <code>number</code> | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>  | 7.1.0 |
+| Prop                   | Type                                                          | Description                                                                              | Default                                   | Since |
+| ---------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`audioSessionMode`** | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Measurement</code> | 7.4.0 |
+| **`bitRate`**          | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                       | 7.2.0 |
+| **`sampleRate`**       | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                        | 7.1.0 |
 
 
 #### StopRecordingResult
@@ -429,6 +452,19 @@ or paused or if an error occurs.
 | **`Inactive`**  | <code>'INACTIVE'</code>  | The recording is inactive. | 7.0.0 |
 | **`Recording`** | <code>'RECORDING'</code> | The recording is active.   | 7.0.0 |
 | **`Paused`**    | <code>'PAUSED'</code>    | The recording is paused.   | 7.0.0 |
+
+
+#### AudioSessionMode
+
+| Members              | Value                          | Description                                                                   | Since |
+| -------------------- | ------------------------------ | ----------------------------------------------------------------------------- | ----- |
+| **`Default`**        | <code>'DEFAULT'</code>         | Default mode that doesn't enable additional audio session features.           | 7.4.0 |
+| **`GameChat`**       | <code>'GAME_CHAT'</code>       | Mode for chat communication over VoIP or internet, optimized for low latency. | 7.4.0 |
+| **`Measurement`**    | <code>'MEASUREMENT'</code>     | Mode for high-quality measurement recordings with maximum dynamic range.      | 7.4.0 |
+| **`SpokenAudio`**    | <code>'SPOKEN_AUDIO'</code>    | Mode for speech recording and transcription with optimized voice processing.  | 7.4.0 |
+| **`VideoChat`**      | <code>'VIDEO_CHAT'</code>      | Mode for two-way video chat communications.                                   | 7.4.0 |
+| **`VideoRecording`** | <code>'VIDEO_RECORDING'</code> | Mode for recording video content with high-quality audio.                     | 7.4.0 |
+| **`VoiceChat`**      | <code>'VOICE_CHAT'</code>      | Mode for voice chat communications.                                           | 7.4.0 |
 
 </docgen-api>
 

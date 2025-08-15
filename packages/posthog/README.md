@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -13,14 +19,58 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
 - `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.10.0`)
 
+This can be useful if you encounter dependency conflicts with other plugins in your project.
+
 ## Configuration
 
-No configuration required for this plugin.
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop         | Type                | Description                          | Default                                 | Since |
+| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
+| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 7.1.0 |
+| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "Posthog": {
+      "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      "host": 'https://eu.i.posthog.com'
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-posthog" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Posthog: {
+      apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      host: 'https://eu.i.posthog.com',
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
 
 ## Demo
 
@@ -340,6 +390,8 @@ setup(options: SetupOptions) => Promise<void>
 Setup the PostHog SDK with the provided options.
 
 **Attention**: This method should be called before any other method.
+Alternatively, on Android and iOS, you can configure this plugin in
+your Capacitor Configuration file. In this case, you must not call this method.
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |

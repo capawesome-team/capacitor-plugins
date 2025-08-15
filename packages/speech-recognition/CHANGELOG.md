@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.4.1
+
+### Patch Changes
+
+- [`af3bd1ab752b964930455c6cbece9d6db81613ae`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/af3bd1ab752b964930455c6cbece9d6db81613ae): fix(web): `end` listener was not always called
+
+## 7.4.0
+
+### Minor Changes
+
+- [`052dc408e3e72059620eccf1acd07a53dc6c32f5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/052dc408e3e72059620eccf1acd07a53dc6c32f5) ([#223](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/223)): feat: add support for punctuation
+
 ## 7.3.3
 
 ### Patch Changes

@@ -2,13 +2,19 @@
 
 Capacitor plugin to securely store key/value pairs such as passwords, tokens or other sensitive information.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for secure storage. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
-- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/plugins/biometrics/) and [SQLite](https://capawesome.io/plugins/sqlite/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -20,6 +26,13 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
+
+## Guides
+
+- [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/)
+- [Announcing the Capacitor Secure Preferences Plugin](https://capawesome.io/blog/announcing-the-capacitor-secure-preferences-plugin/)
+- [Exploring the Capacitor Secure Preferences API](https://capawesome.io/blog/exploring-the-capacitor-secure-preferences-api/)
+- [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
 
 ## Installation
 

@@ -2,12 +2,19 @@
 
 Capacitor plugin for efficient file compression with support for image formats like PNG, JPEG, and WebP.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for file compression. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌅 **Compress Images**: Compress png, jpeg, and webp images.
+- 🤝 **Compatibility**: Compatible with the [Zip](https://capawesome.io/plugins/zip/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -28,6 +35,10 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 | Android                                                                                                                                                |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" alt="Android Demo" /> |
+
+## Guides
+
+- [Exploring the Capacitor File Compressor API](https://capawesome.io/blog/exploring-the-capacitor-file-compressor-api/)
 
 ## Installation
 
@@ -61,9 +72,11 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
@@ -76,9 +89,11 @@ import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
 const compressImage = async () => {
   const { path } = await FileCompressor.compressImage({
+    height: 1000,
     mimeType: 'image/jpeg',
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
     quality: 0.7,
+    width: 1000,
   });
   return path;
 };
