@@ -1,10 +1,20 @@
-import { WebPlugin } from "@capacitor/core";
+import { CapacitorException, ExceptionCode, WebPlugin } from '@capacitor/core';
 
-import type { RealtimeKitPlugin } from "./definitions";
+import type { RealtimeKitPlugin, StartMeetingOptions } from './definitions';
 
 export class RealtimeKitWeb extends WebPlugin implements RealtimeKitPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log("ECHO", options);
-    return options;
+  public async initialize(): Promise<void> {
+    throw this.createUnimplementedException();
+  }
+
+  public async startMeeting(_options: StartMeetingOptions): Promise<void> {
+    throw this.createUnimplementedException();
+  }
+
+  private createUnimplementedException(): CapacitorException {
+    return new CapacitorException(
+      'Not implemented on this platform.',
+      ExceptionCode.Unimplemented,
+    );
   }
 }
