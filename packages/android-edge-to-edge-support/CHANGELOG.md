@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.3
+
+### Patch Changes
+
+- [`cbf41f8170e9f072847696b356995791e1eb3328`](https://github.com/capawesome-team/capacitor-plugins/commit/cbf41f8170e9f072847696b356995791e1eb3328) ([#582](https://github.com/capawesome-team/capacitor-plugins/pull/582)): fix(edge-to-edge): include display cutout in system bars insets
+
 ## 7.2.2
 
 ### Patch Changes
