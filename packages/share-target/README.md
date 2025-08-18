@@ -12,8 +12,10 @@ Capacitor plugin to receive content such as text, links, and files from other ap
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for receiving content from other apps. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📝 **Multi-content types**: Handle text, URLs, images, videos, and files.
+- 🌐 **Web Share Target API**: Leverage the native sharing capabilities of the web.
+- 📦 **Large File Support**: Efficient file caching without memory limitations.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -30,9 +32,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-share-target-demo).
 
-| Android                                                                                                                      | iOS                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/9a35add2-dd32-4b50-8c5f-18bd79df0bde" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/9171f4ae-d4db-49d0-ab0e-9827fb3358b7" width="266" alt="iOS Demo" /> |
+| Android                                                                                                                      | iOS                                                                                                                      | Web                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/9a35add2-dd32-4b50-8c5f-18bd79df0bde" width="240" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/9171f4ae-d4db-49d0-ab0e-9827fb3358b7" width="240" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/3c94a7e0-a46b-4ccd-a095-2b96eebd503c" width="240" alt="Web Demo" /> |
 
 ## Installation
 
@@ -402,6 +404,150 @@ If you don't want to receive files, you can skip this step.
 
 No configuration required for this plugin.
 
+## Web
+
+To use this plugin on the web, you need to set up a **Progressive Web App (PWA)** with a web manifest and service worker that handles share targets.
+
+### Manifest
+
+To allow your PWA to act as a share target, you need to add a `share_target` configuration to your web manifest (`manifest.json`):
+
+```json
+{
+  "share_target": {
+    "action": "/_share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text", 
+      "url": "url",
+      "files": [
+        {
+          "name": "files",
+          "accept": ["*/*"]
+        }
+      ]
+    }
+  }
+}
+```
+
+For more information on setting up the share target for your PWA, refer to the [Web Share Target documentation](https://developer.mozilla.org/en-US/docs/Web/Manifest/share_target).
+
+### Service Worker
+
+Since service workers are the only way to intercept network requests in a PWA, you'll need to create one to handle the share target requests. Just create a file named `sw.js` in your project's root directory and add the following code:
+
+```javascript
+self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  if (event.request.method === 'POST' && url.pathname === '/_share-target') {
+    event.respondWith(handleShareTarget(event.request));
+  } else if (url.pathname.startsWith('/_share-file/')) {
+    event.respondWith(handleFileRequest(event.request));
+  }
+});
+
+async function handleFileRequest(request) {
+  try {
+    const url = new URL(request.url);
+    const fileId = url.pathname.substring(13); // Remove '/_share-file/' prefix
+    const cache = await caches.open('share-target-files');
+    const cacheKey = `/${fileId}`;
+    
+    const response = await cache.match(cacheKey);
+    if (response) {
+      return response;
+    } else {
+      return new Response('File not found', { status: 404 });
+    }
+  } catch (error) {
+    console.error('Error serving file:', error);
+    return new Response('Internal error', { status: 500 });
+  }
+}
+
+async function handleShareTarget(request) {
+  try {
+    const formData = await request.formData();
+    const title = formData.get('title') || '';
+    const text = formData.get('text') || '';
+    const url = formData.get('url') || '';
+    const files = formData.getAll('files');
+
+    const texts = [];
+    if (text) texts.push(text);
+    if (url) texts.push(url);
+
+    const shareData = {
+      title: title,
+      texts: texts.length > 0 ? texts : undefined,
+      files: undefined,
+    };
+
+    if (files.length > 0) {
+      const fileUrls = [];
+      const cache = await caches.open('share-target-files');
+
+      for (const file of files) {
+        if (file instanceof File && file.size > 0) {
+          const fileId = `share-file-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+          const cacheKey = `/${fileId}`;
+          
+          const response = new Response(file, {
+            headers: {
+              'Content-Type': file.type,
+              'Content-Length': file.size.toString(),
+              'X-File-Name': file.name || 'unknown',
+            }
+          });
+          await cache.put(cacheKey, response);
+          
+          fileUrls.push(`/_share-file/${fileId}`);
+        }
+      }
+
+      if (fileUrls.length > 0) {
+        shareData.files = fileUrls;
+      }
+    }
+
+    const redirectUrl = new URL('/', self.location.origin);
+
+    if (shareData.title) {
+      redirectUrl.searchParams.set('title', shareData.title);
+    }
+
+    if (shareData.texts && shareData.texts.length > 0) {
+      shareData.texts.forEach((text, index) => {
+        redirectUrl.searchParams.set(`text${index}`, text);
+      });
+    }
+
+    if (shareData.files && shareData.files.length > 0) {
+      shareData.files.forEach((fileUrl, index) => {
+        redirectUrl.searchParams.set(`file${index}`, fileUrl);
+      });
+    }
+
+    return Response.redirect(redirectUrl.href, 303);
+  } catch (error) {
+    console.error('Error handling share target:', error);
+    return Response.redirect('/', 303);
+  }
+}
+```
+
+Now, register your service worker in your main JavaScript file:
+
+```javascript
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js');
+}
+```
+
 ## Usage
 
 ```typescript
@@ -410,6 +556,15 @@ import { ShareTarget } from '@capawesome-team/capacitor-share-target';
 const addListener = async () => {
     await ShareTarget.addListener('shareReceived', (event) => {
         console.log('Share received:', event);
+        
+        // Handle shared files
+        if (event.files) {
+          event.files.forEach(async (fileUrl) => {
+            const response = await fetch(fileUrl);
+            const blob = await response.blob();
+            // Process the file...
+          });
+        }
     });
 };
 ```
@@ -472,11 +627,11 @@ Remove all listeners for this plugin.
 
 #### ShareReceivedEvent
 
-| Prop        | Type                  | Description                                                                                                                                                                                                               | Since |
-| ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`** | <code>string</code>   | The title of the shared content.                                                                                                                                                                                          | 0.1.0 |
-| **`texts`** | <code>string[]</code> | The text content that was shared.                                                                                                                                                                                         | 0.1.0 |
-| **`files`** | <code>string[]</code> | The files that were shared. On **Android** and **iOS**, this will contain the file paths or base64 encoded data URLs of the shared files. On **Web**, this will contain the base64 encoded data URLs of the shared files. | 0.1.0 |
+| Prop        | Type                  | Description                                                                                                                                                                                                            | Since |
+| ----------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`** | <code>string</code>   | The title of the shared content.                                                                                                                                                                                       | 0.1.0 |
+| **`texts`** | <code>string[]</code> | The text content that was shared.                                                                                                                                                                                      | 0.1.0 |
+| **`files`** | <code>string[]</code> | The files that were shared. On **Android** and **iOS**, this will contain the file paths or base64 encoded data URLs of the shared files. On **Web**, this will contain cached file URLs that can be fetched directly. | 0.1.0 |
 
 </docgen-api>
 
