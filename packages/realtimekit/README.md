@@ -1,6 +1,6 @@
 # @capawesome/capacitor-realtimekit
 
-Unofficial Capacitor plugin for using the RealtimeKit SDK.
+Unofficial Capacitor plugin for using the [RealtimeKit SDK](https://docs.realtime.cloudflare.com/).[^1]
 
 ## Installation
 
@@ -50,8 +50,12 @@ Add the following keys to the `ios/App/App/Info.plist` file:
 ```typescript
 import { RealtimeKit } from '@capawesome/capacitor-realtimekit';
 
-const echo = async () => {
-  await RealtimeKit.echo();
+const initialize = async () => {
+  await RealtimeKit.initialize();
+};
+
+const startMeeting = async (options: StartMeetingOptions) => {
+  await RealtimeKit.startMeeting(options);
 };
 ```
 
@@ -114,3 +118,5 @@ Only available on Android and iOS.
 | **`enableVideo`** | <code>boolean</code> | Whether to join the meeting with video enabled. | <code>true</code> | 0.0.0 |
 
 </docgen-api>
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Cloudflare, Inc. or any of their affiliates or subsidiaries.
