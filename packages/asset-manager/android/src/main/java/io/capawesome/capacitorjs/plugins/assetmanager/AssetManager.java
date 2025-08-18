@@ -110,15 +110,14 @@ public class AssetManager {
     }
 
     private String readFileAsBase64EncodedData(InputStream inputStream) throws IOException {
-        FileInputStream fileInputStream = (FileInputStream) inputStream;
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 
         byte[] buffer = new byte[1024];
-        int c;
-        while ((c = fileInputStream.read(buffer)) != -1) {
-            byteStream.write(buffer, 0, c);
+        int length;
+        while ((length = inputStream.read(buffer)) != -1) {
+            byteStream.write(buffer, 0, length);
         }
-        fileInputStream.close();
+        inputStream.close();
 
         return Base64.encodeToString(byteStream.toByteArray(), Base64.NO_WRAP);
     }
