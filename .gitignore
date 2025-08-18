@@ -8,5 +8,9 @@ node_modules
 # IntelliJ
 .idea
 
-# Clause
+# Claude
 CLAUDE.md
+
+.settings/
+.project
+.classpath
