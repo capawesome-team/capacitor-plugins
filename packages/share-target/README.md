@@ -32,9 +32,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-share-target-demo).
 
-| Android                                                                                                                      | iOS                                                                                                                      | Web                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/9a35add2-dd32-4b50-8c5f-18bd79df0bde" width="240" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/9171f4ae-d4db-49d0-ab0e-9827fb3358b7" width="240" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/3c94a7e0-a46b-4ccd-a095-2b96eebd503c" width="240" alt="Web Demo" /> |
+| Android                                                                                                                  | iOS                                                                                                              | Web                                                                                                              |
+| ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-android.gif" width="240" alt="Android Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-ios.gif" width="240" alt="iOS Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-web.gif" width="240" alt="Web Demo" /> |
 
 ## Installation
 
