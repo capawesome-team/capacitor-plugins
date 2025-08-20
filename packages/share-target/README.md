@@ -143,13 +143,13 @@ To enable your app to be opened by the share extension, you need to set up a URL
     <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-            <string>example</string>
+            <string>YOUR_URL_SCHEME</string>
         </array>
     </dict>
 </array>
 ```
 
-**Attention**: Replace `example` with your desired URL scheme. This will allow your app to be opened with URLs like `example://?text=Hello%20World`.
+**Attention**: Replace `YOUR_URL_SCHEME` with your desired URL scheme (e.g. `myapp`). This will allow your app to be opened with URLs like `myapp://?text=Hello%20World`.
 
 #### Share Extension
 
@@ -164,7 +164,7 @@ This will create a new target in your Xcode project with the necessary files for
 
 After this, you need to configure the share extension to handle the shared content. Open the `Info.plist` file of your share extension and replace its content with the following:
 
-```
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -388,7 +388,7 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 
 #### Capabilities
 
-If you want to receive files (e.g., images, videos) from other apps, you need to enable the "App Groups" capability for both your main app and the share extension. This allows both targets to share files in a common container. To do this, follow these steps:
+If you want to receive not only text but also files (e.g., images, videos) from other apps, you need to enable the "App Groups" capability for both your main app and the share extension. This allows both targets to share files in a common container. To do this, follow these steps:
 
 1. Open your Xcode project.
 2. Select your app target.
