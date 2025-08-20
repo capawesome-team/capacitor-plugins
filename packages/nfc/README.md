@@ -133,9 +133,9 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 Add the `NFCReaderUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why the app needs to use NFC:
 
-```diff
-+ <key>NFCReaderUsageDescription</key>
-+ <string>The app enables the reading and writing of various NFC tags.</string>
+```xml
+<key>NFCReaderUsageDescription</key>
+<string>The app enables the reading and writing of various NFC tags.</string>
 ```
 
 #### Universal Links
