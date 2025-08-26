@@ -78,7 +78,15 @@ public class EdgeToEdge {
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
             // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
-            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                if (keyboardVisible) {
+                    mlp.bottomMargin = 0;
+                } else {
+                    mlp.bottomMargin = systemBarsInsets.bottom;
+                }
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                mlp.bottomMargin = systemBarsInsets.bottom;
+            }
 
             // Set the other margins using system bars insets
             mlp.topMargin = systemBarsInsets.top;
