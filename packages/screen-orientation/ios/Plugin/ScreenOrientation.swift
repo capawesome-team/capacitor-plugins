@@ -46,6 +46,7 @@ import Capacitor
                 return
             }
             self.notifyOrientationChangeListeners(orientationType)
+            self.requestGeometryUpdate(orientationValue: self.convertOrientationTypeToValue(orientationType), orientationMask: UIInterfaceOrientationMask.all)
             completion()
         }
     }
