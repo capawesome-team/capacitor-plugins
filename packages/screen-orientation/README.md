@@ -17,6 +17,8 @@ npx cap sync
 
 ### iOS
 
+#### General
+
 On iOS you must add the following to your app's `AppDelegate.swift`:
 
 ```diff
@@ -28,6 +30,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 + func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 +   return ScreenOrientation.getSupportedInterfaceOrientations()
 + }
+```
+
+#### iPad Orientation Lock
+
+On iPad, you must add the following to your app's `Info.plist`:
+
+```xml
+<key>UIRequiresFullScreen</key>
+<true/>
 ```
 
 ## Configuration
