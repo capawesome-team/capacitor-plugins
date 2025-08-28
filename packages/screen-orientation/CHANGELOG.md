@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.0.2
+
+### Patch Changes
+
+- [`bb6d837e87dbcc92ec16802231662d4648c9f59b`](https://github.com/capawesome-team/capacitor-plugins/commit/bb6d837e87dbcc92ec16802231662d4648c9f59b) ([#599](https://github.com/capawesome-team/capacitor-plugins/pull/599)): fix(ios): assure correct orientation after orientation unlock
+
 ## 7.0.1
 
 ### Patch Changes
