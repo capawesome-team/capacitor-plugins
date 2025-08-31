@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`969dac1b4efd80ab86f3eed38aa0f76f9edd87ba`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/969dac1b4efd80ab86f3eed38aa0f76f9edd87ba) ([#241](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/241)): feat: add `soundLevel` listener
+
 ## 7.4.1
 
 ### Patch Changes
