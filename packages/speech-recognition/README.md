@@ -142,6 +142,9 @@ const addListeners = () => {
   SpeechRecognition.addListener('result', (event) => {
     console.log('Final result:', event.result);
   });
+  SpeechRecognition.addListener('soundLevel', (event) => {
+    console.log('Sound level:', event.level);
+  });
   SpeechRecognition.addListener('speechStart', () => {
     console.log('User started speaking');
   });
