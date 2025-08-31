@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`0f7284f63e343cd5390216603d6fdd2968cd533d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0f7284f63e343cd5390216603d6fdd2968cd533d) ([#270](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/270)): feat(ios): add `audioSessionCategoryOptions` to `StartRecordingOptions`
+
 ## 7.4.0
 
 ### Minor Changes
