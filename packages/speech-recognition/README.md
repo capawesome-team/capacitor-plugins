@@ -173,6 +173,7 @@ const removeAllListeners = async () => {
 * [`addListener('speechEnd', ...)`](#addlistenerspeechend-)
 * [`addListener('speechStart', ...)`](#addlistenerspeechstart-)
 * [`addListener('start', ...)`](#addlistenerstart-)
+* [`addListener('soundLevel', ...)`](#addlistenersoundlevel-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -446,6 +447,30 @@ Called when the speech recognizer has started listening.
 --------------------
 
 
+### addListener('soundLevel', ...)
+
+```typescript
+addListener(eventName: 'soundLevel', listenerFunc: (event: SoundLevelEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the sound level changes during speech recognition.
+
+**Attention**: There is no guarantee that this method will be called.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                            |
+| ------------------ | ------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'soundLevel'</code>                                                       |
+| **`listenerFunc`** | <code>(event: <a href="#soundlevelevent">SoundLevelEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.5.0
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -544,6 +569,13 @@ Remove all listeners for this plugin.
 | Prop         | Type                | Description                                 | Since |
 | ------------ | ------------------- | ------------------------------------------- | ----- |
 | **`result`** | <code>string</code> | The final result of the speech recognition. | 6.0.0 |
+
+
+#### SoundLevelEvent
+
+| Prop        | Type                | Description                                                                                                                                                                          | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`level`** | <code>number</code> | The sound level of the audio signal. The value is normalized across platforms to a range of 0-100, where 0 represents minimum detected sound and 100 represents maximum sound level. | 7.5.0 |
 
 
 ### Type Aliases
