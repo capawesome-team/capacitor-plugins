@@ -388,11 +388,12 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop                   | Type                                                          | Description                                                                              | Default                                   | Since |
-| ---------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
-| **`audioSessionMode`** | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Measurement</code> | 7.4.0 |
-| **`bitRate`**          | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                       | 7.2.0 |
-| **`sampleRate`**       | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                        | 7.1.0 |
+| Prop                              | Type                                                          | Description                                                                              | Default                                   | Since |
+| --------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                 | <code>['duckOthers']</code>               | 7.5.0 |
+| **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Measurement</code> | 7.4.0 |
+| **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                       | 7.2.0 |
+| **`sampleRate`**                  | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                        | 7.1.0 |
 
 
 #### StopRecordingResult
@@ -452,6 +453,20 @@ or paused or if an error occurs.
 | **`Inactive`**  | <code>'INACTIVE'</code>  | The recording is inactive. | 7.0.0 |
 | **`Recording`** | <code>'RECORDING'</code> | The recording is active.   | 7.0.0 |
 | **`Paused`**    | <code>'PAUSED'</code>    | The recording is paused.   | 7.0.0 |
+
+
+#### AudioSessionCategoryOption
+
+| Members                                    | Value                                                     | Description                                                                                                                | Since |
+| ------------------------------------------ | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`AllowAirPlay`**                         | <code>'ALLOW_AIR_PLAY'</code>                             | Option to stream audio from this session to AirPlay devices.                                                               | 7.5.0 |
+| **`AllowBluetooth`**                       | <code>'ALLOW_BLUETOOTH'</code>                            | Option to make Bluetooth hands-free devices appears as available input routes.                                             | 7.5.0 |
+| **`AllowBluetoothA2DP`**                   | <code>'ALLOW_BLUETOOTH_A2DP'</code>                       | Option to stream audio from this session to Bluetooth devices that support the Advanced Audio Distribution Profile (A2DP). | 7.5.0 |
+| **`DefaultToSpeaker`**                     | <code>'DEFAULT_TO_SPEAKER'</code>                         | Option to make audio from this session to default to the built-in speaker instead of the receiver.                         | 7.5.0 |
+| **`DuckOthers`**                           | <code>'DUCK_OTHERS'</code>                                | Option to reduce the audio volume of other active sessions when audio from this session is in play.                        | 7.5.0 |
+| **`InterruptSpokenAudioAndMixWithOthers`** | <code>'INTERRUPT_SPOKEN_AUDIO_AND_MIX_WITH_OTHERS'</code> | Option to pause spoken audio of other sessions when audio from this session is in play.                                    | 7.5.0 |
+| **`MixWithOthers`**                        | <code>'MIX_WITH_OTHERS'</code>                            | Option to mix audio with audio from other active sessions in other apps.                                                   | 7.5.0 |
+| **`overrideMutedMicrophoneInterruption`**  | <code>'OVERRIDE_MUTED_MICROPHONE_INTERRUPTION'</code>     | Option that indicates if the system interrupts the audio session when it mutes the built-in microphone.                    | 7.5.0 |
 
 
 #### AudioSessionMode
