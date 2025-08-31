@@ -94,7 +94,7 @@ No configuration required for this plugin.
 ## Usage
 
 ```typescript
-import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
+import { AudioRecorder, AudioSessionCategoryOption, AudioSessionMode } from '@capawesome-team/capacitor-audio-recorder';
 import { NativeAudio } from '@capacitor-community/native-audio';
 
 const cancelRecording = async () => {
@@ -115,7 +115,12 @@ const resumeRecording = async () => {
 };
 
 const startRecording = async () => {
-  await AudioRecorder.startRecording();
+  await AudioRecorder.startRecording({
+    audioSessionCategoryOptions: [AudioSessionCategoryOption.DuckOthers],
+    audioSessionMode: AudioSessionMode.Measurement,
+    bitRate: 192000,
+    sampleRate: 44100
+  });
 };
 
 const stopRecording = async () => {
