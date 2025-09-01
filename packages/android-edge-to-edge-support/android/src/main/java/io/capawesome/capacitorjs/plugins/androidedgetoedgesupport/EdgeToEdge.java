@@ -1,9 +1,13 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,12 +22,15 @@ public class EdgeToEdge {
     @NonNull
     private final EdgeToEdgePlugin plugin;
 
+    private View overlayView;
+
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
         this.config = config;
         this.plugin = plugin;
         // Apply insets to disable the edge-to-edge feature
         setBackgroundColor(config.getBackgroundColor());
         applyInsets();
+        setStatusBarBackgroundColor(config.getStatusBarBackgroundColor());
     }
 
     public void enable() {
@@ -41,6 +48,10 @@ public class EdgeToEdge {
 
     public void setBackgroundColor(String color) {
         setBackgroundColor(Color.parseColor(color));
+    }
+
+    public void setStatusBarBackgroundColor(String color) {
+        setStatusBarBackgroundColor(Color.parseColor(color));
     }
 
     private void applyInsets() {
@@ -102,6 +113,9 @@ public class EdgeToEdge {
         mlp.rightMargin = 0;
         mlp.bottomMargin = 0;
         view.setLayoutParams(mlp);
+        if (overlayView != null) {
+            parent.getOverlay().remove(overlayView);
+        }
         // Reset listener
         ViewCompat.setOnApplyWindowInsetsListener(view, null);
     }
@@ -112,5 +126,34 @@ public class EdgeToEdge {
         ViewGroup parent = (ViewGroup) view.getParent();
         // Set background color
         parent.setBackgroundColor(color);
+    }
+
+    private void setStatusBarBackgroundColor(int color) {
+        View view = plugin.getBridge().getWebView();
+        Activity activity = plugin.getBridge().getActivity();
+        // Create new view
+        View overlay = new View(activity);
+        WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
+        if (currentInsets != null) {
+            int statusBarHeight = currentInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
+            ).top;
+            overlay.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    statusBarHeight
+            ));
+            overlay.setBackgroundColor(color);
+            // Get root view bridge activity
+            ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+
+            // Remove previous overlay if exist
+            if (overlayView != null) {
+                rootView.removeView(overlayView);
+            }
+            // Set reference overlay view
+            overlayView = view;
+            // Add overlay view
+            rootView.addView(overlay);
+        }
     }
 }
