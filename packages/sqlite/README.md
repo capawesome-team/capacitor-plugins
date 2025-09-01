@@ -436,9 +436,11 @@ To get the version of the database schema, simply run the `PRAGMA user_version;`
 initialize(options?: InitializeOptions | undefined) => Promise<void>
 ```
 
-Initialize the plugin with optional configuration.
+Initialize the plugin before any other method is called.
 
-This method is should be called before using any other methods of the plugin.
+Use this method to customize the plugin's behavior.
+If this method is not called, the plugin will be automatically
+initialized with default settings on the first call to any other method.
 
 On **Android** and **iOS**, this method is a no-op.
 
