@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`84870a79b0e6e03626b5e98dd0be4903a6546864`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/84870a79b0e6e03626b5e98dd0be4903a6546864) ([#272](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/272)): feat: automatically initialize the plugin on first call
+
 ## 7.2.0
 
 ### Minor Changes
