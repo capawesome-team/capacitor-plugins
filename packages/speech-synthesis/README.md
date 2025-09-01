@@ -74,52 +74,6 @@ No configuration required for this plugin.
 ```typescript
 import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
 
-const activateAudioSession = async () => {
-  await SpeechSynthesis.activateAudioSession({ category: AudioSessionCategory.Ambient });
-};
-
-const cancel = async () => {
-  await SpeechSynthesis.cancel();
-};
-
-const deactivateAudioSession = async () => {
-  await SpeechSynthesis.deactivateAudioSession();
-};
-
-const getLanguages = async () => {
-  const result = await SpeechSynthesis.getLanguages();
-  return result.languages;
-};
-
-const getVoices = async () => {
-  const result = await SpeechSynthesis.getVoices();
-  return result.voices;
-};
-
-const initialize = async () => {
-  await SpeechSynthesis.initialize();
-};
-
-const isAvailable = async () => {
-  const result = await SpeechSynthesis.isAvailable();
-  return result.isAvailable;
-};
-
-const isSpeaking = async () => {
-  const result = await SpeechSynthesis.isSpeaking();
-  return result.isSpeaking;
-};
-
-const isLanguageAvailable = async () => {
-  const result = await SpeechSynthesis.isLanguageAvailable({ language: 'en-US' });
-  return result.isAvailable;
-};
-
-const isVoiceAvailable = async () => {
-  const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
-  return result.isAvailable;
-};
-
 const speak = async () => {
   // Add an utterance to the utterance queue to be spoken
   const { utteranceId } = await SpeechSynthesis.speak({
@@ -164,12 +118,41 @@ const synthesizeToFile = async () => {
   return path;
 };
 
+const cancel = async () => {
+  await SpeechSynthesis.cancel();
+};
+
 const pause = async () => {
   await SpeechSynthesis.pause();
 };
 
 const resume = async () => {
   await SpeechSynthesis.resume();
+};
+
+const isAvailable = async () => {
+  const result = await SpeechSynthesis.isAvailable();
+  return result.isAvailable;
+};
+
+const isLanguageAvailable = async () => {
+  const result = await SpeechSynthesis.isLanguageAvailable({ language: 'en-US' });
+  return result.isAvailable;
+};
+
+const isVoiceAvailable = async () => {
+  const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
+  return result.isAvailable;
+};
+
+const getLanguages = async () => {
+  const result = await SpeechSynthesis.getLanguages();
+  return result.languages;
+};
+
+const getVoices = async () => {
+  const result = await SpeechSynthesis.getVoices();
+  return result.voices;
 };
 
 const addListeners = () => {
@@ -311,7 +294,10 @@ Get the available voices for speech synthesis.
 initialize() => Promise<void>
 ```
 
-Initialize the plugin. This method must be called before any other method.
+Initialize the plugin before any other method is called.
+
+Use this method to warm up the speech synthesis engine.
+Otherwise, the plugin is initialized on the first call to any other method.
 
 Only available on Android and iOS.
 
