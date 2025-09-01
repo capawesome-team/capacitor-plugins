@@ -297,7 +297,8 @@ initialize() => Promise<void>
 Initialize the plugin before any other method is called.
 
 Use this method to warm up the speech synthesis engine.
-Otherwise, the plugin is initialized on the first call to any other method.
+If this method is not called, the plugin will be automatically
+initialized on the first call to any other method.
 
 Only available on Android and iOS.
 
