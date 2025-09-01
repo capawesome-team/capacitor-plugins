@@ -114,7 +114,9 @@ public class EdgeToEdge {
         mlp.bottomMargin = 0;
         view.setLayoutParams(mlp);
         if (overlayView != null) {
-            parent.getOverlay().remove(overlayView);
+            Activity activity = plugin.getBridge().getActivity();
+            ViewGroup rootView = (ViewGroup) activity.getWindow().getDecorView();
+            rootView.removeView(overlayView);
         }
         // Reset listener
         ViewCompat.setOnApplyWindowInsetsListener(view, null);
