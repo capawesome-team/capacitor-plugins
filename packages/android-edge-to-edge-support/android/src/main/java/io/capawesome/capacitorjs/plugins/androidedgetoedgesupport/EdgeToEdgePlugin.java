@@ -82,13 +82,35 @@ public class EdgeToEdgePlugin extends Plugin {
             });
     }
 
+    @PluginMethod
+    public void setStatusBarBackgroundColor(PluginCall call) {
+        String color = call.getString("color");
+        if (color == null) {
+            call.reject(ERROR_COLOR_MISSING);
+            return;
+        }
+        getActivity()
+                .runOnUiThread(() -> {
+                    try {
+                        implementation.setStatusBarBackgroundColor(color);
+                        call.resolve();
+                    } catch (Exception exception) {
+                        call.reject(exception.getMessage());
+                    }
+                });
+    }
+
     private EdgeToEdgeConfig getEdgeToEdgeConfig() {
         EdgeToEdgeConfig config = new EdgeToEdgeConfig();
 
         try {
             String backgroundColor = getConfig().getString("backgroundColor");
+            String statusBarBackgroundColor = getConfig().getString("statusBarBackgroundColor");
             if (backgroundColor != null) {
                 config.setBackgroundColor(Color.parseColor(backgroundColor));
+            }
+            if (statusBarBackgroundColor != null) {
+                config.setStatusBarBackgroundColor(Color.parseColor(statusBarBackgroundColor));
             }
         } catch (Exception exception) {
             Logger.error(TAG, "Set config failed.", exception);
