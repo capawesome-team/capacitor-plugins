@@ -635,6 +635,18 @@ Remove all listeners for this plugin.
 
 </docgen-api>
 
+## Troubleshooting
+
+##### `Unable to find compatibility version string for object version XX`
+
+When creating a share extension, you might encounter the following error when building your app:
+
+```
+Unable to find compatibility version string for object version 70
+```
+
+This error is typically caused by an updated `objectVersion` value in the `project.pbxproj` file of your Xcode project. To resolve this issue, you need to manually revert the `objectVersion` value to a previous version that is compatible with your Xcode version.
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/share-target/CHANGELOG.md).
