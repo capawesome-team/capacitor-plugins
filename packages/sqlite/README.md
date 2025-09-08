@@ -714,7 +714,7 @@ The web implementation of this plugin has the following limitations:
 
 - **BLOBs**: Arrays of numbers (BLOBs) are not supported. You can only use strings, numbers, and `null` as values in SQL statements.
 
-## Common Issues
+## Troubleshooting
 
 ##### `SQLITE_ERROR: sqlite3 result code 1: no such vfs: opfs`
 
