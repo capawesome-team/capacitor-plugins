@@ -1,12 +1,40 @@
 # @capawesome/capacitor-file-picker
 
-Capacitor plugin that allows the user to select a file.
+Capacitor plugin that allows the user to select a file, directory, image, or video from the device's file system or gallery.
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
     <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
   </a>
 </div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for file picking. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 📂 **Directory picking**: Allows users to select a directory to retrieve all files.
+- 🖼️ **Image picking**: Lets users select one or more images from the gallery.
+- 🎥 **Video picking**: Lets users select one or more videos from the gallery.
+- 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
+- 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
+- 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
+- 📦 **SPM**: Supports Swift Package Manager for iOS. 
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 5.x.x          | 5.x.x             | Deprecated     |
 
 ## Installation
 
@@ -44,10 +72,6 @@ If you don't want to use the plugin with Mac Catalyst, you can skip this step.
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

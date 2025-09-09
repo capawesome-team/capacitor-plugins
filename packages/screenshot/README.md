@@ -8,6 +8,22 @@ Capacitor plugin for taking screenshots.
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for capturing screenshots. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
+- 📸 **Easy screenshots**: Simple one-method API for taking screenshots.
+- 🌐 **Web support**: Uses html2canvas for web platform screenshot capture.
+- 📱 **Native capture**: High-quality native screenshot capture on mobile.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 Install the plugin:

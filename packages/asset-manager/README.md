@@ -8,6 +8,25 @@ Capacitor plugin to access native asset files.
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for asset management. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📂 **Asset copying**: Copy files or directories from app bundle to data directory.
+- 📄 **File listing**: List all files in asset directories.
+- 📖 **File reading**: Read asset files with Base64 or UTF-8 encoding.
+- 🔄 **Bundle access**: Direct access to native app bundle assets.
+- 🗂️ **Directory operations**: Handle both individual files and entire directories.
+- 📦 **Multiple encodings**: Support for Base64 and UTF-8 file reading.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash

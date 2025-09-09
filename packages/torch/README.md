@@ -8,6 +8,22 @@ Capacitor plugin for switching the flashlight on and off.
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for torch/flashlight control. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
+- 🔦 **Torch control**: Enable, disable, and toggle torch/flashlight.
+- ✅ **Availability check**: Check if torch is available on the device.
+- 🌐 **Web support**: Uses MediaStream API for web torch control.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash

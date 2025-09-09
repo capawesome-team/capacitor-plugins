@@ -11,6 +11,25 @@ It supports retrieving app update information on **Android** and **iOS** and sup
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for app updates. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📱 **App update information**: Retrieves current and available app versions.
+- ⚡ **Immediate in-app updates**: Performs immediate updates on Android.
+- 📲 **Flexible in-app updates**: Supports flexible update flows on Android.
+- 📈 **Update priority**: Supports update priority levels on Android.
+- 🏪 **App store navigation**: Opens the app store entry for manual updates.
+- 📊 **Update state tracking**: Monitors flexible update progress with listeners.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash
