@@ -8,6 +8,24 @@ Capacitor plugin to access and update the badge number of the app icon.
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for app icon badge management. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web (PWA).
+- 🔢 **Badge management**: Get, set, increase, decrease, and clear badge counts.
+- 💾 **Persistent badges**: Badge count persists after reboot or app restart.
+- 🔄 **Auto-clear option**: Automatically reset counter when resuming the app.
+- 🔐 **Permission handling**: Check and request badge display permissions.
+- ⚙️ **Configurable**: Customize persistence and auto-clear behaviors.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash

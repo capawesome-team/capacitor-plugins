@@ -8,6 +8,26 @@ Capacitor plugin to lock/unlock the screen orientation.
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for screen orientation control. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
+- 🔒 **Orientation locking**: Lock screen to specific orientations.
+- 🔓 **Orientation unlocking**: Unlock and restore automatic orientation.
+- 📱 **Multiple orientations**: Support for portrait, landscape, and specific orientations.
+- 🔄 **Orientation detection**: Get current screen orientation.
+- 📢 **Event listeners**: Listen to orientation change events.
+- 📐 **Fine-grained control**: Primary and secondary orientation modes.
+- 🍎 **iPad support**: Special configuration for iPad orientation locking.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash

@@ -8,6 +8,26 @@ Capacitor plugin for seamless date and time selection with advanced features lik
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for date and time picking. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📅 **Multiple modes**: Date, time, and datetime picker modes.
+- 🌍 **Localization**: Support for BCP 47 language tags.
+- 🎨 **Theming**: Auto, light, and dark theme support.
+- ⚡ **Custom formats**: Define your own date/time format strings.
+- 🔒 **Min/Max constraints**: Set minimum and maximum selectable dates/times.
+- 📱 **Native UI**: Uses platform-specific picker components.
+- ⚙️ **Flexible configuration**: Customizable button texts and picker modes.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash
