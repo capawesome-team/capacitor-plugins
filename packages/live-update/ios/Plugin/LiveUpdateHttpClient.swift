@@ -27,7 +27,7 @@ public class LiveUpdateHttpClient: NSObject {
                 if let callback = callback {
                     callback(progress)
                 }
-            }.responseData { response in
+            }.responseData(emptyResponseCodes: [200, 204, 205]) { response in
                 continuation.resume(returning: response)
             }
         }
