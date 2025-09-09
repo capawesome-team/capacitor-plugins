@@ -521,6 +521,7 @@ Remove all listeners for this plugin.
 | **`enableFormatting`**             | <code>boolean</code>                                                  | Whether to add punctuation to speech recognition results. **Note**: On Android, this option does not work reliably as it varies depending on the device and TTS engine. Only available on Android (SDK 33+) and iOS (+16). | <code>false</code>                       | 7.4.0 |
 | **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                                                                                                     |                                          | 6.0.0 |
 | **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. Only available on Android (SDK 33+) and iOS.                                                                                                     | <code>2000</code>                        | 6.0.0 |
+| **`taskHint`**                     | <code><a href="#taskhint">TaskHint</a></code>                         | The type of task for which the speech recognition is being used for. Only available on iOS.                                                                                                                                | <code>TaskHint.Unspecified</code>        | 7.5.0 |
 
 
 #### StopListeningOptions
@@ -603,6 +604,16 @@ Remove all listeners for this plugin.
 | ------------------- | ------------------------------ | --------------------------------------------------------------------- | ----- |
 | **`Record`**        | <code>'RECORD'</code>          | The category for recording audio while also silencing playback audio. | 7.2.0 |
 | **`PlayAndRecord`** | <code>'PLAY_AND_RECORD'</code> | The category for recording (input) and playback (output) of audio.    | 7.2.0 |
+
+
+#### TaskHint
+
+| Members            | Value                       | Since |
+| ------------------ | --------------------------- | ----- |
+| **`Confirmation`** | <code>'CONFIRMATION'</code> | 7.5.0 |
+| **`Dictation`**    | <code>'DICTATION'</code>    | 7.5.0 |
+| **`Search`**       | <code>'SEARCH'</code>       | 7.5.0 |
+| **`Unspecified`**  | <code>'UNSPECIFIED'</code>  | 7.5.0 |
 
 </docgen-api>
 
