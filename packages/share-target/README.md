@@ -160,9 +160,9 @@ To enable your app to receive shared content from other apps on iOS, you need to
 3. Select `Share Extension` from the list of templates.
 4. Name your extension `AppShare` and click `Finish`.
 
-This will create a new target in your Xcode project with the necessary files for a share extension. There is one file called `MainInterface.storyboard` that you can delete, as we will not need it.
+This will create a new target in your Xcode project with the necessary files for a share extension. If you see a prompt to activate the new scheme, choose "Don't Activate". There is one file called `MainInterface.storyboard` that you should delete **via Xcode**, as we will not need it.
 
-After this, you need to configure the share extension to handle the shared content. Open the `Info.plist` file of your share extension and replace its content with the following:
+After this, you need to configure the share extension to handle the shared content. Open the `Info.plist` file of your share extension **in a text editor of your choice** and replace its content with the following:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -204,7 +204,7 @@ After this, you need to configure the share extension to handle the shared conte
 
 Feel free to adjust the `NSExtensionActivationRule` keys to match the types of content you want to support. The example above supports text, web URLs, files, images, and movies.
 
-Next, you need to create a new Swift file in your share extension target. Name it `ShareViewController.swift` and replace its content with the following code:
+Next, you need to update the `ShareViewController.swift` file in your share extension target and replace its content with the following code:
 
 ```swift
 import MobileCoreServices
@@ -214,8 +214,8 @@ import UniformTypeIdentifiers
 
 class ShareViewController: UIViewController {
 
-    private let appGroupIdentifier = "PLACEHOLDER_APP_GROUP_IDENTIFIER"
-    private let urlScheme = "PLACEHOLDER_URL_SCHEME"
+    private let appGroupIdentifier = "group.<YOUR_APP_IDENTIFIER>"
+    private let urlScheme = "<YOUR_URL_SCHEME>"
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -369,7 +369,7 @@ class ShareViewController: UIViewController {
 }
 ```
 
-**Attention**: Replace `<YOUR_URL_SCHEME>` with the URL scheme you defined in your main app's `Info.plist` file.
+**Attention**: Replace `<YOUR_URL_SCHEME>` with the URL scheme you defined in your main app's `Info.plist` file (e.g. `myapp`) and `<YOUR_APP_IDENTIFIER>` with your app identifier (e.g. `com.example.app`). Make sure to keep the `group.` prefix for the app group identifier.
 
 Finally, you need to modify the `AppDelegate.swift` file of your main app target to handle the URLs opened by the share extension. Add the missing import and the following code to the `application(_:open:options:)` method:
 
@@ -395,7 +395,7 @@ If you want to receive not only text but also files (e.g., images, videos) from 
 3. Go to the "Signing & Capabilities" tab.
 4. Click the "+" button to add a new capability.
 5. Select "App Groups" from the list.
-6. Create a new app group (must begin with `group.`) and note its identifier (e.g., `group.com.example.app`).
+6. Create a new app group using the format `group.<YOUR_APP_IDENTIFIER>` (e.g., `group.com.example.app`).
 7. Repeat the same steps for your share extension target, ensuring that both targets use the same app group identifier.
 
 If you don't want to receive files, you can skip this step.
@@ -551,6 +551,7 @@ if ('serviceWorker' in navigator) {
 ## Usage
 
 ```typescript
+import { Capacitor } from '@capacitor/core';
 import { ShareTarget } from '@capawesome-team/capacitor-share-target';
 
 const addListener = async () => {
@@ -560,7 +561,8 @@ const addListener = async () => {
         // Handle shared files
         if (event.files) {
           event.files.forEach(async (fileUrl) => {
-            const response = await fetch(fileUrl);
+            const webPath = Capacitor.convertFileSrc(fileUrl);
+            const response = await fetch(webPath);
             const blob = await response.blob();
             // Process the file...
           });
