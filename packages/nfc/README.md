@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-nfc
 
-Capacitor plugin for reading and writing NFC tags.
+Capacitor plugin for NFC tag reading, writing, and emulation. Supports Android, iOS, and Web with advanced features like HCE and raw command handling.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -17,7 +23,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -31,13 +37,18 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-nfc-demo).
 
-| Android                                                                                                                         | iOS                                                                                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" /> |
+| Android                                                                                                                                            | iOS                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/184409092-7fdc3a77-67b1-4155-b1b1-0fd34a92a77b.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/184409000-a81243a3-93e5-4d51-817a-e006c0a385cf.gif" width="266" alt="iOS Demo" /> |
+
+## Guides
+
+- [Announcing the Capacitor NFC Plugin](https://capawesome.io/blog/announcing-the-capacitor-nfc-plugin/)
+- [Exploring the Capacitor NFC API](https://capawesome.io/blog/exploring-the-capacitor-nfc-api/)
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -46,7 +57,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -122,9 +133,9 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 Add the `NFCReaderUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why the app needs to use NFC:
 
-```diff
-+ <key>NFCReaderUsageDescription</key>
-+ <string>The app enables the reading and writing of various NFC tags.</string>
+```xml
+<key>NFCReaderUsageDescription</key>
+<string>The app enables the reading and writing of various NFC tags.</string>
 ```
 
 #### Universal Links
@@ -280,6 +291,7 @@ const removeAllListeners = async () => {
 * [`transceive(...)`](#transceive)
 * [`connect(...)`](#connect)
 * [`close()`](#close)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`isEnabled()`](#isenabled)
 * [`openSettings()`](#opensettings)
@@ -499,6 +511,21 @@ This method must be called from within a `nfcTagScanned` handler.
 Only available on Android.
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Returns whether or not NFC is available.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -817,6 +844,14 @@ Remove all listeners for this plugin.
 | **`techType`** | <code><a href="#nfctagtechtype">NfcTagTechType</a></code> | The NFC tag technology to connect with. Only available on Android. | 6.0.0 |
 
 
+#### IsAvailableResult
+
+| Prop      | Type                 | Description                                                          | Since |
+| --------- | -------------------- | -------------------------------------------------------------------- | ----- |
+| **`hce`** | <code>boolean</code> | Whether or not Host Card Emulation (HCE) is available on the device. | 7.2.0 |
+| **`nfc`** | <code>boolean</code> | Whether or not NFC is available on the device.                       | 7.2.0 |
+
+
 #### IsSupportedResult
 
 | Prop              | Type                 | Description                                                          | Since |
@@ -1017,7 +1052,19 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md).
+This plugin provides a utility class `NfcUtils` that can be used for various NFC-related operations, for example, creating NDEF records:
+
+```ts
+import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+
+const createNdefTextRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
+  return record;
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md) for more information.
 
 ## Changelog
 

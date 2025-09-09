@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-zip
 
-Capacitor plugin to zip and unzip files.
+Capacitor plugin to zip and unzip files and directories with support for encryption.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -9,6 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📁 **File Compression**: Zip and unzip single or multiple files.
 - 🔑 **Encryption**: Encrypt and decrypt files.
+- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/plugins/file-compressor/) plugin.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -28,7 +35,7 @@ A working example can be found [here](https://github.com/robingenz/capacitor-plu
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -37,7 +44,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -58,9 +65,11 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 

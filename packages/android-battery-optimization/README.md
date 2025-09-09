@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-android-battery-optimization
 
-Capacitor plugin to access battery optimization settings on Android. 
+Capacitor plugin for Android to manage battery optimization settings, request exemptions, and enhance app performance under Doze and App Standby modes.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Installation
 
@@ -27,9 +33,9 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
-| Android                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" /> |
+| Android                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" alt="Android Demo" /> |
 
 ## Usage
 

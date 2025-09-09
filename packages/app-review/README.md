@@ -2,6 +2,12 @@
 
 Capacitor plugin that allows users to submit app store reviews and ratings.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -13,9 +19,11 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidPlayReviewVersion` version of `com.google.android.play:review` (default: `2.0.2`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 

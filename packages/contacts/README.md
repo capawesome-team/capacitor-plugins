@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-contacts
 
-Capacitor plugin to read, write, or select device contacts.
+Capacitor plugin to read, write, or select device contacts. Supports Android, iOS and Web with advanced features like contact groups, pagination, and native modals.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -19,7 +25,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -27,9 +33,15 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 7.x.x          | >=7.x.x           | Active support |
 
+## Guides
+
+- [Alternative to the Capacitor Community Contacts plugin](https://capawesome.io/blog/alternative-to-capacitor-community-contacts-plugin/)
+- [Announcing the Capacitor Contacts Plugin](https://capawesome.io/blog/announcing-the-capacitor-contacts-plugin/)
+- [Exploring the Capacitor Contacts API](https://capawesome.io/blog/exploring-the-capacitor-contacts-api/)
+
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -38,7 +50,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -143,6 +155,11 @@ const createContact = async () => {
   });
 };
 
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
 const createGroup = async () => {
   return Contacts.createGroup({
     group: {
@@ -188,7 +205,18 @@ const getContactById = async (id: string) => {
 };
 
 const getContacts = async () => {
-  const { contacts } = await Contacts.getContacts();
+  const { contacts } = await Contacts.getContacts({
+    fields: [
+      'id',
+      'givenName',
+      'familyName',
+      'emailAddresses',
+      'phoneNumbers',
+      'postalAddresses'
+    ],
+    limit: 10,
+    offset: 0
+  });
   return contacts;
 };
 
@@ -202,13 +230,28 @@ const getGroups = async () => {
   return groups;
 };
 
+const isAvailable = async () => {
+  const { isAvailable } = await Contacts.isAvailable();
+  return isAvailable;
+};
+
 const isSupported = async () => {
   const { isSupported } = await Contacts.isSupported();
   return isSupported;
 };
 
 const pickContacts = async () => {
-  const { contacts } = await Contacts.pickContacts();
+  const { contacts } = await Contacts.pickContacts({
+    fields: [
+      'id',
+      'givenName',
+      'familyName',
+      'emailAddresses',
+      'phoneNumbers',
+      'postalAddresses'
+    ],
+    multiple: true
+  });
   return contacts;
 };
 
@@ -248,6 +291,7 @@ const requestPermissions = async () => {
 * [`getContacts(...)`](#getcontacts)
 * [`getGroupById(...)`](#getgroupbyid)
 * [`getGroups()`](#getgroups)
+* [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
 * [`pickContact(...)`](#pickcontact)
 * [`pickContacts(...)`](#pickcontacts)
@@ -515,6 +559,21 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#getgroupsresult">GetGroupsResult</a>&gt;</code>
 
 **Since:** 7.4.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not contacts is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.6.0
 
 --------------------
 
@@ -861,6 +920,13 @@ Only available on Android and iOS.
 | Prop         | Type                 | Description                       | Since |
 | ------------ | -------------------- | --------------------------------- | ----- |
 | **`groups`** | <code>Group[]</code> | The list of groups on the device. | 7.4.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                         | Since |
+| ----------------- | -------------------- | --------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not contacts is available on the device. | 7.6.0 |
 
 
 #### IsSupportedResult

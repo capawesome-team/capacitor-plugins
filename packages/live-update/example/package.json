@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
-    "@capawesome/cli": "^1.9.0",
+    "@capawesome/cli": "2.1.2",
     "vite": "^2.9.13"
   }
 }

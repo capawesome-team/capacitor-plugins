@@ -30,6 +30,12 @@ Stay up to date with the latest news and updates about this plugin by subscribin
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -49,6 +55,19 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 <!-- Needed if you want to read files from external storage -->
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 ```
+
+### iOS
+
+#### Entitlements
+
+To use this plugin with Mac Catalyst, your app must have the `com.apple.security.files.user-selected.read-only` entitlement enabled. This allows the app to read files selected by the user. Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.files.user-selected.read-only) for more information.
+
+```xml
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
+
+If you don't want to use the plugin with Mac Catalyst, you can skip this step.
 
 ## Configuration
 
@@ -178,8 +197,6 @@ copyFile(options: CopyFileOptions) => Promise<void>
 ```
 
 Copy a file to a new location.
-
-Only available on Android.
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
@@ -376,10 +393,11 @@ Remove all listeners for this plugin.
 
 #### CopyFileOptions
 
-| Prop       | Type                | Description                   | Since |
-| ---------- | ------------------- | ----------------------------- | ----- |
-| **`from`** | <code>string</code> | The path of the file to copy. | 7.1.0 |
-| **`to`**   | <code>string</code> | The path to copy the file to. | 7.1.0 |
+| Prop            | Type                 | Description                                                     | Default           | Since |
+| --------------- | -------------------- | --------------------------------------------------------------- | ----------------- | ----- |
+| **`from`**      | <code>string</code>  | The path of the file to copy.                                   |                   | 7.1.0 |
+| **`overwrite`** | <code>boolean</code> | Whether to overwrite if the file at destination already exists. | <code>true</code> | 7.2.0 |
+| **`to`**        | <code>string</code>  | The path to copy the file to.                                   |                   | 7.1.0 |
 
 
 #### PickFilesResult

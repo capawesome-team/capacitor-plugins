@@ -22,8 +22,6 @@ export interface FilePickerPlugin {
   /**
    * Copy a file to a new location.
    *
-   * Only available on Android.
-   *
    * @since 7.1.0
    */
   copyFile(options: CopyFileOptions): Promise<void>;
@@ -135,6 +133,14 @@ export interface CopyFileOptions {
    * @since 7.1.0
    */
   from: string;
+  /**
+   * Whether to overwrite if the file at destination already exists.
+   *
+   * @default true
+   * @example false
+   * @since 7.2.0
+   */
+  overwrite?: boolean;
   /**
    * The path to copy the file to.
    *

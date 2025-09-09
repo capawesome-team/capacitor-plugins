@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-asset-manager",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "Capacitor plugin to access native asset files.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

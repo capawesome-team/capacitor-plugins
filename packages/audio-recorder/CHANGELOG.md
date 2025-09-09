@@ -1,5 +1,29 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`0f7284f63e343cd5390216603d6fdd2968cd533d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0f7284f63e343cd5390216603d6fdd2968cd533d) ([#270](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/270)): feat(ios): add `audioSessionCategoryOptions` to `StartRecordingOptions`
+
+## 7.4.0
+
+### Minor Changes
+
+- [`eeb5e5d13dbebb5b26d8964eb215b413b2eedb84`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/eeb5e5d13dbebb5b26d8964eb215b413b2eedb84) ([#243](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/243)): feat(ios): add `audioSessionMode` property
+
+## 7.3.2
+
+### Patch Changes
+
+- [`cd337f11490c4463ed77a93a0abd7c92a0a776d7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cd337f11490c4463ed77a93a0abd7c92a0a776d7): fix: `options` parameter in `startRecording` method is now optional
+
+## 7.3.1
+
+### Patch Changes
+
+- [`a91c9b18d1e4dbb54b79bc70de1ae652864442a0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a91c9b18d1e4dbb54b79bc70de1ae652864442a0): fix: `options` parameter in `startRecording` method is now optional
+
 ## 7.3.0
 
 ### Minor Changes

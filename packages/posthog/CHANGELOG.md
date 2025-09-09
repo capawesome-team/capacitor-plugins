@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`e2e3bc772d9c49117a1b6dbb63f71fa1ce59c99d`](https://github.com/capawesome-team/capacitor-plugins/commit/e2e3bc772d9c49117a1b6dbb63f71fa1ce59c99d) ([#561](https://github.com/capawesome-team/capacitor-plugins/pull/561)): feat: add configuration options for setup
+
 ## 7.1.0
 
 ### Minor Changes

@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-wifi
 
-Capacitor plugin to manage Wi-Fi connectivity.
+Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks. Supports both Android and iOS.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -13,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -23,13 +29,13 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Demo
 
-| Android                                                                                                   | iOS                                                                                                       |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/38f75f55-141d-4073-b81b-fdb4dae0fcc7" width="324" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1" width="266" /> |
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/38f75f55-141d-4073-b81b-fdb4dae0fcc7" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -38,7 +44,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 

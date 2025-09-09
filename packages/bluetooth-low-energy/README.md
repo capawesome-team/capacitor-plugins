@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-bluetooth-low-energy
 
-Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role.
+Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -19,7 +25,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -32,13 +38,18 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-heart-rate-monitor-app).
 
-| Android                                                                                                   | iOS                                                                                                       |
-| --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" /> |
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" alt="iOS Demo" /> |
+
+## Guides
+
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -47,7 +58,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -103,7 +114,7 @@ You also need to add the following service **inside** the `application` tag in y
 
 If you want to run your own native code when a specific event occurs, you can create a headless task.
 For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
-Then you need to add the `onCharacteristicChanged` method to your class:
+Then implement the following methods:
 
 ```java
 import android.bluetooth.BluetoothGatt;
@@ -116,6 +127,10 @@ public class BluetoothLowEnergyHeadlessTask {
   }
 
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
     // Your code here
   }
 }
@@ -192,7 +207,12 @@ const getServices = async () => {
 };
 
 const initialize = async () => {
-  await BluetoothLowEnergy.initialize();
+  await BluetoothLowEnergy.initialize({ mode: 'central' });
+};
+
+const isAvailable = async () => {
+  const result = await BluetoothLowEnergy.isAvailable();
+  return result.isAvailable;
 };
 
 const isBonded = async () => {
@@ -265,28 +285,32 @@ const setCharacteristicValue = async () => {
 
 const startAdvertising = async () => {
   await BluetoothLowEnergy.startAdvertising({
-        services: [
+    manufacturerData: {
+      0xffff: [1, 2, 3]
+    },
+    name: 'MyDevice',
+    services: [
+      {
+        id: '0000180A-0000-1000-8000-00805F9B34FB',
+        characteristics: [
           {
-            id: '0000180A-0000-1000-8000-00805F9B34FB',
-            characteristics: [
-              {
-                id: '00002A29-0000-1000-8000-00805F9B34FB',
-                descriptors: [], // Descriptors are ignored for now
-                permissions: {
-                  read: true,
-                  write: true,
-                },
-                properties: {
-                  read: true,
-                  write: true,
-                  notify: true,
-                  indicate: true,
-                },
-              },
-            ],
+            id: '00002A29-0000-1000-8000-00805F9B34FB',
+            descriptors: [], // Descriptors are ignored for now
+            permissions: {
+              read: true,
+              write: true,
+            },
+            properties: {
+              read: true,
+              write: true,
+              notify: true,
+              indicate: true,
+            },
           },
         ],
-      });
+      },
+    ],
+  });
 };
 
 const startCharacteristicNotifications = async () => {
@@ -366,6 +390,10 @@ const addListener = () => {
 
   BluetoothLowEnergy.addListener('characteristicWriteRequest', async (event) => {
     console.log('Characteristic write request', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceConnected', (event) => {
+    console.log('Device connected', event);
   });
 
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
@@ -561,8 +589,7 @@ initialize(options?: InitializeOptions | undefined) => Promise<void>
 Initialize the plugin. This method must be called before any other method.
 
 On **iOS**, this will prompt the user for Bluetooth permissions.
-
-Only available on iOS.
+On **Android** and **Web**, this does nothing.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -1372,10 +1399,11 @@ Remove all listeners for this plugin.
 
 #### StartAdvertisingOptions
 
-| Prop           | Type                   | Description                                                       | Default                | Since |
-| -------------- | ---------------------- | ----------------------------------------------------------------- | ---------------------- | ----- |
-| **`name`**     | <code>string</code>    | The name of the local device to advertise. Only available on iOS. | <code>"Unknown"</code> | 7.2.0 |
-| **`services`** | <code>Service[]</code> | The services to advertise.                                        |                        | 7.2.0 |
+| Prop                   | Type                                      | Description                                                             | Default                | Since |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------------------------- | ---------------------- | ----- |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android. |                        | 7.5.0 |
+| **`name`**             | <code>string</code>                       | The name of the local device to advertise. Only available on iOS.       | <code>"Unknown"</code> | 7.2.0 |
+| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                              |                        | 7.2.0 |
 
 
 #### StartCharacteristicNotificationsOptions
@@ -1537,7 +1565,17 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md).
+This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
+
+```ts
+import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+
+const convertBytesToHex = (bytes: number[]) => {
+  return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
 
 ## Changelog
 

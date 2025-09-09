@@ -1,6 +1,12 @@
 # @capawesome-team/capacitor-speech-synthesis
 
-Capacitor plugin for synthesizing speech from text (also known as text-to-speech).
+Capacitor plugin for synthesizing speech from text (also known as text-to-speech) with advanced features like voice selection, pitch, and rate control.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
@@ -13,13 +19,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🎧 **Background Audio**: Synthesize speech from text while your application runs in the background.
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugin.
+- ⏸️ **Pause/Resume**: Pause and resume speech synthesis.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 
-Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
 ## Compatibility
 
@@ -30,7 +37,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -39,7 +46,7 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, install the package:
 
@@ -66,52 +73,6 @@ No configuration required for this plugin.
 
 ```typescript
 import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
-
-const activateAudioSession = async () => {
-  await SpeechSynthesis.activateAudioSession({ category: AudioSessionCategory.Ambient });
-};
-
-const cancel = async () => {
-  await SpeechSynthesis.cancel();
-};
-
-const deactivateAudioSession = async () => {
-  await SpeechSynthesis.deactivateAudioSession();
-};
-
-const getLanguages = async () => {
-  const result = await SpeechSynthesis.getLanguages();
-  return result.languages;
-};
-
-const getVoices = async () => {
-  const result = await SpeechSynthesis.getVoices();
-  return result.voices;
-};
-
-const initialize = async () => {
-  await SpeechSynthesis.initialize();
-};
-
-const isAvailable = async () => {
-  const result = await SpeechSynthesis.isAvailable();
-  return result.isAvailable;
-};
-
-const isSpeaking = async () => {
-  const result = await SpeechSynthesis.isSpeaking();
-  return result.isSpeaking;
-};
-
-const isLanguageAvailable = async () => {
-  const result = await SpeechSynthesis.isLanguageAvailable({ language: 'en-US' });
-  return result.isAvailable;
-};
-
-const isVoiceAvailable = async () => {
-  const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
-  return result.isAvailable;
-};
 
 const speak = async () => {
   // Add an utterance to the utterance queue to be spoken
@@ -157,6 +118,42 @@ const synthesizeToFile = async () => {
   return path;
 };
 
+const cancel = async () => {
+  await SpeechSynthesis.cancel();
+};
+
+const pause = async () => {
+  await SpeechSynthesis.pause();
+};
+
+const resume = async () => {
+  await SpeechSynthesis.resume();
+};
+
+const isAvailable = async () => {
+  const result = await SpeechSynthesis.isAvailable();
+  return result.isAvailable;
+};
+
+const isLanguageAvailable = async () => {
+  const result = await SpeechSynthesis.isLanguageAvailable({ language: 'en-US' });
+  return result.isAvailable;
+};
+
+const isVoiceAvailable = async () => {
+  const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
+  return result.isAvailable;
+};
+
+const getLanguages = async () => {
+  const result = await SpeechSynthesis.getLanguages();
+  return result.languages;
+};
+
+const getVoices = async () => {
+  const result = await SpeechSynthesis.getVoices();
+  return result.voices;
+};
 
 const addListeners = () => {
   SpeechSynthesis.addListener('boundary', (event) => {
@@ -195,6 +192,8 @@ const removeAllListeners = async () => {
 * [`isSpeaking()`](#isspeaking)
 * [`isLanguageAvailable(...)`](#islanguageavailable)
 * [`isVoiceAvailable(...)`](#isvoiceavailable)
+* [`pause()`](#pause)
+* [`resume()`](#resume)
 * [`speak(...)`](#speak)
 * [`synthesizeToFile(...)`](#synthesizetofile)
 * [`addListener('boundary', ...)`](#addlistenerboundary-)
@@ -295,7 +294,11 @@ Get the available voices for speech synthesis.
 initialize() => Promise<void>
 ```
 
-Initialize the plugin. This method must be called before any other method.
+Initialize the plugin before any other method is called.
+
+Use this method to warm up the speech synthesis engine.
+If this method is not called, the plugin will be automatically
+initialized on the first call to any other method.
 
 Only available on Android and iOS.
 
@@ -368,6 +371,32 @@ Check if a voice is available for speech synthesis.
 **Returns:** <code>Promise&lt;<a href="#isvoiceavailableresult">IsVoiceAvailableResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### pause()
+
+```typescript
+pause() => Promise<void>
+```
+
+Pause speech immediately.
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### resume()
+
+```typescript
+resume() => Promise<void>
+```
+
+Resume speech.
+
+**Since:** 7.2.0
 
 --------------------
 
