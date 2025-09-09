@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "7.1.0"
+    public static let version = "7.2.2"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
