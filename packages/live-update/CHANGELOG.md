@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.2.2
+
+### Patch Changes
+
+- [`c5813eeb9b05829dca1407baba4d1d73a514169d`](https://github.com/capawesome-team/capacitor-plugins/commit/c5813eeb9b05829dca1407baba4d1d73a514169d) ([#607](https://github.com/capawesome-team/capacitor-plugins/pull/607)): fix(ios): bundle file download fails for empty files
+
+- [`f6929c2b4b0e84116f3f6207c9d5e1f56a295c8c`](https://github.com/capawesome-team/capacitor-plugins/commit/f6929c2b4b0e84116f3f6207c9d5e1f56a295c8c): fix: send correct plugin version to Capawesome Cloud
+
 ## 7.2.1
 
 ### Patch Changes
