@@ -285,28 +285,32 @@ const setCharacteristicValue = async () => {
 
 const startAdvertising = async () => {
   await BluetoothLowEnergy.startAdvertising({
-        services: [
+    manufacturerData: {
+      0xffff: [1, 2, 3]
+    },
+    name: 'MyDevice',
+    services: [
+      {
+        id: '0000180A-0000-1000-8000-00805F9B34FB',
+        characteristics: [
           {
-            id: '0000180A-0000-1000-8000-00805F9B34FB',
-            characteristics: [
-              {
-                id: '00002A29-0000-1000-8000-00805F9B34FB',
-                descriptors: [], // Descriptors are ignored for now
-                permissions: {
-                  read: true,
-                  write: true,
-                },
-                properties: {
-                  read: true,
-                  write: true,
-                  notify: true,
-                  indicate: true,
-                },
-              },
-            ],
+            id: '00002A29-0000-1000-8000-00805F9B34FB',
+            descriptors: [], // Descriptors are ignored for now
+            permissions: {
+              read: true,
+              write: true,
+            },
+            properties: {
+              read: true,
+              write: true,
+              notify: true,
+              indicate: true,
+            },
           },
         ],
-      });
+      },
+    ],
+  });
 };
 
 const startCharacteristicNotifications = async () => {
@@ -585,8 +589,7 @@ initialize(options?: InitializeOptions | undefined) => Promise<void>
 Initialize the plugin. This method must be called before any other method.
 
 On **iOS**, this will prompt the user for Bluetooth permissions.
-
-Only available on iOS.
+On **Android** and **Web**, this does nothing.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -1396,10 +1399,11 @@ Remove all listeners for this plugin.
 
 #### StartAdvertisingOptions
 
-| Prop           | Type                   | Description                                                       | Default                | Since |
-| -------------- | ---------------------- | ----------------------------------------------------------------- | ---------------------- | ----- |
-| **`name`**     | <code>string</code>    | The name of the local device to advertise. Only available on iOS. | <code>"Unknown"</code> | 7.2.0 |
-| **`services`** | <code>Service[]</code> | The services to advertise.                                        |                        | 7.2.0 |
+| Prop                   | Type                                      | Description                                                             | Default                | Since |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------------------------- | ---------------------- | ----- |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android. |                        | 7.5.0 |
+| **`name`**             | <code>string</code>                       | The name of the local device to advertise. Only available on iOS.       | <code>"Unknown"</code> | 7.2.0 |
+| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                              |                        | 7.2.0 |
 
 
 #### StartCharacteristicNotificationsOptions
