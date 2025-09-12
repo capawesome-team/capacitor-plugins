@@ -155,16 +155,9 @@ Add the `NSBluetoothAlwaysUsageDescription` key to the `Info.plist` file (usuall
 <string>The app needs access to Bluetooth peripherals to communicate with Bluetooth devices.</string>
 ```
 
-#### Background Modes
+#### Capabilities
 
-If the app wants to use Bluetooth in the background, add the `UIBackgroundModes` key with the `bluetooth-central` value:
-
-```xml
-<key>UIBackgroundModes</key>
-<array>
-    <string>bluetooth-central</string>
-</array>
-```
+If you want your app to maintain Bluetooth Low Energy connections in the background, ensure the `Background Modes` capability is enabled with `bluetooth-central` in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 ## Configuration
 
