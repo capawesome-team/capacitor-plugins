@@ -126,8 +126,7 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 #### Capabilities
 
-Ensure `Near Field Communication Tag Reading` capabilities have been enabled in your application in Xcode.
-See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+Ensure `Near Field Communication Tag Reading` capability is enabled in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 #### Privacy Descriptions
 
