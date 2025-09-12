@@ -17,7 +17,8 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🚀 **Performance**: Record long audio sessions without any performance issues.
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
-- 🤝 **Compatibility**: Compatible with the [Speech Recognition](https://capawesome.io/plugins/speech-recognition/), [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
+- 🌙 **Background Mode**: Record audio even when the app is in the background.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -67,16 +68,9 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
-#### Background Modes
+#### Capabilities
 
-If the app wants to record Audio in the background, add the `UIBackgroundModes` key with the `audio` value:
-
-```xml
-<key>UIBackgroundModes</key>
-<array>
-    <string>audio</string>
-</array>
-```
+If you want to record audio in the background, ensure `Background Modes` capability is enabled with `Audio, AirPlay, and Picture in Picture` in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 #### Privacy Descriptions
 
