@@ -20,7 +20,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
 - ⏸️ **Pause/Resume**: Pause and resume speech synthesis.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Native Audio](https://github.com/capacitor-community/native-audio) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) and [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 50 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
