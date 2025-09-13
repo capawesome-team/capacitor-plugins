@@ -320,6 +320,14 @@ export interface SetupOptions {
    * @example 'https://eu.i.posthog.com'
    */
   host?: string;
+  /**
+   * Additional configuration options to pass to PostHog initialization.
+   * These will be merged with the default configuration.
+   *
+   * @since 8.0.0
+   * @example { 'autocapture': false, 'enable_recording_console_log': true }
+   */
+  config?: Record<string, any>;
 }
 
 /**

@@ -80,9 +80,11 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async setup(options: SetupOptions): Promise<void> {
     const host = options.host || 'https://us.i.posthog.com';
-    posthog.init(options.apiKey, {
+    const config = {
       api_host: host,
-    });
+      ...(options.config || {}),
+    };
+    posthog.init(options.apiKey, config);
   }
 
   async unregister(options: UnregisterOptions): Promise<void> {

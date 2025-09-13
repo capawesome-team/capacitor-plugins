@@ -175,8 +175,9 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         let host = call.getString("host", "https://us.i.posthog.com")
+        let config = call.getObject("config")
 
-        let options = SetupOptions(apiKey: apiKey, host: host)
+        let options = SetupOptions(apiKey: apiKey, host: host, config: config)
 
         implementation?.setup(options)
         call.resolve()

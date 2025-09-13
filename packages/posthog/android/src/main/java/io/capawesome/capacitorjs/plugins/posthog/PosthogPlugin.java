@@ -240,8 +240,14 @@ public class PosthogPlugin extends Plugin {
                 return;
             }
             String host = call.getString("host", "https://us.i.posthog.com");
+            JSObject configObject = call.getObject("config");
+            Map<String, Object> config = null;
 
-            SetupOptions options = new SetupOptions(apiKey, host);
+            if (configObject != null) {
+                config = configObject.toMap();
+            }
+
+            SetupOptions options = new SetupOptions(apiKey, host, config);
 
             implementation.setup(options);
             call.resolve();

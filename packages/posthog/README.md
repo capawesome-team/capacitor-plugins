@@ -143,7 +143,13 @@ const setup = async () => {
   await Posthog.setup({
     apiKey: 'YOUR_API_KEY',
     host: 'https://eu.i.posthog.com',
-    });
+    config: {
+      // Additional PostHog configuration options
+      autocapture: false,
+      enable_recording_console_log: true,
+      // Any other PostHog SDK configuration options
+    },
+  });
 };
 
 const unregister = async () => {
@@ -514,10 +520,11 @@ Remove a super property.
 
 #### SetupOptions
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 6.0.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| Prop         | Type                                                         | Description                                                                                                              | Default                                 | Since |
+| ------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------------- | ----- |
+| **`apiKey`** | <code>string</code>                                          | The API key of your PostHog project.                                                                                     |                                         | 6.0.0 |
+| **`host`**   | <code>string</code>                                          | The host of your PostHog instance.                                                                                       | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`config`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional configuration options to pass to PostHog initialization. These will be merged with the default configuration. |                                         | 8.0.0 |
 
 
 #### UnregisterOptions

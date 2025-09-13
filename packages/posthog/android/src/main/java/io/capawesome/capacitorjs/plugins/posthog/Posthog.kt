@@ -23,7 +23,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost())
+            setup(apiKey, config.getHost(), null)
         }
     }
 
@@ -104,8 +104,9 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     fun setup(options: SetupOptions) {
         val apiKey = options.apiKey
         val host = options.host
+        val config = options.config
 
-        setup(apiKey, host)
+        setup(apiKey, host, config)
     }
 
     fun unregister(options: UnregisterOptions) {
@@ -114,7 +115,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String) {
+    private fun setup(apiKey: String, host: String, configMap: Map<String, Object>?) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
@@ -122,6 +123,32 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         posthogConfig.captureScreenViews = false
         posthogConfig.optOut = false
 
+        // Apply custom configuration parameters
+        configMap?.let { config ->
+            applyConfigToPostHogConfig(posthogConfig, config)
+        }
+
         PostHogAndroid.setup(plugin.context, posthogConfig)
+    }
+
+    private fun applyConfigToPostHogConfig(posthogConfig: PostHogAndroidConfig, configMap: Map<String, Object>) {
+        configMap.forEach { (key, value) ->
+            try {
+                val field = posthogConfig.javaClass.getDeclaredField(key)
+                field.isAccessible = true
+                when (value) {
+                    is Boolean -> field.setBoolean(posthogConfig, value)
+                    is Int -> field.setInt(posthogConfig, value)
+                    is Long -> field.setLong(posthogConfig, value)
+                    is Float -> field.setFloat(posthogConfig, value)
+                    is Double -> field.setDouble(posthogConfig, value)
+                    is String -> field.set(posthogConfig, value)
+                    else -> field.set(posthogConfig, value)
+                }
+            } catch (e: Exception) {
+                // Log the error but don't fail the setup
+                android.util.Log.w("Posthog", "Failed to set config property: $key", e)
+            }
+        }
     }
 }
