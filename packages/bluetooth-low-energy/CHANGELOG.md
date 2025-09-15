@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`7b9593769844335769ccddcbf3205677facd33b0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7b9593769844335769ccddcbf3205677facd33b0) ([#275](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/275)): feat: automatically initialize the plugin on first call
+
+- [`1de0c493350fa179cf2e37cfc19a062d6aca852a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1de0c493350fa179cf2e37cfc19a062d6aca852a) ([#256](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/256)): feat(android): add `manufacturerData` option
+
 ## 7.4.0
 
 ### Minor Changes
