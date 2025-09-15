@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.6.0
+
+### Minor Changes
+
+- [`1b3edf78f061a93aedec8996b212abe573797baf`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1b3edf78f061a93aedec8996b212abe573797baf) ([#269](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/269)): feat(ios): add task hint to `StartListeningOptions`
+
 ## 7.5.0
 
 ### Minor Changes
