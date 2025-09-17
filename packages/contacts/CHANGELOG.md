@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.7.0
+
+### Minor Changes
+
+- [`73eb0bffde285e903b10f5f81b325071aaa5c688`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/73eb0bffde285e903b10f5f81b325071aaa5c688) ([#289](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/289)): feat: add `openSettings()` method
+
 ## 7.6.1
 
 ### Patch Changes
