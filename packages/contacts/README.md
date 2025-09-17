@@ -293,6 +293,7 @@ const requestPermissions = async () => {
 * [`getGroups()`](#getgroups)
 * [`isAvailable()`](#isavailable)
 * [`isSupported()`](#issupported)
+* [`openSettings()`](#opensettings)
 * [`pickContact(...)`](#pickcontact)
 * [`pickContacts(...)`](#pickcontacts)
 * [`updateContactById(...)`](#updatecontactbyid)
@@ -589,6 +590,21 @@ Check if the contacts API is available on the device.
 **Returns:** <code>Promise&lt;<a href="#issupportedresult">IsSupportedResult</a>&gt;</code>
 
 **Since:** 7.0.0
+
+--------------------
+
+
+### openSettings()
+
+```typescript
+openSettings() => Promise<void>
+```
+
+Opens the native app settings page to allow the user to grant the app contacts permissions.
+
+Only available on Android and iOS.
+
+**Since:** 7.7.0
 
 --------------------
 
