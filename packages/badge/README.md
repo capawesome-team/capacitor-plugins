@@ -77,10 +77,10 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 
 These configuration values are available:
 
-| Prop            | Type                 | Description                                                                                                               | Default            |
-| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available on Android and iOS. | <code>true</code>  |
-| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. Only available on Android and iOS.  | <code>false</code> |
+| Prop            | Type                 | Description                                                                                                                                                                  | Default            |
+| --------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available on Android and iOS.                                                    | <code>true</code>  |
+| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. On **iOS**, this will also clear all notifications. Only available on Android and iOS. | <code>false</code> |
 
 ### Examples
 

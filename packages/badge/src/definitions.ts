@@ -19,6 +19,8 @@ declare module '@capacitor/cli' {
       persist?: boolean;
       /**
        * Configure whether the plugin should reset the counter after resuming the application.
+       * 
+       * On **iOS**, this will also clear all notifications.
        *
        * Only available on Android and iOS.
        *
