@@ -243,6 +243,8 @@ clear() => Promise<void>
 
 Clear the badge count.
 
+On **iOS**, this will remove the badge and also clear all notifications.
+
 --------------------
 
 
@@ -297,9 +299,9 @@ Request permission to display badge.
 
 #### SetBadgeOptions
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`count`** | <code>number</code> |
+| Prop        | Type                | Description                                                                                                          |
+| ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **`count`** | <code>number</code> | The badge count to set. On **iOS**, setting the count to `0` will remove the badge and also clear all notifications. |
 
 
 #### IsSupportedResult
