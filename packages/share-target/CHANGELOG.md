@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`2b155f7f28a988a8cada85b0f2fd0c57d4b2e757`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2b155f7f28a988a8cada85b0f2fd0c57d4b2e757) ([#291](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/291)): feat!: provide `mimeType` and `name` for shared files
+
 ## 0.1.0
 
 ### Minor Changes
