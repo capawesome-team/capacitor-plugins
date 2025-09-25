@@ -61,9 +61,57 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 ```typescript
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem } from '@capacitor/filesystem';
 
-const echo = async () => {
-  await AudioPlayer.echo();
+const play = async () => {
+  if (Capacitor.getPlatform() === 'web') {
+    const assetUrl = 'https://www.example.com/audio.mp3';
+    const response = await fetch(assetUrl);
+    const blob = await response.blob();
+    await AudioPlayer.play({ blob, loop: false, volume: 100, position: 0 });
+  } else {
+  const { uri } = await Filesystem.getUri({
+    directory: FilesystemDirectory.Documents,
+    path: 'audio.mp3',
+  });
+    await AudioPlayer.play({ uri, loop: false, volume: 100, position: 0 });
+  }
+};
+
+const pause = async () => {
+  await AudioPlayer.pause();
+};
+
+const resume = async () => {
+  await AudioPlayer.resume();
+};
+
+const stop = async () => {
+  await AudioPlayer.stop();
+};
+
+const seekTo = async () => {
+  await AudioPlayer.seekTo({ position: 30_000 }); // Seek to 30 seconds
+};
+
+const setVolume = async () => {
+  await AudioPlayer.setVolume({ volume: 50 }); // Set volume to 50%
+};
+
+const getCurrentPosition = async () => {
+  const { position } = await AudioPlayer.getCurrentPosition();
+  console.log('Current position:', position);
+};
+
+const getDuration = async () => {
+  const { duration } = await AudioPlayer.getDuration();
+  console.log('Duration:', duration);
+};
+
+const isPlaying = async () => {
+  const { isPlaying } = await AudioPlayer.isPlaying();
+  console.log('Is playing:', isPlaying);
 };
 ```
 
