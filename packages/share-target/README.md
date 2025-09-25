@@ -212,6 +212,12 @@ import Social
 import UIKit
 import UniformTypeIdentifiers
 
+struct SharedFileData {
+    let uri: String
+    let name: String?
+    let mimeType: String?
+}
+
 class ShareViewController: UIViewController {
 
     private let appGroupIdentifier = "group.<YOUR_APP_IDENTIFIER>"
@@ -263,7 +269,22 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func sendData(with textValues: [String], fileValues: [String], title: String) {
+    public func getMimeTypeFromUrl(_ url: URL) -> String {
+        let fileExtension = url.pathExtension as CFString
+        guard let extUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, nil)?.takeUnretainedValue() else {
+            return ""
+        }
+        guard let mimeUTI = UTTypeCopyPreferredTagWithClass(extUTI, kUTTagClassMIMEType) else {
+            return ""
+        }
+        return mimeUTI.takeRetainedValue() as String
+    }
+
+    public func getNameFromUrl(_ url: URL) -> String {
+        return url.lastPathComponent
+    }
+
+    private func sendData(with textValues: [String], fileValues: [SharedFileData], title: String) {
         var urlComps = URLComponents(string: "\(urlScheme)://?")!
         var queryItems: [URLQueryItem] = []
 
@@ -277,9 +298,13 @@ class ShareViewController: UIViewController {
             }
         }
 
-        for file in fileValues {
-            if !file.isEmpty {
-                queryItems.append(URLQueryItem(name: "file", value: file))
+        for (index, file) in fileValues.enumerated() {
+            queryItems.append(URLQueryItem(name: "fileUri\(index)", value: file.uri))
+            if let name = file.name {
+                queryItems.append(URLQueryItem(name: "fileName\(index)", value: name))
+            }
+            if let mimeType = file.mimeType {
+                queryItems.append(URLQueryItem(name: "fileMimeType\(index)", value: mimeType))
             }
         }
 
@@ -304,7 +329,7 @@ class ShareViewController: UIViewController {
         }
 
         var textValues: [String] = []
-        var fileValues: [String] = []
+        var fileValues: [SharedFileData] = []
         let title = item.attributedTitle?.string ?? item.attributedContentText?.string ?? ""
         let dispatchGroup = DispatchGroup()
 
@@ -317,12 +342,15 @@ class ShareViewController: UIViewController {
 
                     if let url = item as? URL {
                         if let sharedPath = self?.copyFileToSharedContainer(url) {
-                            fileValues.append(sharedPath)
+                            let fileName = self?.getNameFromUrl(url)
+                            let mimeType = self?.getMimeTypeFromUrl(url)
+                            let finalMimeType = mimeType?.isEmpty == false ? mimeType : nil
+                            fileValues.append(SharedFileData(uri: sharedPath, name: fileName, mimeType: finalMimeType))
                         }
                     } else if let image = item as? UIImage {
                         if let data = image.pngData() {
                             let base64String = data.base64EncodedString()
-                            fileValues.append("data:image/png;base64,\(base64String)")
+                            fileValues.append(SharedFileData(uri: "data:image/png;base64,\(base64String)", name: nil, mimeType: "image/png"))
                         }
                     }
                 }
@@ -335,7 +363,10 @@ class ShareViewController: UIViewController {
 
                     if let url = item as? URL {
                         if let sharedPath = self?.copyFileToSharedContainer(url) {
-                            fileValues.append(sharedPath)
+                            let fileName = self?.getNameFromUrl(url)
+                            let mimeType = self?.getMimeTypeFromUrl(url)
+                            let finalMimeType = mimeType?.isEmpty == false ? mimeType : nil
+                            fileValues.append(SharedFileData(uri: sharedPath, name: fileName, mimeType: finalMimeType))
                         }
                     }
                 }
@@ -488,14 +519,14 @@ async function handleShareTarget(request) {
     };
 
     if (files.length > 0) {
-      const fileUrls = [];
+      const sharedFiles = [];
       const cache = await caches.open('share-target-files');
 
       for (const file of files) {
         if (file instanceof File && file.size > 0) {
           const fileId = `share-file-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
           const cacheKey = `/${fileId}`;
-          
+
           const response = new Response(file, {
             headers: {
               'Content-Type': file.type,
@@ -504,13 +535,17 @@ async function handleShareTarget(request) {
             }
           });
           await cache.put(cacheKey, response);
-          
-          fileUrls.push(`/_share-file/${fileId}`);
+
+          sharedFiles.push({
+            uri: `/_share-file/${fileId}`,
+            name: file.name || undefined,
+            mimeType: file.type || undefined,
+          });
         }
       }
 
-      if (fileUrls.length > 0) {
-        shareData.files = fileUrls;
+      if (sharedFiles.length > 0) {
+        shareData.files = sharedFiles;
       }
     }
 
@@ -527,8 +562,14 @@ async function handleShareTarget(request) {
     }
 
     if (shareData.files && shareData.files.length > 0) {
-      shareData.files.forEach((fileUrl, index) => {
-        redirectUrl.searchParams.set(`file${index}`, fileUrl);
+      shareData.files.forEach((file, index) => {
+        redirectUrl.searchParams.set(`fileUri${index}`, file.uri);
+        if (file.name) {
+          redirectUrl.searchParams.set(`fileName${index}`, file.name);
+        }
+        if (file.mimeType) {
+          redirectUrl.searchParams.set(`fileMimeType${index}`, file.mimeType);
+        }
       });
     }
 
@@ -560,8 +601,8 @@ const addListener = async () => {
         
         // Handle shared files
         if (event.files) {
-          event.files.forEach(async (fileUrl) => {
-            const webPath = Capacitor.convertFileSrc(fileUrl);
+          event.files.forEach(async (file) => {
+            const webPath = Capacitor.convertFileSrc(file.uri);
             const response = await fetch(webPath);
             const blob = await response.blob();
             // Process the file...
@@ -629,11 +670,20 @@ Remove all listeners for this plugin.
 
 #### ShareReceivedEvent
 
-| Prop        | Type                  | Description                                                                                                                                                                                                            | Since |
-| ----------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`title`** | <code>string</code>   | The title of the shared content.                                                                                                                                                                                       | 0.1.0 |
-| **`texts`** | <code>string[]</code> | The text content that was shared.                                                                                                                                                                                      | 0.1.0 |
-| **`files`** | <code>string[]</code> | The files that were shared. On **Android** and **iOS**, this will contain the file paths or base64 encoded data URLs of the shared files. On **Web**, this will contain cached file URLs that can be fetched directly. | 0.1.0 |
+| Prop        | Type                      | Description                       | Since |
+| ----------- | ------------------------- | --------------------------------- | ----- |
+| **`title`** | <code>string</code>       | The title of the shared content.  | 0.1.0 |
+| **`texts`** | <code>string[]</code>     | The text content that was shared. | 0.1.0 |
+| **`files`** | <code>SharedFile[]</code> | The files that were shared.       | 0.2.0 |
+
+
+#### SharedFile
+
+| Prop           | Type                | Description                                                                                                                                                                                                            | Since |
+| -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`mimeType`** | <code>string</code> | The mime type of the shared file.                                                                                                                                                                                      | 0.2.0 |
+| **`name`**     | <code>string</code> | The name of the shared file with or without extension.                                                                                                                                                                 | 0.2.0 |
+| **`uri`**      | <code>string</code> | The URI of the shared file. On **Android** and **iOS**, this will contain the file paths or base64 encoded data URLs of the shared files. On **Web**, this will contain cached file URLs that can be fetched directly. | 0.2.0 |
 
 </docgen-api>
 
