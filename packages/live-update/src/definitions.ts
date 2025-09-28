@@ -51,8 +51,8 @@ declare module '@capacitor/cli' {
        * The timeout in milliseconds to wait for the app to be ready
        * before resetting to the default bundle.
        *
-       * It is strongly **recommended** to configure this option so that
-       * the plugin can roll back to the default bundle in case of problems.
+       * It is strongly **recommended** to configure this option (e.g. `10000` ms)
+       * so that the plugin can roll back to the default bundle in case of problems.
        * If configured, the plugin will wait for the app to call the `ready()`
        * method before resetting to the default bundle.
        *
