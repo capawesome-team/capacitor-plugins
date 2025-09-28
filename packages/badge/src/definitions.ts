@@ -19,7 +19,7 @@ declare module '@capacitor/cli' {
       persist?: boolean;
       /**
        * Configure whether the plugin should reset the counter after resuming the application.
-       * 
+       *
        * On **iOS**, this will also clear all notifications.
        *
        * Only available on Android and iOS.
@@ -54,7 +54,7 @@ export interface BadgePlugin {
   decrease(): Promise<void>;
   /**
    * Clear the badge count.
-   * 
+   *
    * On **iOS**, this will remove the badge and also clear all notifications.
    */
   clear(): Promise<void>;
@@ -79,7 +79,7 @@ export interface GetBadgeResult {
 export interface SetBadgeOptions {
   /**
    * The badge count to set.
-   * 
+   *
    * On **iOS**, setting the count to `0` will remove the badge and also clear all notifications.
    */
   count: number;
