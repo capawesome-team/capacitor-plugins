@@ -1,11 +1,13 @@
 package io.capawesome.capacitorjs.plugins.posthog
 
 import com.posthog.android.PostHogAndroid
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions
 
 import com.posthog.android.PostHogAndroidConfig
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
@@ -24,6 +26,15 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val apiKey = config.getApiKey()
         if (apiKey != null) {
             setup(apiKey, config.getHost())
+
+            // Start session recording if configured
+            if (config.getEnableSessionReplay()) {
+                val options = StartSessionRecordingOptions(
+                    config.getSessionReplayLinkedFlag(),
+                    config.getSessionReplaySampling()
+                )
+                startSessionRecording(options)
+            }
         }
     }
 
@@ -37,6 +48,13 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val properties = options.properties
 
         com.posthog.PostHog.capture(event = event, properties = properties)
+    }
+
+    fun captureException(options: CaptureExceptionOptions) {
+        val exception = options.exception
+        val properties = options.properties
+
+        com.posthog.PostHog.captureException(exception = exception, properties = properties)
     }
 
     fun flush() {
@@ -106,6 +124,24 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val host = options.host
 
         setup(apiKey, host)
+    }
+
+    fun startSessionRecording(options: StartSessionRecordingOptions) {
+        val linkedFlag = options.linkedFlag
+        val sampling = options.sampling
+
+        if (linkedFlag != null || sampling != null) {
+            val sessionOptions = mutableMapOf<String, Any>()
+            linkedFlag?.let { sessionOptions["linked_flag"] = it }
+            sampling?.let { sessionOptions["sampling"] = it }
+            com.posthog.PostHog.startSessionRecording(options = sessionOptions)
+        } else {
+            com.posthog.PostHog.startSessionRecording()
+        }
+    }
+
+    fun stopSessionRecording() {
+        com.posthog.PostHog.stopSessionRecording()
     }
 
     fun unregister(options: UnregisterOptions) {

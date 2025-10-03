@@ -3,6 +3,7 @@ import posthog from 'posthog-js';
 
 import type {
   AliasOptions,
+  CaptureExceptionOptions,
   CaptureOptions,
   GetFeatureFlagOptions,
   GetFeatureFlagPayloadOptions,
@@ -16,6 +17,7 @@ import type {
   RegisterOptions,
   ScreenOptions,
   SetupOptions,
+  StartSessionRecordingOptions,
   UnregisterOptions,
 } from './definitions';
 
@@ -26,6 +28,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async capture(options: CaptureOptions): Promise<void> {
     posthog.capture(options.event, options.properties);
+  }
+
+  async captureException(options: CaptureExceptionOptions): Promise<void> {
+    posthog.captureException(options.exception, options.properties);
   }
 
   async getFeatureFlag(
@@ -80,9 +86,66 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async setup(options: SetupOptions): Promise<void> {
     const host = options.host || 'https://us.i.posthog.com';
-    posthog.init(options.apiKey, {
+    const config: any = {
       api_host: host,
-    });
+    };
+
+    // Check for Capacitor configuration
+    const capacitorConfig = (window as any).Capacitor?.getConfig?.()?.plugins
+      ?.Posthog;
+    if (capacitorConfig) {
+      if (capacitorConfig.enableSessionReplay) {
+        config.session_recording = {
+          recordCrossOriginIframes: true,
+        };
+        if (capacitorConfig.sessionReplaySampling !== undefined) {
+          config.session_recording.sampleRate =
+            capacitorConfig.sessionReplaySampling;
+        }
+        if (capacitorConfig.sessionReplayLinkedFlag) {
+          config.session_recording.linked_flag =
+            capacitorConfig.sessionReplayLinkedFlag;
+        }
+      }
+      if (capacitorConfig.enableErrorTracking) {
+        config.captureExceptions = true;
+      }
+    }
+
+    posthog.init(options.apiKey, config);
+
+    // Start session recording if configured
+    if (capacitorConfig?.enableSessionReplay) {
+      const sessionOptions: any = {};
+      if (capacitorConfig.sessionReplaySampling !== undefined) {
+        sessionOptions.sampling = capacitorConfig.sessionReplaySampling;
+      }
+      if (capacitorConfig.sessionReplayLinkedFlag) {
+        sessionOptions.linked_flag = capacitorConfig.sessionReplayLinkedFlag;
+      }
+      this.startSessionRecording(sessionOptions);
+    }
+  }
+
+  async startSessionRecording(
+    options?: StartSessionRecordingOptions,
+  ): Promise<void> {
+    if (options?.sampling || options?.linkedFlag) {
+      const sessionOptions: any = {};
+      if (options.sampling !== undefined) {
+        sessionOptions.sampling = options.sampling;
+      }
+      if (options.linkedFlag !== undefined) {
+        sessionOptions.linked_flag = options.linkedFlag;
+      }
+      posthog.startSessionRecording(sessionOptions);
+    } else {
+      posthog.startSessionRecording();
+    }
+  }
+
+  async stopSessionRecording(): Promise<void> {
+    posthog.stopSessionRecording();
   }
 
   async unregister(options: UnregisterOptions): Promise<void> {

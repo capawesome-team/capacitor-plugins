@@ -14,6 +14,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "captureException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
@@ -25,6 +26,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "screen", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startSessionRecording", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stopSessionRecording", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise)
     ]
 
@@ -56,6 +59,19 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let options = CaptureOptions(event: event, properties: properties)
 
         implementation?.capture(options)
+        call.resolve()
+    }
+
+    @objc func captureException(_ call: CAPPluginCall) {
+        guard let exception = call.getObject("exception") as AnyObject? else {
+            call.reject(CustomError.valueMissing.localizedDescription)
+            return
+        }
+        let properties = call.getObject("properties")
+
+        let options = CaptureExceptionOptions(exception: exception, properties: properties)
+
+        implementation?.captureException(options)
         call.resolve()
     }
 
@@ -182,6 +198,21 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve()
     }
 
+    @objc func startSessionRecording(_ call: CAPPluginCall) {
+        let linkedFlag = call.getBool("linkedFlag")
+        let sampling = call.getDouble("sampling")
+
+        let options = StartSessionRecordingOptions(linkedFlag: linkedFlag, sampling: sampling)
+
+        implementation?.startSessionRecording(options)
+        call.resolve()
+    }
+
+    @objc func stopSessionRecording(_ call: CAPPluginCall) {
+        implementation?.stopSessionRecording()
+        call.resolve()
+    }
+
     @objc func unregister(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {
             call.reject(CustomError.keyMissing.localizedDescription)
@@ -199,6 +230,10 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.host = getConfig().getString("host") ?? config.host
+        config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
+        config.sessionReplaySampling = getConfig().getDouble("sessionReplaySampling", config.sessionReplaySampling)
+        config.sessionReplayLinkedFlag = getConfig().getBoolean("sessionReplayLinkedFlag", config.sessionReplayLinkedFlag)
+        config.enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.enableErrorTracking)
 
         return config
     }

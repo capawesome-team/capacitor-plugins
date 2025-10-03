@@ -18,6 +18,34 @@ declare module '@capacitor/cli' {
        * @example 'https://eu.i.posthog.com'
        */
       host?: string;
+      /**
+       * Whether to enable session recording automatically.
+       *
+       * @since 8.0.0
+       * @default false
+       */
+      enableSessionReplay?: boolean;
+      /**
+       * Session recording sampling rate (0.0 to 1.0).
+       *
+       * @since 8.0.0
+       * @default 1.0
+       */
+      sessionReplaySampling?: number;
+      /**
+       * Whether to enable linked flags for session recording.
+       *
+       * @since 8.0.0
+       * @default false
+       */
+      sessionReplayLinkedFlag?: boolean;
+      /**
+       * Whether to enable automatic error tracking.
+       *
+       * @since 8.0.0
+       * @default false
+       */
+      enableErrorTracking?: boolean;
     };
   }
 }
@@ -35,6 +63,12 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
+  /**
+   * Capture an exception/error event.
+   *
+   * @since 8.0.0
+   */
+  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -113,6 +147,18 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   setup(options: SetupOptions): Promise<void>;
+  /**
+   * Start session recording.
+   *
+   * @since 8.0.0
+   */
+  startSessionRecording(options?: StartSessionRecordingOptions): Promise<void>;
+  /**
+   * Stop session recording.
+   *
+   * @since 8.0.0
+   */
+  stopSessionRecording(): Promise<void>;
   /**
    * Remove a super property.
    *
@@ -342,7 +388,44 @@ export type JsonType =
   | number
   | boolean
   | null
+  | undefined
   | {
-      [key: string]: JsonType;
-    }
+    [key: string]: JsonType;
+  }
   | JsonType[];
+
+/**
+ * @since 8.0.0
+ */
+export interface CaptureExceptionOptions {
+  /**
+   * The exception/error to capture.
+   *
+   * @since 8.0.0
+   */
+  exception: any;
+  /**
+   * Additional properties to send with the exception event.
+   *
+   * @since 8.0.0
+   */
+  properties?: Record<string, any>;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface StartSessionRecordingOptions {
+  /**
+   * Whether to enable linked flags for session recording.
+   *
+   * @since 8.0.0
+   */
+  linkedFlag?: boolean;
+  /**
+   * Sampling rate for session recording (0.0 to 1.0).
+   *
+   * @since 8.0.0
+   */
+  sampling?: number;
+}

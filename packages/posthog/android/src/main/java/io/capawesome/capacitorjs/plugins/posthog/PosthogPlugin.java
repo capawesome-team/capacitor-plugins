@@ -9,6 +9,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions;
@@ -18,6 +19,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnable
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
 
@@ -77,6 +79,25 @@ public class PosthogPlugin extends Plugin {
             CaptureOptions options = new CaptureOptions(event, properties);
 
             implementation.capture(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void captureException(PluginCall call) {
+        try {
+            Object exception = call.getData().get("exception");
+            if (exception == null) {
+                call.reject(ERROR_VALUE_MISSING);
+                return;
+            }
+            JSObject properties = call.getObject("properties");
+
+            CaptureExceptionOptions options = new CaptureExceptionOptions(exception, properties);
+
+            implementation.captureException(options);
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -251,6 +272,31 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void startSessionRecording(PluginCall call) {
+        try {
+            Boolean linkedFlag = call.getBoolean("linkedFlag");
+            Double sampling = call.getDouble("sampling");
+
+            StartSessionRecordingOptions options = new StartSessionRecordingOptions(linkedFlag, sampling);
+
+            implementation.startSessionRecording(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void stopSessionRecording(PluginCall call) {
+        try {
+            implementation.stopSessionRecording();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void unregister(PluginCall call) {
         try {
             String key = call.getString("key");
@@ -275,6 +321,14 @@ public class PosthogPlugin extends Plugin {
         config.setApiKey(apiKey);
         String host = getConfig().getString("host", config.getHost());
         config.setHost(host);
+        boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
+        config.setEnableSessionReplay(enableSessionReplay);
+        double sessionReplaySampling = getConfig().getDouble("sessionReplaySampling", config.getSessionReplaySampling());
+        config.setSessionReplaySampling(sessionReplaySampling);
+        boolean sessionReplayLinkedFlag = getConfig().getBoolean("sessionReplayLinkedFlag", config.getSessionReplayLinkedFlag());
+        config.setSessionReplayLinkedFlag(sessionReplayLinkedFlag);
+        boolean enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.getEnableErrorTracking());
+        config.setEnableErrorTracking(enableErrorTracking);
 
         return config;
     }
