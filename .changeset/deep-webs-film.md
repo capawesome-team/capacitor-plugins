@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-posthog': major
+'@capawesome/capacitor-posthog': minor
 ---
 
-Adds session recording & error tracking to the Capacitor PostHog plugin. No breaking changes made to previous implementations. Marked as a major change due to large features being added.
+feat: add session replay and error capture to PostHog plugin
