@@ -139,6 +139,18 @@ export interface PresentOptions {
    * @since 5.1.0
    */
   androidDatePickerMode?: 'calendar' | 'spinner';
+  /**
+   * The minute interval of the time picker.
+   * This controls the granularity of the minute selector (e.g., 15 for 0, 15, 30, 45).
+   * The value must be evenly divisible into 60.
+   *
+   * Only available on iOS when using time or datetime modes.
+   * On Android, this parameter is ignored.
+   *
+   * @since 7.1.0
+   * @default 1
+   */
+  minuteInterval?: number;
 }
 
 export interface PresentResult {

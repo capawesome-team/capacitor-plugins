@@ -41,6 +41,7 @@ public class DatetimePickerPlugin extends Plugin {
             String doneButtonText = call.getString("doneButtonText", "Ok");
             String androidTimePickerModeText = call.getString("androidTimePickerMode", "clock");
             String androidDatePickerModeText = call.getString("androidDatePickerMode", "calendar");
+            Integer minuteInterval = call.getInt("minuteInterval", 1);
 
             AndroidDatePickerMode androidDatePickerMode = null;
             if (androidDatePickerModeText != null) {
@@ -87,7 +88,8 @@ public class DatetimePickerPlugin extends Plugin {
                     theme,
                     resultCallback,
                     androidDatePickerMode,
-                    androidTimePickerMode
+                    androidTimePickerMode,
+                    minuteInterval
                 );
             } else if (mode.equals("date")) {
                 implementation.presentDatePicker(
@@ -100,7 +102,8 @@ public class DatetimePickerPlugin extends Plugin {
                     theme,
                     resultCallback,
                     androidDatePickerMode,
-                    androidTimePickerMode
+                    androidTimePickerMode,
+                    minuteInterval
                 );
             } else if (mode.equals("time")) {
                 implementation.presentTimePicker(
@@ -111,7 +114,8 @@ public class DatetimePickerPlugin extends Plugin {
                     theme,
                     resultCallback,
                     androidDatePickerMode,
-                    androidTimePickerMode
+                    androidTimePickerMode,
+                    minuteInterval
                 );
             } else {
                 call.reject(ERROR_MODE_INVALID);
