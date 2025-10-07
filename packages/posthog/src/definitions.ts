@@ -381,19 +381,19 @@ export interface SetupOptions {
    */
   host?: string;
   /**
-   * Session recording sampling rate (0.0 to 1.0).
-   *
-   * @since 7.3.0
-   * @default 1.0
-   */
-  sessionReplaySampling?: number;
-  /**
    * Whether to enable linked flags for session recording.
    *
    * @since 7.3.0
    * @default false
    */
   sessionReplayLinkedFlag?: boolean;
+  /**
+   * Session recording sampling rate (0.0 to 1.0).
+   *
+   * @since 7.3.0
+   * @default 1.0
+   */
+  sessionReplaySampling?: number;
 }
 
 /**
