@@ -35,10 +35,10 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 | ----------------------------- | -------------------- | ----------------------------------------------------- | --------------------------------------- | ----- |
 | **`apiKey`**                  | <code>string</code>  | The API key of your PostHog project.                  |                                         | 7.1.0 |
 | **`host`**                    | <code>string</code>  | The host of your PostHog instance.                    | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`enableSessionReplay`**     | <code>boolean</code> | Whether to enable session recording automatically.    | <code>false</code>                      | 8.0.0 |
-| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 8.0.0 |
-| **`sessionReplayLinkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | <code>false</code>                      | 8.0.0 |
-| **`enableErrorTracking`**     | <code>boolean</code> | Whether to enable automatic error tracking.           | <code>false</code>                      | 8.0.0 |
+| **`enableSessionReplay`**     | <code>boolean</code> | Whether to enable session recording automatically.    | <code>false</code>                      | 7.3.0 |
+| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
+| **`sessionReplayLinkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | <code>false</code>                      | 7.3.0 |
+| **`enableErrorTracking`**     | <code>boolean</code> | Whether to enable automatic error tracking.           | <code>false</code>                      | 7.3.0 |
 
 ### Examples
 
@@ -240,7 +240,7 @@ Capture an exception/error event.
 | ------------- | --------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 7.3.0
 
 --------------------
 
@@ -446,7 +446,7 @@ Start session recording.
 | ------------- | ------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#startsessionrecordingoptions">StartSessionRecordingOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 7.3.0
 
 --------------------
 
@@ -459,7 +459,7 @@ stopSessionRecording() => Promise<void>
 
 Stop session recording.
 
-**Since:** 8.0.0
+**Since:** 7.3.0
 
 --------------------
 
@@ -503,8 +503,8 @@ Remove a super property.
 
 | Prop             | Type                                                         | Description                                             | Since |
 | ---------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ----- |
-| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 8.0.0 |
-| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 8.0.0 |
+| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 7.3.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 7.3.0 |
 
 
 #### GetFeatureFlagResult
@@ -584,18 +584,22 @@ Remove a super property.
 
 #### SetupOptions
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 6.0.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| Prop                          | Type                 | Description                                           | Default                                 | Since |
+| ----------------------------- | -------------------- | ----------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**                  | <code>string</code>  | The API key of your PostHog project.                  |                                         | 6.0.0 |
+| **`enableErrorTracking`**     | <code>boolean</code> | Whether to enable automatic error tracking.           | <code>false</code>                      | 7.3.0 |
+| **`enableSessionReplay`**     | <code>boolean</code> | Whether to enable session recording automatically.    | <code>false</code>                      | 7.3.0 |
+| **`host`**                    | <code>string</code>  | The host of your PostHog instance.                    | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
+| **`sessionReplayLinkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | <code>false</code>                      | 7.3.0 |
 
 
 #### StartSessionRecordingOptions
 
 | Prop             | Type                 | Description                                           | Since |
 | ---------------- | -------------------- | ----------------------------------------------------- | ----- |
-| **`linkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | 8.0.0 |
-| **`sampling`**   | <code>number</code>  | Sampling rate for session recording (0.0 to 1.0).     | 8.0.0 |
+| **`linkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | 7.3.0 |
+| **`sampling`**   | <code>number</code>  | Sampling rate for session recording (0.0 to 1.0).     | 7.3.0 |
 
 
 #### UnregisterOptions
@@ -617,7 +621,7 @@ Construct a type with a set of properties K of type T
 
 #### JsonType
 
-<code>string | number | boolean | null</code> |  | <code>{ [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
+<code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
 

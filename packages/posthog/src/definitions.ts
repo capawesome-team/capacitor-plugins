@@ -21,28 +21,28 @@ declare module '@capacitor/cli' {
       /**
        * Whether to enable session recording automatically.
        *
-       * @since 8.0.0
+       * @since 7.3.0
        * @default false
        */
       enableSessionReplay?: boolean;
       /**
        * Session recording sampling rate (0.0 to 1.0).
        *
-       * @since 8.0.0
+       * @since 7.3.0
        * @default 1.0
        */
       sessionReplaySampling?: number;
       /**
        * Whether to enable linked flags for session recording.
        *
-       * @since 8.0.0
+       * @since 7.3.0
        * @default false
        */
       sessionReplayLinkedFlag?: boolean;
       /**
        * Whether to enable automatic error tracking.
        *
-       * @since 8.0.0
+       * @since 7.3.0
        * @default false
        */
       enableErrorTracking?: boolean;
@@ -66,7 +66,7 @@ export interface PosthogPlugin {
   /**
    * Capture an exception/error event.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
@@ -150,13 +150,13 @@ export interface PosthogPlugin {
   /**
    * Start session recording.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   startSessionRecording(options?: StartSessionRecordingOptions): Promise<void>;
   /**
    * Stop session recording.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   stopSessionRecording(): Promise<void>;
   /**
@@ -359,6 +359,20 @@ export interface SetupOptions {
    */
   apiKey: string;
   /**
+   * Whether to enable automatic error tracking.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  enableErrorTracking?: boolean;
+  /**
+   * Whether to enable session recording automatically.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  enableSessionReplay?: boolean;
+  /**
    * The host of your PostHog instance.
    *
    * @since 6.0.0
@@ -366,6 +380,20 @@ export interface SetupOptions {
    * @example 'https://eu.i.posthog.com'
    */
   host?: string;
+  /**
+   * Session recording sampling rate (0.0 to 1.0).
+   *
+   * @since 7.3.0
+   * @default 1.0
+   */
+  sessionReplaySampling?: number;
+  /**
+   * Whether to enable linked flags for session recording.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  sessionReplayLinkedFlag?: boolean;
 }
 
 /**
@@ -388,44 +416,43 @@ export type JsonType =
   | number
   | boolean
   | null
-  | undefined
   | {
     [key: string]: JsonType;
   }
   | JsonType[];
 
 /**
- * @since 8.0.0
+ * @since 7.3.0
  */
 export interface CaptureExceptionOptions {
   /**
    * The exception/error to capture.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   exception: any;
   /**
    * Additional properties to send with the exception event.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   properties?: Record<string, any>;
 }
 
 /**
- * @since 8.0.0
+ * @since 7.3.0
  */
 export interface StartSessionRecordingOptions {
   /**
    * Whether to enable linked flags for session recording.
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   linkedFlag?: boolean;
   /**
    * Sampling rate for session recording (0.0 to 1.0).
    *
-   * @since 8.0.0
+   * @since 7.3.0
    */
   sampling?: number;
 }

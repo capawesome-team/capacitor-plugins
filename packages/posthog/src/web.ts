@@ -90,38 +90,34 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
       api_host: host,
     };
 
-    // Check for Capacitor configuration
-    const capacitorConfig = (window as any).Capacitor?.getConfig?.()?.plugins
-      ?.Posthog;
-    if (capacitorConfig) {
-      if (capacitorConfig.enableSessionReplay) {
-        config.session_recording = {
-          recordCrossOriginIframes: true,
-        };
-        if (capacitorConfig.sessionReplaySampling !== undefined) {
-          config.session_recording.sampleRate =
-            capacitorConfig.sessionReplaySampling;
-        }
-        if (capacitorConfig.sessionReplayLinkedFlag) {
-          config.session_recording.linked_flag =
-            capacitorConfig.sessionReplayLinkedFlag;
-        }
+    // Configure session recording if enabled
+    if (options.enableSessionReplay) {
+      config.session_recording = {
+        recordCrossOriginIframes: true,
+      };
+      if (options.sessionReplaySampling !== undefined) {
+        config.session_recording.sampleRate = options.sessionReplaySampling;
       }
-      if (capacitorConfig.enableErrorTracking) {
-        config.captureExceptions = true;
+      if (options.sessionReplayLinkedFlag) {
+        config.session_recording.linked_flag = options.sessionReplayLinkedFlag;
       }
+    }
+
+    // Configure error tracking if enabled
+    if (options.enableErrorTracking) {
+      config.captureExceptions = true;
     }
 
     posthog.init(options.apiKey, config);
 
     // Start session recording if configured
-    if (capacitorConfig?.enableSessionReplay) {
+    if (options.enableSessionReplay) {
       const sessionOptions: any = {};
-      if (capacitorConfig.sessionReplaySampling !== undefined) {
-        sessionOptions.sampling = capacitorConfig.sessionReplaySampling;
+      if (options.sessionReplaySampling !== undefined) {
+        sessionOptions.sampling = options.sessionReplaySampling;
       }
-      if (capacitorConfig.sessionReplayLinkedFlag) {
-        sessionOptions.linked_flag = capacitorConfig.sessionReplayLinkedFlag;
+      if (options.sessionReplayLinkedFlag) {
+        sessionOptions.linked_flag = options.sessionReplayLinkedFlag;
       }
       this.startSessionRecording(sessionOptions);
     }
