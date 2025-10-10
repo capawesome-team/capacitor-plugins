@@ -119,6 +119,7 @@ Then implement the following methods:
 ```java
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import androidx.annotation.NonNull;
 
 public class BluetoothLowEnergyHeadlessTask {
@@ -130,7 +131,39 @@ public class BluetoothLowEnergyHeadlessTask {
     // Your code here
   }
 
+  public void onCharacteristicRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
+  public void onCharacteristicWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
   public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
+    // Your code here
+  }
+
+  public void onDescriptorRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onDescriptorWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status) {
+    // Your code here
+  }
+
+  public void onMtuChanged(@NonNull BluetoothGatt gatt, int mtu, int status) {
+    // Your code here
+  }
+
+  public void onReadRemoteRssi(@NonNull BluetoothGatt gatt, int rssi, int status) {
+    // Your code here
+  }
+
+  public void onServiceChanged(@NonNull BluetoothGatt gatt) {
+    // Your code here
+  }
+
+  public void onServicesDiscovered(@NonNull BluetoothGatt gatt, int status) {
     // Your code here
   }
 }
