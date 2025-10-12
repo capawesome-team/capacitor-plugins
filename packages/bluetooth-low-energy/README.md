@@ -885,7 +885,7 @@ Only available on Android and iOS.
 ### startForegroundService(...)
 
 ```typescript
-startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
+startForegroundService(options?: StartForegroundServiceOptions | undefined) => Promise<void>
 ```
 
 Start the foreground service and show a notification.
@@ -1444,12 +1444,12 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                     | Since |
-| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | 6.0.0 |
-| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | 6.0.0 |
-| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 6.0.0 |
-| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | 6.0.0 |
+| Prop            | Type                | Description                                                                                                                                                                                                     | Default                                                                              | Since |
+| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | <code>"App is running in the background to keep Bluetooth connections alive."</code> | 6.0.0 |
+| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | <code>105</code>                                                                     | 6.0.0 |
+| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                                                                                      | 6.0.0 |
+| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | <code>"Bluetooth Low Energy"</code>                                                  | 6.0.0 |
 
 
 #### StartScanOptions
