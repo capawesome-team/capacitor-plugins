@@ -11,6 +11,7 @@ Capacitor plugin to support in-app purchases.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
