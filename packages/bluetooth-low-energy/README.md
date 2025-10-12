@@ -17,9 +17,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
+- 🔌 **Auto Reconnection**: Automatically reconnect to peripherals when the connection is lost.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
-- 🛠️ **Utils**: Utility functions to make your life easier. 
+- 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 30 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -1194,11 +1195,12 @@ Remove all listeners for this plugin.
 
 #### ConnectOptions
 
-| Prop              | Type                 | Description                                                                                                                                                            | Default            | Since |
-| ----------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`autoConnect`** | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
-| **`deviceId`**    | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
-| **`timeout`**     | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
+| Prop                | Type                 | Description                                                                                                                                                            | Default            | Since |
+| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`autoConnect`**   | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
+| **`autoReconnect`** | <code>boolean</code> | Whether to enable automatic reconnection to the peripheral when the connection is lost. Only available on Android and iOS (17.0+).                                     | <code>false</code> | 7.6.0 |
+| **`deviceId`**      | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
+| **`timeout`**       | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
 
 
 #### CreateBondOptions
