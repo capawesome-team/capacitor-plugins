@@ -36,7 +36,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Android                                                                                                                      | iOS                                                                                                                      | Web                                                                                                                      |
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/f1d90460-f43a-490d-9878-0c1fd574f22a" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/e5913fc5-a909-4088-9ea2-4bf3ecf8dde4" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/efb55a38-bac7-4f08-a94b-1413df0eaa11" width="324" alt="Web Demo" /> |
+| <img src="https://github.com/user-attachments/assets/f1d90460-f43a-490d-9878-0c1fd574f22a?name=demo.gif" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/e5913fc5-a909-4088-9ea2-4bf3ecf8dde4?name=demo.gif" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/efb55a38-bac7-4f08-a94b-1413df0eaa11?name=demo.gif" width="324" alt="Web Demo" /> |
 
 ## Installation
 
