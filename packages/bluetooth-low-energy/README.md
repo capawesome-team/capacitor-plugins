@@ -17,13 +17,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
+- 🔌 **Auto Reconnection**: Automatically reconnect to peripherals when the connection is lost.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
-- 🛠️ **Utils**: Utility functions to make your life easier. 
+- 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 30 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -119,6 +121,7 @@ Then implement the following methods:
 ```java
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import androidx.annotation.NonNull;
 
 public class BluetoothLowEnergyHeadlessTask {
@@ -130,7 +133,39 @@ public class BluetoothLowEnergyHeadlessTask {
     // Your code here
   }
 
+  public void onCharacteristicRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
+  public void onCharacteristicWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
   public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
+    // Your code here
+  }
+
+  public void onDescriptorRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onDescriptorWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status) {
+    // Your code here
+  }
+
+  public void onMtuChanged(@NonNull BluetoothGatt gatt, int mtu, int status) {
+    // Your code here
+  }
+
+  public void onReadRemoteRssi(@NonNull BluetoothGatt gatt, int rssi, int status) {
+    // Your code here
+  }
+
+  public void onServiceChanged(@NonNull BluetoothGatt gatt) {
+    // Your code here
+  }
+
+  public void onServicesDiscovered(@NonNull BluetoothGatt gatt, int status) {
     // Your code here
   }
 }
@@ -852,7 +887,7 @@ Only available on Android and iOS.
 ### startForegroundService(...)
 
 ```typescript
-startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
+startForegroundService(options?: StartForegroundServiceOptions | undefined) => Promise<void>
 ```
 
 Start the foreground service and show a notification.
@@ -1161,11 +1196,12 @@ Remove all listeners for this plugin.
 
 #### ConnectOptions
 
-| Prop              | Type                 | Description                                                                                                                                                            | Default            | Since |
-| ----------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`autoConnect`** | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
-| **`deviceId`**    | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
-| **`timeout`**     | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
+| Prop                | Type                 | Description                                                                                                                                                            | Default            | Since |
+| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`autoConnect`**   | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
+| **`autoReconnect`** | <code>boolean</code> | Whether to enable automatic reconnection to the peripheral when the connection is lost. Only available on Android and iOS (17.0+).                                     | <code>false</code> | 7.6.0 |
+| **`deviceId`**      | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
+| **`timeout`**       | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
 
 
 #### CreateBondOptions
@@ -1411,12 +1447,12 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                     | Since |
-| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | 6.0.0 |
-| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | 6.0.0 |
-| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 6.0.0 |
-| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | 6.0.0 |
+| Prop            | Type                | Description                                                                                                                                                                                                     | Default                                                                              | Since |
+| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | <code>"App is running in the background to keep Bluetooth connections alive."</code> | 6.0.0 |
+| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | <code>105</code>                                                                     | 6.0.0 |
+| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                                                                                      | 6.0.0 |
+| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | <code>"Bluetooth Low Energy"</code>                                                  | 6.0.0 |
 
 
 #### StartScanOptions

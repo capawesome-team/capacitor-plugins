@@ -1,5 +1,15 @@
 # Changelog
 
+## 7.6.0
+
+### Minor Changes
+
+- [`5928660c975ada503e1db633378cf6da1ebd1e29`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5928660c975ada503e1db633378cf6da1ebd1e29) ([#306](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/306)): feat: add default values for `StartForegroundServiceOptions`
+
+- [`09ed4a9cd4dd0586e618df767c3729fd52994bfd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/09ed4a9cd4dd0586e618df767c3729fd52994bfd) ([#302](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/302)): feat(android): add more headless task methods
+
+- [`673f6c52d92aba22500fb034df4a2e73c3469c05`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/673f6c52d92aba22500fb034df4a2e73c3469c05) ([#304](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/304)): feat(ios): add `autoReconnect` option
+
 ## 7.5.0
 
 ### Minor Changes

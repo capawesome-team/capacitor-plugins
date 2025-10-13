@@ -32,9 +32,11 @@ body:
         - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: Geocoder
         - label: libSQL
         - label: Live Update
         - label: Managed Configurations
+        - label: Media Session
         - label: NFC
         - label: Pedometer
         - label: Photo Editor
