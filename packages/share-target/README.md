@@ -130,6 +130,14 @@ If you are using Proguard, you need to add the following rules to your `proguard
 -keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
 
+#### Variables
+
+If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
+
+- `$androidxExifInterfaceVersion` version of `androidx.exifinterface:exifinterface` (default: `1.4.1`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
+
 ### iOS
 
 On iOS, it's not possible to receive shared content directly in the main app. Instead, you need to create a share extension that can handle the shared content and then communicate it back to your main app. This involves setting up a URL scheme and configuring the share extension to handle the shared content. The communication between the share extension and the main app is done using URL schemes, which allows the share extension to open the main app with the shared content as parameters in the URL.
@@ -269,8 +277,93 @@ class ShareViewController: UIViewController {
             return nil
         }
     }
+    
+    private func copyImageToSharedContainerWithOrientationFix(_ url: URL) -> String? {
+        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
+            return nil
+        }
 
-    public func getMimeTypeFromUrl(_ url: URL) -> String {
+        let fileName = url.lastPathComponent
+        let destinationURL = containerURL.appendingPathComponent(fileName)
+
+        do {
+            // Remove file if it already exists
+            if FileManager.default.fileExists(atPath: destinationURL.path) {
+                try FileManager.default.removeItem(at: destinationURL)
+            }
+
+            // Load and fix orientation of the image
+            if let fixedImageData = loadImageWithOrientationFix(from: url) {
+                try fixedImageData.write(to: destinationURL)
+                return destinationURL.absoluteString
+            } else {
+                // Fallback to regular copy if orientation fix fails
+                try FileManager.default.copyItem(at: url, to: destinationURL)
+                return destinationURL.absoluteString
+            }
+        } catch {
+            print("Error copying image to shared container: \(error)")
+            return nil
+        }
+    }
+    
+    private func loadImageWithOrientationFix(from url: URL) -> Data? {
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+            return nil
+        }
+        
+        // Get the orientation from EXIF data
+        let orientation = getImageOrientation(from: imageSource)
+        
+        // Create UIImage with proper orientation
+        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
+        
+        // Draw the image in the correct orientation
+        let fixedImage = normalizeImageOrientation(uiImage)
+        
+        // Convert back to data, preserving the original format if possible
+        let fileExtension = url.pathExtension.lowercased()
+        if fileExtension == "jpg" || fileExtension == "jpeg" {
+            return fixedImage.jpegData(compressionQuality: 0.9)
+        } else {
+            return fixedImage.pngData()
+        }
+    }
+    
+    private func getImageOrientation(from imageSource: CGImageSource) -> UIImage.Orientation {
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any],
+              let orientationValue = properties[kCGImagePropertyOrientation] as? UInt32 else {
+            return .up
+        }
+        
+        switch orientationValue {
+        case 1: return .up
+        case 2: return .upMirrored
+        case 3: return .down
+        case 4: return .downMirrored
+        case 5: return .leftMirrored
+        case 6: return .right
+        case 7: return .rightMirrored
+        case 8: return .left
+        default: return .up
+        }
+    }
+    
+    private func normalizeImageOrientation(_ image: UIImage) -> UIImage {
+        if image.imageOrientation == .up {
+            return image
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.draw(in: CGRect(origin: .zero, size: image.size))
+        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return normalizedImage ?? image
+    }
+
+    func getMimeTypeFromUrl(_ url: URL) -> String {
         let fileExtension = url.pathExtension as CFString
         guard let extUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, nil)?.takeUnretainedValue() else {
             return ""
@@ -281,7 +374,7 @@ class ShareViewController: UIViewController {
         return mimeUTI.takeRetainedValue() as String
     }
 
-    public func getNameFromUrl(_ url: URL) -> String {
+    func getNameFromUrl(_ url: URL) -> String {
         return url.lastPathComponent
     }
 
@@ -342,14 +435,15 @@ class ShareViewController: UIViewController {
                     defer { dispatchGroup.leave() }
 
                     if let url = item as? URL {
-                        if let sharedPath = self?.copyFileToSharedContainer(url) {
+                        if let sharedPath = self?.copyImageToSharedContainerWithOrientationFix(url) {
                             let fileName = self?.getNameFromUrl(url)
                             let mimeType = self?.getMimeTypeFromUrl(url)
                             let finalMimeType = mimeType?.isEmpty == false ? mimeType : nil
                             fileValues.append(SharedFileData(uri: sharedPath, name: fileName, mimeType: finalMimeType))
                         }
                     } else if let image = item as? UIImage {
-                        if let data = image.pngData() {
+                        let fixedImage = self?.normalizeImageOrientation(image) ?? image
+                        if let data = fixedImage.pngData() {
                             let base64String = data.base64EncodedString()
                             fileValues.append(SharedFileData(uri: "data:image/png;base64,\(base64String)", name: nil, mimeType: "image/png"))
                         }
