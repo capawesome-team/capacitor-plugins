@@ -10,6 +10,7 @@ body:
       description: Select the plugins that this feature request affects.
       options:
         - label: Accelerometer
+        - label: Age Signals
         - label: Android Battery Optimization
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
