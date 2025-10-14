@@ -31,9 +31,6 @@ public class CustomExceptions {
         "CLIENT_TRANSIENT_ERROR",
         "There was a transient error in the client device."
     );
-    public static final CustomException APP_NOT_OWNED = new CustomException(
-        "APP_NOT_OWNED",
-        "The app was not installed by Google Play."
-    );
+    public static final CustomException APP_NOT_OWNED = new CustomException("APP_NOT_OWNED", "The app was not installed by Google Play.");
     public static final CustomException INTERNAL_ERROR = new CustomException("INTERNAL_ERROR", "Unknown internal error.");
 }

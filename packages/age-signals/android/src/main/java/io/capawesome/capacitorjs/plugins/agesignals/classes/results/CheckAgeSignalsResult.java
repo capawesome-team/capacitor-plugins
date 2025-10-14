@@ -28,7 +28,9 @@ public class CheckAgeSignalsResult implements Result {
         this.userStatus = mapUserStatus(ageSignalsResult.userStatus().toString());
         this.ageLower = ageSignalsResult.ageLower();
         this.ageUpper = ageSignalsResult.ageUpper();
-        this.mostRecentApprovalDate = ageSignalsResult.mostRecentApprovalDate() != null ? ageSignalsResult.mostRecentApprovalDate().toString() : null;
+        this.mostRecentApprovalDate = ageSignalsResult.mostRecentApprovalDate() != null
+            ? ageSignalsResult.mostRecentApprovalDate().toString()
+            : null;
         this.installId = ageSignalsResult.installId();
     }
 
