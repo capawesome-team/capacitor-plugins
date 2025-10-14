@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- [`1a09658278757ac9374c0145e578b764b13ac9a9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1a09658278757ac9374c0145e578b764b13ac9a9) ([#310](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/310)): fix: automatically rotate shared images to the correct orientation
+
 ## 0.2.0
 
 ### Minor Changes
