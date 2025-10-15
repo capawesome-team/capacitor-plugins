@@ -12,11 +12,12 @@ Capacitor plugin to play audio with background support.
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio playback. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌙 **Background Mode**: Play audio even when the app is in the background.
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
+- 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
 - 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Media Session](https://capawesome.io/plugins/media-session/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
