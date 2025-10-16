@@ -92,23 +92,6 @@ No configuration required for this plugin.
 import { AudioRecorder, AudioSessionCategoryOption, AudioSessionMode } from '@capawesome-team/capacitor-audio-recorder';
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
-const cancelRecording = async () => {
-  await AudioRecorder.cancelRecording();
-};
-
-const getRecordingStatus = async () => {
-  const { status } = await AudioRecorder.getRecordingStatus();
-  console.log('Recording status:', status);
-};
-
-const pauseRecording = async () => {
-  await AudioRecorder.pauseRecording();
-};
-
-const resumeRecording = async () => {
-  await AudioRecorder.resumeRecording();
-};
-
 const startRecording = async () => {
   await AudioRecorder.startRecording({
     audioSessionCategoryOptions: [AudioSessionCategoryOption.DuckOthers],
@@ -129,6 +112,23 @@ const stopRecording = async () => {
     // Only available on Android and iOS
     await AudioPlayer.play({ uri });
   }
+};
+
+const pauseRecording = async () => {
+  await AudioRecorder.pauseRecording();
+};
+
+const resumeRecording = async () => {
+  await AudioRecorder.resumeRecording();
+};
+
+const cancelRecording = async () => {
+  await AudioRecorder.cancelRecording();
+};
+
+const getRecordingStatus = async () => {
+  const { status } = await AudioRecorder.getRecordingStatus();
+  console.log('Recording status:', status);
 };
 
 const checkPermissions = async () => {
