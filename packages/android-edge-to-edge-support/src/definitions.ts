@@ -10,6 +10,13 @@ declare module '@capacitor/cli' {
        * @example "#ffffff"
        */
       backgroundColor?: string;
+      /**
+       * The hexadecimal color to set as the background color of the status bar and navigation bar.
+       *
+       * @since 7.1.0
+       * @example "#ffffff"
+       */
+      statusBarBackgroundColor?: string;
     };
   }
 }
@@ -40,13 +47,21 @@ export interface EdgeToEdgePlugin {
    */
   getInsets(): Promise<GetInsetsResult>;
   /**
-   * Set the background color of the status bar and navigation bar.
+   * Set the background color of the navigation bar.
    *
    * Only available on Android.
    *
    * @since 7.0.0
    */
   setBackgroundColor(options: SetBackgroundColorOptions): Promise<void>;
+  /**
+   * Set the background color of the status bar.
+   *
+   * Only available on Android.
+   *
+   * @since 7.0.0
+   */
+  setStatusBarBackgroundColor(options: SetBackgroundColorOptions): Promise<void>;
 }
 
 /**
