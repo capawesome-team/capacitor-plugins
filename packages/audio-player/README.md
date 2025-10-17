@@ -12,15 +12,17 @@ Capacitor plugin to play audio with background support.
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio playback. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌙 **Background Mode**: Play audio even when the app is in the background.
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
+- 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Media Session](https://capawesome.io/plugins/media-session/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -61,9 +63,66 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 ```typescript
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem } from '@capacitor/filesystem';
 
-const echo = async () => {
-  await AudioPlayer.echo();
+const playFromWebAsset = async () => {
+  await AudioPlayer.play({ 
+    src: '/assets/audio.mp3', 
+    loop: false, 
+    volume: 100, 
+    position: 0 
+  });
+};
+
+const playFromNativeFile = async () => {
+  const { uri } = await Filesystem.getUri({
+    directory: FilesystemDirectory.Documents,
+    path: 'audio.mp3',
+  });
+  await AudioPlayer.play({ uri, loop: false, volume: 100, position: 0 });
+};
+
+const playFromBlob = async () => {
+  const assetUrl = 'https://www.example.com/audio.mp3';
+  const response = await fetch(assetUrl);
+  const blob = await response.blob();
+  await AudioPlayer.play({ blob, loop: false, volume: 100, position: 0 });
+};
+
+const pause = async () => {
+  await AudioPlayer.pause();
+};
+
+const resume = async () => {
+  await AudioPlayer.resume();
+};
+
+const stop = async () => {
+  await AudioPlayer.stop();
+};
+
+const seekTo = async () => {
+  await AudioPlayer.seekTo({ position: 30_000 }); // Seek to 30 seconds
+};
+
+const setVolume = async () => {
+  await AudioPlayer.setVolume({ volume: 50 }); // Set volume to 50%
+};
+
+const getCurrentPosition = async () => {
+  const { position } = await AudioPlayer.getCurrentPosition();
+  console.log('Current position:', position);
+};
+
+const getDuration = async () => {
+  const { duration } = await AudioPlayer.getDuration();
+  console.log('Duration:', duration);
+};
+
+const isPlaying = async () => {
+  const { isPlaying } = await AudioPlayer.isPlaying();
+  console.log('Is playing:', isPlaying);
 };
 ```
 
@@ -248,13 +307,14 @@ Stop the audio playback.
 
 #### PlayOptions
 
-| Prop           | Type                 | Description                                                           | Since |
-| -------------- | -------------------- | --------------------------------------------------------------------- | ----- |
-| **`blob`**     | <code>Blob</code>    | The audio file to play. Only available on Web.                        | 0.0.1 |
-| **`uri`**      | <code>string</code>  | The URI of the audio file to play. Only available on Android and iOS. | 0.0.1 |
-| **`loop`**     | <code>boolean</code> | Whether to loop the audio playback.                                   | 0.0.1 |
-| **`position`** | <code>number</code>  | The position to start playback from (in milliseconds).                | 0.0.1 |
-| **`volume`**   | <code>number</code>  | The volume level to set (0-100).                                      | 0.0.1 |
+| Prop           | Type                 | Description                                                                                                                                                                                                                                                                 | Since |
+| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`**     | <code>Blob</code>    | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                                                                | 0.0.1 |
+| **`loop`**     | <code>boolean</code> | Whether to loop the audio playback.                                                                                                                                                                                                                                         | 0.0.1 |
+| **`position`** | <code>number</code>  | The position to start playback from (in milliseconds).                                                                                                                                                                                                                      | 0.0.1 |
+| **`src`**      | <code>string</code>  | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. On Android, only web assets are supported. On iOS and Web, both web assets and remote URLs are supported. | 0.1.2 |
+| **`uri`**      | <code>string</code>  | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                                                                   | 0.0.1 |
+| **`volume`**   | <code>number</code>  | The volume level to set (0-100).                                                                                                                                                                                                                                            | 0.0.1 |
 
 
 #### SeekToOptions

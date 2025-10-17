@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7
+
+### Patch Changes
+
+- [`64dafba190eb23ac08f031e5ed692a3c4a925486`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/64dafba190eb23ac08f031e5ed692a3c4a925486) ([#299](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/299)): fix(web): `upgradeStatements` getting reapplied every time
+
 ## 0.1.6
 
 ### Patch Changes

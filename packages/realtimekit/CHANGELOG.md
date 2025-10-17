@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+### Patch Changes
+
+- [`1b55890287a4dc1369d413b7113a4f152b44c6cf`](https://github.com/capawesome-team/capacitor-plugins/commit/1b55890287a4dc1369d413b7113a4f152b44c6cf) ([#619](https://github.com/capawesome-team/capacitor-plugins/pull/619)): fix(ios): resolve dependency build error
+
 ## 0.1.0
 
 ### Minor Changes
