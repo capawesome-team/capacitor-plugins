@@ -33,8 +33,7 @@ public class DatetimePicker {
         @Nullable String theme,
         final PresentResultCallback resultCallback,
         @Nullable AndroidDatePickerMode androidDatePickerMode,
-        @Nullable AndroidTimePickerMode androidTimePickerMode,
-        Integer minuteInterval
+        @Nullable AndroidTimePickerMode androidTimePickerMode
     ) {
         PresentResultCallback dateResultCallback = new PresentResultCallback();
         dateResultCallback.setSuccessListener(selectedDate -> {
@@ -50,8 +49,7 @@ public class DatetimePicker {
                 theme,
                 timeResultCallback,
                 androidDatePickerMode,
-                androidTimePickerMode,
-                minuteInterval
+                androidTimePickerMode
             );
         });
         dateResultCallback.setCancelListener(() -> resultCallback.cancel());
@@ -66,8 +64,7 @@ public class DatetimePicker {
             theme,
             dateResultCallback,
             androidDatePickerMode,
-            androidTimePickerMode,
-            minuteInterval
+            androidTimePickerMode
         );
     }
 
@@ -81,8 +78,7 @@ public class DatetimePicker {
         @Nullable String theme,
         final PresentResultCallback resultCallback,
         @Nullable AndroidDatePickerMode androidDatePickerMode,
-        @Nullable AndroidTimePickerMode androidTimePickerMode,
-        Integer minuteInterval
+        @Nullable AndroidTimePickerMode androidTimePickerMode
     ) {
         if (locale != null) {
             this.updateLocaleConfiguration(locale);
@@ -133,8 +129,7 @@ public class DatetimePicker {
         @Nullable String theme,
         final PresentResultCallback resultCallback,
         @Nullable AndroidDatePickerMode androidDatePickerMode,
-        @Nullable AndroidTimePickerMode androidTimePickerMode,
-        Integer minuteInterval
+        @Nullable AndroidTimePickerMode androidTimePickerMode
     ) {
         if (locale != null) {
             this.updateLocaleConfiguration(locale);
