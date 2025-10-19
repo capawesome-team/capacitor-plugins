@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-datetime-picker",
-  "version": "7.0.1",
+  "version": "7.1.0",
   "description": "Capacitor plugin that let the user easily enter both a date and a time.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
