@@ -35,6 +35,7 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         let value = call.getString("value")
         let cancelButtonText = call.getString("cancelButtonText", "Cancel")
         let doneButtonText = call.getString("doneButtonText", "Ok")
+        let minuteInterval = call.getInt("minuteInterval", 1)
 
         var locale: Locale?
         if let localeString = localeString {
@@ -74,13 +75,13 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
 
         if mode == "datetime" {
             implementation?.presentDatetimePicker(date: date, minDate: minDate, maxDate: maxDate, locale: locale,
-                                                  cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, completion: completion)
+                                                  cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, minuteInterval: minuteInterval, completion: completion)
         } else if mode == "date" {
             implementation?.presentDatePicker(date: date, minDate: minDate, maxDate: maxDate, locale: locale,
                                               cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, completion: completion)
         } else if mode == "time" {
             implementation?.presentTimePicker(date: date, locale: locale, cancelButtonText: cancelButtonText,
-                                              doneButtonText: doneButtonText, theme: theme, completion: completion)
+                                              doneButtonText: doneButtonText, theme: theme, minuteInterval: minuteInterval, completion: completion)
         } else {
             call.reject(errorModeInvalid)
         }
