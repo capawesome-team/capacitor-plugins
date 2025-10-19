@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`43cf6c300382db3c3af8d5e64ebe38deb6821b93`](https://github.com/capawesome-team/capacitor-plugins/commit/43cf6c300382db3c3af8d5e64ebe38deb6821b93) ([#616](https://github.com/capawesome-team/capacitor-plugins/pull/616)): feat(ios): add `minuteInterval` option
+
 ## 7.0.1
 
 ### Patch Changes
