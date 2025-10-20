@@ -1,5 +1,5 @@
 {
-  "name": "@capawesome/capacitor-file-picker",
+  "name": "@hotend/capacitor-file-picker",
   "version": "7.2.0",
   "description": "Capacitor plugin that allows the user to select a file.",
   "main": "dist/plugin.cjs.js",
@@ -11,14 +11,14 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorFilePicker.podspec",
+    "HotendCapacitorFilePicker.podspec",
     "Package.swift"
   ],
-  "author": "Robin Genz <mail@robingenz.dev>",
+  "author": "rbreckner",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
+    "url": "git+https://github.com/rbreckner/capawesome-capacitor-plugins.git"
   },
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
