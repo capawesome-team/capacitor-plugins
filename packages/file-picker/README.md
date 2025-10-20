@@ -1,6 +1,40 @@
 # @capawesome/capacitor-file-picker
 
-Capacitor plugin that allows the user to select a file.
+Capacitor plugin that allows the user to select a file, directory, image, or video from the device's file system or gallery.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for file picking. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 📂 **Directory picking**: Allows users to select a directory to retrieve all files.
+- 🖼️ **Image picking**: Lets users select one or more images from the gallery.
+- 🎥 **Video picking**: Lets users select one or more videos from the gallery.
+- 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
+- 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
+- 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
+- 📦 **SPM**: Supports Swift Package Manager for iOS. 
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 5.x.x          | 5.x.x             | Deprecated     |
 
 ## Installation
 
@@ -9,23 +43,73 @@ npm install @capawesome/capacitor-file-picker
 npx cap sync
 ```
 
+### Android
+
+#### Permissions
+
+This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<!-- Needed if you want to retrieve unredacted EXIF metadata from photos -->
+<uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+<!-- Needed if you want to read files from external storage -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+```
+
+### iOS
+
+#### Entitlements
+
+To use this plugin with Mac Catalyst, your app must have the `com.apple.security.files.user-selected.read-only` entitlement enabled. This allows the app to read files selected by the user. Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.security.files.user-selected.read-only) for more information.
+
+```xml
+<key>com.apple.security.files.user-selected.read-only</key>
+<true/>
+```
+
+If you don't want to use the plugin with Mac Catalyst, you can skip this step.
+
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 
+const appendFileToFormData = async () => {
+  const result = await FilePicker.pickFiles();
+  const file = result.files[0];
+
+  const formData = new FormData();
+  if (file.blob) {
+    const rawFile = new File(file.blob, file.name, {
+      type: file.mimeType,
+    });
+    formData.append('file', rawFile, file.name);
+  }
+};
+
+const checkPermissions = async () => {
+  const result = await FilePicker.checkPermissions();
+};
+
+const copyFile = async () => {
+  const result = await FilePicker.copyFile({
+    from: 'path/to/file',
+    to: 'path/to/destination',
+  });
+};
+
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles({
     types: ['image/png'],
   });
+};
+
+const pickDirectory = async () => {
+  const result = await FilePicker.pickDirectory();
 };
 
 const pickImages = async () => {
@@ -40,17 +124,8 @@ const pickVideos = async () => {
   const result = await FilePicker.pickVideos();
 };
 
-const appendFileToFormData = async () => {
-  const result = await FilePicker.pickFiles();
-  const file = result.files[0];
-
-  const formData = new FormData();
-  if (file.blob) {
-    const rawFile = new File(file.blob, file.name, {
-      type: file.mimeType,
-    });
-    formData.append('file', rawFile, file.name);
-  }
+const requestPermissions = async () => {
+  const result = await FilePicker.requestPermissions();
 };
 ```
 
@@ -58,12 +133,16 @@ const appendFileToFormData = async () => {
 
 <docgen-index>
 
+* [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
+* [`copyFile(...)`](#copyfile)
 * [`pickFiles(...)`](#pickfiles)
+* [`pickDirectory()`](#pickdirectory)
 * [`pickImages(...)`](#pickimages)
 * [`pickMedia(...)`](#pickmedia)
 * [`pickVideos(...)`](#pickvideos)
-* [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed)
+* [`requestPermissions(...)`](#requestpermissions)
+* [`addListener('pickerDismissed', ...)`](#addlistenerpickerdismissed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -72,6 +151,23 @@ const appendFileToFormData = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check permissions to access files.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 6.1.0
+
+--------------------
+
 
 ### convertHeicToJpeg(...)
 
@@ -94,6 +190,23 @@ Only available on iOS.
 --------------------
 
 
+### copyFile(...)
+
+```typescript
+copyFile(options: CopyFileOptions) => Promise<void>
+```
+
+Copy a file to a new location.
+
+| Param         | Type                                                        |
+| ------------- | ----------------------------------------------------------- |
+| **`options`** | <code><a href="#copyfileoptions">CopyFileOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### pickFiles(...)
 
 ```typescript
@@ -107,6 +220,23 @@ Open the file picker that allows the user to select one or more files.
 | **`options`** | <code><a href="#pickfilesoptions">PickFilesOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pickfilesresult">PickFilesResult</a>&gt;</code>
+
+--------------------
+
+
+### pickDirectory()
+
+```typescript
+pickDirectory() => Promise<PickDirectoryResult>
+```
+
+Open a picker dialog that allows the user to select a directory.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#pickdirectoryresult">PickDirectoryResult</a>&gt;</code>
+
+**Since:** 6.2.0
 
 --------------------
 
@@ -180,6 +310,27 @@ Only available on Android and iOS.
 --------------------
 
 
+### requestPermissions(...)
+
+```typescript
+requestPermissions(options?: RequestPermissionsOptions | undefined) => Promise<PermissionStatus>
+```
+
+Request permissions to access files.
+
+Only available on Android.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#requestpermissionsoptions">RequestPermissionsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### addListener('pickerDismissed', ...)
 
 ```typescript
@@ -218,6 +369,14 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
+#### PermissionStatus
+
+| Prop                      | Type                                                        | Description                                                                                                             | Since |
+| ------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`accessMediaLocation`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for accessing media location. On Android, this requests/checks the `ACCESS_MEDIA_LOCATION` permission. | 6.1.0 |
+| **`readExternalStorage`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for reading external storage. On Android, this requests/checks the `READ_EXTERNAL_STORAGE` permission. | 6.1.0 |
+
+
 #### ConvertHeicToJpegResult
 
 | Prop       | Type                | Description                           | Since |
@@ -230,6 +389,15 @@ Remove all listeners for this plugin.
 | Prop       | Type                | Description                 | Since |
 | ---------- | ------------------- | --------------------------- | ----- |
 | **`path`** | <code>string</code> | The path of the HEIC image. | 0.6.0 |
+
+
+#### CopyFileOptions
+
+| Prop            | Type                 | Description                                                     | Default           | Since |
+| --------------- | -------------------- | --------------------------------------------------------------- | ----------------- | ----- |
+| **`from`**      | <code>string</code>  | The path of the file to copy.                                   |                   | 7.1.0 |
+| **`overwrite`** | <code>boolean</code> | Whether to overwrite if the file at destination already exists. | <code>true</code> | 7.2.0 |
+| **`to`**        | <code>string</code>  | The path to copy the file to.                                   |                   | 7.1.0 |
 
 
 #### PickFilesResult
@@ -257,12 +425,19 @@ Remove all listeners for this plugin.
 
 #### PickFilesOptions
 
-| Prop                    | Type                  | Description                                                                                                                                                                                                    | Default            | Since |
-| ----------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| Prop           | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                       | Default            | Since |
+| -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
 | **`persistContentUri`** | <code>boolean</code>  | Request persistent file access for reusing received path after app restart or system reboot. Only available on Android, iOS paths are persistent by default.                                                   | <code>false</code> | 5.1.2 |
-| **`types`**             | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set. |                    |       |
-| **`limit`**             | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                    | <code>0</code>     | 6.0.0 |
-| **`readData`**          | <code>boolean</code>  | Whether to read the file data.                                                                                                                                                                                 | <code>false</code> |       |
+| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set.                                                                                                                                                                    |                    |       |
+| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                                       | <code>0</code>     | 6.0.0 |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file). | <code>false</code> |       |
+
+
+#### PickDirectoryResult
+
+| Prop       | Type                | Description                         | Since |
+| ---------- | ------------------- | ----------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path to the selected directory. | 6.2.0 |
 
 
 #### PickMediaOptions
@@ -275,6 +450,13 @@ Remove all listeners for this plugin.
 | **`ordered`**         | <code>boolean</code> | Whether an ordered number is displayed instead of a check mark in the selection badge. Only available on iOS (15+).                                                  | <code>false</code> | 5.3.0 |
 
 
+#### RequestPermissionsOptions
+
+| Prop              | Type                          | Description                 | Default                                                     | Since |
+| ----------------- | ----------------------------- | --------------------------- | ----------------------------------------------------------- | ----- |
+| **`permissions`** | <code>PermissionType[]</code> | The permissions to request. | <code>["accessMediaLocation", "readExternalStorage"]</code> | 6.1.0 |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -283,6 +465,11 @@ Remove all listeners for this plugin.
 
 
 ### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 #### PickImagesOptions
@@ -308,6 +495,11 @@ Remove all listeners for this plugin.
 #### PickVideosResult
 
 <code><a href="#pickmediaresult">PickMediaResult</a></code>
+
+
+#### PermissionType
+
+<code>'accessMediaLocation' | 'readExternalStorage'</code>
 
 </docgen-api>
 

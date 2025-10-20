@@ -7,10 +7,35 @@ import MobileCoreServices
 
 @objc public class FilePicker: NSObject {
     private var plugin: FilePickerPlugin?
+    private var invokedMethod: String?
 
     init(_ plugin: FilePickerPlugin?) {
         super.init()
         self.plugin = plugin
+    }
+
+    @objc func copyFile(_ options: CopyFileOptions, completion: @escaping (Error?) -> Void) throws {
+        let fileManager = FileManager.default
+        let fromUrl = options.getFromUrl()
+        let toUrl = options.getToUrl()
+        let toFolderUrl = toUrl.deletingLastPathComponent()
+        let shouldOverwrite = options.getOverwrite()
+
+        if !fileManager.fileExists(atPath: toFolderUrl.path) {
+            try fileManager.createDirectory(at: toFolderUrl, withIntermediateDirectories: true, attributes: nil)
+        }
+
+        if fileManager.fileExists(atPath: toUrl.path) {
+            if shouldOverwrite {
+                try fileManager.removeItem(at: toUrl)
+            } else {
+                completion(CustomError.fileAlreadyExists)
+                return
+            }
+        }
+
+        try fileManager.copyItem(at: fromUrl, to: toUrl)
+        completion(nil)
     }
 
     public func convertHeicToJpeg(_ sourceUrl: URL) throws -> URL? {
@@ -30,12 +55,31 @@ import MobileCoreServices
     }
 
     public func openDocumentPicker(limit: Int, documentTypes: [String]) {
+        invokedMethod = "pickFiles"
         DispatchQueue.main.async {
             let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
             picker.delegate = self
             picker.allowsMultipleSelection = limit == 0
             picker.modalPresentationStyle = .fullScreen
             self.presentViewController(picker)
+        }
+    }
+
+    public func openDirectoryPicker() {
+        invokedMethod = "pickDirectory"
+        DispatchQueue.main.async {
+            if #available(iOS 14.0, *) {
+                let picker = UIDocumentPickerViewController(forOpeningContentTypes: [.folder])
+                picker.delegate = self
+                picker.modalPresentationStyle = .fullScreen
+                self.presentViewController(picker)
+            } else {
+                let documentTypes = [kUTTypeFolder as String]
+                let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .open)
+                picker.delegate = self
+                picker.modalPresentationStyle = .fullScreen
+                self.presentViewController(picker)
+            }
         }
     }
 
@@ -257,17 +301,29 @@ import MobileCoreServices
 
 extension FilePicker: UIDocumentPickerDelegate {
     public func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        do {
-            let temporaryUrls = try urls.map { try saveTemporaryFile($0) }
-            plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
-        } catch {
-            plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
+        if invokedMethod == "pickFiles" {
+            do {
+                let temporaryUrls = try urls.map { try saveTemporaryFile($0) }
+                plugin?.handleDocumentPickerResult(urls: temporaryUrls, error: nil)
+            } catch {
+                plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
+            }
+        } else if invokedMethod == "pickDirectory" {
+            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, error: nil)
+        } else {
+            return
         }
         plugin?.notifyPickerDismissedListener()
     }
 
     public func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        plugin?.handleDocumentPickerResult(urls: nil, error: nil)
+        if invokedMethod == "pickFiles" {
+            plugin?.handleDocumentPickerResult(urls: nil, error: nil)
+        } else if invokedMethod == "pickDirectory" {
+            plugin?.handleDirectoryPickerResult(path: nil, error: nil)
+        } else {
+            return
+        }
         plugin?.notifyPickerDismissedListener()
     }
 }

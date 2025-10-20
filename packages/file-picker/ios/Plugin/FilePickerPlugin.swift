@@ -8,11 +8,23 @@ import MobileCoreServices
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(FilePickerPlugin)
-public class FilePickerPlugin: CAPPlugin {
+public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "FilePickerPlugin"
+    public let jsName = "FilePicker"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "convertHeicToJpeg", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "copyFile", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickFiles", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickImages", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickMedia", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickVideos", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "pickDirectory", returnType: CAPPluginReturnPromise)
+    ]
     public let errorPathMissing = "path must be provided."
     public let errorFileNotExist = "File does not exist."
     public let errorConvertFailed = "File could not be converted."
     public let errorPickFileCanceled = "pickFiles canceled."
+    public let errorPickDirectoryCanceled = "pickDirectory canceled."
     public let errorUnknown = "Unknown error occurred."
     public let errorTemporaryCopyFailed = "An unknown error occurred while creating a temporary copy of the file."
     public let errorUnsupportedFileTypeIdentifier = "Unsupported file type identifier."
@@ -49,6 +61,21 @@ public class FilePickerPlugin: CAPPlugin {
         }
     }
 
+    @objc func copyFile(_ call: CAPPluginCall) {
+        do {
+            let options = try CopyFileOptions(call)
+            try implementation?.copyFile(options) { error in
+                if let error = error {
+                    call.reject(error.localizedDescription)
+                    return
+                }
+                call.resolve()
+            }
+        } catch {
+            call.reject(error.localizedDescription)
+        }
+    }
+
     @objc func pickFiles(_ call: CAPPluginCall) {
         savedCall = call
 
@@ -58,6 +85,11 @@ public class FilePickerPlugin: CAPPlugin {
         let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
 
         implementation?.openDocumentPicker(limit: limit, documentTypes: documentTypes)
+    }
+
+    @objc func pickDirectory(_ call: CAPPluginCall) {
+        savedCall = call
+        implementation?.openDirectoryPicker()
     }
 
     @objc func pickImages(_ call: CAPPluginCall) {
@@ -138,6 +170,23 @@ public class FilePickerPlugin: CAPPlugin {
             savedCall.reject(error.localizedDescription, nil, error)
             return
         }
+    }
+
+    @objc func handleDirectoryPickerResult(path: String?, error: String?) {
+        guard let savedCall = savedCall else {
+            return
+        }
+        if let error = error {
+            savedCall.reject(error)
+            return
+        }
+        guard let path = path else {
+            savedCall.reject(errorPickDirectoryCanceled)
+            return
+        }
+        var result = JSObject()
+        result["path"] = path
+        savedCall.resolve(result)
     }
 
     private func parseTypesOption(_ types: [String]) -> [String] {

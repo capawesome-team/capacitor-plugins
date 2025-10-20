@@ -1,5 +1,27 @@
 # Changelog
 
+## 7.0.2
+
+### Patch Changes
+
+- [`bb6d837e87dbcc92ec16802231662d4648c9f59b`](https://github.com/capawesome-team/capacitor-plugins/commit/bb6d837e87dbcc92ec16802231662d4648c9f59b) ([#599](https://github.com/capawesome-team/capacitor-plugins/pull/599)): fix(ios): assure correct orientation after orientation unlock
+
+## 7.0.1
+
+### Patch Changes
+
+- [`1dc1fe3626a199a0f5dec2685443d74589cf43e5`](https://github.com/capawesome-team/capacitor-plugins/commit/1dc1fe3626a199a0f5dec2685443d74589cf43e5) ([#407](https://github.com/capawesome-team/capacitor-plugins/pull/407)): fix: set correct target paths for SPM support
+
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
+### Minor Changes
+
+- [`fdbcd817f6ab89525149685045f6ea7b78606b45`](https://github.com/capawesome-team/capacitor-plugins/commit/fdbcd817f6ab89525149685045f6ea7b78606b45) ([#382](https://github.com/capawesome-team/capacitor-plugins/pull/382)): feat: add SPM support
+
 ## 6.0.1
 
 ### Patch Changes

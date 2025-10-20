@@ -6,7 +6,18 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(AppUpdatePlugin)
-public class AppUpdatePlugin: CAPPlugin {
+public class AppUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "AppUpdatePlugin"
+    public let jsName = "AppUpdate"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getAppUpdateInfo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "openAppStore", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "performImmediateUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startFlexibleUpdate", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "completeFlexibleUpdate", returnType: CAPPluginReturnPromise)
+    ]
+    public let errorAppIdMissing = "appId must be provided."
+    public let errorAppIdInvalid = "appId is invalid."
     private static let updateAvailabilityNotAvailable = 1
     private static let updateAvailabilityAvailable = 2
 
@@ -58,37 +69,17 @@ public class AppUpdatePlugin: CAPPlugin {
     }
 
     @objc func openAppStore(_ call: CAPPluginCall) {
-        DispatchQueue.global().async {
-            do {
-                let date = Date.init().timeIntervalSince1970
-                guard
-                    let info = Bundle.main.infoDictionary,
-                    let bundleId = info["CFBundleIdentifier"] as? String,
-                    var lookupUrl = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleId)&date=\(date)")
-                else {
-                    call.reject("Invalid bundle info provided")
-                    return
-                }
-                if let country = call.getString("country") {
-                    lookupUrl = URL(string: "https://itunes.apple.com/lookup?bundleId=\(bundleId)&country=\(country)&date=\(date)")!
-                }
-                let data = try Data(contentsOf: lookupUrl)
-                guard
-                    let json = try JSONSerialization.jsonObject(with: data, options: [.allowFragments]) as? [String: Any],
-                    let result = (json["results"] as? [Any])?.first as? [String: Any],
-                    let trackId = result["trackId"] as? Int,
-                    let storeUrl = URL(string: "itms-apps://itunes.apple.com/app/id\(trackId)")
-                else {
-                    call.reject("Required app information could not be fetched")
-                    return
-                }
-                DispatchQueue.main.async {
-                    UIApplication.shared.open(storeUrl) { (_) in
-                        call.resolve()
-                    }
-                }
-            } catch let error {
-                call.reject(error.localizedDescription)
+        guard let appId = call.getString("appId") else {
+            call.reject(errorAppIdMissing)
+            return
+        }
+        guard let url = URL(string: "https://apps.apple.com/app/id\(appId)") else {
+            call.reject(errorAppIdInvalid)
+            return
+        }
+        DispatchQueue.main.async {
+            UIApplication.shared.open(url) { (_) in
+                call.resolve()
             }
         }
     }

@@ -1,16 +1,23 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -19,7 +26,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "6.4.1";
+    public static final String VERSION = "7.2.2";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -36,6 +43,8 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
     public static final String ERROR_SIGNATURE_MISSING = "Bundle does not contain a signature.";
     public static final String ERROR_SYNC_IN_PROGRESS = "Sync is already in progress.";
+    public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
+    public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
 
     private boolean syncInProgress = false;
 
@@ -67,79 +76,76 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.deleteBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
     @PluginMethod
     public void downloadBundle(PluginCall call) {
         try {
+            String artifactType = call.getString("artifactType", "zip");
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
                 call.reject(ERROR_BUNDLE_ID_MISSING);
                 return;
             }
             String checksum = call.getString("checksum");
+            String signature = call.getString("signature");
             String url = call.getString("url");
             if (url == null) {
                 call.reject(ERROR_URL_MISSING);
                 return;
             }
 
-            DownloadBundleOptions options = new DownloadBundleOptions(bundleId, checksum, url);
+            DownloadBundleOptions options = new DownloadBundleOptions(artifactType, bundleId, checksum, signature, url);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.downloadBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
     @PluginMethod
-    public void getBundle(PluginCall call) {
+    public void fetchLatestBundle(PluginCall call) {
         try {
+            FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
-            implementation.getBundle(callback);
+            implementation.fetchLatestBundle(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -149,20 +155,18 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getBundles(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -172,20 +176,40 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getChannel(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getCurrentBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetCurrentBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetCurrentBundleResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getCurrentBundle(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
         }
     }
 
@@ -195,20 +219,18 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getCustomId(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -218,20 +240,40 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getDeviceId(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getNextBundle(PluginCall call) {
+        try {
+            NonEmptyCallback<GetNextBundleResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetNextBundleResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getNextBundle(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
         }
     }
 
@@ -241,20 +283,18 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getVersionCode(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -264,31 +304,39 @@ public class LiveUpdatePlugin extends Plugin {
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.getVersionName(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
     @PluginMethod
     public void ready(PluginCall call) {
         try {
-            implementation.ready();
-            call.resolve();
+            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(Result result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.ready(callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -296,10 +344,9 @@ public class LiveUpdatePlugin extends Plugin {
     public void reload(PluginCall call) {
         try {
             implementation.reload();
-            call.resolve();
+            resolveCall(call);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -307,40 +354,9 @@ public class LiveUpdatePlugin extends Plugin {
     public void reset(PluginCall call) {
         try {
             implementation.reset();
-            call.resolve();
+            resolveCall(call);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void setBundle(PluginCall call) {
-        try {
-            String bundleId = call.getString("bundleId");
-            if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
-                return;
-            }
-
-            SetBundleOptions options = new SetBundleOptions(bundleId);
-            EmptyCallback callback = new EmptyCallback() {
-                @Override
-                public void success() {
-                    call.resolve();
-                }
-
-                @Override
-                public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
-                }
-            };
-
-            implementation.setBundle(options, callback);
-        } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -353,20 +369,18 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.setChannel(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
     }
 
@@ -383,20 +397,40 @@ public class LiveUpdatePlugin extends Plugin {
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
-                    call.resolve();
+                    resolveCall(call);
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
             implementation.setCustomId(options, callback);
         } catch (Exception exception) {
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextBundle(PluginCall call) {
+        try {
+            SetNextBundleOptions options = new SetNextBundleOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.setNextBundle(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
         }
     }
 
@@ -415,27 +449,30 @@ public class LiveUpdatePlugin extends Plugin {
             }
             syncInProgress = true;
 
+            SyncOptions options = new SyncOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
                     syncInProgress = false;
-                    call.resolve(result.toJSObject());
+                    resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
                     syncInProgress = false;
-                    Logger.error(TAG, exception.getMessage(), exception);
-                    call.reject(exception.getMessage());
+                    rejectCall(call, exception);
                 }
             };
 
-            implementation.sync(callback);
+            implementation.sync(options, callback);
         } catch (Exception exception) {
             syncInProgress = false;
-            Logger.error(TAG, exception.getMessage(), exception);
-            call.reject(exception.getMessage());
+            rejectCall(call, exception);
         }
+    }
+
+    public void notifyDownloadBundleProgressListeners(@NonNull DownloadBundleProgressEvent event) {
+        notifyListeners(EVENT_DOWNLOAD_BUNDLE_PROGRESS, event.toJSObject(), false);
     }
 
     private LiveUpdateConfig getLiveUpdateConfig() {
@@ -447,19 +484,34 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAutoDeleteBundles(autoDeleteBundles);
         String defaultChannel = getConfig().getString("defaultChannel", config.getDefaultChannel());
         config.setDefaultChannel(defaultChannel);
-        boolean enabled = getConfig().getBoolean("enabled", config.getEnabled());
-        config.setEnabled(enabled);
         int httpTimeout = getConfig().getInt("httpTimeout", config.getHttpTimeout());
         config.setHttpTimeout(httpTimeout);
-        String location = getConfig().getString("location", config.getLocation());
-        config.setLocation(location);
         String publicKey = getConfig().getString("publicKey", config.getPublicKey());
         config.setPublicKey(publicKey);
         int readyTimeout = getConfig().getInt("readyTimeout", config.getReadyTimeout());
         config.setReadyTimeout(readyTimeout);
-        boolean resetOnUpdate = getConfig().getBoolean("resetOnUpdate", config.getResetOnUpdate());
-        config.setResetOnUpdate(resetOnUpdate);
+        String serverDomain = getConfig().getString("serverDomain", config.getServerDomain());
+        config.setServerDomain(serverDomain);
 
         return config;
+    }
+
+    private void resolveCall(@NonNull PluginCall call) {
+        call.resolve();
+    }
+
+    private void resolveCall(@NonNull PluginCall call, @NonNull JSObject result) {
+        call.resolve(result);
+    }
+
+    private void rejectCall(PluginCall call, Exception exception) {
+        String message = exception.getMessage();
+        if (exception instanceof java.net.SocketTimeoutException) {
+            message = ERROR_HTTP_TIMEOUT;
+        } else {
+            message = message == null ? ERROR_UNKNOWN_ERROR : message;
+        }
+        Logger.error(TAG, message, exception);
+        call.reject(message);
     }
 }

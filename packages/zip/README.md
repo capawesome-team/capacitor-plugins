@@ -1,49 +1,80 @@
 # @capawesome-team/capacitor-zip
 
-Capacitor plugin to zip and unzip files.
+Capacitor plugin to zip and unzip files and directories with support for encryption.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
-- 🔋 Supports Android and iOS
-- 📁 Zip and unzip single or multiple files
-- 🔑 Encrypt and decrypt files
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for zipping and unzipping files. Here are some of the key features:
 
-## Sponsorware
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📁 **File Compression**: Zip and unzip single or multiple files.
+- 🔑 **Encryption**: Encrypt and decrypt files.
+- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/plugins/file-compressor/) plugin.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
-This project is available as **Sponsorware**.
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
+## Compatibility
 
-This means...
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
 
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
+## Demo
 
-## Terms
-
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
+A working example can be found [here](https://github.com/robingenz/capacitor-plugin-demo).
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-zip) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
 
-### Android Variables
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-zip
+npx cap sync
+```
+
+### Android 
+
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
+#### Variables
+
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 
@@ -143,6 +174,10 @@ Only available on Android and iOS.
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/zip/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/zip/BREAKING.md).
 
 ## License
 

@@ -5,6 +5,31 @@ It supports retrieving app update information on **Android** and **iOS** and sup
 
 > Check out the [Capacitor Live Update](https://capawesome.io/plugins/live-update/) plugin to update your app remotely in real-time without submitting a new version to the app store. 🚀
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for app updates. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 📱 **App update information**: Retrieves current and available app versions.
+- ⚡ **Immediate in-app updates**: Performs immediate updates on Android.
+- 📲 **Flexible in-app updates**: Supports flexible update flows on Android.
+- 📈 **Update priority**: Supports update priority levels on Android.
+- 🏪 **App store navigation**: Opens the app store entry for manual updates.
+- 📊 **Update state tracking**: Monitors flexible update progress with listeners.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash
@@ -14,10 +39,12 @@ npx cap sync
 
 ### Android Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidPlayAppUpdateVersion` version of `com.google.android.play:app-update` (default: `2.1.0`)
 - `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.0.1`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
@@ -89,7 +116,7 @@ const completeFlexibleUpdate = async () => {
 * [`performImmediateUpdate()`](#performimmediateupdate)
 * [`startFlexibleUpdate()`](#startflexibleupdate)
 * [`completeFlexibleUpdate()`](#completeflexibleupdate)
-* [`addListener('onFlexibleUpdateStateChange', ...)`](#addlisteneronflexibleupdatestatechange)
+* [`addListener('onFlexibleUpdateStateChange', ...)`](#addlisteneronflexibleupdatestatechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
@@ -239,9 +266,9 @@ Remove all listeners for this plugin.
 
 #### OpenAppStoreOptions
 
-| Prop          | Type                | Description                                                                                                                                                               |
-| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`country`** | <code>string</code> | The two-letter country code for the store you want to search. See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes. Only available on iOS. |
+| Prop        | Type                | Description                                                                                                                                                                                                                                     | Since |
+| ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`appId`** | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). You can find the ID in the URL of your app store entry (e.g. `https://apps.apple.com/app/id123456789`). Only available on iOS. | 6.1.0 |
 
 
 #### AppUpdateResult
@@ -309,7 +336,7 @@ Remove all listeners for this plugin.
 
 ## Test with internal app-sharing
 
-The Android Developers documentation describes how to test [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) using [internal app sharing](https://support.google.com/googleplay/android-developer/answer/9303479): https://developer.android.com/guide/playcore/in-app-updates/test
+The Android Developers documentation describes how to test [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) using [internal app sharing](https://developer.android.com/guide/playcore/in-app-updates/test).
 
 ## Changelog
 

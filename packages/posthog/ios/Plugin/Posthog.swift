@@ -2,10 +2,16 @@ import Foundation
 import PostHog
 
 @objc public class Posthog: NSObject {
+    private let config: PosthogConfig
     private let plugin: PosthogPlugin
 
-    init(plugin: PosthogPlugin) {
+    init(config: PosthogConfig, plugin: PosthogPlugin) {
+        self.config = config
         self.plugin = plugin
+        super.init()
+        if let apiKey = config.apiKey {
+            self.setup(apiKey: apiKey, host: config.host)
+        }
     }
 
     @objc public func alias(_ options: AliasOptions) {
@@ -25,6 +31,20 @@ import PostHog
         PostHogSDK.shared.flush()
     }
 
+    @objc public func getFeatureFlag(_ options: GetFeatureFlagOptions) -> GetFeatureFlagResult {
+        let key = options.getKey()
+
+        let value = PostHogSDK.shared.getFeatureFlag(key)
+        return GetFeatureFlagResult(value: value)
+    }
+
+    @objc public func getFeatureFlagPayload(_ options: GetFeatureFlagPayloadOptions) -> GetFeatureFlagPayloadResult {
+        let key = options.getKey()
+
+        let value = PostHogSDK.shared.getFeatureFlagPayload(key)
+        return GetFeatureFlagPayloadResult(value: value)
+    }
+
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
         let key = options.getKey()
@@ -40,6 +60,13 @@ import PostHog
         PostHogSDK.shared.identify(distinctId, userProperties: userProperties)
     }
 
+    @objc public func isFeatureEnabled(_ options: IsFeatureEnabledOptions) -> IsFeatureEnabledResult {
+        let key = options.getKey()
+
+        let isEnabled = PostHogSDK.shared.isFeatureEnabled(key)
+        return IsFeatureEnabledResult(enabled: isEnabled)
+    }
+
     @objc public func register(_ options: RegisterOptions) {
         let key = options.getKey()
         let value = options.getValue()
@@ -47,6 +74,10 @@ import PostHog
         let properties = [key: value]
 
         PostHogSDK.shared.register(properties)
+    }
+
+    @objc public func reloadFeatureFlags() {
+        PostHogSDK.shared.reloadFeatureFlags()
     }
 
     @objc public func reset() {
@@ -64,7 +95,13 @@ import PostHog
         let apiKey = options.getApiKey()
         let host = options.getHost()
 
+        setup(apiKey: apiKey, host: host)
+    }
+
+    private func setup(apiKey: String, host: String) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
+        config.captureScreenViews = false
+        config.optOut = false
 
         PostHogSDK.shared.setup(config)
     }

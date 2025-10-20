@@ -1,0 +1,6 @@
+{
+  "appId": "com.example.plugin",
+  "appName": "example",
+  "bundledWebRuntime": false,
+  "webDir": "dist"
+}

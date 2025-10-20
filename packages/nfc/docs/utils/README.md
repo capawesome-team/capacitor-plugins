@@ -1,5 +1,61 @@
 # Utils
 
+This plugin provides a utility class `NfcUtils` that can be used for various NFC-related operations, for example, creating NDEF records:
+
+## Usage
+
+```ts
+import { NfcUtils } from '@capawesome-team/capacitor-nfc';
+
+const convertBytesToHex = () => {
+  const utils = new NfcUtils();
+  const { hex } = utils.convertBytesToHex({ bytes: [0, 1, 2], start: '0x', separator: '' });
+  return hex;
+};
+
+const convertBytesToString = () => {
+  const utils = new NfcUtils();
+  const { text } = utils.convertBytesToString({ bytes: [72, 101, 108, 108, 111] });
+  return text;
+};
+
+const convertHexToBytes = () => {
+  const utils = new NfcUtils();
+  const { bytes } = utils.convertHexToBytes({ hex: '0x000102' });
+  return bytes;
+};
+
+const convertHexToNumber = () => {
+  const utils = new NfcUtils();
+  const { number } = utils.convertHexToNumber({ hex: '0x000102' });
+  return number;
+};
+
+const convertNumberToHex = () => {
+  const utils = new NfcUtils();
+  const { hex } = utils.convertNumberToHex({ number: 258 });
+  return hex;
+};
+
+const convertStringToBytes = () => {
+  const utils = new NfcUtils();
+  const { bytes } = utils.convertStringToBytes({ text: 'Hello' });
+  return bytes;
+};
+
+const createNdefTextRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefTextRecord({ text: 'Capacitor NFC Plugin' });
+  return record;
+};
+
+const createNdefUriRecord = () => {
+  const utils = new NfcUtils();
+  const { record } = utils.createNdefUriRecord({ uri: 'capacitorjs.com' });
+  return record;
+};
+```
+
 ## API
 
 <docgen-index>
@@ -22,7 +78,9 @@
 * [`getTextFromNdefTextRecord(...)`](#gettextfromndeftextrecord)
 * [`getUriFromNdefUriRecord(...)`](#geturifromndefurirecord)
 * [`mapBytesToRecordTypeDefinition(...)`](#mapbytestorecordtypedefinition)
+* [`mapUriIdentifierCodeToString(...)`](#mapuriidentifiercodetostring)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -276,7 +334,7 @@ Create a NDEF external type record.
 ### getIdentifierCodeFromNdefUriRecord(...)
 
 ```typescript
-getIdentifierCodeFromNdefUriRecord(options: GetIdentifierCodeFromNdefUriRecordOptions) => { identifierCode: UriIdentifierCode | undefined; }
+getIdentifierCodeFromNdefUriRecord(options: GetIdentifierCodeFromNdefUriRecordOptions) => GetIdentifierCodeFromNdefUriRecordResult
 ```
 
 Get the identifier code from a NDEF URI record.
@@ -287,7 +345,7 @@ This method assumes that the record has a valid URI identifier code.
 | ------------- | --------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#getidentifiercodefromndefurirecordoptions">GetIdentifierCodeFromNdefUriRecordOptions</a></code> |
 
-**Returns:** <code>{ identifierCode: <a href="#uriidentifiercode">UriIdentifierCode</a>; }</code>
+**Returns:** <code><a href="#getidentifiercodefromndefurirecordresult">GetIdentifierCodeFromNdefUriRecordResult</a></code>
 
 **Since:** 0.3.1
 
@@ -335,18 +393,18 @@ Get the text from a NDEF text record.
 ### getUriFromNdefUriRecord(...)
 
 ```typescript
-getUriFromNdefUriRecord(options: GetIdentifierCodeFromNdefUriRecordOptions) => { uri: string | undefined; }
+getUriFromNdefUriRecord(options: GetUriFromNdefUriRecordOptions) => GetUriFromNdefUriRecordResult
 ```
 
 Get the uri from a NDEF URI record.
 
 This method assumes that the record has a valid URI identifier code.
 
-| Param         | Type                                                                                                            |
-| ------------- | --------------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#getidentifiercodefromndefurirecordoptions">GetIdentifierCodeFromNdefUriRecordOptions</a></code> |
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#geturifromndefurirecordoptions">GetUriFromNdefUriRecordOptions</a></code> |
 
-**Returns:** <code>{ uri: string; }</code>
+**Returns:** <code><a href="#geturifromndefurirecordresult">GetUriFromNdefUriRecordResult</a></code>
 
 **Since:** 0.3.1
 
@@ -372,6 +430,25 @@ Map a byte array to a the corresponding NDEF record type.
 --------------------
 
 
+### mapUriIdentifierCodeToString(...)
+
+```typescript
+mapUriIdentifierCodeToString(options: MapUriIdentifierCodeToStringOptions) => MapUriIdentifierCodeToStringResult
+```
+
+Map a URI identifier code to the corresponding prefix string.
+
+| Param         | Type                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#mapuriidentifiercodetostringoptions">MapUriIdentifierCodeToStringOptions</a></code> |
+
+**Returns:** <code><a href="#mapuriidentifiercodetostringresult">MapUriIdentifierCodeToStringResult</a></code>
+
+**Since:** 7.3.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -386,9 +463,84 @@ Map a byte array to a the corresponding NDEF record type.
 
 #### ConvertBytesToStringOptions
 
-| Prop        | Type                  | Description                            | Since |
-| ----------- | --------------------- | -------------------------------------- | ----- |
-| **`bytes`** | <code>number[]</code> | The byte array to convert to a string. | 0.0.1 |
+| Prop        | Type                                                          | Description                            | Since |
+| ----------- | ------------------------------------------------------------- | -------------------------------------- | ----- |
+| **`bytes`** | <code>number[] \| <a href="#uint8array">Uint8Array</a></code> | The byte array to convert to a string. | 0.0.1 |
+
+
+#### Uint8Array
+
+A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
+requested number of bytes could not be allocated an exception is raised.
+
+| Prop                    | Type                                                        | Description                                                                  |
+| ----------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **`BYTES_PER_ELEMENT`** | <code>number</code>                                         | The size in bytes of each element in the array.                              |
+| **`buffer`**            | <code><a href="#arraybufferlike">ArrayBufferLike</a></code> | The <a href="#arraybuffer">ArrayBuffer</a> instance referenced by the array. |
+| **`byteLength`**        | <code>number</code>                                         | The length in bytes of the array.                                            |
+| **`byteOffset`**        | <code>number</code>                                         | The offset in bytes of the array.                                            |
+| **`length`**            | <code>number</code>                                         | The length of the array.                                                     |
+
+| Method             | Signature                                                                                                                                                                      | Description                                                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **copyWithin**     | (target: number, start: number, end?: number \| undefined) =&gt; this                                                                                                          | Returns the this object after copying a section of the array identified by start and end to the same array starting at position target                                                                                                      |
+| **every**          | (predicate: (value: number, index: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; unknown, thisArg?: any) =&gt; boolean                                            | Determines whether all the members of an array satisfy the specified test.                                                                                                                                                                  |
+| **fill**           | (value: number, start?: number \| undefined, end?: number \| undefined) =&gt; this                                                                                             | Returns the this object after filling the section identified by start and end with value                                                                                                                                                    |
+| **filter**         | (predicate: (value: number, index: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; any, thisArg?: any) =&gt; <a href="#uint8array">Uint8Array</a>                   | Returns the elements of an array that meet the condition specified in a callback function.                                                                                                                                                  |
+| **find**           | (predicate: (value: number, index: number, obj: <a href="#uint8array">Uint8Array</a>) =&gt; boolean, thisArg?: any) =&gt; number \| undefined                                  | Returns the value of the first element in the array where predicate is true, and undefined otherwise.                                                                                                                                       |
+| **findIndex**      | (predicate: (value: number, index: number, obj: <a href="#uint8array">Uint8Array</a>) =&gt; boolean, thisArg?: any) =&gt; number                                               | Returns the index of the first element in the array where predicate is true, and -1 otherwise.                                                                                                                                              |
+| **forEach**        | (callbackfn: (value: number, index: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; void, thisArg?: any) =&gt; void                                                 | Performs the specified action for each element in an array.                                                                                                                                                                                 |
+| **indexOf**        | (searchElement: number, fromIndex?: number \| undefined) =&gt; number                                                                                                          | Returns the index of the first occurrence of a value in an array.                                                                                                                                                                           |
+| **join**           | (separator?: string \| undefined) =&gt; string                                                                                                                                 | Adds all the elements of an array separated by the specified separator string.                                                                                                                                                              |
+| **lastIndexOf**    | (searchElement: number, fromIndex?: number \| undefined) =&gt; number                                                                                                          | Returns the index of the last occurrence of a value in an array.                                                                                                                                                                            |
+| **map**            | (callbackfn: (value: number, index: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; number, thisArg?: any) =&gt; <a href="#uint8array">Uint8Array</a>               | Calls a defined callback function on each element of an array, and returns an array that contains the results.                                                                                                                              |
+| **reduce**         | (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; number) =&gt; number                       | Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.                      |
+| **reduce**         | (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; number, initialValue: number) =&gt; number |                                                                                                                                                                                                                                             |
+| **reduce**         | &lt;U&gt;(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; U, initialValue: U) =&gt; U            | Calls the specified callback function for all the elements in an array. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.                      |
+| **reduceRight**    | (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; number) =&gt; number                       | Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function. |
+| **reduceRight**    | (callbackfn: (previousValue: number, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; number, initialValue: number) =&gt; number |                                                                                                                                                                                                                                             |
+| **reduceRight**    | &lt;U&gt;(callbackfn: (previousValue: U, currentValue: number, currentIndex: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; U, initialValue: U) =&gt; U            | Calls the specified callback function for all the elements in an array, in descending order. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function. |
+| **reverse**        | () =&gt; <a href="#uint8array">Uint8Array</a>                                                                                                                                  | Reverses the elements in an Array.                                                                                                                                                                                                          |
+| **set**            | (array: <a href="#arraylike">ArrayLike</a>&lt;number&gt;, offset?: number \| undefined) =&gt; void                                                                             | Sets a value or an array of values.                                                                                                                                                                                                         |
+| **slice**          | (start?: number \| undefined, end?: number \| undefined) =&gt; <a href="#uint8array">Uint8Array</a>                                                                            | Returns a section of an array.                                                                                                                                                                                                              |
+| **some**           | (predicate: (value: number, index: number, array: <a href="#uint8array">Uint8Array</a>) =&gt; unknown, thisArg?: any) =&gt; boolean                                            | Determines whether the specified callback function returns true for any element of an array.                                                                                                                                                |
+| **sort**           | (compareFn?: ((a: number, b: number) =&gt; number) \| undefined) =&gt; this                                                                                                    | Sorts an array.                                                                                                                                                                                                                             |
+| **subarray**       | (begin?: number \| undefined, end?: number \| undefined) =&gt; <a href="#uint8array">Uint8Array</a>                                                                            | Gets a new <a href="#uint8array">Uint8Array</a> view of the <a href="#arraybuffer">ArrayBuffer</a> store for this array, referencing the elements at begin, inclusive, up to end, exclusive.                                                |
+| **toLocaleString** | () =&gt; string                                                                                                                                                                | Converts a number to a string by using the current locale.                                                                                                                                                                                  |
+| **toString**       | () =&gt; string                                                                                                                                                                | Returns a string representation of an array.                                                                                                                                                                                                |
+| **valueOf**        | () =&gt; <a href="#uint8array">Uint8Array</a>                                                                                                                                  | Returns the primitive value of the specified object.                                                                                                                                                                                        |
+
+
+#### ArrayLike
+
+| Prop         | Type                |
+| ------------ | ------------------- |
+| **`length`** | <code>number</code> |
+
+
+#### ArrayBufferTypes
+
+Allowed <a href="#arraybuffer">ArrayBuffer</a> types for the buffer of an ArrayBufferView and related Typed Arrays.
+
+| Prop              | Type                                                |
+| ----------------- | --------------------------------------------------- |
+| **`ArrayBuffer`** | <code><a href="#arraybuffer">ArrayBuffer</a></code> |
+
+
+#### ArrayBuffer
+
+Represents a raw buffer of binary data, which is used to store data for the
+different typed arrays. ArrayBuffers cannot be read from or written to directly,
+but can be passed to a typed array or DataView Object to interpret the raw
+buffer as needed.
+
+| Prop             | Type                | Description                                                                     |
+| ---------------- | ------------------- | ------------------------------------------------------------------------------- |
+| **`byteLength`** | <code>number</code> | Read-only. The length of the <a href="#arraybuffer">ArrayBuffer</a> (in bytes). |
+
+| Method    | Signature                                                                               | Description                                                     |
+| --------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **slice** | (begin: number, end?: number \| undefined) =&gt; <a href="#arraybuffer">ArrayBuffer</a> | Returns a section of an <a href="#arraybuffer">ArrayBuffer</a>. |
 
 
 #### ConvertHexToBytesOptions
@@ -493,6 +645,13 @@ Map a byte array to a the corresponding NDEF record type.
 | **`type`**    | <code>string \| number[]</code> | The domain-specific type of data.        | 0.0.1 |
 
 
+#### GetIdentifierCodeFromNdefUriRecordResult
+
+| Prop                 | Type                                                            | Description                                                 | Since |
+| -------------------- | --------------------------------------------------------------- | ----------------------------------------------------------- | ----- |
+| **`identifierCode`** | <code><a href="#uriidentifiercode">UriIdentifierCode</a></code> | The URI identifier code extracted from the NDEF URI record. | 7.3.0 |
+
+
 #### GetIdentifierCodeFromNdefUriRecordOptions
 
 | Prop         | Type                                              | Since |
@@ -512,6 +671,42 @@ Map a byte array to a the corresponding NDEF record type.
 | Prop         | Type                                              | Since |
 | ------------ | ------------------------------------------------- | ----- |
 | **`record`** | <code><a href="#ndefrecord">NdefRecord</a></code> | 0.0.1 |
+
+
+#### GetUriFromNdefUriRecordResult
+
+| Prop      | Type                | Description                                 | Since |
+| --------- | ------------------- | ------------------------------------------- | ----- |
+| **`uri`** | <code>string</code> | The URI extracted from the NDEF URI record. | 7.3.0 |
+
+
+#### GetUriFromNdefUriRecordOptions
+
+| Prop         | Type                                              | Description                                  | Since |
+| ------------ | ------------------------------------------------- | -------------------------------------------- | ----- |
+| **`record`** | <code><a href="#ndefrecord">NdefRecord</a></code> | The NDEF URI record to extract the URI from. | 7.3.0 |
+
+
+#### MapUriIdentifierCodeToStringResult
+
+| Prop         | Type                | Description                                                        | Since |
+| ------------ | ------------------- | ------------------------------------------------------------------ | ----- |
+| **`prefix`** | <code>string</code> | The corresponding URI prefix string for the given identifier code. | 7.3.0 |
+
+
+#### MapUriIdentifierCodeToStringOptions
+
+| Prop                 | Type                                                            | Description                                     | Since |
+| -------------------- | --------------------------------------------------------------- | ----------------------------------------------- | ----- |
+| **`identifierCode`** | <code><a href="#uriidentifiercode">UriIdentifierCode</a></code> | The URI identifier code to convert to a string. | 7.3.0 |
+
+
+### Type Aliases
+
+
+#### ArrayBufferLike
+
+<code>ArrayBufferTypes[keyof ArrayBufferTypes]</code>
 
 
 ### Enums

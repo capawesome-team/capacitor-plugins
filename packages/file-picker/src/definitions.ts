@@ -2,6 +2,14 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface FilePickerPlugin {
   /**
+   * Check permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
    * Convert a HEIC image to JPEG.
    *
    * Only available on iOS.
@@ -12,9 +20,23 @@ export interface FilePickerPlugin {
     options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult>;
   /**
+   * Copy a file to a new location.
+   *
+   * @since 7.1.0
+   */
+  copyFile(options: CopyFileOptions): Promise<void>;
+  /**
    * Open the file picker that allows the user to select one or more files.
    */
   pickFiles(options?: PickFilesOptions): Promise<PickFilesResult>;
+  /**
+   * Open a picker dialog that allows the user to select a directory.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.2.0
+   */
+  pickDirectory(): Promise<PickDirectoryResult>;
   /**
    * Pick one or more images from the gallery.
    *
@@ -45,6 +67,16 @@ export interface FilePickerPlugin {
    * @since 0.5.3
    */
   pickVideos(options?: PickVideosOptions): Promise<PickVideosResult>;
+  /**
+   * Request permissions to access files.
+   *
+   * Only available on Android.
+   *
+   * @since 6.1.0
+   */
+  requestPermissions(
+    options?: RequestPermissionsOptions,
+  ): Promise<PermissionStatus>;
   /**
    * Called when the file picker is dismissed.
    *
@@ -90,6 +122,56 @@ export interface ConvertHeicToJpegResult {
   path: string;
 }
 
+/**
+ * @since 7.1.0
+ */
+export interface CopyFileOptions {
+  /**
+   * The path of the file to copy.
+   *
+   * @example '/path/to/file.txt'
+   * @since 7.1.0
+   */
+  from: string;
+  /**
+   * Whether to overwrite if the file at destination already exists.
+   *
+   * @default true
+   * @example false
+   * @since 7.2.0
+   */
+  overwrite?: boolean;
+  /**
+   * The path to copy the file to.
+   *
+   * @example '/path/to/new-file.txt'
+   * @since 7.1.0
+   */
+  to: string;
+}
+
+/**
+ * @since 6.1.0
+ */
+export interface PermissionStatus {
+  /**
+   * Permission state for accessing media location.
+   *
+   * On Android, this requests/checks the `ACCESS_MEDIA_LOCATION` permission.
+   *
+   * @since 6.1.0
+   */
+  accessMediaLocation: PermissionState;
+  /**
+   * Permission state for reading external storage.
+   *
+   * On Android, this requests/checks the `READ_EXTERNAL_STORAGE` permission.
+   *
+   * @since 6.1.0
+   */
+  readExternalStorage: PermissionState;
+}
+
 export interface PickFilesOptions {
   /**
    * Request persistent file access for reusing received path after app restart or system reboot.
@@ -122,6 +204,11 @@ export interface PickFilesOptions {
   limit?: number;
   /**
    * Whether to read the file data.
+   *
+   * **Attention**: Reading large files can lead to app crashes.
+   * It's therefore not recommended to use this option.
+   * Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
+   * to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file).
    *
    * @default false
    */
@@ -238,6 +325,15 @@ export interface PickMediaOptions {
   ordered?: boolean;
 }
 
+export interface PickDirectoryResult {
+  /**
+   * The path to the selected directory.
+   *
+   * @since 6.2.0
+   */
+  path: string;
+}
+
 /**
  * @since 0.5.3
  */
@@ -262,3 +358,21 @@ export type PickVideosOptions = PickMediaOptions;
  * @since 0.5.3
  */
 export type PickVideosResult = PickMediaResult;
+
+/**
+ * @since 6.1.0
+ */
+export interface RequestPermissionsOptions {
+  /**
+   * The permissions to request.
+   *
+   * @since 6.1.0
+   * @default ["accessMediaLocation", "readExternalStorage"]
+   */
+  permissions?: PermissionType[];
+}
+
+/**
+ * @since 6.1.0
+ */
+export type PermissionType = 'accessMediaLocation' | 'readExternalStorage';

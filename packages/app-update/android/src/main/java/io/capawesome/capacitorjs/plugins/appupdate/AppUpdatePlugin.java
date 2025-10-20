@@ -68,38 +68,34 @@ public class AppUpdatePlugin extends Plugin {
                 return;
             }
             Task<AppUpdateInfo> appUpdateInfoTask = this.appUpdateManager.getAppUpdateInfo();
-            appUpdateInfoTask.addOnSuccessListener(
-                appUpdateInfo -> {
-                    this.appUpdateInfo = appUpdateInfo;
-                    PackageInfo pInfo;
-                    try {
-                        pInfo = this.getPackageInfo();
-                    } catch (PackageManager.NameNotFoundException e) {
-                        call.reject(ERROR_GET_APP_INFO_FAILED);
-                        return;
-                    }
-                    JSObject ret = new JSObject();
-                    ret.put("currentVersionName", pInfo.versionName);
-                    ret.put("currentVersionCode", String.valueOf(pInfo.versionCode));
-                    ret.put("availableVersionCode", String.valueOf(appUpdateInfo.availableVersionCode()));
-                    ret.put("updateAvailability", appUpdateInfo.updateAvailability());
-                    ret.put("updatePriority", appUpdateInfo.updatePriority());
-                    ret.put("immediateUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE));
-                    ret.put("flexibleUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE));
-                    Integer clientVersionStalenessDays = appUpdateInfo.clientVersionStalenessDays();
-                    if (clientVersionStalenessDays != null) {
-                        ret.put("clientVersionStalenessDays", clientVersionStalenessDays);
-                    }
-                    ret.put("installStatus", appUpdateInfo.installStatus());
-                    call.resolve(ret);
+            appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+                this.appUpdateInfo = appUpdateInfo;
+                PackageInfo pInfo;
+                try {
+                    pInfo = this.getPackageInfo();
+                } catch (PackageManager.NameNotFoundException e) {
+                    call.reject(ERROR_GET_APP_INFO_FAILED);
+                    return;
                 }
-            );
-            appUpdateInfoTask.addOnFailureListener(
-                failure -> {
-                    String message = failure.getMessage();
-                    call.reject(message);
+                JSObject ret = new JSObject();
+                ret.put("currentVersionName", pInfo.versionName);
+                ret.put("currentVersionCode", String.valueOf(pInfo.versionCode));
+                ret.put("availableVersionCode", String.valueOf(appUpdateInfo.availableVersionCode()));
+                ret.put("updateAvailability", appUpdateInfo.updateAvailability());
+                ret.put("updatePriority", appUpdateInfo.updatePriority());
+                ret.put("immediateUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE));
+                ret.put("flexibleUpdateAllowed", appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE));
+                Integer clientVersionStalenessDays = appUpdateInfo.clientVersionStalenessDays();
+                if (clientVersionStalenessDays != null) {
+                    ret.put("clientVersionStalenessDays", clientVersionStalenessDays);
                 }
-            );
+                ret.put("installStatus", appUpdateInfo.installStatus());
+                call.resolve(ret);
+            });
+            appUpdateInfoTask.addOnFailureListener(failure -> {
+                String message = failure.getMessage();
+                call.reject(message);
+            });
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());
@@ -156,17 +152,16 @@ public class AppUpdatePlugin extends Plugin {
                 return;
             }
             savedPluginCall = call;
-            this.listener =
-                state -> {
-                    int installStatus = state.installStatus();
-                    JSObject ret = new JSObject();
-                    ret.put("installStatus", installStatus);
-                    if (installStatus == InstallStatus.DOWNLOADING) {
-                        ret.put("bytesDownloaded", state.bytesDownloaded());
-                        ret.put("totalBytesToDownload", state.totalBytesToDownload());
-                    }
-                    notifyListeners("onFlexibleUpdateStateChange", ret);
-                };
+            this.listener = state -> {
+                int installStatus = state.installStatus();
+                JSObject ret = new JSObject();
+                ret.put("installStatus", installStatus);
+                if (installStatus == InstallStatus.DOWNLOADING) {
+                    ret.put("bytesDownloaded", state.bytesDownloaded());
+                    ret.put("totalBytesToDownload", state.totalBytesToDownload());
+                }
+                notifyListeners("onFlexibleUpdateStateChange", ret);
+            };
             this.appUpdateManager.registerListener(this.listener);
             this.appUpdateManager.startUpdateFlowForResult(
                     this.appUpdateInfo,

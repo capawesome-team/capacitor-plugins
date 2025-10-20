@@ -9,23 +9,50 @@ body:
       label: Plugin(s)
       description: Select the plugins that this bug affects.
       options:
-        - label: Android Foreground Service
+        - label: Accelerometer
+        - label: Age Signals
         - label: Android Battery Optimization
+        - label: Android Dark Mode Support
+        - label: Android Edge-to-Edge Support
+        - label: Android Foreground Service
+        - label: App Review
+        - label: App Shortcuts
         - label: App Update
+        - label: Audio Player
+        - label: Audio Recorder
+        - label: Asset Manager
+        - label: Audio Recorder
         - label: Background Task
         - label: Badge
+        - label: Barometer
+        - label: Biometrics
         - label: Bluetooth Low Energy
         - label: Cloudinary
+        - label: Contacts
         - label: Datetime Picker
         - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: Geocoder
+        - label: libSQL
         - label: Live Update
         - label: Managed Configurations
+        - label: Media Session
         - label: NFC
+        - label: Pedometer
         - label: Photo Editor
+        - label: Posthog
+        - label: Purchases
         - label: Printer
+        - label: RealtimeKit
+        - label: Secure Preferences
         - label: Screen Orientation
+        - label: Screenshot
+        - label: Speech Recognition
+        - label: Speech Synthesis
+        - label: Share Target
+        - label: SQLite
+        - label: Torch
         - label: Zip
   - type: input
     attributes:

@@ -1,5 +1,31 @@
 # Changelog
 
+## 7.0.1
+
+### Patch Changes
+
+- [`82a40bae6703d829d4017da007e8f175842e9bf7`](https://github.com/capawesome-team/capacitor-plugins/commit/82a40bae6703d829d4017da007e8f175842e9bf7) ([#418](https://github.com/capawesome-team/capacitor-plugins/pull/418)): fix(android): `serviceType` property was ignored
+
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
+## 6.2.0
+
+### Minor Changes
+
+- [`b5088c7`](https://github.com/capawesome-team/capacitor-plugins/commit/b5088c73cef1e2be5d915d1ed7a0649865a3d3ca) ([#358](https://github.com/capawesome-team/capacitor-plugins/pull/358)): feat(android): support more Foreground service types
+
+## 6.1.0
+
+### Minor Changes
+
+- [`6051ba5`](https://github.com/capawesome-team/capacitor-plugins/commit/6051ba5c06b8f49b7ec3c5a36f630358bf4d3dc3) ([#328](https://github.com/capawesome-team/capacitor-plugins/pull/328)): feat(android): add `updateForegroundService(...)` method
+
+* [`965d322`](https://github.com/capawesome-team/capacitor-plugins/commit/965d322aa0d8f95dfa3a287df5233caa6a5aac78) ([#334](https://github.com/capawesome-team/capacitor-plugins/pull/334)): feat: add `createNotificationChannel` and `deleteNotificationChannel` methods
+
 ## 6.0.1
 
 ### Patch Changes

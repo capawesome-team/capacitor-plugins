@@ -6,7 +6,12 @@ import Capacitor
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(DatetimePickerPlugin)
-public class DatetimePickerPlugin: CAPPlugin {
+public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "DatetimePickerPlugin"
+    public let jsName = "DatetimePicker"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "present", returnType: CAPPluginReturnPromise)
+    ]
     public let errorModeInvalid = "The provided mode is invalid."
     public let errorPickerCanceled = "The picker was canceled."
     public let errorPickerDismissed = "The picker was dismissed."
@@ -30,6 +35,7 @@ public class DatetimePickerPlugin: CAPPlugin {
         let value = call.getString("value")
         let cancelButtonText = call.getString("cancelButtonText", "Cancel")
         let doneButtonText = call.getString("doneButtonText", "Ok")
+        let minuteInterval = call.getInt("minuteInterval", 1)
 
         var locale: Locale?
         if let localeString = localeString {
@@ -69,13 +75,13 @@ public class DatetimePickerPlugin: CAPPlugin {
 
         if mode == "datetime" {
             implementation?.presentDatetimePicker(date: date, minDate: minDate, maxDate: maxDate, locale: locale,
-                                                  cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, completion: completion)
+                                                  cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, minuteInterval: minuteInterval, completion: completion)
         } else if mode == "date" {
             implementation?.presentDatePicker(date: date, minDate: minDate, maxDate: maxDate, locale: locale,
                                               cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, completion: completion)
         } else if mode == "time" {
             implementation?.presentTimePicker(date: date, locale: locale, cancelButtonText: cancelButtonText,
-                                              doneButtonText: doneButtonText, theme: theme, completion: completion)
+                                              doneButtonText: doneButtonText, theme: theme, minuteInterval: minuteInterval, completion: completion)
         } else {
             call.reject(errorModeInvalid)
         }

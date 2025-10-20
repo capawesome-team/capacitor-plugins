@@ -18,7 +18,7 @@ public class LiveUpdatePreferences {
     private final String channelKey = "channel"; // DO NOT CHANGE
     private final String deviceIdKey = "deviceId"; // DO NOT CHANGE
     private final String customIdKey = "customId"; // DO NOT CHANGE
-    private final String lastVersionCodeKey = "lastVersionCode"; // DO NOT CHANGE
+    private final String previousBundleIdKey = "previousBundleId"; // DO NOT CHANGE
 
     public LiveUpdatePreferences(@NonNull Context context) {
         this.context = context;
@@ -48,8 +48,11 @@ public class LiveUpdatePreferences {
         }
     }
 
-    public int getLastVersionCode() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getInt(lastVersionCodeKey, 0);
+    @Nullable
+    public String getPreviousBundleId() {
+        return context
+            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
+            .getString(previousBundleIdKey, null);
     }
 
     public void setChannel(@Nullable String channel) {
@@ -79,8 +82,12 @@ public class LiveUpdatePreferences {
         settingsEditor.apply();
     }
 
-    public void setLastVersionCode(int lastVersionCode) {
-        settingsEditor.putInt(lastVersionCodeKey, lastVersionCode);
+    public void setPreviousBundleId(@Nullable String bundleId) {
+        if (bundleId == null) {
+            settingsEditor.remove(previousBundleIdKey);
+        } else {
+            settingsEditor.putString(previousBundleIdKey, bundleId);
+        }
         settingsEditor.apply();
     }
 }

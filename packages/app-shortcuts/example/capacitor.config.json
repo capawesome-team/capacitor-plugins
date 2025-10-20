@@ -1,0 +1,10 @@
+{
+  "appId": "com.example.plugin",
+  "appName": "example",
+  "webDir": "dist",
+  "plugins": {
+    "AppShortcuts": {
+      "shortcuts": [{ "id": "feedback", "title": "Feedback", "iosIcon": "star.fill", "androidIcon": 17301547 }]
+    }
+  }
+}

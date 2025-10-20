@@ -1,45 +1,89 @@
 # @capawesome-team/capacitor-printer
 
-Capacitor plugin for printing.
+Capacitor plugin for seamless printing on Android and iOS. Supports base64, files, HTML, PDFs, and web views.
 
-## Sponsorware
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
-This project is available as **Sponsorware**.
+## Features
 
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for printing. Here are some of the key features:
 
-This means...
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🖨️ **Base64 Printer**: Print base64 encoded files.
+- 🖨️ **File Printer**: Print files from the device.
+- 🖨️ **HTML Printer**: Print custom HTML content.
+- 🖨️ **PDF Printer**: Print PDF files.
+- 🖨️ **Web View Printer**: Print web view content.
+- ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Terms
+## Compatibility
 
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 5.x.x          | 5.x.x             | Deprecated     |
 
 ## Demo
 
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+A working example can be found [here](https://github.com/robingenz/capacitor-plugin-demo).
 
-| Android                                                                                                                             | iOS                                                                                                                                 |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/7de4bcb3-aa59-43bc-a882-2796964be539" width="324" /> | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/d796d9f0-32c1-4d5c-b38f-ab46509a5eda" width="324" /> |
+| Android                                                                                                                                                | iOS                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/7de4bcb3-aa59-43bc-a882-2796964be539" width="324" alt="Android Demo" /> | <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/d796d9f0-32c1-4d5c-b38f-ab46509a5eda" width="324" alt="iOS Demo" /> |
+
+## Guides
+
+- [Exploring the Capacitor Printer API](https://capawesome.io/blog/exploring-the-capacitor-printer-api/)
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-printer) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
+
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-printer
+npx cap sync
+```
 
 ### Android
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+- `$androidxPrintVersion` version of `androidx.print:print` (default: `1.0.0`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
@@ -49,6 +93,20 @@ No configuration required for this plugin.
 
 ```typescript
 import { Printer } from '@capawesome-team/capacitor-printer';
+
+const printBase64 = async () => {
+  await Printer.printBase64({
+    name: 'My Document',
+    data: 'JVBERi0...',
+  });
+}
+
+const printFile = async () => {
+  await Printer.printFile({
+    mimeType: 'application/pdf',
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
+  });
+};
 
 const printHtml = async () => {
   await Printer.printHtml({
@@ -75,6 +133,8 @@ const printWebView = async () => {
 
 <docgen-index>
 
+* [`printBase64(...)`](#printbase64)
+* [`printFile(...)`](#printfile)
 * [`printHtml(...)`](#printhtml)
 * [`printPdf(...)`](#printpdf)
 * [`printWebView(...)`](#printwebview)
@@ -86,6 +146,46 @@ const printWebView = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
+### printBase64(...)
+
+```typescript
+printBase64(options: PrintBase64Options) => Promise<void>
+```
+
+Present the printing user interface to print files encoded as base64 strings.
+
+**Attention**: Large files can lead to app crashes. It's therefore recommended to use the `printFile` method instead.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#printbase64options">PrintBase64Options</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
+### printFile(...)
+
+```typescript
+printFile(options: PrintFileOptions) => Promise<void>
+```
+
+Present the printing user interface to print files.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#printfileoptions">PrintFileOptions</a></code> |
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### printHtml(...)
 
 ```typescript
@@ -94,7 +194,7 @@ printHtml(options: PrintHtmlOptions) => Promise<void>
 
 Present the printing user interface to print a html document.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -113,7 +213,7 @@ printPdf(options: PrintPdfOptions) => Promise<void>
 
 Present the printing user interface to print a pdf document.
 
-Only available for Android and iOS.
+Only available on Android and iOS.
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
@@ -132,18 +232,35 @@ printWebView(options?: PrintOptions | undefined) => Promise<void>
 
 Present the printing user interface to print the web view content.
 
+You can use a print style sheet to customize the print
+output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing).
+
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
 | **`options`** | <code><a href="#printoptions">PrintOptions</a></code> |
 
 **Since:** 5.0.0
 
-Only available for Android and iOS.
-
 --------------------
 
 
 ### Interfaces
+
+
+#### PrintBase64Options
+
+| Prop           | Type                | Description                                                                                                                                               | Since |
+| -------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`data`**     | <code>string</code> | A valid base 64 encoded string.                                                                                                                           | 7.1.0 |
+| **`mimeType`** | <code>string</code> | The mime type of the data. The following mime types are supported: `application/pdf`, `image/gif`, `image/heic`, `image/heif`, `image/jpeg`, `image/png`. | 7.1.0 |
+
+
+#### PrintFileOptions
+
+| Prop           | Type                | Description                                           | Since |
+| -------------- | ------------------- | ----------------------------------------------------- | ----- |
+| **`mimeType`** | <code>string</code> | The mime type of the file. Only available on Android. | 7.1.0 |
+| **`path`**     | <code>string</code> | The path to the file.                                 | 7.1.0 |
 
 
 #### PrintHtmlOptions
@@ -179,6 +296,10 @@ Only available for Android and iOS.
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/printer/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/printer/BREAKING.md).
 
 ## License
 

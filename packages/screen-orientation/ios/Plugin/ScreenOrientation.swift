@@ -30,9 +30,7 @@ import Capacitor
             strongSelf.requestGeometryUpdate(orientationValue: nextOrientationValue, orientationMask: nextOrientationMask)
             ScreenOrientation.supportedInterfaceOrientations = nextOrientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
-            if #unavailable(iOS 16) {
-                strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
-            }
+            strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
             strongSelf.notifyOrientationChangeListeners(orientationType)
             completion()
         }
@@ -40,11 +38,14 @@ import Capacitor
 
     @objc public func unlock(completion: @escaping () -> Void) {
         DispatchQueue.main.async {
-            ScreenOrientation.supportedInterfaceOrientations = UIInterfaceOrientationMask.all
+            let orientationMask = UIInterfaceOrientationMask.all
+            ScreenOrientation.supportedInterfaceOrientations = orientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
             guard let orientationType = self.lastOrientationType else {
                 return
             }
+            let orientationValue = self.convertOrientationTypeToValue(orientationType)
+            self.requestGeometryUpdate(orientationValue: orientationValue, orientationMask: orientationMask)
             self.notifyOrientationChangeListeners(orientationType)
             completion()
         }

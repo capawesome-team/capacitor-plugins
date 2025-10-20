@@ -1,0 +1,58 @@
+{
+  "name": "@capawesome/capacitor-android-dark-mode-support",
+  "version": "7.0.0",
+  "description": "Capacitor plugin to support dark mode on Android.",
+  "files": [
+    "android/src/main/",
+    "android/build.gradle"
+  ],
+  "author": "Robin Genz <mail@robingenz.dev>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/capawesome-team/"
+    },
+    {
+      "type": "opencollective",
+      "url": "https://opencollective.com/capawesome"
+    }
+  ],
+  "homepage": "https://capawesome.io/plugins/android-dark-mode-support/",
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "scripts": {
+    "verify": "npm run verify:android",
+    "verify:android": "cd android && ./gradlew clean build test && cd ..",
+    "lint": "npm run prettier -- --check",
+    "fmt": "npm run prettier -- --write",
+    "prettier": "prettier \"**/*.{css,html,ts,js,java}\""
+  },
+  "devDependencies": {
+    "@capacitor/android": "7.0.0",
+    "@capacitor/cli": "7.0.0",
+    "prettier": "3.4.2",
+    "prettier-plugin-java": "2.6.7"
+  },
+  "peerDependencies": {
+    "@capacitor/core": ">=7.0.0"
+  },
+  "capacitor": {
+    "android": {
+      "src": "android"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

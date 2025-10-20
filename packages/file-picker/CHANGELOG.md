@@ -1,5 +1,49 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`5bcf4245be157420c425b8539c7e55652625ae7b`](https://github.com/capawesome-team/capacitor-plugins/commit/5bcf4245be157420c425b8539c7e55652625ae7b) ([#542](https://github.com/capawesome-team/capacitor-plugins/pull/542)): feat(ios): add `copyFile(...)` method
+
+## 7.1.0
+
+### Minor Changes
+
+- [`0b995f2215a273bd76c13b8930d39a9b7c7bacf3`](https://github.com/capawesome-team/capacitor-plugins/commit/0b995f2215a273bd76c13b8930d39a9b7c7bacf3) ([#514](https://github.com/capawesome-team/capacitor-plugins/pull/514)): feat(android): add `copyFile(...)` method
+
+## 7.0.1
+
+### Patch Changes
+
+- [`1dc1fe3626a199a0f5dec2685443d74589cf43e5`](https://github.com/capawesome-team/capacitor-plugins/commit/1dc1fe3626a199a0f5dec2685443d74589cf43e5) ([#407](https://github.com/capawesome-team/capacitor-plugins/pull/407)): fix: set correct target paths for SPM support
+
+## 7.0.0
+
+### Major Changes
+
+- [`a8a9e276492df2176b327c6eedae5325ea0442ea`](https://github.com/capawesome-team/capacitor-plugins/commit/a8a9e276492df2176b327c6eedae5325ea0442ea) ([#402](https://github.com/capawesome-team/capacitor-plugins/pull/402)): feat: update to Capacitor 7
+
+### Minor Changes
+
+- [`fdbcd817f6ab89525149685045f6ea7b78606b45`](https://github.com/capawesome-team/capacitor-plugins/commit/fdbcd817f6ab89525149685045f6ea7b78606b45) ([#382](https://github.com/capawesome-team/capacitor-plugins/pull/382)): feat: add SPM support
+
+## 6.2.0
+
+### Minor Changes
+
+- [`e3f377a`](https://github.com/capawesome-team/capacitor-plugins/commit/e3f377a7656f2ace20c34be1b566cbce443f538b) ([#326](https://github.com/capawesome-team/capacitor-plugins/pull/326)): feat: add `pickDirectory()` method
+
+## 6.1.0
+
+### Minor Changes
+
+- [`ede2704`](https://github.com/capawesome-team/capacitor-plugins/commit/ede2704bf34875c59570e3ef0c016c2730fe57ac) ([#302](https://github.com/capawesome-team/capacitor-plugins/pull/302)): feat(android): add `checkPermissions()` and `requestPermissions(...)` methods
+
+### Patch Changes
+
+- [`7f68534`](https://github.com/capawesome-team/capacitor-plugins/commit/7f68534c84d72952caafa270753a0125147bfbce) ([#295](https://github.com/capawesome-team/capacitor-plugins/pull/295)): fix(android): no files were returned on Android 10 and below with the Samsung Gallery app
+
 ## 6.0.1
 
 ### Patch Changes

@@ -13,17 +13,13 @@ public class LiveUpdateConfig {
     @Nullable
     private String defaultChannel = null;
 
-    private boolean enabled = true;
     private int httpTimeout = 60000;
-
-    @Nullable
-    private String location = null;
 
     @Nullable
     private String publicKey = null;
 
-    private int readyTimeout = 10000;
-    private boolean resetOnUpdate = true;
+    private int readyTimeout = 0;
+    private String serverDomain = "api.cloud.capawesome.io";
 
     @Nullable
     public String getAppId() {
@@ -39,17 +35,8 @@ public class LiveUpdateConfig {
         return defaultChannel;
     }
 
-    public boolean getEnabled() {
-        return enabled;
-    }
-
     public int getHttpTimeout() {
         return httpTimeout;
-    }
-
-    @Nullable
-    public String getLocation() {
-        return location;
     }
 
     @Nullable
@@ -61,8 +48,8 @@ public class LiveUpdateConfig {
         return readyTimeout;
     }
 
-    public boolean getResetOnUpdate() {
-        return resetOnUpdate;
+    public String getServerDomain() {
+        return serverDomain;
     }
 
     public void setAppId(@Nullable String appId) {
@@ -77,16 +64,8 @@ public class LiveUpdateConfig {
         this.defaultChannel = defaultChannel;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public void setHttpTimeout(int httpTimeout) {
         this.httpTimeout = httpTimeout;
-    }
-
-    public void setLocation(@Nullable String location) {
-        this.location = location;
     }
 
     public void setPublicKey(@Nullable String publicKey) {
@@ -97,7 +76,7 @@ public class LiveUpdateConfig {
         this.readyTimeout = readyTimeout;
     }
 
-    public void setResetOnUpdate(boolean resetOnUpdate) {
-        this.resetOnUpdate = resetOnUpdate;
+    public void setServerDomain(String serverDomain) {
+        this.serverDomain = serverDomain;
     }
 }

@@ -1,45 +1,83 @@
 # @capawesome-team/capacitor-file-compressor
 
-Capacitor plugin for compressing files.
+Capacitor plugin for efficient file compression with support for image formats like PNG, JPEG, and WebP.
 
-## Sponsorware
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
-This project is available as **Sponsorware**.
+## Features
 
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for file compression. Here are some of the key features:
 
-This means...
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🌅 **Compress Images**: Compress png, jpeg, and webp images.
+- 🤝 **Compatibility**: Compatible with the [Zip](https://capawesome.io/plugins/zip/) plugin.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Terms
+## Compatibility
 
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
-
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
 
 ## Demo
 
-A working example can be found here: [capawesome-team/capacitor-plugin-demo](https://github.com/capawesome-team/capacitor-plugin-demo)
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugin-demo).
 
-| Android                                                                                                                             |
-| ----------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" /> |
+| Android                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/24fa080e-327f-4a7e-afed-f2e7da82d5a7" width="324" alt="Android Demo" /> |
+
+## Guides
+
+- [Exploring the Capacitor File Compressor API](https://capawesome.io/blog/exploring-the-capacitor-file-compressor-api/)
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-file-compressor) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
+
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-file-compressor
+npx cap sync
+```
 
 ### Android
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
@@ -52,9 +90,11 @@ import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
 const compressImage = async () => {
   const { path } = await FileCompressor.compressImage({
+    height: 1000,
     mimeType: 'image/jpeg',
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
     quality: 0.7,
+    width: 1000,
   });
   return path;
 };
@@ -111,15 +151,21 @@ Only png, jpeg, and webp images are supported.
 | Prop           | Type                | Description                                                                                                                                                                                                                    | Default                   | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | ----- |
 | **`blob`**     | <code>Blob</code>   | The blob of the file to compress. Only available on Web.                                                                                                                                                                       |                           | 5.0.0 |
+| **`height`**   | <code>number</code> | The height of the resulting image.                                                                                                                                                                                             |                           | 7.1.0 |
 | **`mimeType`** | <code>string</code> | The mime type of the compressed file. On Android, only `image/jpeg` and `image/webp` are supported. On iOS, only `image/jpeg` is supported. On Web, only `image/jpeg` and `image/webp` are supported.                          | <code>'image/jpeg'</code> | 5.0.0 |
 | **`path`**     | <code>string</code> | The path of the file to compress. Only available on Android and iOS.                                                                                                                                                           |                           | 5.0.0 |
 | **`quality`**  | <code>number</code> | The quality of the resulting image, expressed as a value from `0.0` to `1.0`. The value `0.0` represents the maximum compression (or lowest quality) while the value `1.0` represents the least compression (or best quality). | <code>0.6</code>          | 5.0.0 |
+| **`width`**    | <code>number</code> | The width of the resulting image.                                                                                                                                                                                              |                           | 7.1.0 |
 
 </docgen-api>
 
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/file-compressor/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/file-compressor/BREAKING.md).
 
 ## License
 

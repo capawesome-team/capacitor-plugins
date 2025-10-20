@@ -2,6 +2,32 @@
 
 Capacitor plugin to lock/unlock the screen orientation.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for screen orientation control. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
+- 🔒 **Orientation locking**: Lock screen to specific orientations.
+- 🔓 **Orientation unlocking**: Unlock and restore automatic orientation.
+- 📱 **Multiple orientations**: Support for portrait, landscape, and specific orientations.
+- 🔄 **Orientation detection**: Get current screen orientation.
+- 📢 **Event listeners**: Listen to orientation change events.
+- 📐 **Fine-grained control**: Primary and secondary orientation modes.
+- 🍎 **iPad support**: Special configuration for iPad orientation locking.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash
@@ -10,6 +36,8 @@ npx cap sync
 ```
 
 ### iOS
+
+#### General
 
 On iOS you must add the following to your app's `AppDelegate.swift`:
 
@@ -22,6 +50,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 + func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 +   return ScreenOrientation.getSupportedInterfaceOrientations()
 + }
+```
+
+#### iPad Orientation Lock
+
+On iPad, you must add the following to your app's `Info.plist`:
+
+```xml
+<key>UIRequiresFullScreen</key>
+<true/>
 ```
 
 ## Configuration
@@ -58,7 +95,7 @@ const getCurrentOrientation = async () => {
 * [`lock(...)`](#lock)
 * [`unlock()`](#unlock)
 * [`getCurrentOrientation()`](#getcurrentorientation)
-* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange)
+* [`addListener('screenOrientationChange', ...)`](#addlistenerscreenorientationchange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)

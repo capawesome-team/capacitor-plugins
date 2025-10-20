@@ -2,6 +2,30 @@
 
 Capacitor plugin to access and update the badge number of the app icon.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for app icon badge management. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android, iOS, and Web (PWA).
+- 🔢 **Badge management**: Get, set, increase, decrease, and clear badge counts.
+- 💾 **Persistent badges**: Badge count persists after reboot or app restart.
+- 🔄 **Auto-clear option**: Automatically reset counter when resuming the app.
+- 🔐 **Permission handling**: Check and request badge display permissions.
+- ⚙️ **Configurable**: Customize persistence and auto-clear behaviors.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Installation
 
 ```bash
@@ -13,9 +37,11 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$shortcutBadgerVersion` version of `me.leolin:ShortcutBadger` (default: `1.1.22`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
 
@@ -51,10 +77,10 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 
 These configuration values are available:
 
-| Prop            | Type                 | Description                                                                                                               | Default            |
-| --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available on Android and iOS. | <code>true</code>  |
-| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. Only available on Android and iOS.  | <code>false</code> |
+| Prop            | Type                 | Description                                                                                                                                                                  | Default            |
+| --------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| **`persist`**   | <code>boolean</code> | Configure whether the plugin should restore the counter after a reboot or app restart. Only available on Android and iOS.                                                    | <code>true</code>  |
+| **`autoClear`** | <code>boolean</code> | Configure whether the plugin should reset the counter after resuming the application. On **iOS**, this will also clear all notifications. Only available on Android and iOS. | <code>false</code> |
 
 ### Examples
 
@@ -217,6 +243,8 @@ clear() => Promise<void>
 
 Clear the badge count.
 
+On **iOS**, this will remove the badge and also clear all notifications.
+
 --------------------
 
 
@@ -271,9 +299,9 @@ Request permission to display badge.
 
 #### SetBadgeOptions
 
-| Prop        | Type                |
-| ----------- | ------------------- |
-| **`count`** | <code>number</code> |
+| Prop        | Type                | Description                                                                                                          |
+| ----------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **`count`** | <code>number</code> | The badge count to set. On **iOS**, setting the count to `0` will remove the badge and also clear all notifications. |
 
 
 #### IsSupportedResult

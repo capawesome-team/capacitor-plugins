@@ -67,14 +67,12 @@ public class DatetimePickerPlugin extends Plugin {
                 maxDate = DatetimePickerHelper.convertStringToDate(format, max);
             }
             PresentResultCallback resultCallback = new PresentResultCallback();
-            resultCallback.setSuccessListener(
-                selectedDate -> {
-                    String dateAsString = DatetimePickerHelper.convertDateToString(format, selectedDate);
-                    JSObject result = new JSObject();
-                    result.put("value", dateAsString);
-                    call.resolve(result);
-                }
-            );
+            resultCallback.setSuccessListener(selectedDate -> {
+                String dateAsString = DatetimePickerHelper.convertDateToString(format, selectedDate);
+                JSObject result = new JSObject();
+                result.put("value", dateAsString);
+                call.resolve(result);
+            });
             resultCallback.setCancelListener(() -> call.reject(ERROR_PICKER_CANCELED, ERROR_CODE_CANCELED));
             resultCallback.setDismissListener(() -> call.reject(ERROR_PICKER_DISMISSED, ERROR_CODE_DISMISSED));
 

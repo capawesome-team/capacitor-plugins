@@ -2,11 +2,18 @@
 
 Capacitor plugin to run a foreground service on Android.
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/insiders/getting-started/?plugin=capacitor-android-foreground-service) and follow the instructions to install the plugin.
-
-After that, follow the platform-specific instructions in the section [Android](#android).
+```bash
+npm install @capawesome-team/capacitor-android-foreground-service
+npx cap sync
+```
 
 ### Android
 
@@ -15,12 +22,13 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 ```xml
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+<!-- Required to keep the app running in the background without any ressource limitations -->
 <uses-permission android:name="android.permission.WAKE_LOCK" />
 <!-- Required to request the manage overlay permission -->
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 ```
 
-**Attention**: Replace `FOREGROUND_SERVICE_LOCATION` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
+**Attention**: Replace `FOREGROUND_SERVICE_LOCATION` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)). See [ServiceType](#servicetype) for the available types.
 
 You also need to add the following receiver and service **inside** the `application` tag in your `AndroidManifest.xml`:
 
@@ -29,7 +37,7 @@ You also need to add the following receiver and service **inside** the `applicat
 <service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" />
 ```
 
-**Attention**: Replace `location` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)).
+**Attention**: Replace `location` with the foreground service types you want to use (see [Foreground service types](https://developer.android.com/develop/background-work/services/fg-service-types)). See [ServiceType](#servicetype) for the available types.
 
 ## Configuration
 
@@ -39,9 +47,9 @@ No configuration required for this plugin.
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
-| Android                                                                                                                         |
-| ------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/188438969-fcbf02d3-0db2-4277-8039-ddfb6bce42ae.gif" width="324" /> |
+| Android                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/188438969-fcbf02d3-0db2-4277-8039-ddfb6bce42ae.gif" width="324" alt="Android Demo" /> |
 
 ## Usage
 
@@ -50,17 +58,52 @@ import { Capacitor } from '@capacitor/core';
 import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
 
 const startForegroundService = async () => {
-  if (Capacitor.getPlatform() !== 'android') {
-    return false;
-  }
-  await ForegroundService.startForegroundService();
+  await ForegroundService.startForegroundService({
+    id: 1,
+    title: 'Title',
+    body: 'Body',
+    smallIcon: 'ic_stat_icon_config_sample',
+    buttons: [
+      {
+        title: 'Button 1',
+        id: 1,
+      },
+      {
+        title: 'Button 2',
+        id: 2,
+      },
+    ],
+    silent: false,
+    notificationChannelId: 'default',
+  });
+};
+
+const updateForegroundService = async () => {
+  await ForegroundService.updateForegroundService({
+    id: 1,
+    title: 'Title',
+    body: 'Body',
+    smallIcon: 'ic_stat_icon_config_sample',
+  });
 };
 
 const stopForegroundService = async () => {
-  if (Capacitor.getPlatform() !== 'android') {
-    return false;
-  }
   await ForegroundService.stopForegroundService();
+};
+
+const createNotificationChannel = async () => {
+  await ForegroundService.createNotificationChannel({
+    id: 'default',
+    name: 'Default',
+    description: 'Default channel',
+    importance: Importance.Default,
+  });
+};
+
+const deleteNotificationChannel = async () => {
+  await ForegroundService.deleteNotificationChannel({
+    id: 'default',
+  });
 };
 ```
 
@@ -70,15 +113,19 @@ const stopForegroundService = async () => {
 
 * [`moveToForeground()`](#movetoforeground)
 * [`startForegroundService(...)`](#startforegroundservice)
+* [`updateForegroundService(...)`](#updateforegroundservice)
 * [`stopForegroundService()`](#stopforegroundservice)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
 * [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
-* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked)
+* [`createNotificationChannel(...)`](#createnotificationchannel)
+* [`deleteNotificationChannel(...)`](#deletenotificationchannel)
+* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -120,6 +167,25 @@ Only available on Android.
 | **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### updateForegroundService(...)
+
+```typescript
+updateForegroundService(options: UpdateForegroundServiceOptions) => Promise<void>
+```
+
+Updates the notification details of the running foreground service.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code> |
+
+**Since:** 6.1.0
 
 --------------------
 
@@ -211,6 +277,45 @@ Only available on Android.
 --------------------
 
 
+### createNotificationChannel(...)
+
+```typescript
+createNotificationChannel(options: CreateNotificationChannelOptions) => Promise<void>
+```
+
+Create a notification channel.
+If not invoked, the plugin creates a channel with name and description set to "Default".
+
+Only available for Android (SDK 26+).
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#createnotificationchanneloptions">CreateNotificationChannelOptions</a></code> |
+
+**Since:** 6.1.0
+
+--------------------
+
+
+### deleteNotificationChannel(...)
+
+```typescript
+deleteNotificationChannel(options: DeleteNotificationChannelOptions) => Promise<void>
+```
+
+Delete a notification channel.
+
+Only available for Android (SDK 26+).
+
+| Param         | Type                                                                                          |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletenotificationchanneloptions">DeleteNotificationChannelOptions</a></code> |
+
+**Since:** 6.1.0
+
+--------------------
+
+
 ### addListener('buttonClicked', ...)
 
 ```typescript
@@ -251,13 +356,16 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                              | Description                                                                                                                                                                                                     | Since |
-| --------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`body`**      | <code>string</code>               | The body of the notification, shown below the title.                                                                                                                                                            | 0.0.1 |
-| **`buttons`**   | <code>NotificationButton[]</code> | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   | 0.2.0 |
-| **`id`**        | <code>number</code>               | The notification identifier.                                                                                                                                                                                    | 0.0.1 |
-| **`smallIcon`** | <code>string</code>               | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 0.0.1 |
-| **`title`**     | <code>string</code>               | The title of the notification.                                                                                                                                                                                  | 0.0.1 |
+| Prop                        | Type                                                | Description                                                                                                                                                                                                     | Default            | Since |
+| --------------------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`body`**                  | <code>string</code>                                 | The body of the notification, shown below the title.                                                                                                                                                            |                    | 0.0.1 |
+| **`buttons`**               | <code>NotificationButton[]</code>                   | The buttons to show on the notification. Only available on Android (SDK 24+).                                                                                                                                   |                    | 0.2.0 |
+| **`id`**                    | <code>number</code>                                 | The notification identifier.                                                                                                                                                                                    |                    | 0.0.1 |
+| **`serviceType`**           | <code><a href="#servicetype">ServiceType</a></code> | The foreground service type. Only available on Android (SDK 29+).                                                                                                                                               |                    | 6.2.0 |
+| **`smallIcon`**             | <code>string</code>                                 | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                    | 0.0.1 |
+| **`title`**                 | <code>string</code>                                 | The title of the notification.                                                                                                                                                                                  |                    | 0.0.1 |
+| **`silent`**                | <code>boolean</code>                                | If true, will only alert (sound/vibration) on the first notification. Subsequent updates will be silent.                                                                                                        | <code>false</code> | 6.1.0 |
+| **`notificationChannelId`** | <code>string</code>                                 | The notification channel identifier.                                                                                                                                                                            |                    | 6.1.0 |
 
 
 #### NotificationButton
@@ -282,6 +390,23 @@ Remove all listeners for this plugin.
 | **`granted`** | <code>boolean</code> | Whether the permission is granted. This is always `true` on Android SDK &lt; 23. | 0.3.0 |
 
 
+#### CreateNotificationChannelOptions
+
+| Prop              | Type                                              | Description                                                         | Since |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------- | ----- |
+| **`description`** | <code>string</code>                               | The description of this channel (presented to the user).            | 6.1.0 |
+| **`id`**          | <code>string</code>                               | The channel identifier.                                             | 6.1.0 |
+| **`importance`**  | <code><a href="#importance">Importance</a></code> | The level of interruption for notifications posted to this channel. | 6.1.0 |
+| **`name`**        | <code>string</code>                               | The name of this channel (presented to the user).                   | 6.1.0 |
+
+
+#### DeleteNotificationChannelOptions
+
+| Prop     | Type                | Description             | Since |
+| -------- | ------------------- | ----------------------- | ----- |
+| **`id`** | <code>string</code> | The channel identifier. | 6.1.0 |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -299,6 +424,11 @@ Remove all listeners for this plugin.
 ### Type Aliases
 
 
+#### UpdateForegroundServiceOptions
+
+<code><a href="#startforegroundserviceoptions">StartForegroundServiceOptions</a></code>
+
+
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
@@ -308,7 +438,35 @@ Remove all listeners for this plugin.
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
 
+
+### Enums
+
+
+#### ServiceType
+
+| Members          | Value            | Description                                                                                     | Since |
+| ---------------- | ---------------- | ----------------------------------------------------------------------------------------------- | ----- |
+| **`Location`**   | <code>8</code>   | Long-running use cases that require location access, such as navigation and location sharing.   | 6.2.0 |
+| **`Microphone`** | <code>128</code> | Continue microphone capture from the background, such as voice recorders or communication apps. | 6.2.0 |
+
+
+#### Importance
+
+| Members       | Value          | Since |
+| ------------- | -------------- | ----- |
+| **`Min`**     | <code>1</code> | 6.1.0 |
+| **`Low`**     | <code>2</code> | 6.1.0 |
+| **`Default`** | <code>3</code> | 6.1.0 |
+| **`High`**    | <code>4</code> | 6.1.0 |
+| **`Max`**     | <code>5</code> | 6.1.0 |
+
 </docgen-api>
+
+## FAQ
+
+### Why can the user dismiss the notification?
+
+Android 14 has changed the behavior to allow users to dismiss such notifications, see [Changes to how users experience non-dismissible notifications](https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications).
 
 ## Changelog
 

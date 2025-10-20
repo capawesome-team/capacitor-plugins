@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-posthog",
-  "version": "5.0.0",
+  "version": "7.2.0",
   "description": "Unofficial Capacitor plugin for PostHog SDK.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,8 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorPosthog.podspec"
+    "CapawesomeCapacitorPosthog.podspec",
+    "Package.swift"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
@@ -50,32 +51,32 @@
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api PosthogPlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
+    "ios:spm:install": "cd ios && swift package resolve && cd ..",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "6.0.0",
-    "@capacitor/cli": "6.0.0",
-    "@capacitor/core": "6.0.0",
-    "@capacitor/docgen": "0.0.17",
-    "@capacitor/ios": "6.0.0",
-    "@ionic/eslint-config": "0.3.0",
-    "@ionic/prettier-config": "2.0.0",
-    "@ionic/swiftlint-config": "1.1.2",
-    "eslint": "7.32.0",
+    "@capacitor/android": "7.0.0",
+    "@capacitor/cli": "7.0.0",
+    "@capacitor/core": "7.0.0",
+    "@capacitor/docgen": "0.3.0",
+    "@capacitor/ios": "7.0.0",
+    "@ionic/eslint-config": "0.4.0",
+    "@ionic/swiftlint-config": "2.0.0",
+    "eslint": "8.57.0",
     "posthog-js": "1.160.3",
-    "prettier": "2.6.2",
-    "prettier-plugin-java": "1.6.1",
-    "rimraf": "3.0.2",
-    "rollup": "2.77.2",
-    "swiftlint": "1.0.1",
+    "prettier": "3.4.2",
+    "prettier-plugin-java": "2.6.7",
+    "rimraf": "6.0.1",
+    "rollup": "4.30.1",
+    "swiftlint": "2.0.0",
     "typescript": "4.6.4"
   },
   "peerDependencies": {
-    "@capacitor/core": "^6.0.0",
+    "@capacitor/core": ">=7.0.0",
     "posthog-js": "^1.160.3"
   },
   "peerDependenciesMeta": {
@@ -83,7 +84,6 @@
       "optional": true
     }
   },
-  "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"

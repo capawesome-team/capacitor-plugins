@@ -1,0 +1,24 @@
+{
+  "name": "capacitor-app",
+  "version": "1.0.0",
+  "description": "An Amazing Capacitor App",
+  "main": "index.js",
+  "keywords": [
+    "capacitor",
+    "mobile"
+  ],
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@capacitor/core": "7.0.0",
+    "@capawesome-team/capacitor-file-opener": "file:..",
+    "@capawesome/capacitor-file-picker": "^7.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "7.0.0",
+    "vite": "^2.9.13"
+  }
+}

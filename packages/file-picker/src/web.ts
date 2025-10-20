@@ -3,7 +3,10 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   ConvertHeicToJpegOptions,
   ConvertHeicToJpegResult,
+  CopyFileOptions,
   FilePickerPlugin,
+  PermissionStatus,
+  PickDirectoryResult,
   PickFilesOptions,
   PickFilesResult,
   PickImagesOptions,
@@ -13,14 +16,23 @@ import type {
   PickVideosOptions,
   PickVideosResult,
   PickedFile,
+  RequestPermissionsOptions,
 } from './definitions';
 
 export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
   public readonly ERROR_PICK_FILE_CANCELED = 'pickFiles canceled.';
 
+  public async checkPermissions(): Promise<PermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   public async convertHeicToJpeg(
     _options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  public async copyFile(_options: CopyFileOptions): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
@@ -49,6 +61,10 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     return result;
   }
 
+  public async pickDirectory(): Promise<PickDirectoryResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   public async pickImages(
     options?: PickImagesOptions,
   ): Promise<PickImagesResult> {
@@ -63,6 +79,12 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     options?: PickVideosOptions,
   ): Promise<PickVideosResult> {
     return this.pickFiles({ types: ['video/*'], ...options });
+  }
+
+  public async requestPermissions(
+    _options?: RequestPermissionsOptions,
+  ): Promise<PermissionStatus> {
+    throw this.unimplemented('Not implemented on web.');
   }
 
   private async openFilePicker(

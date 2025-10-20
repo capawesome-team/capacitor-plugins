@@ -4,3 +4,10 @@ node_modules
 
 # VSCode
 .vscode/settings.json
+
+# IntelliJ
+.idea
+
+# Clause
+CLAUDE.md
+AGENTS.md

@@ -162,12 +162,18 @@ export enum AppUpdateAvailability {
 
 export interface OpenAppStoreOptions {
   /**
-   *  The two-letter country code for the store you want to search.
-   *  See http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2 for a list of ISO Country Codes.
+   * The app ID of the app to open in the App Store.
    *
-   *  Only available on iOS.
+   * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
+   * You can find the ID in the URL of your app store entry
+   * (e.g. `https://apps.apple.com/app/id123456789`).
+   *
+   * Only available on iOS.
+   *
+   * @since 6.1.0
+   * @example 123456789
    */
-  country?: string;
+  appId?: string;
 }
 
 export interface FlexibleUpdateState {

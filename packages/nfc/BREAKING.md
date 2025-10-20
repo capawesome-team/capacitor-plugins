@@ -4,7 +4,14 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 7.x.x](#version-7xx)
 - [Version 6.x.x](#version-6xx)
+
+## Version 7.x.x
+
+### `NfcTag.id` property
+
+On **iOS**, the `id` property of the `NfcTag` interface was returned reversed for ISO 15693 tags. This issue has been fixed in this version. The `id` property is now returned correctly and behaves the same way as on Android. More information can be found in the discussion [#200](https://github.com/capawesome-team/capacitor-plugins/discussions/200).
 
 ## Version 6.x.x
 

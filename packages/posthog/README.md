@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
+
 ## Installation
 
 ```bash
@@ -13,13 +19,58 @@ npx cap sync
 
 #### Variables
 
-This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
+- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.10.0`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Configuration
 
-No configuration required for this plugin.
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop         | Type                | Description                          | Default                                 | Since |
+| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
+| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 7.1.0 |
+| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "Posthog": {
+      "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      "host": 'https://eu.i.posthog.com'
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome/capacitor-posthog" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    Posthog: {
+      apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      host: 'https://eu.i.posthog.com',
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
 
 ## Demo
 
@@ -109,9 +160,13 @@ const unregister = async () => {
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
+* [`getFeatureFlag(...)`](#getfeatureflag)
+* [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
+* [`isFeatureEnabled(...)`](#isfeatureenabled)
 * [`register(...)`](#register)
+* [`reloadFeatureFlags()`](#reloadfeatureflags)
 * [`reset()`](#reset)
 * [`screen(...)`](#screen)
 * [`setup(...)`](#setup)
@@ -173,6 +228,44 @@ Only available on Android and iOS.
 --------------------
 
 
+### getFeatureFlag(...)
+
+```typescript
+getFeatureFlag(options: GetFeatureFlagOptions) => Promise<GetFeatureFlagResult>
+```
+
+Get the value of a feature flag.
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getfeatureflagoptions">GetFeatureFlagOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getfeatureflagresult">GetFeatureFlagResult</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### getFeatureFlagPayload(...)
+
+```typescript
+getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions) => Promise<GetFeatureFlagPayloadResult>
+```
+
+Get the payload of a feature flag.
+
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getfeatureflagpayloadoptions">GetFeatureFlagPayloadOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getfeatureflagpayloadresult">GetFeatureFlagPayloadResult</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### group(...)
 
 ```typescript
@@ -207,6 +300,25 @@ Identify the current user.
 --------------------
 
 
+### isFeatureEnabled(...)
+
+```typescript
+isFeatureEnabled(options: IsFeatureEnabledOptions) => Promise<IsFeatureEnabledResult>
+```
+
+Check if a feature flag is enabled.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#isfeatureenabledoptions">IsFeatureEnabledOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isfeatureenabledresult">IsFeatureEnabledResult</a>&gt;</code>
+
+**Since:** 7.0.0
+
+--------------------
+
+
 ### register(...)
 
 ```typescript
@@ -220,6 +332,19 @@ Register a new super property. This property will be sent with every event.
 | **`options`** | <code><a href="#registeroptions">RegisterOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### reloadFeatureFlags()
+
+```typescript
+reloadFeatureFlags() => Promise<void>
+```
+
+Reload the feature flags.
+
+**Since:** 7.0.0
 
 --------------------
 
@@ -265,6 +390,8 @@ setup(options: SetupOptions) => Promise<void>
 Setup the PostHog SDK with the provided options.
 
 **Attention**: This method should be called before any other method.
+Alternatively, on Android and iOS, you can configure this plugin in
+your Capacitor Configuration file. In this case, you must not call this method.
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
@@ -310,6 +437,34 @@ Remove a super property.
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### GetFeatureFlagResult
+
+| Prop        | Type                                   | Description                                                                                  | Since |
+| ----------- | -------------------------------------- | -------------------------------------------------------------------------------------------- | ----- |
+| **`value`** | <code>string \| boolean \| null</code> | The value of the feature flag. If the feature flag does not exist, the value will be `null`. | 7.0.0 |
+
+
+#### GetFeatureFlagOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
+
+
+#### GetFeatureFlagPayloadResult
+
+| Prop        | Type                                          | Description                            | Since |
+| ----------- | --------------------------------------------- | -------------------------------------- | ----- |
+| **`value`** | <code><a href="#jsontype">JsonType</a></code> | The value of the feature flag payload. | 7.1.0 |
+
+
+#### GetFeatureFlagPayloadOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.1.0 |
+
+
 #### GroupOptions
 
 | Prop                  | Type                                                         | Description                                  | Since |
@@ -325,6 +480,20 @@ Remove a super property.
 | -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
 | **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
 | **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+
+
+#### IsFeatureEnabledResult
+
+| Prop          | Type                 | Description                                                                                         | Since |
+| ------------- | -------------------- | --------------------------------------------------------------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Whether the feature flag is enabled. If the feature flag does not exist, the value will be `false`. | 7.0.0 |
+
+
+#### IsFeatureEnabledOptions
+
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
 
 #### RegisterOptions
@@ -366,6 +535,11 @@ Remove a super property.
 Construct a type with a set of properties K of type T
 
 <code>{ [P in K]: T; }</code>
+
+
+#### JsonType
+
+<code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
 

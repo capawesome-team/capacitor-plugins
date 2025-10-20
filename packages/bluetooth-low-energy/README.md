@@ -1,56 +1,102 @@
 # @capawesome-team/capacitor-bluetooth-low-energy
 
-Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central role.
+Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+  </a>
+</div>
 
 ## Features
 
-- 🔋 Supports Android and iOS
-- ⚡️ Capacitor 6 support
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
+- 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
+- 🔌 **Auto Reconnection**: Automatically reconnect to peripherals when the connection is lost.
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
-- 🛠️ **Utils**: Utility functions to make your life easier. 
+- 🛠️ **Utils**: Utility functions to make your life easier.
+- ⚔️ **Battle-Tested**: Used in more than 30 projects.
+- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
 
-## Sponsorware
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-This project is available as **Sponsorware**.
+## Compatibility
 
-> Sponsorware is a release strategy for open-source software that enables developers to be compensated for their open-source work with fewer downsides than traditional open-source funding models. ([Source](https://github.com/sponsorware/docs))
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 7.x.x          | >=7.x.x           | Active support |
+| 6.x.x          | 6.x.x             | Deprecated     |
 
-This means...
+## Demo
 
-- The source code will be published as soon as the [funding goal](https://capawesome.io/sponsors/insiders/#funding) is reached.
-- Any [sponsor](https://capawesome.io/sponsors/insiders/) with a sponsorware tier gets **immediate access** to our sponsors-only repository and can start using the project right away.
+A working example can be found [here](https://github.com/capawesome-team/capacitor-heart-rate-monitor-app).
 
-## Terms
+| Android                                                                                                                      | iOS                                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/user-attachments/assets/c4cf7ddc-7f98-42e1-8334-34a26dfdf457" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/3cfac38f-22ef-4b8e-a439-529079926a4e" width="266" alt="iOS Demo" /> |
 
-This project is licensed under the terms of the MIT license.  
-However, we kindly ask you to respect our **fair use policy**:
+## Guides
 
-- Please **don't distribute the source code** of the sponsors-only repository. You may freely use it for public, private or commercial projects, privately fork or mirror it, but please don't make the source code public, as it would counteract the sponsorware strategy.
-- If you cancel your subscription, you're automatically removed as a collaborator and will miss out on all future updates. However, **you may use the latest version that's available to you as long as you like**.
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
 
 ## Installation
 
-See [Getting started with Insiders](https://capawesome.io/sponsors/insiders/getting-started/?plugin=capacitor-bluetooth-low-energy) and follow the instructions to install the plugin.
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
+First, make sure you have the Capawesome npm registry set up.
+You can do this by running the following commands:
 
-After that, follow the platform-specific instructions in the sections [Android](#android) and [iOS](#ios).
+```
+npm config set @capawesome-team:registry https://npm.registry.capawesome.io
+npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
+```
+
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
+
+Next, install the package:
+
+```
+npm install @capawesome-team/capacitor-bluetooth-low-energy
+npx cap sync
+```
 
 ### Android
 
-#### Permissions
+#### Features
 
-This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
+Add the following element to your `AndroidManifest.xml` before or after the `application` tag:
 
 ```xml
-<!-- Needed only if your app looks for Bluetooth devices.  -->
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+```
+
+Set the `android:required` attribute to `true` if your app can't function, or isn't designed to function, when Bluetooth Low Energy is not available on the device. If your app can function without Bluetooth Low Energy, set the `android:required` attribute to `false`. This will allow your app to be installed on devices that do not support Bluetooth Low Energy.
+
+#### Permissions
+
+This API requires the following elements be added to your `AndroidManifest.xml` before or after the `application` tag:
+
+```xml
+<!-- Required if you want to support Android 11 and below. -->
+<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+<!-- Required if you want to advertise as a BLE device. -->
+<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+<!-- Required if you want to scan for BLE devices. -->
 <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
-<!-- Needed only if your app communicates with already-paired Bluetooth devices. -->
-<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-<!-- Needed only if your app uses Bluetooth scan results to derive physical location. -->
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<!-- Needed only if your app uses the foreground service. -->
+<!-- Required if you want to be able to connect to paired Bluetooth devices. -->
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+<!--Required if you want to start a foreground service.-->
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
 <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -70,45 +116,92 @@ You also need to add the following service **inside** the `application` tag in y
 
 If you want to run your own native code when a specific event occurs, you can create a headless task.
 For this, you need to create a Java class with the name `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity`.
-Then you need to add the `onCharacteristicChanged` method to your class:
+Then implement the following methods:
 
 ```java
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import androidx.annotation.NonNull;
 
 public class BluetoothLowEnergyHeadlessTask {
+  public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic) {
+    // Your code here
+  }
+
   public void onCharacteristicChanged(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onCharacteristicRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
+  public void onCharacteristicWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattCharacteristic characteristic, int status) {
+    // Your code here
+  }
+
+  public void onConnectionStateChange(@NonNull BluetoothGatt gatt, int status, int newState) {
+    // Your code here
+  }
+
+  public void onDescriptorRead(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status, @NonNull byte[] value) {
+    // Your code here
+  }
+
+  public void onDescriptorWrite(@NonNull BluetoothGatt gatt, @NonNull BluetoothGattDescriptor descriptor, int status) {
+    // Your code here
+  }
+
+  public void onMtuChanged(@NonNull BluetoothGatt gatt, int mtu, int status) {
+    // Your code here
+  }
+
+  public void onReadRemoteRssi(@NonNull BluetoothGatt gatt, int rssi, int status) {
+    // Your code here
+  }
+
+  public void onServiceChanged(@NonNull BluetoothGatt gatt) {
+    // Your code here
+  }
+
+  public void onServicesDiscovered(@NonNull BluetoothGatt gatt, int status) {
     // Your code here
   }
 }
 ```
 
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
 ### iOS
 
-Add the `NSBluetoothPeripheralUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
+#### Privacy Descriptions
+
+Add the `NSBluetoothAlwaysUsageDescription` key to the `Info.plist` file (usually `ios/App/App/Info.plist`), which tells the user why the app needs access to Bluetooth peripherals:
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
 <string>The app needs access to Bluetooth peripherals to communicate with Bluetooth devices.</string>
 ```
 
-If the app wants to use Bluetooth in the background, add the `UIBackgroundModes` key with the `bluetooth-central` value:
+#### Capabilities
 
-```xml
-<key>UIBackgroundModes</key>
-<array>
-    <string>bluetooth-central</string>
-</array>
-```
+If you want your app to maintain Bluetooth Low Energy connections in the background, ensure the `Background Modes` capability is enabled with `bluetooth-central` in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 ## Configuration
 
 No configuration required for this plugin.
 
-## Demo
+## Guides
 
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+- [Announcing the Capacitor Bluetooth Low Energy Plugin](https://capawesome.io/blog/announcing-the-capacitor-bluetooth-low-energy-plugin/)
+- [How to Build a Heart Rate Monitor with Capacitor](https://capawesome.io/blog/how-to-build-a-heart-rate-monitor-with-capacitor/)
 
 ## Usage
 
@@ -142,7 +235,12 @@ const getServices = async () => {
 };
 
 const initialize = async () => {
-  await BluetoothLowEnergy.initialize();
+  await BluetoothLowEnergy.initialize({ mode: 'central' });
+};
+
+const isAvailable = async () => {
+  const result = await BluetoothLowEnergy.isAvailable();
+  return result.isAvailable;
 };
 
 const isBonded = async () => {
@@ -205,6 +303,44 @@ const requestMtu = async () => {
   });
 };
 
+const setCharacteristicValue = async () => {
+  await BluetoothLowEnergy.setCharacteristicValue({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [1, 2, 3],
+  });
+};
+
+const startAdvertising = async () => {
+  await BluetoothLowEnergy.startAdvertising({
+    manufacturerData: {
+      0xffff: [1, 2, 3]
+    },
+    name: 'MyDevice',
+    services: [
+      {
+        id: '0000180A-0000-1000-8000-00805F9B34FB',
+        characteristics: [
+          {
+            id: '00002A29-0000-1000-8000-00805F9B34FB',
+            descriptors: [], // Descriptors are ignored for now
+            permissions: {
+              read: true,
+              write: true,
+            },
+            properties: {
+              read: true,
+              write: true,
+              notify: true,
+              indicate: true,
+            },
+          },
+        ],
+      },
+    ],
+  });
+};
+
 const startCharacteristicNotifications = async () => {
   await BluetoothLowEnergy.startCharacteristicNotifications({
     characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
@@ -224,6 +360,10 @@ const startForegroundService = async () => {
 
 const startScan = async () => {
   await BluetoothLowEnergy.startScan();
+};
+
+const stopAdvertising = async () => {
+  await BluetoothLowEnergy.stopAdvertising();
 };
 
 const stopCharacteristicNotifications = async () => {
@@ -276,6 +416,14 @@ const addListener = () => {
     console.log('Characteristic changed', event);
   });
 
+  BluetoothLowEnergy.addListener('characteristicWriteRequest', async (event) => {
+    console.log('Characteristic write request', event);
+  });
+
+  BluetoothLowEnergy.addListener('deviceConnected', (event) => {
+    console.log('Device connected', event);
+  });
+
   BluetoothLowEnergy.addListener('deviceDisconnected', (event) => {
     console.log('Device disconnected', event);
   });
@@ -304,7 +452,8 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`discoverServices(...)`](#discoverservices)
 * [`getConnectedDevices()`](#getconnecteddevices)
 * [`getServices(...)`](#getservices)
-* [`initialize()`](#initialize)
+* [`initialize(...)`](#initialize)
+* [`isAvailable()`](#isavailable)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
 * [`openAppSettings()`](#openappsettings)
@@ -315,9 +464,12 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`readRssi(...)`](#readrssi)
 * [`requestConnectionPriority(...)`](#requestconnectionpriority)
 * [`requestMtu(...)`](#requestmtu)
+* [`setCharacteristicValue(...)`](#setcharacteristicvalue)
+* [`startAdvertising(...)`](#startadvertising)
 * [`startCharacteristicNotifications(...)`](#startcharacteristicnotifications)
 * [`startForegroundService(...)`](#startforegroundservice)
 * [`startScan(...)`](#startscan)
+* [`stopAdvertising()`](#stopadvertising)
 * [`stopCharacteristicNotifications(...)`](#stopcharacteristicnotifications)
 * [`stopForegroundService()`](#stopforegroundservice)
 * [`stopScan()`](#stopscan)
@@ -325,9 +477,11 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`writeDescriptor(...)`](#writedescriptor)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions(...)`](#requestpermissions)
-* [`addListener('characteristicChanged', ...)`](#addlistenercharacteristicchanged)
-* [`addListener('deviceDisconnected', ...)`](#addlistenerdevicedisconnected)
-* [`addListener('deviceScanned', ...)`](#addlistenerdevicescanned)
+* [`addListener('characteristicChanged', ...)`](#addlistenercharacteristicchanged-)
+* [`addListener('characteristicWriteRequest', ...)`](#addlistenercharacteristicwriterequest-)
+* [`addListener('deviceConnected', ...)`](#addlistenerdeviceconnected-)
+* [`addListener('deviceDisconnected', ...)`](#addlistenerdevicedisconnected-)
+* [`addListener('deviceScanned', ...)`](#addlistenerdevicescanned-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -454,19 +608,37 @@ Only available on Android and iOS.
 --------------------
 
 
-### initialize()
+### initialize(...)
 
 ```typescript
-initialize() => Promise<void>
+initialize(options?: InitializeOptions | undefined) => Promise<void>
 ```
 
 Initialize the plugin. This method must be called before any other method.
 
 On **iOS**, this will prompt the user for Bluetooth permissions.
+On **Android** and **Web**, this does nothing.
 
-Only available on iOS.
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check whether or not Bluetooth Low Energy is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 7.3.0
 
 --------------------
 
@@ -655,6 +827,44 @@ Only available on Android.
 --------------------
 
 
+### setCharacteristicValue(...)
+
+```typescript
+setCharacteristicValue(options: SetCharacteristicValueOptions) => Promise<void>
+```
+
+Set the value of a characteristic.
+
+Only available on Android.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setcharacteristicvalueoptions">SetCharacteristicValueOptions</a></code> |
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### startAdvertising(...)
+
+```typescript
+startAdvertising(options: StartAdvertisingOptions) => Promise<void>
+```
+
+Start advertising as a BLE device.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startadvertisingoptions">StartAdvertisingOptions</a></code> |
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### startCharacteristicNotifications(...)
 
 ```typescript
@@ -677,10 +887,13 @@ Only available on Android and iOS.
 ### startForegroundService(...)
 
 ```typescript
-startForegroundService(options: StartForegroundServiceOptions) => Promise<void>
+startForegroundService(options?: StartForegroundServiceOptions | undefined) => Promise<void>
 ```
 
-Start the foreground service.
+Start the foreground service and show a notification.
+
+This method should be called when the app is moved to the background to
+keep the Bluetooth connections alive.
 
 Only available on Android.
 
@@ -712,6 +925,21 @@ Only available on Android and iOS.
 --------------------
 
 
+### stopAdvertising()
+
+```typescript
+stopAdvertising() => Promise<void>
+```
+
+Stop advertising as a BLE device.
+
+Only available on Android and iOS.
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### stopCharacteristicNotifications(...)
 
 ```typescript
@@ -737,7 +965,10 @@ Only available on Android and iOS.
 stopForegroundService() => Promise<void>
 ```
 
-Stop the foreground service.
+Stop the foreground service and remove the notification.
+
+This method should be called when the app is moved to the foreground
+since the foreground service is no longer needed.
 
 Only available on Android.
 
@@ -859,6 +1090,50 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('characteristicWriteRequest', ...)
+
+```typescript
+addListener(eventName: 'characteristicWriteRequest', listenerFunc: (event: CharacteristicWriteRequestEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a characteristic write request is received.
+
+Only available on Android.
+
+| Param              | Type                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'characteristicWriteRequest'</code>                                                                       |
+| **`listenerFunc`** | <code>(event: <a href="#characteristicwriterequestevent">CharacteristicWriteRequestEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.2.0
+
+--------------------
+
+
+### addListener('deviceConnected', ...)
+
+```typescript
+addListener(eventName: 'deviceConnected', listenerFunc: (event: DeviceConnectedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a device is connected.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                                      |
+| ------------------ | ----------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'deviceConnected'</code>                                                            |
+| **`listenerFunc`** | <code>(event: <a href="#deviceconnectedevent">DeviceConnectedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 7.1.0
+
+--------------------
+
+
 ### addListener('deviceDisconnected', ...)
 
 ```typescript
@@ -921,10 +1196,12 @@ Remove all listeners for this plugin.
 
 #### ConnectOptions
 
-| Prop           | Type                | Description                                                                                                                         | Default            | Since |
-| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`deviceId`** | <code>string</code> | The address of the device to connect to.                                                                                            |                    | 6.0.0 |
-| **`timeout`**  | <code>number</code> | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>10000</code> | 6.0.0 |
+| Prop                | Type                 | Description                                                                                                                                                            | Default            | Since |
+| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`autoConnect`**   | <code>boolean</code> | Whether to directly connect to the remote device (false) or to automatically connect as soon as the remote device becomes available (true). Only available on Android. | <code>false</code> | 7.1.0 |
+| **`autoReconnect`** | <code>boolean</code> | Whether to enable automatic reconnection to the peripheral when the connection is lost. Only available on Android and iOS (17.0+).                                     | <code>false</code> | 7.6.0 |
+| **`deviceId`**      | <code>string</code>  | The address of the device to connect to.                                                                                                                               |                    | 6.0.0 |
+| **`timeout`**       | <code>number</code>  | The timeout for the connect operation in milliseconds. If the operation takes longer than this value, the promise will be rejected.                                    | <code>10000</code> | 6.0.0 |
 
 
 #### CreateBondOptions
@@ -983,11 +1260,12 @@ Remove all listeners for this plugin.
 
 #### Characteristic
 
-| Prop              | Type                                                                          | Description                            | Since |
-| ----------------- | ----------------------------------------------------------------------------- | -------------------------------------- | ----- |
-| **`id`**          | <code>string</code>                                                           | The UUID of the characteristic.        | 6.0.0 |
-| **`descriptors`** | <code>Descriptor[]</code>                                                     | The descriptors of the characteristic. | 6.0.0 |
-| **`properties`**  | <code><a href="#characteristicproperties">CharacteristicProperties</a></code> | The properties of the characteristic.  | 6.0.0 |
+| Prop              | Type                                                                            | Description                                                                                                            | Since |
+| ----------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**          | <code>string</code>                                                             | The UUID of the characteristic.                                                                                        | 6.0.0 |
+| **`descriptors`** | <code>Descriptor[]</code>                                                       | The descriptors of the characteristic. **Note**: This property is currently ignored when advertising a characteristic. | 6.0.0 |
+| **`permissions`** | <code><a href="#characteristicpermissions">CharacteristicPermissions</a></code> | The permissions of the characteristic. Only available on Android.                                                      | 7.2.0 |
+| **`properties`**  | <code><a href="#characteristicproperties">CharacteristicProperties</a></code>   | The properties of the characteristic.                                                                                  | 6.0.0 |
 
 
 #### Descriptor
@@ -995,6 +1273,20 @@ Remove all listeners for this plugin.
 | Prop     | Type                | Description                 | Since |
 | -------- | ------------------- | --------------------------- | ----- |
 | **`id`** | <code>string</code> | The UUID of the descriptor. | 6.0.0 |
+
+
+#### CharacteristicPermissions
+
+| Prop                     | Type                 | Description                                                                                                      | Since |
+| ------------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------- | ----- |
+| **`read`**               | <code>boolean</code> | Whether or not the characteristic can be read.                                                                   | 7.2.0 |
+| **`readEncrypted`**      | <code>boolean</code> | Whether or not the characteristic can be read with encryption.                                                   | 7.2.0 |
+| **`readEncryptedMitm`**  | <code>boolean</code> | Whether or not the characteristic can be read with encryption and MITM protection. Only available on Android.    | 7.2.0 |
+| **`write`**              | <code>boolean</code> | Whether or not the characteristic can be written.                                                                | 7.2.0 |
+| **`writeEncrypted`**     | <code>boolean</code> | Whether or not the characteristic can be written with encryption.                                                | 7.2.0 |
+| **`writeEncryptedMitm`** | <code>boolean</code> | Whether or not the characteristic can be written with encryption and MITM protection. Only available on Android. | 7.2.0 |
+| **`writeSigned`**        | <code>boolean</code> | Whether or not the characteristic can be written signed. Only available on Android.                              | 7.2.0 |
+| **`writeSignedMitm`**    | <code>boolean</code> | Whether or not the characteristic can be written signed with encryption. Only available on Android.              | 7.2.0 |
 
 
 #### CharacteristicProperties
@@ -1019,6 +1311,20 @@ Remove all listeners for this plugin.
 | -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
 | **`deviceId`** | <code>string</code> | The address of the device to get the services for.                                                                                       |                   | 6.0.0 |
 | **`timeout`**  | <code>number</code> | The timeout for the get services operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | <code>5000</code> | 6.0.0 |
+
+
+#### InitializeOptions
+
+| Prop       | Type                                   | Description                                                         | Default                | Since |
+| ---------- | -------------------------------------- | ------------------------------------------------------------------- | ---------------------- | ----- |
+| **`mode`** | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS. | <code>'central'</code> | 7.2.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                                     | Since |
+| ----------------- | -------------------- | --------------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether or not Bluetooth Low Energy is available on the device. | 7.3.0 |
 
 
 #### IsBondedResult
@@ -1111,6 +1417,24 @@ Remove all listeners for this plugin.
 | **`timeout`**  | <code>number</code> | The timeout for the request MTU operation in milliseconds. If the operation takes longer than this value, the promise will be rejected. | 6.0.0 |
 
 
+#### SetCharacteristicValueOptions
+
+| Prop                   | Type                  | Description                                          | Since |
+| ---------------------- | --------------------- | ---------------------------------------------------- | ----- |
+| **`characteristicId`** | <code>string</code>   | The UUID of the characteristic to set the value for. | 7.2.0 |
+| **`serviceId`**        | <code>string</code>   | The UUID of the service to set the value for.        | 7.2.0 |
+| **`value`**            | <code>number[]</code> | The value bytes to set for the characteristic.       | 7.2.0 |
+
+
+#### StartAdvertisingOptions
+
+| Prop                   | Type                                      | Description                                                             | Default                | Since |
+| ---------------------- | ----------------------------------------- | ----------------------------------------------------------------------- | ---------------------- | ----- |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android. |                        | 7.5.0 |
+| **`name`**             | <code>string</code>                       | The name of the local device to advertise. Only available on iOS.       | <code>"Unknown"</code> | 7.2.0 |
+| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                              |                        | 7.2.0 |
+
+
 #### StartCharacteristicNotificationsOptions
 
 | Prop                   | Type                | Description                                                                                                                                     | Default           | Since |
@@ -1123,12 +1447,12 @@ Remove all listeners for this plugin.
 
 #### StartForegroundServiceOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                     | Since |
-| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | 6.0.0 |
-| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | 6.0.0 |
-| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. | 6.0.0 |
-| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | 6.0.0 |
+| Prop            | Type                | Description                                                                                                                                                                                                     | Default                                                                              | Since |
+| --------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`body`**      | <code>string</code> | The body of the notification, shown below the title.                                                                                                                                                            | <code>"App is running in the background to keep Bluetooth connections alive."</code> | 6.0.0 |
+| **`id`**        | <code>number</code> | The notification identifier.                                                                                                                                                                                    | <code>105</code>                                                                     | 6.0.0 |
+| **`smallIcon`** | <code>string</code> | The status bar icon for the notification. Icons should be placed in your app's `res/drawable` folder. The value for this option should be the drawable resource ID, which is the filename without an extension. |                                                                                      | 6.0.0 |
+| **`title`**     | <code>string</code> | The title of the notification.                                                                                                                                                                                  | <code>"Bluetooth Low Energy"</code>                                                  | 6.0.0 |
 
 
 #### StartScanOptions
@@ -1185,9 +1509,9 @@ Remove all listeners for this plugin.
 
 #### BluetoothLowEnergyPluginPermission
 
-| Prop              | Type                                            |
-| ----------------- | ----------------------------------------------- |
-| **`permissions`** | <code>BluetoothLowEnergyPermissionType[]</code> |
+| Prop              | Type                                            | Description                 | Default                                                                                                        |
+| ----------------- | ----------------------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **`permissions`** | <code>BluetoothLowEnergyPermissionType[]</code> | The permissions to request. | <code>['bluetooth', 'bluetoothAdmin', 'bluetoothConnect', 'bluetoothScan', 'location', 'notifications']</code> |
 
 
 #### PluginListenerHandle
@@ -1205,6 +1529,23 @@ Remove all listeners for this plugin.
 | **`deviceId`**         | <code>string</code>   | The address of the device.                     | 6.0.0 |
 | **`serviceId`**        | <code>string</code>   | The UUID of the service.                       | 6.0.0 |
 | **`value`**            | <code>number[]</code> | The changed value bytes of the characteristic. | 6.0.0 |
+
+
+#### CharacteristicWriteRequestEvent
+
+| Prop                   | Type                  | Description                                     | Since |
+| ---------------------- | --------------------- | ----------------------------------------------- | ----- |
+| **`characteristicId`** | <code>string</code>   | The UUID of the characteristic.                 | 7.2.0 |
+| **`serviceId`**        | <code>string</code>   | The address of the device.                      | 7.2.0 |
+| **`value`**            | <code>number[]</code> | The value bytes to write to the characteristic. | 7.2.0 |
+
+
+#### DeviceConnectedEvent
+
+| Prop           | Type                | Description                          | Since |
+| -------------- | ------------------- | ------------------------------------ | ----- |
+| **`deviceId`** | <code>string</code> | The address of the connected device. | 7.1.0 |
+| **`name`**     | <code>string</code> | The name of the connected device.    | 7.1.0 |
 
 
 #### DeviceDisconnectedEvent
@@ -1234,7 +1575,7 @@ Remove all listeners for this plugin.
 
 #### BluetoothLowEnergyPermissionType
 
-<code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'location' | 'notifications'</code>
+<code>'bluetooth' | 'bluetoothAdmin' | 'bluetoothAdvertise' | 'bluetoothConnect' | 'bluetoothScan' | 'location' | 'notifications'</code>
 
 
 ### Enums
@@ -1253,11 +1594,25 @@ Remove all listeners for this plugin.
 
 ## Utils
 
-See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md).
+This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
+
+```ts
+import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+
+const convertBytesToHex = (bytes: number[]) => {
+  return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
+};
+```
+
+See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
 
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/BREAKING.md).
 
 ## License
 

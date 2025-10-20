@@ -12,20 +12,24 @@
 		2F98D68224C9AAE500613A4C /* LiveUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* LiveUpdate.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* LiveUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* LiveUpdateTests.swift */; };
-		50ADFF99201F53D600D50D53 /* LiveUpdatePlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 50ADFF8B201F53D600D50D53 /* LiveUpdatePlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
-		50ADFFA82020EE4F00D50D53 /* LiveUpdatePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* LiveUpdatePlugin.m */; };
 		50E1A94820377CB70090CE1A /* LiveUpdatePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */; };
 		7C0C8C492BAB354A005F76D1 /* LiveUpdateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */; };
 		7C2011512BA9653B001FABAD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011502BA9653B001FABAD /* Result.swift */; };
 		7C2011532BA96555001FABAD /* GetBundlesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011522BA96555001FABAD /* GetBundlesResult.swift */; };
-		7C2011552BA9656E001FABAD /* SetBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011542BA9656E001FABAD /* SetBundleOptions.swift */; };
 		7C2011572BA9661B001FABAD /* DeleteBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011562BA9661B001FABAD /* DeleteBundleOptions.swift */; };
 		7C2011592BA966F4001FABAD /* DownloadBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011582BA966F4001FABAD /* DownloadBundleOptions.swift */; };
+		7C29FB502CBAB671007DCB06 /* LiveUpdateHttpClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29FB4F2CBAB66C007DCB06 /* LiveUpdateHttpClient.swift */; };
+		7C29FB532CBCE2B5007DCB06 /* ArtifactType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29FB522CBCE2B0007DCB06 /* ArtifactType.swift */; };
+		7C29FB582CBCEE4C007DCB06 /* ManifestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29FB572CBCEE4B007DCB06 /* ManifestItem.swift */; };
+		7C29FB5A2CBD414B007DCB06 /* Manifest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C29FB592CBD4148007DCB06 /* Manifest.swift */; };
 		7C2E4CE72BC29C1100C80C2A /* SyncResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2E4CE62BC29C1100C80C2A /* SyncResult.swift */; };
-		7C33FC412BCBFE16003AA8B4 /* GetBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC402BCBFE16003AA8B4 /* GetBundleResult.swift */; };
 		7C33FC432BCBFE27003AA8B4 /* GetVersionCodeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */; };
 		7C33FC452BCBFE3A003AA8B4 /* GetVersionNameResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */; };
+		7C4274D52D1487500066184E /* SyncOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D42D14874E0066184E /* SyncOptions.swift */; };
+		7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */; };
+		7C4F2B122D149290005E2310 /* GetCurrentBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */; };
+		7C4F2B142D149296005E2310 /* GetNextBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */; };
 		7C62B6512BA9AD220025240F /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C62B6502BA9AD220025240F /* CustomError.swift */; };
 		7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */; };
 		7C6715D12BB1BC9E0000878A /* SetCustomIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */; };
@@ -34,6 +38,10 @@
 		7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */; };
 		7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */; };
 		7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */; };
+		7CA18F442C5E1FFE00D0BE5B /* ReadyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */; };
+		7CA1DA9C2D454C0B001EB3D0 /* DownloadBundleProgressEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */; };
+		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
+		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,25 +58,29 @@
 		2F98D68124C9AAE400613A4C /* LiveUpdate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveUpdate.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		50ADFF8B201F53D600D50D53 /* LiveUpdatePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveUpdatePlugin.h; sourceTree = "<group>"; };
 		50ADFF8C201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50ADFF91201F53D600D50D53 /* PluginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PluginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF96201F53D600D50D53 /* LiveUpdateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateTests.swift; sourceTree = "<group>"; };
 		50ADFF98201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		50ADFFA72020EE4F00D50D53 /* LiveUpdatePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveUpdatePlugin.m; sourceTree = "<group>"; };
 		50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveUpdatePlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateConfig.swift; sourceTree = "<group>"; };
 		7C2011502BA9653B001FABAD /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7C2011522BA96555001FABAD /* GetBundlesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBundlesResult.swift; sourceTree = "<group>"; };
-		7C2011542BA9656E001FABAD /* SetBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetBundleOptions.swift; sourceTree = "<group>"; };
 		7C2011562BA9661B001FABAD /* DeleteBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBundleOptions.swift; sourceTree = "<group>"; };
 		7C2011582BA966F4001FABAD /* DownloadBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadBundleOptions.swift; sourceTree = "<group>"; };
+		7C29FB4F2CBAB66C007DCB06 /* LiveUpdateHttpClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateHttpClient.swift; sourceTree = "<group>"; };
+		7C29FB522CBCE2B0007DCB06 /* ArtifactType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtifactType.swift; sourceTree = "<group>"; };
+		7C29FB572CBCEE4B007DCB06 /* ManifestItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestItem.swift; sourceTree = "<group>"; };
+		7C29FB592CBD4148007DCB06 /* Manifest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Manifest.swift; sourceTree = "<group>"; };
 		7C2E4CE62BC29C1100C80C2A /* SyncResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncResult.swift; sourceTree = "<group>"; };
-		7C33FC402BCBFE16003AA8B4 /* GetBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBundleResult.swift; sourceTree = "<group>"; };
 		7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetVersionCodeResult.swift; sourceTree = "<group>"; };
 		7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetVersionNameResult.swift; sourceTree = "<group>"; };
+		7C4274D42D14874E0066184E /* SyncOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOptions.swift; sourceTree = "<group>"; };
+		7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleOptions.swift; sourceTree = "<group>"; };
+		7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentBundleResult.swift; sourceTree = "<group>"; };
+		7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNextBundleResult.swift; sourceTree = "<group>"; };
 		7C62B6502BA9AD220025240F /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChannelOptions.swift; sourceTree = "<group>"; };
 		7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCustomIdOptions.swift; sourceTree = "<group>"; };
@@ -77,6 +89,10 @@
 		7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCustomIdResult.swift; sourceTree = "<group>"; };
 		7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdatePreferences.swift; sourceTree = "<group>"; };
 		7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLatestBundleResponse.swift; sourceTree = "<group>"; };
+		7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyResult.swift; sourceTree = "<group>"; };
+		7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadBundleProgressEvent.swift; sourceTree = "<group>"; };
+		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
+		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -128,14 +144,14 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				7C29FB512CBCE2A8007DCB06 /* Enums */,
 				7C20114D2BA9651D001FABAD /* Protocols */,
 				7C20114C2BA96518001FABAD /* Classes */,
 				50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */,
 				2F98D68124C9AAE400613A4C /* LiveUpdate.swift */,
+				7C29FB4F2CBAB66C007DCB06 /* LiveUpdateHttpClient.swift */,
 				7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */,
 				7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */,
-				50ADFF8B201F53D600D50D53 /* LiveUpdatePlugin.h */,
-				50ADFFA72020EE4F00D50D53 /* LiveUpdatePlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
@@ -153,9 +169,10 @@
 		7C20114C2BA96518001FABAD /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7CA1DA9A2D454C04001EB3D0 /* Events */,
+				7C29FB592CBD4148007DCB06 /* Manifest.swift */,
 				7C20114F2BA96529001FABAD /* Results */,
 				7C20114E2BA96524001FABAD /* Options */,
-				7C62B6502BA9AD220025240F /* CustomError.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -172,7 +189,9 @@
 		7C20114E2BA96524001FABAD /* Options */ = {
 			isa = PBXGroup;
 			children = (
-				7C2011542BA9656E001FABAD /* SetBundleOptions.swift */,
+				7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */,
+				7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */,
+				7C4274D42D14874E0066184E /* SyncOptions.swift */,
 				7C2011562BA9661B001FABAD /* DeleteBundleOptions.swift */,
 				7C2011582BA966F4001FABAD /* DownloadBundleOptions.swift */,
 				7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */,
@@ -184,24 +203,45 @@
 		7C20114F2BA96529001FABAD /* Results */ = {
 			isa = PBXGroup;
 			children = (
+				7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */,
+				7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */,
+				7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */,
 				7C2011522BA96555001FABAD /* GetBundlesResult.swift */,
 				7C6715D22BB1BCAB0000878A /* GetChannelResult.swift */,
 				7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */,
-				7C33FC402BCBFE16003AA8B4 /* GetBundleResult.swift */,
 				7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */,
 				7C2E4CE62BC29C1100C80C2A /* SyncResult.swift */,
 				7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */,
 				7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */,
+				7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */,
 			);
 			path = Results;
+			sourceTree = "<group>";
+		};
+		7C29FB512CBCE2A8007DCB06 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				7C29FB522CBCE2B0007DCB06 /* ArtifactType.swift */,
+				7C62B6502BA9AD220025240F /* CustomError.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		7C9B252D2BBEDC090007ED74 /* Api */ = {
 			isa = PBXGroup;
 			children = (
+				7C29FB572CBCEE4B007DCB06 /* ManifestItem.swift */,
 				7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */,
 			);
 			path = Api;
+			sourceTree = "<group>";
+		};
+		7CA1DA9A2D454C04001EB3D0 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */,
+			);
+			path = Events;
 			sourceTree = "<group>";
 		};
 		8C8E7744173064A9F6D438E3 /* Pods */ = {
@@ -232,7 +272,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50ADFF99201F53D600D50D53 /* LiveUpdatePlugin.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,24 +446,33 @@
 				50E1A94820377CB70090CE1A /* LiveUpdatePlugin.swift in Sources */,
 				7C6715D12BB1BC9E0000878A /* SetCustomIdOptions.swift in Sources */,
 				7C2011592BA966F4001FABAD /* DownloadBundleOptions.swift in Sources */,
+				7C29FB502CBAB671007DCB06 /* LiveUpdateHttpClient.swift in Sources */,
 				7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */,
+				7CA18F442C5E1FFE00D0BE5B /* ReadyResult.swift in Sources */,
+				7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */,
+				7C29FB532CBCE2B5007DCB06 /* ArtifactType.swift in Sources */,
 				7C6715D32BB1BCAB0000878A /* GetChannelResult.swift in Sources */,
 				7C33FC432BCBFE27003AA8B4 /* GetVersionCodeResult.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* LiveUpdate.swift in Sources */,
 				7C62B6512BA9AD220025240F /* CustomError.swift in Sources */,
 				7C0C8C492BAB354A005F76D1 /* LiveUpdateConfig.swift in Sources */,
+				7C4F2B122D149290005E2310 /* GetCurrentBundleResult.swift in Sources */,
+				7C4F2B142D149296005E2310 /* GetNextBundleResult.swift in Sources */,
 				7C2011532BA96555001FABAD /* GetBundlesResult.swift in Sources */,
+				7C29FB5A2CBD414B007DCB06 /* Manifest.swift in Sources */,
 				7C2E4CE72BC29C1100C80C2A /* SyncResult.swift in Sources */,
 				7C33FC452BCBFE3A003AA8B4 /* GetVersionNameResult.swift in Sources */,
 				7C6715D52BB1BCB70000878A /* GetDeviceIdResult.swift in Sources */,
 				7C2011512BA9653B001FABAD /* Result.swift in Sources */,
 				7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */,
+				7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */,
 				7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */,
+				7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */,
+				7CA1DA9C2D454C0B001EB3D0 /* DownloadBundleProgressEvent.swift in Sources */,
 				7C2011572BA9661B001FABAD /* DeleteBundleOptions.swift in Sources */,
+				7C29FB582CBCEE4C007DCB06 /* ManifestItem.swift in Sources */,
 				7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */,
-				7C33FC412BCBFE16003AA8B4 /* GetBundleResult.swift in Sources */,
-				7C2011552BA9656E001FABAD /* SetBundleOptions.swift in Sources */,
-				50ADFFA82020EE4F00D50D53 /* LiveUpdatePlugin.m in Sources */,
+				7C4274D52D1487500066184E /* SyncOptions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +550,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -562,7 +610,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -585,7 +633,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
@@ -611,7 +659,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
