@@ -26,19 +26,11 @@ declare module '@capacitor/cli' {
        */
       enableSessionReplay?: boolean;
       /**
-       * Session recording sampling rate (0.0 to 1.0).
+       * Session replay configuration options.
        *
        * @since 7.3.0
-       * @default 1.0
        */
-      sessionReplaySampling?: number;
-      /**
-       * Whether to enable linked flags for session recording.
-       *
-       * @since 7.3.0
-       * @default false
-       */
-      sessionReplayLinkedFlag?: boolean;
+      sessionReplayConfig?: SessionReplayOptions;
       /**
        * Whether to enable automatic error tracking.
        *
@@ -386,22 +378,6 @@ export interface SetupOptions {
    * @since 7.3.0
    */
   sessionReplayConfig?: SessionReplayOptions;
-  /**
-   * Whether to enable linked flags for session recording.
-   *
-   * @since 7.3.0
-   * @deprecated Use sessionReplayConfig instead
-   * @default false
-   */
-  sessionReplayLinkedFlag?: boolean;
-  /**
-   * Session recording sampling rate (0.0 to 1.0).
-   *
-   * @since 7.3.0
-   * @deprecated Use sessionReplayConfig instead
-   * @default 1.0
-   */
-  sessionReplaySampling?: number;
 }
 
 /**
@@ -424,6 +400,7 @@ export type JsonType =
   | number
   | boolean
   | null
+  | undefined
   | {
     [key: string]: JsonType;
   }

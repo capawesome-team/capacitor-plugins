@@ -43,7 +43,8 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   async getFeatureFlagPayload(
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult> {
-    return { value: posthog.getFeatureFlagPayload(options.key) };
+    const value = posthog.getFeatureFlagPayload(options.key);
+    return { value: value || null };
   }
 
   async flush(): Promise<void> {
