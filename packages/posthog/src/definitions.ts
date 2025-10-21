@@ -152,7 +152,7 @@ export interface PosthogPlugin {
    *
    * @since 7.3.0
    */
-  startSessionRecording(options?: StartSessionRecordingOptions): Promise<void>;
+  startSessionRecording(): Promise<void>;
   /**
    * Stop session recording.
    *
@@ -381,9 +381,16 @@ export interface SetupOptions {
    */
   host?: string;
   /**
+   * Session replay configuration options.
+   *
+   * @since 7.3.0
+   */
+  sessionReplayConfig?: SessionReplayOptions;
+  /**
    * Whether to enable linked flags for session recording.
    *
    * @since 7.3.0
+   * @deprecated Use sessionReplayConfig instead
    * @default false
    */
   sessionReplayLinkedFlag?: boolean;
@@ -391,6 +398,7 @@ export interface SetupOptions {
    * Session recording sampling rate (0.0 to 1.0).
    *
    * @since 7.3.0
+   * @deprecated Use sessionReplayConfig instead
    * @default 1.0
    */
   sessionReplaySampling?: number;
@@ -417,8 +425,8 @@ export type JsonType =
   | boolean
   | null
   | {
-      [key: string]: JsonType;
-    }
+    [key: string]: JsonType;
+  }
   | JsonType[];
 
 /**
@@ -442,17 +450,48 @@ export interface CaptureExceptionOptions {
 /**
  * @since 7.3.0
  */
-export interface StartSessionRecordingOptions {
+export interface SessionReplayOptions {
   /**
-   * Whether to enable linked flags for session recording.
+   * Enable screenshot mode for session recordings.
+   * WARNING: This may capture sensitive information.
    *
    * @since 7.3.0
+   * @default false
    */
-  linkedFlag?: boolean;
+  screenshotMode?: boolean;
   /**
-   * Sampling rate for session recording (0.0 to 1.0).
+   * Mask all text input fields in session recordings.
    *
    * @since 7.3.0
+   * @default true
    */
-  sampling?: number;
+  maskAllTextInputs?: boolean;
+  /**
+   * Mask all images in session recordings.
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllImages?: boolean;
+  /**
+   * Mask all sandboxed system views (iOS-specific).
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllSandboxedViews?: boolean;
+  /**
+   * Capture network telemetry in session recordings.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  captureNetworkTelemetry?: boolean;
+  /**
+   * Debounce delay for session recording snapshots (in seconds).
+   *
+   * @since 7.3.0
+   * @default 1.0
+   */
+  debouncerDelay?: number;
 }

@@ -17,7 +17,6 @@ import type {
   RegisterOptions,
   ScreenOptions,
   SetupOptions,
-  StartSessionRecordingOptions,
   UnregisterOptions,
 } from './definitions';
 
@@ -95,11 +94,29 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
       config.session_recording = {
         recordCrossOriginIframes: true,
       };
-      if (options.sessionReplaySampling !== undefined) {
-        config.session_recording.sampleRate = options.sessionReplaySampling;
-      }
-      if (options.sessionReplayLinkedFlag) {
-        config.session_recording.linked_flag = options.sessionReplayLinkedFlag;
+
+      // Use new sessionReplayConfig if provided, otherwise fall back to deprecated options
+      if (options.sessionReplayConfig) {
+        if (options.sessionReplayConfig.debouncerDelay !== undefined) {
+          config.session_recording.sampleRate =
+            options.sessionReplayConfig.debouncerDelay;
+        }
+        if (options.sessionReplayConfig.captureNetworkTelemetry !== undefined) {
+          config.session_recording.captureNetworkTelemetry =
+            options.sessionReplayConfig.captureNetworkTelemetry;
+        }
+        if (options.sessionReplayConfig.screenshotMode !== undefined) {
+          config.session_recording.screenshotMode =
+            options.sessionReplayConfig.screenshotMode;
+        }
+        if (options.sessionReplayConfig.maskAllTextInputs !== undefined) {
+          config.session_recording.maskAllTextInputs =
+            options.sessionReplayConfig.maskAllTextInputs;
+        }
+        if (options.sessionReplayConfig.maskAllImages !== undefined) {
+          config.session_recording.maskAllImages =
+            options.sessionReplayConfig.maskAllImages;
+        }
       }
     }
 
@@ -109,35 +126,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     }
 
     posthog.init(options.apiKey, config);
-
-    // Start session recording if configured
-    if (options.enableSessionReplay) {
-      const sessionOptions: any = {};
-      if (options.sessionReplaySampling !== undefined) {
-        sessionOptions.sampling = options.sessionReplaySampling;
-      }
-      if (options.sessionReplayLinkedFlag) {
-        sessionOptions.linked_flag = options.sessionReplayLinkedFlag;
-      }
-      this.startSessionRecording(sessionOptions);
-    }
   }
 
-  async startSessionRecording(
-    options?: StartSessionRecordingOptions,
-  ): Promise<void> {
-    if (options?.sampling || options?.linkedFlag) {
-      const sessionOptions: any = {};
-      if (options.sampling !== undefined) {
-        sessionOptions.sampling = options.sampling;
-      }
-      if (options.linkedFlag !== undefined) {
-        sessionOptions.linked_flag = options.linkedFlag;
-      }
-      posthog.startSessionRecording(sessionOptions);
-    } else {
-      posthog.startSessionRecording();
-    }
+  async startSessionRecording(): Promise<void> {
+    posthog.startSessionRecording();
   }
 
   async stopSessionRecording(): Promise<void> {
