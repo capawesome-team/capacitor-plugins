@@ -20,7 +20,6 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptio
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
-import java.lang.Throwable
 
 class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
 
@@ -47,7 +46,11 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val exception = options.exception
         val properties = options.properties
 
-        val throwable = Throwable(exception)
+        val throwable = when (exception) {
+            is Throwable -> exception
+            is String -> Throwable(exception)
+            else -> Throwable(exception.toString())
+        }
         PostHog.captureException(throwable, properties = properties)
     }
 
