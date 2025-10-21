@@ -590,8 +590,8 @@ Remove a super property.
 | **`enableErrorTracking`**     | <code>boolean</code> | Whether to enable automatic error tracking.           | <code>false</code>                      | 7.3.0 |
 | **`enableSessionReplay`**     | <code>boolean</code> | Whether to enable session recording automatically.    | <code>false</code>                      | 7.3.0 |
 | **`host`**                    | <code>string</code>  | The host of your PostHog instance.                    | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
-| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
 | **`sessionReplayLinkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | <code>false</code>                      | 7.3.0 |
+| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
 
 
 #### StartSessionRecordingOptions
@@ -616,9 +616,7 @@ Remove a super property.
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 
 #### JsonType

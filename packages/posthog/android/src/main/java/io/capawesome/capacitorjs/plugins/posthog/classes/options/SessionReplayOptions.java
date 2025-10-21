@@ -24,7 +24,14 @@ public class SessionReplayOptions {
 
     public SessionReplayOptions() {}
 
-    public SessionReplayOptions(@Nullable Boolean screenshotMode, @Nullable Boolean maskAllTextInputs, @Nullable Boolean maskAllImages, @Nullable Boolean maskAllSandboxedViews, @Nullable Boolean captureNetworkTelemetry, @Nullable Double debouncerDelay) {
+    public SessionReplayOptions(
+        @Nullable Boolean screenshotMode,
+        @Nullable Boolean maskAllTextInputs,
+        @Nullable Boolean maskAllImages,
+        @Nullable Boolean maskAllSandboxedViews,
+        @Nullable Boolean captureNetworkTelemetry,
+        @Nullable Double debouncerDelay
+    ) {
         this.screenshotMode = screenshotMode;
         this.maskAllTextInputs = maskAllTextInputs;
         this.maskAllImages = maskAllImages;

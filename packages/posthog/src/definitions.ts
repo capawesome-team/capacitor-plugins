@@ -417,8 +417,8 @@ export type JsonType =
   | boolean
   | null
   | {
-    [key: string]: JsonType;
-  }
+      [key: string]: JsonType;
+    }
   | JsonType[];
 
 /**

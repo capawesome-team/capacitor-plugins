@@ -61,6 +61,4 @@ public class SetupOptions {
     public void setEnableErrorTracking(boolean enableErrorTracking) {
         this.enableErrorTracking = enableErrorTracking;
     }
-
-
 }

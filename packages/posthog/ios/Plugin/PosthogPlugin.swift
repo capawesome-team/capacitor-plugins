@@ -219,7 +219,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.host = getConfig().getString("host") ?? config.host
         config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
-        
+
         if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
             config.sessionReplayConfig = SessionReplayOptions(
                 screenshotMode: sessionReplayConfigDict["screenshotMode"] as? Bool ?? false,

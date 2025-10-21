@@ -10,7 +10,7 @@ import Foundation
         self.apiKey = apiKey
         self.host = host
         self.enableSessionReplay = enableSessionReplay
-        
+
         if let config = sessionReplayConfig {
             self.sessionReplayConfig = SessionReplayOptions(
                 screenshotMode: config["screenshotMode"] as? Bool ?? false,
@@ -34,7 +34,7 @@ import Foundation
     func getEnableSessionReplay() -> Bool {
         return enableSessionReplay
     }
-    
+
     func getSessionReplayConfig() -> SessionReplayOptions? {
         return sessionReplayConfig
     }

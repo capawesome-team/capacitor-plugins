@@ -28,15 +28,15 @@ import Foundation
     func getMaskAllImages() -> Bool? {
         return maskAllImages
     }
-    
+
     func getMaskAllSandboxedViews() -> Bool? {
         return maskAllSandboxedViews
     }
-    
+
     func getCaptureNetworkTelemetry() -> Bool? {
         return captureNetworkTelemetry
     }
-    
+
     func getDebouncerDelay() -> Double? {
         return debouncerDelay
     }
