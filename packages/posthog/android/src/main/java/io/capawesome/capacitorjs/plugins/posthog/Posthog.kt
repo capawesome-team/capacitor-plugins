@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.posthog
 
+import com.posthog.PostHog
 import com.posthog.android.PostHogAndroid
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
@@ -7,7 +8,6 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions
 
 import com.posthog.android.PostHogAndroidConfig
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
@@ -15,26 +15,19 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagO
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
+import java.lang.Throwable
 
 class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
 
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost())
-
-            // Start session recording if configured
-            if (config.getEnableSessionReplay()) {
-                val options = StartSessionRecordingOptions(
-                    config.getSessionReplayLinkedFlag(),
-                    config.getSessionReplaySampling()
-                )
-                startSessionRecording(options)
-            }
+            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig(), config.getEnableErrorTracking())
         }
     }
 
@@ -54,7 +47,8 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val exception = options.exception
         val properties = options.properties
 
-        com.posthog.PostHog.captureException(exception = exception, properties = properties)
+        val throwable = Throwable(exception)
+        PostHog.captureException(throwable, properties = properties)
     }
 
     fun flush() {
@@ -126,37 +120,67 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         setup(apiKey, host)
     }
 
-    fun startSessionRecording(options: StartSessionRecordingOptions) {
-        val linkedFlag = options.linkedFlag
-        val sampling = options.sampling
-
-        if (linkedFlag != null || sampling != null) {
-            val sessionOptions = mutableMapOf<String, Any>()
-            linkedFlag?.let { sessionOptions["linked_flag"] = it }
-            sampling?.let { sessionOptions["sampling"] = it }
-            com.posthog.PostHog.startSessionRecording(options = sessionOptions)
-        } else {
-            com.posthog.PostHog.startSessionRecording()
-        }
-    }
-
-    fun stopSessionRecording() {
-        com.posthog.PostHog.stopSessionRecording()
-    }
-
     fun unregister(options: UnregisterOptions) {
         val key = options.key
 
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String) {
+    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null, enableErrorTracking: Boolean = false) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
         )
         posthogConfig.captureScreenViews = false
         posthogConfig.optOut = false
+        posthogConfig.sessionReplay = enableSessionReplay
+        posthogConfig.errorTrackingConfig.autoCapture = enableErrorTracking
+
+        // Configure session replay options if provided
+        sessionReplayConfig?.let { replayConfig ->
+            // Map plugin interface options to Android PostHog SDK equivalents
+            //
+            // iOS SDK supports all these options via PostHogSessionReplayConfig:
+            // - screenshotMode: ✅ Supported (screenshotMode)
+            // - maskAllTextInputs: ✅ Supported (maskAllTextInputs)
+            // - maskAllImages: ✅ Supported (maskAllImages)
+            // - maskAllSandboxedViews: ✅ Supported (maskAllSandboxedViews)
+            // - captureNetworkTelemetry: ✅ Supported (captureNetworkTelemetry)
+            // - debouncerDelay: ✅ Supported (debouncerDelay)
+
+            // Android PostHog SDK currently only supports basic enable/disable
+            // When the Android SDK adds session replay configuration options,
+            // uncomment and update the following mappings:
+
+            /*
+            // Screenshot mode configuration
+            posthogConfig.screenshot = replayConfig.getScreenshotMode() ?: false
+
+            // Text input masking
+            posthogConfig.maskAllTextInputs = replayConfig.getMaskAllTextInputs() ?: true
+
+            // Image masking
+            posthogConfig.maskAllImages = replayConfig.getMaskAllImages() ?: true
+
+            // Network telemetry capture
+            posthogConfig.captureLogcat = replayConfig.getCaptureNetworkTelemetry() ?: true
+
+            // Debounce delay for performance (convert seconds to milliseconds)
+            val debouncerDelaySeconds = replayConfig.getDebouncerDelay() ?: 1.0
+            posthogConfig.throttleDelayMs = (debouncerDelaySeconds * 1000).toLong()
+
+            // Note: maskAllSandboxedViews is iOS-specific (sandboxed system views)
+            // Android doesn't have this concept, so it's not applicable
+            */
+
+            // For now, all advanced options are accepted but not applied
+            // They will be available when Android SDK adds PostHogSessionReplayConfig equivalent
+        }
+
+        // Configure error tracking if enabled
+        if (config.getEnableErrorTracking()) {
+            posthogConfig.captureApplicationLifecycleEvents = true
+        }
 
         PostHogAndroid.setup(plugin.context, posthogConfig)
     }

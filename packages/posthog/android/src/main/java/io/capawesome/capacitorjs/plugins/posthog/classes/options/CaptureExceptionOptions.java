@@ -10,12 +10,12 @@ import org.json.JSONException;
 public class CaptureExceptionOptions {
 
     @NonNull
-    private Object exception;
+    private String exception;
 
     @Nullable
     private Map<String, Object> properties;
 
-    public CaptureExceptionOptions(@NonNull Object exception, @Nullable JSObject properties) throws JSONException {
+    public CaptureExceptionOptions(@NonNull String exception, @Nullable JSObject properties) throws JSONException {
         this.exception = exception;
         this.properties = PosthogHelper.createHashMapFromJSONObject(properties);
     }

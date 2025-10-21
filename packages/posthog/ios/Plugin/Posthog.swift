@@ -10,12 +10,11 @@ import PostHog
         self.plugin = plugin
         super.init()
         if let apiKey = config.apiKey {
-            self.setup(apiKey: apiKey, host: config.host)
+            self.setup(apiKey: apiKey, host: config.host, enableSessionReplay: config.enableSessionReplay, sessionReplayConfig: config.sessionReplayConfig)
 
             // Start session recording if configured
             if config.enableSessionReplay {
-                let options = StartSessionRecordingOptions(linkedFlag: config.sessionReplayLinkedFlag, sampling: config.sessionReplaySampling)
-                self.startSessionRecording(options)
+                self.startSessionRecording()
             }
         }
     }
@@ -31,13 +30,6 @@ import PostHog
         let properties = options.getProperties()
 
         PostHogSDK.shared.capture(event, properties: properties)
-    }
-
-    @objc public func captureException(_ options: CaptureExceptionOptions) {
-        let exception = options.getException()
-        let properties = options.getProperties()
-
-        PostHogSDK.shared.captureException(exception, properties: properties)
     }
 
     @objc public func flush() {
@@ -107,34 +99,31 @@ import PostHog
     @objc public func setup(_ options: SetupOptions) {
         let apiKey = options.getApiKey()
         let host = options.getHost()
+        let enableSessionReplay = options.getEnableSessionReplay()
+        let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, host: host)
+        setup(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, sessionReplayConfig: sessionReplayConfig)
     }
 
-    @objc public func startSessionRecording(_ options: StartSessionRecordingOptions) {
-        var config: [String: Any] = [:]
-        if let linkedFlag = options.getLinkedFlag() {
-            config["linked_flag"] = linkedFlag
-        }
-        if let sampling = options.getSampling() {
-            config["sampling"] = sampling
-        }
-
-        if config.isEmpty {
-            PostHogSDK.shared.startSessionRecording()
-        } else {
-            PostHogSDK.shared.startSessionRecording(options: config)
-        }
+    @objc public func startSessionRecording() {
+        PostHogSDK.shared.startSessionRecording()
     }
 
     @objc public func stopSessionRecording() {
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, host: String) {
+    private func setup(apiKey: String, host: String, enableSessionReplay: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         config.captureScreenViews = false
         config.optOut = false
+        config.sessionReplay = enableSessionReplay
+        config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
+        config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true
+        config.sessionReplayConfig.maskAllTextInputs = sessionReplayConfig?.getMaskAllTextInputs() ?? true
+        config.sessionReplayConfig.maskAllSandboxedViews = sessionReplayConfig?.getMaskAllSandboxedViews() ?? true
+        config.sessionReplayConfig.captureNetworkTelemetry = sessionReplayConfig?.getCaptureNetworkTelemetry() ?? true
+        config.sessionReplayConfig.debouncerDelay = sessionReplayConfig?.getDebouncerDelay() ?? 1.0
 
         PostHogSDK.shared.setup(config)
     }

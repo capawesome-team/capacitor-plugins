@@ -18,6 +18,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
@@ -88,7 +89,7 @@ public class PosthogPlugin extends Plugin {
     @PluginMethod
     public void captureException(PluginCall call) {
         try {
-            Object exception = call.getData().get("exception");
+            String exception = call.getString("exception");
             if (exception == null) {
                 call.reject(ERROR_VALUE_MISSING);
                 return;
@@ -261,35 +262,25 @@ public class PosthogPlugin extends Plugin {
                 return;
             }
             String host = call.getString("host", "https://us.i.posthog.com");
+            Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
 
             SetupOptions options = new SetupOptions(apiKey, host);
+            options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
+
+            JSObject sessionReplayConfigObject = call.getObject("sessionReplayConfig");
+            if (sessionReplayConfigObject != null) {
+                SessionReplayOptions sessionReplayOptions = new SessionReplayOptions(
+                    sessionReplayConfigObject.getBool("screenshotMode"),
+                    sessionReplayConfigObject.getBool("maskAllTextInputs"),
+                    sessionReplayConfigObject.getBool("maskAllImages"),
+                    sessionReplayConfigObject.getBool("maskAllSandboxedViews"),
+                    sessionReplayConfigObject.getBool("captureNetworkTelemetry"),
+                    sessionReplayConfigObject.getDouble("debouncerDelay")
+                );
+                options.setSessionReplayConfig(sessionReplayOptions);
+            }
 
             implementation.setup(options);
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void startSessionRecording(PluginCall call) {
-        try {
-            Boolean linkedFlag = call.getBoolean("linkedFlag");
-            Double sampling = call.getDouble("sampling");
-
-            StartSessionRecordingOptions options = new StartSessionRecordingOptions(linkedFlag, sampling);
-
-            implementation.startSessionRecording(options);
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void stopSessionRecording(PluginCall call) {
-        try {
-            implementation.stopSessionRecording();
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -323,10 +314,6 @@ public class PosthogPlugin extends Plugin {
         config.setHost(host);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
-        double sessionReplaySampling = getConfig().getDouble("sessionReplaySampling", config.getSessionReplaySampling());
-        config.setSessionReplaySampling(sessionReplaySampling);
-        boolean sessionReplayLinkedFlag = getConfig().getBoolean("sessionReplayLinkedFlag", config.getSessionReplayLinkedFlag());
-        config.setSessionReplayLinkedFlag(sessionReplayLinkedFlag);
         boolean enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.getEnableErrorTracking());
         config.setEnableErrorTracking(enableErrorTracking);
 

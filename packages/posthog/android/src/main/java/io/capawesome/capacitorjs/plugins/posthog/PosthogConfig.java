@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.posthog;
 
 import androidx.annotation.Nullable;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions;
 
 public class PosthogConfig {
 
@@ -11,9 +12,8 @@ public class PosthogConfig {
 
     private boolean enableSessionReplay = false;
 
-    private double sessionReplaySampling = 1.0;
-
-    private boolean sessionReplayLinkedFlag = false;
+    @Nullable
+    private SessionReplayOptions sessionReplayConfig = null;
 
     private boolean enableErrorTracking = false;
 
@@ -30,16 +30,13 @@ public class PosthogConfig {
         return enableSessionReplay;
     }
 
-    public double getSessionReplaySampling() {
-        return sessionReplaySampling;
-    }
-
-    public boolean getSessionReplayLinkedFlag() {
-        return sessionReplayLinkedFlag;
-    }
-
     public boolean getEnableErrorTracking() {
         return enableErrorTracking;
+    }
+
+    @Nullable
+    public SessionReplayOptions getSessionReplayConfig() {
+        return sessionReplayConfig;
     }
 
     public void setApiKey(@Nullable String apiKey) {
@@ -54,12 +51,8 @@ public class PosthogConfig {
         this.enableSessionReplay = enableSessionReplay;
     }
 
-    public void setSessionReplaySampling(double sessionReplaySampling) {
-        this.sessionReplaySampling = sessionReplaySampling;
-    }
-
-    public void setSessionReplayLinkedFlag(boolean sessionReplayLinkedFlag) {
-        this.sessionReplayLinkedFlag = sessionReplayLinkedFlag;
+    public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {
+        this.sessionReplayConfig = sessionReplayConfig;
     }
 
     public void setEnableErrorTracking(boolean enableErrorTracking) {

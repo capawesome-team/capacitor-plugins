@@ -63,16 +63,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func captureException(_ call: CAPPluginCall) {
-        guard let exception = call.getObject("exception") as AnyObject? else {
-            call.reject(CustomError.valueMissing.localizedDescription)
-            return
-        }
-        let properties = call.getObject("properties")
-
-        let options = CaptureExceptionOptions(exception: exception, properties: properties)
-
-        implementation?.captureException(options)
-        call.resolve()
+        call.unimplemented("Not implemented on iOS.")
     }
 
     @objc func flush(_ call: CAPPluginCall) {
@@ -191,20 +182,17 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         let host = call.getString("host", "https://us.i.posthog.com")
+        let enableSessionReplay = call.getBool("enableSessionReplay", false)
+        let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
-        let options = SetupOptions(apiKey: apiKey, host: host)
+        let options = SetupOptions(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, sessionReplayConfig: sessionReplayConfig)
 
         implementation?.setup(options)
         call.resolve()
     }
 
     @objc func startSessionRecording(_ call: CAPPluginCall) {
-        let linkedFlag = call.getBool("linkedFlag")
-        let sampling = call.getDouble("sampling")
-
-        let options = StartSessionRecordingOptions(linkedFlag: linkedFlag, sampling: sampling)
-
-        implementation?.startSessionRecording(options)
+        implementation?.startSessionRecording()
         call.resolve()
     }
 
@@ -231,9 +219,17 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.host = getConfig().getString("host") ?? config.host
         config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
-        config.sessionReplaySampling = getConfig().getDouble("sessionReplaySampling", config.sessionReplaySampling)
-        config.sessionReplayLinkedFlag = getConfig().getBoolean("sessionReplayLinkedFlag", config.sessionReplayLinkedFlag)
-        config.enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.enableErrorTracking)
+        
+        if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
+            config.sessionReplayConfig = SessionReplayOptions(
+                screenshotMode: sessionReplayConfigDict["screenshotMode"] as? Bool ?? false,
+                maskAllTextInputs: sessionReplayConfigDict["maskAllTextInputs"] as? Bool ?? true,
+                maskAllImages: sessionReplayConfigDict["maskAllImages"] as? Bool ?? true,
+                maskAllSandboxedViews: sessionReplayConfigDict["maskAllSandboxedViews"] as? Bool ?? true,
+                captureNetworkTelemetry: sessionReplayConfigDict["captureNetworkTelemetry"] as? Bool ?? true,
+                debouncerDelay: sessionReplayConfigDict["debouncerDelay"] as? Double ?? 1.0
+            )
+        }
 
         return config
     }
