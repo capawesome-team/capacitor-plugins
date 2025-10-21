@@ -1,5 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 import posthog from 'posthog-js';
+import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
@@ -86,7 +87,7 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async setup(options: SetupOptions): Promise<void> {
     const host = options.host || 'https://us.i.posthog.com';
-    const config: any = {
+    const config: Partial<PostHogConfig> = {
       api_host: host,
     };
 
@@ -98,32 +99,16 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
       // Use new sessionReplayConfig if provided, otherwise fall back to deprecated options
       if (options.sessionReplayConfig) {
-        if (options.sessionReplayConfig.debouncerDelay !== undefined) {
-          config.session_recording.sampleRate =
-            options.sessionReplayConfig.debouncerDelay;
-        }
-        if (options.sessionReplayConfig.captureNetworkTelemetry !== undefined) {
-          config.session_recording.captureNetworkTelemetry =
-            options.sessionReplayConfig.captureNetworkTelemetry;
-        }
-        if (options.sessionReplayConfig.screenshotMode !== undefined) {
-          config.session_recording.screenshotMode =
-            options.sessionReplayConfig.screenshotMode;
-        }
         if (options.sessionReplayConfig.maskAllTextInputs !== undefined) {
-          config.session_recording.maskAllTextInputs =
+          config.session_recording.maskAllInputs =
             options.sessionReplayConfig.maskAllTextInputs;
-        }
-        if (options.sessionReplayConfig.maskAllImages !== undefined) {
-          config.session_recording.maskAllImages =
-            options.sessionReplayConfig.maskAllImages;
         }
       }
     }
 
     // Configure error tracking if enabled
     if (options.enableErrorTracking) {
-      config.captureExceptions = true;
+      config.capture_exceptions = true;
     }
 
     posthog.init(options.apiKey, config);
