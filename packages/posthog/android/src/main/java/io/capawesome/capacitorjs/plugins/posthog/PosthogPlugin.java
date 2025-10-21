@@ -9,7 +9,6 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions;
