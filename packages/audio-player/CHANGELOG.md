@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`a51c4bd37bf982cae62d86b5aace9cb2dbef0dff`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a51c4bd37bf982cae62d86b5aace9cb2dbef0dff) ([#309](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/309)): feat: add support for web paths
+
 ## 0.1.1
 
 ### Patch Changes

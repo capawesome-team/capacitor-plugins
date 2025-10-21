@@ -11,11 +11,11 @@ import Foundation
         self.config = config
     }
 
-    @objc public func presentDatetimePicker(date: Date, minDate: Date?, maxDate: Date?, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, completion: @escaping (Date?, ErrorCode) -> Void) {
+    @objc public func presentDatetimePicker(date: Date, minDate: Date?, maxDate: Date?, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, minuteInterval: Int, completion: @escaping (Date?, ErrorCode) -> Void) {
         closeKeyboard()
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             RPicker.selectDate(title: "", cancelText: cancelButtonText, doneText: doneButtonText, datePickerMode: .dateAndTime, selectedDate: date,
-                               minDate: minDate, maxDate: maxDate, locale: locale, theme: self.getTheme(unconvertedTheme: theme), completion: { (date, errorCode) in
+                               minDate: minDate, maxDate: maxDate, locale: locale, theme: self.getTheme(unconvertedTheme: theme), minuteInterval: minuteInterval, completion: { (date, errorCode) in
                                 completion(date, errorCode)
                                })
         }
@@ -32,12 +32,12 @@ import Foundation
         }
     }
 
-    @objc public func presentTimePicker(date: Date, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, completion: @escaping (Date?, ErrorCode) -> Void) {
+    @objc public func presentTimePicker(date: Date, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, minuteInterval: Int, completion: @escaping (Date?, ErrorCode) -> Void) {
         closeKeyboard()
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             RPicker.selectDate(title: "", cancelText: cancelButtonText, doneText: doneButtonText,
                                datePickerMode: .time, selectedDate: date, locale: locale, style: DatetimePickerStyle.wheel,
-                               theme: self.getTheme(unconvertedTheme: theme), completion: { (date, errorCode) in
+                               theme: self.getTheme(unconvertedTheme: theme), minuteInterval: minuteInterval, completion: { (date, errorCode) in
                                 completion(date, errorCode)
                                })
         }

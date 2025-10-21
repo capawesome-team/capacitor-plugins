@@ -12,7 +12,7 @@ Capacitor plugin for seamless printing on Android and iOS. Supports base64, file
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for printing. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🖨️ **Base64 Printer**: Print base64 encoded files.
 - 🖨️ **File Printer**: Print files from the device.
 - 🖨️ **HTML Printer**: Print custom HTML content.

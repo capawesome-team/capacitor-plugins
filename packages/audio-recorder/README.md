@@ -90,24 +90,7 @@ No configuration required for this plugin.
 
 ```typescript
 import { AudioRecorder, AudioSessionCategoryOption, AudioSessionMode } from '@capawesome-team/capacitor-audio-recorder';
-import { NativeAudio } from '@capacitor-community/native-audio';
-
-const cancelRecording = async () => {
-  await AudioRecorder.cancelRecording();
-};
-
-const getRecordingStatus = async () => {
-  const { status } = await AudioRecorder.getRecordingStatus();
-  console.log('Recording status:', status);
-};
-
-const pauseRecording = async () => {
-  await AudioRecorder.pauseRecording();
-};
-
-const resumeRecording = async () => {
-  await AudioRecorder.resumeRecording();
-};
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const startRecording = async () => {
   await AudioRecorder.startRecording({
@@ -124,18 +107,28 @@ const stopRecording = async () => {
   // Play the audio
   if (blob) {
     // Only available on Web
-    const audio = new Audio();
-    audio.src = URL.createObjectURL(blob);
-    audio.play();
+    await AudioPlayer.play({ blob });
   } else if (uri) {
     // Only available on Android and iOS
-    await NativeAudio.preload({
-      assetId: 'recording',
-      assetPath: uri,
-      isUrl: true,
-    });
-    await NativeAudio.play({ assetId: 'recording' });
+    await AudioPlayer.play({ uri });
   }
+};
+
+const pauseRecording = async () => {
+  await AudioRecorder.pauseRecording();
+};
+
+const resumeRecording = async () => {
+  await AudioRecorder.resumeRecording();
+};
+
+const cancelRecording = async () => {
+  await AudioRecorder.cancelRecording();
+};
+
+const getRecordingStatus = async () => {
+  const { status } = await AudioRecorder.getRecordingStatus();
+  console.log('Recording status:', status);
 };
 
 const checkPermissions = async () => {

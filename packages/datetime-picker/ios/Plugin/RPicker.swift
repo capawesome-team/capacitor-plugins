@@ -45,10 +45,11 @@ import UIKit
                                 locale: Locale? = nil,
                                 style: DatetimePickerStyle = .inline,
                                 theme: Theme = .auto,
+                                minuteInterval: Int = 1,
                                 completion: ((_ date: Date?, _ errorCode: ErrorCode) -> Void)?) {
 
         guard let vc = controller(title: title, cancelText: cancelText, doneText: doneText, datePickerMode: datePickerMode,
-                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme) else { return }
+                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval) else { return }
 
         vc.onDateSelected = { (selectedData) in
             completion?(selectedData, ErrorCode.none)
@@ -70,14 +71,15 @@ import UIKit
                                   maxDate: Date? = nil,
                                   locale: Locale? = nil,
                                   style: DatetimePickerStyle = .inline,
-                                  theme: Theme = .auto) -> RPickerController? {
+                                  theme: Theme = .auto,
+                                  minuteInterval: Int = 1) -> RPickerController? {
 
         if let cc = UIWindow.currentController {
             if RPicker.sharedInstance.isPresented == false {
                 RPicker.sharedInstance.isPresented = true
 
                 let vc = RPickerController(title: title, cancelText: cancelText, doneText: doneText, datePickerMode: datePickerMode,
-                                           selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme)
+                                           selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval)
 
                 vc.modalPresentationStyle = .overCurrentContext
                 vc.modalTransitionStyle = .crossDissolve
@@ -133,6 +135,7 @@ class RPickerController: UIViewController {
     var datePickerMode: UIDatePicker.Mode = .date
     var datePickerStyle: DatetimePickerStyle = .inline
     var theme: Theme = .auto
+    var minuteInterval: Int = 1
 
     // MARK: - Private variables
     private let barViewHeight: CGFloat = 44
@@ -152,7 +155,8 @@ class RPickerController: UIViewController {
          maxDate: Date? = nil,
          locale: Locale? = nil,
          style: DatetimePickerStyle = .inline,
-         theme: Theme = .auto) {
+         theme: Theme = .auto,
+         minuteInterval: Int = 1) {
 
         self.titleText = title
         self.cancelText = cancelText
@@ -164,6 +168,7 @@ class RPickerController: UIViewController {
         self.locale = locale
         self.datePickerStyle = style
         self.theme = theme
+        self.minuteInterval = minuteInterval
 
         super.init(nibName: nil, bundle: nil)
 
@@ -312,6 +317,7 @@ class RPickerController: UIViewController {
         picker.maximumDate = maxDate
         picker.date = selectedDate
         picker.datePickerMode = datePickerMode
+        picker.minuteInterval = minuteInterval
         if let locale = locale {
             picker.locale = locale
         }
