@@ -26,7 +26,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig(), config.getEnableErrorTracking())
+            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig())
         }
     }
 
@@ -40,18 +40,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val properties = options.properties
 
         com.posthog.PostHog.capture(event = event, properties = properties)
-    }
-
-    fun captureException(options: CaptureExceptionOptions) {
-        val exception = options.exception
-        val properties = options.properties
-
-        val throwable = when (exception) {
-            is Throwable -> exception
-            is String -> Throwable(exception)
-            else -> Throwable(exception.toString())
-        }
-        PostHog.captureException(throwable, properties = properties)
     }
 
     fun flush() {
@@ -129,7 +117,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null, enableErrorTracking: Boolean = false) {
+    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
@@ -137,7 +125,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         posthogConfig.captureScreenViews = false
         posthogConfig.optOut = false
         posthogConfig.sessionReplay = enableSessionReplay
-        posthogConfig.errorTrackingConfig.autoCapture = enableErrorTracking
 
         // Configure session replay options if provided
         sessionReplayConfig?.let { replayConfig ->
@@ -178,11 +165,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
 
             // For now, all advanced options are accepted but not applied
             // They will be available when Android SDK adds PostHogSessionReplayConfig equivalent
-        }
-
-        // Configure error tracking if enabled
-        if (config.getEnableErrorTracking()) {
-            posthogConfig.captureApplicationLifecycleEvents = true
         }
 
         PostHogAndroid.setup(plugin.context, posthogConfig)

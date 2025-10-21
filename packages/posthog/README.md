@@ -31,14 +31,12 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                          | Type                 | Description                                           | Default                                 | Since |
-| ----------------------------- | -------------------- | ----------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**                  | <code>string</code>  | The API key of your PostHog project.                  |                                         | 7.1.0 |
-| **`host`**                    | <code>string</code>  | The host of your PostHog instance.                    | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`enableSessionReplay`**     | <code>boolean</code> | Whether to enable session recording automatically.    | <code>false</code>                      | 7.3.0 |
-| **`sessionReplaySampling`**   | <code>number</code>  | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
-| **`sessionReplayLinkedFlag`** | <code>boolean</code> | Whether to enable linked flags for session recording. | <code>false</code>                      | 7.3.0 |
-| **`enableErrorTracking`**     | <code>boolean</code> | Whether to enable automatic error tracking.           | <code>false</code>                      | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.           |                                         | 7.3.0 |
 
 ### Examples
 
@@ -51,9 +49,7 @@ In `capacitor.config.json`:
       "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       "host": 'https://eu.i.posthog.com',
       "enableSessionReplay": undefined,
-      "sessionReplaySampling": undefined,
-      "sessionReplayLinkedFlag": undefined,
-      "enableErrorTracking": undefined
+      "sessionReplayConfig": undefined
     }
   }
 }
@@ -72,9 +68,7 @@ const config: CapacitorConfig = {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       host: 'https://eu.i.posthog.com',
       enableSessionReplay: undefined,
-      sessionReplaySampling: undefined,
-      sessionReplayLinkedFlag: undefined,
-      enableErrorTracking: undefined,
+      sessionReplayConfig: undefined,
     },
   },
 };
@@ -171,7 +165,6 @@ const unregister = async () => {
 
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
-* [`captureException(...)`](#captureexception)
 * [`flush()`](#flush)
 * [`getFeatureFlag(...)`](#getfeatureflag)
 * [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
@@ -224,23 +217,6 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
-
---------------------
-
-
-### captureException(...)
-
-```typescript
-captureException(options: CaptureExceptionOptions) => Promise<void>
-```
-
-Capture an exception/error event.
-
-| Param         | Type                                                                        |
-| ------------- | --------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
-
-**Since:** 7.3.0
 
 --------------------
 
@@ -495,14 +471,6 @@ Remove a super property.
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
-#### CaptureExceptionOptions
-
-| Prop             | Type                                                         | Description                                             | Since |
-| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ----- |
-| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 7.3.0 |
-| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 7.3.0 |
-
-
 #### GetFeatureFlagResult
 
 | Prop        | Type                                   | Description                                                                                  | Since |
@@ -580,15 +548,13 @@ Remove a super property.
 
 #### SetupOptions
 
-| Prop                          | Type                                                                  | Description                                           | Default                                 | Since |
-| ----------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**                  | <code>string</code>                                                   | The API key of your PostHog project.                  |                                         | 6.0.0 |
-| **`enableErrorTracking`**     | <code>boolean</code>                                                  | Whether to enable automatic error tracking.           | <code>false</code>                      | 7.3.0 |
-| **`enableSessionReplay`**     | <code>boolean</code>                                                  | Whether to enable session recording automatically.    | <code>false</code>                      | 7.3.0 |
-| **`host`**                    | <code>string</code>                                                   | The host of your PostHog instance.                    | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
-| **`sessionReplayConfig`**     | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                 |                                         | 7.3.0 |
-| **`sessionReplayLinkedFlag`** | <code>boolean</code>                                                  | Whether to enable linked flags for session recording. | <code>false</code>                      | 7.3.0 |
-| **`sessionReplaySampling`**   | <code>number</code>                                                   | Session recording sampling rate (0.0 to 1.0).         | <code>1.0</code>                        | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
+| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.        | <code>false</code>                      | 7.3.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
 
 
 #### SessionReplayOptions

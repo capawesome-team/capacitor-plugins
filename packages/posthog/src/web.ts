@@ -3,7 +3,6 @@ import posthog from 'posthog-js';
 
 import type {
   AliasOptions,
-  CaptureExceptionOptions,
   CaptureOptions,
   GetFeatureFlagOptions,
   GetFeatureFlagPayloadOptions,
@@ -27,10 +26,6 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async capture(options: CaptureOptions): Promise<void> {
     posthog.capture(options.event, options.properties);
-  }
-
-  async captureException(options: CaptureExceptionOptions): Promise<void> {
-    posthog.captureException(options.exception, options.properties);
   }
 
   async getFeatureFlag(

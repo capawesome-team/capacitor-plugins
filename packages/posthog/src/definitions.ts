@@ -26,26 +26,11 @@ declare module '@capacitor/cli' {
        */
       enableSessionReplay?: boolean;
       /**
-       * Session recording sampling rate (0.0 to 1.0).
+       * Session recording configuration options.
        *
        * @since 7.3.0
-       * @default 1.0
        */
-      sessionReplaySampling?: number;
-      /**
-       * Whether to enable linked flags for session recording.
-       *
-       * @since 7.3.0
-       * @default false
-       */
-      sessionReplayLinkedFlag?: boolean;
-      /**
-       * Whether to enable automatic error tracking.
-       *
-       * @since 7.3.0
-       * @default false
-       */
-      enableErrorTracking?: boolean;
+      sessionReplayConfig?: SessionReplayOptions;
     };
   }
 }
@@ -63,12 +48,6 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
-  /**
-   * Capture an exception/error event.
-   *
-   * @since 7.3.0
-   */
-  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -386,22 +365,6 @@ export interface SetupOptions {
    * @since 7.3.0
    */
   sessionReplayConfig?: SessionReplayOptions;
-  /**
-   * Whether to enable linked flags for session recording.
-   *
-   * @since 7.3.0
-   * @deprecated Use sessionReplayConfig instead
-   * @default false
-   */
-  sessionReplayLinkedFlag?: boolean;
-  /**
-   * Session recording sampling rate (0.0 to 1.0).
-   *
-   * @since 7.3.0
-   * @deprecated Use sessionReplayConfig instead
-   * @default 1.0
-   */
-  sessionReplaySampling?: number;
 }
 
 /**

@@ -87,25 +87,6 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void captureException(PluginCall call) {
-        try {
-            String exception = call.getString("exception");
-            if (exception == null) {
-                call.reject(ERROR_VALUE_MISSING);
-                return;
-            }
-            JSObject properties = call.getObject("properties");
-
-            CaptureExceptionOptions options = new CaptureExceptionOptions(exception, properties);
-
-            implementation.captureException(options);
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
     public void flush(PluginCall call) {
         try {
             implementation.flush();
@@ -314,8 +295,6 @@ public class PosthogPlugin extends Plugin {
         config.setHost(host);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
-        boolean enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.getEnableErrorTracking());
-        config.setEnableErrorTracking(enableErrorTracking);
 
         return config;
     }
