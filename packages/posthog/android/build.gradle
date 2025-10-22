@@ -45,6 +45,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
+    buildOptions {
+        jvmTarget = '21'
+    }
 }
 
 repositories {
