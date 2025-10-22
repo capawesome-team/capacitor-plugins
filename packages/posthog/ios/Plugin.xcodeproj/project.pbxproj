@@ -32,6 +32,7 @@
 		7C28C8D02C8AEA2E00271553 /* PosthogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C28C8CF2C8AEA2E00271553 /* PosthogHelper.swift */; };
 		7C645E762E2B82E200E5559D /* PosthogConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C645E752E2B82DE00E5559D /* PosthogConfig.swift */; };
 		7CFD6A9E2C8B046100FF2B17 /* GroupOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFD6A9D2C8B046100FF2B17 /* GroupOptions.swift */; };
+		9BD9F4D32EA7141600408A6E /* SessionReplayOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD9F4D22EA7140800408A6E /* SessionReplayOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		7CFD6A9D2C8B046100FF2B17 /* GroupOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		9BD9F4D22EA7140800408A6E /* SessionReplayOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionReplayOptions.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -183,6 +185,7 @@
 		7C28C8C02C8AE98000271553 /* Options */ = {
 			isa = PBXGroup;
 			children = (
+				9BD9F4D22EA7140800408A6E /* SessionReplayOptions.swift */,
 				030596DE2D79850D001EC5F7 /* GetFeatureFlagPayloadOptions.swift */,
 				7C2747512D3BFF0300589048 /* IsFeatureEnabledOptions.swift */,
 				7C27474C2D3BFEF000589048 /* GetFeatureFlagOptions.swift */,
@@ -409,6 +412,7 @@
 				7C28C8CA2C8AE9C300271553 /* ScreenOptions.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* Posthog.swift in Sources */,
 				7C28C8C62C8AE9AC00271553 /* IdentifyOptions.swift in Sources */,
+				9BD9F4D32EA7141600408A6E /* SessionReplayOptions.swift in Sources */,
 				7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */,
 				7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */,
 				030596E12D79853F001EC5F7 /* GetFeatureFlagPayloadResult.swift in Sources */,
