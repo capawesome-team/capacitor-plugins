@@ -14,6 +14,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "captureException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
@@ -25,6 +26,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "screen", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startSessionRecording", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stopSessionRecording", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unregister", returnType: CAPPluginReturnPromise)
     ]
 
@@ -57,6 +60,10 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.capture(options)
         call.resolve()
+    }
+
+    @objc func captureException(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
     }
 
     @objc func flush(_ call: CAPPluginCall) {
@@ -175,10 +182,22 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         let host = call.getString("host", "https://us.i.posthog.com")
+        let enableSessionReplay = call.getBool("enableSessionReplay", false)
+        let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
-        let options = SetupOptions(apiKey: apiKey, host: host)
+        let options = SetupOptions(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, sessionReplayConfig: sessionReplayConfig)
 
         implementation?.setup(options)
+        call.resolve()
+    }
+
+    @objc func startSessionRecording(_ call: CAPPluginCall) {
+        implementation?.startSessionRecording()
+        call.resolve()
+    }
+
+    @objc func stopSessionRecording(_ call: CAPPluginCall) {
+        implementation?.stopSessionRecording()
         call.resolve()
     }
 
@@ -199,6 +218,18 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.host = getConfig().getString("host") ?? config.host
+        config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
+
+        if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
+            config.sessionReplayConfig = SessionReplayOptions(
+                screenshotMode: sessionReplayConfigDict["screenshotMode"] as? Bool ?? false,
+                maskAllTextInputs: sessionReplayConfigDict["maskAllTextInputs"] as? Bool ?? true,
+                maskAllImages: sessionReplayConfigDict["maskAllImages"] as? Bool ?? true,
+                maskAllSandboxedViews: sessionReplayConfigDict["maskAllSandboxedViews"] as? Bool ?? true,
+                captureNetworkTelemetry: sessionReplayConfigDict["captureNetworkTelemetry"] as? Bool ?? true,
+                debouncerDelay: sessionReplayConfigDict["debouncerDelay"] as? Double ?? 1.0
+            )
+        }
 
         return config
     }
