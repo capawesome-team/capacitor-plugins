@@ -456,6 +456,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`isAvailable()`](#isavailable)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
+* [`isLocationEnabled()`](#islocationenabled)
 * [`openAppSettings()`](#openappsettings)
 * [`openBluetoothSettings()`](#openbluetoothsettings)
 * [`openLocationSettings()`](#openlocationsettings)
@@ -677,6 +678,23 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#isenabledresult">IsEnabledResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### isLocationEnabled()
+
+```typescript
+isLocationEnabled() => Promise<IsLocationEnabledResult>
+```
+
+Check if location services are enabled.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#islocationenabledresult">IsLocationEnabledResult</a>&gt;</code>
+
+**Since:** 7.7.0
 
 --------------------
 
@@ -1347,6 +1365,13 @@ Remove all listeners for this plugin.
 | Prop          | Type                 | Description                          | Since |
 | ------------- | -------------------- | ------------------------------------ | ----- |
 | **`enabled`** | <code>boolean</code> | Whether or not Bluetooth is enabled. | 6.0.0 |
+
+
+#### IsLocationEnabledResult
+
+| Prop          | Type                 | Description                                   | Since |
+| ------------- | -------------------- | --------------------------------------------- | ----- |
+| **`enabled`** | <code>boolean</code> | Whether or not location services are enabled. | 7.7.0 |
 
 
 #### ReadCharacteristicResult
