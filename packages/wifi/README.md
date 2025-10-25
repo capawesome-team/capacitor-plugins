@@ -30,9 +30,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Demo
 
-| Android                                                                                                                      | iOS                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/user-attachments/assets/4ccd4741-f43f-4c8d-9f43-2c486f87ff97?demo.gif" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/55c3cd4b-1d46-4996-b357-67b12ff46cd1?demo.gif" width="266" alt="iOS Demo" /> |
+| Android                                                                                                          | iOS                                                                                                      |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| <img src="https://capawesome.io/assets/images/gifs/capacitor-wifi-android.gif" width="324" alt="Android Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-wifi-ios.gif" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
