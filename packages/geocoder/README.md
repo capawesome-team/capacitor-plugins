@@ -34,9 +34,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Demo
 
-| Android                                                                                                                                    | iOS                                                                                                                                    | Web                                                                                                                                    |
-| ------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://github.com/user-attachments/assets/1b49d200-e4de-4d71-9058-ef7730cdc7ee#demo.gif" width="324" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/cb5e7f27-5394-4ae3-9657-b4a7a6bc9599#cb5e7f27-5394-4ae3-9657-b4a7a6bc9599.gif" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/961072fe-47b7-4de8-90e6-611498860509?name=961072fe-47b7-4de8-90e6-611498860509.gif" width="324" alt="Web Demo" /> |
+| Android                                                                                                              | iOS                                                                                                          | Web                                                                                                          |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| <img src="https://capawesome.io/assets/images/gifs/capacitor-geocoder-android.gif" width="324" alt="Android Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-geocoder-ios.gif" width="266" alt="iOS Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-geocoder-web.gif" width="324" alt="Web Demo" /> |
 
 ## Installation
 
