@@ -18,6 +18,26 @@ declare module '@capacitor/cli' {
        * @example 'https://eu.i.posthog.com'
        */
       host?: string;
+      /**
+       * Whether to enable session recording automatically.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      enableSessionReplay?: boolean;
+      /**
+       * Session replay configuration options.
+       *
+       * @since 7.3.0
+       */
+      sessionReplayConfig?: SessionReplayOptions;
+      /**
+       * Whether to enable automatic error tracking.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      enableErrorTracking?: boolean;
     };
   }
 }
@@ -35,6 +55,12 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
+  /**
+   * Capture an exception/error event.
+   *
+   * @since 7.3.0
+   */
+  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -113,6 +139,18 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   setup(options: SetupOptions): Promise<void>;
+  /**
+   * Start session recording.
+   *
+   * @since 7.3.0
+   */
+  startSessionRecording(): Promise<void>;
+  /**
+   * Stop session recording.
+   *
+   * @since 7.3.0
+   */
+  stopSessionRecording(): Promise<void>;
   /**
    * Remove a super property.
    *
@@ -313,6 +351,20 @@ export interface SetupOptions {
    */
   apiKey: string;
   /**
+   * Whether to enable automatic error tracking.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  enableErrorTracking?: boolean;
+  /**
+   * Whether to enable session recording automatically.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  enableSessionReplay?: boolean;
+  /**
    * The host of your PostHog instance.
    *
    * @since 6.0.0
@@ -320,6 +372,12 @@ export interface SetupOptions {
    * @example 'https://eu.i.posthog.com'
    */
   host?: string;
+  /**
+   * Session replay configuration options.
+   *
+   * @since 7.3.0
+   */
+  sessionReplayConfig?: SessionReplayOptions;
 }
 
 /**
@@ -342,7 +400,75 @@ export type JsonType =
   | number
   | boolean
   | null
+  | undefined
   | {
-      [key: string]: JsonType;
-    }
+    [key: string]: JsonType;
+  }
   | JsonType[];
+
+/**
+ * @since 7.3.0
+ */
+export interface CaptureExceptionOptions {
+  /**
+   * The exception/error to capture.
+   *
+   * @since 7.3.0
+   */
+  exception: any;
+  /**
+   * Additional properties to send with the exception event.
+   *
+   * @since 7.3.0
+   */
+  properties?: Record<string, any>;
+}
+
+/**
+ * @since 7.3.0
+ */
+export interface SessionReplayOptions {
+  /**
+   * Enable screenshot mode for session recordings.
+   * WARNING: This may capture sensitive information.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  screenshotMode?: boolean;
+  /**
+   * Mask all text input fields in session recordings.
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllTextInputs?: boolean;
+  /**
+   * Mask all images in session recordings.
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllImages?: boolean;
+  /**
+   * Mask all sandboxed system views (iOS-specific).
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllSandboxedViews?: boolean;
+  /**
+   * Capture network telemetry in session recordings.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  captureNetworkTelemetry?: boolean;
+  /**
+   * Debounce delay for session recording snapshots (in seconds).
+   *
+   * @since 7.3.0
+   * @default 1.0
+   */
+  debouncerDelay?: number;
+}

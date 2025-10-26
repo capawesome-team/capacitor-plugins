@@ -31,10 +31,13 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 7.1.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
+| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.        | <code>false</code>                      | 7.3.0 |
 
 ### Examples
 
@@ -45,7 +48,10 @@ In `capacitor.config.json`:
   "plugins": {
     "Posthog": {
       "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
-      "host": 'https://eu.i.posthog.com'
+      "host": 'https://eu.i.posthog.com',
+      "enableSessionReplay": undefined,
+      "sessionReplayConfig": undefined,
+      "enableErrorTracking": undefined
     }
   }
 }
@@ -63,6 +69,9 @@ const config: CapacitorConfig = {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       host: 'https://eu.i.posthog.com',
+      enableSessionReplay: undefined,
+      sessionReplayConfig: undefined,
+      enableErrorTracking: undefined,
     },
   },
 };
@@ -159,6 +168,7 @@ const unregister = async () => {
 
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
+* [`captureException(...)`](#captureexception)
 * [`flush()`](#flush)
 * [`getFeatureFlag(...)`](#getfeatureflag)
 * [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
@@ -170,6 +180,8 @@ const unregister = async () => {
 * [`reset()`](#reset)
 * [`screen(...)`](#screen)
 * [`setup(...)`](#setup)
+* [`startSessionRecording()`](#startsessionrecording)
+* [`stopSessionRecording()`](#stopsessionrecording)
 * [`unregister(...)`](#unregister)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -209,6 +221,23 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### captureException(...)
+
+```typescript
+captureException(options: CaptureExceptionOptions) => Promise<void>
+```
+
+Capture an exception/error event.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
+
+**Since:** 7.3.0
 
 --------------------
 
@@ -402,6 +431,32 @@ your Capacitor Configuration file. In this case, you must not call this method.
 --------------------
 
 
+### startSessionRecording()
+
+```typescript
+startSessionRecording() => Promise<void>
+```
+
+Start session recording.
+
+**Since:** 7.3.0
+
+--------------------
+
+
+### stopSessionRecording()
+
+```typescript
+stopSessionRecording() => Promise<void>
+```
+
+Stop session recording.
+
+**Since:** 7.3.0
+
+--------------------
+
+
 ### unregister(...)
 
 ```typescript
@@ -435,6 +490,14 @@ Remove a super property.
 | ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
 | **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+
+
+#### CaptureExceptionOptions
+
+| Prop             | Type                                                         | Description                                             | Since |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ----- |
+| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 7.3.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 7.3.0 |
 
 
 #### GetFeatureFlagResult
@@ -514,10 +577,25 @@ Remove a super property.
 
 #### SetupOptions
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 6.0.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
+| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.        | <code>false</code>                      | 7.3.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
+
+
+#### SessionReplayOptions
+
+| Prop                          | Type                 | Description                                                                                     | Default            | Since |
+| ----------------------------- | -------------------- | ----------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`screenshotMode`**          | <code>boolean</code> | Enable screenshot mode for session recordings. WARNING: This may capture sensitive information. | <code>false</code> | 7.3.0 |
+| **`maskAllTextInputs`**       | <code>boolean</code> | Mask all text input fields in session recordings.                                               | <code>true</code>  | 7.3.0 |
+| **`maskAllImages`**           | <code>boolean</code> | Mask all images in session recordings.                                                          | <code>true</code>  | 7.3.0 |
+| **`maskAllSandboxedViews`**   | <code>boolean</code> | Mask all sandboxed system views (iOS-specific).                                                 | <code>true</code>  | 7.3.0 |
+| **`captureNetworkTelemetry`** | <code>boolean</code> | Capture network telemetry in session recordings.                                                | <code>false</code> | 7.3.0 |
+| **`debouncerDelay`**          | <code>number</code>  | Debounce delay for session recording snapshots (in seconds).                                    | <code>1.0</code>   | 7.3.0 |
 
 
 #### UnregisterOptions
@@ -539,7 +617,7 @@ Construct a type with a set of properties K of type T
 
 #### JsonType
 
-<code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
+<code>string | number | boolean | null</code> |  | <code>{ [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
 

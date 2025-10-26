@@ -9,6 +9,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions;
@@ -17,7 +18,9 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
 
@@ -77,6 +80,25 @@ public class PosthogPlugin extends Plugin {
             CaptureOptions options = new CaptureOptions(event, properties);
 
             implementation.capture(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void captureException(PluginCall call) {
+        try {
+            String exception = call.getString("exception");
+            if (exception == null) {
+                call.reject(ERROR_VALUE_MISSING);
+                return;
+            }
+            JSObject properties = call.getObject("properties");
+
+            CaptureExceptionOptions options = new CaptureExceptionOptions(exception, properties);
+
+            implementation.captureException(options);
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -240,8 +262,23 @@ public class PosthogPlugin extends Plugin {
                 return;
             }
             String host = call.getString("host", "https://us.i.posthog.com");
+            Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
 
             SetupOptions options = new SetupOptions(apiKey, host);
+            options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
+
+            JSObject sessionReplayConfigObject = call.getObject("sessionReplayConfig");
+            if (sessionReplayConfigObject != null) {
+                SessionReplayOptions sessionReplayOptions = new SessionReplayOptions(
+                    sessionReplayConfigObject.getBool("screenshotMode"),
+                    sessionReplayConfigObject.getBool("maskAllTextInputs"),
+                    sessionReplayConfigObject.getBool("maskAllImages"),
+                    sessionReplayConfigObject.getBool("maskAllSandboxedViews"),
+                    sessionReplayConfigObject.getBool("captureNetworkTelemetry"),
+                    sessionReplayConfigObject.getDouble("debouncerDelay")
+                );
+                options.setSessionReplayConfig(sessionReplayOptions);
+            }
 
             implementation.setup(options);
             call.resolve();
@@ -275,6 +312,10 @@ public class PosthogPlugin extends Plugin {
         config.setApiKey(apiKey);
         String host = getConfig().getString("host", config.getHost());
         config.setHost(host);
+        boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
+        config.setEnableSessionReplay(enableSessionReplay);
+        boolean enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.getEnableErrorTracking());
+        config.setEnableErrorTracking(enableErrorTracking);
 
         return config;
     }
