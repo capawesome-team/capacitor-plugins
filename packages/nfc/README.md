@@ -125,9 +125,10 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
-#### Capabilities
+#### Entitlements
 
-Ensure `Near Field Communication Tag Reading` capability is enabled in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+Ensure `Near Field Communication Tag Reading` and `NFC Scan` capabilities have been enabled in your application in Xcode.
+See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 #### Privacy Descriptions
 
@@ -211,12 +212,12 @@ const readSignature = async () => {
         // 3. Close the connection to the tag.
         await Nfc.close();
         await Nfc.stopScanSession();
-        resolve(response);
+        resolve(result);
       } else {
         // 1. Send one or more commands to the tag and receive the response.
         const result = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
         await Nfc.stopScanSession();
-        resolve(response);
+        resolve(result);
       }
     });
 
@@ -249,8 +250,8 @@ const format = async () => {
 };
 
 const isSupported = async () => {
-  const { isSupported } = await Nfc.isSupported();
-  return isSupported;
+  const { nfc } = await Nfc.isSupported();
+  return nfc;
 };
 
 const isEnabled = async () => {
