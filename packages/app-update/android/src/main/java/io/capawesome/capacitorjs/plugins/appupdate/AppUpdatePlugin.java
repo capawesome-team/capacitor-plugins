@@ -105,7 +105,7 @@ public class AppUpdatePlugin extends Plugin {
     @PluginMethod
     public void openAppStore(PluginCall call) {
         try {
-            String packageName = call.getString("appId");
+            String packageName = call.getString("androidPackageName");
             if (packageName == null) {
                 packageName = this.getContext().getPackageName();
             }
