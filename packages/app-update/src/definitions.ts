@@ -167,7 +167,7 @@ export interface OpenAppStoreOptions {
    * On **Android**, this is the application ID of your app
    * (e.g. `com.example.app`).
    * You can find the ID in the `android/app/build.gradle` file.
-   * 
+   *
    * If not provided, the current app's package name will be used.
    *
    * Only available on Android.
@@ -182,7 +182,7 @@ export interface OpenAppStoreOptions {
    * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
    * You can find the ID in the URL of your app store entry
    * (e.g. `https://apps.apple.com/app/id123456789`).
-   * 
+   *
    * Only available on iOS.
    *
    * @since 6.1.0
