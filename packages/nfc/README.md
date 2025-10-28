@@ -130,6 +130,22 @@ If you are using Proguard, you need to add the following rules to your `proguard
 Ensure `Near Field Communication Tag Reading` and `NFC Scan` capabilities have been enabled in your application in Xcode.
 See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
+This will also create or update the `ios/App/App/App.entitlements` file. Make sure it contains the following key to allow reading NFC tags:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.nfc.readersession.formats</key>
+	<array>
+		<string>NDEF</string>
+		<string>TAG</string>
+	</array>
+</dict>
+</plist>
+```
+
 #### Privacy Descriptions
 
 Add the `NFCReaderUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why the app needs to use NFC:
