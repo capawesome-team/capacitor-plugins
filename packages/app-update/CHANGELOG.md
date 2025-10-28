@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`98c4a921c0ef3d445e7cc0fd70877c85e5454262`](https://github.com/capawesome-team/capacitor-plugins/commit/98c4a921c0ef3d445e7cc0fd70877c85e5454262) ([#648](https://github.com/capawesome-team/capacitor-plugins/pull/648)): feat(android): support `appId` option
+
 ## 7.0.1
 
 ### Patch Changes
