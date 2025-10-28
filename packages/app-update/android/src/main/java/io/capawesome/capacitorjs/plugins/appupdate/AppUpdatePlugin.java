@@ -105,7 +105,10 @@ public class AppUpdatePlugin extends Plugin {
     @PluginMethod
     public void openAppStore(PluginCall call) {
         try {
-            String packageName = this.getContext().getPackageName();
+            String packageName = call.getString("appId");
+            if (packageName == null) {
+                packageName = this.getContext().getPackageName();
+            }
             Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
             try {
                 this.getBridge().getActivity().startActivity(launchIntent);

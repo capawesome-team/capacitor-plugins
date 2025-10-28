@@ -164,14 +164,16 @@ export interface OpenAppStoreOptions {
   /**
    * The app ID of the app to open in the App Store.
    *
+   * On **Android**, this is the package name of your app (e.g. `com.example.app`).
    * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
    * You can find the ID in the URL of your app store entry
    * (e.g. `https://apps.apple.com/app/id123456789`).
    *
-   * Only available on iOS.
+   * Only available on Android and iOS.
    *
    * @since 6.1.0
-   * @example 123456789
+   * @example "com.example.app"
+   * @example "123456789"
    */
   appId?: string;
 }
