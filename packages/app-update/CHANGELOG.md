@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`9b3afe18db73c55c6caf15130122c851aa30b773`](https://github.com/capawesome-team/capacitor-plugins/commit/9b3afe18db73c55c6caf15130122c851aa30b773): feat(android): add `androidPackageName` option
+
 ## 7.1.0
 
 ### Minor Changes
