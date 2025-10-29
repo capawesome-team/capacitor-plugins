@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.7.1
+
+### Patch Changes
+
+- [`a6497fd275daa215db8c16816678008958d15635`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a6497fd275daa215db8c16816678008958d15635) ([#321](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/321)): fix(android): null pointer exception in `stopScan()` method
+
 ## 7.7.0
 
 ### Minor Changes
