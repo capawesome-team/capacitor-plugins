@@ -23,26 +23,23 @@ import Capacitor
             guard let strongSelf = self else {
                 return
             }
-            let currentOrientationValue = UIDevice.current.orientation.rawValue
-            let currentOrientationMask = strongSelf.convertOrientationValueToMask(currentOrientationValue)
-            var nextOrientationMask: UIInterfaceOrientationMask
             var nextOrientationValue: Int
+            var nextOrientationMask: UIInterfaceOrientationMask
             if let orientationType {
-                nextOrientationMask = strongSelf.convertOrientationTypeToMask(orientationType)
                 nextOrientationValue = strongSelf.convertOrientationTypeToValue(orientationType)
+                nextOrientationMask = strongSelf.convertOrientationTypeToMask(orientationType)
             } else {
-                nextOrientationMask = currentOrientationMask
-                nextOrientationValue = currentOrientationValue
+                nextOrientationValue = UIDevice.current.orientation.rawValue
+                nextOrientationMask = strongSelf.convertOrientationValueToMask(nextOrientationValue)
             }
             strongSelf.requestGeometryUpdate(orientationValue: nextOrientationValue, orientationMask: nextOrientationMask)
             ScreenOrientation.supportedInterfaceOrientations = nextOrientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
-            strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
             if let orientationType {
                 strongSelf.notifyOrientationChangeListeners(orientationType)
             } else {
-                let convertedOrientationType = strongSelf.convertOrientationValueToType(nextOrientationValue)
-                strongSelf.notifyOrientationChangeListeners(convertedOrientationType)
+                let convertedOrientationValue = strongSelf.convertOrientationValueToType(nextOrientationValue)
+                strongSelf.notifyOrientationChangeListeners(convertedOrientationValue)
             }
             completion()
         }
