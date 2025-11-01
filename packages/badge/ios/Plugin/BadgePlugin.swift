@@ -61,7 +61,7 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
                 return
             }
             let count = call.getInt("count") ?? 0
-            strongSelf.implementation?.set(count: count, completion: {
+            strongSelf.implementation?.set(count: count, completion: { _ in
                 call.resolve()
             })
         })

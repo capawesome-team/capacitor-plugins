@@ -19,7 +19,7 @@ import UserNotifications
 
     @objc public func handleOnResume() {
         if config.autoClear {
-            set(count: 0, completion: {})
+            set(count: 0, completion: { _ in })
         }
     }
 
@@ -52,20 +52,32 @@ import UserNotifications
         return defaults.integer(forKey: storageKey)
     }
 
-    @objc public func set(count: Int, completion: @escaping () -> Void) {
+    @objc public func set(count: Int, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {
                 return
             }
-            UIApplication.shared.applicationIconBadgeNumber = count
-            strongSelf.defaults.set(count, forKey: strongSelf.storageKey)
-            completion()
+            if #available(iOS 16.0, *) {
+                let center = UNUserNotificationCenter.current()
+                center.setBadgeCount(count) { error in
+                    if let error = error {
+                        completion(error)
+                        return
+                    }
+                    strongSelf.defaults.set(count, forKey: strongSelf.storageKey)
+                    completion(nil)
+                }
+            } else {
+                UIApplication.shared.applicationIconBadgeNumber = count
+                strongSelf.defaults.set(count, forKey: strongSelf.storageKey)
+                completion(nil)
+            }
         }
     }
 
     @objc public func increase(completion: @escaping () -> Void) {
         let count = get()
-        set(count: count + 1, completion: completion)
+        set(count: count + 1, completion: { _ in completion() })
     }
 
     @objc public func decrease(completion: @escaping () -> Void) {
@@ -74,11 +86,11 @@ import UserNotifications
             completion()
             return
         }
-        set(count: count - 1, completion: completion)
+        set(count: count - 1, completion: { _ in completion() })
     }
 
     @objc public func clear(completion: @escaping () -> Void) {
-        set(count: 0, completion: completion)
+        set(count: 0, completion: { _ in completion() })
     }
 
     @objc public func isSupported() -> Bool {
@@ -88,7 +100,7 @@ import UserNotifications
     @objc private func restore() {
         let count = get()
         if count > 0 {
-            set(count: count, completion: {})
+            set(count: count, completion: { _ in })
         }
     }
 }
