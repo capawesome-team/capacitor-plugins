@@ -4,7 +4,7 @@ export interface ScreenOrientationPlugin {
   /**
    * Locks the device orientation.
    */
-  lock(options: LockOptions): Promise<void>;
+  lock(options?: LockOptions): Promise<void>;
   /**
    * Unlocks the device orientation.
    */
@@ -30,7 +30,7 @@ export interface LockOptions {
   /**
    * The orientation lock type.
    */
-  type: OrientationType;
+  type?: OrientationType;
 }
 
 export interface GetCurrentOrientationResult {

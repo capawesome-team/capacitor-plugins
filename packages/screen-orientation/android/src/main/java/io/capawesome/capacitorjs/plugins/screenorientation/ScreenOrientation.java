@@ -44,27 +44,10 @@ public class ScreenOrientation {
         return orientationChangeListener;
     }
 
-    public void lock(String orientationType) {
-        switch (orientationType) {
-            case ScreenOrientationType.LANDSCAPE:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-                break;
-            case ScreenOrientationType.LANDSCAPE_PRIMARY:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                break;
-            case ScreenOrientationType.LANDSCAPE_SECONDARY:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                break;
-            case ScreenOrientationType.PORTRAIT:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT);
-                break;
-            case ScreenOrientationType.PORTRAIT_PRIMARY:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                break;
-            case ScreenOrientationType.PORTRAIT_SECONDARY:
-                bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
-                break;
-        }
+    public void lock(@Nullable String orientationType) throws Exception {
+        final String key = (orientationType != null) ? orientationType : getCurrentOrientationType();
+        int value = ScreenOrientationType.toInt(key);
+        bridge.getActivity().setRequestedOrientation(value);
     }
 
     public void unlock() {
@@ -75,13 +58,13 @@ public class ScreenOrientation {
         int rotation = bridge.getActivity().getWindowManager().getDefaultDisplay().getRotation();
         switch (rotation) {
             case Surface.ROTATION_90:
-                return ScreenOrientationType.LANDSCAPE_PRIMARY;
+                return ScreenOrientationType.LANDSCAPE_PRIMARY.key();
             case Surface.ROTATION_180:
-                return ScreenOrientationType.PORTRAIT_SECONDARY;
+                return ScreenOrientationType.PORTRAIT_SECONDARY.key();
             case Surface.ROTATION_270:
-                return ScreenOrientationType.LANDSCAPE_SECONDARY;
+                return ScreenOrientationType.LANDSCAPE_SECONDARY.key();
             default:
-                return ScreenOrientationType.PORTRAIT_PRIMARY;
+                return ScreenOrientationType.PORTRAIT_PRIMARY.key();
         }
     }
 }

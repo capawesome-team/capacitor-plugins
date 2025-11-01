@@ -10,6 +10,8 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 @CapacitorPlugin(name = "ScreenOrientation")
 public class ScreenOrientationPlugin extends Plugin {
 
+    public static final String ERROR_UNSUPPORTED_ORIENTATION_TYPE = "Unsupported orientation type.";
+
     public static final String SCREEN_ORIENTATION_CHANGE_EVENT = "screenOrientationChange";
 
     private ScreenOrientation implementation;
@@ -29,8 +31,12 @@ public class ScreenOrientationPlugin extends Plugin {
     @PluginMethod
     public void lock(PluginCall call) {
         String orientationType = call.getString("type");
-        implementation.lock(orientationType);
-        call.resolve();
+        try {
+            implementation.lock(orientationType);
+            call.resolve();
+        } catch (Exception exception) {
+            call.reject(exception.getMessage());
+        }
     }
 
     @PluginMethod

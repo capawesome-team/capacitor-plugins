@@ -109,7 +109,7 @@ const getCurrentOrientation = async () => {
 ### lock(...)
 
 ```typescript
-lock(options: LockOptions) => Promise<void>
+lock(options?: LockOptions | undefined) => Promise<void>
 ```
 
 Locks the device orientation.
