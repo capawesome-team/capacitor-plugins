@@ -45,7 +45,7 @@ public class ScreenOrientation {
     }
 
     public void lock(@Nullable String orientationType) throws Exception {
-        final String key = (orientationType != null) ? orientationType : getCurrentOrientationType();
+        final String key = (orientationType == null) ? getCurrentOrientationTypeKey() : orientationType;
         int value = ScreenOrientationType.toInt(key);
         bridge.getActivity().setRequestedOrientation(value);
     }
@@ -54,7 +54,7 @@ public class ScreenOrientation {
         bridge.getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
     }
 
-    public String getCurrentOrientationType() {
+    public String getCurrentOrientationTypeKey() {
         int rotation = bridge.getActivity().getWindowManager().getDefaultDisplay().getRotation();
         switch (rotation) {
             case Surface.ROTATION_90:

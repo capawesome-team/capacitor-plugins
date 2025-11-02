@@ -38,8 +38,8 @@ import Capacitor
             if let orientationType {
                 strongSelf.notifyOrientationChangeListeners(orientationType)
             } else {
-                let convertedOrientationValue = strongSelf.convertOrientationValueToType(nextOrientationValue)
-                strongSelf.notifyOrientationChangeListeners(convertedOrientationValue)
+                let convertedOrientationType = strongSelf.convertOrientationValueToType(nextOrientationValue)
+                strongSelf.notifyOrientationChangeListeners(convertedOrientationType)
             }
             completion()
         }

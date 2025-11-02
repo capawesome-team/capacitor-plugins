@@ -48,14 +48,14 @@ public class ScreenOrientationPlugin extends Plugin {
     @PluginMethod
     public void getCurrentOrientation(PluginCall call) {
         JSObject ret = new JSObject();
-        String orientationType = implementation.getCurrentOrientationType();
+        String orientationType = implementation.getCurrentOrientationTypeKey();
         ret.put("type", orientationType);
         call.resolve(ret);
     }
 
     private void updateOrientation() {
         JSObject ret = new JSObject();
-        String orientationType = implementation.getCurrentOrientationType();
+        String orientationType = implementation.getCurrentOrientationTypeKey();
         ret.put("type", orientationType);
         notifyListeners(SCREEN_ORIENTATION_CHANGE_EVENT, ret);
     }
