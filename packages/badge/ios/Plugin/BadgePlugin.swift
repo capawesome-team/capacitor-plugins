@@ -7,6 +7,8 @@ import Capacitor
  */
 @objc(BadgePlugin)
 public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
+    public static let tag = "BadgePlugin"
+
     public let identifier = "BadgePlugin"
     public let jsName = "Badge"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -27,89 +29,133 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { granted, error in
-            guard error == nil else {
-                call.reject(error!.localizedDescription)
-                return
-            }
-            call.resolve(["display": granted ? "granted" : "denied"])
-        })
+        do {
+            implementation?.requestPermissions(completion: { granted, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                    return
+                }
+                call.resolve(["display": granted ? "granted" : "denied"])
+            })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {
-        implementation?.checkPermissions(completion: { permission in
-            call.resolve([
-                "display": permission
-            ])
-        })
+        do {
+            implementation?.checkPermissions(completion: { permission in
+                call.resolve([
+                    "display": permission
+                ])
+            })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func get(_ call: CAPPluginCall) {
-        let count = implementation?.get()
-        call.resolve([
-            "count": count ?? 0
-        ])
+        do {
+            let count = implementation?.get()
+            call.resolve([
+                "count": count ?? 0
+            ])
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func set(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            guard error == nil else {
-                call.reject(error!.localizedDescription)
-                return
-            }
-            let count = call.getInt("count") ?? 0
-            strongSelf.implementation?.set(count: count, completion: { _ in
-                call.resolve()
+        do {
+            implementation?.requestPermissions(completion: { [weak self] _, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if let error = error {
+                    strongSelf.rejectCall(call, error)
+                    return
+                }
+                let count = call.getInt("count") ?? 0
+                strongSelf.implementation?.set(count: count, completion: { error in
+                    if let error = error {
+                        strongSelf.rejectCall(call, error)
+                        return
+                    }
+                    call.resolve()
+                })
             })
-        })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func increase(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            guard error == nil else {
-                call.reject(error!.localizedDescription)
-                return
-            }
-            strongSelf.implementation?.increase(completion: {
-                call.resolve()
+        do {
+            implementation?.requestPermissions(completion: { [weak self] _, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if let error = error {
+                    strongSelf.rejectCall(call, error)
+                    return
+                }
+                strongSelf.implementation?.increase(completion: { error in
+                    if let error = error {
+                        strongSelf.rejectCall(call, error)
+                        return
+                    }
+                    call.resolve()
+                })
             })
-        })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func decrease(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            guard error == nil else {
-                call.reject(error!.localizedDescription)
-                return
-            }
-            strongSelf.implementation?.decrease(completion: {
-                call.resolve()
+        do {
+            implementation?.requestPermissions(completion: { [weak self] _, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if let error = error {
+                    strongSelf.rejectCall(call, error)
+                    return
+                }
+                strongSelf.implementation?.decrease(completion: { error in
+                    if let error = error {
+                        strongSelf.rejectCall(call, error)
+                        return
+                    }
+                    call.resolve()
+                })
             })
-        })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            guard error == nil else {
-                call.reject(error!.localizedDescription)
-                return
-            }
-            strongSelf.implementation?.clear(completion: {
-                call.resolve()
+        do {
+            implementation?.requestPermissions(completion: { [weak self] _, error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if let error = error {
+                    strongSelf.rejectCall(call, error)
+                    return
+                }
+                strongSelf.implementation?.clear(completion: { error in
+                    if let error = error {
+                        strongSelf.rejectCall(call, error)
+                        return
+                    }
+                    call.resolve()
+                })
             })
-        })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func isSupported(_ call: CAPPluginCall) {
@@ -130,5 +176,10 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
         config.autoClear = getConfig().getBoolean("autoClear", config.autoClear)
 
         return config
+    }
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", BadgePlugin.tag, "] ", error)
+        call.reject(error.localizedDescription)
     }
 }

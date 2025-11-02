@@ -75,22 +75,22 @@ import UserNotifications
         }
     }
 
-    @objc public func increase(completion: @escaping () -> Void) {
+    @objc public func increase(completion: @escaping (Error?) -> Void) {
         let count = get()
-        set(count: count + 1, completion: { _ in completion() })
+        set(count: count + 1, completion: { error in completion(error) })
     }
 
-    @objc public func decrease(completion: @escaping () -> Void) {
+    @objc public func decrease(completion: @escaping (Error?) -> Void) {
         let count = get()
         if count < 1 {
-            completion()
+            completion(nil)
             return
         }
-        set(count: count - 1, completion: { _ in completion() })
+        set(count: count - 1, completion: { error in completion(error) })
     }
 
-    @objc public func clear(completion: @escaping () -> Void) {
-        set(count: 0, completion: { _ in completion() })
+    @objc public func clear(completion: @escaping (Error?) -> Void) {
+        set(count: 0, completion: { error in completion(error) })
     }
 
     @objc public func isSupported() -> Bool {
