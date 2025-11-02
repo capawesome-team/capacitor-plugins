@@ -29,6 +29,12 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
+## Testimonials
+
+> We migrated PadelBand, a sports tech app, from the Capacitor Community BLE plugin to this one and the difference is remarkable. The reliable background support and the ability to run custom native code with headless tasks made all the difference for our use case. Highly recommended!
+
+- [PadelBand](https://padel-band.com) Development Team
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
