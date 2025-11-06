@@ -135,7 +135,7 @@ public class LiveUpdatePlugin extends Plugin {
                 call.reject(ERROR_APP_ID_MISSING);
                 return;
             }
-            
+
             FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override

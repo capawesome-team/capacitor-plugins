@@ -94,7 +94,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                     call.reject(CustomError.appIdMissing.localizedDescription)
                     return
                 }
-                
+
                 let options = FetchLatestBundleOptions(call)
                 let result = try await implementation?.fetchLatestBundle(options)
                 if let result = result?.toJSObject() as? JSObject {
