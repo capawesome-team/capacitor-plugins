@@ -23,7 +23,7 @@ extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .appIdMissing:
-            return NSLocalizedString("No app ID is configured.", comment: "appIdMissing")
+            return NSLocalizedString("appId must be configured.", comment: "appIdMissing")
         case .bundleAlreadyExists:
             return NSLocalizedString("bundle already exists.", comment: "bundleAlreadyExists")
         case .bundleIdMissing:
