@@ -164,10 +164,6 @@ The NFC tag requires a [URI record](https://w3c.github.io/web-nfc/#uri-record) (
 
 No configuration required for this plugin.
 
-## Guides
-
-- [Announcing the Capacitor NFC Plugin](https://capawesome.io/blog/announcing-the-capacitor-nfc-plugin/)
-
 ## Usage
 
 ```typescript
