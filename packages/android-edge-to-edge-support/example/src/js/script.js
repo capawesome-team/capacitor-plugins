@@ -31,4 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
         color: color.includes('#') ? color : `#${color}`,
       });
     });
+  document
+    .querySelector('#set-status-bar-color-button')
+    .addEventListener('click', async () => {
+      const color = document.querySelector('#status-bar-color-input').value;
+      if (!color) {
+        return;
+      }
+      await EdgeToEdge.setStatusBarColor({
+        color: color.includes('#') ? color : `#${color}`,
+      });
+    });
+  document
+    .querySelector('#set-navigation-bar-color-button')
+    .addEventListener('click', async () => {
+      const color = document.querySelector('#navigation-bar-color-input').value;
+      if (!color) {
+        return;
+      }
+      await EdgeToEdge.setNavigationBarColor({
+        color: color.includes('#') ? color : `#${color}`,
+      });
+    });
 });
