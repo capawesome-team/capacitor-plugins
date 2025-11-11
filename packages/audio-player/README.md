@@ -140,6 +140,7 @@ const isPlaying = async () => {
 * [`seekTo(...)`](#seekto)
 * [`setVolume(...)`](#setvolume)
 * [`stop()`](#stop)
+* [`addListener('stop', ...)`](#addlistenerstop-)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -282,6 +283,26 @@ Stop the audio playback.
 --------------------
 
 
+### addListener('stop', ...)
+
+```typescript
+addListener(eventName: 'stop', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the audio has stopped playing.
+
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>'stop'</code>        |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.3.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -330,6 +351,13 @@ Stop the audio playback.
 | Prop         | Type                | Description                      | Since |
 | ------------ | ------------------- | -------------------------------- | ----- |
 | **`volume`** | <code>number</code> | The volume level to set (0-100). | 0.0.1 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>
 
