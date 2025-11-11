@@ -14,6 +14,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌙 **Background Mode**: Play audio even when the app is in the background.
+- 🎵 **Audio Focus Management**: Automatically manages audio focus on Android to pause other audio sources during playback.
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
