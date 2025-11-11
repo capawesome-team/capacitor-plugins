@@ -298,7 +298,7 @@ Called when the audio has stopped playing.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.2.1
+**Since:** 0.2.2
 
 --------------------
 
