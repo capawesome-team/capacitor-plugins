@@ -294,6 +294,88 @@ const removeAllListeners = async () => {
 };
 ```
 
+### Advanced
+
+#### HCE
+
+Host Card Emulation (HCE) allows your device to emulate an NFC card that other devices can interact with. The first example below demonstrates how to send APDU commands from an NFC reader using the `transceive(...)` method:
+
+```typescript
+import { Nfc, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
+import { Capacitor } from '@capacitor/core';
+
+const sendApduCommands = async () => {
+  return new Promise((resolve) => {
+    Nfc.addListener('nfcTagScanned', async (event) => {
+      // Define APDU commands
+      const selectApdu = [0x00, 0xA4, 0x04, 0x00, 0x07, 0xF0, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00];
+      const customApdu = [0x00, 0x01, 0x00, 0x00, 0x00];
+
+      // Connect to the tag (Android only)
+      if (Capacitor.getPlatform() === 'android') {
+        await Nfc.connect({ techType: NfcTagTechType.IsoDep });
+      }
+
+      // Send SELECT APDU command
+      const selectResponse = await Nfc.transceive({
+        techType: NfcTagTechType.Iso7816,
+        data: selectApdu
+      });
+
+      // Send custom APDU command
+      const customResponse = await Nfc.transceive({
+        techType: NfcTagTechType.Iso7816,
+        data: customApdu
+      });
+
+      // Close the connection (Android only)
+      if (Capacitor.getPlatform() === 'android') {
+        await Nfc.close();
+      }
+
+      // Stop the scan session
+      await Nfc.stopScanSession();
+      resolve();
+    });
+    // Start the scan session
+    Nfc.startScanSession();
+  });
+};
+```
+
+The second example below demonstrates how to respond to APDU commands sent by an NFC reader using the `commandReceived` event listener and the `respond(...)` method:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
+
+const respondToApduCommands = async () => {
+  // Listen for incoming APDU commands
+  Nfc.addListener('commandReceived', async (event) => {
+    // Parse the incoming command
+    const command = event.data;
+
+    // Check if it's a SELECT command
+    if (command[0] === 0x00 && command[1] === 0xA4 && command[2] === 0x04 && command[3] === 0x00) {
+      // Respond with success status (0x9000)
+      const response = [0x90, 0x00];
+      await Nfc.respond({ data: response });
+    }
+    // Check for custom command
+    else if (command[0] === 0x00 && command[1] === 0x01) {
+      // Respond with custom data
+      const response = [0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x90, 0x00]; // "Hello" + success status
+      await Nfc.respond({ data: response });
+    }
+    // Unknown command
+    else {
+      // Respond with error status (0x6D00 - Instruction not supported)
+      const response = [0x6D, 0x00];
+      await Nfc.respond({ data: response });
+    }
+  });
+};
+```
+
 ## API
 
 <docgen-index>
