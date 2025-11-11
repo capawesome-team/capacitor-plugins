@@ -10,7 +10,7 @@ import PostHog
         self.plugin = plugin
         super.init()
         if let apiKey = config.apiKey {
-            self.setup(apiKey: apiKey, host: config.host)
+            self.setup(apiKey: apiKey, host: config.host, config: nil)
         }
     }
 
@@ -94,16 +94,35 @@ import PostHog
     @objc public func setup(_ options: SetupOptions) {
         let apiKey = options.getApiKey()
         let host = options.getHost()
+        let config = options.getConfig()
 
-        setup(apiKey: apiKey, host: host)
+        setup(apiKey: apiKey, host: host, config: config)
     }
 
-    private func setup(apiKey: String, host: String) {
+    private func setup(apiKey: String, host: String, config configMap: [String: Any]?) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         config.captureScreenViews = false
         config.optOut = false
 
+        // Apply custom configuration parameters
+        if let customConfig = configMap {
+            applyConfigToPostHogConfig(config: config, configMap: customConfig)
+        }
+
         PostHogSDK.shared.setup(config)
+    }
+
+    private func applyConfigToPostHogConfig(config: PostHogConfig, configMap: [String: Any]) {
+        for (key, value) in configMap {
+            let mirror = Mirror(reflecting: config)
+            for child in mirror.children {
+                if let propertyName = child.label, propertyName == key {
+                    // Use KVC to set the property value
+                    config.setValue(value, forKey: key)
+                    break
+                }
+            }
+        }
     }
 
     @objc public func unregister(_ options: UnregisterOptions) {
