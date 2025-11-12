@@ -31,13 +31,13 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
-| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.        | <code>false</code>                      | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                                                    | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                           |                                         | 7.1.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                                             | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.                                    | <code>false</code>                      | 7.3.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                             | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options. Session recording configuration options. |                                         | 7.3.0 |
 
 ### Examples
 
@@ -49,11 +49,9 @@ In `capacitor.config.json`:
     "Posthog": {
       "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
       "host": "https://eu.i.posthog.com",
-      "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
-      "host": "https://eu.i.posthog.com",
+      "enableErrorTracking": undefined,
       "enableSessionReplay": undefined,
-      "sessionReplayConfig": undefined,
-      "enableErrorTracking": undefined
+      "sessionReplayConfig": undefined
     }
   }
 }
@@ -71,9 +69,9 @@ const config: CapacitorConfig = {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       host: 'https://eu.i.posthog.com',
+      enableErrorTracking: undefined,
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
-      enableErrorTracking: undefined,
     },
   },
 };
@@ -171,7 +169,6 @@ const unregister = async () => {
 
 - [`alias(...)`](#alias)
 - [`capture(...)`](#capture)
-- [`captureException(...)`](#captureexception)
 - [`flush()`](#flush)
 - [`getFeatureFlag(...)`](#getfeatureflag)
 - [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
@@ -209,7 +206,6 @@ Assign another distinct ID to the current user.
 **Since:** 6.0.0
 
 ---
----
 
 ### capture(...)
 
@@ -227,22 +223,6 @@ Capture an event.
 
 ---
 
-### captureException(...)
-
-```typescript
-captureException(options: CaptureExceptionOptions) => Promise<void>
-```
-
-Capture an exception/error event.
-
-| Param         | Type                                                                        |
-| ------------- | --------------------------------------------------------------------------- |
-| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
-
-**Since:** 7.3.0
-
----
-
 ### flush()
 
 ```typescript
@@ -255,7 +235,6 @@ Only available on Android and iOS.
 
 **Since:** 6.0.0
 
----
 ---
 
 ### getFeatureFlag(...)
@@ -275,7 +254,6 @@ Get the value of a feature flag.
 **Since:** 7.0.0
 
 ---
----
 
 ### getFeatureFlagPayload(...)
 
@@ -294,7 +272,6 @@ Get the payload of a feature flag.
 **Since:** 7.1.0
 
 ---
----
 
 ### group(...)
 
@@ -311,7 +288,6 @@ Associate the events for that user with a group.
 **Since:** 6.0.0
 
 ---
----
 
 ### identify(...)
 
@@ -327,7 +303,6 @@ Identify the current user.
 
 **Since:** 6.0.0
 
----
 ---
 
 ### isFeatureEnabled(...)
@@ -347,7 +322,6 @@ Check if a feature flag is enabled.
 **Since:** 7.0.0
 
 ---
----
 
 ### register(...)
 
@@ -364,7 +338,6 @@ Register a new super property. This property will be sent with every event.
 **Since:** 6.0.0
 
 ---
----
 
 ### reloadFeatureFlags()
 
@@ -377,7 +350,6 @@ Reload the feature flags.
 **Since:** 7.0.0
 
 ---
----
 
 ### reset()
 
@@ -389,7 +361,6 @@ Reset the current user's ID and anonymous ID.
 
 **Since:** 6.0.0
 
----
 ---
 
 ### screen(...)
@@ -408,7 +379,6 @@ Only available on Android and iOS.
 
 **Since:** 6.0.0
 
----
 ---
 
 ### setup(...)
@@ -430,7 +400,6 @@ your Capacitor Configuration file. In this case, you must not call this method.
 **Since:** 6.0.0
 
 ---
----
 
 ### startSessionRecording()
 
@@ -443,7 +412,6 @@ Start session recording.
 **Since:** 7.3.0
 
 ---
----
 
 ### stopSessionRecording()
 
@@ -455,7 +423,6 @@ Stop session recording.
 
 **Since:** 7.3.0
 
----
 ---
 
 ### unregister(...)
@@ -473,7 +440,6 @@ Remove a super property.
 **Since:** 6.0.0
 
 ---
----
 
 ### Interfaces
 
@@ -489,13 +455,6 @@ Remove a super property.
 | ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
 | **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
-
-#### CaptureExceptionOptions
-
-| Prop             | Type                                                         | Description                                             | Since |
-| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ----- |
-| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 7.3.0 |
-| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 7.3.0 |
 
 #### GetFeatureFlagResult
 
@@ -596,8 +555,6 @@ Remove a super property.
 Construct a type with a set of properties K of type T
 
 <code>{
-[P in K]: T;
-}</code>
 [P in K]: T;
 }</code>
 
