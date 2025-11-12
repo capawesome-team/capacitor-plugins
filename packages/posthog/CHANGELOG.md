@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`419231d7f385bb2bd707c064fb908042e9fc3340`](https://github.com/capawesome-team/capacitor-plugins/commit/419231d7f385bb2bd707c064fb908042e9fc3340) ([#632](https://github.com/capawesome-team/capacitor-plugins/pull/632)): feat: support session replay
+
 ## 7.2.0
 
 ### Minor Changes
