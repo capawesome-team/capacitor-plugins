@@ -402,8 +402,8 @@ export type JsonType =
   | null
   | undefined
   | {
-    [key: string]: JsonType;
-  }
+      [key: string]: JsonType;
+    }
   | JsonType[];
 
 /**
