@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.1
+
+### Patch Changes
+
+- [`36e30580cc6f5c1b6bb1e13b678599e843329597`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/36e30580cc6f5c1b6bb1e13b678599e843329597) ([#313](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/313)): fix(android): allow connection to networks without internet access
+
 ## 7.2.0
 
 ### Minor Changes

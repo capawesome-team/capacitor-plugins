@@ -31,13 +31,12 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                      | Type                                                                  | Description                                                                    | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                           |                                         | 7.1.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                                             | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.                                    | <code>false</code>                      | 7.3.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                             | <code>false</code>                      | 7.3.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options. Session recording configuration options. |                                         | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.           |                                         | 7.3.0 |
 
 ### Examples
 
@@ -49,7 +48,6 @@ In `capacitor.config.json`:
     "Posthog": {
       "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
       "host": "https://eu.i.posthog.com",
-      "enableErrorTracking": undefined,
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined
     }
@@ -69,7 +67,6 @@ const config: CapacitorConfig = {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       host: 'https://eu.i.posthog.com',
-      enableErrorTracking: undefined,
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
     },
@@ -152,7 +149,6 @@ const setup = async () => {
   await Posthog.setup({
     apiKey: 'YOUR_API_KEY',
     host: 'https://eu.i.posthog.com',
-  });
   });
 };
 
@@ -526,7 +522,6 @@ Remove a super property.
 | Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
 | ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
 | **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
-| **`enableErrorTracking`** | <code>boolean</code>                                                  | Whether to enable automatic error tracking.        | <code>false</code>                      | 7.3.0 |
 | **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
 | **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
 | **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |

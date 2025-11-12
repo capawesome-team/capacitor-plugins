@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- [`2458d73d31e91dbdddefd420df59a3e6caacbc2b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2458d73d31e91dbdddefd420df59a3e6caacbc2b) ([#332](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/332)): feat: implement `stop` event emitter
+
+## 0.2.1
+
+### Patch Changes
+
+- [`8a029ed8e5ef02b4360d927e344814b72e2aa7b8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8a029ed8e5ef02b4360d927e344814b72e2aa7b8) ([#324](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/324)): fix(android): request audio focus on play
+
 ## 0.2.0
 
 ### Minor Changes

@@ -228,7 +228,6 @@ struct SharedFileData {
 }
 
 class ShareViewController: UIViewController {
-
     private let appGroupIdentifier = "group.<YOUR_APP_IDENTIFIER>"
     private let urlScheme = "<YOUR_URL_SCHEME>"
 
@@ -255,22 +254,28 @@ class ShareViewController: UIViewController {
         }
     }
 
-    private func copyFileToSharedContainer(_ url: URL) -> String? {
+    private func sharedContainerURL(for fileName: String) -> URL? {
         guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
             return nil
         }
+        return containerURL.appendingPathComponent(fileName)
+    }
+    
+    private func removeFileIfExists(at url: URL) throws {
+        if FileManager.default.fileExists(atPath: url.path) {
+            try FileManager.default.removeItem(at: url)
+        }
+    }
 
-        let fileName = url.lastPathComponent
-        let destinationURL = containerURL.appendingPathComponent(fileName)
+    private func copyFileToSharedContainer(_ sourceURL: URL) -> String? {
+        let fileName = sourceURL.lastPathComponent
+        guard let destinationURL = sharedContainerURL(for: fileName) else {
+            return nil
+        }
 
         do {
-            // Remove file if it already exists
-            if FileManager.default.fileExists(atPath: destinationURL.path) {
-                try FileManager.default.removeItem(at: destinationURL)
-            }
-
-            // Copy file to shared container
-            try FileManager.default.copyItem(at: url, to: destinationURL)
+            try removeFileIfExists(at: destinationURL)
+            try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
             return destinationURL.absoluteString
         } catch {
             print("Error copying file to shared container: \(error)")
@@ -278,51 +283,37 @@ class ShareViewController: UIViewController {
         }
     }
     
-    private func copyImageToSharedContainerWithOrientationFix(_ url: URL) -> String? {
-        guard let containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupIdentifier) else {
+    private func copyImageToSharedContainerWithFixedOrientation(_ sourceURL: URL) -> String? {
+        let fileName = sourceURL.lastPathComponent
+        guard let destinationURL = sharedContainerURL(for: fileName) else {
             return nil
         }
 
-        let fileName = url.lastPathComponent
-        let destinationURL = containerURL.appendingPathComponent(fileName)
-
         do {
-            // Remove file if it already exists
-            if FileManager.default.fileExists(atPath: destinationURL.path) {
-                try FileManager.default.removeItem(at: destinationURL)
-            }
-
-            // Load and fix orientation of the image
-            if let fixedImageData = loadImageWithOrientationFix(from: url) {
+            try removeFileIfExists(at: destinationURL)
+            
+            if let fixedImageData = loadImageDataWithFixedOrientation(from: sourceURL) {
                 try fixedImageData.write(to: destinationURL)
-                return destinationURL.absoluteString
             } else {
-                // Fallback to regular copy if orientation fix fails
-                try FileManager.default.copyItem(at: url, to: destinationURL)
-                return destinationURL.absoluteString
+                try FileManager.default.copyItem(at: sourceURL, to: destinationURL)
             }
+            
+            return destinationURL.absoluteString
         } catch {
             print("Error copying image to shared container: \(error)")
             return nil
         }
     }
     
-    private func loadImageWithOrientationFix(from url: URL) -> Data? {
-        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil),
-              let cgImage = CGImageSourceCreateImageAtIndex(imageSource, 0, nil) else {
+    private func loadImageDataWithFixedOrientation(from url: URL) -> Data? {
+        guard let source = CGImageSourceCreateWithURL(url as CFURL, nil),
+              let cgImage = CGImageSourceCreateImageAtIndex(source, 0, nil) else {
             return nil
         }
         
-        // Get the orientation from EXIF data
-        let orientation = getImageOrientation(from: imageSource)
-        
-        // Create UIImage with proper orientation
-        let uiImage = UIImage(cgImage: cgImage, scale: 1.0, orientation: orientation)
-        
-        // Draw the image in the correct orientation
+        let uiImage = UIImage(cgImage: cgImage)
         let fixedImage = normalizeImageOrientation(uiImage)
         
-        // Convert back to data, preserving the original format if possible
         let fileExtension = url.pathExtension.lowercased()
         if fileExtension == "jpg" || fileExtension == "jpeg" {
             return fixedImage.jpegData(compressionQuality: 0.9)
@@ -331,39 +322,23 @@ class ShareViewController: UIViewController {
         }
     }
     
-    private func getImageOrientation(from imageSource: CGImageSource) -> UIImage.Orientation {
-        guard let properties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any],
-              let orientationValue = properties[kCGImagePropertyOrientation] as? UInt32 else {
-            return .up
-        }
-        
-        switch orientationValue {
-        case 1: return .up
-        case 2: return .upMirrored
-        case 3: return .down
-        case 4: return .downMirrored
-        case 5: return .leftMirrored
-        case 6: return .right
-        case 7: return .rightMirrored
-        case 8: return .left
-        default: return .up
-        }
-    }
+
     
     private func normalizeImageOrientation(_ image: UIImage) -> UIImage {
-        if image.imageOrientation == .up {
-            return image
+        if let fixedImage = image.fixedOrientation() {
+            return fixedImage
         }
         
-        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-        image.draw(in: CGRect(origin: .zero, size: image.size))
-        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return normalizedImage ?? image
+        return image
     }
 
-    func getMimeTypeFromUrl(_ url: URL) -> String {
+    private func extractFileMetadata(from url: URL) -> (name: String, mimeType: String?) {
+        let fileName = url.lastPathComponent
+        let mimeType = getMimeType(from: url)
+        return (fileName, mimeType.isEmpty ? nil : mimeType)
+    }
+    
+    private func getMimeType(from url: URL) -> String {
         let fileExtension = url.pathExtension as CFString
         guard let extUTI = UTTypeCreatePreferredIdentifierForTag(kUTTagClassFilenameExtension, fileExtension, nil)?.takeUnretainedValue() else {
             return ""
@@ -374,23 +349,17 @@ class ShareViewController: UIViewController {
         return mimeUTI.takeRetainedValue() as String
     }
 
-    func getNameFromUrl(_ url: URL) -> String {
-        return url.lastPathComponent
-    }
-
-    private func sendData(with textValues: [String], fileValues: [SharedFileData], title: String) {
-        var urlComps = URLComponents(string: "\(urlScheme)://?")!
+    private func buildAppURL(textValues: [String], fileValues: [SharedFileData], title: String) -> URL {
+        var urlComponents = URLComponents(string: "\(urlScheme)://?")!
         var queryItems: [URLQueryItem] = []
 
         if !title.isEmpty {
             queryItems.append(URLQueryItem(name: "title", value: title))
         }
 
-        for text in textValues {
-            if !text.isEmpty {
-                queryItems.append(URLQueryItem(name: "text", value: text))
-            }
-        }
+        queryItems.append(contentsOf: textValues.filter { !$0.isEmpty }.map {
+            URLQueryItem(name: "text", value: $0)
+        })
 
         for (index, file) in fileValues.enumerated() {
             queryItems.append(URLQueryItem(name: "fileUri\(index)", value: file.uri))
@@ -402,22 +371,94 @@ class ShareViewController: UIViewController {
             }
         }
 
-        urlComps.queryItems = queryItems.isEmpty ? nil : queryItems
-        openURL(urlComps.url!)
+        urlComponents.queryItems = queryItems.isEmpty ? nil : queryItems
+        return urlComponents.url!
+    }
+
+    private func sendData(with textValues: [String], fileValues: [SharedFileData], title: String) {
+        let url = buildAppURL(textValues: textValues, fileValues: fileValues, title: title)
+        openURL(url)
+    }
+
+    private func processImageAttachment(_ attachment: NSItemProvider, dispatchGroup: DispatchGroup, completion: @escaping (SharedFileData?) -> Void) {
+        dispatchGroup.enter()
+        attachment.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] (item, _) in
+            defer { dispatchGroup.leave() }
+            guard let self = self else { 
+                completion(nil)
+                return 
+            }
+
+            if let url = item as? URL {
+                if let sharedPath = self.copyImageToSharedContainerWithFixedOrientation(url) {
+                    let metadata = self.extractFileMetadata(from: url)
+                    completion(SharedFileData(uri: sharedPath, name: metadata.name, mimeType: metadata.mimeType))
+                    return
+                }
+            } else if let image = item as? UIImage {
+                let fixedImage = self.normalizeImageOrientation(image)
+                if let data = fixedImage.pngData() {
+                    let base64String = data.base64EncodedString()
+                    completion(SharedFileData(uri: "data:image/png;base64,\(base64String)", name: nil, mimeType: "image/png"))
+                    return
+                }
+            }
+            
+            completion(nil)
+        }
+    }
+    
+    private func processMovieAttachment(_ attachment: NSItemProvider, dispatchGroup: DispatchGroup, completion: @escaping (SharedFileData?) -> Void) {
+        dispatchGroup.enter()
+        attachment.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil) { [weak self] (item, _) in
+            defer { dispatchGroup.leave() }
+            guard let self = self else { 
+                completion(nil)
+                return 
+            }
+
+            if let url = item as? URL {
+                if let sharedPath = self.copyFileToSharedContainer(url) {
+                    let metadata = self.extractFileMetadata(from: url)
+                    completion(SharedFileData(uri: sharedPath, name: metadata.name, mimeType: metadata.mimeType))
+                    return
+                }
+            }
+            
+            completion(nil)
+        }
+    }
+    
+    private func processPlainTextAttachment(_ attachment: NSItemProvider, dispatchGroup: DispatchGroup, completion: @escaping (String?) -> Void) {
+        dispatchGroup.enter()
+        attachment.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { (item, _) in
+            defer { dispatchGroup.leave() }
+            
+            if let text = item as? String {
+                completion(text)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    private func processURLAttachment(_ attachment: NSItemProvider, dispatchGroup: DispatchGroup, completion: @escaping (String?) -> Void) {
+        dispatchGroup.enter()
+        attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { (item, _) in
+            defer { dispatchGroup.leave() }
+            
+            if let url = item as? URL {
+                completion(url.absoluteString)
+            } else {
+                completion(nil)
+            }
+        }
     }
 
     private func processSharedContent() {
-        guard let extensionContext = extensionContext else {
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-            return
-        }
-
-        guard let item = extensionContext.inputItems.first as? NSExtensionItem else {
-            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-            return
-        }
-
-        guard let attachments = item.attachments else {
+        guard let extensionContext = extensionContext,
+              let item = extensionContext.inputItems.first as? NSExtensionItem,
+              let attachments = item.attachments else {
             self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
             return
         }
@@ -428,62 +469,35 @@ class ShareViewController: UIViewController {
         let dispatchGroup = DispatchGroup()
 
         for attachment in attachments {
-            // Handle images
             if attachment.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-                dispatchGroup.enter()
-                attachment.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { [weak self] (item, _) in
-                    defer { dispatchGroup.leave() }
-
-                    if let url = item as? URL {
-                        if let sharedPath = self?.copyImageToSharedContainerWithOrientationFix(url) {
-                            let fileName = self?.getNameFromUrl(url)
-                            let mimeType = self?.getMimeTypeFromUrl(url)
-                            let finalMimeType = mimeType?.isEmpty == false ? mimeType : nil
-                            fileValues.append(SharedFileData(uri: sharedPath, name: fileName, mimeType: finalMimeType))
-                        }
-                    } else if let image = item as? UIImage {
-                        let fixedImage = self?.normalizeImageOrientation(image) ?? image
-                        if let data = fixedImage.pngData() {
-                            let base64String = data.base64EncodedString()
-                            fileValues.append(SharedFileData(uri: "data:image/png;base64,\(base64String)", name: nil, mimeType: "image/png"))
-                        }
+                processImageAttachment(attachment, dispatchGroup: dispatchGroup) { fileData in
+                    if let fileData = fileData {
+                        fileValues.append(fileData)
                     }
                 }
             }
-            // Handle movies
+            
             if attachment.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
-                dispatchGroup.enter()
-                attachment.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil) { [weak self] (item, _) in
-                    defer { dispatchGroup.leave() }
-
-                    if let url = item as? URL {
-                        if let sharedPath = self?.copyFileToSharedContainer(url) {
-                            let fileName = self?.getNameFromUrl(url)
-                            let mimeType = self?.getMimeTypeFromUrl(url)
-                            let finalMimeType = mimeType?.isEmpty == false ? mimeType : nil
-                            fileValues.append(SharedFileData(uri: sharedPath, name: fileName, mimeType: finalMimeType))
-                        }
+                processMovieAttachment(attachment, dispatchGroup: dispatchGroup) { fileData in
+                    if let fileData = fileData {
+                        fileValues.append(fileData)
                     }
                 }
             }
-            // Handle plain text content
+            
             if attachment.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
-                dispatchGroup.enter()
-                attachment.loadItem(forTypeIdentifier: UTType.plainText.identifier, options: nil) { (item, _) in
-                    if let text = item as? String {
+                processPlainTextAttachment(attachment, dispatchGroup: dispatchGroup) { text in
+                    if let text = text {
                         textValues.append(text)
                     }
-                    dispatchGroup.leave()
                 }
             }
-            // Handle URL content
+            
             if attachment.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
-                dispatchGroup.enter()
-                attachment.loadItem(forTypeIdentifier: UTType.url.identifier, options: nil) { (item, _) in
-                    if let url = item as? URL {
-                        textValues.append(url.absoluteString)
+                processURLAttachment(attachment, dispatchGroup: dispatchGroup) { urlString in
+                    if let urlString = urlString {
+                        textValues.append(urlString)
                     }
-                    dispatchGroup.leave()
                 }
             }
         }
@@ -491,6 +505,87 @@ class ShareViewController: UIViewController {
         dispatchGroup.notify(queue: .main) { [weak self] in
             self?.sendData(with: textValues, fileValues: fileValues, title: title)
         }
+    }
+}
+
+extension UIImage {
+    
+    private func applyRotationTransform(for orientation: UIImage.Orientation, to transform: CGAffineTransform, size: CGSize) -> CGAffineTransform {
+        var result = transform
+        
+        switch orientation {
+        case .down, .downMirrored:
+            result = result.translatedBy(x: size.width, y: size.height)
+            result = result.rotated(by: .pi)
+        case .left, .leftMirrored:
+            result = result.translatedBy(x: size.width, y: 0)
+            result = result.rotated(by: .pi / 2.0)
+        case .right, .rightMirrored:
+            result = result.translatedBy(x: 0, y: size.height)
+            result = result.rotated(by: -.pi / 2.0)
+        case .up, .upMirrored:
+            break
+        @unknown default:
+            break
+        }
+        
+        return result
+    }
+    
+    private func applyMirrorTransform(for orientation: UIImage.Orientation, to transform: CGAffineTransform, size: CGSize) -> CGAffineTransform {
+        var result = transform
+        
+        switch orientation {
+        case .upMirrored, .downMirrored:
+            result = result.translatedBy(x: size.width, y: 0)
+            result = result.scaledBy(x: -1, y: 1)
+        case .leftMirrored, .rightMirrored:
+            result = result.translatedBy(x: size.height, y: 0)
+            result = result.scaledBy(x: -1, y: 1)
+        case .up, .down, .left, .right:
+            break
+        @unknown default:
+            break
+        }
+        
+        return result
+    }
+    
+    private func drawRect(for orientation: UIImage.Orientation, size: CGSize) -> CGRect {
+        switch orientation {
+        case .left, .leftMirrored, .right, .rightMirrored:
+            return CGRect(x: 0, y: 0, width: size.height, height: size.width)
+        default:
+            return CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        }
+    }
+    
+    func fixedOrientation() -> UIImage? {
+        guard imageOrientation != .up else {
+            return self.copy() as? UIImage
+        }
+        
+        guard let cgImage = self.cgImage,
+              let colorSpace = cgImage.colorSpace,
+              let context = CGContext(data: nil,
+                                    width: Int(size.width),
+                                    height: Int(size.height),
+                                    bitsPerComponent: cgImage.bitsPerComponent,
+                                    bytesPerRow: 0,
+                                    space: colorSpace,
+                                    bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else {
+            return nil
+        }
+        
+        var transform = CGAffineTransform.identity
+        transform = applyRotationTransform(for: imageOrientation, to: transform, size: size)
+        transform = applyMirrorTransform(for: imageOrientation, to: transform, size: size)
+        
+        context.concatenate(transform)
+        context.draw(cgImage, in: drawRect(for: imageOrientation, size: size))
+        
+        guard let newCGImage = context.makeImage() else { return nil }
+        return UIImage(cgImage: newCGImage, scale: 1, orientation: .up)
     }
 }
 ```

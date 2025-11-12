@@ -125,9 +125,26 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ### iOS
 
-#### Capabilities
+#### Entitlements
 
-Ensure `Near Field Communication Tag Reading` capability is enabled in your Xcode project. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+Ensure `Near Field Communication Tag Reading` and `NFC Scan` capabilities have been enabled in your application in Xcode.
+See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+
+This will also create or update the `ios/App/App/App.entitlements` file. Make sure it contains the following key to allow reading NFC tags:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.nfc.readersession.formats</key>
+	<array>
+		<string>NDEF</string>
+		<string>TAG</string>
+	</array>
+</dict>
+</plist>
+```
 
 #### Privacy Descriptions
 
@@ -211,12 +228,12 @@ const readSignature = async () => {
         // 3. Close the connection to the tag.
         await Nfc.close();
         await Nfc.stopScanSession();
-        resolve(response);
+        resolve(result);
       } else {
         // 1. Send one or more commands to the tag and receive the response.
         const result = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
         await Nfc.stopScanSession();
-        resolve(response);
+        resolve(result);
       }
     });
 
@@ -249,8 +266,8 @@ const format = async () => {
 };
 
 const isSupported = async () => {
-  const { isSupported } = await Nfc.isSupported();
-  return isSupported;
+  const { nfc } = await Nfc.isSupported();
+  return nfc;
 };
 
 const isEnabled = async () => {
@@ -274,6 +291,88 @@ const requestPermissions = async () => {
 
 const removeAllListeners = async () => {
   await Nfc.removeAllListeners();
+};
+```
+
+### Advanced
+
+#### HCE
+
+Host Card Emulation (HCE) allows your device to emulate an NFC card that other devices can interact with. The first example below demonstrates how to send APDU commands from an NFC reader using the `transceive(...)` method:
+
+```typescript
+import { Nfc, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
+import { Capacitor } from '@capacitor/core';
+
+const sendApduCommands = async () => {
+  return new Promise((resolve) => {
+    Nfc.addListener('nfcTagScanned', async (event) => {
+      // Define APDU commands
+      const selectApdu = [0x00, 0xA4, 0x04, 0x00, 0x07, 0xF0, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x00];
+      const customApdu = [0x00, 0x01, 0x00, 0x00, 0x00];
+
+      // Connect to the tag (Android only)
+      if (Capacitor.getPlatform() === 'android') {
+        await Nfc.connect({ techType: NfcTagTechType.IsoDep });
+      }
+
+      // Send SELECT APDU command
+      const selectResponse = await Nfc.transceive({
+        techType: NfcTagTechType.Iso7816,
+        data: selectApdu
+      });
+
+      // Send custom APDU command
+      const customResponse = await Nfc.transceive({
+        techType: NfcTagTechType.Iso7816,
+        data: customApdu
+      });
+
+      // Close the connection (Android only)
+      if (Capacitor.getPlatform() === 'android') {
+        await Nfc.close();
+      }
+
+      // Stop the scan session
+      await Nfc.stopScanSession();
+      resolve();
+    });
+    // Start the scan session
+    Nfc.startScanSession();
+  });
+};
+```
+
+The second example below demonstrates how to respond to APDU commands sent by an NFC reader using the `commandReceived` event listener and the `respond(...)` method:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
+
+const respondToApduCommands = async () => {
+  // Listen for incoming APDU commands
+  Nfc.addListener('commandReceived', async (event) => {
+    // Parse the incoming command
+    const command = event.data;
+
+    // Check if it's a SELECT command
+    if (command[0] === 0x00 && command[1] === 0xA4 && command[2] === 0x04 && command[3] === 0x00) {
+      // Respond with success status (0x9000)
+      const response = [0x90, 0x00];
+      await Nfc.respond({ data: response });
+    }
+    // Check for custom command
+    else if (command[0] === 0x00 && command[1] === 0x01) {
+      // Respond with custom data
+      const response = [0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x90, 0x00]; // "Hello" + success status
+      await Nfc.respond({ data: response });
+    }
+    // Unknown command
+    else {
+      // Respond with error status (0x6D00 - Instruction not supported)
+      const response = [0x6D, 0x00];
+      await Nfc.respond({ data: response });
+    }
+  });
 };
 ```
 

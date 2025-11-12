@@ -162,6 +162,21 @@ export enum AppUpdateAvailability {
 
 export interface OpenAppStoreOptions {
   /**
+   * The package name of the app to open in the Play Store.
+   *
+   * On **Android**, this is the application ID of your app
+   * (e.g. `com.example.app`).
+   * You can find the ID in the `android/app/build.gradle` file.
+   *
+   * If not provided, the current app's package name will be used.
+   *
+   * Only available on Android.
+   *
+   * @since 7.2.0
+   * @example "com.example.app"
+   */
+  androidPackageName?: string;
+  /**
    * The app ID of the app to open in the App Store.
    *
    * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
@@ -171,7 +186,8 @@ export interface OpenAppStoreOptions {
    * Only available on iOS.
    *
    * @since 6.1.0
-   * @example 123456789
+   * @example "com.example.app"
+   * @example "123456789"
    */
   appId?: string;
 }

@@ -1,5 +1,17 @@
 # Changelog
 
+## 7.7.1
+
+### Patch Changes
+
+- [`a6497fd275daa215db8c16816678008958d15635`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a6497fd275daa215db8c16816678008958d15635) ([#321](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/321)): fix(android): null pointer exception in `stopScan()` method
+
+## 7.7.0
+
+### Minor Changes
+
+- [`6a09c180cc20d34b1d41c7d07816cb5c2869def7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6a09c180cc20d34b1d41c7d07816cb5c2869def7) ([#316](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/316)): feat(android): add `isLocationEnabled()` method
+
 ## 7.6.0
 
 ### Minor Changes
