@@ -31,10 +31,12 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 7.1.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.           |                                         | 7.3.0 |
 
 ### Examples
 
@@ -44,8 +46,10 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "Posthog": {
-      "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
-      "host": 'https://eu.i.posthog.com'
+      "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
+      "host": "https://eu.i.posthog.com",
+      "enableSessionReplay": undefined,
+      "sessionReplayConfig": undefined
     }
   }
 }
@@ -63,6 +67,8 @@ const config: CapacitorConfig = {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       host: 'https://eu.i.posthog.com',
+      enableSessionReplay: undefined,
+      sessionReplayConfig: undefined,
     },
   },
 };
@@ -143,7 +149,7 @@ const setup = async () => {
   await Posthog.setup({
     apiKey: 'YOUR_API_KEY',
     host: 'https://eu.i.posthog.com',
-    });
+  });
 };
 
 const unregister = async () => {
@@ -157,22 +163,24 @@ const unregister = async () => {
 
 <docgen-index>
 
-* [`alias(...)`](#alias)
-* [`capture(...)`](#capture)
-* [`flush()`](#flush)
-* [`getFeatureFlag(...)`](#getfeatureflag)
-* [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
-* [`group(...)`](#group)
-* [`identify(...)`](#identify)
-* [`isFeatureEnabled(...)`](#isfeatureenabled)
-* [`register(...)`](#register)
-* [`reloadFeatureFlags()`](#reloadfeatureflags)
-* [`reset()`](#reset)
-* [`screen(...)`](#screen)
-* [`setup(...)`](#setup)
-* [`unregister(...)`](#unregister)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
+- [`alias(...)`](#alias)
+- [`capture(...)`](#capture)
+- [`flush()`](#flush)
+- [`getFeatureFlag(...)`](#getfeatureflag)
+- [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
+- [`group(...)`](#group)
+- [`identify(...)`](#identify)
+- [`isFeatureEnabled(...)`](#isfeatureenabled)
+- [`register(...)`](#register)
+- [`reloadFeatureFlags()`](#reloadfeatureflags)
+- [`reset()`](#reset)
+- [`screen(...)`](#screen)
+- [`setup(...)`](#setup)
+- [`startSessionRecording()`](#startsessionrecording)
+- [`stopSessionRecording()`](#stopsessionrecording)
+- [`unregister(...)`](#unregister)
+- [Interfaces](#interfaces)
+- [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -193,8 +201,7 @@ Assign another distinct ID to the current user.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### capture(...)
 
@@ -210,8 +217,7 @@ Capture an event.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### flush()
 
@@ -225,8 +231,7 @@ Only available on Android and iOS.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### getFeatureFlag(...)
 
@@ -244,8 +249,7 @@ Get the value of a feature flag.
 
 **Since:** 7.0.0
 
---------------------
-
+---
 
 ### getFeatureFlagPayload(...)
 
@@ -263,8 +267,7 @@ Get the payload of a feature flag.
 
 **Since:** 7.1.0
 
---------------------
-
+---
 
 ### group(...)
 
@@ -280,8 +283,7 @@ Associate the events for that user with a group.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### identify(...)
 
@@ -297,8 +299,7 @@ Identify the current user.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### isFeatureEnabled(...)
 
@@ -316,8 +317,7 @@ Check if a feature flag is enabled.
 
 **Since:** 7.0.0
 
---------------------
-
+---
 
 ### register(...)
 
@@ -333,8 +333,7 @@ Register a new super property. This property will be sent with every event.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### reloadFeatureFlags()
 
@@ -346,8 +345,7 @@ Reload the feature flags.
 
 **Since:** 7.0.0
 
---------------------
-
+---
 
 ### reset()
 
@@ -359,8 +357,7 @@ Reset the current user's ID and anonymous ID.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### screen(...)
 
@@ -378,8 +375,7 @@ Only available on Android and iOS.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### setup(...)
 
@@ -399,8 +395,31 @@ your Capacitor Configuration file. In this case, you must not call this method.
 
 **Since:** 6.0.0
 
---------------------
+---
 
+### startSessionRecording()
+
+```typescript
+startSessionRecording() => Promise<void>
+```
+
+Start session recording.
+
+**Since:** 7.3.0
+
+---
+
+### stopSessionRecording()
+
+```typescript
+stopSessionRecording() => Promise<void>
+```
+
+Stop session recording.
+
+**Since:** 7.3.0
+
+---
 
 ### unregister(...)
 
@@ -416,18 +435,15 @@ Remove a super property.
 
 **Since:** 6.0.0
 
---------------------
-
+---
 
 ### Interfaces
-
 
 #### AliasOptions
 
 | Prop        | Type                | Description                                        | Since |
 | ----------- | ------------------- | -------------------------------------------------- | ----- |
 | **`alias`** | <code>string</code> | The new distinct ID to assign to the current user. | 6.0.0 |
-
 
 #### CaptureOptions
 
@@ -436,13 +452,11 @@ Remove a super property.
 | **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
-
 #### GetFeatureFlagResult
 
 | Prop        | Type                                   | Description                                                                                  | Since |
 | ----------- | -------------------------------------- | -------------------------------------------------------------------------------------------- | ----- |
 | **`value`** | <code>string \| boolean \| null</code> | The value of the feature flag. If the feature flag does not exist, the value will be `null`. | 7.0.0 |
-
 
 #### GetFeatureFlagOptions
 
@@ -450,20 +464,17 @@ Remove a super property.
 | --------- | ------------------- | ---------------------------- | ----- |
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
-
 #### GetFeatureFlagPayloadResult
 
 | Prop        | Type                                          | Description                            | Since |
 | ----------- | --------------------------------------------- | -------------------------------------- | ----- |
 | **`value`** | <code><a href="#jsontype">JsonType</a></code> | The value of the feature flag payload. | 7.1.0 |
 
-
 #### GetFeatureFlagPayloadOptions
 
 | Prop      | Type                | Description                  | Since |
 | --------- | ------------------- | ---------------------------- | ----- |
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.1.0 |
-
 
 #### GroupOptions
 
@@ -473,7 +484,6 @@ Remove a super property.
 | **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
 | **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
 
-
 #### IdentifyOptions
 
 | Prop                 | Type                                                         | Description                   | Since |
@@ -481,20 +491,17 @@ Remove a super property.
 | **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
 | **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
 
-
 #### IsFeatureEnabledResult
 
 | Prop          | Type                 | Description                                                                                         | Since |
 | ------------- | -------------------- | --------------------------------------------------------------------------------------------------- | ----- |
 | **`enabled`** | <code>boolean</code> | Whether the feature flag is enabled. If the feature flag does not exist, the value will be `false`. | 7.0.0 |
 
-
 #### IsFeatureEnabledOptions
 
 | Prop      | Type                | Description                  | Since |
 | --------- | ------------------- | ---------------------------- | ----- |
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
-
 
 #### RegisterOptions
 
@@ -503,7 +510,6 @@ Remove a super property.
 | **`key`**   | <code>string</code> | The name of the super property.  | 6.0.0 |
 | **`value`** | <code>any</code>    | The value of the super property. | 6.0.0 |
 
-
 #### ScreenOptions
 
 | Prop              | Type                                                         | Description                                   | Since |
@@ -511,14 +517,25 @@ Remove a super property.
 | **`screenTitle`** | <code>string</code>                                          | The name of the screen.                       | 6.0.0 |
 | **`properties`**  | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
-
 #### SetupOptions
 
-| Prop         | Type                | Description                          | Default                                 | Since |
-| ------------ | ------------------- | ------------------------------------ | --------------------------------------- | ----- |
-| **`apiKey`** | <code>string</code> | The API key of your PostHog project. |                                         | 6.0.0 |
-| **`host`**   | <code>string</code> | The host of your PostHog instance.   | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
 
+#### SessionReplayOptions
+
+| Prop                          | Type                 | Description                                                                                     | Default            | Since |
+| ----------------------------- | -------------------- | ----------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`screenshotMode`**          | <code>boolean</code> | Enable screenshot mode for session recordings. WARNING: This may capture sensitive information. | <code>false</code> | 7.3.0 |
+| **`maskAllTextInputs`**       | <code>boolean</code> | Mask all text input fields in session recordings.                                               | <code>true</code>  | 7.3.0 |
+| **`maskAllImages`**           | <code>boolean</code> | Mask all images in session recordings.                                                          | <code>true</code>  | 7.3.0 |
+| **`maskAllSandboxedViews`**   | <code>boolean</code> | Mask all sandboxed system views (iOS-specific).                                                 | <code>true</code>  | 7.3.0 |
+| **`captureNetworkTelemetry`** | <code>boolean</code> | Capture network telemetry in session recordings.                                                | <code>false</code> | 7.3.0 |
+| **`debouncerDelay`**          | <code>number</code>  | Debounce delay for session recording snapshots (in seconds).                                    | <code>1.0</code>   | 7.3.0 |
 
 #### UnregisterOptions
 
@@ -526,16 +543,15 @@ Remove a super property.
 | --------- | ------------------- | ----------------------------------------- | ----- |
 | **`key`** | <code>string</code> | The name of the super property to remove. | 6.0.0 |
 
-
 ### Type Aliases
-
 
 #### Record
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
-
+<code>{
+[P in K]: T;
+}</code>
 
 #### JsonType
 

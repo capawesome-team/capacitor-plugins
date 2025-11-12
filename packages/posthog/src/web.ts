@@ -1,5 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 import posthog from 'posthog-js';
+import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
@@ -80,9 +81,33 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async setup(options: SetupOptions): Promise<void> {
     const host = options.host || 'https://us.i.posthog.com';
-    posthog.init(options.apiKey, {
+    const config: Partial<PostHogConfig> = {
       api_host: host,
-    });
+    };
+
+    // Configure session recording if enabled
+    if (options.enableSessionReplay) {
+      config.session_recording = {
+        recordCrossOriginIframes: true,
+      };
+
+      if (options.sessionReplayConfig) {
+        if (options.sessionReplayConfig.maskAllTextInputs !== undefined) {
+          config.session_recording.maskAllInputs =
+            options.sessionReplayConfig.maskAllTextInputs;
+        }
+      }
+    }
+
+    posthog.init(options.apiKey, config);
+  }
+
+  async startSessionRecording(): Promise<void> {
+    posthog.startSessionRecording();
+  }
+
+  async stopSessionRecording(): Promise<void> {
+    posthog.stopSessionRecording();
   }
 
   async unregister(options: UnregisterOptions): Promise<void> {
