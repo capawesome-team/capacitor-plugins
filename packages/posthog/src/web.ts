@@ -4,7 +4,6 @@ import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
-  CaptureExceptionOptions,
   CaptureOptions,
   GetFeatureFlagOptions,
   GetFeatureFlagPayloadOptions,
@@ -28,10 +27,6 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async capture(options: CaptureOptions): Promise<void> {
     posthog.capture(options.event, options.properties);
-  }
-
-  async captureException(options: CaptureExceptionOptions): Promise<void> {
-    posthog.captureException(options.exception, options.properties);
   }
 
   async getFeatureFlag(
@@ -97,7 +92,6 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
         recordCrossOriginIframes: true,
       };
 
-      // Use new sessionReplayConfig if provided, otherwise fall back to deprecated options
       if (options.sessionReplayConfig) {
         if (options.sessionReplayConfig.maskAllTextInputs !== undefined) {
           config.session_recording.maskAllInputs =

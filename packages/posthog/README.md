@@ -49,6 +49,8 @@ In `capacitor.config.json`:
     "Posthog": {
       "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
       "host": "https://eu.i.posthog.com",
+      "apiKey": "phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy",
+      "host": "https://eu.i.posthog.com",
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined,
       "enableErrorTracking": undefined
@@ -153,6 +155,7 @@ const setup = async () => {
     apiKey: 'YOUR_API_KEY',
     host: 'https://eu.i.posthog.com',
   });
+  });
 };
 
 const unregister = async () => {
@@ -206,6 +209,7 @@ Assign another distinct ID to the current user.
 **Since:** 6.0.0
 
 ---
+---
 
 ### capture(...)
 
@@ -252,6 +256,7 @@ Only available on Android and iOS.
 **Since:** 6.0.0
 
 ---
+---
 
 ### getFeatureFlag(...)
 
@@ -269,6 +274,7 @@ Get the value of a feature flag.
 
 **Since:** 7.0.0
 
+---
 ---
 
 ### getFeatureFlagPayload(...)
@@ -288,6 +294,7 @@ Get the payload of a feature flag.
 **Since:** 7.1.0
 
 ---
+---
 
 ### group(...)
 
@@ -304,6 +311,7 @@ Associate the events for that user with a group.
 **Since:** 6.0.0
 
 ---
+---
 
 ### identify(...)
 
@@ -319,6 +327,7 @@ Identify the current user.
 
 **Since:** 6.0.0
 
+---
 ---
 
 ### isFeatureEnabled(...)
@@ -338,6 +347,7 @@ Check if a feature flag is enabled.
 **Since:** 7.0.0
 
 ---
+---
 
 ### register(...)
 
@@ -354,6 +364,7 @@ Register a new super property. This property will be sent with every event.
 **Since:** 6.0.0
 
 ---
+---
 
 ### reloadFeatureFlags()
 
@@ -366,6 +377,7 @@ Reload the feature flags.
 **Since:** 7.0.0
 
 ---
+---
 
 ### reset()
 
@@ -377,6 +389,7 @@ Reset the current user's ID and anonymous ID.
 
 **Since:** 6.0.0
 
+---
 ---
 
 ### screen(...)
@@ -395,6 +408,7 @@ Only available on Android and iOS.
 
 **Since:** 6.0.0
 
+---
 ---
 
 ### setup(...)
@@ -416,6 +430,7 @@ your Capacitor Configuration file. In this case, you must not call this method.
 **Since:** 6.0.0
 
 ---
+---
 
 ### startSessionRecording()
 
@@ -428,6 +443,7 @@ Start session recording.
 **Since:** 7.3.0
 
 ---
+---
 
 ### stopSessionRecording()
 
@@ -439,6 +455,7 @@ Stop session recording.
 
 **Since:** 7.3.0
 
+---
 ---
 
 ### unregister(...)
@@ -455,6 +472,7 @@ Remove a super property.
 
 **Since:** 6.0.0
 
+---
 ---
 
 ### Interfaces
@@ -578,6 +596,8 @@ Remove a super property.
 Construct a type with a set of properties K of type T
 
 <code>{
+[P in K]: T;
+}</code>
 [P in K]: T;
 }</code>
 

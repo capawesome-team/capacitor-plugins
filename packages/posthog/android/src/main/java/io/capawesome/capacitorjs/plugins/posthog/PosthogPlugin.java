@@ -9,7 +9,6 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions;
@@ -80,25 +79,6 @@ public class PosthogPlugin extends Plugin {
             CaptureOptions options = new CaptureOptions(event, properties);
 
             implementation.capture(options);
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void captureException(PluginCall call) {
-        try {
-            String exception = call.getString("exception");
-            if (exception == null) {
-                call.reject(ERROR_VALUE_MISSING);
-                return;
-            }
-            JSObject properties = call.getObject("properties");
-
-            CaptureExceptionOptions options = new CaptureExceptionOptions(exception, properties);
-
-            implementation.captureException(options);
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -314,8 +294,6 @@ public class PosthogPlugin extends Plugin {
         config.setHost(host);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
-        boolean enableErrorTracking = getConfig().getBoolean("enableErrorTracking", config.getEnableErrorTracking());
-        config.setEnableErrorTracking(enableErrorTracking);
 
         return config;
     }

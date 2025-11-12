@@ -19,6 +19,13 @@ declare module '@capacitor/cli' {
        */
       host?: string;
       /**
+       * Whether to enable automatic error tracking.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      enableErrorTracking?: boolean;
+      /**
        * Whether to enable session recording automatically.
        *
        * @since 7.3.0
@@ -27,17 +34,11 @@ declare module '@capacitor/cli' {
       enableSessionReplay?: boolean;
       /**
        * Session replay configuration options.
+       * Session recording configuration options.
        *
        * @since 7.3.0
        */
       sessionReplayConfig?: SessionReplayOptions;
-      /**
-       * Whether to enable automatic error tracking.
-       *
-       * @since 7.3.0
-       * @default false
-       */
-      enableErrorTracking?: boolean;
     };
   }
 }
@@ -55,12 +56,6 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
-  /**
-   * Capture an exception/error event.
-   *
-   * @since 7.3.0
-   */
-  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -402,27 +397,9 @@ export type JsonType =
   | null
   | undefined
   | {
-      [key: string]: JsonType;
-    }
+    [key: string]: JsonType;
+  }
   | JsonType[];
-
-/**
- * @since 7.3.0
- */
-export interface CaptureExceptionOptions {
-  /**
-   * The exception/error to capture.
-   *
-   * @since 7.3.0
-   */
-  exception: any;
-  /**
-   * Additional properties to send with the exception event.
-   *
-   * @since 7.3.0
-   */
-  properties?: Record<string, any>;
-}
 
 /**
  * @since 7.3.0

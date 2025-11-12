@@ -14,7 +14,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "captureException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
@@ -60,10 +59,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.capture(options)
         call.resolve()
-    }
-
-    @objc func captureException(_ call: CAPPluginCall) {
-        call.unimplemented("Not implemented on iOS.")
     }
 
     @objc func flush(_ call: CAPPluginCall) {
