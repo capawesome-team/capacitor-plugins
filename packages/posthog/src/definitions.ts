@@ -57,6 +57,12 @@ export interface PosthogPlugin {
    */
   capture(options: CaptureOptions): Promise<void>;
   /**
+   * Capture an exception/error event.
+   *
+   * @since 7.3.0
+   */
+  captureException(options: CaptureExceptionOptions): Promise<void>;
+  /**
    * Flush all events in the queue.
    *
    * Only available on Android and iOS.
@@ -400,6 +406,24 @@ export type JsonType =
       [key: string]: JsonType;
     }
   | JsonType[];
+
+/**
+ * @since 7.3.0
+ */
+export interface CaptureExceptionOptions {
+  /**
+   * The exception/error to capture.
+   *
+   * @since 7.3.0
+   */
+  exception: any;
+  /**
+   * Additional properties to send with the exception event.
+   *
+   * @since 7.3.0
+   */
+  properties?: Record<string, any>;
+}
 
 /**
  * @since 7.3.0

@@ -168,6 +168,7 @@ const unregister = async () => {
 
 - [`alias(...)`](#alias)
 - [`capture(...)`](#capture)
+- [`captureException(...)`](#captureexception)
 - [`flush()`](#flush)
 - [`getFeatureFlag(...)`](#getfeatureflag)
 - [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
@@ -219,6 +220,22 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
+
+---
+
+### captureException(...)
+
+```typescript
+captureException(options: CaptureExceptionOptions) => Promise<void>
+```
+
+Capture an exception/error event.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
+
+**Since:** 7.3.0
 
 ---
 
@@ -454,6 +471,13 @@ Remove a super property.
 | ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
 | **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+
+#### CaptureExceptionOptions
+
+| Prop             | Type                                                         | Description                                             | Since |
+| ---------------- | ------------------------------------------------------------ | ------------------------------------------------------- | ----- |
+| **`exception`**  | <code>any</code>                                             | The exception/error to capture.                         | 7.3.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | Additional properties to send with the exception event. | 7.3.0 |
 
 #### GetFeatureFlagResult
 
