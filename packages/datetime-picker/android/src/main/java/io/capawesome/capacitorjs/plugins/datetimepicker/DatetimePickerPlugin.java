@@ -29,8 +29,14 @@ public class DatetimePickerPlugin extends Plugin {
 
     @PluginMethod
     public void cancel(PluginCall call) {
-        implementation.cancel();
-        call.resolve();
+        try {
+            implementation.cancel();
+            call.resolve();
+        } catch (Exception ex) {
+            String message = ex.getLocalizedMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
     }
 
     @PluginMethod

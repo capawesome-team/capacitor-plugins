@@ -10,8 +10,8 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "DatetimePickerPlugin"
     public let jsName = "DatetimePicker"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "present", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "cancel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "present", returnType: CAPPluginReturnPromise)
     ]
     public let errorModeInvalid = "The provided mode is invalid."
     public let errorPickerCanceled = "The picker was canceled."
