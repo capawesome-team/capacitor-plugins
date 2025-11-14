@@ -15,9 +15,15 @@ public class PosthogConfig {
     @Nullable
     private SessionReplayOptions sessionReplayConfig = null;
 
+    private boolean enableErrorTracking = false;
+
     @Nullable
     public String getApiKey() {
         return apiKey;
+    }
+
+    public boolean getEnableErrorTracking() {
+        return enableErrorTracking;
     }
 
     public String getHost() {
@@ -47,5 +53,9 @@ public class PosthogConfig {
 
     public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {
         this.sessionReplayConfig = sessionReplayConfig;
+    }
+
+    public void setEnableErrorTracking(boolean enableErrorTracking) {
+        this.enableErrorTracking = enableErrorTracking;
     }
 }

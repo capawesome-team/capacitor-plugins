@@ -17,6 +17,9 @@ public class SetupOptions {
     @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
+    @Nullable
+    private Boolean enableErrorTracking;
+
     public SetupOptions(@NonNull String apiKey, @NonNull String host) {
         this.apiKey = apiKey;
         this.host = host;
@@ -48,5 +51,14 @@ public class SetupOptions {
 
     public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {
         this.sessionReplayConfig = sessionReplayConfig;
+    }
+
+    @Nullable
+    public Boolean getEnableErrorTracking() {
+        return enableErrorTracking;
+    }
+
+    public void setEnableErrorTracking(boolean enableErrorTracking) {
+        this.enableErrorTracking = enableErrorTracking;
     }
 }

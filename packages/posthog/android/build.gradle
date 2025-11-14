@@ -4,7 +4,7 @@ ext {
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.2.1'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.6.1'
     androidxCoreKtxVersion = project.hasProperty('androidxCoreKtxVersion') ? rootProject.ext.androidxCoreKtxVersion : '1.13.1'
-    posthogVersion = project.hasProperty('posthogVersion') ? rootProject.ext.posthogVersion : '3.10.0'
+    posthogVersion = project.hasProperty('posthogVersion') ? rootProject.ext.posthogVersion : '3.+'
 }
 
 buildscript {
