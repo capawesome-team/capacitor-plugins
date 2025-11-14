@@ -49,6 +49,16 @@ export interface DatetimePickerPlugin {
    * @since 0.0.1
    */
   present(options?: PresentOptions): Promise<PresentResult>;
+  /**
+   * Cancel the currently active datetime picker.
+   *
+   * If there is no active picker, this method does nothing.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.2.0
+   */
+  cancel(): Promise<void>;
 }
 
 export interface PresentOptions {
