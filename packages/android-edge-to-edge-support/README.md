@@ -40,9 +40,11 @@ Otherwise, the web view will be resized to fit the screen, which may cause issue
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                  | Type                | Description                                                                                | Since |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
-| **`backgroundColor`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
+| Prop                     | Type                | Description                                                                                | Since |
+| ------------------------ | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
+| **`backgroundColor`**    | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
+| **`statusBarColor`**     | <code>string</code> | The hexadecimal color to set as the background color of the status bar.                    | 7.3.0 |
+| **`navigationBarColor`** | <code>string</code> | The hexadecimal color to set as the background color of the navigation bar.                | 7.3.0 |
 
 ### Examples
 
@@ -52,7 +54,9 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "EdgeToEdge": {
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "statusBarColor": "#ffffff",
+      "navigationBarColor": "#000000"
     }
   }
 }
@@ -69,6 +73,8 @@ const config: CapacitorConfig = {
   plugins: {
     EdgeToEdge: {
       backgroundColor: "#ffffff",
+      statusBarColor: "#ffffff",
+      navigationBarColor: "#000000",
     },
   },
 };
@@ -80,7 +86,7 @@ export default config;
 
 ## Usage
 
-The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [Status Bar](https://capacitorjs.com/docs/apis/status-bar) plugin.
+The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides methods to set the background color of the status bar and navigation bar separately or together. It's recommended to use these methods in combination with the [Status Bar](https://capacitorjs.com/docs/apis/status-bar) plugin.
 
 ```typescript
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
@@ -99,8 +105,26 @@ const getInsets = async () => {
   console.log('Insets:', result);
 };
 
+// Set both status bar and navigation bar to the same color (deprecated, use setStatusBarColor and setNavigationBarColor instead)
 const setBackgroundColor = async () => {
   await EdgeToEdge.setBackgroundColor({ color: '#ffffff' });
+  await StatusBar.setStyle({ style: Style.Light });
+};
+
+// Set status bar and navigation bar colors separately
+const setStatusBarColor = async () => {
+  await EdgeToEdge.setStatusBarColor({ color: '#ffffff' });
+  await StatusBar.setStyle({ style: Style.Light });
+};
+
+const setNavigationBarColor = async () => {
+  await EdgeToEdge.setNavigationBarColor({ color: '#000000' });
+};
+
+// Example: Set different colors for status bar and navigation bar
+const setDifferentColors = async () => {
+  await EdgeToEdge.setStatusBarColor({ color: '#ffffff' });
+  await EdgeToEdge.setNavigationBarColor({ color: '#000000' });
   await StatusBar.setStyle({ style: Style.Light });
 };
 ```
@@ -113,6 +137,8 @@ const setBackgroundColor = async () => {
 * [`disable()`](#disable)
 * [`getInsets()`](#getinsets)
 * [`setBackgroundColor(...)`](#setbackgroundcolor)
+* [`setStatusBarColor(...)`](#setstatusbarcolor)
+* [`setNavigationBarColor(...)`](#setnavigationbarcolor)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -186,6 +212,44 @@ Only available on Android.
 --------------------
 
 
+### setStatusBarColor(...)
+
+```typescript
+setStatusBarColor(options: SetStatusBarColorOptions) => Promise<void>
+```
+
+Set the background color of the status bar.
+
+Only available on Android.
+
+| Param         | Type                                                                          |
+| ------------- | ----------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setstatusbarcoloroptions">SetStatusBarColorOptions</a></code> |
+
+**Since:** 7.3.0
+
+--------------------
+
+
+### setNavigationBarColor(...)
+
+```typescript
+setNavigationBarColor(options: SetNavigationBarColorOptions) => Promise<void>
+```
+
+Set the background color of the navigation bar.
+
+Only available on Android.
+
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnavigationbarcoloroptions">SetNavigationBarColorOptions</a></code> |
+
+**Since:** 7.3.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -204,6 +268,20 @@ Only available on Android.
 | Prop        | Type                | Description                                                                                | Since |
 | ----------- | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
 | **`color`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.0.0 |
+
+
+#### SetStatusBarColorOptions
+
+| Prop        | Type                | Description                                                             | Since |
+| ----------- | ------------------- | ----------------------------------------------------------------------- | ----- |
+| **`color`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar. | 7.3.0 |
+
+
+#### SetNavigationBarColorOptions
+
+| Prop        | Type                | Description                                                                 | Since |
+| ----------- | ------------------- | --------------------------------------------------------------------------- | ----- |
+| **`color`** | <code>string</code> | The hexadecimal color to set as the background color of the navigation bar. | 7.3.0 |
 
 </docgen-api>
 
