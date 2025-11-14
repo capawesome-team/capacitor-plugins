@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.3
+
+### Patch Changes
+
+- [`e2af9736fa235c323d819fc9a11d8b18c6a95bf0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e2af9736fa235c323d819fc9a11d8b18c6a95bf0) ([#334](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/334)): fix(android): stop playing audio on destroy
+
 ## 0.2.2
 
 ### Patch Changes
