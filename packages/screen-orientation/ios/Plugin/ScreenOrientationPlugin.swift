@@ -26,7 +26,7 @@ public class ScreenOrientationPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func lock(_ call: CAPPluginCall) {
-        let orientationType = call.getString("type") ?? ""
+        let orientationType = call.getString("type")
         implementation?.lock(orientationType, completion: {
             call.resolve()
         })
