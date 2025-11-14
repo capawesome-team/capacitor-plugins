@@ -34,6 +34,7 @@ import UIKit
 
     private static let sharedInstance = RPicker()
     private var isPresented = false
+    private var activeController: RPickerController?
 
     @objc class func selectDate(title: String? = nil,
                                 cancelText: String? = nil,
@@ -87,13 +88,26 @@ import UIKit
 
                 vc.onWillDismiss = {
                     RPicker.sharedInstance.isPresented = false
+                    RPicker.sharedInstance.activeController = nil
                 }
+
+                RPicker.sharedInstance.activeController = vc
 
                 return vc
             }
         }
 
         return nil
+    }
+
+    @objc class func cancel() {
+        DispatchQueue.main.async {
+            if let controller = RPicker.sharedInstance.activeController {
+                controller.dismiss(animated: true, completion: nil)
+                RPicker.sharedInstance.activeController = nil
+                RPicker.sharedInstance.isPresented = false
+            }
+        }
     }
 }
 

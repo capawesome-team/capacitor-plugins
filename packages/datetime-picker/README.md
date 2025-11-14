@@ -73,6 +73,7 @@ const present = async () => {
 <docgen-index>
 
 * [`present(...)`](#present)
+* [`cancel()`](#cancel)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -99,6 +100,23 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#presentresult">PresentResult</a>&gt;</code>
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### cancel()
+
+```typescript
+cancel() => Promise<void>
+```
+
+Cancel the currently active datetime picker.
+
+If there is no active picker, this method does nothing.
+
+Only available on Android and iOS.
+
+**Since:** 6.2.0
 
 --------------------
 
