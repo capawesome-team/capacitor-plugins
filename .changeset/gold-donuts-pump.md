@@ -1,5 +1,5 @@
 ---
-'@capawesome-team/capacitor-datetime-picker': major
+'@capawesome-team/capacitor-datetime-picker': minor
 ---
 
 introduce cancel method for datetime picker
