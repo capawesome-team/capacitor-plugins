@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`8d764977cbe12ee9552570881d10f793837c7b5b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8d764977cbe12ee9552570881d10f793837c7b5b) ([#335](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/335)): fix(android): stop media session if app gets destroyed
+
 ## 0.1.1
 
 ### Patch Changes
