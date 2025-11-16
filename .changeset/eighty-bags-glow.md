@@ -2,4 +2,4 @@
 '@capawesome/capacitor-screen-orientation': minor
 ---
 
-feat: make `LockOptions` optional
+feat: lock to current orientation by default
