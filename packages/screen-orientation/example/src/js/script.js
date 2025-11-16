@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#lock-button').addEventListener('click', async () => {
     const type = document.querySelector('#type').value;
     let result;
-    if (type === '--') {
+    if (type === 'current') {
       result = await ScreenOrientation.lock();
     } else {
       result = await ScreenOrientation.lock({ type });
