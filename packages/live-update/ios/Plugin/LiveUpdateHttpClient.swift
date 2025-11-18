@@ -7,11 +7,15 @@ public class LiveUpdateHttpClient: NSObject {
     private let config: LiveUpdateConfig
 
     public static func getChecksumFromResponse(response: HTTPURLResponse) -> String? {
-        return response.allHeaderFields["x-checksum"] as? String // Must be lowercase!
+        guard let headers = response.allHeaderFields as? [String: String] else { return nil }
+        return headers.first(where: { $0.key.lowercased() == "x-checksum" })?.value?
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     public static func getSignatureFromResponse(response: HTTPURLResponse) -> String? {
-        return response.allHeaderFields["x-signature"] as? String // Must be lowercase!
+        guard let headers = response.allHeaderFields as? [String: String] else { return nil }
+        return headers.first(where: { $0.key.lowercased() == "x-signature" })?.value?
+        .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     init(config: LiveUpdateConfig) {
