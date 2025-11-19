@@ -19,6 +19,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptio
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureExceptionOptions
 
 class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
 
@@ -116,7 +117,19 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
+    fun captureException(options: CaptureExceptionOptions) {
+        val exception = options.exception
+        val properties = options.properties
+
+        val throwable = when (exception) {
+            is Throwable -> exception
+            is String -> Throwable(exception)
+            else -> Throwable(exception.toString())
+        }
+        PostHog.captureException(throwable, properties = properties)
+    }
+
+    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null, enableErrorTracking: Boolean = false) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
@@ -124,6 +137,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         posthogConfig.captureScreenViews = false
         posthogConfig.optOut = false
         posthogConfig.sessionReplay = enableSessionReplay
+        posthogConfig.errorTrackingConfig.autoCapture = enableErrorTracking
 
         // Configure session replay options if provided
         sessionReplayConfig?.let { replayConfig ->
@@ -142,6 +156,11 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
             // Debounce delay for performance (convert seconds to milliseconds)
             val debouncerDelaySeconds = replayConfig.getDebouncerDelay() ?: 1.0
             posthogConfig.sessionReplayConfig.throttleDelayMs = (debouncerDelaySeconds * 1000).toLong()
+        }
+
+        // Configure error tracking if enabled
+        if (config.getEnableErrorTracking()) {
+            posthogConfig.captureApplicationLifecycleEvents = true
         }
 
         PostHogAndroid.setup(plugin.context, posthogConfig)
