@@ -137,7 +137,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject(CustomError.keyMissing.localizedDescription)
             return
         }
-        guard let value = call.getObject("value") as AnyObject? else {
+        guard let value = call.options["value"] as AnyObject? else {
             call.reject(CustomError.valueMissing.localizedDescription)
             return
         }
