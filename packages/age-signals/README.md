@@ -25,6 +25,15 @@ If needed, you can define the following project variable in your app's `variable
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
+### iOS
+
+The following entitlement must be added to the app:
+
+```xml
+<key>com.apple.developer.declared-age-range</key>
+<true/>
+```
+
 ## Configuration
 
 No configuration required for this plugin.
@@ -46,7 +55,7 @@ const checkAgeSignals = async () => {
 
 <docgen-index>
 
-* [`checkAgeSignals()`](#checkagesignals)
+* [`checkAgeSignals(...)`](#checkagesignals)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -55,15 +64,17 @@ const checkAgeSignals = async () => {
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### checkAgeSignals()
+### checkAgeSignals(...)
 
 ```typescript
-checkAgeSignals() => Promise<CheckAgeSignalsResult>
+checkAgeSignals(options?: CheckAgeSignalsOptions | undefined) => Promise<CheckAgeSignalsResult>
 ```
 
-Request the user's age signals from Google Play.
+Request the user's age signals.
 
-Only available on Android.
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#checkagesignalsoptions">CheckAgeSignalsOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#checkagesignalsresult">CheckAgeSignalsResult</a>&gt;</code>
 
@@ -77,13 +88,20 @@ Only available on Android.
 
 #### CheckAgeSignalsResult
 
-| Prop                         | Type                                              | Description                                                                                                                                                                                                                                                                            | Since |
-| ---------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`userStatus`**             | <code><a href="#userstatus">UserStatus</a></code> | The user's verification status.                                                                                                                                                                                                                                                        | 0.0.1 |
-| **`ageLower`**               | <code>number</code>                               | The (inclusive) lower bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.                                                                                                        | 0.0.1 |
-| **`ageUpper`**               | <code>number</code>                               | The (inclusive) upper bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED` and the user's age is under 18.                                                                         | 0.0.1 |
-| **`mostRecentApprovalDate`** | <code>string</code>                               | The effective from date of the most recent significant change that was approved. When an app is installed, the date of the most recent significant change prior to install is used. Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`. | 0.0.1 |
-| **`installId`**              | <code>string</code>                               | An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.                                           | 0.0.1 |
+| Prop                         | Type                                              | Description                                                                                                                                                                                                                                                                                                       | Since |
+| ---------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`userStatus`**             | <code><a href="#userstatus">UserStatus</a></code> | The user's verification status.                                                                                                                                                                                                                                                                                   | 0.0.1 |
+| **`ageLower`**               | <code>number</code>                               | The (inclusive) lower bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.                                                                                                                                   | 0.0.1 |
+| **`ageUpper`**               | <code>number</code>                               | The (inclusive) upper bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED` and the user's age is under 18.                                                                                                    | 0.0.1 |
+| **`mostRecentApprovalDate`** | <code>string</code>                               | The effective from date of the most recent significant change that was approved. When an app is installed, the date of the most recent significant change prior to install is used. Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`. Only available on Android. | 0.0.1 |
+| **`installId`**              | <code>string</code>                               | An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`. Only available on Android.                                           | 0.0.1 |
+
+
+#### CheckAgeSignalsOptions
+
+| Prop           | Type                  | Description                                                                                                                    | Default                   | Since |
+| -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | ----- |
+| **`ageGates`** | <code>number[]</code> | The age ranges that the user falls into. The provided array must contain at least 2 and at most 3 ages. Only available on iOS. | <code>[13, 15, 18]</code> | 0.0.2 |
 
 
 ### Enums

@@ -3,13 +3,29 @@
  */
 export interface AgeSignalsPlugin {
   /**
-   * Request the user's age signals from Google Play.
-   *
-   * Only available on Android.
+   * Request the user's age signals.
    *
    * @since 0.0.1
    */
-  checkAgeSignals(): Promise<CheckAgeSignalsResult>;
+  checkAgeSignals(
+    options?: CheckAgeSignalsOptions,
+  ): Promise<CheckAgeSignalsResult>;
+}
+
+/**
+ * @since 0.0.2
+ */
+export interface CheckAgeSignalsOptions {
+  /**
+   * The age ranges that the user falls into.
+   * The provided array must contain at least 2 and at most 3 ages.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.0.2
+   * @default [13, 15, 18]
+   */
+  ageGates: number[];
 }
 
 /**
@@ -46,6 +62,8 @@ export interface CheckAgeSignalsResult {
    *
    * Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`.
    *
+   * Only available on Android.
+   *
    * @since 0.0.1
    * @example "2024-01-15"
    */
@@ -54,6 +72,8 @@ export interface CheckAgeSignalsResult {
    * An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval.
    *
    * Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.
+   *
+   * Only available on Android.
    *
    * @since 0.0.1
    * @example "abc123xyz"
