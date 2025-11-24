@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-posthog': patch
+'@capawesome/capacitor-posthog': minor
 ---
 
-fix(posthog): accept strings and primitives as super property values in register method
+feat(posthog): accept strings and primitives as super property values in register method
