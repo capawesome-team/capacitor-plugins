@@ -25,7 +25,7 @@ export interface CheckAgeSignalsOptions {
    * @since 0.0.2
    * @default [13, 15, 18]
    */
-  ageGates: number[];
+  ageGates?: number[];
 }
 
 /**
