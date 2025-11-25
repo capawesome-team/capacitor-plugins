@@ -1,6 +1,6 @@
 # @capawesome/capacitor-age-signals
 
-Capacitor plugin to use the [Play Age Signals API](https://developer.android.com/google/play/age-signals/overview) to retrieve age-related signals for users.
+Capacitor plugin to use the [Play Age Signals API](https://developer.android.com/google/play/age-signals/overview) (Android) and [DeclaredAgeRange](https://developer.apple.com/documentation/declaredagerange/) (iOS) to request age signals about the user.
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -27,12 +27,16 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ### iOS
 
-The following entitlement must be added to the app:
+#### Entitlements
+
+To use the DeclaredAgeRange API, you must enable the `com.apple.developer.declared-age-range` entitlement in your app's entitlements file by adding the following key:
 
 ```xml
 <key>com.apple.developer.declared-age-range</key>
 <true/>
 ```
+
+Check out the [Apple documentation](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.contacts.notes) for more information.
 
 ## Configuration
 
