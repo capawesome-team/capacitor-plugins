@@ -4,6 +4,7 @@ import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
+  CaptureExceptionOptions,
   CaptureOptions,
   GetFeatureFlagOptions,
   GetFeatureFlagPayloadOptions,
@@ -29,6 +30,10 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.capture(options.event, options.properties);
   }
 
+  async captureException(options: CaptureExceptionOptions): Promise<void> {
+    posthog.captureException(options.exception, options.properties);
+  }
+
   async getFeatureFlag(
     options: GetFeatureFlagOptions,
   ): Promise<GetFeatureFlagResult> {
@@ -39,7 +44,8 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   async getFeatureFlagPayload(
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult> {
-    return { value: posthog.getFeatureFlagPayload(options.key) };
+    const value = posthog.getFeatureFlagPayload(options.key);
+    return { value: value || null };
   }
 
   async flush(): Promise<void> {
@@ -97,6 +103,11 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
             options.sessionReplayConfig.maskAllTextInputs;
         }
       }
+    }
+
+    // Configure error tracking if enabled
+    if (options.enableErrorTracking) {
+      config.capture_exceptions = true;
     }
 
     posthog.init(options.apiKey, config);
