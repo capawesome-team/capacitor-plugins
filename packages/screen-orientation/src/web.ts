@@ -12,10 +12,16 @@ export class ScreenOrientationWeb
   extends WebPlugin
   implements ScreenOrientationPlugin
 {
-  private readonly isSupported = 'orientation' in screen;
+  private readonly isSupported: boolean;
 
   constructor() {
     super();
+    try {
+      this.isSupported = 'orientation' in screen;
+    } catch {
+      this.isSupported = false;
+    }
+
     if (this.isSupported) {
       screen.orientation.addEventListener(
         'change',
@@ -28,7 +34,8 @@ export class ScreenOrientationWeb
     if (!this.isSupported) {
       this.throwUnsupportedError();
     }
-    await screen.orientation.lock(options.type);
+    const type = options?.type ?? screen.orientation.type;
+    await screen.orientation.lock(type);
   }
 
   public async unlock(): Promise<void> {
