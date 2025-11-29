@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`d22b726226f2426fa652ee67a47a350d9abd16e9`](https://github.com/capawesome-team/capacitor-plugins/commit/d22b726226f2426fa652ee67a47a350d9abd16e9) ([#666](https://github.com/capawesome-team/capacitor-plugins/pull/666)): feat(posthog): accept strings and primitives as super property values in register method
+
 ## 7.3.0
 
 ### Minor Changes
