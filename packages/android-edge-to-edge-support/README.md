@@ -40,9 +40,10 @@ Otherwise, the web view will be resized to fit the screen, which may cause issue
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                  | Type                | Description                                                                                | Since |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
-| **`backgroundColor`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
+| Prop                           | Type                | Description                                                                                | Since |
+| ------------------------------ | ------------------- | ------------------------------------------------------------------------------------------ | ----- |
+| **`backgroundColor`**          | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
+| **`statusBarBackgroundColor`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.1.0 |
 
 ### Examples
 
@@ -52,7 +53,8 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "EdgeToEdge": {
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#ffffff",
+      "statusBarBackgroundColor": "#ffffff"
     }
   }
 }
@@ -69,6 +71,7 @@ const config: CapacitorConfig = {
   plugins: {
     EdgeToEdge: {
       backgroundColor: "#ffffff",
+      statusBarBackgroundColor: "#ffffff",
     },
   },
 };
@@ -113,6 +116,7 @@ const setBackgroundColor = async () => {
 * [`disable()`](#disable)
 * [`getInsets()`](#getinsets)
 * [`setBackgroundColor(...)`](#setbackgroundcolor)
+* [`setStatusBarBackgroundColor(...)`](#setstatusbarbackgroundcolor)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -173,7 +177,26 @@ Only available on Android.
 setBackgroundColor(options: SetBackgroundColorOptions) => Promise<void>
 ```
 
-Set the background color of the status bar and navigation bar.
+Set the background color of the navigation bar.
+
+Only available on Android.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setbackgroundcoloroptions">SetBackgroundColorOptions</a></code> |
+
+**Since:** 7.0.0
+
+--------------------
+
+
+### setStatusBarBackgroundColor(...)
+
+```typescript
+setStatusBarBackgroundColor(options: SetBackgroundColorOptions) => Promise<void>
+```
+
+Set the background color of the status bar.
 
 Only available on Android.
 
