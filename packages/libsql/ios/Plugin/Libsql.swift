@@ -54,7 +54,11 @@ import Libsql
             }
 
             if let values = options.values, !values.isEmpty {
-                try connection.execute(options.statement, values as! [ValueRepresentable])
+                guard let valueRepresentables = values as? [ValueRepresentable] else {
+                    completion(LibsqlError.invalidValues)
+                    return
+                }
+                try connection.execute(options.statement, valueRepresentables)
             } else {
                 try connection.execute(options.statement)
             }
@@ -76,7 +80,11 @@ import Libsql
                 let values = options.values?[safe: index]
 
                 if let values = values, !values.isEmpty {
-                    try connection.execute(statement, values as! [ValueRepresentable])
+                    guard let valueRepresentables = values as? [ValueRepresentable] else {
+                        completion(LibsqlError.invalidValues)
+                        return
+                    }
+                    try connection.execute(statement, valueRepresentables)
                 } else {
                     try connection.execute(statement)
                 }
@@ -113,7 +121,11 @@ import Libsql
             }
 
             if let values = options.values, !values.isEmpty {
-                rows = try connection.query(options.statement, values as! [ValueRepresentable])
+                guard let valueRepresentables = values as? [ValueRepresentable] else {
+                    completion(nil, LibsqlError.invalidValues)
+                    return
+                }
+                rows = try connection.query(options.statement, valueRepresentables)
             } else {
                 rows = try connection.query(options.statement)
             }

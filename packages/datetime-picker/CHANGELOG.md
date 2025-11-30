@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.2.0
+
+### Minor Changes
+
+- [`4c129d99a633c0e7cffc0fa4fb81de0bf17059a2`](https://github.com/capawesome-team/capacitor-plugins/commit/4c129d99a633c0e7cffc0fa4fb81de0bf17059a2) ([#661](https://github.com/capawesome-team/capacitor-plugins/pull/661)): feat: add `cancel()` method
+
 ## 7.1.0
 
 ### Minor Changes

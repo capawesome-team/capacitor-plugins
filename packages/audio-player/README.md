@@ -4,7 +4,7 @@ Capacitor plugin to play audio with background support.
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -14,6 +14,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌙 **Background Mode**: Play audio even when the app is in the background.
+- 🎵 **Audio Focus Management**: Automatically manages audio focus on Android to pause other audio sources during playback.
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
@@ -139,6 +140,7 @@ const isPlaying = async () => {
 * [`seekTo(...)`](#seekto)
 * [`setVolume(...)`](#setvolume)
 * [`stop()`](#stop)
+* [`addListener('stop', ...)`](#addlistenerstop-)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -281,6 +283,26 @@ Stop the audio playback.
 --------------------
 
 
+### addListener('stop', ...)
+
+```typescript
+addListener(eventName: 'stop', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the audio has stopped playing.
+
+| Param              | Type                       |
+| ------------------ | -------------------------- |
+| **`eventName`**    | <code>'stop'</code>        |
+| **`listenerFunc`** | <code>() =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.2.2
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -329,6 +351,13 @@ Stop the audio playback.
 | Prop         | Type                | Description                      | Since |
 | ------------ | ------------------- | -------------------------------- | ----- |
 | **`volume`** | <code>number</code> | The volume level to set (0-100). | 0.0.1 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>
 

@@ -4,7 +4,7 @@ Capacitor plugin for seamless date and time selection with advanced features lik
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -73,6 +73,7 @@ const present = async () => {
 <docgen-index>
 
 * [`present(...)`](#present)
+* [`cancel()`](#cancel)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -103,6 +104,23 @@ Only available on Android and iOS.
 --------------------
 
 
+### cancel()
+
+```typescript
+cancel() => Promise<void>
+```
+
+Cancel the currently active datetime picker.
+
+If there is no active picker, this method does nothing.
+
+Only available on Android and iOS.
+
+**Since:** 7.2.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -128,7 +146,7 @@ Only available on Android and iOS.
 | **`value`**                 | <code>string</code>                         | The predefined value when opening the picker. The format of this value must match the value of the `format` parameter.                                                                                                                                                 |                                             | 0.0.1 |
 | **`androidTimePickerMode`** | <code>'clock' \| 'spinner'</code>           | Whether to use the spinner or clock mode for the time picker on Android. This value overwrites the `androidTimePickerMode` configuration value. Only available on Android.                                                                                             |                                             | 5.1.0 |
 | **`androidDatePickerMode`** | <code>'spinner' \| 'calendar'</code>        | Whether to use the calendar or spinner mode for the date picker on Android. This value overwrites the `androidDatePickerMode` configuration value. Only available on Android.                                                                                          |                                             | 5.1.0 |
-| **`minuteInterval`**        | <code>number</code>                         | The minute interval of the time picker. This controls the granularity of the minute selector (e.g., 15 for 0, 15, 30, 45). The value must be evenly divisible into 60. Only available on iOS when using time or datetime modes. On Android, this parameter is ignored. | <code>1</code>                              | 6.1.0 |
+| **`minuteInterval`**        | <code>number</code>                         | The minute interval of the time picker. This controls the granularity of the minute selector (e.g., 15 for 0, 15, 30, 45). The value must be evenly divisible into 60. Only available on iOS when using time or datetime modes. On Android, this parameter is ignored. | <code>1</code>                              | 7.1.0 |
 
 </docgen-api>
 

@@ -28,6 +28,18 @@ public class DatetimePickerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void cancel(PluginCall call) {
+        try {
+            implementation.cancel();
+            call.resolve();
+        } catch (Exception ex) {
+            String message = ex.getLocalizedMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
+    }
+
+    @PluginMethod
     public void present(PluginCall call) {
         try {
             String format = call.getString("format", "yyyy-MM-dd'T'HH:mm:ss.sss'Z'");

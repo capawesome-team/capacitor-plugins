@@ -17,6 +17,7 @@ public class DatetimePicker {
 
     private final DatetimePickerPlugin plugin;
     private final DatetimePickerConfig config;
+    private Dialog activeDialog;
 
     public DatetimePicker(DatetimePickerPlugin plugin, DatetimePickerConfig config) {
         this.plugin = plugin;
@@ -97,8 +98,14 @@ public class DatetimePicker {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         );
-        dialog.setOnDismissListener(_dialog -> resultCallback.dismiss());
+        dialog.setOnDismissListener(_dialog -> {
+            if (activeDialog == _dialog) {
+                activeDialog = null;
+            }
+            resultCallback.dismiss();
+        });
         dialog.create();
+        activeDialog = dialog;
 
         Button doneButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
         doneButton.setText(doneButtonText);
@@ -158,8 +165,14 @@ public class DatetimePicker {
             calendar.get(Calendar.MINUTE),
             is24HourView
         );
-        dialog.setOnDismissListener(_dialog -> resultCallback.dismiss());
+        dialog.setOnDismissListener(_dialog -> {
+            if (activeDialog == _dialog) {
+                activeDialog = null;
+            }
+            resultCallback.dismiss();
+        });
         dialog.create();
+        activeDialog = dialog;
 
         Button doneButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
         doneButton.setText(doneButtonText);
@@ -273,5 +286,12 @@ public class DatetimePicker {
         Configuration config = new Configuration();
         config.locale = locale;
         plugin.getContext().getResources().updateConfiguration(config, plugin.getContext().getResources().getDisplayMetrics());
+    }
+
+    public void cancel() {
+        if (activeDialog != null && activeDialog.isShowing()) {
+            activeDialog.dismiss();
+            activeDialog = null;
+        }
     }
 }

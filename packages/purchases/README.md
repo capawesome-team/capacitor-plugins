@@ -4,9 +4,14 @@ Capacitor plugin to support in-app purchases.
 
 ## Features
 
-<!-- We are proud to offer one of the most complete and feature-rich Capacitor plugins for in-app purchases. Here are some of the key features: -->
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for in-app purchases. Here are some of the key features:
 
-<!-- - 🖥️ **Cross-platform**: Supports Android and iOS. -->
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- 🛍️ **Product Types**: Supports subscriptions, consumables, and non-consumable in-app products.
+- 🔒 **Server Validation**: Provides verification tokens (iOS JWS, Android purchase tokens) for server-side validation.
+- 📋 **Transaction Management**: Track current, unfinished, and historical transactions.
+- 🔄 **Purchase Restoration**: Easily sync and restore purchases across devices.
+- 🚀 **Modern APIs**: Uses StoreKit 2 and Google Play Billing Library 8.0.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -41,6 +46,14 @@ npm install @capawesome-team/capacitor-purchases
 npx cap sync
 ```
 
+### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `$googlePlayBillingVersion` version of `com.android.billingclient:billing` (default: `8.0.0`)
+
 ### iOS
 
 #### Capabilities
@@ -60,6 +73,8 @@ import { Purchases } from '@capawesome-team/capacitor-purchases';
 const purchaseProduct = async (productId: string) => {
   const { transaction } = await Purchases.purchaseProduct({ productId });
   // Deliver the purchased content or enable the service here
+  // ...
+  // Finish the transaction
   await Purchases.finishTransaction({ transactionId: transaction.id });
 };
 
@@ -68,6 +83,7 @@ const restorePurchases = async () => {
   const { transactions } = await Purchases.getCurrentTransactions();
   for (const transaction of transactions) {
     // Deliver the purchased content or enable the service here
+    // ...
   }
 };
 ```
@@ -101,7 +117,7 @@ Finish a transaction.
 Indicates to the App Store that the app delivered the purchased content
 or enabled the service to finish the transaction.
 
-Only available on iOS (15.0+).
+Only available on Android and iOS (15.0+).
 
 | Param         | Type                                                                          |
 | ------------- | ----------------------------------------------------------------------------- |
@@ -140,7 +156,7 @@ Returns transaction details for currently owned items bought within your app.
 
 Only active subscriptions and non-consumed one-time purchases are returned.
 
-Only available on iOS (15.0+).
+Only available on Android and iOS (15.0+).
 
 **Returns:** <code>Promise&lt;<a href="#getcurrenttransactionsresult">GetCurrentTransactionsResult</a>&gt;</code>
 
@@ -160,7 +176,7 @@ Returns transaction details for all transactions that are not yet finished.
 Check for unfinished transactions at least once every app launch to ensure
 that all transactions are processed correctly.
 
-Only available on iOS (15.0+).
+Only available on Android and iOS (15.0+).
 
 **Returns:** <code>Promise&lt;<a href="#getunfinishedtransactionsresult">GetUnfinishedTransactionsResult</a>&gt;</code>
 
@@ -195,7 +211,7 @@ Purchase a product by its ID.
 Make sure to call `finishTransaction(...)` after the purchase is complete
 and the content has been delivered or the service has been enabled.
 
-Only available on iOS (15.0+).
+Only available on Android and iOS (15.0+).
 
 | Param         | Type                                                                      |
 | ------------- | ------------------------------------------------------------------------- |
@@ -223,7 +239,10 @@ On **iOS**, calling this method will display a system dialog to the user
 asking them to authenticate with their App Store credentials. Call this
 method only in response to an explicit user action.
 
-Only available on iOS (15.0+).
+On **Android**, this method silently queries and refreshes purchases from
+Google Play without user interaction.
+
+Only available on Android and iOS (15.0+).
 
 **Since:** 0.1.0
 
@@ -253,6 +272,7 @@ Only available on iOS (15.0+).
 | ------------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`id`**                 | <code>string</code> | The unique identifier for the transaction.                                                                                                                                                                                        | 0.1.0 |
 | **`verificationResult`** | <code>string</code> | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS. | 0.1.0 |
+| **`token`**              | <code>string</code> | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                              | 0.2.1 |
 
 
 #### GetCurrentTransactionsResult
@@ -285,11 +305,35 @@ Only available on iOS (15.0+).
 
 #### PurchaseProductOptions
 
-| Prop            | Type                | Description                                | Since |
-| --------------- | ------------------- | ------------------------------------------ | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to purchase. | 0.1.0 |
+| Prop            | Type                | Description                                                                                                                                                                              | Since |
+| --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **iOS**, this is the Product ID configured in App Store Connect. On **Android**, this is the Product ID configured in Google Play Console. | 0.1.0 |
 
 </docgen-api>
+
+## Testing
+
+### Android
+
+To test in-app purchases on Android, you need to:
+
+1. Upload your app to the Google Play Console (internal testing track is sufficient)
+2. Add test accounts in Google Play Console under **Settings** → **License Testing**
+3. Install the app from Google Play (not via direct APK installation)
+4. Use test product IDs or enable license testing for your account
+
+See [Test Google Play Billing](https://developer.android.com/google/play/billing/test) for more details.
+
+### iOS
+
+To test in-app purchases on iOS, you can use:
+
+1. **Sandbox Testing**: Create sandbox test accounts in App Store Connect and test on physical devices or simulators
+2. **StoreKit Testing in Xcode**: Configure a StoreKit configuration file for local testing without server connectivity (requires iOS 14+)
+
+Sandbox accounts can be created in App Store Connect under **Users and Access** → **Sandbox**.
+
+See [Testing In-App Purchases](https://developer.apple.com/documentation/storekit/in-app_purchase/testing_in-app_purchases) for more details.
 
 ## Changelog
 

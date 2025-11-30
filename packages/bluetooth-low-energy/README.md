@@ -4,7 +4,7 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -33,7 +33,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 > We migrated PadelBand, a sports tech app, from the Capacitor Community BLE plugin to this one and the difference is remarkable. The reliable background support and the ability to run custom native code with headless tasks made all the difference for our use case. Highly recommended!
 
-- [PadelBand](https://padel-band.com) Development Team
+-- [PadelBand](https://padel-band.com) Development Team
 
 ## Compatibility
 
