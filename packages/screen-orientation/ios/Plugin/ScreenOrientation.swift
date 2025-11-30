@@ -18,20 +18,29 @@ import Capacitor
         return ScreenOrientation.supportedInterfaceOrientations
     }
 
-    @objc public func lock(_ orientationType: String, completion: @escaping () -> Void) {
+    @objc public func lock(_ orientationType: String?, completion: @escaping () -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {
                 return
             }
-            let currentOrientationValue = UIDevice.current.orientation.rawValue
-            let currentOrientationMask = strongSelf.convertOrientationValueToMask(currentOrientationValue)
-            let nextOrientationMask = strongSelf.convertOrientationTypeToMask(orientationType)
-            let nextOrientationValue = strongSelf.convertOrientationTypeToValue(orientationType)
+            var nextOrientationValue: Int
+            var nextOrientationMask: UIInterfaceOrientationMask
+            if let orientationType {
+                nextOrientationValue = strongSelf.convertOrientationTypeToValue(orientationType)
+                nextOrientationMask = strongSelf.convertOrientationTypeToMask(orientationType)
+            } else {
+                nextOrientationValue = UIDevice.current.orientation.rawValue
+                nextOrientationMask = strongSelf.convertOrientationValueToMask(nextOrientationValue)
+            }
             strongSelf.requestGeometryUpdate(orientationValue: nextOrientationValue, orientationMask: nextOrientationMask)
             ScreenOrientation.supportedInterfaceOrientations = nextOrientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
-            strongSelf.requestGeometryUpdate(orientationValue: currentOrientationValue, orientationMask: currentOrientationMask)
-            strongSelf.notifyOrientationChangeListeners(orientationType)
+            if let orientationType {
+                strongSelf.notifyOrientationChangeListeners(orientationType)
+            } else {
+                let convertedOrientationType = strongSelf.convertOrientationValueToType(nextOrientationValue)
+                strongSelf.notifyOrientationChangeListeners(convertedOrientationType)
+            }
             completion()
         }
     }

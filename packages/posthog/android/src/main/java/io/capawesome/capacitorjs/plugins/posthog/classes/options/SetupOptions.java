@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.posthog.classes.options;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class SetupOptions {
 
@@ -9,6 +10,12 @@ public class SetupOptions {
 
     @NonNull
     private String host;
+
+    @Nullable
+    private Boolean enableSessionReplay;
+
+    @Nullable
+    private SessionReplayOptions sessionReplayConfig;
 
     public SetupOptions(@NonNull String apiKey, @NonNull String host) {
         this.apiKey = apiKey;
@@ -23,5 +30,23 @@ public class SetupOptions {
     @NonNull
     public String getHost() {
         return host;
+    }
+
+    @Nullable
+    public boolean getEnableSessionReplay() {
+        return enableSessionReplay;
+    }
+
+    public void setEnableSessionReplay(boolean enableSessionReplay) {
+        this.enableSessionReplay = enableSessionReplay;
+    }
+
+    @Nullable
+    public SessionReplayOptions getSessionReplayConfig() {
+        return sessionReplayConfig;
+    }
+
+    public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {
+        this.sessionReplayConfig = sessionReplayConfig;
     }
 }

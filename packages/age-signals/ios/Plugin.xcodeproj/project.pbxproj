@@ -13,6 +13,12 @@
 		50ADFF97201F53D600D50D53 /* AgeSignalsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* AgeSignalsTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50E1A94820377CB70090CE1A /* AgeSignalsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* AgeSignalsPlugin.swift */; };
+		7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */; };
+		7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33D2ED36FCB000FC952 /* CustomError.swift */; };
+		7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */; };
+		7C2FC3452ED3795D000FC952 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3442ED3795A000FC952 /* Result.swift */; };
+		7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3462ED37997000FC952 /* UserStatus.swift */; };
+		7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +41,12 @@
 		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E1A94720377CB70090CE1A /* AgeSignalsPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgeSignalsPlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSignals.swift; sourceTree = "<group>"; };
+		7C2FC33D2ED36FCB000FC952 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
+		7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsResult.swift; sourceTree = "<group>"; };
+		7C2FC3442ED3795A000FC952 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		7C2FC3462ED37997000FC952 /* UserStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatus.swift; sourceTree = "<group>"; };
+		7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +98,10 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				7C2FC3432ED3794B000FC952 /* Protocols */,
+				7C2FC33F2ED37920000FC952 /* Classes */,
+				7C2FC33C2ED36FC5000FC952 /* Enums */,
+				7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */,
 				50E1A94720377CB70090CE1A /* AgeSignalsPlugin.swift */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
@@ -99,6 +115,48 @@
 				50ADFF98201F53D600D50D53 /* Info.plist */,
 			);
 			path = PluginTests;
+			sourceTree = "<group>";
+		};
+		7C2FC33C2ED36FC5000FC952 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				7C2FC3462ED37997000FC952 /* UserStatus.swift */,
+				7C2FC33D2ED36FCB000FC952 /* CustomError.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		7C2FC33F2ED37920000FC952 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				7C2FC34A2ED37E7E000FC952 /* Options */,
+				7C2FC3402ED37928000FC952 /* Results */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		7C2FC3402ED37928000FC952 /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		7C2FC3432ED3794B000FC952 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7C2FC3442ED3795A000FC952 /* Result.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		7C2FC34A2ED37E7E000FC952 /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */,
+			);
+			path = Options;
 			sourceTree = "<group>";
 		};
 		8C8E7744173064A9F6D438E3 /* Pods */ = {
@@ -297,7 +355,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				50E1A94820377CB70090CE1A /* AgeSignalsPlugin.swift in Sources */,
-				2F98D68224C9AAE500613A4C /* AgeSignals.swift in Sources */,
+				7C2FC3452ED3795D000FC952 /* Result.swift in Sources */,
+				7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */,
+				7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */,
+				7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */,
+				7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */,
+				7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

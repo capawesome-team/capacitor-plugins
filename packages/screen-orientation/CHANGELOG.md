@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.1.0
+
+### Minor Changes
+
+- [`4b99f3aa51a292081886c29fc782f6b74cae9556`](https://github.com/capawesome-team/capacitor-plugins/commit/4b99f3aa51a292081886c29fc782f6b74cae9556) ([#652](https://github.com/capawesome-team/capacitor-plugins/pull/652)): feat: lock to current orientation by default
+
 ## 7.0.2
 
 ### Patch Changes

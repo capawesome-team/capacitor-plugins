@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`8d764977cbe12ee9552570881d10f793837c7b5b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8d764977cbe12ee9552570881d10f793837c7b5b) ([#335](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/335)): fix(android): stop media session if app gets destroyed
+
+## 0.1.1
+
+### Patch Changes
+
+- [`91eb87236a17cb0d365fa6fbbae2c24daa8d3902`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/91eb87236a17cb0d365fa6fbbae2c24daa8d3902) ([#325](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/325)): fix(ios): do not change audio category at startup
+
 ## 0.1.0
 
 ### Minor Changes

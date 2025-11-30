@@ -60,4 +60,8 @@ import Foundation
         }
         return theme
     }
+
+    @objc public func cancel() {
+        RPicker.cancel()
+    }
 }

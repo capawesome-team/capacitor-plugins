@@ -4,7 +4,7 @@ Capacitor plugin to lock/unlock the screen orientation.
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -109,7 +109,7 @@ const getCurrentOrientation = async () => {
 ### lock(...)
 
 ```typescript
-lock(options: LockOptions) => Promise<void>
+lock(options?: LockOptions | undefined) => Promise<void>
 ```
 
 Locks the device orientation.

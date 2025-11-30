@@ -13,14 +13,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/android": "latest",
-    "@capacitor/core": "latest",
-    "@capacitor/ios": "latest",
+    "@capacitor/android": "7.4.4",
+    "@capacitor/core": "7.4.4",
+    "@capacitor/ios": "7.4.4",
     "@capawesome/capacitor-screenshot": "file:..",
-    "html2canvas": "^1.4.1"
+    "html2canvas": "1.4.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
-    "vite": "^2.9.13"
+    "@capacitor/cli": "7.4.4",
+    "vite": "7.2.2"
   }
 }

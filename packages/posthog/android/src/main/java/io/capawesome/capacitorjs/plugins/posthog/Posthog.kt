@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.posthog
 
+import com.posthog.PostHog
 import com.posthog.android.PostHogAndroid
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
@@ -13,6 +14,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagO
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
@@ -23,7 +25,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost())
+            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig())
         }
     }
 
@@ -114,13 +116,33 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String) {
+    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
         )
         posthogConfig.captureScreenViews = false
         posthogConfig.optOut = false
+        posthogConfig.sessionReplay = enableSessionReplay
+
+        // Configure session replay options if provided
+        sessionReplayConfig?.let { replayConfig ->
+            // Screenshot mode configuration
+            posthogConfig.sessionReplayConfig.screenshot = replayConfig.getScreenshotMode() ?: false
+
+            // Text input masking
+            posthogConfig.sessionReplayConfig.maskAllTextInputs = replayConfig.getMaskAllTextInputs() ?: true
+
+            // Image masking
+            posthogConfig.sessionReplayConfig.maskAllImages = replayConfig.getMaskAllImages() ?: true
+
+            // Network telemetry capture
+            posthogConfig.sessionReplayConfig.captureLogcat = replayConfig.getCaptureNetworkTelemetry() ?: true
+
+            // Debounce delay for performance (convert seconds to milliseconds)
+            val debouncerDelaySeconds = replayConfig.getDebouncerDelay() ?: 1.0
+            posthogConfig.sessionReplayConfig.throttleDelayMs = (debouncerDelaySeconds * 1000).toLong()
+        }
 
         PostHogAndroid.setup(plugin.context, posthogConfig)
     }

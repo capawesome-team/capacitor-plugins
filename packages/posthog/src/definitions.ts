@@ -18,6 +18,19 @@ declare module '@capacitor/cli' {
        * @example 'https://eu.i.posthog.com'
        */
       host?: string;
+      /**
+       * Whether to enable session recording automatically.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      enableSessionReplay?: boolean;
+      /**
+       * Session recording configuration options.
+       *
+       * @since 7.3.0
+       */
+      sessionReplayConfig?: SessionReplayOptions;
     };
   }
 }
@@ -113,6 +126,18 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   setup(options: SetupOptions): Promise<void>;
+  /**
+   * Start session recording.
+   *
+   * @since 7.3.0
+   */
+  startSessionRecording(): Promise<void>;
+  /**
+   * Stop session recording.
+   *
+   * @since 7.3.0
+   */
+  stopSessionRecording(): Promise<void>;
   /**
    * Remove a super property.
    *
@@ -313,6 +338,13 @@ export interface SetupOptions {
    */
   apiKey: string;
   /**
+   * Whether to enable session recording automatically.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  enableSessionReplay?: boolean;
+  /**
    * The host of your PostHog instance.
    *
    * @since 6.0.0
@@ -320,6 +352,12 @@ export interface SetupOptions {
    * @example 'https://eu.i.posthog.com'
    */
   host?: string;
+  /**
+   * Session replay configuration options.
+   *
+   * @since 7.3.0
+   */
+  sessionReplayConfig?: SessionReplayOptions;
 }
 
 /**
@@ -346,3 +384,52 @@ export type JsonType =
       [key: string]: JsonType;
     }
   | JsonType[];
+
+/**
+ * @since 7.3.0
+ */
+export interface SessionReplayOptions {
+  /**
+   * Enable screenshot mode for session recordings.
+   * WARNING: This may capture sensitive information.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  screenshotMode?: boolean;
+  /**
+   * Mask all text input fields in session recordings.
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllTextInputs?: boolean;
+  /**
+   * Mask all images in session recordings.
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllImages?: boolean;
+  /**
+   * Mask all sandboxed system views (iOS-specific).
+   *
+   * @since 7.3.0
+   * @default true
+   */
+  maskAllSandboxedViews?: boolean;
+  /**
+   * Capture network telemetry in session recordings.
+   *
+   * @since 7.3.0
+   * @default false
+   */
+  captureNetworkTelemetry?: boolean;
+  /**
+   * Debounce delay for session recording snapshots (in seconds).
+   *
+   * @since 7.3.0
+   * @default 1.0
+   */
+  debouncerDelay?: number;
+}

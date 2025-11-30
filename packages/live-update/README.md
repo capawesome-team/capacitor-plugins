@@ -4,7 +4,7 @@ Capacitor plugin that allows you to update your app remotely in real-time withou
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-deploy-real-time-app-updates.png?t=1" />
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -151,13 +151,6 @@ The following starter templates are available:
 
 - [Ionstarter Angular Firebase](https://ionstarter.dev/)
 - [Ionstarter Angular SQLite](https://ionstarter.dev/)
-
-## Guides
-
-- [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
-- [How Live Updates for Capacitor work](https://capawesome.io/blog/how-live-updates-for-capacitor-work/)
-- [How to restrict Capacitor Live Updates to Native Versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/)
-- [How to gradually roll out Capacitor Live Updates](https://capawesome.io/blog/how-to-gradually-roll-out-capacitor-live-updates/)
 
 ## Usage
 

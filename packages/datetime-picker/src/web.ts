@@ -13,4 +13,8 @@ export class DatetimePickerWeb
   public async present(_options: PresentOptions): Promise<PresentResult> {
     throw this.unimplemented('Not implemented on web.');
   }
+
+  public async cancel(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 }
