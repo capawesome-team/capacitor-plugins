@@ -63,7 +63,7 @@ npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 Next, install the package:
 
 ```
-npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm
+npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm@3.50.4-build1
 npx cap sync
 ```
 
