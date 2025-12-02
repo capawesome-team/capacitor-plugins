@@ -3,7 +3,7 @@ ext {
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.0'
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.2.1'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.6.1'
-    androidPlayAgeSignalsVersion = project.hasProperty('androidPlayAgeSignalsVersion') ? rootProject.ext.androidPlayAgeSignalsVersion : '0.0.1-beta01'
+    androidPlayAgeSignalsVersion = project.hasProperty('androidPlayAgeSignalsVersion') ? rootProject.ext.androidPlayAgeSignalsVersion : '0.0.1-beta02'
 }
 
 buildscript {
