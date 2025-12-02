@@ -679,6 +679,9 @@ isEnabled() => Promise<IsEnabledResult>
 
 Check if Bluetooth is enabled.
 
+On **iOS**, requires the plugin to be initialized.
+Returns `false` if not initialized.
+
 Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#isenabledresult">IsEnabledResult</a>&gt;</code>
