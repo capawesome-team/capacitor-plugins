@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-age-signals': patch
+'@capawesome/capacitor-age-signals': minor
 ---
 
-Update to Play Age Signals API 0.0.1-beta02
+feat(android)!: update to Play Age Signals API 0.0.1-beta02
