@@ -56,23 +56,12 @@ public class LiveUpdatePlugin extends Plugin {
     @Nullable
     private LiveUpdate implementation;
 
+    private boolean webViewListenerRegistered = false;
+
     public void load() {
         try {
             config = getLiveUpdateConfig();
             implementation = new LiveUpdate(config, this);
-
-            // Register WebView listener to trigger auto-update when page is loaded
-            getBridge()
-                .addWebViewListener(
-                    new WebViewListener() {
-                        @Override
-                        public void onPageLoaded(WebView webView) {
-                            if (implementation != null) {
-                                implementation.handleOnPageLoaded();
-                            }
-                        }
-                    }
-                );
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
@@ -81,8 +70,30 @@ public class LiveUpdatePlugin extends Plugin {
     @Override
     protected void handleOnResume() {
         super.handleOnResume();
-        if (implementation != null) {
-            implementation.handleOnResume();
+        try {
+            // Notify the implementation that the app has resumed
+            if (implementation != null) {
+                implementation.handleOnResume();
+            }
+            // Register WebView listener to trigger auto-update when page is loaded
+            // Important: For some reason, the listener CANNOT be registered in the load() method
+            // or constructor, it MUST be done here in onResume().
+            if (!webViewListenerRegistered) {
+                webViewListenerRegistered = true;
+                getBridge()
+                    .addWebViewListener(
+                        new WebViewListener() {
+                            @Override
+                            public void onPageLoaded(WebView webView) {
+                                if (implementation != null) {
+                                    implementation.handleOnPageLoaded();
+                                }
+                            }
+                        }
+                    );
+            }
+        } catch (Exception exception) {
+            Logger.error(TAG, exception.getMessage(), exception);
         }
     }
 
