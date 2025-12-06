@@ -499,7 +499,7 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     public void notifyNextBundleSetListeners(@NonNull NextBundleSetEvent event) {
-        notifyListeners(EVENT_NEXT_BUNDLE_SET, event.toJSObject(), false);
+        notifyListeners(EVENT_NEXT_BUNDLE_SET, event.toJSObject(), true);
     }
 
     private LiveUpdateConfig getLiveUpdateConfig() {

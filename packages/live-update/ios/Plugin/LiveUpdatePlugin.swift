@@ -305,7 +305,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
-        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: false)
+        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: true)
     }
 
     private func liveUpdateConfig() -> LiveUpdateConfig {
