@@ -130,6 +130,12 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void fetchLatestBundle(PluginCall call) {
         try {
+            String appId = config.getAppId();
+            if (appId == null || appId.isEmpty()) {
+                call.reject(ERROR_APP_ID_MISSING);
+                return;
+            }
+
             FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
@@ -438,7 +444,7 @@ public class LiveUpdatePlugin extends Plugin {
     public void sync(PluginCall call) {
         try {
             String appId = config.getAppId();
-            if (appId == null) {
+            if (appId == null || appId.isEmpty()) {
                 call.reject(ERROR_APP_ID_MISSING);
                 return;
             }
