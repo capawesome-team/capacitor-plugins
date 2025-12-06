@@ -214,8 +214,8 @@ public class LiveUpdate {
     public void handleOnPageLoaded() {
         // Wait for initial page load to perform auto update to make sure the WebViewLocalServer is initialized.
         // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
-        initialPageLoaded = true;
-        if ("background".equals(config.getAutoUpdateStrategy())) {
+        if ("background".equals(config.getAutoUpdateStrategy()) && !initialPageLoaded) {
+            initialPageLoaded = true;
             performAutoUpdate();
         }
     }
