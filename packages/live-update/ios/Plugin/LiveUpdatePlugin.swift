@@ -315,6 +315,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         var config = LiveUpdateConfig()
 
         config.appId = getConfig().getString("appId", config.appId)
+        config.autoBlockRolledBackBundles = getConfig().getBoolean("autoBlockRolledBackBundles", config.autoBlockRolledBackBundles)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
         config.autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.autoUpdateStrategy) ?? config.autoUpdateStrategy
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)

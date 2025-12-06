@@ -240,6 +240,10 @@ public class LiveUpdate {
         // Get the current and previous bundle IDs
         String currentBundleId = getCurrentBundleId();
         String previousBundleId = getPreviousBundleId();
+        // Block the rolled back bundle if enabled
+        if (config.getAutoBlockRolledBackBundles() && rollbackPerformed && previousBundleId != null) {
+            addBlockedBundleId(previousBundleId);
+        }
         // Return the result
         ReadyResult result = new ReadyResult(currentBundleId, previousBundleId, rollbackPerformed);
         callback.success(result);
@@ -314,6 +318,13 @@ public class LiveUpdate {
             String checksum = response.getChecksum();
             String signature = response.getSignature();
             String url = response.getUrl();
+            // Check if the bundle is blocked
+            if (isBlockedBundleId(latestBundleId)) {
+                Logger.warn(LiveUpdatePlugin.TAG, "Bundle is blocked and will not be downloaded.");
+                SyncResult syncResult = new SyncResult(null);
+                callback.success(syncResult);
+                return;
+            }
             // Check if the bundle already exists
             if (hasBundleById(latestBundleId)) {
                 String nextBundleId = null;
@@ -990,6 +1001,46 @@ public class LiveUpdate {
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
         plugin.notifyNextBundleSetListeners(event);
+    }
+
+    private void addBlockedBundleId(@NonNull String bundleId) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        List<String> blockedList = new ArrayList<>();
+
+        // Parse existing blocked IDs
+        if (blockedIds != null && !blockedIds.isEmpty()) {
+            String[] ids = blockedIds.split(",");
+            blockedList.addAll(Arrays.asList(ids));
+        }
+
+        // Skip if already blocked
+        if (blockedList.contains(bundleId)) {
+            return;
+        }
+
+        // Remove oldest if limit reached
+        if (blockedList.size() >= 100) {
+            blockedList.remove(0);
+        }
+
+        // Add new bundle
+        blockedList.add(bundleId);
+
+        // Save back to preferences
+        String newBlockedIds = String.join(",", blockedList);
+        preferences.setBlockedBundleIds(newBlockedIds);
+
+        Logger.debug(LiveUpdatePlugin.TAG, "Bundle blocked: " + bundleId);
+    }
+
+    private boolean isBlockedBundleId(@NonNull String bundleId) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        if (blockedIds == null || blockedIds.isEmpty()) {
+            return false;
+        }
+
+        String[] ids = blockedIds.split(",");
+        return Arrays.asList(ids).contains(bundleId);
     }
 
     private void setNextCapacitorServerPath(@NonNull String path) {

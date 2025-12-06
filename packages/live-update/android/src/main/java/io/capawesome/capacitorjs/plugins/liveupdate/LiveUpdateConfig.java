@@ -9,6 +9,8 @@ public class LiveUpdateConfig {
     @Nullable
     private String appId = null;
 
+    private boolean autoBlockRolledBackBundles = false;
+
     private boolean autoDeleteBundles = false;
 
     @NonNull
@@ -28,6 +30,10 @@ public class LiveUpdateConfig {
     @Nullable
     public String getAppId() {
         return appId;
+    }
+
+    public boolean getAutoBlockRolledBackBundles() {
+        return autoBlockRolledBackBundles;
     }
 
     public boolean getAutoDeleteBundles() {
@@ -63,6 +69,10 @@ public class LiveUpdateConfig {
 
     public void setAppId(@Nullable String appId) {
         this.appId = appId;
+    }
+
+    public void setAutoBlockRolledBackBundles(boolean autoBlockRolledBackBundles) {
+        this.autoBlockRolledBackBundles = autoBlockRolledBackBundles;
     }
 
     public void setAutoDeleteBundles(boolean autoDeleteBundles) {

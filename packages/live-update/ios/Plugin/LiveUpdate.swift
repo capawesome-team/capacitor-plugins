@@ -157,6 +157,10 @@ import CommonCrypto
         // Get the current and previous bundle IDs
         let currentBundleId = getCurrentBundleId()
         let previousBundleId = getPreviousBundleId()
+        // Block the rolled back bundle if enabled
+        if config.autoBlockRolledBackBundles && rollbackPerformed, let previousBundleId = previousBundleId {
+            addBlockedBundleId(previousBundleId)
+        }
         // Return the result
         let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
         completion(result, nil)
@@ -229,6 +233,11 @@ import CommonCrypto
         let checksum = response.checksum
         let signature = response.signature
         let downloadUrl = response.url
+        // Check if the bundle is blocked
+        if isBlockedBundleId(latestBundleId) {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
+            return SyncResult(nextBundleId: nil)
+        }
         // Check if bundle already exists
         if hasBundleById(latestBundleId) {
             var nextBundleId: String?
@@ -760,6 +769,43 @@ import CommonCrypto
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
         plugin.notifyNextBundleSetListeners(event)
+    }
+
+    private func addBlockedBundleId(_ bundleId: String) {
+        var blockedList: [String] = []
+
+        // Parse existing blocked IDs
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            blockedList = blockedIds.split(separator: ",").map(String.init)
+        }
+
+        // Skip if already blocked
+        if blockedList.contains(bundleId) {
+            return
+        }
+
+        // Remove oldest if limit reached
+        if blockedList.count >= 100 {
+            blockedList.removeFirst()
+        }
+
+        // Add new bundle
+        blockedList.append(bundleId)
+
+        // Save back to preferences
+        let newBlockedIds = blockedList.joined(separator: ",")
+        preferences.setBlockedBundleIds(newBlockedIds)
+
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle blocked: ", bundleId)
+    }
+
+    private func isBlockedBundleId(_ bundleId: String) -> Bool {
+        guard let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty else {
+            return false
+        }
+
+        let blockedList = blockedIds.split(separator: ",").map(String.init)
+        return blockedList.contains(bundleId)
     }
 
     private func setNextCapacitorServerPath(path: String) {

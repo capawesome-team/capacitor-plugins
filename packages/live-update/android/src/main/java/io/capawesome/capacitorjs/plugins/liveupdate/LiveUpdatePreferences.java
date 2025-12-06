@@ -15,6 +15,7 @@ public class LiveUpdatePreferences {
     @NonNull
     private final SharedPreferences.Editor settingsEditor;
 
+    private final String blockedBundleIdsKey = "blockedBundleIds"; // DO NOT CHANGE
     private final String channelKey = "channel"; // DO NOT CHANGE
     private final String deviceIdKey = "deviceId"; // DO NOT CHANGE
     private final String customIdKey = "customId"; // DO NOT CHANGE
@@ -53,6 +54,22 @@ public class LiveUpdatePreferences {
         return context
             .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
             .getString(previousBundleIdKey, null);
+    }
+
+    @Nullable
+    public String getBlockedBundleIds() {
+        return context
+            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
+            .getString(blockedBundleIdsKey, null);
+    }
+
+    public void setBlockedBundleIds(@Nullable String blockedBundleIds) {
+        if (blockedBundleIds == null) {
+            settingsEditor.remove(blockedBundleIdsKey);
+        } else {
+            settingsEditor.putString(blockedBundleIdsKey, blockedBundleIds);
+        }
+        settingsEditor.apply();
     }
 
     public void setChannel(@Nullable String channel) {

@@ -504,6 +504,8 @@ public class LiveUpdatePlugin extends Plugin {
 
         String appId = getConfig().getString("appId", config.getAppId());
         config.setAppId(appId);
+        boolean autoBlockRolledBackBundles = getConfig().getBoolean("autoBlockRolledBackBundles", config.getAutoBlockRolledBackBundles());
+        config.setAutoBlockRolledBackBundles(autoBlockRolledBackBundles);
         boolean autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.getAutoDeleteBundles());
         config.setAutoDeleteBundles(autoDeleteBundles);
         String autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.getAutoUpdateStrategy());

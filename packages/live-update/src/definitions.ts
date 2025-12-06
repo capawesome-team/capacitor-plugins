@@ -16,6 +16,21 @@ declare module '@capacitor/cli' {
        */
       appId?: string;
       /**
+       * Whether or not to automatically block bundles that have been rolled back.
+       *
+       * When enabled, the plugin will automatically block bundles that caused a rollback
+       * (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked.
+       * Blocked bundles will be skipped in future sync operations.
+       *
+       * **Attention**: This option has no effect if `readyTimeout` is set to `0`.
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      autoBlockRolledBackBundles?: boolean;
+      /**
        * Whether or not to automatically delete unused bundles.
        *
        * When enabled, the plugin will automatically delete unused bundles after calling `ready()`.
