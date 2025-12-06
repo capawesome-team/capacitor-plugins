@@ -44,10 +44,8 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         self.config = liveUpdateConfig()
         self.implementation = LiveUpdate(config: config!, plugin: self)
 
-        // Trigger auto-update if enabled
-        if config?.autoUpdateStrategy == "background" {
-            implementation?.performAutoUpdate()
-        }
+        // Notify implementation about load
+        implementation?.handleLoad()
 
         // Register for app resume notifications
         NotificationCenter.default.addObserver(
@@ -56,10 +54,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
-    }
-
-    @objc private func handleAppWillEnterForeground() {
-        implementation?.handleAppWillEnterForeground()
     }
 
     @objc func deleteBundle(_ call: CAPPluginCall) {
@@ -311,6 +305,10 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
         notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: true)
+    }
+
+    @objc private func handleAppWillEnterForeground() {
+        implementation?.handleAppWillEnterForeground()
     }
 
     private func liveUpdateConfig() -> LiveUpdateConfig {
