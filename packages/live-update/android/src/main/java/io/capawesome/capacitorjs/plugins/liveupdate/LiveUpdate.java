@@ -67,6 +67,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LiveUpdate {
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
     @NonNull

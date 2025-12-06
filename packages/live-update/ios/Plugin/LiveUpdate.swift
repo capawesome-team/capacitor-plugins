@@ -130,7 +130,7 @@ import CommonCrypto
         let result = GetVersionNameResult(versionName: versionName)
         completion(result, nil)
     }
-    
+
     @objc public func handleAppWillEnterForeground() {
         if config.autoUpdateStrategy == "background" {
             performAutoUpdate()

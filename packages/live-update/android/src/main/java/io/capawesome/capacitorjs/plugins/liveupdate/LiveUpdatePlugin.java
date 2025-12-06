@@ -75,18 +75,21 @@ public class LiveUpdatePlugin extends Plugin {
         // Register WebView listener once on first resume
         if (!webViewListenerRegistered && "background".equals(config.getAutoUpdateStrategy())) {
             webViewListenerRegistered = true;
-            getBridge().addWebViewListener(new WebViewListener() {
-                @Override
-                public void onPageLoaded(WebView webView) {
-                    // Wait for initial page load to perform auto update
-                    // to make sure the WebViewLocalServer is initialized.
-                    // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
-                    if (implementation != null && !initialPageLoaded) {
-                        initialPageLoaded = true;
-                        implementation.performAutoUpdate();
+            getBridge()
+                .addWebViewListener(
+                    new WebViewListener() {
+                        @Override
+                        public void onPageLoaded(WebView webView) {
+                            // Wait for initial page load to perform auto update
+                            // to make sure the WebViewLocalServer is initialized.
+                            // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
+                            if (implementation != null && !initialPageLoaded) {
+                                initialPageLoaded = true;
+                                implementation.performAutoUpdate();
+                            }
+                        }
                     }
-                }
-            });
+                );
         }
 
         // Handle subsequent resumes

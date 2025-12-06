@@ -7,7 +7,7 @@ import Capacitor
     init(_ call: CAPPluginCall) {
         self.channel = call.getString("channel")
     }
-    
+
     init(channel: String?) {
         self.channel = channel
     }

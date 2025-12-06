@@ -28,8 +28,8 @@ declare module '@capacitor/cli' {
        * The auto-update strategy for live updates.
        *
        * - `none`: Live updates will not be applied automatically.
-       * - `background`: Live updates will be automatically downloaded 
-       * and applied in the background at app startup and when the app resumes 
+       * - `background`: Live updates will be automatically downloaded
+       * and applied in the background at app startup and when the app resumes
        * (if the last check was more than 15 minutes ago).
        *
        * Only available on Android and iOS.
