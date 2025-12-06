@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
@@ -7,8 +8,10 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
+import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
@@ -26,7 +29,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "7.2.2";
+    public static final String VERSION = "7.3.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -45,8 +48,11 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_SYNC_IN_PROGRESS = "Sync is already in progress.";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
+    public static final String EVENT_NEXT_BUNDLE_SET = "nextBundleSet";
 
     private boolean syncInProgress = false;
+    private boolean webViewListenerRegistered = false;
+    private boolean initialPageLoaded = false;
 
     @Nullable
     private LiveUpdateConfig config;
@@ -60,6 +66,33 @@ public class LiveUpdatePlugin extends Plugin {
             implementation = new LiveUpdate(config, this);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
+        }
+    }
+
+    @Override
+    protected void handleOnResume() {
+        super.handleOnResume();
+
+        // Register WebView listener once on first resume
+        if (!webViewListenerRegistered && "background".equals(config.getAutoUpdateStrategy())) {
+            webViewListenerRegistered = true;
+            getBridge().addWebViewListener(new WebViewListener() {
+                @Override
+                public void onPageLoaded(WebView webView) {
+                    // Wait for initial page load to perform auto update
+                    // to make sure the WebViewLocalServer is initialized.
+                    // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
+                    if (implementation != null && !initialPageLoaded) {
+                        initialPageLoaded = true;
+                        implementation.performAutoUpdate();
+                    }
+                }
+            });
+        }
+
+        // Handle subsequent resumes
+        if (implementation != null && initialPageLoaded) {
+            implementation.handleOnResume();
         }
     }
 
@@ -475,6 +508,10 @@ public class LiveUpdatePlugin extends Plugin {
         notifyListeners(EVENT_DOWNLOAD_BUNDLE_PROGRESS, event.toJSObject(), false);
     }
 
+    public void notifyNextBundleSetListeners(@NonNull NextBundleSetEvent event) {
+        notifyListeners(EVENT_NEXT_BUNDLE_SET, event.toJSObject(), false);
+    }
+
     private LiveUpdateConfig getLiveUpdateConfig() {
         LiveUpdateConfig config = new LiveUpdateConfig();
 
@@ -482,6 +519,8 @@ public class LiveUpdatePlugin extends Plugin {
         config.setAppId(appId);
         boolean autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.getAutoDeleteBundles());
         config.setAutoDeleteBundles(autoDeleteBundles);
+        String autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.getAutoUpdateStrategy());
+        config.setAutoUpdateStrategy(autoUpdateStrategy);
         String defaultChannel = getConfig().getString("defaultChannel", config.getDefaultChannel());
         config.setDefaultChannel(defaultChannel);
         int httpTimeout = getConfig().getInt("httpTimeout", config.getHttpTimeout());

@@ -17,6 +17,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
@@ -66,6 +67,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class LiveUpdate {
+    private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
     @NonNull
     private final LiveUpdateConfig config;
@@ -88,6 +90,7 @@ public class LiveUpdate {
     private final Handler rollbackHandler = new Handler();
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
+    private long lastAutoUpdateCheckTimestamp = 0;
     private boolean rollbackPerformed = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
@@ -203,6 +206,46 @@ public class LiveUpdate {
         String versionName = getVersionName();
         GetVersionNameResult result = new GetVersionNameResult(versionName);
         callback.success(result);
+    }
+
+    public void handleOnResume() {
+        if ("background".equals(config.getAutoUpdateStrategy())) {
+            performAutoUpdate();
+        }
+    }
+
+    public void performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        long now = System.currentTimeMillis();
+        if (lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs) {
+            Logger.debug(LiveUpdatePlugin.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
+            return;
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now;
+
+        // Run sync in background thread
+        new Thread(() -> {
+            try {
+                Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
+                SyncOptions options = new SyncOptions((String) null);
+                NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                    @Override
+                    public void success(Result result) {
+                        Logger.debug(LiveUpdatePlugin.TAG, "Auto-update completed successfully.");
+                    }
+
+                    @Override
+                    public void error(Exception exception) {
+                        Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+                    }
+                };
+                sync(options, callback);
+            } catch (Exception exception) {
+                Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+            }
+        }).start();
     }
 
     public void ready(@NonNull NonEmptyCallback callback) {
@@ -911,6 +954,14 @@ public class LiveUpdate {
             File bundleDirectory = buildBundleDirectoryFor(bundleId);
             setNextCapacitorServerPath(bundleDirectory.getPath());
         }
+
+        // Notify listeners
+        notifyNextBundleSetListeners(bundleId);
+    }
+
+    private void notifyNextBundleSetListeners(@Nullable String bundleId) {
+        NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
+        plugin.notifyNextBundleSetListeners(event);
     }
 
     private void setNextCapacitorServerPath(@NonNull String path) {
