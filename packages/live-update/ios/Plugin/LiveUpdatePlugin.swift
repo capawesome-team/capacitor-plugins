@@ -107,6 +107,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func fetchLatestBundle(_ call: CAPPluginCall) {
         Task {
             do {
+                guard let appId = config?.appId, !appId.isEmpty else {
+                    call.reject(CustomError.appIdMissing.localizedDescription)
+                    return
+                }
+
                 let options = FetchLatestBundleOptions(call)
                 let result = try await implementation?.fetchLatestBundle(options)
                 if let result = result?.toJSObject() as? JSObject {
@@ -282,7 +287,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func sync(_ call: CAPPluginCall) {
         Task {
             do {
-                guard let _ = config?.appId else {
+                guard let appId = config?.appId, !appId.isEmpty else {
                     call.reject(CustomError.appIdMissing.localizedDescription)
                     return
                 }

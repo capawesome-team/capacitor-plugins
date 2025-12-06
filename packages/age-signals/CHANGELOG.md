@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`f5ecc64467f4ebc2944fb3115cd1f95517f5875a`](https://github.com/capawesome-team/capacitor-plugins/commit/f5ecc64467f4ebc2944fb3115cd1f95517f5875a) ([#677](https://github.com/capawesome-team/capacitor-plugins/pull/677)): feat(android)!: update to Play Age Signals API 0.0.1-beta02
+
 ## 0.1.1
 
 ### Patch Changes
