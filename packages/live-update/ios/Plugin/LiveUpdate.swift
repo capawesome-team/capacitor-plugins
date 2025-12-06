@@ -26,6 +26,7 @@ import CommonCrypto
     private var rollbackDispatchWorkItem: DispatchWorkItem?
     private var rollbackPerformed = false
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
+    private var syncInProgress = false
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
@@ -226,6 +227,14 @@ import CommonCrypto
     }
 
     @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        if syncInProgress {
+            throw CustomError.syncInProgress
+        }
+        syncInProgress = true
+        defer {
+            syncInProgress = false
+        }
+
         let channel = options.getChannel()
         // Fetch the latest bundle
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)

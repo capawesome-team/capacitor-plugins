@@ -50,7 +50,6 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
     public static final String EVENT_NEXT_BUNDLE_SET = "nextBundleSet";
 
-    private boolean syncInProgress = false;
     private boolean webViewListenerRegistered = false;
     private boolean initialPageLoaded = false;
 
@@ -476,30 +475,21 @@ public class LiveUpdatePlugin extends Plugin {
                 return;
             }
 
-            if (syncInProgress) {
-                call.reject(ERROR_SYNC_IN_PROGRESS);
-                return;
-            }
-            syncInProgress = true;
-
             SyncOptions options = new SyncOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override
                 public void success(Result result) {
-                    syncInProgress = false;
                     resolveCall(call, result.toJSObject());
                 }
 
                 @Override
                 public void error(Exception exception) {
-                    syncInProgress = false;
                     rejectCall(call, exception);
                 }
             };
 
             implementation.sync(options, callback);
         } catch (Exception exception) {
-            syncInProgress = false;
             rejectCall(call, exception);
         }
     }

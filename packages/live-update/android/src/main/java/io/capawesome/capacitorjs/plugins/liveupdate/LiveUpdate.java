@@ -92,6 +92,7 @@ public class LiveUpdate {
 
     private long lastAutoUpdateCheckTimestamp = 0;
     private boolean rollbackPerformed = false;
+    private boolean syncInProgress = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
@@ -313,44 +314,55 @@ public class LiveUpdate {
     }
 
     public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) throws Exception {
-        String channel = options.getChannel();
-        // Fetch the latest bundle
-        FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
-        GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
-        if (response == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
-            SyncResult syncResult = new SyncResult(null);
-            callback.success(syncResult);
+        if (syncInProgress) {
+            Exception exception = new Exception(LiveUpdatePlugin.ERROR_SYNC_IN_PROGRESS);
+            callback.error(exception);
             return;
         }
-        ArtifactType artifactType = response.getArtifactType();
-        String latestBundleId = response.getBundleId();
-        String checksum = response.getChecksum();
-        String signature = response.getSignature();
-        String url = response.getUrl();
-        // Check if the bundle already exists
-        if (hasBundleById(latestBundleId)) {
-            String nextBundleId = null;
-            String currentBundleId = getCurrentBundleId();
-            if (!latestBundleId.equals(currentBundleId)) {
-                // Set the next bundle
-                setNextBundleById(latestBundleId);
-                nextBundleId = latestBundleId;
+        syncInProgress = true;
+
+        try {
+            String channel = options.getChannel();
+            // Fetch the latest bundle
+            FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
+            GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
+            if (response == null) {
+                Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+                SyncResult syncResult = new SyncResult(null);
+                callback.success(syncResult);
+                return;
             }
-            SyncResult syncResult = new SyncResult(nextBundleId);
+            ArtifactType artifactType = response.getArtifactType();
+            String latestBundleId = response.getBundleId();
+            String checksum = response.getChecksum();
+            String signature = response.getSignature();
+            String url = response.getUrl();
+            // Check if the bundle already exists
+            if (hasBundleById(latestBundleId)) {
+                String nextBundleId = null;
+                String currentBundleId = getCurrentBundleId();
+                if (!latestBundleId.equals(currentBundleId)) {
+                    // Set the next bundle
+                    setNextBundleById(latestBundleId);
+                    nextBundleId = latestBundleId;
+                }
+                SyncResult syncResult = new SyncResult(nextBundleId);
+                callback.success(syncResult);
+                return;
+            }
+            // Download the bundle
+            if (artifactType == ArtifactType.MANIFEST) {
+                downloadBundleOfTypeManifest(latestBundleId, url);
+            } else {
+                downloadBundleOfTypeZip(latestBundleId, checksum, signature, url);
+            }
+            // Set the next bundle
+            setNextBundleById(latestBundleId);
+            SyncResult syncResult = new SyncResult(latestBundleId);
             callback.success(syncResult);
-            return;
+        } finally {
+            syncInProgress = false;
         }
-        // Download the bundle
-        if (artifactType == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(latestBundleId, url);
-        } else {
-            downloadBundleOfTypeZip(latestBundleId, checksum, signature, url);
-        }
-        // Set the next bundle
-        setNextBundleById(latestBundleId);
-        SyncResult syncResult = new SyncResult(latestBundleId);
-        callback.success(syncResult);
     }
 
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {

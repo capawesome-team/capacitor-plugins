@@ -39,7 +39,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
-    private var syncInProgress = false
 
     override public func load() {
         self.config = liveUpdateConfig()
@@ -288,20 +287,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                     return
                 }
 
-                guard !syncInProgress else {
-                    call.reject(CustomError.syncInProgress.localizedDescription)
-                    return
-                }
-                syncInProgress = true
-
                 let options = SyncOptions(call)
                 let result = try await implementation?.sync(options)
-                self.syncInProgress = false
                 if let result = result?.toJSObject() as? JSObject {
                     resolveCall(call, result)
                 }
             } catch {
-                self.syncInProgress = false
                 rejectCall(call, error)
             }
         }
