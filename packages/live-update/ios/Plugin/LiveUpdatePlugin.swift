@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "7.2.2"
+    public static let version = "7.3.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
@@ -35,14 +35,31 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     ]
 
     private let eventDownloadBundleProgess = "downloadBundleProgress"
+    private let eventNextBundleSet = "nextBundleSet"
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
-    private var syncInProgress = false
 
     override public func load() {
         self.config = liveUpdateConfig()
         self.implementation = LiveUpdate(config: config!, plugin: self)
+
+        // Trigger auto-update if enabled
+        if config?.autoUpdateStrategy == "background" {
+            implementation?.performAutoUpdate()
+        }
+
+        // Register for app resume notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    @objc private func handleAppWillEnterForeground() {
+        implementation?.handleAppWillEnterForeground()
     }
 
     @objc func deleteBundle(_ call: CAPPluginCall) {
@@ -275,20 +292,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                     return
                 }
 
-                guard !syncInProgress else {
-                    call.reject(CustomError.syncInProgress.localizedDescription)
-                    return
-                }
-                syncInProgress = true
-
                 let options = SyncOptions(call)
                 let result = try await implementation?.sync(options)
-                self.syncInProgress = false
                 if let result = result?.toJSObject() as? JSObject {
                     resolveCall(call, result)
                 }
             } catch {
-                self.syncInProgress = false
                 rejectCall(call, error)
             }
         }
@@ -300,11 +309,16 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
+        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: true)
+    }
+
     private func liveUpdateConfig() -> LiveUpdateConfig {
         var config = LiveUpdateConfig()
 
         config.appId = getConfig().getString("appId", config.appId)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
+        config.autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.autoUpdateStrategy) ?? config.autoUpdateStrategy
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
         config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)

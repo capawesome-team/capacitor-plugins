@@ -25,6 +25,21 @@ declare module '@capacitor/cli' {
        */
       autoDeleteBundles?: boolean;
       /**
+       * The auto-update strategy for live updates.
+       *
+       * - `none`: Live updates will not be applied automatically.
+       * - `background`: Live updates will be automatically downloaded
+       * and applied in the background at app startup and when the app resumes
+       * (if the last check was more than 15 minutes ago).
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.3.0
+       * @default 'none'
+       * @example 'background'
+       */
+      autoUpdateStrategy?: 'none' | 'background';
+      /**
        * The default channel of the app.
        *
        * @since 6.3.0
@@ -250,6 +265,20 @@ export interface LiveUpdatePlugin {
   addListener(
     eventName: 'downloadBundleProgress',
     listenerFunc: DownloadBundleProgressListener,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Listen for when a bundle is set as the next bundle.
+   *
+   * This event is triggered whenever a bundle is set to be used on the next app restart,
+   * either through automatic updates or manual calls to `setNextBundle()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.3.0
+   */
+  addListener(
+    eventName: 'nextBundleSet',
+    listenerFunc: NextBundleSetListener,
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
@@ -677,4 +706,28 @@ export interface DownloadBundleProgressEvent {
    * @since 7.0.0
    */
   totalBytes: number;
+}
+
+/**
+ * Listener for when a bundle is set as the next bundle.
+ *
+ * @since 7.3.0
+ */
+export type NextBundleSetListener = (event: NextBundleSetEvent) => void;
+
+/**
+ * Event that is triggered when a bundle is set as the next bundle.
+ *
+ * @since 7.3.0
+ */
+export interface NextBundleSetEvent {
+  /**
+   * The unique identifier of the bundle that is set as the next bundle.
+   *
+   * If `null`, the default bundle will be used.
+   *
+   * @since 7.3.0
+   * @example '1.0.0'
+   */
+  bundleId: string | null;
 }

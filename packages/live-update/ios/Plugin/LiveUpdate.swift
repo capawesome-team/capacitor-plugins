@@ -11,6 +11,7 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
@@ -24,6 +25,8 @@ import CommonCrypto
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
     private var rollbackPerformed = false
+    private var lastAutoUpdateCheckTimestamp: Int64 = 0
+    private var syncInProgress = false
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
@@ -128,6 +131,36 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func handleAppWillEnterForeground() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
+        }
+    }
+
+    @objc public func performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
+            return
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now
+
+        // Run sync in background task
+        Task {
+            do {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
+                let options = SyncOptions(channel: nil)
+                _ = try await sync(options)
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
+            } catch {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
+            }
+        }
+    }
+
     @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
         if config.readyTimeout <= 0 {
@@ -194,6 +227,14 @@ import CommonCrypto
     }
 
     @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        if syncInProgress {
+            throw CustomError.syncInProgress
+        }
+        syncInProgress = true
+        defer {
+            syncInProgress = false
+        }
+
         let channel = options.getChannel()
         // Fetch the latest bundle
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
@@ -705,6 +746,14 @@ import CommonCrypto
     private func setNextBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId)
         setNextCapacitorServerPath(path: path)
+
+        // Notify listeners
+        notifyNextBundleSetListeners(bundleId)
+    }
+
+    private func notifyNextBundleSetListeners(_ bundleId: String?) {
+        let event = NextBundleSetEvent(bundleId: bundleId)
+        plugin.notifyNextBundleSetListeners(event)
     }
 
     private func setNextCapacitorServerPath(path: String) {

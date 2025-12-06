@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.security.Key;
 
@@ -9,6 +10,9 @@ public class LiveUpdateConfig {
     private String appId = null;
 
     private boolean autoDeleteBundles = false;
+
+    @NonNull
+    private String autoUpdateStrategy = "none";
 
     @Nullable
     private String defaultChannel = null;
@@ -28,6 +32,11 @@ public class LiveUpdateConfig {
 
     public boolean getAutoDeleteBundles() {
         return autoDeleteBundles;
+    }
+
+    @NonNull
+    public String getAutoUpdateStrategy() {
+        return autoUpdateStrategy;
     }
 
     @Nullable
@@ -58,6 +67,10 @@ public class LiveUpdateConfig {
 
     public void setAutoDeleteBundles(boolean autoDeleteBundles) {
         this.autoDeleteBundles = autoDeleteBundles;
+    }
+
+    public void setAutoUpdateStrategy(@NonNull String autoUpdateStrategy) {
+        this.autoUpdateStrategy = autoUpdateStrategy;
     }
 
     public void setDefaultChannel(@Nullable String defaultChannel) {
