@@ -50,9 +50,6 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
     public static final String EVENT_NEXT_BUNDLE_SET = "nextBundleSet";
 
-    private boolean webViewListenerRegistered = false;
-    private boolean initialPageLoaded = false;
-
     @Nullable
     private LiveUpdateConfig config;
 
@@ -63,6 +60,19 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             config = getLiveUpdateConfig();
             implementation = new LiveUpdate(config, this);
+
+            // Register WebView listener to trigger auto-update when page is loaded
+            getBridge()
+                .addWebViewListener(
+                    new WebViewListener() {
+                        @Override
+                        public void onPageLoaded(WebView webView) {
+                            if (implementation != null) {
+                                implementation.handleOnPageLoaded();
+                            }
+                        }
+                    }
+                );
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
@@ -71,29 +81,7 @@ public class LiveUpdatePlugin extends Plugin {
     @Override
     protected void handleOnResume() {
         super.handleOnResume();
-
-        // Register WebView listener once on first resume
-        if (!webViewListenerRegistered && "background".equals(config.getAutoUpdateStrategy())) {
-            webViewListenerRegistered = true;
-            getBridge()
-                .addWebViewListener(
-                    new WebViewListener() {
-                        @Override
-                        public void onPageLoaded(WebView webView) {
-                            // Wait for initial page load to perform auto update
-                            // to make sure the WebViewLocalServer is initialized.
-                            // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
-                            if (implementation != null && !initialPageLoaded) {
-                                initialPageLoaded = true;
-                                implementation.performAutoUpdate();
-                            }
-                        }
-                    }
-                );
-        }
-
-        // Handle subsequent resumes
-        if (implementation != null && initialPageLoaded) {
+        if (implementation != null) {
             implementation.handleOnResume();
         }
     }

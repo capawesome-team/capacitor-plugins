@@ -91,6 +91,7 @@ public class LiveUpdate {
     private final Handler rollbackHandler = new Handler();
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
+    private boolean initialPageLoaded = false;
     private long lastAutoUpdateCheckTimestamp = 0;
     private boolean rollbackPerformed = false;
     private boolean syncInProgress = false;
@@ -210,44 +211,19 @@ public class LiveUpdate {
         callback.success(result);
     }
 
-    public void handleOnResume() {
+    public void handleOnPageLoaded() {
+        // Wait for initial page load to perform auto update to make sure the WebViewLocalServer is initialized.
+        // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
+        initialPageLoaded = true;
         if ("background".equals(config.getAutoUpdateStrategy())) {
             performAutoUpdate();
         }
     }
 
-    public void performAutoUpdate() {
-        // Check if enough time has passed since the last check
-        long now = System.currentTimeMillis();
-        if (lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs) {
-            Logger.debug(LiveUpdatePlugin.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
-            return;
+    public void handleOnResume() {
+        if ("background".equals(config.getAutoUpdateStrategy()) && initialPageLoaded) {
+            performAutoUpdate();
         }
-
-        // Update the timestamp
-        lastAutoUpdateCheckTimestamp = now;
-
-        // Run sync in background thread
-        new Thread(() -> {
-            try {
-                Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
-                SyncOptions options = new SyncOptions((String) null);
-                NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
-                    @Override
-                    public void success(Result result) {
-                        Logger.debug(LiveUpdatePlugin.TAG, "Auto-update completed successfully.");
-                    }
-
-                    @Override
-                    public void error(Exception exception) {
-                        Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
-                    }
-                };
-                sync(options, callback);
-            } catch (Exception exception) {
-                Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
-            }
-        }).start();
     }
 
     public void ready(@NonNull NonEmptyCallback callback) {
@@ -895,8 +871,42 @@ public class LiveUpdate {
         return loadManifest(source);
     }
 
-    public void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+    private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
         plugin.notifyDownloadBundleProgressListeners(event);
+    }
+
+    private void performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        long now = System.currentTimeMillis();
+        if (lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs) {
+            Logger.debug(LiveUpdatePlugin.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
+            return;
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now;
+
+        // Run sync in background thread
+        new Thread(() -> {
+            try {
+                Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
+                SyncOptions options = new SyncOptions((String) null);
+                NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+                    @Override
+                    public void success(Result result) {
+                        Logger.debug(LiveUpdatePlugin.TAG, "Auto-update completed successfully.");
+                    }
+
+                    @Override
+                    public void error(Exception exception) {
+                        Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+                    }
+                };
+                sync(options, callback);
+            } catch (Exception exception) {
+                Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+            }
+        }).start();
     }
 
     private void rollback() {

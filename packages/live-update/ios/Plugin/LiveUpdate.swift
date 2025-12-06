@@ -131,33 +131,15 @@ import CommonCrypto
         completion(result, nil)
     }
 
-    @objc public func handleAppWillEnterForeground() {
+    @objc public func handleLoad() {
         if config.autoUpdateStrategy == "background" {
             performAutoUpdate()
         }
     }
 
-    @objc public func performAutoUpdate() {
-        // Check if enough time has passed since the last check
-        let now = Int64(Date().timeIntervalSince1970 * 1000)
-        if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
-            return
-        }
-
-        // Update the timestamp
-        lastAutoUpdateCheckTimestamp = now
-
-        // Run sync in background task
-        Task {
-            do {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
-                let options = SyncOptions(channel: nil)
-                _ = try await sync(options)
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
-            } catch {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
-            }
+    @objc public func handleAppWillEnterForeground() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
         }
     }
 
@@ -684,6 +666,30 @@ import CommonCrypto
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
         plugin.notifyDownloadBundleProgressListeners(event)
+    }
+
+    private func performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
+            return
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now
+
+        // Run sync in background task
+        Task {
+            do {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
+                let options = SyncOptions(channel: nil)
+                _ = try await sync(options)
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
+            } catch {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
+            }
+        }
     }
 
     private func rollback() {
