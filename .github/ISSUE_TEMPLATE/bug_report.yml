@@ -18,9 +18,8 @@ body:
         - label: App Review
         - label: App Shortcuts
         - label: App Update
-        - label: Audio Player
-        - label: Audio Recorder
         - label: Asset Manager
+        - label: Audio Player
         - label: Audio Recorder
         - label: Background Task
         - label: Badge
