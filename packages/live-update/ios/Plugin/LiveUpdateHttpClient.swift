@@ -8,12 +8,12 @@ public class LiveUpdateHttpClient: NSObject {
 
     public static func getChecksumFromResponse(response: HTTPURLResponse) -> String? {
         guard let headers = response.allHeaderFields as? [String: String] else { return nil }
-        return headers.first(where: { $0.key.lowercased() == "x-checksum" })?.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return headers.first(where: { $0.key.lowercased() == "x-checksum" })?.value
     }
 
     public static func getSignatureFromResponse(response: HTTPURLResponse) -> String? {
         guard let headers = response.allHeaderFields as? [String: String] else { return nil }
-        return headers.first(where: { $0.key.lowercased() == "x-signature" })?.value.trimmingCharacters(in: .whitespacesAndNewlines)
+        return headers.first(where: { $0.key.lowercased() == "x-signature" })?.value
     }
 
     init(config: LiveUpdateConfig) {
