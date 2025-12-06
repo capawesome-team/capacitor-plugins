@@ -766,10 +766,15 @@ public class LiveUpdate {
      */
     @NonNull
     private String getNextCapacitorServerPath() {
-        return plugin
+        String path = plugin
             .getContext()
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
+        // Empty path means default path
+        if (path.isEmpty()) {
+            path = defaultWebAssetDir;
+        }
+        return path;
     }
 
     /**
