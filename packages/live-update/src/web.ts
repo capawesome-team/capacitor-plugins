@@ -8,6 +8,7 @@ import type {
   GetBundleResult,
   GetBundlesResult,
   GetChannelResult,
+  GetConfigResult,
   GetCurrentBundleResult,
   GetCustomIdResult,
   GetDeviceIdResult,
@@ -20,6 +21,7 @@ import type {
   ReadyResult,
   SetBundleOptions,
   SetChannelOptions,
+  SetConfigOptions,
   SetCustomIdOptions,
   SetNextBundleOptions,
   SyncResult,
@@ -59,6 +61,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async getChannel(): Promise<GetChannelResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async getConfig(): Promise<GetConfigResult> {
     this.throwUnimplementedError();
   }
 
@@ -102,11 +108,19 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
     this.throwUnimplementedError();
   }
 
+  public async resetConfig(): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
   public async setBundle(_options: SetBundleOptions): Promise<void> {
     this.throwUnimplementedError();
   }
 
   public async setChannel(_options: SetChannelOptions): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  public async setConfig(_options: SetConfigOptions): Promise<void> {
     this.throwUnimplementedError();
   }
 

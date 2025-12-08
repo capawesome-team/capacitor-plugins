@@ -172,6 +172,17 @@ export interface LiveUpdatePlugin {
    */
   getChannel(): Promise<GetChannelResult>;
   /**
+   * Get the runtime configuration.
+   *
+   * Returns the current plugin configuration including any runtime
+   * overrides set via `setConfig()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getConfig(): Promise<GetConfigResult>;
+  /**
    * Get all identifiers of bundles that have been downloaded.
    *
    * Only available on Android and iOS.
@@ -274,6 +285,17 @@ export interface LiveUpdatePlugin {
    */
   reset(): Promise<void>;
   /**
+   * Reset the runtime configuration to the values from the Capacitor config file.
+   *
+   * This clears any runtime configuration set via `setConfig()`.
+   * The changes take effect immediately.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  resetConfig(): Promise<void>;
+  /**
    * Set the channel to use for the update.
    *
    * Only available on Android and iOS.
@@ -281,6 +303,21 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   setChannel(options: SetChannelOptions): Promise<void>;
+  /**
+   * Set the runtime configuration.
+   *
+   * This allows updating plugin configuration options at runtime.
+   * The changes are persisted across app restarts and take effect immediately.
+   *
+   * **Important:** Runtime configuration is automatically reset to default values
+   * whenever the native app is updated to a new version. This ensures that
+   * configuration from previous versions doesn't persist after an app update.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  setConfig(options: SetConfigOptions): Promise<void>;
   /**
    * Set the custom identifier of the device.
    *
@@ -561,6 +598,28 @@ export interface GetChannelResult {
 }
 
 /**
+ * @since 7.4.0
+ */
+export interface GetConfigResult {
+  /**
+   * The app ID used to identify the app.
+   *
+   * If `null`, no app ID is configured.
+   *
+   * @since 7.4.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId: string | null;
+  /**
+   * The auto-update strategy for live updates.
+   *
+   * @since 7.4.0
+   * @example 'background'
+   */
+  autoUpdateStrategy: 'none' | 'background';
+}
+
+/**
  * @since 6.7.0
  */
 export interface GetCurrentBundleResult {
@@ -717,6 +776,21 @@ export interface SetChannelOptions {
    * @since 5.0.0
    */
   channel: string | null;
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface SetConfigOptions {
+  /**
+   * The app ID used to identify the app.
+   *
+   * Set `null` to reset to the value from the Capacitor config file.
+   *
+   * @since 7.4.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId?: string | null;
 }
 
 /**

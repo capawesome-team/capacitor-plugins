@@ -35,6 +35,9 @@ import CommonCrypto
         self.preferences = LiveUpdatePreferences()
         super.init()
 
+        // Check version and reset config if version changed
+        checkAndResetConfigIfVersionChanged()
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer()
@@ -110,6 +113,13 @@ import CommonCrypto
     @objc public func getChannel(completion: @escaping (Result?, Error?) -> Void) {
         let channel = getChannel()
         let result = GetChannelResult(channel: channel)
+        completion(result, nil)
+    }
+
+    @objc public func getConfig(completion: @escaping (Result?, Error?) -> Void) {
+        let appId = getAppId()
+        let autoUpdateStrategy = config.autoUpdateStrategy
+        let result = GetConfigResult(appId: appId, autoUpdateStrategy: autoUpdateStrategy)
         completion(result, nil)
     }
 
@@ -204,11 +214,20 @@ import CommonCrypto
         self.setNextBundleById(nil)
     }
 
+    @objc public func resetConfig() {
+        preferences.setAppId(nil)
+    }
+
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {
         let channel = options.getChannel()
 
         preferences.setChannel(channel)
         completion(nil)
+    }
+
+    @objc public func setConfig(_ options: SetConfigOptions) {
+        let appId = options.getAppId()
+        preferences.setAppId(appId)
     }
 
     @objc public func setCustomId(_ options: SetCustomIdOptions, completion: @escaping (Error?) -> Void) {
@@ -540,7 +559,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
@@ -575,6 +594,13 @@ import CommonCrypto
         } catch {
             return []
         }
+    }
+
+    private func getAppId() -> String? {
+        if let appId = preferences.getAppId() {
+            return appId
+        }
+        return config.appId
     }
 
     private func getChannel() -> String? {
@@ -845,6 +871,20 @@ import CommonCrypto
         } else {
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
             KeyValueStore.standard[self.defaultServerPathKey] = path
+        }
+    }
+
+    private func checkAndResetConfigIfVersionChanged() {
+        let currentVersionCode = getVersionCode()
+        let lastVersionCode = preferences.getLastVersionCode()
+
+        if lastVersionCode == nil || lastVersionCode != currentVersionCode {
+            CAPLog.print(
+                "[", LiveUpdatePlugin.tag, "] ",
+                "App version changed (last: \(lastVersionCode ?? "nil"), current: \(currentVersionCode)), resetting config."
+            )
+            resetConfig()
+            preferences.setLastVersionCode(currentVersionCode)
         }
     }
 

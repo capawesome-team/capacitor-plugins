@@ -127,6 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(result);
     });
   document
+    .querySelector('#get-config-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.getConfig();
+      console.log(result);
+      document.querySelector('#app-id-input').value = result.appId || '';
+    });
+  document
     .querySelector('#get-current-bundle-button')
     .addEventListener('click', async () => {
       const result = await LiveUpdate.getCurrentBundle();
@@ -184,10 +191,21 @@ document.addEventListener('DOMContentLoaded', () => {
       await LiveUpdate.reset();
     });
   document
+    .querySelector('#reset-config-button')
+    .addEventListener('click', async () => {
+      await LiveUpdate.resetConfig();
+    });
+  document
     .querySelector('#set-channel-button')
     .addEventListener('click', async () => {
       const channel = document.querySelector('#channel-input').value || null;
       await LiveUpdate.setChannel({ channel });
+    });
+  document
+    .querySelector('#set-config-button')
+    .addEventListener('click', async () => {
+      const appId = document.querySelector('#app-id-input').value || null;
+      await LiveUpdate.setConfig({ appId });
     });
   document
     .querySelector('#set-custom-id-button')

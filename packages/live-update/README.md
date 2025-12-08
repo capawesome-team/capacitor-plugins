@@ -280,6 +280,7 @@ const isNewBundleAvailable = async () => {
 * [`getBlockedBundles()`](#getblockedbundles)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
+* [`getConfig()`](#getconfig)
 * [`getDownloadedBundles()`](#getdownloadedbundles)
 * [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
@@ -291,7 +292,9 @@ const isNewBundleAvailable = async () => {
 * [`ready()`](#ready)
 * [`reload()`](#reload)
 * [`reset()`](#reset)
+* [`resetConfig()`](#resetconfig)
 * [`setChannel(...)`](#setchannel)
+* [`setConfig(...)`](#setconfig)
 * [`setCustomId(...)`](#setcustomid)
 * [`setNextBundle(...)`](#setnextbundle)
 * [`sync(...)`](#sync)
@@ -434,6 +437,26 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getchannelresult">GetChannelResult</a>&gt;</code>
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### getConfig()
+
+```typescript
+getConfig() => Promise<GetConfigResult>
+```
+
+Get the runtime configuration.
+
+Returns the current plugin configuration including any runtime
+overrides set via `setConfig()`.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getconfigresult">GetConfigResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -635,6 +658,24 @@ Only available on Android and iOS.
 --------------------
 
 
+### resetConfig()
+
+```typescript
+resetConfig() => Promise<void>
+```
+
+Reset the runtime configuration to the values from the Capacitor config file.
+
+This clears any runtime configuration set via `setConfig()`.
+The changes take effect immediately.
+
+Only available on Android and iOS.
+
+**Since:** 7.4.0
+
+--------------------
+
+
 ### setChannel(...)
 
 ```typescript
@@ -650,6 +691,32 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#setchanneloptions">SetChannelOptions</a></code> |
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### setConfig(...)
+
+```typescript
+setConfig(options: SetConfigOptions) => Promise<void>
+```
+
+Set the runtime configuration.
+
+This allows updating plugin configuration options at runtime.
+The changes are persisted across app restarts and take effect immediately.
+
+**Important:** Runtime configuration is automatically reset to default values
+whenever the native app is updated to a new version. This ensures that
+configuration from previous versions doesn't persist after an app update.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#setconfigoptions">SetConfigOptions</a></code> |
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -867,6 +934,14 @@ Remove all listeners for this plugin.
 | **`channel`** | <code>string \| null</code> | The channel name. If `null`, the app is using the default channel. | 5.0.0 |
 
 
+#### GetConfigResult
+
+| Prop                     | Type                                | Description                                                              | Since |
+| ------------------------ | ----------------------------------- | ------------------------------------------------------------------------ | ----- |
+| **`appId`**              | <code>string \| null</code>         | The app ID used to identify the app. If `null`, no app ID is configured. | 7.4.0 |
+| **`autoUpdateStrategy`** | <code>'none' \| 'background'</code> | The auto-update strategy for live updates.                               | 7.4.0 |
+
+
 #### GetDownloadedBundlesResult
 
 | Prop            | Type                  | Description                                               | Since |
@@ -937,6 +1012,13 @@ Remove all listeners for this plugin.
 | Prop          | Type                        | Description                                         | Since |
 | ------------- | --------------------------- | --------------------------------------------------- | ----- |
 | **`channel`** | <code>string \| null</code> | The channel name. Set `null` to remove the channel. | 5.0.0 |
+
+
+#### SetConfigOptions
+
+| Prop        | Type                        | Description                                                                                           | Since |
+| ----------- | --------------------------- | ----------------------------------------------------------------------------------------------------- | ----- |
+| **`appId`** | <code>string \| null</code> | The app ID used to identify the app. Set `null` to reset to the value from the Capacitor config file. | 7.4.0 |
 
 
 #### SetCustomIdOptions

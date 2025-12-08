@@ -15,15 +15,22 @@ public class LiveUpdatePreferences {
     @NonNull
     private final SharedPreferences.Editor settingsEditor;
 
+    private final String appIdKey = "appId"; // DO NOT CHANGE
     private final String blockedBundleIdsKey = "blockedBundleIds"; // DO NOT CHANGE
     private final String channelKey = "channel"; // DO NOT CHANGE
     private final String deviceIdKey = "deviceId"; // DO NOT CHANGE
     private final String customIdKey = "customId"; // DO NOT CHANGE
+    private final String lastVersionCodeKey = "lastVersionCode"; // DO NOT CHANGE
     private final String previousBundleIdKey = "previousBundleId"; // DO NOT CHANGE
 
     public LiveUpdatePreferences(@NonNull Context context) {
         this.context = context;
         this.settingsEditor = context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).edit();
+    }
+
+    @Nullable
+    public String getAppId() {
+        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(appIdKey, null);
     }
 
     @Nullable
@@ -49,6 +56,10 @@ public class LiveUpdatePreferences {
         }
     }
 
+    public int getLastVersionCode() {
+        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getInt(lastVersionCodeKey, -1);
+    }
+
     @Nullable
     public String getPreviousBundleId() {
         return context
@@ -61,6 +72,15 @@ public class LiveUpdatePreferences {
         return context
             .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
             .getString(blockedBundleIdsKey, null);
+    }
+
+    public void setAppId(@Nullable String appId) {
+        if (appId == null) {
+            settingsEditor.remove(appIdKey);
+        } else {
+            settingsEditor.putString(appIdKey, appId);
+        }
+        settingsEditor.apply();
     }
 
     public void setBlockedBundleIds(@Nullable String blockedBundleIds) {
@@ -96,6 +116,11 @@ public class LiveUpdatePreferences {
         } else {
             settingsEditor.putString(deviceIdKey + "_" + appId, deviceId);
         }
+        settingsEditor.apply();
+    }
+
+    public void setLastVersionCode(int versionCode) {
+        settingsEditor.putInt(lastVersionCodeKey, versionCode);
         settingsEditor.apply();
     }
 
