@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
       void LiveUpdate.addListener('downloadBundleProgress', event => {
         console.log('downloadBundleProgress', event);
       });
+      void LiveUpdate.addListener('reloaded', () => {
+        console.log('reloaded');
+      });
     });
   };
   void addListeners();
