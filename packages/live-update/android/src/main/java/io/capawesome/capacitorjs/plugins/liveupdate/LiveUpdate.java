@@ -108,6 +108,9 @@ public class LiveUpdate {
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
         this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
+        // Check version and reset config if version changed
+        checkAndResetConfigIfVersionChanged();
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer();
@@ -1116,6 +1119,20 @@ public class LiveUpdate {
     /**
      * @param bundleId The bundle ID to save as the previous bundle. If `null`, the value will be removed.
      */
+    private void checkAndResetConfigIfVersionChanged() throws PackageManager.NameNotFoundException {
+        String currentVersionCode = getVersionCode();
+        String lastVersionCode = preferences.getLastVersionCode();
+
+        if (lastVersionCode == null || !lastVersionCode.equals(currentVersionCode)) {
+            Logger.debug(
+                LiveUpdatePlugin.TAG,
+                "App version changed (last: " + lastVersionCode + ", current: " + currentVersionCode + "), resetting config."
+            );
+            resetConfig();
+            preferences.setLastVersionCode(currentVersionCode);
+        }
+    }
+
     private void setPreviousBundleId(@Nullable String bundleId) {
         preferences.setPreviousBundleId(bundleId);
     }

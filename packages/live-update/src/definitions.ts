@@ -309,6 +309,10 @@ export interface LiveUpdatePlugin {
    * This allows updating plugin configuration options at runtime.
    * The changes are persisted across app restarts and take effect immediately.
    *
+   * **Important:** Runtime configuration is automatically reset to default values
+   * whenever the native app is updated to a new version. This ensures that
+   * configuration from previous versions doesn't persist after an app update.
+   *
    * Only available on Android and iOS.
    *
    * @since 7.4.0

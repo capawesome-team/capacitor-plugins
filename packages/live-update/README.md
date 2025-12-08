@@ -449,8 +449,8 @@ getConfig() => Promise<GetConfigResult>
 
 Get the runtime configuration.
 
-Returns the current configuration including any runtime overrides
-set via `setConfig()`.
+Returns the current plugin configuration including any runtime
+overrides set via `setConfig()`.
 
 Only available on Android and iOS.
 
@@ -703,8 +703,12 @@ setConfig(options: SetConfigOptions) => Promise<void>
 
 Set the runtime configuration.
 
-This allows updating configuration options at runtime.
+This allows updating plugin configuration options at runtime.
 The changes are persisted across app restarts and take effect immediately.
+
+**Important:** Runtime configuration is automatically reset to default values
+whenever the native app is updated to a new version. This ensures that
+configuration from previous versions doesn't persist after an app update.
 
 Only available on Android and iOS.
 

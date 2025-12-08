@@ -5,6 +5,7 @@ public class LiveUpdatePreferences: NSObject {
     private let blockedBundleIdsKey = "blockedBundleIds" // DO NOT CHANGE
     private let channelKey = "channel" // DO NOT CHANGE
     private let customIdKey = "customId" // DO NOT CHANGE
+    private let lastVersionCodeKey = "lastVersionCode" // DO NOT CHANGE
     private let previousBundleIdKey = "previousBundleIdKey" // DO NOT CHANGE
 
     public func getAppId() -> String? {
@@ -21,6 +22,10 @@ public class LiveUpdatePreferences: NSObject {
 
     public func getPreviousBundleId() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: previousBundleIdKey))
+    }
+
+    public func getLastVersionCode() -> String? {
+        return UserDefaults.standard.string(forKey: applyPrefix(to: lastVersionCodeKey))
     }
 
     public func getBlockedBundleIds() -> String? {
@@ -56,6 +61,15 @@ public class LiveUpdatePreferences: NSObject {
 
     public func setCustomId(_ value: String) {
         UserDefaults.standard.set(value, forKey: applyPrefix(to: customIdKey))
+        UserDefaults.standard.synchronize()
+    }
+
+    public func setLastVersionCode(_ value: String?) {
+        if let value = value {
+            UserDefaults.standard.set(value, forKey: applyPrefix(to: lastVersionCodeKey))
+        } else {
+            UserDefaults.standard.removeObject(forKey: applyPrefix(to: lastVersionCodeKey))
+        }
         UserDefaults.standard.synchronize()
     }
 

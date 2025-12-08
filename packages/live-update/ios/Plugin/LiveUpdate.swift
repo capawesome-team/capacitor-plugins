@@ -35,6 +35,9 @@ import CommonCrypto
         self.preferences = LiveUpdatePreferences()
         super.init()
 
+        // Check version and reset config if version changed
+        checkAndResetConfigIfVersionChanged()
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer()
@@ -871,6 +874,20 @@ import CommonCrypto
         } else {
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
             KeyValueStore.standard[self.defaultServerPathKey] = path
+        }
+    }
+
+    private func checkAndResetConfigIfVersionChanged() {
+        let currentVersionCode = getVersionCode()
+        let lastVersionCode = preferences.getLastVersionCode()
+
+        if lastVersionCode == nil || lastVersionCode != currentVersionCode {
+            CAPLog.print(
+                "[", LiveUpdatePlugin.tag, "] ",
+                "App version changed (last: \(lastVersionCode ?? "nil"), current: \(currentVersionCode)), resetting config."
+            )
+            resetConfig()
+            preferences.setLastVersionCode(currentVersionCode)
         }
     }
 
