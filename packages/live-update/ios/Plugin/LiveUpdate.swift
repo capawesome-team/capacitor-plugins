@@ -40,6 +40,10 @@ import CommonCrypto
         startRollbackTimer()
     }
 
+    @objc public func clearBlockedBundles() {
+        preferences.setBlockedBundleIds(nil)
+    }
+
     @objc public func deleteBundle(_ options: DeleteBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
@@ -80,6 +84,15 @@ import CommonCrypto
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
         return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
+    }
+
+    @objc public func getBlockedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleIds: [String] = []
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            bundleIds = blockedIds.split(separator: ",").map(String.init)
+        }
+        let result = GetBlockedBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
     }
 
     @objc public func getBundles(completion: @escaping (Result?, Error?) -> Void) {

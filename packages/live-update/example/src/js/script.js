@@ -52,6 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   document
+    .querySelector('#clear-blocked-bundles-button')
+    .addEventListener('click', async () => {
+      await LiveUpdate.clearBlockedBundles();
+    });
+  document
     .querySelector('#delete-bundle-button')
     .addEventListener('click', async () => {
       const bundleId = document.querySelector('#bundle-id-input').value;
@@ -96,6 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#signature-input').value = result.signature;
       document.querySelector('#download-url-input').value =
         result.downloadUrl || '';
+    });
+  document
+    .querySelector('#get-blocked-bundles-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.getBlockedBundles();
+      console.log(result);
     });
   document
     .querySelector('#get-bundles-button')

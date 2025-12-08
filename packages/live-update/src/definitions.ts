@@ -107,6 +107,17 @@ declare module '@capacitor/cli' {
 
 export interface LiveUpdatePlugin {
   /**
+   * Clear all blocked bundles from the blocked list.
+   *
+   * This removes all bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  clearBlockedBundles(): Promise<void>;
+  /**
    * Delete a bundle from the app.
    *
    * Only available on Android and iOS.
@@ -132,6 +143,17 @@ export interface LiveUpdatePlugin {
   fetchLatestBundle(
     options?: FetchLatestBundleOptions,
   ): Promise<FetchLatestBundleResult>;
+  /**
+   * Get all blocked bundle identifiers.
+   *
+   * Returns the list of bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getBlockedBundles(): Promise<GetBlockedBundlesResult>;
   /**
    * Get all identifiers of bundles that have been downloaded.
    *
@@ -485,6 +507,18 @@ export interface GetBundleResult {
    * @example '1.0.0'
    */
   bundleId: string | null;
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface GetBlockedBundlesResult {
+  /**
+   * An array of unique identifiers of all blocked bundles.
+   *
+   * @since 7.4.0
+   */
+  bundleIds: string[];
 }
 
 /**

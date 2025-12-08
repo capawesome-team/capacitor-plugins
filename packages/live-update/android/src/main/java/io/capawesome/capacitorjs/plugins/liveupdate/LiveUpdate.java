@@ -26,6 +26,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdO
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
@@ -110,6 +111,10 @@ public class LiveUpdate {
         startRollbackTimer();
     }
 
+    public void clearBlockedBundles() {
+        preferences.setBlockedBundleIds(null);
+    }
+
     public void deleteBundle(@NonNull DeleteBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
@@ -162,6 +167,18 @@ public class LiveUpdate {
             downloadUrl,
             signature
         );
+        callback.success(result);
+    }
+
+    public void getBlockedBundles(@NonNull NonEmptyCallback<GetBlockedBundlesResult> callback) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        String[] bundleIds;
+        if (blockedIds == null || blockedIds.isEmpty()) {
+            bundleIds = new String[0];
+        } else {
+            bundleIds = blockedIds.split(",");
+        }
+        GetBlockedBundlesResult result = new GetBlockedBundlesResult(bundleIds);
         callback.success(result);
     }
 
