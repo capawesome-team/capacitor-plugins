@@ -936,9 +936,10 @@ Remove all listeners for this plugin.
 
 #### GetConfigResult
 
-| Prop        | Type                        | Description                                                              | Since |
-| ----------- | --------------------------- | ------------------------------------------------------------------------ | ----- |
-| **`appId`** | <code>string \| null</code> | The app ID used to identify the app. If `null`, no app ID is configured. | 7.4.0 |
+| Prop                     | Type                                | Description                                                              | Since |
+| ------------------------ | ----------------------------------- | ------------------------------------------------------------------------ | ----- |
+| **`appId`**              | <code>string \| null</code>         | The app ID used to identify the app. If `null`, no app ID is configured. | 7.4.0 |
+| **`autoUpdateStrategy`** | <code>'none' \| 'background'</code> | The auto-update strategy for live updates.                               | 7.4.0 |
 
 
 #### GetDownloadedBundlesResult

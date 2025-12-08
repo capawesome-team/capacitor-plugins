@@ -118,7 +118,8 @@ import CommonCrypto
 
     @objc public func getConfig(completion: @escaping (Result?, Error?) -> Void) {
         let appId = getAppId()
-        let result = GetConfigResult(appId: appId)
+        let autoUpdateStrategy = config.autoUpdateStrategy
+        let result = GetConfigResult(appId: appId, autoUpdateStrategy: autoUpdateStrategy)
         completion(result, nil)
     }
 

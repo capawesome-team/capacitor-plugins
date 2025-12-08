@@ -610,6 +610,13 @@ export interface GetConfigResult {
    * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
    */
   appId: string | null;
+  /**
+   * The auto-update strategy for live updates.
+   *
+   * @since 7.4.0
+   * @example 'background'
+   */
+  autoUpdateStrategy: 'none' | 'background';
 }
 
 /**

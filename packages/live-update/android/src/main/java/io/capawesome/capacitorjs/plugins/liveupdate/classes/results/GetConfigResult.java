@@ -11,8 +11,12 @@ public class GetConfigResult implements Result {
     @Nullable
     private final String appId;
 
-    public GetConfigResult(@Nullable String appId) {
+    @NonNull
+    private final String autoUpdateStrategy;
+
+    public GetConfigResult(@Nullable String appId, @NonNull String autoUpdateStrategy) {
         this.appId = appId;
+        this.autoUpdateStrategy = autoUpdateStrategy;
     }
 
     @Nullable
@@ -20,11 +24,17 @@ public class GetConfigResult implements Result {
         return appId;
     }
 
+    @NonNull
+    public String getAutoUpdateStrategy() {
+        return autoUpdateStrategy;
+    }
+
     @Override
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
         result.put("appId", appId == null ? JSONObject.NULL : appId);
+        result.put("autoUpdateStrategy", autoUpdateStrategy);
         return result;
     }
 }

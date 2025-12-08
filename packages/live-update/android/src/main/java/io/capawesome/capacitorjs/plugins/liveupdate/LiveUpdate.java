@@ -207,7 +207,8 @@ public class LiveUpdate {
 
     public void getConfig(@NonNull NonEmptyCallback<GetConfigResult> callback) {
         String appId = getAppId();
-        GetConfigResult result = new GetConfigResult(appId);
+        String autoUpdateStrategy = config.getAutoUpdateStrategy();
+        GetConfigResult result = new GetConfigResult(appId, autoUpdateStrategy);
         callback.success(result);
     }
 
