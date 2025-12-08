@@ -304,7 +304,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
-        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: true)
+        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: false)
     }
 
     @objc private func handleAppWillEnterForeground() {
