@@ -22,6 +22,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundle
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
@@ -29,6 +30,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestB
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
@@ -200,6 +202,12 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    public void getConfig(@NonNull NonEmptyCallback<GetConfigResult> callback) {
+        String appId = getAppId();
+        GetConfigResult result = new GetConfigResult(appId);
+        callback.success(result);
+    }
+
     public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
         String bundleId = getCurrentBundleId();
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
@@ -293,11 +301,20 @@ public class LiveUpdate {
         setNextBundleById(null);
     }
 
+    public void resetConfig() {
+        preferences.setAppId(null);
+    }
+
     public void setChannel(@NonNull SetChannelOptions options, @NonNull EmptyCallback callback) {
         String channel = options.getChannel();
 
         preferences.setChannel(channel);
         callback.success();
+    }
+
+    public void setConfig(@NonNull SetConfigOptions options) {
+        String appId = options.getAppId();
+        preferences.setAppId(appId);
     }
 
     public void setCustomId(@NonNull SetCustomIdOptions options, @NonNull EmptyCallback callback) {
@@ -715,7 +732,7 @@ public class LiveUpdate {
             .host(config.getServerDomain())
             .addPathSegment("v1")
             .addPathSegment("apps")
-            .addPathSegment(config.getAppId())
+            .addPathSegment(getAppId())
             .addPathSegment("bundles")
             .addPathSegment("latest")
             .addQueryParameter("appVersionCode", getVersionCode())
@@ -782,6 +799,18 @@ public class LiveUpdate {
     }
 
     @Nullable
+    private String getAppId() {
+        String appId = null;
+        if (config.getAppId() != null) {
+            appId = config.getAppId();
+        }
+        if (preferences.getAppId() != null) {
+            appId = preferences.getAppId();
+        }
+        return appId;
+    }
+
+    @Nullable
     private String getChannel() {
         String channel = null;
         if (config.getDefaultChannel() != null) {
@@ -814,10 +843,10 @@ public class LiveUpdate {
 
     @NonNull
     private String getDeviceId() {
-        String deviceId = preferences.getDeviceIdForApp(config.getAppId());
+        String deviceId = preferences.getDeviceIdForApp(getAppId());
         if (deviceId == null) {
             deviceId = UUID.randomUUID().toString().toLowerCase();
-            preferences.setDeviceIdForApp(config.getAppId(), deviceId);
+            preferences.setDeviceIdForApp(getAppId(), deviceId);
         }
         return deviceId;
     }

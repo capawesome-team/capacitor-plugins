@@ -1,10 +1,15 @@
 import Foundation
 
 public class LiveUpdatePreferences: NSObject {
+    private let appIdKey = "appId" // DO NOT CHANGE
     private let blockedBundleIdsKey = "blockedBundleIds" // DO NOT CHANGE
     private let channelKey = "channel" // DO NOT CHANGE
     private let customIdKey = "customId" // DO NOT CHANGE
     private let previousBundleIdKey = "previousBundleIdKey" // DO NOT CHANGE
+
+    public func getAppId() -> String? {
+        return UserDefaults.standard.string(forKey: applyPrefix(to: appIdKey))
+    }
 
     public func getChannel() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: channelKey))
@@ -20,6 +25,15 @@ public class LiveUpdatePreferences: NSObject {
 
     public func getBlockedBundleIds() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: blockedBundleIdsKey))
+    }
+
+    public func setAppId(_ value: String?) {
+        if let value = value {
+            UserDefaults.standard.set(value, forKey: applyPrefix(to: appIdKey))
+        } else {
+            UserDefaults.standard.removeObject(forKey: applyPrefix(to: appIdKey))
+        }
+        UserDefaults.standard.synchronize()
     }
 
     public func setBlockedBundleIds(_ value: String?) {

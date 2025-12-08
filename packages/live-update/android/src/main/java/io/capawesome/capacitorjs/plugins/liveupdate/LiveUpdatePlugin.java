@@ -16,10 +16,12 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundle
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
@@ -290,6 +292,28 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getConfig(PluginCall call) {
+        try {
+            NonEmptyCallback<GetConfigResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetConfigResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getConfig(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getCurrentBundle(PluginCall call) {
         try {
             NonEmptyCallback<GetCurrentBundleResult> callback = new NonEmptyCallback<>() {
@@ -481,6 +505,16 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void resetConfig(PluginCall call) {
+        try {
+            implementation.resetConfig();
+            resolveCall(call);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void setChannel(PluginCall call) {
         try {
             String channel = call.getString("channel");
@@ -499,6 +533,17 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.setChannel(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setConfig(PluginCall call) {
+        try {
+            SetConfigOptions options = new SetConfigOptions(call);
+            implementation.setConfig(options);
+            resolveCall(call);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

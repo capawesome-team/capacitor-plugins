@@ -21,6 +21,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDownloadedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCurrentBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCustomId", returnType: CAPPluginReturnPromise),
@@ -32,7 +33,9 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "ready", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reload", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "resetConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setCustomId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise)
@@ -175,6 +178,18 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         })
     }
 
+    @objc func getConfig(_ call: CAPPluginCall) {
+        implementation?.getConfig(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
+    }
+
     @objc func getCurrentBundle(_ call: CAPPluginCall) {
         implementation?.getCurrentBundle(completion: { result, error in
             if let error = error {
@@ -281,6 +296,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         resolveCall(call)
     }
 
+    @objc func resetConfig(_ call: CAPPluginCall) {
+        implementation?.resetConfig()
+        resolveCall(call)
+    }
+
     @objc func setChannel(_ call: CAPPluginCall) {
         let channel = call.getString("channel")
 
@@ -293,6 +313,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
             }
             self.resolveCall(call)
         })
+    }
+
+    @objc func setConfig(_ call: CAPPluginCall) {
+        let options = SetConfigOptions(call)
+        implementation?.setConfig(options)
+        resolveCall(call)
     }
 
     @objc func setCustomId(_ call: CAPPluginCall) {

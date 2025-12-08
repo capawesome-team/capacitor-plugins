@@ -113,6 +113,12 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func getConfig(completion: @escaping (Result?, Error?) -> Void) {
+        let appId = getAppId()
+        let result = GetConfigResult(appId: appId)
+        completion(result, nil)
+    }
+
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
         let bundleId = getCurrentBundleId()
         let result = GetCurrentBundleResult(bundleId: bundleId)
@@ -204,11 +210,20 @@ import CommonCrypto
         self.setNextBundleById(nil)
     }
 
+    @objc public func resetConfig() {
+        preferences.setAppId(nil)
+    }
+
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {
         let channel = options.getChannel()
 
         preferences.setChannel(channel)
         completion(nil)
+    }
+
+    @objc public func setConfig(_ options: SetConfigOptions) {
+        let appId = options.getAppId()
+        preferences.setAppId(appId)
     }
 
     @objc public func setCustomId(_ options: SetCustomIdOptions, completion: @escaping (Error?) -> Void) {
@@ -540,7 +555,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
@@ -575,6 +590,17 @@ import CommonCrypto
         } catch {
             return []
         }
+    }
+
+    private func getAppId() -> String? {
+        var appId: String?
+        if let _ = config.appId {
+            appId = config.appId
+        }
+        if let _ = preferences.getAppId() {
+            appId = preferences.getAppId()
+        }
+        return appId
     }
 
     private func getChannel() -> String? {
