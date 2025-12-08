@@ -273,9 +273,11 @@ const isNewBundleAvailable = async () => {
 
 <docgen-index>
 
+* [`clearBlockedBundles()`](#clearblockedbundles)
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
 * [`fetchLatestBundle(...)`](#fetchlatestbundle)
+* [`getBlockedBundles()`](#getblockedbundles)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
 * [`getDownloadedBundles()`](#getdownloadedbundles)
@@ -304,6 +306,24 @@ const isNewBundleAvailable = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### clearBlockedBundles()
+
+```typescript
+clearBlockedBundles() => Promise<void>
+```
+
+Clear all blocked bundles from the blocked list.
+
+This removes all bundle identifiers that were automatically blocked
+due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+
+Only available on Android and iOS.
+
+**Since:** 7.4.0
+
+--------------------
+
 
 ### deleteBundle(...)
 
@@ -360,6 +380,26 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#fetchlatestbundleresult">FetchLatestBundleResult</a>&gt;</code>
 
 **Since:** 6.6.0
+
+--------------------
+
+
+### getBlockedBundles()
+
+```typescript
+getBlockedBundles() => Promise<GetBlockedBundlesResult>
+```
+
+Get all blocked bundle identifiers.
+
+Returns the list of bundle identifiers that were automatically blocked
+due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getblockedbundlesresult">GetBlockedBundlesResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -804,6 +844,13 @@ Remove all listeners for this plugin.
 | Prop          | Type                | Description                                                      | Since |
 | ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
 | **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
+
+
+#### GetBlockedBundlesResult
+
+| Prop            | Type                  | Description                                            | Since |
+| --------------- | --------------------- | ------------------------------------------------------ | ----- |
+| **`bundleIds`** | <code>string[]</code> | An array of unique identifiers of all blocked bundles. | 7.4.0 |
 
 
 #### GetBundlesResult

@@ -19,6 +19,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOp
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
@@ -97,6 +98,16 @@ public class LiveUpdatePlugin extends Plugin {
             }
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
+        }
+    }
+
+    @PluginMethod
+    public void clearBlockedBundles(PluginCall call) {
+        try {
+            implementation.clearBlockedBundles();
+            resolveCall(call);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
         }
     }
 
@@ -187,6 +198,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.fetchLatestBundle(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getBlockedBundles(PluginCall call) {
+        try {
+            NonEmptyCallback<GetBlockedBundlesResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetBlockedBundlesResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getBlockedBundles(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

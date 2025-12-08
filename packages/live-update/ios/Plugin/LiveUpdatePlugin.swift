@@ -14,9 +14,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "LiveUpdatePlugin"
     public let jsName = "LiveUpdate"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "clearBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fetchLatestBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDownloadedBundles", returnType: CAPPluginReturnPromise),
@@ -57,6 +59,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
+    }
+
+    @objc func clearBlockedBundles(_ call: CAPPluginCall) {
+        implementation?.clearBlockedBundles()
+        resolveCall(call)
     }
 
     @objc func deleteBundle(_ call: CAPPluginCall) {
@@ -118,6 +125,18 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 rejectCall(call, error)
             }
         }
+    }
+
+    @objc func getBlockedBundles(_ call: CAPPluginCall) {
+        implementation?.getBlockedBundles(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
     }
 
     @objc func getBundles(_ call: CAPPluginCall) {

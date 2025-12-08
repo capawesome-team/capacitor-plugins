@@ -4,6 +4,7 @@ import type {
   DeleteBundleOptions,
   DownloadBundleOptions,
   FetchLatestBundleResult,
+  GetBlockedBundlesResult,
   GetBundleResult,
   GetBundlesResult,
   GetChannelResult,
@@ -25,6 +26,10 @@ import type {
 } from './definitions';
 
 export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
+  public async clearBlockedBundles(): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
   public async deleteBundle(_options: DeleteBundleOptions): Promise<void> {
     this.throwUnimplementedError();
   }
@@ -34,6 +39,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async fetchLatestBundle(): Promise<FetchLatestBundleResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async getBlockedBundles(): Promise<GetBlockedBundlesResult> {
     this.throwUnimplementedError();
   }
 
