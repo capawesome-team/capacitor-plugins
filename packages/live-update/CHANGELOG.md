@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.3.0
+
+### Minor Changes
+
+- [`a90dc9e4c3232cb307a860eb8310aacfe5447e44`](https://github.com/capawesome-team/capacitor-plugins/commit/a90dc9e4c3232cb307a860eb8310aacfe5447e44) ([#680](https://github.com/capawesome-team/capacitor-plugins/pull/680)): feat: add `autoUpdateStrategy` configuration option
+
+- [`7dfd6d7305ceae7a9617dd76a77a4546e3659780`](https://github.com/capawesome-team/capacitor-plugins/commit/7dfd6d7305ceae7a9617dd76a77a4546e3659780) ([#685](https://github.com/capawesome-team/capacitor-plugins/pull/685)): feat: add `autoBlockRolledBackBundles` configuration option
+
+### Patch Changes
+
+- [`0c234a38800fd9875d65bc2cd64765296bcf2eee`](https://github.com/capawesome-team/capacitor-plugins/commit/0c234a38800fd9875d65bc2cd64765296bcf2eee) ([#656](https://github.com/capawesome-team/capacitor-plugins/pull/656)): fix: `fetchLatestBundle` and `sync` throw error if `appId` is unset
+
+- [`2d7a2d2c6a796b6b8a169eeb338ceb2c5ee6fcdf`](https://github.com/capawesome-team/capacitor-plugins/commit/2d7a2d2c6a796b6b8a169eeb338ceb2c5ee6fcdf) ([#683](https://github.com/capawesome-team/capacitor-plugins/pull/683)): fix(ios): improve header parsing for checksum and signature responses
+
+- [`d594b9e8b3d740691051e0555e185811215e54ca`](https://github.com/capawesome-team/capacitor-plugins/commit/d594b9e8b3d740691051e0555e185811215e54ca) ([#682](https://github.com/capawesome-team/capacitor-plugins/pull/682)): fix(android): prevent empty next server path
+
 ## 7.2.2
 
 ### Patch Changes
