@@ -237,7 +237,7 @@ public class LiveUpdate {
     }
 
     public void getVersionCode(@NonNull NonEmptyCallback callback) throws PackageManager.NameNotFoundException {
-        String versionCode = getVersionCode();
+        String versionCode = getVersionCodeAsString();
         GetVersionCodeResult result = new GetVersionCodeResult(versionCode);
         callback.success(result);
     }
@@ -739,7 +739,7 @@ public class LiveUpdate {
             .addPathSegment(getAppId())
             .addPathSegment("bundles")
             .addPathSegment("latest")
-            .addQueryParameter("appVersionCode", getVersionCode())
+            .addQueryParameter("appVersionCode", getVersionCodeAsString())
             .addQueryParameter("appVersionName", getVersionName())
             .addQueryParameter("bundleId", getCurrentBundleId())
             .addQueryParameter("channelName", channel)
@@ -891,8 +891,12 @@ public class LiveUpdate {
         return preferences.getPreviousBundleId();
     }
 
-    private String getVersionCode() throws PackageManager.NameNotFoundException {
-        return String.valueOf(getPackageInfo().versionCode);
+    private int getVersionCodeAsInt() throws PackageManager.NameNotFoundException {
+        return getPackageInfo().versionCode;
+    }
+
+    private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
+        return String.valueOf(getVersionCodeAsInt());
     }
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
@@ -1121,10 +1125,10 @@ public class LiveUpdate {
      * @param bundleId The bundle ID to save as the previous bundle. If `null`, the value will be removed.
      */
     private void checkAndResetConfigIfVersionChanged() throws PackageManager.NameNotFoundException {
-        String currentVersionCode = getVersionCode();
-        String lastVersionCode = preferences.getLastVersionCode();
+        int currentVersionCode = getVersionCodeAsInt();
+        int lastVersionCode = preferences.getLastVersionCode();
 
-        if (lastVersionCode == null || !lastVersionCode.equals(currentVersionCode)) {
+        if (lastVersionCode == -1 || lastVersionCode != currentVersionCode) {
             Logger.debug(
                 LiveUpdatePlugin.TAG,
                 "App version changed (last: " + lastVersionCode + ", current: " + currentVersionCode + "), resetting config."

@@ -56,11 +56,8 @@ public class LiveUpdatePreferences {
         }
     }
 
-    @Nullable
-    public String getLastVersionCode() {
-        return context
-            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-            .getString(lastVersionCodeKey, null);
+    public int getLastVersionCode() {
+        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getInt(lastVersionCodeKey, -1);
     }
 
     @Nullable
@@ -122,12 +119,8 @@ public class LiveUpdatePreferences {
         settingsEditor.apply();
     }
 
-    public void setLastVersionCode(@Nullable String versionCode) {
-        if (versionCode == null) {
-            settingsEditor.remove(lastVersionCodeKey);
-        } else {
-            settingsEditor.putString(lastVersionCodeKey, versionCode);
-        }
+    public void setLastVersionCode(int versionCode) {
+        settingsEditor.putInt(lastVersionCodeKey, versionCode);
         settingsEditor.apply();
     }
 
