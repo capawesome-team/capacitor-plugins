@@ -31,6 +31,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelRe
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
@@ -165,8 +166,14 @@ public class LiveUpdate {
     }
 
     public void getBundles(@NonNull NonEmptyCallback callback) {
-        String[] bundleIds = getBundleIds();
+        String[] bundleIds = getDownloadedBundleIds();
         GetBundlesResult result = new GetBundlesResult(bundleIds);
+        callback.success(result);
+    }
+
+    public void getDownloadedBundles(@NonNull NonEmptyCallback<GetDownloadedBundlesResult> callback) {
+        String[] bundleIds = getDownloadedBundleIds();
+        GetDownloadedBundlesResult result = new GetDownloadedBundlesResult(bundleIds);
         callback.success(result);
     }
 
@@ -514,7 +521,7 @@ public class LiveUpdate {
     }
 
     private void deleteUnusedBundles() {
-        String[] bundleIds = getBundleIds();
+        String[] bundleIds = getDownloadedBundleIds();
         for (String bundleId : bundleIds) {
             if (!isBundleInUse(bundleId)) {
                 deleteBundleById(bundleId);
@@ -717,7 +724,7 @@ public class LiveUpdate {
         }
     }
 
-    private String[] getBundleIds() {
+    private String[] getDownloadedBundleIds() {
         File bundlesDirectory = buildBundlesDirectory();
         File[] bundles = bundlesDirectory.listFiles();
         if (bundles == null) {

@@ -278,6 +278,7 @@ const isNewBundleAvailable = async () => {
 * [`fetchLatestBundle(...)`](#fetchlatestbundle)
 * [`getBundles()`](#getbundles)
 * [`getChannel()`](#getchannel)
+* [`getDownloadedBundles()`](#getdownloadedbundles)
 * [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
 * [`getDeviceId()`](#getdeviceid)
@@ -393,6 +394,23 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getchannelresult">GetChannelResult</a>&gt;</code>
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### getDownloadedBundles()
+
+```typescript
+getDownloadedBundles() => Promise<GetDownloadedBundlesResult>
+```
+
+Get all identifiers of bundles that have been downloaded.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getdownloadedbundlesresult">GetDownloadedBundlesResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -800,6 +818,13 @@ Remove all listeners for this plugin.
 | Prop          | Type                        | Description                                                        | Since |
 | ------------- | --------------------------- | ------------------------------------------------------------------ | ----- |
 | **`channel`** | <code>string \| null</code> | The channel name. If `null`, the app is using the default channel. | 5.0.0 |
+
+
+#### GetDownloadedBundlesResult
+
+| Prop            | Type                  | Description                                               | Since |
+| --------------- | --------------------- | --------------------------------------------------------- | ----- |
+| **`bundleIds`** | <code>string[]</code> | An array of unique identifiers of all downloaded bundles. | 7.4.0 |
 
 
 #### GetCurrentBundleResult

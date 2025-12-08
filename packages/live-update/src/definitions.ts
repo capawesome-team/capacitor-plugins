@@ -138,6 +138,7 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getDownloadedBundles()` instead.
    */
   getBundles(): Promise<GetBundlesResult>;
   /**
@@ -148,6 +149,14 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getChannel(): Promise<GetChannelResult>;
+  /**
+   * Get all identifiers of bundles that have been downloaded.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getDownloadedBundles(): Promise<GetDownloadedBundlesResult>;
   /**
    * Get the bundle identifier of the current bundle.
    * The current bundle is the bundle that is currently used by the app.
@@ -486,6 +495,18 @@ export interface GetBundlesResult {
    * An array of unique identifiers of all available bundles.
    *
    * @since 5.0.0
+   */
+  bundleIds: string[];
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface GetDownloadedBundlesResult {
+  /**
+   * An array of unique identifiers of all downloaded bundles.
+   *
+   * @since 7.4.0
    */
   bundleIds: string[];
 }

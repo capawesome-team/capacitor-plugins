@@ -10,6 +10,7 @@ import type {
   GetCurrentBundleResult,
   GetCustomIdResult,
   GetDeviceIdResult,
+  GetDownloadedBundlesResult,
   GetNextBundleResult,
   GetVersionCodeResult,
   GetVersionNameResult,
@@ -41,6 +42,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async getBundles(): Promise<GetBundlesResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async getDownloadedBundles(): Promise<GetDownloadedBundlesResult> {
     this.throwUnimplementedError();
   }
 

@@ -104,6 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(result);
     });
   document
+    .querySelector('#get-downloaded-bundles-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.getDownloadedBundles();
+      console.log(result);
+    });
+  document
     .querySelector('#get-channel-button')
     .addEventListener('click', async () => {
       const result = await LiveUpdate.getChannel();
