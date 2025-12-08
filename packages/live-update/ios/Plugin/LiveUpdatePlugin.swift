@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "7.3.0"
+    public static let version = "7.4.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
@@ -36,6 +36,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private let eventDownloadBundleProgess = "downloadBundleProgress"
     private let eventNextBundleSet = "nextBundleSet"
+    private let eventReloaded = "reloaded"
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
@@ -305,6 +306,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
         notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: false)
+    }
+
+    func notifyReloadedListeners() {
+        let event = JSObject()
+        notifyListeners(eventReloaded, data: event, retainUntilConsumed: true)
     }
 
     @objc private func handleAppWillEnterForeground() {
