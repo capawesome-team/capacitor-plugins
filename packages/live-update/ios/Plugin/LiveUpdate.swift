@@ -755,6 +755,8 @@ import CommonCrypto
             return
         }
         viewController.setServerBasePath(path: path)
+        // Notify listeners
+        notifyReloadedListeners()
     }
 
     /// - Parameter bundleId: The bundle ID to set as the next bundle. If `nil`, the default bundle will be used.
@@ -769,6 +771,10 @@ import CommonCrypto
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
         plugin.notifyNextBundleSetListeners(event)
+    }
+
+    private func notifyReloadedListeners() {
+        plugin.notifyReloadedListeners()
     }
 
     private func addBlockedBundleId(_ bundleId: String) {

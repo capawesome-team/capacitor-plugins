@@ -296,6 +296,24 @@ export interface LiveUpdatePlugin {
     listenerFunc: NextBundleSetListener,
   ): Promise<PluginListenerHandle>;
   /**
+   * Listen for when the app is reloaded.
+   *
+   * This event is triggered after the `reload()` method is called
+   * and the app has been reloaded.
+   *
+   * **Note:** To verify whether an update was successfully applied after a reload,
+   * use the `ready()` method instead. The `ready()` method provides detailed information
+   * about the current bundle, previous bundle, and whether a rollback occurred.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  addListener(
+    eventName: 'reloaded',
+    listenerFunc: ReloadedListener,
+  ): Promise<PluginListenerHandle>;
+  /**
    * Remove all listeners for this plugin.
    *
    * @since 7.2.0
@@ -746,3 +764,10 @@ export interface NextBundleSetEvent {
    */
   bundleId: string | null;
 }
+
+/**
+ * Listener for when the app is reloaded.
+ *
+ * @since 7.4.0
+ */
+export type ReloadedListener = () => void;

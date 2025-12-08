@@ -29,7 +29,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "7.3.0";
+    public static final String VERSION = "7.4.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -49,6 +49,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String EVENT_DOWNLOAD_BUNDLE_PROGRESS = "downloadBundleProgress";
     public static final String EVENT_NEXT_BUNDLE_SET = "nextBundleSet";
+    public static final String EVENT_RELOADED = "reloaded";
 
     @Nullable
     private LiveUpdateConfig config;
@@ -508,6 +509,11 @@ public class LiveUpdatePlugin extends Plugin {
 
     public void notifyNextBundleSetListeners(@NonNull NextBundleSetEvent event) {
         notifyListeners(EVENT_NEXT_BUNDLE_SET, event.toJSObject(), false);
+    }
+
+    public void notifyReloadedListeners() {
+        JSObject event = new JSObject();
+        notifyListeners(EVENT_RELOADED, event, true);
     }
 
     private LiveUpdateConfig getLiveUpdateConfig() {

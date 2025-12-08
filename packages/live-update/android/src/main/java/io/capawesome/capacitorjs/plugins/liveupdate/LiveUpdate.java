@@ -981,6 +981,8 @@ public class LiveUpdate {
             this.plugin.getBridge().setServerBasePath(path);
         }
         this.plugin.getBridge().reload();
+        // Notify listeners
+        notifyReloadedListeners();
     }
 
     /**
@@ -1001,6 +1003,10 @@ public class LiveUpdate {
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
         plugin.notifyNextBundleSetListeners(event);
+    }
+
+    private void notifyReloadedListeners() {
+        plugin.notifyReloadedListeners();
     }
 
     private void addBlockedBundleId(@NonNull String bundleId) {
