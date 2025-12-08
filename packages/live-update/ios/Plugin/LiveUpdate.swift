@@ -597,14 +597,10 @@ import CommonCrypto
     }
 
     private func getAppId() -> String? {
-        var appId: String?
-        if let _ = config.appId {
-            appId = config.appId
+        if let appId = preferences.getAppId() {
+            return appId
         }
-        if let _ = preferences.getAppId() {
-            appId = preferences.getAppId()
-        }
-        return appId
+        return config.appId
     }
 
     private func getChannel() -> String? {

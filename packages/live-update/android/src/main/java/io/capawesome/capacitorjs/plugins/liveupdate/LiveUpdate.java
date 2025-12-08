@@ -804,14 +804,11 @@ public class LiveUpdate {
 
     @Nullable
     private String getAppId() {
-        String appId = null;
-        if (config.getAppId() != null) {
-            appId = config.getAppId();
+        String appId = preferences.getAppId();
+        if (appId != null) {
+            return appId;
         }
-        if (preferences.getAppId() != null) {
-            appId = preferences.getAppId();
-        }
-        return appId;
+        return config.getAppId();
     }
 
     @Nullable
