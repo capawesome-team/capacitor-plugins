@@ -13,6 +13,7 @@ import type {
   GetNextBundleResult,
   GetVersionCodeResult,
   GetVersionNameResult,
+  IsSyncingResult,
   LiveUpdatePlugin,
   ReadyResult,
   SetBundleOptions,
@@ -68,6 +69,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async getVersionName(): Promise<GetVersionNameResult> {
+    this.throwUnimplementedError();
+  }
+
+  public async isSyncing(): Promise<IsSyncingResult> {
     this.throwUnimplementedError();
   }
 

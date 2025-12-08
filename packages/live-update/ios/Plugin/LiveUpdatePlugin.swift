@@ -25,6 +25,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getVersionCode", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getVersionName", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isSyncing", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "ready", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reload", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
@@ -204,6 +205,18 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getVersionName(_ call: CAPPluginCall) {
         implementation?.getVersionName(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
+    }
+
+    @objc func isSyncing(_ call: CAPPluginCall) {
+        implementation?.isSyncing(completion: { result, error in
             if let error = error {
                 self.rejectCall(call, error)
                 return

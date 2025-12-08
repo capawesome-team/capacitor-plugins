@@ -281,6 +281,7 @@ const isNewBundleAvailable = async () => {
 * [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
 * [`getDeviceId()`](#getdeviceid)
+* [`isSyncing()`](#issyncing)
 * [`getNextBundle()`](#getnextbundle)
 * [`getVersionCode()`](#getversioncode)
 * [`getVersionName()`](#getversionname)
@@ -444,6 +445,23 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getdeviceidresult">GetDeviceIdResult</a>&gt;</code>
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### isSyncing()
+
+```typescript
+isSyncing() => Promise<IsSyncingResult>
+```
+
+Check whether a sync operation is currently in progress.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#issyncingresult">IsSyncingResult</a>&gt;</code>
+
+**Since:** 7.4.0
 
 --------------------
 
@@ -803,6 +821,13 @@ Remove all listeners for this plugin.
 | Prop           | Type                | Description                                                                                                                                                                                                                                                                    | Since |
 | -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. | 5.0.0 |
+
+
+#### IsSyncingResult
+
+| Prop          | Type                 | Description                                        | Since |
+| ------------- | -------------------- | -------------------------------------------------- | ----- |
+| **`syncing`** | <code>boolean</code> | Whether a sync operation is currently in progress. | 7.4.0 |
 
 
 #### GetNextBundleResult

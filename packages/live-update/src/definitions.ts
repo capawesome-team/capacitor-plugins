@@ -174,6 +174,14 @@ export interface LiveUpdatePlugin {
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
   /**
+   * Check whether a sync operation is currently in progress.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  isSyncing(): Promise<IsSyncingResult>;
+  /**
    * Get the bundle identifier of the next bundle.
    * The next bundle is the bundle that will be used after calling `reload()`
    * or restarting the app.
@@ -526,6 +534,18 @@ export interface GetDeviceIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   deviceId: string;
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface IsSyncingResult {
+  /**
+   * Whether a sync operation is currently in progress.
+   *
+   * @since 7.4.0
+   */
+  syncing: boolean;
 }
 
 /**
