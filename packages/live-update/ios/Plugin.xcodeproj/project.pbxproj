@@ -27,6 +27,7 @@
 		7C33FC432BCBFE27003AA8B4 /* GetVersionCodeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */; };
 		7C33FC452BCBFE3A003AA8B4 /* GetVersionNameResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */; };
 		7C4274D52D1487500066184E /* SyncOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D42D14874E0066184E /* SyncOptions.swift */; };
+		7CAB12342DEFA1B0003BB1C4 /* IsSyncingResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12332DEFA1B0003BB1C4 /* IsSyncingResult.swift */; };
 		7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */; };
 		7C4F2B122D149290005E2310 /* GetCurrentBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */; };
 		7C4F2B142D149296005E2310 /* GetNextBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */; };
@@ -79,6 +80,7 @@
 		7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetVersionCodeResult.swift; sourceTree = "<group>"; };
 		7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetVersionNameResult.swift; sourceTree = "<group>"; };
 		7C4274D42D14874E0066184E /* SyncOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncOptions.swift; sourceTree = "<group>"; };
+		7CAB12332DEFA1B0003BB1C4 /* IsSyncingResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsSyncingResult.swift; sourceTree = "<group>"; };
 		7C4274D62D1487530066184E /* FetchLatestBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleOptions.swift; sourceTree = "<group>"; };
 		7C4F2B112D14928F005E2310 /* GetCurrentBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCurrentBundleResult.swift; sourceTree = "<group>"; };
 		7C4F2B132D149296005E2310 /* GetNextBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNextBundleResult.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				7C2E4CE62BC29C1100C80C2A /* SyncResult.swift */,
 				7C33FC422BCBFE27003AA8B4 /* GetVersionCodeResult.swift */,
 				7C33FC442BCBFE3A003AA8B4 /* GetVersionNameResult.swift */,
+				7CAB12332DEFA1B0003BB1C4 /* IsSyncingResult.swift */,
 				7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */,
 			);
 			path = Results;
@@ -465,6 +468,7 @@
 				7C29FB5A2CBD414B007DCB06 /* Manifest.swift in Sources */,
 				7C2E4CE72BC29C1100C80C2A /* SyncResult.swift in Sources */,
 				7C33FC452BCBFE3A003AA8B4 /* GetVersionNameResult.swift in Sources */,
+				7CAB12342DEFA1B0003BB1C4 /* IsSyncingResult.swift in Sources */,
 				7C6715D52BB1BCB70000878A /* GetDeviceIdResult.swift in Sources */,
 				7C2011512BA9653B001FABAD /* Result.swift in Sources */,
 				7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */,

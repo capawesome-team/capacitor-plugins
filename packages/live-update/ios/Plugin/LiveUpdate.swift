@@ -131,6 +131,11 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func isSyncing(completion: @escaping (Result?, Error?) -> Void) {
+        let result = IsSyncingResult(syncing: syncInProgress)
+        completion(result, nil)
+    }
+
     @objc public func handleLoad() {
         if config.autoUpdateStrategy == "background" {
             performAutoUpdate()

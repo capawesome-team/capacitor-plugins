@@ -146,6 +146,12 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(result);
     });
   document
+    .querySelector('#is-syncing-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.isSyncing();
+      console.log(result);
+    });
+  document
     .querySelector('#ready-button')
     .addEventListener('click', async () => {
       await LiveUpdate.ready();

@@ -34,6 +34,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdR
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
@@ -208,6 +209,11 @@ public class LiveUpdate {
     public void getVersionName(@NonNull NonEmptyCallback callback) throws PackageManager.NameNotFoundException {
         String versionName = getVersionName();
         GetVersionNameResult result = new GetVersionNameResult(versionName);
+        callback.success(result);
+    }
+
+    public void isSyncing(@NonNull NonEmptyCallback<IsSyncingResult> callback) {
+        IsSyncingResult result = new IsSyncingResult(syncInProgress);
         callback.success(result);
     }
 

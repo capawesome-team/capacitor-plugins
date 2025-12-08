@@ -21,6 +21,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundl
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -355,6 +356,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.getVersionName(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void isSyncing(PluginCall call) {
+        try {
+            NonEmptyCallback<IsSyncingResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(IsSyncingResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.isSyncing(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
