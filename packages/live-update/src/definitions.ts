@@ -174,7 +174,7 @@ export interface LiveUpdatePlugin {
   /**
    * Get the runtime configuration.
    *
-   * Returns the current plugin configuration including any runtime 
+   * Returns the current plugin configuration including any runtime
    * overrides set via `setConfig()`.
    *
    * Only available on Android and iOS.
