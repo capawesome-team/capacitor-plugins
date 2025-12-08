@@ -83,8 +83,14 @@ import CommonCrypto
     }
 
     @objc public func getBundles(completion: @escaping (Result?, Error?) -> Void) {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let result = GetBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
+    }
+
+    @objc public func getDownloadedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        let bundleIds = getDownloadedBundleIds()
+        let result = GetDownloadedBundlesResult(bundleIds: bundleIds)
         completion(result, nil)
     }
 
@@ -376,7 +382,7 @@ import CommonCrypto
     }
 
     private func deleteUnusedBundles() {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let currentBundleId = getCurrentBundleId()
         let nextBundleId = getNextBundleId()
 
@@ -544,7 +550,7 @@ import CommonCrypto
         }
     }
 
-    private func getBundleIds() -> [String] {
+    private func getDownloadedBundleIds() -> [String] {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         do {
             let pathExists = FileManager.default.fileExists(atPath: url.path)

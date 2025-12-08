@@ -20,6 +20,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdO
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
@@ -207,6 +208,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.getBundles(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getDownloadedBundles(PluginCall call) {
+        try {
+            NonEmptyCallback<GetDownloadedBundlesResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetDownloadedBundlesResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getDownloadedBundles(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
