@@ -876,15 +876,18 @@ import CommonCrypto
 
     private func checkAndResetConfigIfVersionChanged() {
         let currentVersionCode = getVersionCode()
+        let currentVersionName = getVersionName()
         let lastVersionCode = preferences.getLastVersionCode()
+        let lastVersionName = preferences.getLastVersionName()
 
-        if lastVersionCode == nil || lastVersionCode != currentVersionCode {
+        if lastVersionCode == nil || lastVersionName == nil || lastVersionCode != currentVersionCode || lastVersionName != currentVersionName {
             CAPLog.print(
                 "[", LiveUpdatePlugin.tag, "] ",
-                "App version changed (last: \(lastVersionCode ?? "nil"), current: \(currentVersionCode)), resetting config."
+                "App version changed (last: \(lastVersionName ?? "nil")/\(lastVersionCode ?? "nil"), current: \(currentVersionName)/\(currentVersionCode)), resetting config."
             )
             resetConfig()
             preferences.setLastVersionCode(currentVersionCode)
+            preferences.setLastVersionName(currentVersionName)
         }
     }
 

@@ -1118,9 +1118,6 @@ public class LiveUpdate {
         this.webViewSettingsEditor.commit();
     }
 
-    /**
-     * @param bundleId The bundle ID to save as the previous bundle. If `null`, the value will be removed.
-     */
     private void checkAndResetConfigIfVersionChanged() throws PackageManager.NameNotFoundException {
         int currentVersionCode = getVersionCodeAsInt();
         int lastVersionCode = preferences.getLastVersionCode();
