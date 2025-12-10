@@ -25,7 +25,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig())
+            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), false, config.getSessionReplayConfig())
         }
     }
 
