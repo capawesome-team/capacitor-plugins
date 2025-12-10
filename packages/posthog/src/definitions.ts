@@ -144,6 +144,27 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   unregister(options: UnregisterOptions): Promise<void>;
+  /**
+   * Opt in to event capturing.
+   *
+   * @since 7.5.0
+   */
+  optIn(): Promise<void>;
+  /**
+   * Opt out of event capturing.
+   *
+   * On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
+   * On iOS/Android: stops all event capturing entirely.
+   *
+   * @since 7.5.0
+   */
+  optOut(): Promise<void>;
+  /**
+   * Check if the user has opted out of capturing.
+   *
+   * @since 7.5.0
+   */
+  isOptedOut(): Promise<IsOptedOutResult>;
 }
 
 /**
@@ -291,6 +312,18 @@ export interface IsFeatureEnabledResult {
 }
 
 /**
+ * @since 7.5.0
+ */
+export interface IsOptedOutResult {
+  /**
+   * Whether the user has opted out of capturing.
+   *
+   * @since 7.5.0
+   */
+  optedOut: boolean;
+}
+
+/**
  * @since 6.0.0
  */
 export interface RegisterOptions {
@@ -338,6 +371,18 @@ export interface SetupOptions {
    */
   apiKey: string;
   /**
+   * Cookieless tracking mode.
+   *
+   * - `'always'`: Always use cookieless tracking with server-side anonymous hash.
+   * - `'on_reject'`: Normal tracking until `optOut()` is called, then switches to cookieless.
+   *
+   * Only available on Web. Requires cookieless mode to be enabled in PostHog project settings.
+   *
+   * @since 7.5.0
+   * @platform web
+   */
+  cookielessMode?: 'always' | 'on_reject';
+  /**
    * Whether to enable session recording automatically.
    *
    * @since 7.3.0
@@ -352,6 +397,15 @@ export interface SetupOptions {
    * @example 'https://eu.i.posthog.com'
    */
   host?: string;
+  /**
+   * Whether to opt out of capturing by default.
+   *
+   * User must call `optIn()` to enable capturing.
+   *
+   * @since 7.5.0
+   * @default false
+   */
+  optOut?: boolean;
   /**
    * Session replay configuration options.
    *

@@ -186,6 +186,9 @@ const unregister = async () => {
 * [`startSessionRecording()`](#startsessionrecording)
 * [`stopSessionRecording()`](#stopsessionrecording)
 * [`unregister(...)`](#unregister)
+* [`optIn()`](#optin)
+* [`optOut()`](#optout)
+* [`isOptedOut()`](#isoptedout)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -460,6 +463,50 @@ Remove a super property.
 --------------------
 
 
+### optIn()
+
+```typescript
+optIn() => Promise<void>
+```
+
+Opt in to event capturing.
+
+**Since:** 7.5.0
+
+--------------------
+
+
+### optOut()
+
+```typescript
+optOut() => Promise<void>
+```
+
+Opt out of event capturing.
+
+On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
+On iOS/Android: stops all event capturing entirely.
+
+**Since:** 7.5.0
+
+--------------------
+
+
+### isOptedOut()
+
+```typescript
+isOptedOut() => Promise<IsOptedOutResult>
+```
+
+Check if the user has opted out of capturing.
+
+**Returns:** <code>Promise&lt;<a href="#isoptedoutresult">IsOptedOutResult</a>&gt;</code>
+
+**Since:** 7.5.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -555,12 +602,14 @@ Remove a super property.
 
 #### SetupOptions
 
-| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                                                                                                                                                                                                                                                                  | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                                                                                                                                                                                                                         |                                         | 6.0.0 |
+| **`cookielessMode`**      | <code>'always' \| 'on_reject'</code>                                  | Cookieless tracking mode. - `'always'`: Always use cookieless tracking with server-side anonymous hash. - `'on_reject'`: Normal tracking until `optOut()` is called, then switches to cookieless. Only available on Web. Requires cookieless mode to be enabled in PostHog project settings. |                                         | 7.5.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                                                                                                                                                                                                                           | <code>false</code>                      | 7.3.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                                                                                                                                                                                                                                                           | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`optOut`**              | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 7.5.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 
 
 #### SessionReplayOptions
@@ -580,6 +629,13 @@ Remove a super property.
 | Prop      | Type                | Description                               | Since |
 | --------- | ------------------- | ----------------------------------------- | ----- |
 | **`key`** | <code>string</code> | The name of the super property to remove. | 6.0.0 |
+
+
+#### IsOptedOutResult
+
+| Prop           | Type                 | Description                                  | Since |
+| -------------- | -------------------- | -------------------------------------------- | ----- |
+| **`optedOut`** | <code>boolean</code> | Whether the user has opted out of capturing. | 7.5.0 |
 
 
 ### Type Aliases

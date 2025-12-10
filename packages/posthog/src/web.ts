@@ -13,6 +13,7 @@ import type {
   IdentifyOptions,
   IsFeatureEnabledOptions,
   IsFeatureEnabledResult,
+  IsOptedOutResult,
   PosthogPlugin,
   RegisterOptions,
   ScreenOptions,
@@ -81,9 +82,18 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async setup(options: SetupOptions): Promise<void> {
     const host = options.host || 'https://us.i.posthog.com';
-    const config: Partial<PostHogConfig> = {
+    const config: Partial<PostHogConfig> & {
+      cookieless_mode?: 'always' | 'on_reject';
+    } = {
       api_host: host,
     };
+
+    if (options.optOut) {
+      config.opt_out_capturing_by_default = true;
+    }
+    if (options.cookielessMode) {
+      config.cookieless_mode = options.cookielessMode;
+    }
 
     // Configure session recording if enabled
     if (options.enableSessionReplay) {
@@ -112,6 +122,18 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async unregister(options: UnregisterOptions): Promise<void> {
     posthog.unregister(options.key);
+  }
+
+  async optIn(): Promise<void> {
+    posthog.opt_in_capturing();
+  }
+
+  async optOut(): Promise<void> {
+    posthog.opt_out_capturing();
+  }
+
+  async isOptedOut(): Promise<IsOptedOutResult> {
+    return { optedOut: posthog.has_opted_out_capturing() };
   }
 
   private throwUnimplementedError(): never {

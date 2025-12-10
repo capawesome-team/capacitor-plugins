@@ -243,9 +243,11 @@ public class PosthogPlugin extends Plugin {
             }
             String host = call.getString("host", "https://us.i.posthog.com");
             Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
+            Boolean optOut = call.getBoolean("optOut", false);
 
             SetupOptions options = new SetupOptions(apiKey, host);
             options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
+            options.setOptOut(optOut != null ? optOut : false);
 
             JSObject sessionReplayConfigObject = call.getObject("sessionReplayConfig");
             if (sessionReplayConfigObject != null) {
@@ -280,6 +282,38 @@ public class PosthogPlugin extends Plugin {
 
             implementation.unregister(options);
             call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void optIn(PluginCall call) {
+        try {
+            implementation.optIn();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void optOut(PluginCall call) {
+        try {
+            implementation.optOut();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void isOptedOut(PluginCall call) {
+        try {
+            boolean optedOut = implementation.isOptedOut();
+            JSObject result = new JSObject();
+            result.put("optedOut", optedOut);
+            call.resolve(result);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
