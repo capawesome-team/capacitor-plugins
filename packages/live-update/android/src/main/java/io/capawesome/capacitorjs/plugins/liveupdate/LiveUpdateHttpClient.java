@@ -56,17 +56,21 @@ public class LiveUpdateHttpClient {
             .build();
         Request request = new Request.Builder().url(url).build();
 
-        okHttpClient.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) {
-                callback.success(response);
-            }
+        okHttpClient
+            .newCall(request)
+            .enqueue(
+                new Callback() {
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) {
+                        callback.success(response);
+                    }
 
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                callback.error(new Exception(e));
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        callback.error(new Exception(e));
+                    }
+                }
+            );
     }
 
     public void downloadFileAsync(
@@ -75,27 +79,30 @@ public class LiveUpdateHttpClient {
         @Nullable DownloadProgressCallback progressCallback,
         EmptyCallback completionCallback
     ) {
-        enqueueAsync(url, new NonEmptyCallback<Response>() {
-            @Override
-            public void success(@NonNull Response response) {
-                try {
-                    if (response.isSuccessful()) {
-                        writeResponseBodyToFile(response.body(), destinationFile, progressCallback);
-                        completionCallback.success();
-                    } else {
-                        String errorMessage = response.body().string();
-                        completionCallback.error(new Exception(errorMessage));
+        enqueueAsync(
+            url,
+            new NonEmptyCallback<Response>() {
+                @Override
+                public void success(@NonNull Response response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            writeResponseBodyToFile(response.body(), destinationFile, progressCallback);
+                            completionCallback.success();
+                        } else {
+                            String errorMessage = response.body().string();
+                            completionCallback.error(new Exception(errorMessage));
+                        }
+                    } catch (Exception e) {
+                        completionCallback.error(e);
                     }
-                } catch (Exception e) {
-                    completionCallback.error(e);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    completionCallback.error(exception);
                 }
             }
-
-            @Override
-            public void error(@NonNull Exception exception) {
-                completionCallback.error(exception);
-            }
-        });
+        );
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
