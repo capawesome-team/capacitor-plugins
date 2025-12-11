@@ -159,8 +159,8 @@ public class LiveUpdate {
         }
     }
 
-    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) {
-        fetchLatestBundleAsync(
+    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<FetchLatestBundleResult> callback) {
+        fetchLatestBundleInternal(
             options,
             new NonEmptyCallback<GetLatestBundleResponse>() {
                 @Override
@@ -371,7 +371,7 @@ public class LiveUpdate {
         String channel = options.getChannel();
         // Fetch the latest bundle
         FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
-        fetchLatestBundleAsync(
+        fetchLatestBundleInternal(
             fetchLatestBundleOptions,
             new NonEmptyCallback<GetLatestBundleResponse>() {
                 @Override
@@ -626,7 +626,7 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        httpClient.enqueueAsync(
+        httpClient.enqueue(
             url,
             new NonEmptyCallback<Response>() {
                 @Override
@@ -903,7 +903,7 @@ public class LiveUpdate {
         );
     }
 
-    private void fetchLatestBundleAsync(
+    private void fetchLatestBundleInternal(
         @NonNull FetchLatestBundleOptions options,
         @NonNull NonEmptyCallback<GetLatestBundleResponse> callback
     ) {
@@ -930,7 +930,7 @@ public class LiveUpdate {
                 .toString();
             Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
 
-            httpClient.enqueueAsync(
+            httpClient.enqueue(
                 url,
                 new NonEmptyCallback<Response>() {
                     @Override
