@@ -151,7 +151,7 @@ public class LiveUpdate {
             return;
         }
 
-        // Download the bundle (async)
+        // Download the bundle
         if (artifactType == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(bundleId, url, callback);
         } else {
@@ -369,7 +369,7 @@ public class LiveUpdate {
         syncInProgress = true;
 
         String channel = options.getChannel();
-        // Fetch the latest bundle (async)
+        // Fetch the latest bundle
         FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
         fetchLatestBundleAsync(
             fetchLatestBundleOptions,
@@ -412,7 +412,7 @@ public class LiveUpdate {
                             return;
                         }
 
-                        // Download the bundle (async)
+                        // Download the bundle
                         EmptyCallback downloadCallback = new EmptyCallback() {
                             @Override
                             public void success() {
@@ -784,7 +784,7 @@ public class LiveUpdate {
             // Create a temporary directory
             File temporaryDirectory = createTemporaryDirectory();
 
-            // Download the latest manifest (async)
+            // Download the latest manifest
             downloadBundleFile(
                 downloadUrl,
                 manifestFileName,
@@ -814,7 +814,7 @@ public class LiveUpdate {
                                 itemsToDownload.addAll(missingItems);
                             }
 
-                            // Download the files (async)
+                            // Download the files
                             downloadBundleFiles(
                                 downloadUrl,
                                 itemsToDownload,
@@ -869,7 +869,7 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         File file = buildTemporaryZipFile();
-        // Download the bundle (async)
+        // Download the bundle
         downloadAndVerifyFile(
             downloadUrl,
             file,
