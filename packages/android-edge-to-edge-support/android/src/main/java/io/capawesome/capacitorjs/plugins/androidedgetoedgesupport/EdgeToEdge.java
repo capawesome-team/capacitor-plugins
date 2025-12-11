@@ -50,16 +50,26 @@ public class EdgeToEdge {
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            Insets systemBarsInsets = currentInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
+            Insets systemBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutoutInsets = currentInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
+            Insets statusBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.statusBars());
             Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
+            boolean statusBarsVisible = currentInsets.isVisible(WindowInsetsCompat.Type.statusBars());
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
+            // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
             mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
-            mlp.topMargin = systemBarsInsets.top;
+
+            // For the top inset, apply insets only while the status bar is visible.
+            // If the status bar is hidden, we allow the content to extend fully to the top.
+            int topInset = 0;
+            if (statusBarsVisible) {
+                topInset = Math.max(displayCutoutInsets.top, statusBarsInsets.top);
+            }
+            mlp.topMargin = topInset;
+
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
 
@@ -67,21 +77,28 @@ public class EdgeToEdge {
         }
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            // Retrieve system bars insets (for status/navigation bars)
-            Insets systemBarsInsets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
+            // Retrieve system bars insets (for navigation bars etc.)
+            Insets systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            Insets displayCutoutInsets = windowInsets.getInsets(WindowInsetsCompat.Type.displayCutout());
+            Insets statusBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
             // Retrieve keyboard (IME) insets
             Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
+            boolean statusBarsVisible = windowInsets.isVisible(WindowInsetsCompat.Type.statusBars());
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
             // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
             mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
 
-            // Set the other margins using system bars insets
-            mlp.topMargin = systemBarsInsets.top;
+            // For the top inset, apply insets only while the status bar is visible.
+            // If the status bar is hidden, we allow the content to extend fully to the top.
+            int topInset = 0;
+            if (statusBarsVisible) {
+                topInset = Math.max(displayCutoutInsets.top, statusBarsInsets.top);
+            }
+            mlp.topMargin = topInset;
+
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
 
