@@ -65,6 +65,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
+import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -617,7 +618,7 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadAndVerifyFile(
+    private Call downloadAndVerifyFile(
         @NonNull String url,
         @NonNull File file,
         @Nullable String checksum,
@@ -625,7 +626,7 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        httpClient.enqueue(
+        return httpClient.enqueue(
             url,
             new NonEmptyCallback<Response>() {
                 @Override
@@ -661,7 +662,7 @@ public class LiveUpdate {
         );
     }
 
-    private void downloadBundleFile(
+    private Call downloadBundleFile(
         @NonNull String baseUrl,
         @NonNull String href,
         @NonNull File destinationDirectory,
@@ -674,7 +675,7 @@ public class LiveUpdate {
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
+        return downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
     }
 
     private void downloadBundleFiles(
@@ -704,19 +705,11 @@ public class LiveUpdate {
         CountDownLatch latch = new CountDownLatch(filesToDownload.size());
         AtomicReference<Exception> firstError = new AtomicReference<>();
         AtomicBoolean completionHandled = new AtomicBoolean(false);
+        List<Call> activeCalls = new ArrayList<>();
 
-        // Start all downloads
+        // Start all downloads asynchronously (OkHttp's dispatcher handles parallelization)
         for (ManifestItem item : filesToDownload) {
-            // Short-circuit on first error
-            if (firstError.get() != null) {
-                latch.countDown();
-                if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
-                    completionCallback.error(firstError.get());
-                }
-                continue;
-            }
-
-            downloadBundleFile(
+            Call call = downloadBundleFile(
                 baseUrl,
                 item.getHref(),
                 destinationDirectory,
@@ -754,8 +747,18 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception e) {
-                        firstError.compareAndSet(null, e);
-                        Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
+                        // Capture first error and cancel all remaining downloads
+                        if (firstError.compareAndSet(null, e)) {
+                            Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
+                            // Cancel all in-flight downloads (fail-fast)
+                            synchronized (activeCalls) {
+                                for (Call activeCall : activeCalls) {
+                                    if (!activeCall.isCanceled() && !activeCall.isExecuted()) {
+                                        activeCall.cancel();
+                                    }
+                                }
+                            }
+                        }
                         latch.countDown();
 
                         // Check if this was the last download to complete
@@ -765,6 +768,9 @@ public class LiveUpdate {
                     }
                 }
             );
+            synchronized (activeCalls) {
+                activeCalls.add(call);
+            }
         }
     }
 

@@ -47,7 +47,7 @@ public class LiveUpdateHttpClient {
         this.config = config;
     }
 
-    public void enqueue(String url, NonEmptyCallback<Response> callback) {
+    public Call enqueue(String url, NonEmptyCallback<Response> callback) {
         int httpTimeout = config.getHttpTimeout();
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
@@ -56,21 +56,21 @@ public class LiveUpdateHttpClient {
             .build();
         Request request = new Request.Builder().url(url).build();
 
-        okHttpClient
-            .newCall(request)
-            .enqueue(
-                new Callback() {
-                    @Override
-                    public void onResponse(@NonNull Call call, @NonNull Response response) {
-                        callback.success(response);
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                        callback.error(new Exception(e));
-                    }
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(
+            new Callback() {
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    callback.success(response);
                 }
-            );
+
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    callback.error(new Exception(e));
+                }
+            }
+        );
+        return call;
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
