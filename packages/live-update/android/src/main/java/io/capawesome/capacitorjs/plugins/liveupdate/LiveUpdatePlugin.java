@@ -20,6 +20,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOpt
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
@@ -187,9 +188,9 @@ public class LiveUpdatePlugin extends Plugin {
             }
 
             FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
-            NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+            NonEmptyCallback<FetchLatestBundleResult> callback = new NonEmptyCallback<>() {
                 @Override
-                public void success(Result result) {
+                public void success(FetchLatestBundleResult result) {
                     resolveCall(call, result.toJSObject());
                 }
 

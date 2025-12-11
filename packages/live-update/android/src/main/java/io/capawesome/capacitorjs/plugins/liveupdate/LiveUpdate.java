@@ -61,8 +61,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
@@ -640,7 +639,7 @@ public class LiveUpdate {
                             String finalChecksum = checksum != null ? checksum : LiveUpdateHttpClient.getChecksumFromResponse(response);
                             String finalSignature = signature != null ? signature : LiveUpdateHttpClient.getSignatureFromResponse(response);
 
-                            // Verify file (synchronous but fast)
+                            // Verify file
                             verifyFile(file, finalChecksum, finalSignature);
                             completionCallback.success();
                         } else {
@@ -704,75 +703,69 @@ public class LiveUpdate {
         // Coordination primitives
         CountDownLatch latch = new CountDownLatch(filesToDownload.size());
         AtomicReference<Exception> firstError = new AtomicReference<>();
+        AtomicBoolean completionHandled = new AtomicBoolean(false);
 
-        // Create thread pool
-        int maxThreads = Runtime.getRuntime().availableProcessors() * 2;
-        ExecutorService executor = Executors.newFixedThreadPool(maxThreads);
-
-        // Submit download tasks
+        // Start all downloads
         for (ManifestItem item : filesToDownload) {
-            executor.submit(() -> {
-                // Short-circuit on first error
-                if (firstError.get() != null) {
-                    latch.countDown();
-                    return;
+            // Short-circuit on first error
+            if (firstError.get() != null) {
+                latch.countDown();
+                if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
+                    completionCallback.error(firstError.get());
                 }
+                continue;
+            }
 
-                downloadBundleFile(
-                    baseUrl,
-                    item.getHref(),
-                    destinationDirectory,
-                    (downloadedBytes, totalBytes) -> {
-                        // Per-file progress
+            downloadBundleFile(
+                baseUrl,
+                item.getHref(),
+                destinationDirectory,
+                (downloadedBytes, totalBytes) -> {
+                    // Per-file progress
+                    if (progressCallback != null) {
+                        long totalProgress = totalBytesDownloaded.get() + downloadedBytes;
+                        progressCallback.onProgress(totalProgress, finalTotalBytesToDownload);
+                    }
+                },
+                new EmptyCallback() {
+                    @Override
+                    public void success() {
+                        // Update total progress
+                        totalBytesDownloaded.addAndGet(item.getSizeInBytes());
                         if (progressCallback != null) {
-                            long totalProgress = totalBytesDownloaded.get() + downloadedBytes;
-                            progressCallback.onProgress(totalProgress, finalTotalBytesToDownload);
+                            progressCallback.onProgress(totalBytesDownloaded.get(), finalTotalBytesToDownload);
                         }
-                    },
-                    new EmptyCallback() {
-                        @Override
-                        public void success() {
-                            // Update total progress
-                            totalBytesDownloaded.addAndGet(item.getSizeInBytes());
-                            if (progressCallback != null) {
-                                progressCallback.onProgress(totalBytesDownloaded.get(), finalTotalBytesToDownload);
-                            }
-                            latch.countDown();
-                        }
+                        latch.countDown();
 
-                        @Override
-                        public void error(@NonNull Exception e) {
-                            firstError.compareAndSet(null, e);
-                            Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
-                            latch.countDown();
+                        // Check if this was the last download to complete
+                        if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
+                            Exception error = firstError.get();
+                            if (error != null) {
+                                completionCallback.error(error);
+                            } else {
+                                // Final progress update
+                                if (progressCallback != null) {
+                                    progressCallback.onProgress(finalTotalBytesToDownload, finalTotalBytesToDownload);
+                                }
+                                completionCallback.success();
+                            }
                         }
                     }
-                );
-            });
+
+                    @Override
+                    public void error(@NonNull Exception e) {
+                        firstError.compareAndSet(null, e);
+                        Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
+                        latch.countDown();
+
+                        // Check if this was the last download to complete
+                        if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
+                            completionCallback.error(firstError.get());
+                        }
+                    }
+                }
+            );
         }
-
-        // Wait for completion on background thread (don't block caller)
-        executor.execute(() -> {
-            try {
-                latch.await();
-                executor.shutdown();
-
-                Exception error = firstError.get();
-                if (error != null) {
-                    completionCallback.error(error);
-                    return;
-                }
-
-                // Final progress update
-                if (progressCallback != null) {
-                    progressCallback.onProgress(finalTotalBytesToDownload, finalTotalBytesToDownload);
-                }
-
-                completionCallback.success();
-            } catch (InterruptedException e) {
-                completionCallback.error(new Exception(e));
-            }
-        });
     }
 
     private void downloadBundleOfTypeManifest(
@@ -807,7 +800,7 @@ public class LiveUpdate {
                                 itemsToCopy.addAll(Manifest.findDuplicateItems(latestManifest, currentManifest));
                                 itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
                             }
-                            // Copy the files (synchronous - local file operations)
+                            // Copy the files
                             List<ManifestItem> missingItems = copyCurrentBundleFilesAndReturnFailures(itemsToCopy, temporaryDirectory);
                             // If items could not be copied, add them to the list of items to download
                             if (!missingItems.isEmpty()) {
@@ -1160,7 +1153,7 @@ public class LiveUpdate {
         // Update the timestamp
         lastAutoUpdateCheckTimestamp = now;
 
-        // Run sync asynchronously (no need for manual thread since sync is now fully async)
+        // Run sync
         Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
         SyncOptions options = new SyncOptions((String) null);
         NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
