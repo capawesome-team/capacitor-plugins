@@ -46,7 +46,7 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.1.0`)
+- `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.5.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
