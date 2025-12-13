@@ -25,6 +25,9 @@ public class LiveUpdateHttpClient {
     @NonNull
     private final LiveUpdateConfig config;
 
+    @NonNull
+    private final OkHttpClient okHttpClient;
+
     @Nullable
     public static String getChecksumFromResponse(Response response) {
         String checksum = response.header("X-Checksum");
@@ -45,15 +48,21 @@ public class LiveUpdateHttpClient {
 
     public LiveUpdateHttpClient(@NonNull LiveUpdateConfig config) {
         this.config = config;
-    }
-
-    public Call enqueue(String url, NonEmptyCallback<Response> callback) {
         int httpTimeout = config.getHttpTimeout();
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+
+        // Increase max requests per host to allow multiple parallel downloads from the same host
+        okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
+        dispatcher.setMaxRequestsPerHost(30);
+
+        this.okHttpClient = new OkHttpClient.Builder()
+            .dispatcher(dispatcher)
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .build();
+    }
+
+    public Call enqueue(String url, NonEmptyCallback<Response> callback) {
         Request request = new Request.Builder().url(url).build();
 
         Call call = okHttpClient.newCall(request);
