@@ -637,8 +637,8 @@ public class LiveUpdate {
                             LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file, progressCallback);
 
                             // Extract checksum/signature from headers
-                            String finalChecksum = checksum != null ? checksum : LiveUpdateHttpClient.getChecksumFromResponse(response);
-                            String finalSignature = signature != null ? signature : LiveUpdateHttpClient.getSignatureFromResponse(response);
+                            String finalChecksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
+                            String finalSignature = signature == null ? LiveUpdateHttpClient.getSignatureFromResponse(response) : signature;
 
                             // Verify file
                             verifyFile(file, finalChecksum, finalSignature);
