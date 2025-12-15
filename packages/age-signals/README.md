@@ -12,6 +12,13 @@ Capacitor plugin to use the [Play Age Signals API](https://developer.android.com
 
     The **Play Age Signals API** is returning "Not yet implemented" because its live functionality is scheduled to begin on January 1, 2026.
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | 7.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash

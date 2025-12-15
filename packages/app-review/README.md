@@ -8,6 +8,12 @@ Capacitor plugin that allows users to submit app store reviews and ratings.
   </a>
 </div>
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 ```bash

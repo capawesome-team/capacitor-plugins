@@ -24,6 +24,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 Install the plugin:

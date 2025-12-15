@@ -8,6 +8,12 @@ Capacitor plugin for seamless Android dark mode support. Enhance user experience
   </a>
 </div>
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 ```bash

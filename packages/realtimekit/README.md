@@ -2,6 +2,13 @@
 
 Unofficial Capacitor plugin for using the [RealtimeKit SDK](https://docs.realtime.cloudflare.com/).[^1]
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.2.x          | >=8.x.x           | Active support |
+| 0.1.x          | 7.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash

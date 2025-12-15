@@ -8,6 +8,12 @@ Capacitor plugin for Android to manage battery optimization settings, request ex
   </a>
 </div>
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 ```bash
