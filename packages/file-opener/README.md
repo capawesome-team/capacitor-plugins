@@ -63,7 +63,7 @@ More information can be found in the [Android documentation](https://developer.a
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.1.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

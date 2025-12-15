@@ -29,7 +29,7 @@ npx cap sync
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
-- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.10.0`)
+- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.27.2`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

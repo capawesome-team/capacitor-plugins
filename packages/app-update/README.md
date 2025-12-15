@@ -51,7 +51,7 @@ npx cap sync
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidPlayAppUpdateVersion` version of `com.google.android.play:app-update` (default: `2.1.0`)
-- `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.0.1`)
+- `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.9.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

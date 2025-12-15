@@ -17,4 +17,4 @@ This plugin now supports **Capacitor 8**. The minimum Android SDK version is **3
 
 ### Variables
 
-- On Android, the `posthogVersion` variable has been updated to `3.10.0`.
+- On Android, the `posthogVersion` variable has been updated to `3.27.2`.
