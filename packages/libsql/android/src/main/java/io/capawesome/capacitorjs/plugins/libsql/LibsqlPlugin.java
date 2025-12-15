@@ -187,7 +187,7 @@ public class LibsqlPlugin extends Plugin {
 
     @PluginMethod
     public void sync(PluginCall call) {
-        rejectCallAsUnavailable(call);
+        rejectCallAsUnimplemented(call);
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
@@ -199,8 +199,8 @@ public class LibsqlPlugin extends Plugin {
         call.reject(message);
     }
 
-    private void rejectCallAsUnavailable(@NonNull PluginCall call) {
-        call.unimplemented("Not available on this platform.");
+    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
+        call.unimplemented("Not implemented on this platform.");
     }
 
     private void resolveCall(@NonNull PluginCall call) {

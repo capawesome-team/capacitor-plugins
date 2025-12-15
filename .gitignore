@@ -8,7 +8,7 @@ node_modules
 # IntelliJ
 .idea
 
-# Clause
+# Others
 CLAUDE.md
 AGENTS.md
 TODO.md
