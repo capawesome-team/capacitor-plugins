@@ -32,7 +32,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
 
 ## Guides
 
@@ -724,9 +725,9 @@ Only available on Android and iOS.
 
 #### CreateContactOptions
 
-| Prop          | Type                                                                              | Description            | Since |
-| ------------- | --------------------------------------------------------------------------------- | ---------------------- | ----- |
-| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to create. | 7.0.0 |
+| Prop          | Type                                                          | Description            | Since |
+| ------------- | ------------------------------------------------------------- | ---------------------- | ----- |
+| **`contact`** | <code>Omit&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to create. | 7.0.0 |
 
 
 #### Contact
@@ -825,9 +826,9 @@ Only available on Android and iOS.
 
 #### CreateGroupOptions
 
-| Prop        | Type                                                                          | Description          | Since |
-| ----------- | ----------------------------------------------------------------------------- | -------------------- | ----- |
-| **`group`** | <code><a href="#omit">Omit</a>&lt;<a href="#group">Group</a>, 'id'&gt;</code> | The group to create. | 7.4.0 |
+| Prop        | Type                                                      | Description          | Since |
+| ----------- | --------------------------------------------------------- | -------------------- | ----- |
+| **`group`** | <code>Omit&lt;<a href="#group">Group</a>, 'id'&gt;</code> | The group to create. | 7.4.0 |
 
 
 #### Group
@@ -868,9 +869,9 @@ Only available on Android and iOS.
 
 #### DisplayCreateContactOptions
 
-| Prop          | Type                                                                              | Description                                         | Since |
-| ------------- | --------------------------------------------------------------------------------- | --------------------------------------------------- | ----- |
-| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
+| Prop          | Type                                                          | Description                                         | Since |
+| ------------- | ------------------------------------------------------------- | --------------------------------------------------- | ----- |
+| **`contact`** | <code>Omit&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The contact to display in the create contact modal. | 7.2.0 |
 
 
 #### DisplayUpdateContactByIdOptions
@@ -970,10 +971,10 @@ Only available on Android and iOS.
 
 #### UpdateContactByIdOptions
 
-| Prop          | Type                                                                              | Description                                                                                                                                                                          | Since |
-| ------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`contact`** | <code><a href="#omit">Omit</a>&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The updated contact information. **Attention**: All fields are required to be provided, even if they are not updated. Fields that are not provided will be removed from the contact. | 7.4.0 |
-| **`id`**      | <code>string</code>                                                               | The identifier for the contact.                                                                                                                                                      | 7.4.0 |
+| Prop          | Type                                                          | Description                                                                                                                                                                          | Since |
+| ------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`contact`** | <code>Omit&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The updated contact information. **Attention**: All fields are required to be provided, even if they are not updated. Fields that are not provided will be removed from the contact. | 7.4.0 |
+| **`id`**      | <code>string</code>                                           | The identifier for the contact.                                                                                                                                                      | 7.4.0 |
 
 
 #### PermissionStatus
@@ -992,29 +993,6 @@ Only available on Android and iOS.
 
 
 ### Type Aliases
-
-
-#### Omit
-
-Construct a type with the properties of T except for those in type K.
-
-<code><a href="#pick">Pick</a>&lt;T, <a href="#exclude">Exclude</a>&lt;keyof T, K&gt;&gt;</code>
-
-
-#### Pick
-
-From T, pick a set of properties whose keys are in the union K
-
-<code>{
- [P in K]: T[P];
- }</code>
-
-
-#### Exclude
-
-<a href="#exclude">Exclude</a> from T those types that are assignable to U
-
-<code>T extends U ? never : T</code>
 
 
 #### ContactField
