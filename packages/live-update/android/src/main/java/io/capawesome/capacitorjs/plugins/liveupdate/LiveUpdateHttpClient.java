@@ -4,9 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -20,6 +24,9 @@ public class LiveUpdateHttpClient {
 
     @NonNull
     private final LiveUpdateConfig config;
+
+    @NonNull
+    private final OkHttpClient okHttpClient;
 
     @Nullable
     public static String getChecksumFromResponse(Response response) {
@@ -41,17 +48,38 @@ public class LiveUpdateHttpClient {
 
     public LiveUpdateHttpClient(@NonNull LiveUpdateConfig config) {
         this.config = config;
-    }
-
-    public Response execute(String url) throws IOException {
         int httpTimeout = config.getHttpTimeout();
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+
+        // Increase max requests per host to allow multiple parallel downloads from the same host
+        okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
+        dispatcher.setMaxRequestsPerHost(30);
+
+        this.okHttpClient = new OkHttpClient.Builder()
+            .dispatcher(dispatcher)
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .build();
+    }
+
+    public Call enqueue(String url, NonEmptyCallback<Response> callback) {
         Request request = new Request.Builder().url(url).build();
-        return okHttpClient.newCall(request).execute();
+
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(
+            new Callback() {
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    callback.success(response);
+                }
+
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    callback.error(new Exception(e));
+                }
+            }
+        );
+        return call;
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)

@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.8.0
+
+### Minor Changes
+
+- [`b8a6aca6bb7865ca94febda252abb62564c0b563`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b8a6aca6bb7865ca94febda252abb62564c0b563) ([#347](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/347)): feat(ios): support `isEnabled` method in peripheral mode
+
 ## 7.7.1
 
 ### Patch Changes

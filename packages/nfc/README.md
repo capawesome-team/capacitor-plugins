@@ -30,9 +30,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
 | 6.x.x          | 6.x.x             | Deprecated     |
-| 5.x.x          | 5.x.x             | Deprecated     |
 
 ## Demo
 
@@ -1064,7 +1064,7 @@ Remove all listeners for this plugin.
 
 #### PermissionState
 
-<code>"denied" | "granted" | "prompt"</code>
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 
 ### Enums
@@ -1164,6 +1164,12 @@ const createNdefTextRecord = () => {
 ```
 
 See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nfc/docs/utils/README.md) for more information.
+
+## Troubleshooting
+
+##### `The connection to service named com.apple.nfcd.service.corenfc was invalidated from this process`
+
+This error occurs on iOS when the required NFC capability is not added to the app. To fix this, add the `Near Field Communication Tag Reading` capability in Xcode under the `Signing & Capabilities` tab. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
 
 ## Changelog
 

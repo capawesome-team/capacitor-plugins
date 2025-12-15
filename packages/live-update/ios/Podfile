@@ -1,4 +1,4 @@
-platform :ios, '14.0'
+platform :ios, '15.0'
 
 def assertDeploymentTarget(installer)
   installer.pods_project.targets.each do |target|
@@ -22,8 +22,8 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'Alamofire', '5.9.0'
-  pod 'SSZipArchive', '2.2.3'
+  pod 'Alamofire', '5.10.2'
+  pod 'SSZipArchive', '2.4.0'
 end
 
 target 'PluginTests' do

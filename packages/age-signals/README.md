@@ -12,6 +12,13 @@ Capacitor plugin to use the [Play Age Signals API](https://developer.android.com
 
     The **Play Age Signals API** is returning "Not yet implemented" because its live functionality is scheduled to begin on January 1, 2026.
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | 7.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash
@@ -25,7 +32,7 @@ npx cap sync
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.1-beta01`)
+- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.2`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

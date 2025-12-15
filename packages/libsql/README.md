@@ -8,12 +8,29 @@ Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
   </a>
 </div>
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.2.x          | >=8.x.x           | Active support |
+| 0.1.x          | 7.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash
 npm install @capawesome/capacitor-libsql
 npx cap sync
 ```
+
+### Android
+
+#### Variables
+
+If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
+
+- `$libsqlVersion` version of `tech.turso.libsql:libsql` (default: `0.1.2`)
+
+This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ## Usage
 

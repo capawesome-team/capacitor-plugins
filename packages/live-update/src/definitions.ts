@@ -16,6 +16,21 @@ declare module '@capacitor/cli' {
        */
       appId?: string;
       /**
+       * Whether or not to automatically block bundles that have been rolled back.
+       *
+       * When enabled, the plugin will automatically block bundles that caused a rollback
+       * (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked.
+       * Blocked bundles will be skipped in future sync operations.
+       *
+       * **Attention**: This option has no effect if `readyTimeout` is set to `0`.
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.3.0
+       * @default false
+       */
+      autoBlockRolledBackBundles?: boolean;
+      /**
        * Whether or not to automatically delete unused bundles.
        *
        * When enabled, the plugin will automatically delete unused bundles after calling `ready()`.
@@ -24,6 +39,21 @@ declare module '@capacitor/cli' {
        * @default false
        */
       autoDeleteBundles?: boolean;
+      /**
+       * The auto-update strategy for live updates.
+       *
+       * - `none`: Live updates will not be applied automatically.
+       * - `background`: Live updates will be automatically downloaded
+       * and applied in the background at app startup and when the app resumes
+       * (if the last check was more than 15 minutes ago).
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 7.3.0
+       * @default 'none'
+       * @example 'background'
+       */
+      autoUpdateStrategy?: 'none' | 'background';
       /**
        * The default channel of the app.
        *
@@ -77,6 +107,17 @@ declare module '@capacitor/cli' {
 
 export interface LiveUpdatePlugin {
   /**
+   * Clear all blocked bundles from the blocked list.
+   *
+   * This removes all bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  clearBlockedBundles(): Promise<void>;
+  /**
    * Delete a bundle from the app.
    *
    * Only available on Android and iOS.
@@ -103,11 +144,23 @@ export interface LiveUpdatePlugin {
     options?: FetchLatestBundleOptions,
   ): Promise<FetchLatestBundleResult>;
   /**
+   * Get all blocked bundle identifiers.
+   *
+   * Returns the list of bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getBlockedBundles(): Promise<GetBlockedBundlesResult>;
+  /**
    * Get all identifiers of bundles that have been downloaded.
    *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getDownloadedBundles()` instead.
    */
   getBundles(): Promise<GetBundlesResult>;
   /**
@@ -118,6 +171,25 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getChannel(): Promise<GetChannelResult>;
+  /**
+   * Get the runtime configuration.
+   *
+   * Returns the current plugin configuration including any runtime
+   * overrides set via `setConfig()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getConfig(): Promise<GetConfigResult>;
+  /**
+   * Get all identifiers of bundles that have been downloaded.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  getDownloadedBundles(): Promise<GetDownloadedBundlesResult>;
   /**
    * Get the bundle identifier of the current bundle.
    * The current bundle is the bundle that is currently used by the app.
@@ -143,6 +215,14 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
+  /**
+   * Check whether a sync operation is currently in progress.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  isSyncing(): Promise<IsSyncingResult>;
   /**
    * Get the bundle identifier of the next bundle.
    * The next bundle is the bundle that will be used after calling `reload()`
@@ -205,6 +285,17 @@ export interface LiveUpdatePlugin {
    */
   reset(): Promise<void>;
   /**
+   * Reset the runtime configuration to the values from the Capacitor config file.
+   *
+   * This clears any runtime configuration set via `setConfig()`.
+   * The changes take effect immediately.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  resetConfig(): Promise<void>;
+  /**
    * Set the channel to use for the update.
    *
    * Only available on Android and iOS.
@@ -212,6 +303,21 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   setChannel(options: SetChannelOptions): Promise<void>;
+  /**
+   * Set the runtime configuration.
+   *
+   * This allows updating plugin configuration options at runtime.
+   * The changes are persisted across app restarts and take effect immediately.
+   *
+   * **Important:** Runtime configuration is automatically reset to default values
+   * whenever the native app is updated to a new version. This ensures that
+   * configuration from previous versions doesn't persist after an app update.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  setConfig(options: SetConfigOptions): Promise<void>;
   /**
    * Set the custom identifier of the device.
    *
@@ -250,6 +356,38 @@ export interface LiveUpdatePlugin {
   addListener(
     eventName: 'downloadBundleProgress',
     listenerFunc: DownloadBundleProgressListener,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Listen for when a bundle is set as the next bundle.
+   *
+   * This event is triggered whenever a bundle is set to be used on the next app restart,
+   * either through automatic updates or manual calls to `setNextBundle()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.3.0
+   */
+  addListener(
+    eventName: 'nextBundleSet',
+    listenerFunc: NextBundleSetListener,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Listen for when the app is reloaded.
+   *
+   * This event is triggered after the `reload()` method is called
+   * and the app has been reloaded.
+   *
+   * **Note:** To verify whether an update was successfully applied after a reload,
+   * use the `ready()` method instead. The `ready()` method provides detailed information
+   * about the current bundle, previous bundle, and whether a rollback occurred.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 7.4.0
+   */
+  addListener(
+    eventName: 'reloaded',
+    listenerFunc: ReloadedListener,
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
@@ -409,6 +547,18 @@ export interface GetBundleResult {
 }
 
 /**
+ * @since 7.4.0
+ */
+export interface GetBlockedBundlesResult {
+  /**
+   * An array of unique identifiers of all blocked bundles.
+   *
+   * @since 7.4.0
+   */
+  bundleIds: string[];
+}
+
+/**
  * @since 5.0.0
  */
 export interface GetBundlesResult {
@@ -416,6 +566,18 @@ export interface GetBundlesResult {
    * An array of unique identifiers of all available bundles.
    *
    * @since 5.0.0
+   */
+  bundleIds: string[];
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface GetDownloadedBundlesResult {
+  /**
+   * An array of unique identifiers of all downloaded bundles.
+   *
+   * @since 7.4.0
    */
   bundleIds: string[];
 }
@@ -433,6 +595,28 @@ export interface GetChannelResult {
    * @example 'production'
    */
   channel: string | null;
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface GetConfigResult {
+  /**
+   * The app ID used to identify the app.
+   *
+   * If `null`, no app ID is configured.
+   *
+   * @since 7.4.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId: string | null;
+  /**
+   * The auto-update strategy for live updates.
+   *
+   * @since 7.4.0
+   * @example 'background'
+   */
+  autoUpdateStrategy: 'none' | 'background';
 }
 
 /**
@@ -464,6 +648,18 @@ export interface GetDeviceIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   deviceId: string;
+}
+
+/**
+ * @since 7.4.0
+ */
+export interface IsSyncingResult {
+  /**
+   * Whether a sync operation is currently in progress.
+   *
+   * @since 7.4.0
+   */
+  syncing: boolean;
 }
 
 /**
@@ -583,6 +779,21 @@ export interface SetChannelOptions {
 }
 
 /**
+ * @since 7.4.0
+ */
+export interface SetConfigOptions {
+  /**
+   * The app ID used to identify the app.
+   *
+   * Set `null` to reset to the value from the Capacitor config file.
+   *
+   * @since 7.4.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId?: string | null;
+}
+
+/**
  * @since 5.0.0
  */
 export interface SetCustomIdOptions {
@@ -678,3 +889,34 @@ export interface DownloadBundleProgressEvent {
    */
   totalBytes: number;
 }
+
+/**
+ * Listener for when a bundle is set as the next bundle.
+ *
+ * @since 7.3.0
+ */
+export type NextBundleSetListener = (event: NextBundleSetEvent) => void;
+
+/**
+ * Event that is triggered when a bundle is set as the next bundle.
+ *
+ * @since 7.3.0
+ */
+export interface NextBundleSetEvent {
+  /**
+   * The unique identifier of the bundle that is set as the next bundle.
+   *
+   * If `null`, the default bundle will be used.
+   *
+   * @since 7.3.0
+   * @example '1.0.0'
+   */
+  bundleId: string | null;
+}
+
+/**
+ * Listener for when the app is reloaded.
+ *
+ * @since 7.4.0
+ */
+export type ReloadedListener = () => void;

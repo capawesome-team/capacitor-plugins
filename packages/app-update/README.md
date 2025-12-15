@@ -30,6 +30,15 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
+| 6.x.x          | 6.x.x             | Deprecated     |
+| 5.x.x          | 5.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash
@@ -42,7 +51,7 @@ npx cap sync
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidPlayAppUpdateVersion` version of `com.google.android.play:app-update` (default: `2.1.0`)
-- `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.0.1`)
+- `$androidPlayServicesBaseVersion` version of `com.google.android.gms:play-services-base` (default: `18.9.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

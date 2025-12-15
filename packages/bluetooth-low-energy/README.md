@@ -39,7 +39,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
 | 6.x.x          | 6.x.x             | Deprecated     |
 
 ## Demo
@@ -678,6 +679,9 @@ isEnabled() => Promise<IsEnabledResult>
 ```
 
 Check if Bluetooth is enabled.
+
+On **iOS**, requires the plugin to be initialized.
+Returns `false` if not initialized.
 
 Only available on Android and iOS.
 

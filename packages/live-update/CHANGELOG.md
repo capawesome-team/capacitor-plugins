@@ -1,5 +1,41 @@
 # Changelog
 
+## 7.4.0
+
+### Minor Changes
+
+- [`4704e4179b4d8693d8269348f4ad24b4e3ba06a8`](https://github.com/capawesome-team/capacitor-plugins/commit/4704e4179b4d8693d8269348f4ad24b4e3ba06a8) ([#688](https://github.com/capawesome-team/capacitor-plugins/pull/688)): feat: add `isSyncing()` method
+
+- [`8351814e93a9cb7b2a45713cc070700e43742338`](https://github.com/capawesome-team/capacitor-plugins/commit/8351814e93a9cb7b2a45713cc070700e43742338) ([#689](https://github.com/capawesome-team/capacitor-plugins/pull/689)): feat: add `getDownloadedBundles()` method
+
+- [`f1e83978f3a5e2fe9ebf2f172f2159465af44b45`](https://github.com/capawesome-team/capacitor-plugins/commit/f1e83978f3a5e2fe9ebf2f172f2159465af44b45) ([#686](https://github.com/capawesome-team/capacitor-plugins/pull/686)): feat: add `reloaded` event
+
+- [`2425640fccfa62084ec74f0f26e68692174bd165`](https://github.com/capawesome-team/capacitor-plugins/commit/2425640fccfa62084ec74f0f26e68692174bd165) ([#691](https://github.com/capawesome-team/capacitor-plugins/pull/691)): feat: add `setConfig(...)`, `getConfig()`, and `resetConfig()` methods
+
+- [`9d366dac6039e2567ae5adee684075506f5961f3`](https://github.com/capawesome-team/capacitor-plugins/commit/9d366dac6039e2567ae5adee684075506f5961f3) ([#690](https://github.com/capawesome-team/capacitor-plugins/pull/690)): feat: add `clearBlockedBundles()` and `getBlockedBundles()` methods
+
+### Patch Changes
+
+- [`525b112cbd244e97f07c939392029a40489753f5`](https://github.com/capawesome-team/capacitor-plugins/commit/525b112cbd244e97f07c939392029a40489753f5) ([#695](https://github.com/capawesome-team/capacitor-plugins/pull/695)): fix(android): make http requests asynchronous
+
+- [`f7771fb158adf60659f9282da49eac43508e4d0d`](https://github.com/capawesome-team/capacitor-plugins/commit/f7771fb158adf60659f9282da49eac43508e4d0d) ([#697](https://github.com/capawesome-team/capacitor-plugins/pull/697)): fix(android): handle null values for checksum and signature correctly
+
+## 7.3.0
+
+### Minor Changes
+
+- [`a90dc9e4c3232cb307a860eb8310aacfe5447e44`](https://github.com/capawesome-team/capacitor-plugins/commit/a90dc9e4c3232cb307a860eb8310aacfe5447e44) ([#680](https://github.com/capawesome-team/capacitor-plugins/pull/680)): feat: add `autoUpdateStrategy` configuration option
+
+- [`7dfd6d7305ceae7a9617dd76a77a4546e3659780`](https://github.com/capawesome-team/capacitor-plugins/commit/7dfd6d7305ceae7a9617dd76a77a4546e3659780) ([#685](https://github.com/capawesome-team/capacitor-plugins/pull/685)): feat: add `autoBlockRolledBackBundles` configuration option
+
+### Patch Changes
+
+- [`0c234a38800fd9875d65bc2cd64765296bcf2eee`](https://github.com/capawesome-team/capacitor-plugins/commit/0c234a38800fd9875d65bc2cd64765296bcf2eee) ([#656](https://github.com/capawesome-team/capacitor-plugins/pull/656)): fix: `fetchLatestBundle` and `sync` throw error if `appId` is unset
+
+- [`2d7a2d2c6a796b6b8a169eeb338ceb2c5ee6fcdf`](https://github.com/capawesome-team/capacitor-plugins/commit/2d7a2d2c6a796b6b8a169eeb338ceb2c5ee6fcdf) ([#683](https://github.com/capawesome-team/capacitor-plugins/pull/683)): fix(ios): improve header parsing for checksum and signature responses
+
+- [`d594b9e8b3d740691051e0555e185811215e54ca`](https://github.com/capawesome-team/capacitor-plugins/commit/d594b9e8b3d740691051e0555e185811215e54ca) ([#682](https://github.com/capawesome-team/capacitor-plugins/pull/682)): fix(android): prevent empty next server path
+
 ## 7.2.2
 
 ### Patch Changes

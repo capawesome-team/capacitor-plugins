@@ -29,7 +29,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 0.5.x          | >=8.x.x           | Active support |
 
 ## Guides
 

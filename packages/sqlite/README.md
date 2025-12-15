@@ -37,7 +37,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 8.x.x          | >=8.x.x           | Active support |
+| 0.1.x          | 7.x.x             | Deprecated     |
 
 ## Guides
 
@@ -63,9 +64,11 @@ npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 Next, install the package:
 
 ```
-npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm
+npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm@3.50.3-build1
 npx cap sync
 ```
+
+**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
 
 ### Android
 
@@ -93,9 +96,9 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxSqliteVersion` version of `androidx.sqlite:sqlite` (default: `2.4.0`)
-- `$androidxSqliteFrameworkAndroidVersion` version of `androidx.sqlite:sqlite-framework-android` (default: `2.5.2`)
-- `$netZeteticSqlcipherVersion` version of `net.zetetic:sqlcipher-android` (default: `4.9.0`)
+- `$androidxSqliteVersion` version of `androidx.sqlite:sqlite` (default: `2.6.2`)
+- `$androidxSqliteFrameworkAndroidVersion` version of `androidx.sqlite:sqlite-framework-android` (default: `2.6.2`)
+- `$netZeteticSqlcipherVersion` version of `net.zetetic:sqlcipher-android` (default: `4.12.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

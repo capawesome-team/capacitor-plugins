@@ -24,6 +24,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 ```bash
@@ -46,7 +52,7 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.1.0`)
+- `$androidxCameraCoreVersion` version of `androidx.camera:camera-core` (default: `1.5.2`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

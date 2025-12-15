@@ -25,7 +25,7 @@ public class CheckAgeSignalsResult implements Result {
     private final String installId;
 
     public CheckAgeSignalsResult(@NonNull AgeSignalsResult ageSignalsResult) {
-        this.userStatus = mapUserStatus(ageSignalsResult.userStatus().toString());
+        this.userStatus = mapUserStatus(ageSignalsResult.userStatus());
         this.ageLower = ageSignalsResult.ageLower();
         this.ageUpper = ageSignalsResult.ageUpper();
         this.mostRecentApprovalDate = ageSignalsResult.mostRecentApprovalDate() != null
@@ -54,20 +54,17 @@ public class CheckAgeSignalsResult implements Result {
     }
 
     @NonNull
-    private UserStatus mapUserStatus(@NonNull String status) {
-        switch (status) {
-            case "VERIFIED":
-                return UserStatus.VERIFIED;
-            case "SUPERVISED":
-                return UserStatus.SUPERVISED;
-            case "SUPERVISED_APPROVAL_PENDING":
-                return UserStatus.SUPERVISED_APPROVAL_PENDING;
-            case "SUPERVISED_APPROVAL_DENIED":
-                return UserStatus.SUPERVISED_APPROVAL_DENIED;
-            case "UNKNOWN":
-                return UserStatus.UNKNOWN;
-            default:
-                return UserStatus.EMPTY;
+    private UserStatus mapUserStatus(@Nullable Integer status) {
+        if (status == null) {
+            return UserStatus.EMPTY;
         }
+
+        UserStatus[] values = UserStatus.values();
+
+        if (status < 0 || status >= values.length) {
+            throw new IllegalArgumentException("Invalid UserStatus: " + status);
+        }
+
+        return values[status];
     }
 }

@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.security.Key;
 
@@ -8,7 +9,12 @@ public class LiveUpdateConfig {
     @Nullable
     private String appId = null;
 
+    private boolean autoBlockRolledBackBundles = false;
+
     private boolean autoDeleteBundles = false;
+
+    @NonNull
+    private String autoUpdateStrategy = "none";
 
     @Nullable
     private String defaultChannel = null;
@@ -26,8 +32,17 @@ public class LiveUpdateConfig {
         return appId;
     }
 
+    public boolean getAutoBlockRolledBackBundles() {
+        return autoBlockRolledBackBundles;
+    }
+
     public boolean getAutoDeleteBundles() {
         return autoDeleteBundles;
+    }
+
+    @NonNull
+    public String getAutoUpdateStrategy() {
+        return autoUpdateStrategy;
     }
 
     @Nullable
@@ -56,8 +71,16 @@ public class LiveUpdateConfig {
         this.appId = appId;
     }
 
+    public void setAutoBlockRolledBackBundles(boolean autoBlockRolledBackBundles) {
+        this.autoBlockRolledBackBundles = autoBlockRolledBackBundles;
+    }
+
     public void setAutoDeleteBundles(boolean autoDeleteBundles) {
         this.autoDeleteBundles = autoDeleteBundles;
+    }
+
+    public void setAutoUpdateStrategy(@NonNull String autoUpdateStrategy) {
+        this.autoUpdateStrategy = autoUpdateStrategy;
     }
 
     public void setDefaultChannel(@Nullable String defaultChannel) {

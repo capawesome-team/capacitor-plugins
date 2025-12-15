@@ -30,9 +30,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
 | 6.x.x          | 6.x.x             | Deprecated     |
-| 5.x.x          | 5.x.x             | Deprecated     |
 
 ## Demo
 
@@ -80,8 +80,8 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
-- `$androidxPrintVersion` version of `androidx.print:print` (default: `1.0.0`)
+- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.1.0`)
+- `$androidxPrintVersion` version of `androidx.print:print` (default: `1.1.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 

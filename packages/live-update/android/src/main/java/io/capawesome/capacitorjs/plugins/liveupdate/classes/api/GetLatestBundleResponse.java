@@ -36,9 +36,9 @@ public class GetLatestBundleResponse {
             this.artifactType = ArtifactType.ZIP;
         }
         this.bundleId = responseJson.optString("bundleId");
-        this.checksum = responseJson.optString("checksum");
+        this.checksum = responseJson.isNull("checksum") ? null : responseJson.optString("checksum");
         this.customProperties = responseJson.optJSONObject("customProperties");
-        this.signature = responseJson.optString("signature");
+        this.signature = responseJson.isNull("signature") ? null : responseJson.optString("signature");
         this.url = responseJson.optString("url");
     }
 

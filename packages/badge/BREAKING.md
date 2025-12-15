@@ -1,6 +1,6 @@
 # Breaking Changes
 
-This is a comprehensive list of the breaking changes introduced in the major version releases of Capacitor Badge plugin.
+This is a comprehensive list of the breaking changes introduced in the major version releases.
 
 ## Versions
 
@@ -8,6 +8,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 - [Version 5.x.x](#version-5xx)
 
 ## Version 8.x.x
+
+### Capacitor 8
+
+This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36** and the iOS deployment target is **15.0**. Ensure your project meets these requirements before upgrading.
 
 ### Error Handling
 

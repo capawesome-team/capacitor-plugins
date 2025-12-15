@@ -8,41 +8,65 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "7.2.2"
+    public static let version = "7.4.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
     public let jsName = "LiveUpdate"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "clearBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fetchLatestBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getConfig", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDownloadedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCurrentBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCustomId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDeviceId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getVersionCode", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getVersionName", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isSyncing", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "ready", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reload", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "resetConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setChannel", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setCustomId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "sync", returnType: CAPPluginReturnPromise)
     ]
 
     private let eventDownloadBundleProgess = "downloadBundleProgress"
+    private let eventNextBundleSet = "nextBundleSet"
+    private let eventReloaded = "reloaded"
 
     private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
-    private var syncInProgress = false
 
     override public func load() {
         self.config = liveUpdateConfig()
         self.implementation = LiveUpdate(config: config!, plugin: self)
+
+        // Notify implementation about load
+        implementation?.handleLoad()
+
+        // Register for app resume notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
+    }
+
+    @objc func clearBlockedBundles(_ call: CAPPluginCall) {
+        implementation?.clearBlockedBundles()
+        resolveCall(call)
     }
 
     @objc func deleteBundle(_ call: CAPPluginCall) {
@@ -90,6 +114,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func fetchLatestBundle(_ call: CAPPluginCall) {
         Task {
             do {
+                guard let appId = config?.appId, !appId.isEmpty else {
+                    call.reject(CustomError.appIdMissing.localizedDescription)
+                    return
+                }
+
                 let options = FetchLatestBundleOptions(call)
                 let result = try await implementation?.fetchLatestBundle(options)
                 if let result = result?.toJSObject() as? JSObject {
@@ -99,6 +128,18 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 rejectCall(call, error)
             }
         }
+    }
+
+    @objc func getBlockedBundles(_ call: CAPPluginCall) {
+        implementation?.getBlockedBundles(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
     }
 
     @objc func getBundles(_ call: CAPPluginCall) {
@@ -113,8 +154,32 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         })
     }
 
+    @objc func getDownloadedBundles(_ call: CAPPluginCall) {
+        implementation?.getDownloadedBundles(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
+    }
+
     @objc func getChannel(_ call: CAPPluginCall) {
         implementation?.getChannel(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
+    }
+
+    @objc func getConfig(_ call: CAPPluginCall) {
+        implementation?.getConfig(completion: { result, error in
             if let error = error {
                 self.rejectCall(call, error)
                 return
@@ -197,6 +262,18 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         })
     }
 
+    @objc func isSyncing(_ call: CAPPluginCall) {
+        implementation?.isSyncing(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            if let result = result?.toJSObject() as? JSObject {
+                self.resolveCall(call, result)
+            }
+        })
+    }
+
     @objc func ready(_ call: CAPPluginCall) {
         implementation?.ready(completion: { result, error in
             if let error = error {
@@ -219,6 +296,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         resolveCall(call)
     }
 
+    @objc func resetConfig(_ call: CAPPluginCall) {
+        implementation?.resetConfig()
+        resolveCall(call)
+    }
+
     @objc func setChannel(_ call: CAPPluginCall) {
         let channel = call.getString("channel")
 
@@ -231,6 +313,12 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
             }
             self.resolveCall(call)
         })
+    }
+
+    @objc func setConfig(_ call: CAPPluginCall) {
+        let options = SetConfigOptions(call)
+        implementation?.setConfig(options)
+        resolveCall(call)
     }
 
     @objc func setCustomId(_ call: CAPPluginCall) {
@@ -265,25 +353,17 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func sync(_ call: CAPPluginCall) {
         Task {
             do {
-                guard let _ = config?.appId else {
+                guard let appId = config?.appId, !appId.isEmpty else {
                     call.reject(CustomError.appIdMissing.localizedDescription)
                     return
                 }
 
-                guard !syncInProgress else {
-                    call.reject(CustomError.syncInProgress.localizedDescription)
-                    return
-                }
-                syncInProgress = true
-
                 let options = SyncOptions(call)
                 let result = try await implementation?.sync(options)
-                self.syncInProgress = false
                 if let result = result?.toJSObject() as? JSObject {
                     resolveCall(call, result)
                 }
             } catch {
-                self.syncInProgress = false
                 rejectCall(call, error)
             }
         }
@@ -295,11 +375,26 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    func notifyNextBundleSetListeners(_ event: NextBundleSetEvent) {
+        notifyListeners(eventNextBundleSet, data: event.toJSObject(), retainUntilConsumed: false)
+    }
+
+    func notifyReloadedListeners() {
+        let event = JSObject()
+        notifyListeners(eventReloaded, data: event, retainUntilConsumed: true)
+    }
+
+    @objc private func handleAppWillEnterForeground() {
+        implementation?.handleAppWillEnterForeground()
+    }
+
     private func liveUpdateConfig() -> LiveUpdateConfig {
         var config = LiveUpdateConfig()
 
         config.appId = getConfig().getString("appId", config.appId)
+        config.autoBlockRolledBackBundles = getConfig().getBoolean("autoBlockRolledBackBundles", config.autoBlockRolledBackBundles)
         config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
+        config.autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.autoUpdateStrategy) ?? config.autoUpdateStrategy
         config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
         config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
         config.publicKey = getConfig().getString("publicKey", config.publicKey)

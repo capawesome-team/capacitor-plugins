@@ -24,7 +24,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 7.x.x          | >=7.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Active support |
 
 ## Installation
 
@@ -52,7 +52,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$googlePlayBillingVersion` version of `com.android.billingclient:billing` (default: `8.0.0`)
+- `$googlePlayBillingVersion` version of `com.android.billingclient:billing` (default: `8.2.0`)
 
 ### iOS
 
@@ -307,7 +307,7 @@ Only available on Android and iOS (15.0+).
 
 | Prop            | Type                | Description                                                                                                                                                                              | Since |
 | --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **iOS**, this is the Product ID configured in App Store Connect. On **Android**, this is the Product ID configured in Google Play Console. | 0.1.0 |
+| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the Product ID configured in Google Play Console. On **iOS**, this is the Product ID configured in App Store Connect. | 0.1.0 |
 
 </docgen-api>
 

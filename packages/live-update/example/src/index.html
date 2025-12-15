@@ -55,6 +55,9 @@
             </ion-select>
           </ion-item>
           <ion-item>
+            <ion-input id="app-id-input" label="App ID"></ion-input>
+          </ion-item>
+          <ion-item>
             <ion-input id="bundle-id-input" label="Bundle ID"></ion-input>
             <ion-button
               id="present-select-bundle-alert-button"
@@ -82,6 +85,9 @@
           <ion-item>
             <ion-input id="signature-input" label="Signature"></ion-input>
           </ion-item>
+          <ion-button id="clear-blocked-bundles-button" expand="block"
+            >Clear Blocked Bundles</ion-button
+          >
           <ion-button id="delete-bundle-button" expand="block"
             >Delete Bundle</ion-button
           >
@@ -91,11 +97,20 @@
           <ion-button id="fetch-latest-bundle-button" expand="block"
             >Fetch Latest Bundle</ion-button
           >
+          <ion-button id="get-blocked-bundles-button" expand="block"
+            >Get Blocked Bundles</ion-button
+          >
           <ion-button id="get-bundles-button" expand="block"
             >Get Bundles</ion-button
           >
+          <ion-button id="get-downloaded-bundles-button" expand="block"
+            >Get Downloaded Bundles</ion-button
+          >
           <ion-button id="get-channel-button" expand="block"
             >Get Channel</ion-button
+          >
+          <ion-button id="get-config-button" expand="block"
+            >Get Config</ion-button
           >
           <ion-button id="get-current-bundle-button" expand="block"
             >Get Current Bundle</ion-button
@@ -115,11 +130,20 @@
           <ion-button id="get-version-name-button" expand="block"
             >Get Version Name</ion-button
           >
+          <ion-button id="is-syncing-button" expand="block"
+            >Is Syncing</ion-button
+          >
           <ion-button id="ready-button" expand="block">Ready</ion-button>
           <ion-button id="reload-button" expand="block">Reload</ion-button>
           <ion-button id="reset-button" expand="block">Reset</ion-button>
+          <ion-button id="reset-config-button" expand="block"
+            >Reset Config</ion-button
+          >
           <ion-button id="set-channel-button" expand="block"
             >Set Channel</ion-button
+          >
+          <ion-button id="set-config-button" expand="block"
+            >Set Config</ion-button
           >
           <ion-button id="set-custom-id-button" expand="block"
             >Set Custom ID</ion-button

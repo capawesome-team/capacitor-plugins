@@ -11,6 +11,7 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
@@ -24,6 +25,8 @@ import CommonCrypto
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
     private var rollbackPerformed = false
+    private var lastAutoUpdateCheckTimestamp: Int64 = 0
+    private var syncInProgress = false
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
@@ -32,9 +35,16 @@ import CommonCrypto
         self.preferences = LiveUpdatePreferences()
         super.init()
 
+        // Check version and reset config if version changed
+        checkAndResetConfigIfVersionChanged()
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer()
+    }
+
+    @objc public func clearBlockedBundles() {
+        preferences.setBlockedBundleIds(nil)
     }
 
     @objc public func deleteBundle(_ options: DeleteBundleOptions, completion: @escaping (Error?) -> Void) {
@@ -79,15 +89,37 @@ import CommonCrypto
         return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
     }
 
+    @objc public func getBlockedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleIds: [String] = []
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            bundleIds = blockedIds.split(separator: ",").map(String.init)
+        }
+        let result = GetBlockedBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
+    }
+
     @objc public func getBundles(completion: @escaping (Result?, Error?) -> Void) {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let result = GetBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
+    }
+
+    @objc public func getDownloadedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        let bundleIds = getDownloadedBundleIds()
+        let result = GetDownloadedBundlesResult(bundleIds: bundleIds)
         completion(result, nil)
     }
 
     @objc public func getChannel(completion: @escaping (Result?, Error?) -> Void) {
         let channel = getChannel()
         let result = GetChannelResult(channel: channel)
+        completion(result, nil)
+    }
+
+    @objc public func getConfig(completion: @escaping (Result?, Error?) -> Void) {
+        let appId = getAppId()
+        let autoUpdateStrategy = config.autoUpdateStrategy
+        let result = GetConfigResult(appId: appId, autoUpdateStrategy: autoUpdateStrategy)
         completion(result, nil)
     }
 
@@ -128,6 +160,23 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func isSyncing(completion: @escaping (Result?, Error?) -> Void) {
+        let result = IsSyncingResult(syncing: syncInProgress)
+        completion(result, nil)
+    }
+
+    @objc public func handleLoad() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
+        }
+    }
+
+    @objc public func handleAppWillEnterForeground() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
+        }
+    }
+
     @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
         if config.readyTimeout <= 0 {
@@ -142,6 +191,10 @@ import CommonCrypto
         // Get the current and previous bundle IDs
         let currentBundleId = getCurrentBundleId()
         let previousBundleId = getPreviousBundleId()
+        // Block the rolled back bundle if enabled
+        if config.autoBlockRolledBackBundles && rollbackPerformed, let previousBundleId = previousBundleId {
+            addBlockedBundleId(previousBundleId)
+        }
         // Return the result
         let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
         completion(result, nil)
@@ -161,11 +214,20 @@ import CommonCrypto
         self.setNextBundleById(nil)
     }
 
+    @objc public func resetConfig() {
+        preferences.setAppId(nil)
+    }
+
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {
         let channel = options.getChannel()
 
         preferences.setChannel(channel)
         completion(nil)
+    }
+
+    @objc public func setConfig(_ options: SetConfigOptions) {
+        let appId = options.getAppId()
+        preferences.setAppId(appId)
     }
 
     @objc public func setCustomId(_ options: SetCustomIdOptions, completion: @escaping (Error?) -> Void) {
@@ -194,6 +256,14 @@ import CommonCrypto
     }
 
     @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        if syncInProgress {
+            throw CustomError.syncInProgress
+        }
+        syncInProgress = true
+        defer {
+            syncInProgress = false
+        }
+
         let channel = options.getChannel()
         // Fetch the latest bundle
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
@@ -206,6 +276,11 @@ import CommonCrypto
         let checksum = response.checksum
         let signature = response.signature
         let downloadUrl = response.url
+        // Check if the bundle is blocked
+        if isBlockedBundleId(latestBundleId) {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
+            return SyncResult(nextBundleId: nil)
+        }
         // Check if bundle already exists
         if hasBundleById(latestBundleId) {
             var nextBundleId: String?
@@ -339,7 +414,7 @@ import CommonCrypto
     }
 
     private func deleteUnusedBundles() {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let currentBundleId = getCurrentBundleId()
         let nextBundleId = getNextBundleId()
 
@@ -484,7 +559,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
@@ -507,7 +582,7 @@ import CommonCrypto
         }
     }
 
-    private func getBundleIds() -> [String] {
+    private func getDownloadedBundleIds() -> [String] {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         do {
             let pathExists = FileManager.default.fileExists(atPath: url.path)
@@ -519,6 +594,13 @@ import CommonCrypto
         } catch {
             return []
         }
+    }
+
+    private func getAppId() -> String? {
+        if let appId = preferences.getAppId() {
+            return appId
+        }
+        return config.appId
     }
 
     private func getChannel() -> String? {
@@ -645,6 +727,30 @@ import CommonCrypto
         plugin.notifyDownloadBundleProgressListeners(event)
     }
 
+    private func performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
+            return
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now
+
+        // Run sync in background task
+        Task {
+            do {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
+                let options = SyncOptions(channel: nil)
+                _ = try await sync(options)
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
+            } catch {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
+            }
+        }
+    }
+
     private func rollback() {
         // Set the rollback flag
         rollbackPerformed = true
@@ -699,12 +805,63 @@ import CommonCrypto
             return
         }
         viewController.setServerBasePath(path: path)
+        // Notify listeners
+        notifyReloadedListeners()
     }
 
     /// - Parameter bundleId: The bundle ID to set as the next bundle. If `nil`, the default bundle will be used.
     private func setNextBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId)
         setNextCapacitorServerPath(path: path)
+
+        // Notify listeners
+        notifyNextBundleSetListeners(bundleId)
+    }
+
+    private func notifyNextBundleSetListeners(_ bundleId: String?) {
+        let event = NextBundleSetEvent(bundleId: bundleId)
+        plugin.notifyNextBundleSetListeners(event)
+    }
+
+    private func notifyReloadedListeners() {
+        plugin.notifyReloadedListeners()
+    }
+
+    private func addBlockedBundleId(_ bundleId: String) {
+        var blockedList: [String] = []
+
+        // Parse existing blocked IDs
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            blockedList = blockedIds.split(separator: ",").map(String.init)
+        }
+
+        // Skip if already blocked
+        if blockedList.contains(bundleId) {
+            return
+        }
+
+        // Remove oldest if limit reached
+        if blockedList.count >= 100 {
+            blockedList.removeFirst()
+        }
+
+        // Add new bundle
+        blockedList.append(bundleId)
+
+        // Save back to preferences
+        let newBlockedIds = blockedList.joined(separator: ",")
+        preferences.setBlockedBundleIds(newBlockedIds)
+
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle blocked: ", bundleId)
+    }
+
+    private func isBlockedBundleId(_ bundleId: String) -> Bool {
+        guard let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty else {
+            return false
+        }
+
+        let blockedList = blockedIds.split(separator: ",").map(String.init)
+        return blockedList.contains(bundleId)
     }
 
     private func setNextCapacitorServerPath(path: String) {
@@ -714,6 +871,23 @@ import CommonCrypto
         } else {
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
             KeyValueStore.standard[self.defaultServerPathKey] = path
+        }
+    }
+
+    private func checkAndResetConfigIfVersionChanged() {
+        let currentVersionCode = getVersionCode()
+        let currentVersionName = getVersionName()
+        let lastVersionCode = preferences.getLastVersionCode()
+        let lastVersionName = preferences.getLastVersionName()
+
+        if lastVersionCode == nil || lastVersionName == nil || lastVersionCode != currentVersionCode || lastVersionName != currentVersionName {
+            CAPLog.print(
+                "[", LiveUpdatePlugin.tag, "] ",
+                "App version changed (last: \(lastVersionName ?? "nil")/\(lastVersionCode ?? "nil"), current: \(currentVersionName)/\(currentVersionCode)), resetting config."
+            )
+            resetConfig()
+            preferences.setLastVersionCode(currentVersionCode)
+            preferences.setLastVersionName(currentVersionName)
         }
     }
 

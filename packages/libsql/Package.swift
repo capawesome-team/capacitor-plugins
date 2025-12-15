@@ -3,14 +3,14 @@ import PackageDescription
 
 let package = Package(
     name: "CapawesomeCapacitorLibsql",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "CapawesomeCapacitorLibsql",
             targets: ["LibsqlPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0"),
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
         .package(url: "https://github.com/tursodatabase/libsql-swift", from: "0.1.1")
     ],
     targets: [
