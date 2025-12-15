@@ -8,6 +8,13 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
   </a>
 </div>
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
+
 ## Installation
 
 ```bash

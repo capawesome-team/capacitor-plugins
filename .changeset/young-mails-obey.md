@@ -4,4 +4,4 @@
 '@capawesome/capacitor-libsql': minor
 ---
 
-feat!: Capacitor 8 support
+feat!: update to Capacitor 8 (see `BREAKING.md`)

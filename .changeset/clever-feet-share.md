@@ -22,4 +22,4 @@
 '@capawesome/capacitor-torch': major
 ---
 
-feat!: Capacitor 8 support
+feat!: update to Capacitor 8 (see `BREAKING.md`)
