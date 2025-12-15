@@ -11,3 +11,7 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 ### Capacitor 8
 
 This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36**. Ensure your project meets these requirements before upgrading.
+
+### Default Background Color
+
+The default background color has been changed from white to transparent. If you want to keep the white background, you need to explicitly set the `backgroundColor` configuration option to `#ffffff`.

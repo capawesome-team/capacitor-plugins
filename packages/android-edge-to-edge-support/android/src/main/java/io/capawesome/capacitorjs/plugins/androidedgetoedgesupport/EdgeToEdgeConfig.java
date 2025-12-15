@@ -4,7 +4,7 @@ import android.graphics.Color;
 
 public class EdgeToEdgeConfig {
 
-    private int backgroundColor = Color.WHITE;
+    private int backgroundColor = Color.TRANSPARENT;
 
     public int getBackgroundColor() {
         return this.backgroundColor;
