@@ -76,7 +76,7 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.0.1`)
+- `$androidxDocumentFileVersion` version of `androidx.documentfile:documentfile` (default: `1.1.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
