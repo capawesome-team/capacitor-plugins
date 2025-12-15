@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-screen-orientation",
-  "version": "8.0.0",
+  "version": "7.0.0",
   "description": "Capacitor plugin to lock/unlock the screen orientation.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

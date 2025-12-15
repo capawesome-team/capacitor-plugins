@@ -17,6 +17,7 @@ Capacitor plugin to use the [Play Age Signals API](https://developer.android.com
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | 7.x.x             | Deprecated     |
 
 ## Installation
 

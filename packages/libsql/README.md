@@ -13,7 +13,7 @@ Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.2.x          | >=8.x.x           | Active support |
-| 0.1.x          | 7.x.x             | Deprecated |
+| 0.1.x          | 7.x.x             | Deprecated     |
 
 ## Installation
 
