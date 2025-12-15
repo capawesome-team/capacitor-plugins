@@ -52,7 +52,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$googlePlayBillingVersion` version of `com.android.billingclient:billing` (default: `8.0.0`)
+- `$googlePlayBillingVersion` version of `com.android.billingclient:billing` (default: `8.2.0`)
 
 ### iOS
 
