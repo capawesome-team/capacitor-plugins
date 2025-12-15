@@ -24,7 +24,7 @@ This plugin is supported on Android SDK +24.
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$realtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.2.2`)
+- `$realtimekitUiVersion` version of `com.cloudflare.realtimekit:ui-android` (default: `0.3.1`)
 
 ### iOS
 

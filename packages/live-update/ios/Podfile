@@ -22,8 +22,8 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'Alamofire', '5.9.0'
-  pod 'SSZipArchive', '2.2.3'
+  pod 'Alamofire', '5.10.2'
+  pod 'SSZipArchive', '2.4.0'
 end
 
 target 'PluginTests' do

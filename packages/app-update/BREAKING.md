@@ -15,6 +15,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36** and the iOS deployment target is **15.0**. Ensure your project meets these requirements before upgrading.
 
+### Variables
+
+- On Android, the `androidPlayServicesBaseVersion` variable has been updated to `18.9.0`.
+
 ## Version 7.x.x
 
 ### `OpenAppStoreOptions` interface

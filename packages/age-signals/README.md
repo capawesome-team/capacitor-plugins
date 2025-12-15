@@ -32,7 +32,7 @@ npx cap sync
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.1-beta02`)
+- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.2`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
