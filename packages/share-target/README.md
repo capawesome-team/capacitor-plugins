@@ -135,7 +135,7 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$androidxExifInterfaceVersion` version of `androidx.exifinterface:exifinterface` (default: `1.4.1`)
+- `$androidxExifInterfaceVersion` version of `androidx.exifinterface:exifinterface` (default: `1.4.2`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
