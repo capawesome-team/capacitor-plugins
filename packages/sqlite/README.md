@@ -68,7 +68,7 @@ npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm@3.50.3-bui
 npx cap sync
 ```
 
-**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
+**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4-build1` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
 
 ### Android
 
