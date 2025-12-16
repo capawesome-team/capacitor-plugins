@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/android": "7.4.4",
-    "@capacitor/core": "7.4.4",
-    "@capacitor/ios": "7.4.4",
+    "@capacitor/android": "^8.0.0",
+    "@capacitor/core": "^8.0.0",
+    "@capacitor/ios": "^8.0.0",
     "@capawesome/capacitor-app-shortcuts": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "7.4.4",
+    "@capacitor/cli": "^8.0.0",
     "vite": "7.2.2"
   }
 }
