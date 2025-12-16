@@ -13,6 +13,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36** and the iOS deployment target is **15.0**. Ensure your project meets these requirements before upgrading.
 
+### Peer Dependencies
+
+The `posthog-js` peer dependency has been updated to version `^1.306.2`. Ensure your project uses a compatible version of `posthog-js` before upgrading.
+
 ## Version 7.x.x
 
 ### Variables
