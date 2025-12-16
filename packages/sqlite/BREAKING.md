@@ -12,6 +12,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36** and the iOS deployment target is **15.0**. Ensure your project meets these requirements before upgrading.
 
+### SQLite WASM Dependency
+
+The `@sqlite.org/sqlite-wasm` dependency version is now restricted to `3.50.3-build1` or lower. Versions higher than `3.50.3-build1` are not supported due to an open bug report (see [sqlite/sqlite-wasm#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
+
 ### Variables
 
 - On Android, the `androidxSqliteVersion` variable has been updated to `2.6.2`.
