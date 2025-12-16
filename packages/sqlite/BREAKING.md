@@ -4,9 +4,9 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
-- [Version 8.x.x](#version-8xx)
+- [Version 0.2.x](#version-02x)
 
-## Version 8.x.x
+## Version 0.2.x
 
 ### Capacitor 8
 
@@ -21,3 +21,7 @@ The `@sqlite.org/sqlite-wasm` dependency version is now restricted to `3.50.3-bu
 - On Android, the `androidxSqliteVersion` variable has been updated to `2.6.2`.
 - On Android, the `androidxSqliteFrameworkAndroidVersion` variable has been updated to `2.6.2`.
 - On Android, the `netZeteticSqlcipherVersion` variable has been updated to `4.12.0`.
+
+### Database Version Management
+
+The default behavior for setting the database version has changed. If neither `version` nor `upgradeStatements` are provided when opening a database, no version will be set. This allows for greater flexibility in managing database versions manually. Previously, if you did not specify a `version` when opening a database, the default version was set to `1`.
