@@ -116,6 +116,8 @@ capacitor_pods
 end
 ```
 
+**Attention**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM). If you need database encryption, you must use CocoaPods for the Capacitor iOS platform. See the [Limitations](#limitations) section for more details.
+
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
 If you do NOT want to use encryption, you need to add the `Plain` pod to your app's `Podfile` by adding the following line:
