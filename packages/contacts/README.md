@@ -14,6 +14,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
+- 🔄 **Partial Updates**: Update only specific contact fields without affecting others - missing properties are preserved, null values delete fields.
 - 📌 **Groups**: Create, update, delete and retrieve contact groups on iOS.
 - 🎫 **Accounts**: Add contacts to specific accounts on Android.
 - 📖 **Pagination**: Paginate through contacts to avoid performance issues.
@@ -113,11 +114,6 @@ import {
   PostalAddressType
 } from '@capawesome-team/capacitor-contacts';
 
-const countContacts = async () => {
-  const { total } = await Contacts.countContacts();
-  return total;
-};
-
 const createContact = async () => {
   return Contacts.createContact({
     contact: {
@@ -157,15 +153,14 @@ const createContact = async () => {
   });
 };
 
-const countContacts = async () => {
-  const { total } = await Contacts.countContacts();
-  return total;
-};
-
-const createGroup = async () => {
-  return Contacts.createGroup({
-    group: {
-      name: 'My Group'
+const updateContactById = async (id: string) => {
+  await Contacts.updateContactById({
+    id,
+    contact: {
+      givenName: 'John',
+      familyName: 'Doe',
+      birthday: null, // This will remove the birthday field from the contact
+      note: undefined // This will preserve the existing note field
     }
   });
 };
@@ -174,31 +169,19 @@ const deleteContactById = async (id: string) => {
   await Contacts.deleteContactById({ id });
 };
 
-const deleteGroupById = async (id: string) => {
-  await Contacts.deleteGroupById({ id });
-};
-
-const displayContactById = async (id: string) => {
-  await Contacts.displayContactById({ id });
-};
-
-const displayCreateContact = async () => {
-  const { id } = await Contacts.displayCreateContact({
-    contact: {
-      givenName: 'John',
-      familyName: 'Doe'
-    }
+const pickContacts = async () => {
+  const { contacts } = await Contacts.pickContacts({
+    fields: [
+      'id',
+      'givenName',
+      'familyName',
+      'emailAddresses',
+      'phoneNumbers',
+      'postalAddresses'
+    ],
+    multiple: true
   });
-  return id;
-};
-
-const displayUpdateContactById = async (id: string) => {
-  await Contacts.displayUpdateContactById({ id });
-};
-
-const getAccounts = async () => {
-  const { accounts } = await Contacts.getAccounts();
-  return accounts;
+  return contacts;
 };
 
 const getContactById = async (id: string) => {
@@ -222,6 +205,36 @@ const getContacts = async () => {
   return contacts;
 };
 
+const displayContactById = async (id: string) => {
+  await Contacts.displayContactById({ id });
+};
+
+const displayUpdateContactById = async (id: string) => {
+  await Contacts.displayUpdateContactById({ id });
+};
+
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+
+const createGroup = async () => {
+  return Contacts.createGroup({
+    group: {
+      name: 'My Group'
+    }
+  });
+};
+
+const deleteGroupById = async (id: string) => {
+  await Contacts.deleteGroupById({ id });
+};
+
+const getAccounts = async () => {
+  const { accounts } = await Contacts.getAccounts();
+  return accounts;
+};
+
 const getGroupById = async (id: string) => {
   const { group } = await Contacts.getGroupById({ id });
   return group;
@@ -240,31 +253,6 @@ const isAvailable = async () => {
 const isSupported = async () => {
   const { isSupported } = await Contacts.isSupported();
   return isSupported;
-};
-
-const pickContacts = async () => {
-  const { contacts } = await Contacts.pickContacts({
-    fields: [
-      'id',
-      'givenName',
-      'familyName',
-      'emailAddresses',
-      'phoneNumbers',
-      'postalAddresses'
-    ],
-    multiple: true
-  });
-  return contacts;
-};
-
-const updateContactById = async (id: string) => {
-  await Contacts.updateContactById({
-    id,
-    contact: {
-      givenName: 'John',
-      familyName: 'Doe'
-    }
-  });
 };
 
 const checkPermissions = async () => {
@@ -971,10 +959,10 @@ Only available on Android and iOS.
 
 #### UpdateContactByIdOptions
 
-| Prop          | Type                                                          | Description                                                                                                                                                                          | Since |
-| ------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`contact`** | <code>Omit&lt;<a href="#contact">Contact</a>, 'id'&gt;</code> | The updated contact information. **Attention**: All fields are required to be provided, even if they are not updated. Fields that are not provided will be removed from the contact. | 7.4.0 |
-| **`id`**      | <code>string</code>                                           | The identifier for the contact.                                                                                                                                                      | 7.4.0 |
+| Prop          | Type                                                                                                  | Description                                                                                                                                                                 | Since |
+| ------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`contact`** | <code><a href="#nullable">Nullable</a>&lt;Omit&lt;<a href="#contact">Contact</a>, 'id'&gt;&gt;</code> | The updated contact information. Missing properties are ignored and keep their existing values. Properties explicitly set to `null` (or empty arrays `[]`) will be deleted. | 8.0.0 |
+| **`id`**      | <code>string</code>                                                                                   | The identifier for the contact.                                                                                                                                             | 8.0.0 |
 
 
 #### PermissionStatus
@@ -1008,6 +996,13 @@ Only available on Android and iOS.
 #### PickContactResult
 
 <code><a href="#pickcontactsresult">PickContactsResult</a></code>
+
+
+#### Nullable
+
+Makes all properties of T nullable.
+
+<code>{ [K in keyof T]: T[K] | null }</code>
 
 
 #### ContactsPermissionState
