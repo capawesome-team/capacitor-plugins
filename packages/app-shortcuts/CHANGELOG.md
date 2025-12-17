@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`12a22f63df48338afc9ed1ef91f7db0ace660540`](https://github.com/capawesome-team/capacitor-plugins/commit/12a22f63df48338afc9ed1ef91f7db0ace660540) ([#705](https://github.com/capawesome-team/capacitor-plugins/pull/705)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
 ## 7.5.0
 
 ### Minor Changes

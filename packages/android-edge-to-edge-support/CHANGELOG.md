@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`12a22f63df48338afc9ed1ef91f7db0ace660540`](https://github.com/capawesome-team/capacitor-plugins/commit/12a22f63df48338afc9ed1ef91f7db0ace660540) ([#705](https://github.com/capawesome-team/capacitor-plugins/pull/705)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`5a342c9037d889436945175521cbb138d644aa91`](https://github.com/capawesome-team/capacitor-plugins/commit/5a342c9037d889436945175521cbb138d644aa91) ([#711](https://github.com/capawesome-team/capacitor-plugins/pull/711)): feat!: remove default background color
+
+### Minor Changes
+
+- [`ec619dac2c5f8248e00a24798b4dbae98899143e`](https://github.com/capawesome-team/capacitor-plugins/commit/ec619dac2c5f8248e00a24798b4dbae98899143e) ([#712](https://github.com/capawesome-team/capacitor-plugins/pull/712)): feat(android): add support for status bar and navigation bar color customization
+
 ## 7.2.3
 
 ### Patch Changes

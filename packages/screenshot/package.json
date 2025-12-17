@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-screenshot",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Capacitor plugin for taking screenshots.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
