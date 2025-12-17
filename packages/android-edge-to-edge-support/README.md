@@ -12,6 +12,8 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | <image src="https://github.com/user-attachments/assets/1c42aa63-1191-4b9b-860f-ffc47881d815" width="200" /> | <image src="https://github.com/user-attachments/assets/a4df4e58-0c21-45b5-aadd-ca197308016a" width="200" /> | <image src="https://github.com/user-attachments/assets/22c94f95-a0c4-4ace-8a3b-3a0feabf9191" width="200" /> | <image src="https://github.com/user-attachments/assets/21ece022-fb74-4067-889b-6922ecd0e2a5" width="200" /> |
 
+**Attention:** Despite its name, this plugin doesn't enable edge-to-edge mode by default. Instead, it preserves the traditional app behavior by applying proper insets to the webview, preventing Android's edge-to-edge changes from affecting apps that haven't been designed to support it.
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -212,6 +214,16 @@ Only available on Android.
 | **`color`** | <code>string</code> | The hexadecimal color to set as the background color of the status bar and navigation bar. | 7.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### What about Capacitor 8's built-in edge-to-edge support?
+
+Capacitor 8 introduced native edge-to-edge functionality through the internal `SystemBars` plugin. While this covers many common scenarios, this plugin addresses additional edge cases that aren't yet fully resolved in the Capacitor core implementation. We plan to deprecate this plugin once all edge cases are properly handled in Capacitor core.
+
+### Is this plugin compatible with Capacitor's SystemBars API?
+
+Yes, this plugin is partially compatible with the new [SystemBars API](https://capacitorjs.com/docs/apis/system-bars) introduced in Capacitor 8. For example, methods like `setStyle()` from the SystemBars API are supported and can be used alongside this plugin without conflicts.
 
 ## Changelog
 
