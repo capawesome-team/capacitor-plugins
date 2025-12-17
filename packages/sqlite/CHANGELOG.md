@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`cf030072c768ecc3d13343514d2b6e8b2a152521`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cf030072c768ecc3d13343514d2b6e8b2a152521) ([#351](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/351)): chore(deps)!: do not allow any version higher than `3.50.3-build1` for `@sqlite.org/sqlite-wasm`
+
+- [`c0659be66863400d370b54d99c64e1ae4de484e6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c0659be66863400d370b54d99c64e1ae4de484e6) ([#355](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/355)): feat!: update dependencies to the latest versions (see `README.md`)
+
+- [`19fb06d2a63c41850557e3eeeaa6102b7321bf65`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/19fb06d2a63c41850557e3eeeaa6102b7321bf65) ([#350](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/350)): refactor!: do not set a database version by default if no version is specified
+
 ## 0.1.7
 
 ### Patch Changes
