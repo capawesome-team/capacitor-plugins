@@ -14,4 +14,14 @@ This plugin now supports **Capacitor 8**. The minimum Android SDK version is **3
 
 ### Default Background Color
 
-The default background color has been changed from white to transparent. If you want to keep the white background, you need to explicitly set the `backgroundColor` configuration option to `#ffffff`.
+The default background color has been changed **from white to transparent**. If you want to keep the white background, you need to explicitly set the `backgroundColor` configuration option to `#ffffff`:
+
+```json
+{
+  "plugins": {
+    "EdgeToEdge": {
+      "backgroundColor": "#ffffff"
+    }
+  }
+}
+```
