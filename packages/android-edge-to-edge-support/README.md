@@ -92,7 +92,7 @@ The plugin **only needs to be installed**. It applies insets to the web view to 
 
 ```typescript
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
-import { StatusBar, Style } from '@capacitor/status-bar';
+import { SystemBars, SystemBarsStyle } from '@capacitor/status-bar';
 
 const enable = async () => {
   await EdgeToEdge.enable();
@@ -107,9 +107,14 @@ const getInsets = async () => {
   console.log('Insets:', result);
 };
 
-const setBackgroundColor = async () => {
-  await EdgeToEdge.setBackgroundColor({ color: '#ffffff' });
-  await StatusBar.setStyle({ style: Style.Light });
+const setDarkStyle = async () => {
+  await SystemBars.setStyle({ style: SystemBarsStyle.Dark });
+  await EdgeToEdge.setBackgroundColor({ color: '#000000' });
+};
+
+const setLightStyle = async () => {
+  await SystemBars.setStyle({ style: SystemBarsStyle.Light });
+  await EdgeToEdge.setBackgroundColor({ color: '#FFFFFF' });
 };
 ```
 
