@@ -6,23 +6,34 @@ declare module '@capacitor/cli' {
       /**
        * The hexadecimal color to set as the background color of the status bar and navigation bar.
        *
+       * @deprecated Use `statusBarColor` and `navigationBarColor` instead.
        * @since 7.1.0
        * @example "#ffffff"
        */
       backgroundColor?: string;
+      /**
+       * The hexadecimal color to set as the background color of the navigation bar area.
+       *
+       * Only available on Android.
+       *
+       * @since 8.0.0
+       * @example "#000000"
+       */
+      navigationBarColor?: string;
+      /**
+       * The hexadecimal color to set as the background color of the status bar area.
+       *
+       * Only available on Android.
+       *
+       * @since 8.0.0
+       * @example "#ffffff"
+       */
+      statusBarColor?: string;
     };
   }
 }
 
 export interface EdgeToEdgePlugin {
-  /**
-   * Enable the edge-to-edge mode.
-   *
-   * Only available on Android.
-   *
-   * @since 7.2.0
-   */
-  enable(): Promise<void>;
   /**
    * Disable the edge-to-edge mode.
    *
@@ -31,6 +42,14 @@ export interface EdgeToEdgePlugin {
    * @since 7.2.0
    */
   disable(): Promise<void>;
+  /**
+   * Enable the edge-to-edge mode.
+   *
+   * Only available on Android.
+   *
+   * @since 7.2.0
+   */
+  enable(): Promise<void>;
   /**
    * Return the insets that are currently applied to the webview.
    *
@@ -44,9 +63,26 @@ export interface EdgeToEdgePlugin {
    *
    * Only available on Android.
    *
+   * @deprecated Use `setStatusBarColor()` and `setNavigationBarColor()` instead.
    * @since 7.0.0
    */
   setBackgroundColor(options: SetBackgroundColorOptions): Promise<void>;
+  /**
+   * Set the background color of the navigation bar area.
+   *
+   * Only available on Android.
+   *
+   * @since 8.0.0
+   */
+  setNavigationBarColor(options: SetNavigationBarColorOptions): Promise<void>;
+  /**
+   * Set the background color of the status bar area.
+   *
+   * Only available on Android.
+   *
+   * @since 8.0.0
+   */
+  setStatusBarColor(options: SetStatusBarColorOptions): Promise<void>;
 }
 
 /**
@@ -97,6 +133,32 @@ export interface SetBackgroundColorOptions {
    * @since 7.0.0
    * @example "#ffffff"
    * @example "#000000"
+   */
+  color: string;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface SetNavigationBarColorOptions {
+  /**
+   * The hexadecimal color to set as the background color of the navigation bar area.
+   *
+   * @since 8.0.0
+   * @example "#000000"
+   */
+  color: string;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface SetStatusBarColorOptions {
+  /**
+   * The hexadecimal color to set as the background color of the status bar area.
+   *
+   * @since 8.0.0
+   * @example "#ffffff"
    */
   color: string;
 }

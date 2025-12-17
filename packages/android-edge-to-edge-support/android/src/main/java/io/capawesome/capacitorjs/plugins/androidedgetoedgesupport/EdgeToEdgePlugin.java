@@ -82,11 +82,64 @@ public class EdgeToEdgePlugin extends Plugin {
             });
     }
 
+    @PluginMethod
+    public void setNavigationBarColor(PluginCall call) {
+        String color = call.getString("color");
+        if (color == null) {
+            call.reject(ERROR_COLOR_MISSING);
+            return;
+        }
+        getActivity()
+            .runOnUiThread(() -> {
+                try {
+                    implementation.setNavigationBarColor(color);
+                    call.resolve();
+                } catch (Exception exception) {
+                    call.reject(exception.getMessage());
+                }
+            });
+    }
+
+    @PluginMethod
+    public void setStatusBarColor(PluginCall call) {
+        String color = call.getString("color");
+        if (color == null) {
+            call.reject(ERROR_COLOR_MISSING);
+            return;
+        }
+        getActivity()
+            .runOnUiThread(() -> {
+                try {
+                    implementation.setStatusBarColor(color);
+                    call.resolve();
+                } catch (Exception exception) {
+                    call.reject(exception.getMessage());
+                }
+            });
+    }
+
     private EdgeToEdgeConfig getEdgeToEdgeConfig() {
         EdgeToEdgeConfig config = new EdgeToEdgeConfig();
 
         try {
             String backgroundColor = getConfig().getString("backgroundColor");
+            String statusBarColor = getConfig().getString("statusBarColor");
+            String navigationBarColor = getConfig().getString("navigationBarColor");
+
+            // Backward compatibility: if backgroundColor is set but specific colors aren't, use it for both
+            if (statusBarColor == null && backgroundColor != null) {
+                config.setStatusBarColor(Color.parseColor(backgroundColor));
+            } else if (statusBarColor != null) {
+                config.setStatusBarColor(Color.parseColor(statusBarColor));
+            }
+
+            if (navigationBarColor == null && backgroundColor != null) {
+                config.setNavigationBarColor(Color.parseColor(backgroundColor));
+            } else if (navigationBarColor != null) {
+                config.setNavigationBarColor(Color.parseColor(navigationBarColor));
+            }
+
+            // Keep backgroundColor for any legacy code that might use it
             if (backgroundColor != null) {
                 config.setBackgroundColor(Color.parseColor(backgroundColor));
             }

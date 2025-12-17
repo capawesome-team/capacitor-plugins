@@ -2,13 +2,17 @@ package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
 import android.os.Build;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.getcapacitor.Logger;
+import java.lang.reflect.Constructor;
 
 public class EdgeToEdge {
 
@@ -18,11 +22,21 @@ public class EdgeToEdge {
     @NonNull
     private final EdgeToEdgePlugin plugin;
 
+    @Nullable
+    private View navigationBarOverlay;
+
+    @Nullable
+    private View statusBarOverlay;
+
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
         this.config = config;
         this.plugin = plugin;
-        // Apply insets to disable the edge-to-edge feature
-        setBackgroundColor(config.getBackgroundColor());
+        // Create color overlays
+        createColorOverlays();
+        // Set colors from config
+        setStatusBarColor(config.getStatusBarColor());
+        setNavigationBarColor(config.getNavigationBarColor());
+        // Apply insets to enable the edge-to-edge feature
         applyInsets();
     }
 
@@ -40,7 +54,17 @@ public class EdgeToEdge {
     }
 
     public void setBackgroundColor(String color) {
-        setBackgroundColor(Color.parseColor(color));
+        int parsedColor = Color.parseColor(color);
+        setStatusBarColor(parsedColor);
+        setNavigationBarColor(parsedColor);
+    }
+
+    public void setNavigationBarColor(String color) {
+        setNavigationBarColor(Color.parseColor(color));
+    }
+
+    public void setStatusBarColor(String color) {
+        setStatusBarColor(Color.parseColor(color));
     }
 
     private void applyInsets() {
@@ -64,6 +88,9 @@ public class EdgeToEdge {
             mlp.rightMargin = systemBarsInsets.right;
 
             view.setLayoutParams(mlp);
+
+            // Update color overlays based on current insets
+            updateColorOverlays(systemBarsInsets);
         }
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
@@ -87,6 +114,9 @@ public class EdgeToEdge {
 
             v.setLayoutParams(mlp);
 
+            // Update color overlays based on current insets
+            updateColorOverlays(systemBarsInsets);
+
             return WindowInsetsCompat.CONSUMED;
         });
     }
@@ -104,13 +134,105 @@ public class EdgeToEdge {
         view.setLayoutParams(mlp);
         // Reset listener
         ViewCompat.setOnApplyWindowInsetsListener(view, null);
+        // Remove color overlays
+        removeColorOverlays();
     }
 
-    private void setBackgroundColor(int color) {
-        View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
-        // Set background color
-        parent.setBackgroundColor(color);
+    private void createColorOverlays() {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay == null) {
+            statusBarOverlay = new View(parent.getContext());
+            parent.addView(statusBarOverlay, 0); // Add behind webview
+        }
+
+        if (navigationBarOverlay == null) {
+            navigationBarOverlay = new View(parent.getContext());
+            parent.addView(navigationBarOverlay, 0); // Add behind webview
+        }
+    }
+
+    private void removeColorOverlays() {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay != null) {
+            parent.removeView(statusBarOverlay);
+            statusBarOverlay = null;
+        }
+
+        if (navigationBarOverlay != null) {
+            parent.removeView(navigationBarOverlay);
+            navigationBarOverlay = null;
+        }
+    }
+
+    private void setNavigationBarColor(int color) {
+        if (navigationBarOverlay != null) {
+            navigationBarOverlay.setBackgroundColor(color);
+        }
+    }
+
+    private void setStatusBarColor(int color) {
+        if (statusBarOverlay != null) {
+            statusBarOverlay.setBackgroundColor(color);
+        }
+    }
+
+    private void updateColorOverlays(Insets systemBarsInsets) {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay != null) {
+            // Position status bar overlay at top
+            ViewGroup.LayoutParams statusParams = createLayoutParams(
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.top,
+                Gravity.TOP
+            );
+            statusBarOverlay.setLayoutParams(statusParams);
+        }
+
+        if (navigationBarOverlay != null) {
+            // Position navigation bar overlay at bottom
+            ViewGroup.LayoutParams navParams = createLayoutParams(
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.bottom,
+                Gravity.BOTTOM
+            );
+            navigationBarOverlay.setLayoutParams(navParams);
+        }
+    }
+
+    private ViewGroup.LayoutParams createLayoutParams(ViewGroup parent, int width, int height, int gravity) {
+        String parentClassName = parent.getClass().getName();
+
+        // Handle CoordinatorLayout using reflection
+        if (parentClassName.contains("CoordinatorLayout")) {
+            try {
+                Class<?> layoutParamsClass = Class.forName("androidx.coordinatorlayout.widget.CoordinatorLayout$LayoutParams");
+                Constructor<?> constructor = layoutParamsClass.getConstructor(int.class, int.class);
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) constructor.newInstance(width, height);
+                // Set gravity using reflection
+                layoutParamsClass.getField("gravity").setInt(params, gravity);
+                return params;
+            } catch (Exception e) {
+                Logger.error("EdgeToEdge", "Failed to create CoordinatorLayout.LayoutParams", e);
+            }
+        }
+
+        // Handle FrameLayout
+        if (parent instanceof FrameLayout) {
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+            params.gravity = gravity;
+            return params;
+        }
+
+        // Fallback to MarginLayoutParams
+        ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(width, height);
+        return params;
     }
 }
