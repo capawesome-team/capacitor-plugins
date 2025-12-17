@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`a368efb4160bd515668d96bc6426b3a3b8b5a14e`](https://github.com/capawesome-team/capacitor-plugins/commit/a368efb4160bd515668d96bc6426b3a3b8b5a14e) ([#709](https://github.com/capawesome-team/capacitor-plugins/pull/709)): feat!: update dependencies to the latest versions (see `BREAKING.md`)
+
+- [`12a22f63df48338afc9ed1ef91f7db0ace660540`](https://github.com/capawesome-team/capacitor-plugins/commit/12a22f63df48338afc9ed1ef91f7db0ace660540) ([#705](https://github.com/capawesome-team/capacitor-plugins/pull/705)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`6160e3418df21467469a3d1a2c9fe8cb9d72dbd0`](https://github.com/capawesome-team/capacitor-plugins/commit/6160e3418df21467469a3d1a2c9fe8cb9d72dbd0): fix(ios)!: update minimum iOS deployment target to 16.0
+
 ## 7.4.0
 
 ### Minor Changes

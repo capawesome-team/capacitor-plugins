@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`12a22f63df48338afc9ed1ef91f7db0ace660540`](https://github.com/capawesome-team/capacitor-plugins/commit/12a22f63df48338afc9ed1ef91f7db0ace660540) ([#705](https://github.com/capawesome-team/capacitor-plugins/pull/705)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`aeb4ff6a90542288bbaa7e4ddcb6043698eb4f9d`](https://github.com/capawesome-team/capacitor-plugins/commit/aeb4ff6a90542288bbaa7e4ddcb6043698eb4f9d) ([#653](https://github.com/capawesome-team/capacitor-plugins/pull/653)): fix(ios): replace `applicationIconBadgeNumber` usage with `setBadgeCount`
+
 ## 7.0.1
 
 ### Patch Changes
