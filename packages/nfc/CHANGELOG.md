@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`d1c3bd063a4a41ee9b8a3b236da4cae128215650`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d1c3bd063a4a41ee9b8a3b236da4cae128215650): fix!: throw correct error code (see `BREAKING.md`)
+
 ## 7.3.0
 
 ### Minor Changes
