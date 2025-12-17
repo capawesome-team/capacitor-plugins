@@ -1,5 +1,19 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`4438ee93102f40e80b8466e047c424239f066a3a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4438ee93102f40e80b8466e047c424239f066a3a) ([#338](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/338)): refactor(ios)!: set default value of `audioSessionMode` in the `StartRecordingOptions` interface to `AudioSessionMode.Default`
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`968064d3ca529d7094aecd28ed56ccfcd1e7ee85`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/968064d3ca529d7094aecd28ed56ccfcd1e7ee85): fix!: throw correct error code (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`d402dd89338610c8c6decd72473ac09aa2a6010a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d402dd89338610c8c6decd72473ac09aa2a6010a) ([#339](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/339)): fix(android): stop recording on destroy
+
 ## 7.5.0
 
 ### Minor Changes
