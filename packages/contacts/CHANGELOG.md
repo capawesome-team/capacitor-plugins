@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`24f72ad12dcce983a1eaa3af3287bbf0d4c8c688`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/24f72ad12dcce983a1eaa3af3287bbf0d4c8c688) ([#323](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/323)): refactor!: set default value of `limit` in `GetContactsOptions` to 20
+
 ## 7.7.0
 
 ### Minor Changes
