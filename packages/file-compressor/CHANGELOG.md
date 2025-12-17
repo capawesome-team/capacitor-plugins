@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+- [`c0659be66863400d370b54d99c64e1ae4de484e6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c0659be66863400d370b54d99c64e1ae4de484e6) ([#355](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/355)): feat!: update dependencies to the latest versions (see `README.md`)
+
+- [`a5af42a248c73dba33ce0c6593080049f6cf52ff`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a5af42a248c73dba33ce0c6593080049f6cf52ff) ([#326](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/326)): refactor(android)!: return URI instead of absolute path on Android
+
 ## 7.1.0
 
 ### Minor Changes
