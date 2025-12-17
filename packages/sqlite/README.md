@@ -37,7 +37,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 8.x.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Active support |
 | 0.1.x          | 7.x.x             | Deprecated     |
 
 ## Guides
@@ -68,7 +68,7 @@ npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm@3.50.3-bui
 npx cap sync
 ```
 
-**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
+**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4-build1` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
 
 ### Android
 
@@ -115,6 +115,8 @@ capacitor_pods
 +  pod 'CapawesomeTeamCapacitorSqlite/SQLCipher', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
 end
 ```
+
+**Attention**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM). If you need database encryption, you must use CocoaPods for the Capacitor iOS platform. See the [Limitations](#limitations) section for more details.
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
@@ -622,7 +624,7 @@ This command can be used to reclaim unused space and optimize the database file.
 | **`readOnly`**          | <code>boolean</code>            | Whether the database should be opened in read-only mode. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | <code>false</code> | 0.1.0 |
 | **`path`**              | <code>string</code>             | The path to the database file. If no file exists at the specified path, a new file will be created. If no path or URL is provided, the plugin will create a new in-memory database. On **Android**, the path can either be a simple filename or a file URI. If a simple filename is provided, the plugin will create the database in the default database directory (see [getDatabasePath](https://developer.android.com/reference/android/content/Context#getDatabasePath(java.lang.String))). On **iOS**, the path can either be a simple filename or a file URL. If a simple filename is provided, the plugin will create the database in the default documents directory (see [documentsDirectory](https://developer.apple.com/documentation/foundation/url/documentsdirectory)). On **Web**, the path should be a simple filename without a directory (e.g., `mydb.sqlite3`). |                    | 0.1.0 |
 | **`upgradeStatements`** | <code>UpgradeStatement[]</code> | An array of upgrade statements to apply when opening the database. Each statement should specify the version of the database schema it applies to and the SQL statements to execute for the upgrade. The current version of the database schema can be checked using the `PRAGMA user_version;` command.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                    | 0.1.0 |
-| **`version`**           | <code>number</code>             | The version of the database schema. If provided, the plugin will check the schema version and apply migrations if necessary. If not provided, the latest version of the upgrade statements will be used, if any. **Attention:** The version must be 1 or higher.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | <code>1</code>     | 0.1.0 |
+| **`version`**           | <code>number</code>             | The version of the database schema. If provided, the plugin will check the schema version and apply migrations if necessary. If not provided, the latest version of the upgrade statements will be used, if any. If neither `version` nor `upgradeStatements` are provided, the database version will not be managed by the plugin. **Attention:** The version must be 1 or higher.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                    | 0.1.0 |
 
 
 #### UpgradeStatement
@@ -710,7 +712,7 @@ This plugin has some limitations on certain platforms.
 
 The iOS implementation of this plugin has the following limitations:
 
-- **Encryption**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM).
+- **Encryption**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM). SQLCipher does not officially support SPM due to technical limitations in its build system (see [sqlcipher/sqlcipher#371](https://github.com/sqlcipher/sqlcipher/issues/371)). If you need database encryption, you must use CocoaPods for the Capacitor iOS platform.
 
 ### Web
 

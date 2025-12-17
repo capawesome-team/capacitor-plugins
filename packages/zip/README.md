@@ -73,6 +73,23 @@ If needed, you can define the following project variable in your app’s `variab
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
+### iOS
+
+#### Minimum Deployment Target
+
+If you are using **Swift Package Manager**, make sure that your iOS deployment target is set to at least `16.0` in your Xcode project settings (usually in `ios/App/App.xcodeproj`):
+
+```diff
+-IPHONEOS_DEPLOYMENT_TARGET = 15.0
++IPHONEOS_DEPLOYMENT_TARGET = 16.0
+```
+
+If you are using **CocoaPods**, make sure that your iOS deployment target is set to at least `16.0` in your `Podfile`:
+
+```ruby
+platform :ios, '16.0'
+```
+
 ## Configuration
 
 No configuration required for this plugin.

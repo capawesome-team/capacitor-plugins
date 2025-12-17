@@ -17,6 +17,14 @@ This plugin now supports **Capacitor 8**. The minimum Android SDK version is **3
 
 - On Android, the `androidxDocumentFileVersion` variable has been updated to `1.1.0`.
 
+### `CompressImageResult`
+
+On Android, the `path` property returned in the `CompressImageResult` object is now a URI string instead of an absolute file path. This change was made to ensure consistent behavior across different Capacitor plugins.
+
+| Before                                            | After                                                    |
+| ------------------------------------------------- | -------------------------------------------------------- |
+| `/data/user/0/com.example.plugin/cache/test.jpeg` | `file:///data/user/0/com.example.plugin/cache/test.jpeg` |
+
 ## Version 6.x.x
 
 ### Capacitor 6

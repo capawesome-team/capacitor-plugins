@@ -32,7 +32,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
-| 7.x.x          | 7.x.x             | Deprecated     |
+| 7.x.x          | 7.x.x             | Maintenance    |
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
@@ -92,6 +92,21 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 ```
 
 We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278401) as the reason for accessing the [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults) API.
+
+#### Minimum Deployment Target
+
+If you are using **Swift Package Manager**, make sure that your iOS deployment target is set to at least `16.0` in your Xcode project settings (usually in `ios/App/App.xcodeproj`):
+
+```diff
+-IPHONEOS_DEPLOYMENT_TARGET = 15.0
++IPHONEOS_DEPLOYMENT_TARGET = 16.0
+```
+
+If you are using **CocoaPods**, make sure that your iOS deployment target is set to at least `16.0` in your `Podfile`:
+
+```ruby
+platform :ios, '16.0'
+```
 
 ## Configuration
 

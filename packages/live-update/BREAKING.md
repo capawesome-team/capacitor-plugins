@@ -13,6 +13,24 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36** and the iOS deployment target is **15.0**. Ensure your project meets these requirements before upgrading.
 
+### iOS Deployment Target
+
+The minimum iOS deployment target has been updated to **16.0** to address several security vulnerabilities related to ZIP file handling in earlier iOS versions.
+
+If you are using **Swift Package Manager**, update your iOS deployment target in your Xcode project settings (usually in `ios/App/App.xcodeproj`):
+
+```diff
+-IPHONEOS_DEPLOYMENT_TARGET = 15.0
++IPHONEOS_DEPLOYMENT_TARGET = 16.0
+```
+
+If you are using **CocoaPods**, update your `Podfile`:
+
+```diff
+-platform :ios, '15.0'
++platform :ios, '16.0'
+```
+
 ### Variables
 
 - On Android, the `okhttp3Version` variable has been updated to `5.3.2`.
