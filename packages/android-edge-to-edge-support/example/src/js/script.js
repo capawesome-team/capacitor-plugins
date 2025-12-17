@@ -1,9 +1,6 @@
-import { StatusBar, Style } from '@capacitor/status-bar';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 
 document.addEventListener('DOMContentLoaded', () => {
-  StatusBar.setStyle({ style: Style.Light });
-
   document
     .querySelector('#enable-button')
     .addEventListener('click', async () => {
@@ -29,6 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       await EdgeToEdge.setBackgroundColor({
         color: color.includes('#') ? color : `#${color}`,
+      });
+    });
+  document
+    .querySelector('#set-status-bar-color-button')
+    .addEventListener('click', async () => {
+      await EdgeToEdge.setStatusBarColor({
+        color: '#ff0000',
+      });
+    });
+  document
+    .querySelector('#set-navigation-bar-color-button')
+    .addEventListener('click', async () => {
+      await EdgeToEdge.setNavigationBarColor({
+        color: '#0000ff',
       });
     });
 });

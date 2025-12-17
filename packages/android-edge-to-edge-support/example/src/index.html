@@ -49,7 +49,19 @@
       <ion-content class="ion-padding">
         <ion-list>
           <ion-item>
-            <ion-input id="color-input" label="Color"></ion-input>
+            <ion-input id="color-input" label="Color (Deprecated)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="status-bar-color-input"
+              label="Status Bar Color"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="navigation-bar-color-input"
+              label="Navigation Bar Color"
+            ></ion-input>
           </ion-item>
           <ion-button id="enable-button" expand="block">Enable</ion-button>
           <ion-button id="disable-button" expand="block">Disable</ion-button>
@@ -57,7 +69,13 @@
             >Get Insets</ion-button
           >
           <ion-button id="set-background-color-button" expand="block"
-            >Set Background Color</ion-button
+            >Set Background Color (Deprecated)</ion-button
+          >
+          <ion-button id="set-status-bar-color-button" expand="block"
+            >Set Status Bar Color</ion-button
+          >
+          <ion-button id="set-navigation-bar-color-button" expand="block"
+            >Set Navigation Bar Color</ion-button
           >
         </ion-list>
       </ion-content>
