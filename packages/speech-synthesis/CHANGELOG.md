@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- [`9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9b4b5a5f34bc17e87543f3ee24ec38c1a6df344d) ([#353](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/353)): feat!: update to Capacitor 8 (see `BREAKING.md`)
+
+### Minor Changes
+
+- [`e042a6f5a8b705cce5b32ab6432bd252054abed5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e042a6f5a8b705cce5b32ab6432bd252054abed5) ([#356](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/356)): feat(ios): add `audioSessionCategory` option to `SpeakOptions` interface
+
 ## 7.3.0
 
 ### Minor Changes
