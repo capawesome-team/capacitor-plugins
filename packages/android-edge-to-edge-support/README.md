@@ -94,11 +94,11 @@ export default config;
 
 ## Usage
 
-The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [Status Bar](https://capacitorjs.com/docs/apis/status-bar) plugin.
+The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin.
 
 ```typescript
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
-import { SystemBars, SystemBarsStyle } from '@capacitor/status-bar';
+import { SystemBars, SystemBarsStyle } from '@capacitor/core';
 
 const enable = async () => {
   await EdgeToEdge.enable();
