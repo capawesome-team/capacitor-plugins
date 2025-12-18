@@ -6,7 +6,8 @@ public class AgeSignalsPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "AgeSignalsPlugin"
     public let jsName = "AgeSignals"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "checkAgeSignals", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "checkAgeSignals", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkEligibility", returnType: CAPPluginReturnPromise)
     ]
 
     public static let tag = "AgeSignalsPlugin"
@@ -29,6 +30,16 @@ public class AgeSignalsPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         } catch {
             rejectCall(call, error)
+        }
+    }
+
+    @objc func checkEligibility(_ call: CAPPluginCall) {
+        implementation?.checkEligibility { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            self.resolveCall(call, result)
         }
     }
 

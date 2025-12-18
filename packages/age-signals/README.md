@@ -64,6 +64,11 @@ const checkAgeSignals = async () => {
   console.log('Age Lower:', result.ageLower);
   console.log('Age Upper:', result.ageUpper);
 };
+
+const checkEligibility = async () => {
+  const result = await AgeSignals.checkEligibility();
+  console.log('Is Eligible:', result.isEligible);
+};
 ```
 
 ## API
@@ -71,6 +76,7 @@ const checkAgeSignals = async () => {
 <docgen-index>
 
 * [`checkAgeSignals(...)`](#checkagesignals)
+* [`checkEligibility()`](#checkeligibility)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -98,6 +104,23 @@ Request the user's age signals.
 --------------------
 
 
+### checkEligibility()
+
+```typescript
+checkEligibility() => Promise<CheckEligibilityResult>
+```
+
+Check if the user is eligible for age-gated features.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#checkeligibilityresult">CheckEligibilityResult</a>&gt;</code>
+
+**Since:** 0.5.0
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -117,6 +140,13 @@ Request the user's age signals.
 | Prop           | Type                  | Description                                                                                                                    | Default                   | Since |
 | -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------- | ----- |
 | **`ageGates`** | <code>number[]</code> | The age ranges that the user falls into. The provided array must contain at least 2 and at most 3 ages. Only available on iOS. | <code>[13, 15, 18]</code> | 0.0.2 |
+
+
+#### CheckEligibilityResult
+
+| Prop             | Type                 | Description                                                                                                                                                                                   | Since |
+| ---------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`isEligible`** | <code>boolean</code> | Whether the user is eligible for age-gated features. Returns `true` if the user is in an applicable region that requires additional age-related obligations. Always returns `false` on macOS. | 0.5.0 |
 
 
 ### Enums

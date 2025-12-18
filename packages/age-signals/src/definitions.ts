@@ -10,6 +10,14 @@ export interface AgeSignalsPlugin {
   checkAgeSignals(
     options?: CheckAgeSignalsOptions,
   ): Promise<CheckAgeSignalsResult>;
+  /**
+   * Check if the user is eligible for age-gated features.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.3.1
+   */
+  checkEligibility(): Promise<CheckEligibilityResult>;
 }
 
 /**
@@ -79,6 +87,22 @@ export interface CheckAgeSignalsResult {
    * @example "abc123xyz"
    */
   installId?: string;
+}
+
+/**
+ * @since 0.3.1
+ */
+export interface CheckEligibilityResult {
+  /**
+   * Whether the user is eligible for age-gated features.
+   *
+   * Returns `true` if the user is in an applicable region that requires
+   * additional age-related obligations. Always returns `false` on macOS.
+   *
+   * @since 0.3.1
+   * @example true
+   */
+  isEligible: boolean;
 }
 
 /**

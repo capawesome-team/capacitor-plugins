@@ -53,6 +53,26 @@ import DeclaredAgeRange
         #endif
     }
 
+    @objc func checkEligibility(completion: @escaping (CheckEligibilityResult?, Error?) -> Void) {
+        #if canImport(DeclaredAgeRange)
+        if #available(iOS 26.2, *) {
+            Task { @MainActor in
+                do {
+                    let isEligible = try await AgeRangeService.shared.isEligibleForAgeFeatures
+                    let result = CheckEligibilityResult(isEligible: isEligible)
+                    completion(result, nil)
+                } catch {
+                    completion(nil, CustomError.apiNotAvailable)
+                }
+            }
+        } else {
+            completion(nil, CustomError.apiNotAvailable)
+        }
+        #else
+        completion(nil, CustomError.apiNotAvailable)
+        #endif
+    }
+
     #if canImport(DeclaredAgeRange)
     @available(iOS 26.0, *)
     private static func mapResponseToResult(

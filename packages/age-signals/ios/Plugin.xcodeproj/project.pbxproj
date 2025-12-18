@@ -16,6 +16,7 @@
 		7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */; };
 		7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33D2ED36FCB000FC952 /* CustomError.swift */; };
 		7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */; };
+		7C2FC34D2ED37EA0000FC952 /* CheckEligibilityResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */; };
 		7C2FC3452ED3795D000FC952 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3442ED3795A000FC952 /* Result.swift */; };
 		7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3462ED37997000FC952 /* UserStatus.swift */; };
 		7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */; };
@@ -44,6 +45,7 @@
 		7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSignals.swift; sourceTree = "<group>"; };
 		7C2FC33D2ED36FCB000FC952 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsResult.swift; sourceTree = "<group>"; };
+		7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEligibilityResult.swift; sourceTree = "<group>"; };
 		7C2FC3442ED3795A000FC952 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7C2FC3462ED37997000FC952 /* UserStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatus.swift; sourceTree = "<group>"; };
 		7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsOptions.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 			isa = PBXGroup;
 			children = (
 				7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */,
+				7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				50E1A94820377CB70090CE1A /* AgeSignalsPlugin.swift in Sources */,
 				7C2FC3452ED3795D000FC952 /* Result.swift in Sources */,
 				7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */,
+				7C2FC34D2ED37EA0000FC952 /* CheckEligibilityResult.swift in Sources */,
 				7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */,
 				7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */,
 				7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */,
