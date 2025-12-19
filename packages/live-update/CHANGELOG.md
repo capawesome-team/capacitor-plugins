@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [`3e2b674942044dfac576331b9f54a49c6eabf6de`](https://github.com/capawesome-team/capacitor-plugins/commit/3e2b674942044dfac576331b9f54a49c6eabf6de): fix: bump plugin version
+
 ## 8.0.0
 
 ### Major Changes
