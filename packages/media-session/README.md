@@ -15,6 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🎮 **Media Controls**: Handle hardware media keys, lock screen controls, and notification controls.
 - 🎵 **Rich Metadata**: Display song title, artist, album, and artwork on lock screen and notifications.
+- 🎨 **Customizable Icon**: Configure the notification icon on Android to match your app's branding.
 - ▶️ **Action Handlers**: Support for play, pause, seek, next/previous track, and more.
 - 📍 **Position State**: Track and display playback position, duration, and playback rate.
 - 🔧 **Native APIs**: Uses MediaSession API on Android and MPNowPlayingInfoCenter on iOS for the best possible integration.
@@ -66,6 +67,65 @@ npx cap sync
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidMediaVersion` version of `androidx.media:media` (default: `1.7.1`)
+
+## Configuration
+
+These configuration options are available:
+
+| Prop          | Type     | Description                                                                                                                                                                                                                                                | Default            | Since  |
+| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------ |
+| **smallIcon** | `string` | The name of the drawable resource to use as the small icon in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_play"` | 8.1.0 |
+
+### Examples
+
+In `capacitor.config.ts`:
+
+```ts
+import type { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    MediaSession: {
+      smallIcon: 'ic_notification',
+    },
+  },
+};
+
+export default config;
+```
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "MediaSession": {
+      "smallIcon": "ic_notification"
+    }
+  }
+}
+```
+
+### Android Custom Icon Setup
+
+To use a custom notification icon on Android:
+
+1. Add your icon to `android/app/src/main/res/drawable/` (e.g., `ic_notification.png`)
+   - Icon should be single-color white with transparent background for best display
+   - Can use density-specific folders (`drawable-mdpi`, `drawable-hdpi`, etc.)
+
+2. Configure the plugin in `capacitor.config.ts`:
+   ```ts
+   const config: CapacitorConfig = {
+     plugins: {
+       MediaSession: {
+         smallIcon: 'ic_notification',  // Matches ic_notification.png
+       },
+     },
+   };
+   ```
+
+3. Run: `npx cap sync`
 
 ## Usage
 
