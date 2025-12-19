@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [`e89a9356329ce131ac99c9e02639c322398d1123`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e89a9356329ce131ac99c9e02639c322398d1123) ([#360](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/360)): fix(android): add scan response data to advertising
+
 ## 8.0.0
 
 ### Major Changes
