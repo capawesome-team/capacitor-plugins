@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`c076da73e29a1f3f7ce97f501b5ff1e2ae02a6cd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c076da73e29a1f3f7ce97f501b5ff1e2ae02a6cd) ([#365](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/365)): feat(android): add `smallIcon` configuration option
+
 ## 8.0.0
 
 ### Major Changes
