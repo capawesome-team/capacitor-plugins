@@ -178,6 +178,9 @@ const unregister = async () => {
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
+* [`isOptOut()`](#isoptout)
+* [`optIn()`](#optin)
+* [`optOut()`](#optout)
 * [`register(...)`](#register)
 * [`reloadFeatureFlags()`](#reloadfeatureflags)
 * [`reset()`](#reset)
@@ -186,9 +189,6 @@ const unregister = async () => {
 * [`startSessionRecording()`](#startsessionrecording)
 * [`stopSessionRecording()`](#stopsessionrecording)
 * [`unregister(...)`](#unregister)
-* [`optIn()`](#optin)
-* [`optOut()`](#optout)
-* [`isOptOut()`](#isoptout)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -337,6 +337,50 @@ Check if a feature flag is enabled.
 --------------------
 
 
+### isOptOut()
+
+```typescript
+isOptOut() => Promise<IsOptOutResult>
+```
+
+Check if the user has opted out of capturing.
+
+**Returns:** <code>Promise&lt;<a href="#isoptoutresult">IsOptOutResult</a>&gt;</code>
+
+**Since:** 7.5.0
+
+--------------------
+
+
+### optIn()
+
+```typescript
+optIn() => Promise<void>
+```
+
+Opt in to event capturing.
+
+**Since:** 7.5.0
+
+--------------------
+
+
+### optOut()
+
+```typescript
+optOut() => Promise<void>
+```
+
+Opt out of event capturing.
+
+On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
+On iOS/Android: stops all event capturing entirely.
+
+**Since:** 7.5.0
+
+--------------------
+
+
 ### register(...)
 
 ```typescript
@@ -463,50 +507,6 @@ Remove a super property.
 --------------------
 
 
-### optIn()
-
-```typescript
-optIn() => Promise<void>
-```
-
-Opt in to event capturing.
-
-**Since:** 7.5.0
-
---------------------
-
-
-### optOut()
-
-```typescript
-optOut() => Promise<void>
-```
-
-Opt out of event capturing.
-
-On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
-On iOS/Android: stops all event capturing entirely.
-
-**Since:** 7.5.0
-
---------------------
-
-
-### isOptOut()
-
-```typescript
-isOptOut() => Promise<IsOptOutResult>
-```
-
-Check if the user has opted out of capturing.
-
-**Returns:** <code>Promise&lt;<a href="#isoptoutresult">IsOptOutResult</a>&gt;</code>
-
-**Since:** 7.5.0
-
---------------------
-
-
 ### Interfaces
 
 
@@ -584,6 +584,13 @@ Check if the user has opted out of capturing.
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
 
+#### IsOptOutResult
+
+| Prop           | Type                 | Description                                  | Since |
+| -------------- | -------------------- | -------------------------------------------- | ----- |
+| **`optedOut`** | <code>boolean</code> | Whether the user has opted out of capturing. | 7.5.0 |
+
+
 #### RegisterOptions
 
 | Prop        | Type                | Description                      | Since |
@@ -629,13 +636,6 @@ Check if the user has opted out of capturing.
 | Prop      | Type                | Description                               | Since |
 | --------- | ------------------- | ----------------------------------------- | ----- |
 | **`key`** | <code>string</code> | The name of the super property to remove. | 6.0.0 |
-
-
-#### IsOptOutResult
-
-| Prop           | Type                 | Description                                  | Since |
-| -------------- | -------------------- | -------------------------------------------- | ----- |
-| **`optedOut`** | <code>boolean</code> | Whether the user has opted out of capturing. | 7.5.0 |
 
 
 ### Type Aliases

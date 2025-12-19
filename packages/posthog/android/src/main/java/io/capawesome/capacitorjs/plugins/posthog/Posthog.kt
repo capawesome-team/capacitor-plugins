@@ -81,6 +81,18 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         return IsFeatureEnabledResult(isEnabled)
     }
 
+    fun isOptOut(): Boolean {
+        return com.posthog.PostHog.isOptOut()
+    }
+
+    fun optIn() {
+        com.posthog.PostHog.optIn()
+    }
+
+    fun optOut() {
+        com.posthog.PostHog.optOut()
+    }
+
     fun register(options: RegisterOptions) {
         val key = options.key
         val value = options.value
@@ -117,18 +129,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val key = options.key
 
         com.posthog.PostHog.unregister(key = key)
-    }
-
-    fun optIn() {
-        com.posthog.PostHog.optIn()
-    }
-
-    fun optOut() {
-        com.posthog.PostHog.optOut()
-    }
-
-    fun isOptOut(): Boolean {
-        return com.posthog.PostHog.isOptOut()
     }
 
     private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, optOut: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {

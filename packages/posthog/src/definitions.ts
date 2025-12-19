@@ -91,6 +91,27 @@ export interface PosthogPlugin {
     options: IsFeatureEnabledOptions,
   ): Promise<IsFeatureEnabledResult>;
   /**
+   * Check if the user has opted out of capturing.
+   *
+   * @since 7.5.0
+   */
+  isOptOut(): Promise<IsOptOutResult>;
+  /**
+   * Opt in to event capturing.
+   *
+   * @since 7.5.0
+   */
+  optIn(): Promise<void>;
+  /**
+   * Opt out of event capturing.
+   *
+   * On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
+   * On iOS/Android: stops all event capturing entirely.
+   *
+   * @since 7.5.0
+   */
+  optOut(): Promise<void>;
+  /**
    * Register a new super property. This property will be sent with every event.
    *
    * @since 6.0.0
@@ -144,27 +165,6 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   unregister(options: UnregisterOptions): Promise<void>;
-  /**
-   * Opt in to event capturing.
-   *
-   * @since 7.5.0
-   */
-  optIn(): Promise<void>;
-  /**
-   * Opt out of event capturing.
-   *
-   * On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
-   * On iOS/Android: stops all event capturing entirely.
-   *
-   * @since 7.5.0
-   */
-  optOut(): Promise<void>;
-  /**
-   * Check if the user has opted out of capturing.
-   *
-   * @since 7.5.0
-   */
-  isOptOut(): Promise<IsOptOutResult>;
 }
 
 /**

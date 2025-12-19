@@ -135,6 +135,21 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func isOptOut(_ call: CAPPluginCall) {
+        let optedOut = implementation?.isOptOut() ?? false
+        call.resolve(["optedOut": optedOut])
+    }
+
+    @objc func optIn(_ call: CAPPluginCall) {
+        implementation?.optIn()
+        call.resolve()
+    }
+
+    @objc func optOut(_ call: CAPPluginCall) {
+        implementation?.optOut()
+        call.resolve()
+    }
+
     @objc func register(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {
             call.reject(CustomError.keyMissing.localizedDescription)
@@ -210,21 +225,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         implementation?.unregister(options)
         call.resolve()
-    }
-
-    @objc func optIn(_ call: CAPPluginCall) {
-        implementation?.optIn()
-        call.resolve()
-    }
-
-    @objc func optOut(_ call: CAPPluginCall) {
-        implementation?.optOut()
-        call.resolve()
-    }
-
-    @objc func isOptOut(_ call: CAPPluginCall) {
-        let optedOut = implementation?.isOptOut() ?? false
-        call.resolve(["optedOut": optedOut])
     }
 
     private func posthogConfig() -> PosthogConfig {

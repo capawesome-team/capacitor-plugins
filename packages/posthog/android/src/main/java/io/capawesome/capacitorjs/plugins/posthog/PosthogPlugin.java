@@ -172,6 +172,38 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void isOptOut(PluginCall call) {
+        try {
+            boolean optedOut = implementation.isOptOut();
+            JSObject result = new JSObject();
+            result.put("optedOut", optedOut);
+            call.resolve(result);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void optIn(PluginCall call) {
+        try {
+            implementation.optIn();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void optOut(PluginCall call) {
+        try {
+            implementation.optOut();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void register(PluginCall call) {
         try {
             String key = call.getString("key");
@@ -282,38 +314,6 @@ public class PosthogPlugin extends Plugin {
 
             implementation.unregister(options);
             call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void optIn(PluginCall call) {
-        try {
-            implementation.optIn();
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void optOut(PluginCall call) {
-        try {
-            implementation.optOut();
-            call.resolve();
-        } catch (Exception exception) {
-            rejectCall(call, exception);
-        }
-    }
-
-    @PluginMethod
-    public void isOptOut(PluginCall call) {
-        try {
-            boolean optedOut = implementation.isOptOut();
-            JSObject result = new JSObject();
-            result.put("optedOut", optedOut);
-            call.resolve(result);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

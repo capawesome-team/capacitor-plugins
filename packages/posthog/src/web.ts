@@ -62,6 +62,18 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     return { enabled: enabled || false };
   }
 
+  async isOptOut(): Promise<IsOptOutResult> {
+    return { optedOut: posthog.has_opted_out_capturing() };
+  }
+
+  async optIn(): Promise<void> {
+    posthog.opt_in_capturing();
+  }
+
+  async optOut(): Promise<void> {
+    posthog.opt_out_capturing();
+  }
+
   async register(options: RegisterOptions): Promise<void> {
     posthog.register({
       [options.key]: options.value,
@@ -122,18 +134,6 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async unregister(options: UnregisterOptions): Promise<void> {
     posthog.unregister(options.key);
-  }
-
-  async optIn(): Promise<void> {
-    posthog.opt_in_capturing();
-  }
-
-  async optOut(): Promise<void> {
-    posthog.opt_out_capturing();
-  }
-
-  async isOptOut(): Promise<IsOptOutResult> {
-    return { optedOut: posthog.has_opted_out_capturing() };
   }
 
   private throwUnimplementedError(): never {

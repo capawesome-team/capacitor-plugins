@@ -72,6 +72,18 @@ import PostHog
         return IsFeatureEnabledResult(enabled: isEnabled)
     }
 
+    @objc public func isOptOut() -> Bool {
+        return PostHogSDK.shared.isOptOut()
+    }
+
+    @objc public func optIn() {
+        PostHogSDK.shared.optIn()
+    }
+
+    @objc public func optOut() {
+        PostHogSDK.shared.optOut()
+    }
+
     @objc public func register(_ options: RegisterOptions) {
         let key = options.getKey()
         let value = options.getValue()
@@ -133,17 +145,5 @@ import PostHog
         let key = options.getKey()
 
         PostHogSDK.shared.unregister(key)
-    }
-
-    @objc public func optIn() {
-        PostHogSDK.shared.optIn()
-    }
-
-    @objc public func optOut() {
-        PostHogSDK.shared.optOut()
-    }
-
-    @objc public func isOptOut() -> Bool {
-        return PostHogSDK.shared.isOptOut()
     }
 }
