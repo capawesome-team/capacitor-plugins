@@ -164,7 +164,7 @@ export interface PosthogPlugin {
    *
    * @since 7.5.0
    */
-  isOptedOut(): Promise<IsOptedOutResult>;
+  isOptOut(): Promise<IsOptOutResult>;
 }
 
 /**
@@ -314,7 +314,7 @@ export interface IsFeatureEnabledResult {
 /**
  * @since 7.5.0
  */
-export interface IsOptedOutResult {
+export interface IsOptOutResult {
   /**
    * Whether the user has opted out of capturing.
    *

@@ -13,7 +13,7 @@ import type {
   IdentifyOptions,
   IsFeatureEnabledOptions,
   IsFeatureEnabledResult,
-  IsOptedOutResult,
+  IsOptOutResult,
   PosthogPlugin,
   RegisterOptions,
   ScreenOptions,
@@ -132,7 +132,7 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.opt_out_capturing();
   }
 
-  async isOptedOut(): Promise<IsOptedOutResult> {
+  async isOptOut(): Promise<IsOptOutResult> {
     return { optedOut: posthog.has_opted_out_capturing() };
   }
 

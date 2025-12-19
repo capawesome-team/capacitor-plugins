@@ -127,7 +127,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.optOut()
     }
 
-    fun isOptedOut(): Boolean {
+    fun isOptOut(): Boolean {
         return com.posthog.PostHog.isOptOut()
     }
 

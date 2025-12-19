@@ -20,7 +20,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "isOptedOut", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isOptOut", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "optIn", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "optOut", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
@@ -222,8 +222,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve()
     }
 
-    @objc func isOptedOut(_ call: CAPPluginCall) {
-        let optedOut = implementation?.isOptedOut() ?? false
+    @objc func isOptOut(_ call: CAPPluginCall) {
+        let optedOut = implementation?.isOptOut() ?? false
         call.resolve(["optedOut": optedOut])
     }
 

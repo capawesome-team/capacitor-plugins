@@ -188,7 +188,7 @@ const unregister = async () => {
 * [`unregister(...)`](#unregister)
 * [`optIn()`](#optin)
 * [`optOut()`](#optout)
-* [`isOptedOut()`](#isoptedout)
+* [`isOptOut()`](#isoptout)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -492,15 +492,15 @@ On iOS/Android: stops all event capturing entirely.
 --------------------
 
 
-### isOptedOut()
+### isOptOut()
 
 ```typescript
-isOptedOut() => Promise<IsOptedOutResult>
+isOptOut() => Promise<IsOptOutResult>
 ```
 
 Check if the user has opted out of capturing.
 
-**Returns:** <code>Promise&lt;<a href="#isoptedoutresult">IsOptedOutResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#isoptoutresult">IsOptOutResult</a>&gt;</code>
 
 **Since:** 7.5.0
 
@@ -519,10 +519,10 @@ Check if the user has opted out of capturing.
 
 #### CaptureOptions
 
-| Prop             | Type                                   | Description                            | Since |
-| ---------------- | -------------------------------------- | -------------------------------------- | ----- |
-| **`event`**      | <code>string</code>                    | The name of the event to capture.      | 6.0.0 |
-| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+| Prop             | Type                                                         | Description                            | Since |
+| ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
+| **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
 #### GetFeatureFlagResult
@@ -555,19 +555,19 @@ Check if the user has opted out of capturing.
 
 #### GroupOptions
 
-| Prop                  | Type                                   | Description                                  | Since |
-| --------------------- | -------------------------------------- | -------------------------------------------- | ----- |
-| **`type`**            | <code>string</code>                    | The group type.                              | 6.0.0 |
-| **`key`**             | <code>string</code>                    | The group key.                               | 6.0.0 |
-| **`groupProperties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
+| Prop                  | Type                                                         | Description                                  | Since |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------- | ----- |
+| **`type`**            | <code>string</code>                                          | The group type.                              | 6.0.0 |
+| **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
+| **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
 
 
 #### IdentifyOptions
 
-| Prop                 | Type                                   | Description                   | Since |
-| -------------------- | -------------------------------------- | ----------------------------- | ----- |
-| **`distinctId`**     | <code>string</code>                    | The distinct ID of the user.  | 6.0.0 |
-| **`userProperties`** | <code>Record&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+| Prop                 | Type                                                         | Description                   | Since |
+| -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
+| **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
+| **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
 
 
 #### IsFeatureEnabledResult
@@ -594,10 +594,10 @@ Check if the user has opted out of capturing.
 
 #### ScreenOptions
 
-| Prop              | Type                                   | Description                                   | Since |
-| ----------------- | -------------------------------------- | --------------------------------------------- | ----- |
-| **`screenTitle`** | <code>string</code>                    | The name of the screen.                       | 6.0.0 |
-| **`properties`**  | <code>Record&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
+| Prop              | Type                                                         | Description                                   | Since |
+| ----------------- | ------------------------------------------------------------ | --------------------------------------------- | ----- |
+| **`screenTitle`** | <code>string</code>                                          | The name of the screen.                       | 6.0.0 |
+| **`properties`**  | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
 
 #### SetupOptions
@@ -631,7 +631,7 @@ Check if the user has opted out of capturing.
 | **`key`** | <code>string</code> | The name of the super property to remove. | 6.0.0 |
 
 
-#### IsOptedOutResult
+#### IsOptOutResult
 
 | Prop           | Type                 | Description                                  | Since |
 | -------------- | -------------------- | -------------------------------------------- | ----- |
@@ -639,6 +639,13 @@ Check if the user has opted out of capturing.
 
 
 ### Type Aliases
+
+
+#### Record
+
+Construct a type with a set of properties K of type T
+
+<code>{ [P in K]: T; }</code>
 
 
 #### JsonType

@@ -308,9 +308,9 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void isOptedOut(PluginCall call) {
+    public void isOptOut(PluginCall call) {
         try {
-            boolean optedOut = implementation.isOptedOut();
+            boolean optedOut = implementation.isOptOut();
             JSObject result = new JSObject();
             result.put("optedOut", optedOut);
             call.resolve(result);

@@ -143,7 +143,7 @@ import PostHog
         PostHogSDK.shared.optOut()
     }
 
-    @objc public func isOptedOut() -> Bool {
+    @objc public func isOptOut() -> Bool {
         return PostHogSDK.shared.isOptOut()
     }
 }
