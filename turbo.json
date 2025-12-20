@@ -1,18 +1,36 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
-    "verify:android": {},
-    "verify:ios": {},
-    "verify:web": {},
-    "lint": {},
-    "fmt": {},
-    "docgen": {},
-    "build": {},
-    "dev": {
-      "cache": false
+    "verify:android": {
+      "inputs": ["android/**", "src/**", "package.json", "tsconfig.json"]
     },
-    "version": {},
-    "ios:pod:install": {},
-    "ios:spm:install": {}
+    "verify:ios": {
+      "inputs": ["ios/**", "src/**", "*.podspec", "Package.swift", "package.json", "tsconfig.json"]
+    },
+    "verify:web": {
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "lint": {
+      "inputs": ["android/**", "ios/**", "src/**", "package.json"]
+    },
+    "fmt": {
+      "inputs": ["android/**", "ios/**", "src/**", "package.json"]
+    },
+    "docgen": {
+      "inputs": ["src/definitions.ts", "package.json"]
+    },
+    "build": {
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "dev": {
+      "cache": false,
+      "inputs": ["src/**", "package.json", "tsconfig.json"]
+    },
+    "ios:pod:install": {
+      "inputs": ["ios/Podfile", "*.podspec"]
+    },
+    "ios:spm:install": {
+      "inputs": ["Package.swift"]
+    }
   }
 }
