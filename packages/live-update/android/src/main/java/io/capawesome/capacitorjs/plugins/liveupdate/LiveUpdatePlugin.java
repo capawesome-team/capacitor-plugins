@@ -37,7 +37,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String TAG = "LiveUpdate";
     public static final String VERSION = "8.0.1";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
-    public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
+    public static final String ERROR_APP_ID_MISSING = "appId must be configured. TEST";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
