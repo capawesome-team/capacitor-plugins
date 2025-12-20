@@ -93,13 +93,13 @@ export interface PosthogPlugin {
   /**
    * Check if the user has opted out of capturing.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    */
   isOptOut(): Promise<IsOptOutResult>;
   /**
    * Opt in to event capturing.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    */
   optIn(): Promise<void>;
   /**
@@ -108,7 +108,7 @@ export interface PosthogPlugin {
    * On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
    * On iOS/Android: stops all event capturing entirely.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    */
   optOut(): Promise<void>;
   /**
@@ -312,13 +312,13 @@ export interface IsFeatureEnabledResult {
 }
 
 /**
- * @since 8.0.0
+ * @since 8.1.0
  */
 export interface IsOptOutResult {
   /**
    * Whether the user has opted out of capturing.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    */
   optedOut: boolean;
 }
@@ -378,7 +378,7 @@ export interface SetupOptions {
    *
    * Only available on Web. Requires cookieless mode to be enabled in PostHog project settings.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    * @platform web
    */
   cookielessMode?: 'always' | 'on_reject';
@@ -402,7 +402,7 @@ export interface SetupOptions {
    *
    * User must call `optIn()` to enable capturing.
    *
-   * @since 8.0.0
+   * @since 8.1.0
    * @default false
    */
   optOut?: boolean;
