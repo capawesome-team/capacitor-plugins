@@ -4,12 +4,14 @@ import Foundation
     private var apiKey: String
     private var host: String
     private var enableSessionReplay: Bool
+    private var optOut: Bool
     private var sessionReplayConfig: SessionReplayOptions?
 
-    init(apiKey: String, host: String, enableSessionReplay: Bool, sessionReplayConfig: [String: Any]?) {
+    init(apiKey: String, host: String, enableSessionReplay: Bool, optOut: Bool, sessionReplayConfig: [String: Any]?) {
         self.apiKey = apiKey
         self.host = host
         self.enableSessionReplay = enableSessionReplay
+        self.optOut = optOut
 
         if let config = sessionReplayConfig {
             self.sessionReplayConfig = SessionReplayOptions(
@@ -33,6 +35,10 @@ import Foundation
 
     func getEnableSessionReplay() -> Bool {
         return enableSessionReplay
+    }
+
+    func getOptOut() -> Bool {
+        return optOut
     }
 
     func getSessionReplayConfig() -> SessionReplayOptions? {

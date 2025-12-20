@@ -25,7 +25,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), config.getSessionReplayConfig())
+            setup(apiKey, config.getHost(), config.getEnableSessionReplay(), false, config.getSessionReplayConfig())
         }
     }
 
@@ -81,6 +81,18 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         return IsFeatureEnabledResult(isEnabled)
     }
 
+    fun isOptOut(): Boolean {
+        return com.posthog.PostHog.isOptOut()
+    }
+
+    fun optIn() {
+        com.posthog.PostHog.optIn()
+    }
+
+    fun optOut() {
+        com.posthog.PostHog.optOut()
+    }
+
     fun register(options: RegisterOptions) {
         val key = options.key
         val value = options.value
@@ -106,8 +118,11 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     fun setup(options: SetupOptions) {
         val apiKey = options.apiKey
         val host = options.host
+        val enableSessionReplay = options.enableSessionReplay
+        val optOut = options.optOut
+        val sessionReplayConfig = options.sessionReplayConfig
 
-        setup(apiKey, host)
+        setup(apiKey, host, enableSessionReplay, optOut, sessionReplayConfig)
     }
 
     fun unregister(options: UnregisterOptions) {
@@ -116,13 +131,13 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
+    private fun setup(apiKey: String, host: String, enableSessionReplay: Boolean = false, optOut: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = host
         )
         posthogConfig.captureScreenViews = false
-        posthogConfig.optOut = false
+        posthogConfig.optOut = optOut
         posthogConfig.sessionReplay = enableSessionReplay
 
         // Configure session replay options if provided

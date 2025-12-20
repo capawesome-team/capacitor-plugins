@@ -178,6 +178,9 @@ const unregister = async () => {
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
+* [`isOptOut()`](#isoptout)
+* [`optIn()`](#optin)
+* [`optOut()`](#optout)
 * [`register(...)`](#register)
 * [`reloadFeatureFlags()`](#reloadfeatureflags)
 * [`reset()`](#reset)
@@ -334,6 +337,50 @@ Check if a feature flag is enabled.
 --------------------
 
 
+### isOptOut()
+
+```typescript
+isOptOut() => Promise<IsOptOutResult>
+```
+
+Check if the user has opted out of capturing.
+
+**Returns:** <code>Promise&lt;<a href="#isoptoutresult">IsOptOutResult</a>&gt;</code>
+
+**Since:** 8.1.0
+
+--------------------
+
+
+### optIn()
+
+```typescript
+optIn() => Promise<void>
+```
+
+Opt in to event capturing.
+
+**Since:** 8.1.0
+
+--------------------
+
+
+### optOut()
+
+```typescript
+optOut() => Promise<void>
+```
+
+Opt out of event capturing.
+
+On Web with `cookielessMode: 'on_reject'`: switches to cookieless anonymous tracking.
+On iOS/Android: stops all event capturing entirely.
+
+**Since:** 8.1.0
+
+--------------------
+
+
 ### register(...)
 
 ```typescript
@@ -472,10 +519,10 @@ Remove a super property.
 
 #### CaptureOptions
 
-| Prop             | Type                                   | Description                            | Since |
-| ---------------- | -------------------------------------- | -------------------------------------- | ----- |
-| **`event`**      | <code>string</code>                    | The name of the event to capture.      | 6.0.0 |
-| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+| Prop             | Type                                                         | Description                            | Since |
+| ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
+| **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
 #### GetFeatureFlagResult
@@ -508,19 +555,19 @@ Remove a super property.
 
 #### GroupOptions
 
-| Prop                  | Type                                   | Description                                  | Since |
-| --------------------- | -------------------------------------- | -------------------------------------------- | ----- |
-| **`type`**            | <code>string</code>                    | The group type.                              | 6.0.0 |
-| **`key`**             | <code>string</code>                    | The group key.                               | 6.0.0 |
-| **`groupProperties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
+| Prop                  | Type                                                         | Description                                  | Since |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------- | ----- |
+| **`type`**            | <code>string</code>                                          | The group type.                              | 6.0.0 |
+| **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
+| **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
 
 
 #### IdentifyOptions
 
-| Prop                 | Type                                   | Description                   | Since |
-| -------------------- | -------------------------------------- | ----------------------------- | ----- |
-| **`distinctId`**     | <code>string</code>                    | The distinct ID of the user.  | 6.0.0 |
-| **`userProperties`** | <code>Record&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+| Prop                 | Type                                                         | Description                   | Since |
+| -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
+| **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
+| **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
 
 
 #### IsFeatureEnabledResult
@@ -537,6 +584,13 @@ Remove a super property.
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.0.0 |
 
 
+#### IsOptOutResult
+
+| Prop           | Type                 | Description                                  | Since |
+| -------------- | -------------------- | -------------------------------------------- | ----- |
+| **`optedOut`** | <code>boolean</code> | Whether the user has opted out of capturing. | 8.1.0 |
+
+
 #### RegisterOptions
 
 | Prop        | Type                | Description                      | Since |
@@ -547,20 +601,22 @@ Remove a super property.
 
 #### ScreenOptions
 
-| Prop              | Type                                   | Description                                   | Since |
-| ----------------- | -------------------------------------- | --------------------------------------------- | ----- |
-| **`screenTitle`** | <code>string</code>                    | The name of the screen.                       | 6.0.0 |
-| **`properties`**  | <code>Record&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
+| Prop              | Type                                                         | Description                                   | Since |
+| ----------------- | ------------------------------------------------------------ | --------------------------------------------- | ----- |
+| **`screenTitle`** | <code>string</code>                                          | The name of the screen.                       | 6.0.0 |
+| **`properties`**  | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
 
 #### SetupOptions
 
-| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 6.0.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.              |                                         | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                                                                                                                                                                                                                                                                  | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                                                                                                                                                                                                                         |                                         | 6.0.0 |
+| **`cookielessMode`**      | <code>'always' \| 'on_reject'</code>                                  | Cookieless tracking mode. - `'always'`: Always use cookieless tracking with server-side anonymous hash. - `'on_reject'`: Normal tracking until `optOut()` is called, then switches to cookieless. Only available on Web. Requires cookieless mode to be enabled in PostHog project settings. |                                         | 8.1.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                                                                                                                                                                                                                           | <code>false</code>                      | 7.3.0 |
+| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                                                                                                                                                                                                                                                           | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`optOut`**              | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 
 
 #### SessionReplayOptions
@@ -583,6 +639,13 @@ Remove a super property.
 
 
 ### Type Aliases
+
+
+#### Record
+
+Construct a type with a set of properties K of type T
+
+<code>{ [P in K]: T; }</code>
 
 
 #### JsonType

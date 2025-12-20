@@ -15,6 +15,9 @@ public class SetupOptions {
     private Boolean enableSessionReplay;
 
     @Nullable
+    private Boolean optOut;
+
+    @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
     public SetupOptions(@NonNull String apiKey, @NonNull String host) {
@@ -32,13 +35,20 @@ public class SetupOptions {
         return host;
     }
 
-    @Nullable
     public boolean getEnableSessionReplay() {
-        return enableSessionReplay;
+        return enableSessionReplay != null ? enableSessionReplay : false;
     }
 
     public void setEnableSessionReplay(boolean enableSessionReplay) {
         this.enableSessionReplay = enableSessionReplay;
+    }
+
+    public boolean getOptOut() {
+        return optOut != null ? optOut : false;
+    }
+
+    public void setOptOut(boolean optOut) {
+        this.optOut = optOut;
     }
 
     @Nullable

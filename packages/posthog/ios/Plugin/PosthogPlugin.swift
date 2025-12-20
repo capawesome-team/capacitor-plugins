@@ -20,6 +20,9 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isOptOut", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "optIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "optOut", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reloadFeatureFlags", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
@@ -132,6 +135,21 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func isOptOut(_ call: CAPPluginCall) {
+        let optedOut = implementation?.isOptOut() ?? false
+        call.resolve(["optedOut": optedOut])
+    }
+
+    @objc func optIn(_ call: CAPPluginCall) {
+        implementation?.optIn()
+        call.resolve()
+    }
+
+    @objc func optOut(_ call: CAPPluginCall) {
+        implementation?.optOut()
+        call.resolve()
+    }
+
     @objc func register(_ call: CAPPluginCall) {
         guard let key = call.getString("key") else {
             call.reject(CustomError.keyMissing.localizedDescription)
@@ -178,9 +196,10 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
         let host = call.getString("host", "https://us.i.posthog.com")
         let enableSessionReplay = call.getBool("enableSessionReplay", false)
+        let optOut = call.getBool("optOut", false)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
-        let options = SetupOptions(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, sessionReplayConfig: sessionReplayConfig)
+        let options = SetupOptions(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
 
         implementation?.setup(options)
         call.resolve()

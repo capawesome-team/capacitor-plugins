@@ -72,6 +72,18 @@ import PostHog
         return IsFeatureEnabledResult(enabled: isEnabled)
     }
 
+    @objc public func isOptOut() -> Bool {
+        return PostHogSDK.shared.isOptOut()
+    }
+
+    @objc public func optIn() {
+        PostHogSDK.shared.optIn()
+    }
+
+    @objc public func optOut() {
+        PostHogSDK.shared.optOut()
+    }
+
     @objc public func register(_ options: RegisterOptions) {
         let key = options.getKey()
         let value = options.getValue()
@@ -100,9 +112,10 @@ import PostHog
         let apiKey = options.getApiKey()
         let host = options.getHost()
         let enableSessionReplay = options.getEnableSessionReplay()
+        let optOut = options.getOptOut()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, sessionReplayConfig: sessionReplayConfig)
+        setup(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
     }
 
     @objc public func startSessionRecording() {
@@ -113,10 +126,10 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, host: String, enableSessionReplay: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
+    private func setup(apiKey: String, host: String, enableSessionReplay: Bool = false, optOut: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
         let config = PostHogConfig(apiKey: apiKey, host: host)
         config.captureScreenViews = false
-        config.optOut = false
+        config.optOut = optOut
         config.sessionReplay = enableSessionReplay
         config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
         config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true
