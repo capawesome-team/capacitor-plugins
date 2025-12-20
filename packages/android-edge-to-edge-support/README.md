@@ -19,6 +19,7 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
+| 7.x.x          | 7.x.x             | Deprecated     |
 
 ## Installation
 
