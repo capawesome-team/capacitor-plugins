@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`188711410525c88de41b37c12000ae319e0c524a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/188711410525c88de41b37c12000ae319e0c524a) ([#364](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/364)): fix(android): improve error handling for BLE advertising
+
 ## 8.0.1
 
 ### Patch Changes
