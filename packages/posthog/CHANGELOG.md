@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`8c4b07162156689dd9d80ed5af890d9f51e69456`](https://github.com/capawesome-team/capacitor-plugins/commit/8c4b07162156689dd9d80ed5af890d9f51e69456) ([#694](https://github.com/capawesome-team/capacitor-plugins/pull/694)): feat: add consent management and cookieless tracking support
+
 ## 8.0.0
 
 ### Major Changes
