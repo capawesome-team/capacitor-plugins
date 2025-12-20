@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`ae8313ec7c6f82de92876fd8bc08b880bf3aa8e9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae8313ec7c6f82de92876fd8bc08b880bf3aa8e9) ([#361](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/361)): feat(ios)!: enhance error reporting with OSStatus codes (see `BREAKING.md`)
+
 ## 0.2.0
 
 ### Minor Changes
