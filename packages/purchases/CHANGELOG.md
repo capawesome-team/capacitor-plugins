@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- [`39862f15e37714041bb82b2ca8346c3687bafe58`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/39862f15e37714041bb82b2ca8346c3687bafe58) ([#363](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/363)): feat: add `getProductById` method
+
 ## 0.3.0
 
 ### Minor Changes
