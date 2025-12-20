@@ -1,40 +1,18 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "tasks": {
-    "verify:android": {
-      "inputs": ["android/**", "src/**", "package.json", "tsconfig.json", "rollup.config.mjs"]
-    },
-    "verify:ios": {
-      "inputs": ["ios/**", "src/**", "package.json", "tsconfig.json", "rollup.config.mjs", "*.podspec", "Package.swift"]
-    },
-    "verify:web": {
-      "inputs": ["src/**", "package.json", "tsconfig.json", "rollup.config.mjs"]
-    },
-    "lint": {
-      "inputs": ["src/**", "package.json", ".eslintignore"]
-    },
-    "fmt": {
-      "inputs": ["src/**", "package.json", ".prettierrc.js"]
-    },
-    "docgen": {
-      "inputs": ["src/definitions.ts", "package.json"]
-    },
-    "build": {
-      "inputs": ["src/**", "package.json", "tsconfig.json", "rollup.config.mjs"],
-      "outputs": ["dist/**"]
-    },
+    "verify:android": {},
+    "verify:ios": {},
+    "verify:web": {},
+    "lint": {},
+    "fmt": {},
+    "docgen": {},
+    "build": {},
     "dev": {
-      "cache": false,
-      "inputs": ["src/**", "package.json", "tsconfig.json", "rollup.config.mjs"]
+      "cache": false
     },
-    "version": {
-      "inputs": ["package.json", "CHANGELOG.md"]
-    },
-    "ios:pod:install": {
-      "inputs": ["ios/Podfile", "ios/Podfile.lock", "*.podspec"]
-    },
-    "ios:spm:install": {
-      "inputs": ["Package.swift", "Package.resolved"]
-    }
+    "version": {},
+    "ios:pod:install": {},
+    "ios:spm:install": {}
   }
 }
