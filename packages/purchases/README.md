@@ -95,11 +95,13 @@ const restorePurchases = async () => {
 * [`finishTransaction(...)`](#finishtransaction)
 * [`getAllTransactions()`](#getalltransactions)
 * [`getCurrentTransactions()`](#getcurrenttransactions)
+* [`getProductById(...)`](#getproductbyid)
 * [`getUnfinishedTransactions()`](#getunfinishedtransactions)
 * [`isAvailable()`](#isavailable)
 * [`purchaseProduct(...)`](#purchaseproduct)
 * [`syncTransactions()`](#synctransactions)
 * [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -161,6 +163,27 @@ Only available on Android and iOS (15.0+).
 **Returns:** <code>Promise&lt;<a href="#getcurrenttransactionsresult">GetCurrentTransactionsResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### getProductById(...)
+
+```typescript
+getProductById(options: GetProductByIdOptions) => Promise<GetProductByIdResult>
+```
+
+Get product details by product ID.
+
+Only available on Android and iOS (15.0+).
+
+| Param         | Type                                                                    |
+| ------------- | ----------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getproductbyidoptions">GetProductByIdOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getproductbyidresult">GetProductByIdResult</a>&gt;</code>
+
+**Since:** 0.3.1
 
 --------------------
 
@@ -282,6 +305,35 @@ Only available on Android and iOS (15.0+).
 | **`transactions`** | <code>Transaction[]</code> | The current transactions for the user. | 0.1.0 |
 
 
+#### GetProductByIdResult
+
+| Prop          | Type                                        | Description          | Since |
+| ------------- | ------------------------------------------- | -------------------- | ----- |
+| **`product`** | <code><a href="#product">Product</a></code> | The product details. | 0.3.1 |
+
+
+#### Product
+
+Represents an in-app product available for purchase.
+
+| Prop               | Type                                                | Description                                                                                                                                                            | Since |
+| ------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**           | <code>string</code>                                 | The unique product identifier.                                                                                                                                         | 0.3.1 |
+| **`displayName`**  | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.               | 0.3.1 |
+| **`description`**  | <code>string</code>                                 | The localized description of the product.                                                                                                                              | 0.3.1 |
+| **`displayPrice`** | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                     | 0.3.1 |
+| **`price`**        | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal. | 0.3.1 |
+| **`currencyCode`** | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                  | 0.3.1 |
+| **`type`**         | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                   | 0.3.1 |
+
+
+#### GetProductByIdOptions
+
+| Prop            | Type                | Description                                                                                                                                                                                                                    | Since |
+| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`productId`** | <code>string</code> | The product ID of the product to retrieve. On Android, this is the <a href="#product">Product</a> ID configured in Google Play Console. On iOS, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.3.1 |
+
+
 #### GetUnfinishedTransactionsResult
 
 | Prop               | Type                       | Description                               | Since |
@@ -305,9 +357,22 @@ Only available on Android and iOS (15.0+).
 
 #### PurchaseProductOptions
 
-| Prop            | Type                | Description                                                                                                                                                                              | Since |
-| --------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the Product ID configured in Google Play Console. On **iOS**, this is the Product ID configured in App Store Connect. | 0.1.0 |
+| Prop            | Type                | Description                                                                                                                                                                                                                            | Since |
+| --------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
+
+
+### Enums
+
+
+#### ProductType
+
+| Members                         | Value                                      | Description                                                                                                                                                                                           | Since |
+| ------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Consumable`**                | <code>'CONSUMABLE'</code>                  | A consumable in-app product. On Android, this is <a href="#producttype">ProductType</a>.INAPP. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.consumable.      | 0.3.1 |
+| **`NonConsumable`**             | <code>'NON_CONSUMABLE'</code>              | A non-consumable in-app product. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonConsumable. Only available on iOS.                                          | 0.3.1 |
+| **`AutoRenewableSubscription`** | <code>'AUTO_RENEWABLE_SUBSCRIPTION'</code> | An auto-renewable subscription. On Android, this is <a href="#producttype">ProductType</a>.SUBS. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.autoRenewable. | 0.3.1 |
+| **`NonRenewableSubscription`**  | <code>'NON_RENEWABLE_SUBSCRIPTION'</code>  | A non-renewing subscription. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonRenewable. Only available on iOS.                                               | 0.3.1 |
 
 </docgen-api>
 
