@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`27ee06a17c765f4566da9142dcb51b7d198a857e`](https://github.com/capawesome-team/capacitor-plugins/commit/27ee06a17c765f4566da9142dcb51b7d198a857e) ([#721](https://github.com/capawesome-team/capacitor-plugins/pull/721)): feat(ios): add support for iOS 15
+
 ## 8.0.1
 
 ### Patch Changes
