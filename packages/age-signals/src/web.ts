@@ -21,9 +21,7 @@ export class AgeSignalsWeb extends WebPlugin implements AgeSignalsPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async setUseFakeManager(
-    _options: SetUseFakeManagerOptions,
-  ): Promise<void> {
+  async setUseFakeManager(_options: SetUseFakeManagerOptions): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
