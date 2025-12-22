@@ -18,6 +18,34 @@ export interface AgeSignalsPlugin {
    * @since 0.3.1
    */
   checkEligibility(): Promise<CheckEligibilityResult>;
+  /**
+   * Enable or disable the fake age signals manager for testing.
+   *
+   * Only available on Android.
+   *
+   * @since 0.3.1
+   */
+  setUseFakeManager(options: SetUseFakeManagerOptions): Promise<void>;
+  /**
+   * Set the next age signals result to be returned by the fake manager.
+   *
+   * Only available on Android.
+   *
+   * @since 0.3.1
+   */
+  setNextAgeSignalsResult(
+    options: SetNextAgeSignalsResultOptions,
+  ): Promise<void>;
+  /**
+   * Set the next exception to be thrown by the fake manager.
+   *
+   * Only available on Android.
+   *
+   * @since 0.3.1
+   */
+  setNextAgeSignalsException(
+    options: SetNextAgeSignalsExceptionOptions,
+  ): Promise<void>;
 }
 
 /**
@@ -217,4 +245,79 @@ export enum ErrorCode {
    * @since 0.0.1
    */
   InternalError = 'INTERNAL_ERROR',
+}
+
+/**
+ * @since 0.3.1
+ */
+export interface SetUseFakeManagerOptions {
+  /**
+   * Whether to use the fake age signals manager for testing.
+   *
+   * @since 0.3.1
+   * @default false
+   * @example true
+   */
+  useFake: boolean;
+}
+
+/**
+ * @since 0.3.1
+ */
+export interface SetNextAgeSignalsResultOptions {
+  /**
+   * The user's verification status.
+   *
+   * @since 0.3.1
+   */
+  userStatus: UserStatus;
+  /**
+   * The (inclusive) lower bound of a supervised user's age range.
+   *
+   * Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.
+   *
+   * @since 0.3.1
+   * @example 13
+   */
+  ageLower?: number;
+  /**
+   * The (inclusive) upper bound of a supervised user's age range.
+   *
+   * Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED` and the user's age is under 18.
+   *
+   * @since 0.3.1
+   * @example 15
+   */
+  ageUpper?: number;
+  /**
+   * The effective from date of the most recent significant change that was approved.
+   * When an app is installed, the date of the most recent significant change prior to install is used.
+   *
+   * Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`.
+   *
+   * @since 0.3.1
+   * @example "2024-01-15"
+   */
+  mostRecentApprovalDate?: string;
+  /**
+   * An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval.
+   *
+   * Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.
+   *
+   * @since 0.3.1
+   * @example "fake_install_id"
+   */
+  installId?: string;
+}
+
+/**
+ * @since 0.3.1
+ */
+export interface SetNextAgeSignalsExceptionOptions {
+  /**
+   * The error code to be thrown by the fake manager.
+   *
+   * @since 0.3.1
+   */
+  errorCode: ErrorCode;
 }
