@@ -50,6 +50,11 @@ public class AgeSignalsPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void checkEligibility(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
         String message = exception.getMessage();
         if (message == null) {
@@ -57,6 +62,10 @@ public class AgeSignalsPlugin extends Plugin {
         }
         Logger.error(TAG, message, exception);
         call.reject(message);
+    }
+
+    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
+        call.unimplemented("This method is not available on this platform.");
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable Result result) {
