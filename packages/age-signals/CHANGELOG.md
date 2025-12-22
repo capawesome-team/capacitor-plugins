@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2
+
+### Patch Changes
+
+- [`a77b7cbe5dddf35b6edd70ce81b2a129166cc37d`](https://github.com/capawesome-team/capacitor-plugins/commit/a77b7cbe5dddf35b6edd70ce81b2a129166cc37d) ([#724](https://github.com/capawesome-team/capacitor-plugins/pull/724)): feat(android): add methods for testing
+
 ## 0.3.1
 
 ### Patch Changes
