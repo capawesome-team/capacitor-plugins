@@ -8,7 +8,11 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsExceptionOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsResultOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetUseFakeManagerOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.results.CheckAgeSignalsResult;
+import io.capawesome.capacitorjs.plugins.agesignals.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.NonEmptyResultCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.Result;
 
@@ -55,6 +59,75 @@ public class AgeSignalsPlugin extends Plugin {
         rejectCallAsUnimplemented(call);
     }
 
+    @PluginMethod
+    public void setUseFakeManager(PluginCall call) {
+        try {
+            SetUseFakeManagerOptions options = new SetUseFakeManagerOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.setUseFakeManager(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextAgeSignalsResult(PluginCall call) {
+        try {
+            SetNextAgeSignalsResultOptions options = new SetNextAgeSignalsResultOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.setNextAgeSignalsResult(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextAgeSignalsException(PluginCall call) {
+        try {
+            SetNextAgeSignalsExceptionOptions options = new SetNextAgeSignalsExceptionOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.setNextAgeSignalsException(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
         String message = exception.getMessage();
         if (message == null) {
@@ -66,6 +139,10 @@ public class AgeSignalsPlugin extends Plugin {
 
     private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
         call.unimplemented("This method is not available on this platform.");
+    }
+
+    private void resolveCall(@NonNull PluginCall call) {
+        call.resolve();
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable Result result) {

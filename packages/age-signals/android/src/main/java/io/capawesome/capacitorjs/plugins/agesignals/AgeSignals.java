@@ -1,13 +1,19 @@
 package io.capawesome.capacitorjs.plugins.agesignals;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.tasks.Task;
 import com.google.android.play.agesignals.AgeSignalsManager;
 import com.google.android.play.agesignals.AgeSignalsManagerFactory;
 import com.google.android.play.agesignals.AgeSignalsRequest;
 import com.google.android.play.agesignals.AgeSignalsResult;
+import com.google.android.play.agesignals.testing.FakeAgeSignalsManager;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.CustomExceptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsExceptionOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsResultOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetUseFakeManagerOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.results.CheckAgeSignalsResult;
+import io.capawesome.capacitorjs.plugins.agesignals.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.NonEmptyResultCallback;
 
 public class AgeSignals {
@@ -15,12 +21,23 @@ public class AgeSignals {
     @NonNull
     private final AgeSignalsPlugin plugin;
 
+    private boolean useFakeManager = false;
+
+    @Nullable
+    private FakeAgeSignalsManager fakeManager = null;
+
     public AgeSignals(@NonNull AgeSignalsPlugin plugin) {
         this.plugin = plugin;
     }
 
     public void checkAgeSignals(@NonNull NonEmptyResultCallback<CheckAgeSignalsResult> callback) {
-        AgeSignalsManager manager = AgeSignalsManagerFactory.create(plugin.getActivity());
+        AgeSignalsManager manager;
+        if (useFakeManager && fakeManager != null) {
+            manager = fakeManager;
+        } else {
+            manager = AgeSignalsManagerFactory.create(plugin.getActivity());
+        }
+
         AgeSignalsRequest request = AgeSignalsRequest.builder().build();
 
         Task<AgeSignalsResult> task = manager.checkAgeSignals(request);
@@ -36,6 +53,46 @@ public class AgeSignals {
             Exception mappedException = mapErrorCodeToException(exception);
             callback.error(mappedException);
         });
+    }
+
+    public void setUseFakeManager(@NonNull SetUseFakeManagerOptions options, @NonNull EmptyCallback callback) {
+        try {
+            this.useFakeManager = options.getUseFake();
+            if (this.useFakeManager) {
+                this.fakeManager = new FakeAgeSignalsManager();
+            } else {
+                this.fakeManager = null;
+            }
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void setNextAgeSignalsResult(@NonNull SetNextAgeSignalsResultOptions options, @NonNull EmptyCallback callback) {
+        try {
+            if (!useFakeManager || fakeManager == null) {
+                throw CustomExceptions.FAKE_MANAGER_NOT_ENABLED;
+            }
+            com.google.android.play.agesignals.AgeSignalsResult result = options.buildAgeSignalsResult();
+            fakeManager.setNextAgeSignalsResult(result);
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void setNextAgeSignalsException(@NonNull SetNextAgeSignalsExceptionOptions options, @NonNull EmptyCallback callback) {
+        try {
+            if (!useFakeManager || fakeManager == null) {
+                throw CustomExceptions.FAKE_MANAGER_NOT_ENABLED;
+            }
+            com.google.android.play.agesignals.AgeSignalsException exception = options.buildAgeSignalsException();
+            fakeManager.setNextAgeSignalsException(exception);
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
     }
 
     @NonNull
