@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- [`9dcbf9a0d5a9f4158e1646bb28439fca041b4b74`](https://github.com/capawesome-team/capacitor-plugins/commit/9dcbf9a0d5a9f4158e1646bb28439fca041b4b74) ([#715](https://github.com/capawesome-team/capacitor-plugins/pull/715)): feat(ios): add `checkEligibility()` method
+
 ## 0.3.0
 
 ### Minor Changes
