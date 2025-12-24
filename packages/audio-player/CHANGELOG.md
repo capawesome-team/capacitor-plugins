@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`73f61d43ac42b79baf17ca2d3ac3f812f4ce8082`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/73f61d43ac42b79baf17ca2d3ac3f812f4ce8082) ([#367](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/367)): feat(android): support remote URLs
+
+### Patch Changes
+
+- [`f38c640dad8f1a7310cf37f9d1dfd5e56d5cba41`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f38c640dad8f1a7310cf37f9d1dfd5e56d5cba41) ([#371](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/371)): fix(ios): support remote URLs
+
 ## 8.0.0
 
 ### Major Changes
