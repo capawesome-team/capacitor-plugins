@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`6677d4f79acd822c45ddbb86b787bfab1de43cb9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6677d4f79acd822c45ddbb86b787bfab1de43cb9) ([#372](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/372)): feat: add support for album artwork in notifications
+
 ## 8.1.0
 
 ### Minor Changes
