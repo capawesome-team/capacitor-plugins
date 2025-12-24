@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`56113a53dbc635f03b4bf606b654216bd3f0ba93`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/56113a53dbc635f03b4bf606b654216bd3f0ba93) ([#373](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/373)): fix(ios): `seekTo(...)` method did not work
+
 ## 8.1.0
 
 ### Minor Changes
