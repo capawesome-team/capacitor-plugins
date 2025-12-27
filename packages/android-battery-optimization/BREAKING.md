@@ -10,4 +10,4 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ### Capacitor 8
 
-This plugin now supports **Capacitor 8**. The minimum Android SDK version is **36**. Ensure your project meets these requirements before upgrading.
+This plugin now supports **Capacitor 8**. The minimum Android SDK version is **24**. Ensure your project meets these requirements before upgrading.
