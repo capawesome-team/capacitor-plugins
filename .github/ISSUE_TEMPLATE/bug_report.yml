@@ -51,6 +51,7 @@ body:
         - label: Speech Synthesis
         - label: Share Target
         - label: SQLite
+        - label: Superwall
         - label: Torch
         - label: Zip
   - type: input
