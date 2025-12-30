@@ -22,6 +22,16 @@ public class SquareMobilePaymentsPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new SquareMobilePayments(this);
+        implementation.setReaderChangedCallback();
+        implementation.setAvailableCardInputMethodsCallback();
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        if (implementation != null) {
+            implementation.clearReaderChangedCallback();
+            implementation.clearAvailableCardInputMethodsCallback();
+        }
     }
 
     @PluginMethod
