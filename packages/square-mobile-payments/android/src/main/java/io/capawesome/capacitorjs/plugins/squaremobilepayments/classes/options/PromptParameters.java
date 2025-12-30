@@ -2,10 +2,10 @@ package io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 
 public class PromptParameters {
@@ -20,14 +20,18 @@ public class PromptParameters {
         this.mode = obj.getString("mode");
 
         this.additionalMethods = new ArrayList<>();
-        JSArray additionalMethodsArray = obj.getArray("additionalMethods");
-        if (additionalMethodsArray != null) {
-            for (int i = 0; i < additionalMethodsArray.length(); i++) {
-                String method = additionalMethodsArray.getString(i);
-                if (method != null) {
-                    this.additionalMethods.add(method);
+        try {
+            JSONArray additionalMethodsArray = obj.getJSONArray("additionalMethods");
+            if (additionalMethodsArray != null) {
+                for (int i = 0; i < additionalMethodsArray.length(); i++) {
+                    String method = additionalMethodsArray.getString(i);
+                    if (method != null) {
+                        this.additionalMethods.add(method);
+                    }
                 }
             }
+        } catch (JSONException e) {
+            // Array not provided, use empty list
         }
     }
 
