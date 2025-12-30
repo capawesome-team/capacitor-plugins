@@ -3,6 +3,7 @@ ext {
     androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.1'
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.3.0'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
+    squareMobilePaymentsSdkVersion = project.hasProperty('squareMobilePaymentsSdkVersion') ? rootProject.ext.squareMobilePaymentsSdkVersion : '2.3.4'
 }
 
 buildscript {
@@ -45,6 +46,9 @@ android {
 repositories {
     google()
     mavenCentral()
+    maven {
+        url 'https://sdk.squareup.com/public/android/'
+    }
 }
 
 
@@ -52,6 +56,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "com.squareup.sdk:mobile-payments-sdk:$squareMobilePaymentsSdkVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
