@@ -3,8 +3,8 @@
   "appName": "example",
   "webDir": "dist",
   "plugins": {
-    "SplashScreen": {
-      "launchAutoHide": false
+    "SystemBars": {
+      "insetsHandling": "disable"
     }
   }
 }
