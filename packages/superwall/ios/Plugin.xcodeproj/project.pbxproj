@@ -14,6 +14,25 @@
 		50ADFF97201F53D600D50D53 /* SuperwallTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* SuperwallTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50E1A94820377CB70090CE1A /* SuperwallPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* SuperwallPlugin.swift */; };
+		A1000001000000000000000A /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000001000000000000000A /* CustomError.swift */; };
+		A1000002000000000000000A /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000002000000000000000A /* Result.swift */; };
+		A1000003000000000000000A /* ConfigureOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000003000000000000000A /* ConfigureOptions.swift */; };
+		A1000004000000000000000A /* RegisterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000004000000000000000A /* RegisterOptions.swift */; };
+		A1000005000000000000000A /* GetPresentationResultOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000005000000000000000A /* GetPresentationResultOptions.swift */; };
+		A1000006000000000000000A /* IdentifyOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000006000000000000000A /* IdentifyOptions.swift */; };
+		A1000007000000000000000A /* SetUserAttributesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000007000000000000000A /* SetUserAttributesOptions.swift */; };
+		A1000008000000000000000A /* HandleDeepLinkOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000008000000000000000A /* HandleDeepLinkOptions.swift */; };
+		A1000009000000000000000A /* RegisterResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000009000000000000000A /* RegisterResult.swift */; };
+		A100000A000000000000000A /* GetPresentationResultResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000A000000000000000A /* GetPresentationResultResult.swift */; };
+		A100000B000000000000000A /* GetUserIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000B000000000000000A /* GetUserIdResult.swift */; };
+		A100000C000000000000000A /* GetIsLoggedInResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000C000000000000000A /* GetIsLoggedInResult.swift */; };
+		A100000D000000000000000A /* GetSubscriptionStatusResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000D000000000000000A /* GetSubscriptionStatusResult.swift */; };
+		A100000E000000000000000A /* SuperwallEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000E000000000000000A /* SuperwallEvent.swift */; };
+		A100000F000000000000000A /* SubscriptionStatusDidChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100000F000000000000000A /* SubscriptionStatusDidChangeEvent.swift */; };
+		A1000010000000000000000A /* PaywallPresentedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000010000000000000000A /* PaywallPresentedEvent.swift */; };
+		A1000011000000000000000A /* PaywallWillDismissEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000011000000000000000A /* PaywallWillDismissEvent.swift */; };
+		A1000012000000000000000A /* PaywallDismissedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000012000000000000000A /* PaywallDismissedEvent.swift */; };
+		A1000013000000000000000A /* CustomPaywallActionEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000013000000000000000A /* CustomPaywallActionEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +58,25 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B1000001000000000000000A /* CustomError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
+		B1000002000000000000000A /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		B1000003000000000000000A /* ConfigureOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigureOptions.swift; sourceTree = "<group>"; };
+		B1000004000000000000000A /* RegisterOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterOptions.swift; sourceTree = "<group>"; };
+		B1000005000000000000000A /* GetPresentationResultOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPresentationResultOptions.swift; sourceTree = "<group>"; };
+		B1000006000000000000000A /* IdentifyOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifyOptions.swift; sourceTree = "<group>"; };
+		B1000007000000000000000A /* SetUserAttributesOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetUserAttributesOptions.swift; sourceTree = "<group>"; };
+		B1000008000000000000000A /* HandleDeepLinkOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HandleDeepLinkOptions.swift; sourceTree = "<group>"; };
+		B1000009000000000000000A /* RegisterResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterResult.swift; sourceTree = "<group>"; };
+		B100000A000000000000000A /* GetPresentationResultResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPresentationResultResult.swift; sourceTree = "<group>"; };
+		B100000B000000000000000A /* GetUserIdResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetUserIdResult.swift; sourceTree = "<group>"; };
+		B100000C000000000000000A /* GetIsLoggedInResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetIsLoggedInResult.swift; sourceTree = "<group>"; };
+		B100000D000000000000000A /* GetSubscriptionStatusResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetSubscriptionStatusResult.swift; sourceTree = "<group>"; };
+		B100000E000000000000000A /* SuperwallEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperwallEvent.swift; sourceTree = "<group>"; };
+		B100000F000000000000000A /* SubscriptionStatusDidChangeEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubscriptionStatusDidChangeEvent.swift; sourceTree = "<group>"; };
+		B1000010000000000000000A /* PaywallPresentedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaywallPresentedEvent.swift; sourceTree = "<group>"; };
+		B1000011000000000000000A /* PaywallWillDismissEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaywallWillDismissEvent.swift; sourceTree = "<group>"; };
+		B1000012000000000000000A /* PaywallDismissedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaywallDismissedEvent.swift; sourceTree = "<group>"; };
+		B1000013000000000000000A /* CustomPaywallActionEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPaywallActionEvent.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -90,9 +128,76 @@
 			children = (
 				50E1A94720377CB70090CE1A /* SuperwallPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* Superwall.swift */,
+				C1000001000000000000000A /* Enums */,
+				C1000002000000000000000A /* Protocols */,
+				C1000003000000000000000A /* Classes */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
+			sourceTree = "<group>";
+		};
+		C1000001000000000000000A /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				B1000001000000000000000A /* CustomError.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		C1000002000000000000000A /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				B1000002000000000000000A /* Result.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		C1000003000000000000000A /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C1000004000000000000000A /* Options */,
+				C1000005000000000000000A /* Results */,
+				C1000006000000000000000A /* Events */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		C1000004000000000000000A /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				B1000003000000000000000A /* ConfigureOptions.swift */,
+				B1000004000000000000000A /* RegisterOptions.swift */,
+				B1000005000000000000000A /* GetPresentationResultOptions.swift */,
+				B1000006000000000000000A /* IdentifyOptions.swift */,
+				B1000007000000000000000A /* SetUserAttributesOptions.swift */,
+				B1000008000000000000000A /* HandleDeepLinkOptions.swift */,
+			);
+			path = Options;
+			sourceTree = "<group>";
+		};
+		C1000005000000000000000A /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				B1000009000000000000000A /* RegisterResult.swift */,
+				B100000A000000000000000A /* GetPresentationResultResult.swift */,
+				B100000B000000000000000A /* GetUserIdResult.swift */,
+				B100000C000000000000000A /* GetIsLoggedInResult.swift */,
+				B100000D000000000000000A /* GetSubscriptionStatusResult.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		C1000006000000000000000A /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				B100000E000000000000000A /* SuperwallEvent.swift */,
+				B100000F000000000000000A /* SubscriptionStatusDidChangeEvent.swift */,
+				B1000010000000000000000A /* PaywallPresentedEvent.swift */,
+				B1000011000000000000000A /* PaywallWillDismissEvent.swift */,
+				B1000012000000000000000A /* PaywallDismissedEvent.swift */,
+				B1000013000000000000000A /* CustomPaywallActionEvent.swift */,
+			);
+			path = Events;
 			sourceTree = "<group>";
 		};
 		50ADFF95201F53D600D50D53 /* PluginTests */ = {
@@ -263,11 +368,15 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
 				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
+				"${BUILT_PRODUCTS_DIR}/Superscript/Superscript.framework",
+				"${BUILT_PRODUCTS_DIR}/SuperwallKit/SuperwallKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Superscript.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SuperwallKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -301,6 +410,25 @@
 			files = (
 				50E1A94820377CB70090CE1A /* SuperwallPlugin.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* Superwall.swift in Sources */,
+				A1000001000000000000000A /* CustomError.swift in Sources */,
+				A1000002000000000000000A /* Result.swift in Sources */,
+				A1000003000000000000000A /* ConfigureOptions.swift in Sources */,
+				A1000004000000000000000A /* RegisterOptions.swift in Sources */,
+				A1000005000000000000000A /* GetPresentationResultOptions.swift in Sources */,
+				A1000006000000000000000A /* IdentifyOptions.swift in Sources */,
+				A1000007000000000000000A /* SetUserAttributesOptions.swift in Sources */,
+				A1000008000000000000000A /* HandleDeepLinkOptions.swift in Sources */,
+				A1000009000000000000000A /* RegisterResult.swift in Sources */,
+				A100000A000000000000000A /* GetPresentationResultResult.swift in Sources */,
+				A100000B000000000000000A /* GetUserIdResult.swift in Sources */,
+				A100000C000000000000000A /* GetIsLoggedInResult.swift in Sources */,
+				A100000D000000000000000A /* GetSubscriptionStatusResult.swift in Sources */,
+				A100000E000000000000000A /* SuperwallEvent.swift in Sources */,
+				A100000F000000000000000A /* SubscriptionStatusDidChangeEvent.swift in Sources */,
+				A1000010000000000000000A /* PaywallPresentedEvent.swift in Sources */,
+				A1000011000000000000000A /* PaywallWillDismissEvent.swift in Sources */,
+				A1000012000000000000000A /* PaywallDismissedEvent.swift in Sources */,
+				A1000013000000000000000A /* CustomPaywallActionEvent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +506,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -438,7 +566,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -461,7 +589,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
@@ -487,7 +615,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
