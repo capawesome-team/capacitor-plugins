@@ -30,7 +30,25 @@ npx cap sync
 
 ### Android
 
-If you are using the [Capacitor Keyboard](https://capacitorjs.com/docs/apis/keyboard) plugin, make sure to set the `resizeOnFullScreen` property to `false` (default) in your Capacitor Configuration file:
+#### Capacitor SystemBars Plugin
+
+Make sure to disable the built-in insets handling of the [Capacitor SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin in your [Capacitor Configuration](https://capacitorjs.com/docs/config) file:
+
+```json
+{
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "disable"
+    }
+  }
+}
+```
+
+Please note that this plugin is part of the Capacitor core and the insets handling is **always enabled by default**.
+
+#### Capacitor Keyboard Plugin
+
+If you are using the [Capacitor Keyboard](https://capacitorjs.com/docs/apis/keyboard) plugin, make sure to set the `resizeOnFullScreen` property to `false` (default) in your [Capacitor Configuration](https://capacitorjs.com/docs/config) file:
 
 ```json
 {
