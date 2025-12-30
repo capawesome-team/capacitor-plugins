@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [Superwall SDK](https://superwall.com/).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 We are proud to offer a comprehensive Capacitor plugin for Superwall SDK integration. Here are some of the key features:
