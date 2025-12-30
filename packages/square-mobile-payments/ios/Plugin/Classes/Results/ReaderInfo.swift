@@ -40,7 +40,7 @@ import Capacitor
         result["batteryLevel"] = batteryLevel ?? NSNull()
         result["isCharging"] = isCharging ?? NSNull()
         result["supportedCardInputMethods"] = supportedCardInputMethods
-        result["unavailableReasonInfo"] = unavailableReasonInfo?.toJSObject() ?? NSNull()
+        result["unavailableReasonInfo"] = unavailableReasonInfo != nil ? (unavailableReasonInfo!.toJSObject() as? JSObject) : NSNull()
         return result as AnyObject
     }
 }

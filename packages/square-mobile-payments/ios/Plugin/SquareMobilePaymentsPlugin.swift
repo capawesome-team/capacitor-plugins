@@ -7,17 +7,270 @@ import Capacitor
  */
 @objc(SquareMobilePaymentsPlugin)
 public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
+    public static let tag = "SquareMobilePayments"
+
     public let identifier = "SquareMobilePaymentsPlugin"
     public let jsName = "SquareMobilePayments"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "echo", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "authorize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isAuthorized", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "deauthorize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "showSettings", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getSettings", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startPairing", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "stopPairing", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isPairingInProgress", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getReaders", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "forgetReader", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "retryConnection", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "startPayment", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cancelPayment", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAvailableCardInputMethods", returnType: CAPPluginReturnPromise)
     ]
-    private let implementation = SquareMobilePayments()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    private var implementation: SquareMobilePayments?
+
+    override public func load() {
+        self.implementation = SquareMobilePayments(plugin: self)
+    }
+
+    @objc func initialize(_ call: CAPPluginCall) {
+        do {
+            let options = try InitializeOptions(call)
+
+            try implementation?.initialize(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func authorize(_ call: CAPPluginCall) {
+        do {
+            let options = try AuthorizeOptions(call)
+
+            try implementation?.authorize(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func isAuthorized(_ call: CAPPluginCall) {
+        do {
+            try implementation?.isAuthorized(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func deauthorize(_ call: CAPPluginCall) {
+        do {
+            try implementation?.deauthorize(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func showSettings(_ call: CAPPluginCall) {
+        do {
+            try implementation?.showSettings(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func getSettings(_ call: CAPPluginCall) {
+        do {
+            try implementation?.getSettings(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func startPairing(_ call: CAPPluginCall) {
+        do {
+            try implementation?.startPairing(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func stopPairing(_ call: CAPPluginCall) {
+        do {
+            try implementation?.stopPairing(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func isPairingInProgress(_ call: CAPPluginCall) {
+        do {
+            try implementation?.isPairingInProgress(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func getReaders(_ call: CAPPluginCall) {
+        do {
+            try implementation?.getReaders(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func forgetReader(_ call: CAPPluginCall) {
+        do {
+            let options = try ForgetReaderOptions(call)
+
+            try implementation?.forgetReader(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func retryConnection(_ call: CAPPluginCall) {
+        do {
+            let options = try RetryConnectionOptions(call)
+
+            try implementation?.retryConnection(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func startPayment(_ call: CAPPluginCall) {
+        do {
+            let options = try StartPaymentOptions(call)
+
+            try implementation?.startPayment(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func cancelPayment(_ call: CAPPluginCall) {
+        do {
+            try implementation?.cancelPayment(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func getAvailableCardInputMethods(_ call: CAPPluginCall) {
+        do {
+            try implementation?.getAvailableCardInputMethods(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    // MARK: - Helper Methods
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        CAPLog.print("[", SquareMobilePaymentsPlugin.tag, "] ", error)
+        call.reject(error.localizedDescription)
+    }
+
+    private func resolveCall(_ call: CAPPluginCall) {
+        call.resolve()
+    }
+
+    private func resolveCall<T: Result>(_ call: CAPPluginCall, _ result: T?) {
+        if let result = result?.toJSObject() as? JSObject {
+            call.resolve(result)
+        } else {
+            call.resolve()
+        }
     }
 }

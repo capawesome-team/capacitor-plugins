@@ -45,12 +45,12 @@ import Capacitor
         result["id"] = id ?? NSNull()
         result["type"] = type
         result["status"] = status
-        result["amountMoney"] = amountMoney.toJSObject()
-        result["tipMoney"] = tipMoney?.toJSObject() ?? NSNull()
-        result["applicationFee"] = applicationFee?.toJSObject() ?? NSNull()
+        result["amountMoney"] = amountMoney.toJSObject() as? JSObject
+        result["tipMoney"] = tipMoney != nil ? (tipMoney!.toJSObject() as? JSObject) : NSNull()
+        result["applicationFee"] = applicationFee != nil ? (applicationFee!.toJSObject() as? JSObject) : NSNull()
         result["referenceId"] = referenceId ?? NSNull()
         result["orderId"] = orderId ?? NSNull()
-        result["cardDetails"] = cardDetails?.toJSObject() ?? NSNull()
+        result["cardDetails"] = cardDetails != nil ? (cardDetails!.toJSObject() as? JSObject) : NSNull()
         result["createdAt"] = createdAt ?? NSNull()
         result["updatedAt"] = updatedAt ?? NSNull()
         return result as AnyObject

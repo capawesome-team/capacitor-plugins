@@ -2,11 +2,13 @@ package io.capawesome.capacitorjs.plugins.squaremobilepayments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.events.*;
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.*;
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.*;
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.interfaces.*;
@@ -388,5 +390,45 @@ public class SquareMobilePaymentsPlugin extends Plugin {
         } else {
             call.resolve(result.toJSObject());
         }
+    }
+
+    public void notifyReaderPairingDidBeginListeners() {
+        notifyListeners("readerPairingDidBegin", new JSObject());
+    }
+
+    public void notifyReaderPairingDidSucceedListeners() {
+        notifyListeners("readerPairingDidSucceed", new JSObject());
+    }
+
+    public void notifyReaderPairingDidFailListeners(@NonNull ReaderPairingDidFailEvent event) {
+        notifyListeners("readerPairingDidFail", event.toJSObject());
+    }
+
+    public void notifyReaderWasAddedListeners(@NonNull ReaderWasAddedEvent event) {
+        notifyListeners("readerWasAdded", event.toJSObject());
+    }
+
+    public void notifyReaderWasRemovedListeners(@NonNull ReaderWasRemovedEvent event) {
+        notifyListeners("readerWasRemoved", event.toJSObject());
+    }
+
+    public void notifyReaderDidChangeListeners(@NonNull ReaderDidChangeEvent event) {
+        notifyListeners("readerDidChange", event.toJSObject());
+    }
+
+    public void notifyAvailableCardInputMethodsDidChangeListeners(@NonNull AvailableCardInputMethodsDidChangeEvent event) {
+        notifyListeners("availableCardInputMethodsDidChange", event.toJSObject());
+    }
+
+    public void notifyPaymentDidFinishListeners(@NonNull PaymentDidFinishEvent event) {
+        notifyListeners("paymentDidFinish", event.toJSObject());
+    }
+
+    public void notifyPaymentDidFailListeners(@NonNull PaymentDidFailEvent event) {
+        notifyListeners("paymentDidFail", event.toJSObject());
+    }
+
+    public void notifyPaymentDidCancelListeners(@NonNull PaymentDidCancelEvent event) {
+        notifyListeners("paymentDidCancel", event.toJSObject());
     }
 }

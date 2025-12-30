@@ -24,7 +24,7 @@ import Capacitor
 
     @objc public func toJSObject() -> AnyObject {
         var result = JSObject()
-        result["card"] = card.toJSObject()
+        result["card"] = card.toJSObject() as? JSObject
         result["entryMethod"] = entryMethod
         result["authorizationCode"] = authorizationCode ?? NSNull()
         result["applicationName"] = applicationName ?? NSNull()
