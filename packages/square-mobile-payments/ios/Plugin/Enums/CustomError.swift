@@ -13,6 +13,7 @@ enum CustomError: Error {
     case pairingAlreadyInProgress
     case noPaymentInProgress
     case readerNotFound
+    case privacyDescriptionsMissing
 
     var code: String? {
         switch self {
@@ -40,6 +41,8 @@ enum CustomError: Error {
             return "NO_PAYMENT_IN_PROGRESS"
         case .readerNotFound:
             return "READER_NOT_FOUND"
+        case .privacyDescriptionsMissing:
+            return "PRIVACY_DESCRIPTIONS_MISSING"
         }
     }
 }
@@ -71,6 +74,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("No payment is currently in progress.", comment: "noPaymentInProgress")
         case .readerNotFound:
             return NSLocalizedString("Reader not found.", comment: "readerNotFound")
+        case .privacyDescriptionsMissing:
+            return NSLocalizedString("Privacy descriptions are missing in Info.plist.", comment: "privacyDescriptionsMissing")
         }
     }
 }

@@ -26,8 +26,13 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "retryConnection", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startPayment", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "cancelPayment", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getAvailableCardInputMethods", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "getAvailableCardInputMethods", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
     ]
+
+    public static let permissionLocation = "location"
+    public static let permissionBluetooth = "bluetooth"
 
     private var implementation: SquareMobilePayments?
 
@@ -255,7 +260,73 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
+        var locationResult: String
+        switch implementation?.checkLocationPermission() {
+        case .notDetermined:
+            locationResult = "prompt"
+        case .none, .restricted, .denied:
+            locationResult = "denied"
+        case .authorizedAlways, .authorizedWhenInUse:
+            locationResult = "granted"
+        @unknown default:
+            locationResult = "prompt"
+        }
+
+        var bluetoothResult: String
+        switch implementation?.checkBluetoothPermission() {
+        case .notDetermined:
+            bluetoothResult = "prompt"
+        case .none, .restricted, .denied:
+            bluetoothResult = "denied"
+        case .allowedAlways:
+            bluetoothResult = "granted"
+        @unknown default:
+            bluetoothResult = "prompt"
+        }
+
+        var result = JSObject()
+        result[SquareMobilePaymentsPlugin.permissionLocation] = locationResult
+        result[SquareMobilePaymentsPlugin.permissionBluetooth] = bluetoothResult
+        call.resolve(result)
+    }
+
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
+        if !hasUsageDescription(forKey: "NSLocationWhenInUseUsageDescription") {
+            rejectCall(call, CustomError.privacyDescriptionsMissing)
+            return
+        }
+        if !hasUsageDescription(forKey: "NSBluetoothAlwaysUsageDescription") {
+            rejectCall(call, CustomError.privacyDescriptionsMissing)
+            return
+        }
+
+        let group = DispatchGroup()
+
+        if implementation?.checkLocationPermission() == .notDetermined {
+            group.enter()
+            implementation?.requestLocationPermission { _ in
+                group.leave()
+            }
+        }
+
+        if implementation?.checkBluetoothPermission() == .notDetermined {
+            group.enter()
+            implementation?.requestBluetoothPermission {
+                group.leave()
+            }
+        }
+
+        group.notify(queue: DispatchQueue.main) {
+            self.checkPermissions(call)
+        }
+    }
+
     // MARK: - Helper Methods
+
+    private func hasUsageDescription(forKey key: String) -> Bool {
+        return Bundle.main.object(forInfoDictionaryKey: key) as? String != nil
+    }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", SquareMobilePaymentsPlugin.tag, "] ", error)

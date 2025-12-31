@@ -1,4 +1,4 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 /**
  * @since 0.0.1
@@ -138,6 +138,22 @@ export interface SquareMobilePaymentsPlugin {
    * @since 0.0.1
    */
   getAvailableCardInputMethods(): Promise<GetAvailableCardInputMethodsResult>;
+  /**
+   * Check the current permission status.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.0.1
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
+   * Request the required permissions.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.0.1
+   */
+  requestPermissions(): Promise<PermissionStatus>;
   /**
    * Listen for reader pairing events.
    *
@@ -1150,11 +1166,15 @@ export enum ReaderChange {
   /**
    * Reader battery started charging.
    *
+   * Only available on iOS.
+   *
    * @since 0.0.1
    */
   BatteryDidBeginCharging = 'BATTERY_DID_BEGIN_CHARGING',
   /**
    * Reader battery stopped charging.
+   *
+   * Only available on iOS.
    *
    * @since 0.0.1
    */
@@ -1162,9 +1182,35 @@ export enum ReaderChange {
   /**
    * Reader battery level changed.
    *
+   * Only available on iOS.
+   *
    * @since 0.0.1
    */
   BatteryLevelDidChange = 'BATTERY_LEVEL_DID_CHANGE',
+  /**
+   * Reader battery charging status changed.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  BatteryCharging = 'BATTERY_CHARGING',
+  /**
+   * Reader was added.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  Added = 'ADDED',
+  /**
+   * Reader was removed.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  Removed = 'REMOVED',
   /**
    * Reader status changed.
    *
@@ -1180,27 +1226,59 @@ export enum UnavailableReason {
   /**
    * Bluetooth connection issue.
    *
+   * Only available on iOS.
+   *
    * @since 0.0.1
    */
   BluetoothError = 'BLUETOOTH_ERROR',
   /**
+   * Bluetooth failure.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  BluetoothFailure = 'BLUETOOTH_FAILURE',
+  /**
+   * Bluetooth is disabled.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  BluetoothDisabled = 'BLUETOOTH_DISABLED',
+  /**
    * Reader firmware is updating.
+   *
+   * Only available on iOS.
    *
    * @since 0.0.1
    */
   FirmwareUpdate = 'FIRMWARE_UPDATE',
   /**
-   * Reader is disabled in the Square Dashboard.
+   * Blocking firmware update.
+   *
+   * Only available on Android.
    *
    * @since 0.0.1
    */
-  DisabledInDashboard = 'DISABLED_IN_DASHBOARD',
+  BlockingUpdate = 'BLOCKING_UPDATE',
   /**
-   * The Square account is not authorized.
+   * Reader is unavailable offline.
+   *
+   * Only available on Android.
    *
    * @since 0.0.1
    */
-  AccountNotAuthorized = 'ACCOUNT_NOT_AUTHORIZED',
+  ReaderUnavailableOffline = 'READER_UNAVAILABLE_OFFLINE',
+  /**
+   * Device is in developer mode.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  DeviceDeveloperMode = 'DEVICE_DEVELOPER_MODE',
   /**
    * Unknown reason.
    *
@@ -1327,6 +1405,68 @@ export enum CardBrand {
    * @since 0.0.1
    */
   Other = 'OTHER',
+}
+
+/**
+ * @since 0.0.1
+ */
+export interface PermissionStatus {
+  /**
+   * Permission state for accessing location.
+   *
+   * Required to confirm that payments are occurring in a supported Square location.
+   *
+   * @since 0.0.1
+   */
+  location: PermissionState;
+  /**
+   * Permission state for recording audio.
+   *
+   * Required to receive data from magstripe readers.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  recordAudio?: PermissionState;
+  /**
+   * Permission state for Bluetooth connect.
+   *
+   * Required to receive data from contactless and chip readers.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  bluetoothConnect?: PermissionState;
+  /**
+   * Permission state for Bluetooth scan.
+   *
+   * Required to store information during checkout.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  bluetoothScan?: PermissionState;
+  /**
+   * Permission state for reading phone state.
+   *
+   * Required to identify the device sending information to Square servers.
+   *
+   * Only available on Android.
+   *
+   * @since 0.0.1
+   */
+  readPhoneState?: PermissionState;
+  /**
+   * Permission state for using Bluetooth.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.0.1
+   */
+  bluetooth?: PermissionState;
 }
 
 /**

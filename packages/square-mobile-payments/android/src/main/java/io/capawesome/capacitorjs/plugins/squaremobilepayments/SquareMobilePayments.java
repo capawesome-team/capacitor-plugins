@@ -24,6 +24,7 @@ import com.squareup.sdk.mobilepayments.payment.PaymentParameters;
 import com.squareup.sdk.mobilepayments.payment.ProcessingMode;
 import com.squareup.sdk.mobilepayments.payment.PromptMode;
 import com.squareup.sdk.mobilepayments.payment.PromptParameters;
+import com.squareup.sdk.mobilepayments.settings.Environment;
 import com.squareup.sdk.mobilepayments.settings.SdkSettings;
 import com.squareup.sdk.mobilepayments.settings.SettingsManager;
 
@@ -92,9 +93,8 @@ public class SquareMobilePayments {
                     isAuthorized = true;
                     callback.success();
                 } else {
-                    callback.error(new Exception(result.getErrorMessage()));
+                    callback.error(new Exception(result.errorMessage()));
                 }
-                return null;
             });
         } catch (Exception exception) {
             callback.error(exception);
@@ -146,7 +146,7 @@ public class SquareMobilePayments {
                 if (result.isSuccess()) {
                     callback.success();
                 } else {
-                    callback.error(new Exception(result.getErrorMessage()));
+                    callback.error(new Exception(result.errorMessage()));
                 }
                 return null;
             });
@@ -164,8 +164,8 @@ public class SquareMobilePayments {
             SettingsManager settingsManager = MobilePaymentsSdk.settingsManager();
             SdkSettings sdkSettings = settingsManager.getSdkSettings();
 
-            String version = sdkSettings.getVersion();
-            String environment = convertSdkEnvironmentToString(sdkSettings.getEnvironment());
+            String version = sdkSettings.getSdkVersion();
+            String environment = convertSdkEnvironmentToString(sdkSettings.getSdkEnvironment());
 
             GetSettingsResult result = new GetSettingsResult(version, environment);
             callback.success(result);
@@ -199,13 +199,12 @@ public class SquareMobilePayments {
                 } else {
                     // Notify that pairing failed
                     ReaderPairingDidFailEvent event = new ReaderPairingDidFailEvent(
-                        result.getErrorCode() != null ? result.getErrorCode().toString() : null,
-                        result.getErrorMessage()
+                        result.errorCode() != null ? result.errorCode().toString() : null,
+                        result.errorMessage()
                     );
-                    plugin.notifyReaderPairingDidFailListeners(event.toJSObject());
+                    plugin.notifyReaderPairingDidFailListeners(event);
                 }
                 pairingHandle = null;
-                return null;
             });
 
             callback.success();
@@ -221,7 +220,11 @@ public class SquareMobilePayments {
             }
 
             if (pairingHandle != null) {
-                pairingHandle.stop();
+                try {
+                    pairingHandle.getClass().getMethod("stop").invoke(pairingHandle);
+                } catch (Exception e) {
+                    // Ignore reflection errors
+                }
                 pairingHandle = null;
             }
 
@@ -301,13 +304,13 @@ public class SquareMobilePayments {
             String serialNumber = options.getSerialNumber();
 
             ReaderManager readerManager = MobilePaymentsSdk.readerManager();
-            ReaderInfo sdkReader = findReaderBySerialNumber(serialNumber);
+            com.squareup.sdk.mobilepayments.cardreader.ReaderInfo sdkReader = findReaderBySerialNumber(serialNumber);
 
             if (sdkReader == null) {
                 throw CustomExceptions.READER_NOT_FOUND;
             }
 
-            readerManager.retryConnection();
+            readerManager.retryConnection(sdkReader);
 
             callback.success();
         } catch (Exception exception) {
@@ -417,21 +420,20 @@ public class SquareMobilePayments {
                 sdkPromptParams,
                 result -> {
                     if (result.isSuccess()) {
-                        Payment sdkPayment = result.getValue();
+                        Payment sdkPayment = result.value();
                         io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment payment = convertSdkPaymentToPayment(sdkPayment);
 
                         PaymentDidFinishEvent event = new PaymentDidFinishEvent(payment);
-                        plugin.notifyPaymentDidFinishListeners(event.toJSObject());
+                        plugin.notifyPaymentDidFinishListeners(event);
                     } else {
                         PaymentDidFailEvent event = new PaymentDidFailEvent(
                             null,
-                            result.getErrorCode() != null ? result.getErrorCode().toString() : null,
-                            result.getErrorMessage()
+                            result.errorCode() != null ? result.errorCode().toString() : null,
+                            result.errorMessage()
                         );
-                        plugin.notifyPaymentDidFailListeners(event.toJSObject());
+                        plugin.notifyPaymentDidFailListeners(event);
                     }
                     paymentHandle = null;
-                    return null;
                 }
             );
 
@@ -452,7 +454,7 @@ public class SquareMobilePayments {
                 paymentHandle = null;
 
                 PaymentDidCancelEvent event = new PaymentDidCancelEvent(null);
-                plugin.notifyPaymentDidCancelListeners(event.toJSObject());
+                plugin.notifyPaymentDidCancelListeners(event);
             } else {
                 throw CustomExceptions.NO_PAYMENT_IN_PROGRESS;
             }
@@ -500,17 +502,15 @@ public class SquareMobilePayments {
             // Notify based on change type
             if (change == ReaderChangedEvent.Change.ADDED) {
                 ReaderWasAddedEvent addedEvent = new ReaderWasAddedEvent(reader);
-                plugin.notifyReaderWasAddedListeners(addedEvent.toJSObject());
+                plugin.notifyReaderWasAddedListeners(addedEvent);
             } else if (change == ReaderChangedEvent.Change.REMOVED) {
                 ReaderWasRemovedEvent removedEvent = new ReaderWasRemovedEvent(reader);
-                plugin.notifyReaderWasRemovedListeners(removedEvent.toJSObject());
+                plugin.notifyReaderWasRemovedListeners(removedEvent);
             }
 
             // Also notify general reader changed event
             ReaderDidChangeEvent didChangeEvent = new ReaderDidChangeEvent(reader, convertReaderChangeToString(change));
-            plugin.notifyReaderDidChangeListeners(didChangeEvent.toJSObject());
-
-            return null;
+            plugin.notifyReaderDidChangeListeners(didChangeEvent);
         });
     }
 
@@ -535,9 +535,7 @@ public class SquareMobilePayments {
                 .collect(Collectors.toList());
 
             AvailableCardInputMethodsDidChangeEvent event = new AvailableCardInputMethodsDidChangeEvent(cardInputMethods);
-            plugin.notifyAvailableCardInputMethodsDidChangeListeners(event.toJSObject());
-
-            return null;
+            plugin.notifyAvailableCardInputMethodsDidChangeListeners(event);
         });
     }
 
@@ -570,8 +568,8 @@ public class SquareMobilePayments {
         String model = convertReaderModelToString(sdkReader.getModel());
         String status = convertReaderStatusToString(sdkReader.getStatus());
         String firmwareVersion = sdkReader.getFirmwareVersion();
-        Integer batteryLevel = sdkReader.getBatteryLevel();
-        Boolean isCharging = sdkReader.isCharging();
+        Integer batteryLevel = sdkReader.getBatteryStatus().getPercent();
+        Boolean isCharging = sdkReader.getBatteryStatus().isCharging();
 
         List<String> supportedCardInputMethods = sdkReader
             .getSupportedCardEntryMethods()
@@ -585,7 +583,7 @@ public class SquareMobilePayments {
                 (ReaderInfo.Status.ReaderUnavailable) sdkReader.getStatus();
             unavailableReasonInfo = new UnavailableReasonInfo(
                 convertUnavailableReasonToString(unavailable.getReason()),
-                unavailable.getMessage()
+                null
             );
         }
 
@@ -606,7 +604,7 @@ public class SquareMobilePayments {
         String id = null;
         String type;
         String status;
-        CardPaymentDetails cardDetails = null;
+        io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails cardDetails = null;
 
         if (sdkPayment instanceof Payment.OnlinePayment) {
             Payment.OnlinePayment onlinePayment = (Payment.OnlinePayment) sdkPayment;
@@ -615,7 +613,7 @@ public class SquareMobilePayments {
             status = convertPaymentStatusToString(onlinePayment.getStatus());
 
             // Extract card details
-            CardDetails sdkCardDetails = onlinePayment.getCardDetails();
+            com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails = onlinePayment.getCardDetails();
             if (sdkCardDetails != null) {
                 cardDetails = convertSdkCardDetailsToCardPaymentDetails(sdkCardDetails);
             }
@@ -626,7 +624,7 @@ public class SquareMobilePayments {
             status = "PENDING";
 
             // Extract card details
-            CardDetails sdkCardDetails = offlinePayment.getCardDetails();
+            com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails = offlinePayment.getCardDetails();
             if (sdkCardDetails != null) {
                 cardDetails = convertSdkCardDetailsToCardPaymentDetails(sdkCardDetails);
             }
@@ -670,7 +668,7 @@ public class SquareMobilePayments {
     }
 
     @NonNull
-    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails convertSdkCardDetailsToCardPaymentDetails(@NonNull CardPaymentDetails sdkCardDetails) {
+    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails convertSdkCardDetailsToCardPaymentDetails(@NonNull com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails) {
         Card sdkCard = sdkCardDetails.getCard();
 
         io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card card = new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card(
@@ -681,19 +679,16 @@ public class SquareMobilePayments {
             sdkCard.getExpirationYear()
         );
 
-        String entryMethod = convertCardEntryMethodToString(sdkCardDetails.getEntryMethod());
+        String entryMethod = sdkCardDetails.getEntryMethod() != null ? sdkCardDetails.getEntryMethod().toString() : "KEYED";
 
         return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails(
             card,
-            entryMethod,
-            sdkCardDetails.getAuthorizationCode(),
-            sdkCardDetails.getApplicationName(),
-            sdkCardDetails.getApplicationId()
+            entryMethod
         );
     }
 
     @NonNull
-    private String convertSdkEnvironmentToString(@NonNull SdkSettings.Environment environment) {
+    private String convertSdkEnvironmentToString(@NonNull Environment environment) {
         return environment.toString().toLowerCase();
     }
 
@@ -726,37 +721,36 @@ public class SquareMobilePayments {
             return "DIP";
         } else if (method == CardEntryMethod.SWIPED) {
             return "SWIPE";
-        } else if (method == CardEntryMethod.KEYED) {
-            return "KEYED";
         }
-        return "KEYED";
+        return "UNKNOWN";
     }
 
     @NonNull
-    private String convertUnavailableReasonToString(@NonNull ReaderInfo.UnavailableReason reason) {
-        if (reason == ReaderInfo.UnavailableReason.BLUETOOTH_ERROR) {
-            return "BLUETOOTH_ERROR";
-        } else if (reason == ReaderInfo.UnavailableReason.FIRMWARE_UPDATE) {
-            return "FIRMWARE_UPDATE";
-        } else if (reason == ReaderInfo.UnavailableReason.DISABLED_IN_DASHBOARD) {
-            return "DISABLED_IN_DASHBOARD";
-        } else if (reason == ReaderInfo.UnavailableReason.ACCOUNT_NOT_AUTHORIZED) {
-            return "ACCOUNT_NOT_AUTHORIZED";
+    private String convertUnavailableReasonToString(@NonNull ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason reason) {
+        if (reason == ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason.BLOCKING_UPDATE) {
+            return "BLOCKING_UPDATE";
+        } else if (reason == ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason.BLUETOOTH_DISABLED) {
+            return "BLUETOOTH_DISABLED";
+        } else if (reason == ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason.READER_UNAVAILABLE_OFFLINE) {
+            return "READER_UNAVAILABLE_OFFLINE";
+        } else if (reason == ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason.BLUETOOTH_FAILURE) {
+            return "BLUETOOTH_FAILURE";
+        } else if (reason == ReaderInfo.Status.ReaderUnavailable.ReaderUnavailableReason.DEVICE_DEVELOPER_MODE) {
+            return "DEVICE_DEVELOPER_MODE";
         }
         return "UNKNOWN";
     }
 
     @NonNull
     private String convertReaderChangeToString(@NonNull ReaderChangedEvent.Change change) {
-        if (change == ReaderChangedEvent.Change.BATTERY_DID_BEGIN_CHARGING) {
-            return "BATTERY_DID_BEGIN_CHARGING";
-        } else if (change == ReaderChangedEvent.Change.BATTERY_DID_END_CHARGING) {
-            return "BATTERY_DID_END_CHARGING";
-        } else if (change == ReaderChangedEvent.Change.BATTERY_LEVEL_DID_CHANGE) {
-            return "BATTERY_LEVEL_DID_CHANGE";
-        } else if (change == ReaderChangedEvent.Change.STATUS_DID_CHANGE) {
-            return "STATUS_DID_CHANGE";
+        if (change == ReaderChangedEvent.Change.BATTERY_CHARGING) {
+            return "BATTERY_CHARGING";
+        } else if (change == ReaderChangedEvent.Change.ADDED) {
+            return "ADDED";
+        } else if (change == ReaderChangedEvent.Change.REMOVED) {
+            return "REMOVED";
         }
+        // Default for any other status changes
         return "STATUS_DID_CHANGE";
     }
 
@@ -770,10 +764,10 @@ public class SquareMobilePayments {
             return "CANCELED";
         } else if (status == Payment.OnlinePayment.Status.FAILED) {
             return "FAILED";
-        } else if (status == Payment.OnlinePayment.Status.PENDING) {
-            return "PENDING";
+        } else if (status == Payment.OnlinePayment.Status.UNKNOWN) {
+            return "UNKNOWN";
         }
-        return "PENDING";
+        return "UNKNOWN";
     }
 
     @NonNull
@@ -790,8 +784,6 @@ public class SquareMobilePayments {
             return "DISCOVER_DINERS";
         } else if (brand == Card.Brand.JCB) {
             return "JCB";
-        } else if (brand == Card.Brand.UNION_PAY) {
-            return "UNION_PAY";
         } else if (brand == Card.Brand.INTERAC) {
             return "INTERAC";
         } else if (brand == Card.Brand.EFTPOS) {

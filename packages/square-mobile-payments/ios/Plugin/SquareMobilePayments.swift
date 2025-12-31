@@ -1,6 +1,8 @@
 import Foundation
 import Capacitor
 import SquareMobilePaymentsSDK
+import CoreLocation
+import CoreBluetooth
 
 @objc public class SquareMobilePayments: NSObject {
     private weak var plugin: SquareMobilePaymentsPlugin?
@@ -8,6 +10,10 @@ import SquareMobilePaymentsSDK
     private var paymentHandle: SquareMobilePaymentsSDK.PaymentHandle?
     private var squareApplicationId: String?
     private var locationId: String?
+    private var locationManager: CLLocationManager?
+    private var bluetoothManager: CBCentralManager?
+    private var locationPermissionCompletion: ((CLAuthorizationStatus) -> Void)?
+    private var bluetoothPermissionCompletion: (() -> Void)?
 
     init(plugin: SquareMobilePaymentsPlugin) {
         self.plugin = plugin
@@ -544,6 +550,75 @@ extension SquareMobilePayments: PaymentManagerDelegate {
             data["payment"] = paymentData
         }
         plugin?.notifyListeners("paymentDidCancel", data: data)
+    }
+
+    // MARK: - Permission Methods
+
+    @objc public func checkLocationPermission() -> CLAuthorizationStatus {
+        if #available(iOS 14.0, *) {
+            if locationManager == nil {
+                locationManager = CLLocationManager()
+                locationManager?.delegate = self
+            }
+            return locationManager?.authorizationStatus ?? .notDetermined
+        } else {
+            return CLLocationManager.authorizationStatus()
+        }
+    }
+
+    @objc public func requestLocationPermission(completion: @escaping (CLAuthorizationStatus) -> Void) {
+        if locationManager == nil {
+            locationManager = CLLocationManager()
+            locationManager?.delegate = self
+        }
+        locationPermissionCompletion = completion
+        locationManager?.requestWhenInUseAuthorization()
+    }
+
+    @objc public func checkBluetoothPermission() -> CBManagerAuthorization {
+        if #available(iOS 13.1, *) {
+            return CBCentralManager.authorization
+        } else {
+            return .allowedAlways
+        }
+    }
+
+    @objc public func requestBluetoothPermission(completion: @escaping () -> Void) {
+        guard CBCentralManager.authorization == .notDetermined else {
+            completion()
+            return
+        }
+
+        bluetoothPermissionCompletion = completion
+        bluetoothManager = CBCentralManager(
+            delegate: self,
+            queue: .main,
+            options: nil
+        )
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension SquareMobilePayments: CLLocationManagerDelegate {
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status: CLAuthorizationStatus
+        if #available(iOS 14.0, *) {
+            status = manager.authorizationStatus
+        } else {
+            status = CLLocationManager.authorizationStatus()
+        }
+        locationPermissionCompletion?(status)
+        locationPermissionCompletion = nil
+    }
+}
+
+// MARK: - CBCentralManagerDelegate
+
+extension SquareMobilePayments: CBCentralManagerDelegate {
+    public func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        bluetoothPermissionCompletion?()
+        bluetoothPermissionCompletion = nil
     }
 }
 

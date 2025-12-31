@@ -14,27 +14,12 @@ public class CardPaymentDetails implements Result {
     @NonNull
     private final String entryMethod;
 
-    @Nullable
-    private final String authorizationCode;
-
-    @Nullable
-    private final String applicationName;
-
-    @Nullable
-    private final String applicationId;
-
     public CardPaymentDetails(
         @NonNull Card card,
-        @NonNull String entryMethod,
-        @Nullable String authorizationCode,
-        @Nullable String applicationName,
-        @Nullable String applicationId
+        @NonNull String entryMethod
     ) {
         this.card = card;
         this.entryMethod = entryMethod;
-        this.authorizationCode = authorizationCode;
-        this.applicationName = applicationName;
-        this.applicationId = applicationId;
     }
 
     @Override
@@ -43,9 +28,6 @@ public class CardPaymentDetails implements Result {
         JSObject result = new JSObject();
         result.put("card", card.toJSObject());
         result.put("entryMethod", entryMethod);
-        result.put("authorizationCode", authorizationCode == null ? JSONObject.NULL : authorizationCode);
-        result.put("applicationName", applicationName == null ? JSONObject.NULL : applicationName);
-        result.put("applicationId", applicationId == null ? JSONObject.NULL : applicationId);
         return result;
     }
 }
