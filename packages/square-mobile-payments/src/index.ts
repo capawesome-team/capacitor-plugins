@@ -1,13 +1,13 @@
-import { registerPlugin } from "@capacitor/core";
+import { registerPlugin } from '@capacitor/core';
 
-import type { SquareMobilePaymentsPlugin } from "./definitions";
+import type { SquareMobilePaymentsPlugin } from './definitions';
 
 const SquareMobilePayments = registerPlugin<SquareMobilePaymentsPlugin>(
-  "SquareMobilePayments",
+  'SquareMobilePayments',
   {
-    web: () => import("./web").then((m) => new m.SquareMobilePaymentsWeb()),
+    web: () => import('./web').then(m => new m.SquareMobilePaymentsWeb()),
   },
 );
 
-export * from "./definitions";
+export * from './definitions';
 export { SquareMobilePayments };

@@ -325,7 +325,7 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
     // MARK: - Helper Methods
 
     private func hasUsageDescription(forKey key: String) -> Bool {
-        return Bundle.main.object(forInfoDictionaryKey: key) as? String != nil
+        return Bundle.main.object(forInfoDictionaryKey: key) is String
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

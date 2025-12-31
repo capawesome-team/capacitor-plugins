@@ -794,7 +794,9 @@ export type ReaderPairingDidSucceedListener = () => void;
  *
  * @since 0.0.1
  */
-export type ReaderPairingDidFailListener = (event: ReaderPairingDidFailEvent) => void;
+export type ReaderPairingDidFailListener = (
+  event: ReaderPairingDidFailEvent,
+) => void;
 
 /**
  * @since 0.0.1

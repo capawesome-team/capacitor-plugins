@@ -14,10 +14,7 @@ public class CardPaymentDetails implements Result {
     @NonNull
     private final String entryMethod;
 
-    public CardPaymentDetails(
-        @NonNull Card card,
-        @NonNull String entryMethod
-    ) {
+    public CardPaymentDetails(@NonNull Card card, @NonNull String entryMethod) {
         this.card = card;
         this.entryMethod = entryMethod;
     }

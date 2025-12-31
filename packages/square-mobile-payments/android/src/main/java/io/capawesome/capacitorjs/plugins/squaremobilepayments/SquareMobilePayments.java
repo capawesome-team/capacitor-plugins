@@ -27,7 +27,6 @@ import com.squareup.sdk.mobilepayments.payment.PromptParameters;
 import com.squareup.sdk.mobilepayments.settings.Environment;
 import com.squareup.sdk.mobilepayments.settings.SdkSettings;
 import com.squareup.sdk.mobilepayments.settings.SettingsManager;
-
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.events.*;
 import io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.*;
@@ -261,7 +260,9 @@ public class SquareMobilePayments {
 
             List<io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo> readers = new ArrayList<>();
             for (ReaderInfo sdkReader : sdkReaders) {
-                io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo reader = convertSdkReaderToReaderInfo(sdkReader);
+                io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo reader = convertSdkReaderToReaderInfo(
+                    sdkReader
+                );
                 readers.add(reader);
             }
 
@@ -327,16 +328,15 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.PaymentParameters params = options.getPaymentParameters();
-            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.PromptParameters promptParams = options.getPromptParameters();
+            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.PaymentParameters params =
+                options.getPaymentParameters();
+            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.options.PromptParameters promptParams =
+                options.getPromptParameters();
 
             PaymentManager paymentManager = MobilePaymentsSdk.paymentManager();
 
             // Build Money object
-            Money amountMoney = new Money(
-                params.getAmountMoney().getAmount(),
-                CurrencyCode.valueOf(params.getAmountMoney().getCurrency())
-            );
+            Money amountMoney = new Money(params.getAmountMoney().getAmount(), CurrencyCode.valueOf(params.getAmountMoney().getCurrency()));
 
             // Determine processing mode
             ProcessingMode processingMode = ProcessingMode.AUTO_DETECT;
@@ -370,10 +370,7 @@ public class SquareMobilePayments {
             }
 
             if (params.getTipMoney() != null) {
-                Money tipMoney = new Money(
-                    params.getTipMoney().getAmount(),
-                    CurrencyCode.valueOf(params.getTipMoney().getCurrency())
-                );
+                Money tipMoney = new Money(params.getTipMoney().getAmount(), CurrencyCode.valueOf(params.getTipMoney().getCurrency()));
                 paramsBuilder.tipMoney(tipMoney);
             }
 
@@ -391,9 +388,7 @@ public class SquareMobilePayments {
             }
 
             if (params.getDelayAction() != null) {
-                paramsBuilder.delayAction(
-                    DelayAction.valueOf(params.getDelayAction())
-                );
+                paramsBuilder.delayAction(DelayAction.valueOf(params.getDelayAction()));
             }
 
             PaymentParameters sdkPaymentParams = paramsBuilder.build();
@@ -409,33 +404,28 @@ public class SquareMobilePayments {
                 additionalMethods.add(AdditionalPaymentMethod.Type.valueOf(method));
             }
 
-            PromptParameters sdkPromptParams = new PromptParameters(
-                promptMode,
-                additionalMethods
-            );
+            PromptParameters sdkPromptParams = new PromptParameters(promptMode, additionalMethods);
 
             // Start payment
-            paymentHandle = paymentManager.startPaymentActivity(
-                sdkPaymentParams,
-                sdkPromptParams,
-                result -> {
-                    if (result.isSuccess()) {
-                        Payment sdkPayment = result.value();
-                        io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment payment = convertSdkPaymentToPayment(sdkPayment);
+            paymentHandle = paymentManager.startPaymentActivity(sdkPaymentParams, sdkPromptParams, result -> {
+                if (result.isSuccess()) {
+                    Payment sdkPayment = result.value();
+                    io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment payment = convertSdkPaymentToPayment(
+                        sdkPayment
+                    );
 
-                        PaymentDidFinishEvent event = new PaymentDidFinishEvent(payment);
-                        plugin.notifyPaymentDidFinishListeners(event);
-                    } else {
-                        PaymentDidFailEvent event = new PaymentDidFailEvent(
-                            null,
-                            result.errorCode() != null ? result.errorCode().toString() : null,
-                            result.errorMessage()
-                        );
-                        plugin.notifyPaymentDidFailListeners(event);
-                    }
-                    paymentHandle = null;
+                    PaymentDidFinishEvent event = new PaymentDidFinishEvent(payment);
+                    plugin.notifyPaymentDidFinishListeners(event);
+                } else {
+                    PaymentDidFailEvent event = new PaymentDidFailEvent(
+                        null,
+                        result.errorCode() != null ? result.errorCode().toString() : null,
+                        result.errorMessage()
+                    );
+                    plugin.notifyPaymentDidFailListeners(event);
                 }
-            );
+                paymentHandle = null;
+            });
 
             callback.success();
         } catch (Exception exception) {
@@ -474,10 +464,7 @@ public class SquareMobilePayments {
             PaymentManager paymentManager = MobilePaymentsSdk.paymentManager();
             Set<CardEntryMethod> methods = paymentManager.getAvailableCardEntryMethods();
 
-            List<String> cardInputMethods = methods
-                .stream()
-                .map(this::convertCardEntryMethodToString)
-                .collect(Collectors.toList());
+            List<String> cardInputMethods = methods.stream().map(this::convertCardEntryMethodToString).collect(Collectors.toList());
 
             GetAvailableCardInputMethodsResult result = new GetAvailableCardInputMethodsResult(cardInputMethods);
             callback.success(result);
@@ -497,7 +484,9 @@ public class SquareMobilePayments {
             com.squareup.sdk.mobilepayments.cardreader.ReaderInfo sdkReader = event.getReader();
             ReaderChangedEvent.Change change = event.getChange();
 
-            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo reader = convertSdkReaderToReaderInfo(sdkReader);
+            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo reader = convertSdkReaderToReaderInfo(
+                sdkReader
+            );
 
             // Notify based on change type
             if (change == ReaderChangedEvent.Change.ADDED) {
@@ -529,10 +518,7 @@ public class SquareMobilePayments {
         PaymentManager paymentManager = MobilePaymentsSdk.paymentManager();
 
         availableCardInputMethodsCallbackReference = paymentManager.setAvailableCardEntryMethodChangedCallback(methods -> {
-            List<String> cardInputMethods = methods
-                .stream()
-                .map(this::convertCardEntryMethodToString)
-                .collect(Collectors.toList());
+            List<String> cardInputMethods = methods.stream().map(this::convertCardEntryMethodToString).collect(Collectors.toList());
 
             AvailableCardInputMethodsDidChangeEvent event = new AvailableCardInputMethodsDidChangeEvent(cardInputMethods);
             plugin.notifyAvailableCardInputMethodsDidChangeListeners(event);
@@ -563,7 +549,9 @@ public class SquareMobilePayments {
     }
 
     @NonNull
-    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo convertSdkReaderToReaderInfo(@NonNull com.squareup.sdk.mobilepayments.cardreader.ReaderInfo sdkReader) {
+    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo convertSdkReaderToReaderInfo(
+        @NonNull com.squareup.sdk.mobilepayments.cardreader.ReaderInfo sdkReader
+    ) {
         String serialNumber = sdkReader.getSerialNumber();
         String model = convertReaderModelToString(sdkReader.getModel());
         String status = convertReaderStatusToString(sdkReader.getStatus());
@@ -579,12 +567,8 @@ public class SquareMobilePayments {
 
         UnavailableReasonInfo unavailableReasonInfo = null;
         if (sdkReader.getStatus() instanceof ReaderInfo.Status.ReaderUnavailable) {
-            ReaderInfo.Status.ReaderUnavailable unavailable =
-                (ReaderInfo.Status.ReaderUnavailable) sdkReader.getStatus();
-            unavailableReasonInfo = new UnavailableReasonInfo(
-                convertUnavailableReasonToString(unavailable.getReason()),
-                null
-            );
+            ReaderInfo.Status.ReaderUnavailable unavailable = (ReaderInfo.Status.ReaderUnavailable) sdkReader.getStatus();
+            unavailableReasonInfo = new UnavailableReasonInfo(convertUnavailableReasonToString(unavailable.getReason()), null);
         }
 
         return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.ReaderInfo(
@@ -600,7 +584,9 @@ public class SquareMobilePayments {
     }
 
     @NonNull
-    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment convertSdkPaymentToPayment(@NonNull Payment sdkPayment) {
+    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment convertSdkPaymentToPayment(
+        @NonNull Payment sdkPayment
+    ) {
         String id = null;
         String type;
         String status;
@@ -639,17 +625,11 @@ public class SquareMobilePayments {
         );
 
         MoneyResult tipMoney = sdkPayment.getTipMoney() != null
-            ? new MoneyResult(
-                (int) sdkPayment.getTipMoney().getAmount(),
-                sdkPayment.getTipMoney().getCurrencyCode().toString()
-            )
+            ? new MoneyResult((int) sdkPayment.getTipMoney().getAmount(), sdkPayment.getTipMoney().getCurrencyCode().toString())
             : null;
 
         MoneyResult applicationFee = sdkPayment.getAppFeeMoney() != null
-            ? new MoneyResult(
-                (int) sdkPayment.getAppFeeMoney().getAmount(),
-                sdkPayment.getAppFeeMoney().getCurrencyCode().toString()
-            )
+            ? new MoneyResult((int) sdkPayment.getAppFeeMoney().getAmount(), sdkPayment.getAppFeeMoney().getCurrencyCode().toString())
             : null;
 
         return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment(
@@ -668,23 +648,23 @@ public class SquareMobilePayments {
     }
 
     @NonNull
-    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails convertSdkCardDetailsToCardPaymentDetails(@NonNull com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails) {
+    private io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails convertSdkCardDetailsToCardPaymentDetails(
+        @NonNull com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails
+    ) {
         Card sdkCard = sdkCardDetails.getCard();
 
-        io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card card = new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card(
-            convertCardBrandToString(sdkCard.getBrand()),
-            sdkCard.getLastFourDigits(),
-            sdkCard.getCardholderName(),
-            sdkCard.getExpirationMonth(),
-            sdkCard.getExpirationYear()
-        );
+        io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card card =
+            new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Card(
+                convertCardBrandToString(sdkCard.getBrand()),
+                sdkCard.getLastFourDigits(),
+                sdkCard.getCardholderName(),
+                sdkCard.getExpirationMonth(),
+                sdkCard.getExpirationYear()
+            );
 
         String entryMethod = sdkCardDetails.getEntryMethod() != null ? sdkCardDetails.getEntryMethod().toString() : "KEYED";
 
-        return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails(
-            card,
-            entryMethod
-        );
+        return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.CardPaymentDetails(card, entryMethod);
     }
 
     @NonNull
