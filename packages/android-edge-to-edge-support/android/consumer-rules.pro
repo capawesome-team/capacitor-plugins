@@ -1,9 +1,5 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Capacitor Plugin ProGuard Rules
+# These rules ensure the plugin works correctly when the consumer app uses minification
 
 # Keep all plugin classes
 -keep class io.capawesome.capacitorjs.plugins.androidedgetoedgesupport.** { *; }
