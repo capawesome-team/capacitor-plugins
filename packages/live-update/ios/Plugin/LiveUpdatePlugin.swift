@@ -7,9 +7,8 @@ import Capacitor
  */
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
-    public static let tag = "LiveUpdate"
-    public static let version = "8.1.0"
-    public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
+    public static let tag = LiveUpdate.tag
+    public static let version = LiveUpdate.version
 
     public let identifier = "LiveUpdatePlugin"
     public let jsName = "LiveUpdate"
@@ -49,8 +48,13 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     private var implementation: LiveUpdate?
 
     override public func load() {
-        self.config = liveUpdateConfig()
-        self.implementation = LiveUpdate(config: config!, plugin: self)
+        guard let bridge = bridge else {
+            return
+        }
+        let config = liveUpdateConfig()
+        self.config = config
+        let eventEmitter = PluginLiveUpdateEventEmitter(plugin: self)
+        self.implementation = LiveUpdate(bridge: bridge, config: config, eventEmitter: eventEmitter)
 
         // Notify implementation about load
         implementation?.handleLoad()
@@ -421,5 +425,25 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func resolveCall(_ call: CAPPluginCall, _ result: JSObject) {
         call.resolve(result)
+    }
+
+    private class PluginLiveUpdateEventEmitter: NSObject, LiveUpdateEventEmitter {
+        weak var plugin: LiveUpdatePlugin?
+
+        init(plugin: LiveUpdatePlugin) {
+            self.plugin = plugin
+        }
+
+        func onDownloadBundleProgress(_ event: DownloadBundleProgressEvent) {
+            plugin?.notifyDownloadBundleProgressListeners(event)
+        }
+
+        func onNextBundleSet(_ event: NextBundleSetEvent) {
+            plugin?.notifyNextBundleSetListeners(event)
+        }
+
+        func onReloaded() {
+            plugin?.notifyReloadedListeners()
+        }
     }
 }

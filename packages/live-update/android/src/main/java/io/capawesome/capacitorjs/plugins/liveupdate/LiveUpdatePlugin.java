@@ -28,15 +28,15 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloade
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.LiveUpdateEventEmitter;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 
 @CapacitorPlugin(name = "LiveUpdate")
 public class LiveUpdatePlugin extends Plugin {
 
-    public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "8.1.0";
-    public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
+    public static final String TAG = LiveUpdate.TAG;
+    public static final String VERSION = LiveUpdate.VERSION;
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
@@ -68,7 +68,8 @@ public class LiveUpdatePlugin extends Plugin {
     public void load() {
         try {
             config = getLiveUpdateConfig();
-            implementation = new LiveUpdate(config, this);
+            LiveUpdateEventEmitter eventEmitter = new PluginLiveUpdateEventEmitter();
+            implementation = new LiveUpdate(getContext(), getBridge(), config, eventEmitter);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
@@ -683,5 +684,23 @@ public class LiveUpdatePlugin extends Plugin {
         }
         Logger.error(TAG, message, exception);
         call.reject(message);
+    }
+
+    private class PluginLiveUpdateEventEmitter implements LiveUpdateEventEmitter {
+
+        @Override
+        public void onDownloadBundleProgress(@NonNull DownloadBundleProgressEvent event) {
+            notifyDownloadBundleProgressListeners(event);
+        }
+
+        @Override
+        public void onNextBundleSet(@NonNull NextBundleSetEvent event) {
+            notifyNextBundleSetListeners(event);
+        }
+
+        @Override
+        public void onReloaded() {
+            notifyReloadedListeners();
+        }
     }
 }

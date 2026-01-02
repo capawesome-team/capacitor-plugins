@@ -1,6 +1,8 @@
 import Foundation
 
 public class LiveUpdatePreferences: NSObject {
+    private static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
+
     private let appIdKey = "appId" // DO NOT CHANGE
     private let blockedBundleIdsKey = "blockedBundleIds" // DO NOT CHANGE
     private let channelKey = "channel" // DO NOT CHANGE
@@ -97,6 +99,6 @@ public class LiveUpdatePreferences: NSObject {
     }
 
     private func applyPrefix(to key: String) -> String {
-        return LiveUpdatePlugin.userDefaultsPrefix + "." + key
+        return LiveUpdatePreferences.userDefaultsPrefix + "." + key
     }
 }

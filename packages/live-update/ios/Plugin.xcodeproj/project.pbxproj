@@ -16,6 +16,7 @@
 		50E1A94820377CB70090CE1A /* LiveUpdatePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */; };
 		7C0C8C492BAB354A005F76D1 /* LiveUpdateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */; };
 		7C2011512BA9653B001FABAD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011502BA9653B001FABAD /* Result.swift */; };
+		7CFFAABB2E00000000000001 /* LiveUpdateEventEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFFAABB2E00000000000002 /* LiveUpdateEventEmitter.swift */; };
 		7C2011532BA96555001FABAD /* GetBundlesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011522BA96555001FABAD /* GetBundlesResult.swift */; };
 		7C2011572BA9661B001FABAD /* DeleteBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011562BA9661B001FABAD /* DeleteBundleOptions.swift */; };
 		7C2011592BA966F4001FABAD /* DownloadBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011582BA966F4001FABAD /* DownloadBundleOptions.swift */; };
@@ -73,6 +74,7 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateConfig.swift; sourceTree = "<group>"; };
 		7C2011502BA9653B001FABAD /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		7CFFAABB2E00000000000002 /* LiveUpdateEventEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateEventEmitter.swift; sourceTree = "<group>"; };
 		7C2011522BA96555001FABAD /* GetBundlesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBundlesResult.swift; sourceTree = "<group>"; };
 		7C2011562BA9661B001FABAD /* DeleteBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteBundleOptions.swift; sourceTree = "<group>"; };
 		7C2011582BA966F4001FABAD /* DownloadBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadBundleOptions.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				7C9B252D2BBEDC090007ED74 /* Api */,
+				7CFFAABB2E00000000000002 /* LiveUpdateEventEmitter.swift */,
 				7C2011502BA9653B001FABAD /* Result.swift */,
 			);
 			path = Protocols;
@@ -486,6 +489,7 @@
 				7CAB12342DEFA1B0003BB1C4 /* IsSyncingResult.swift in Sources */,
 				7C6715D52BB1BCB70000878A /* GetDeviceIdResult.swift in Sources */,
 				7C2011512BA9653B001FABAD /* Result.swift in Sources */,
+				7CFFAABB2E00000000000001 /* LiveUpdateEventEmitter.swift in Sources */,
 				7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */,
 				7C4274D72D1487590066184E /* FetchLatestBundleOptions.swift in Sources */,
 				7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */,

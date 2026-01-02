@@ -7,16 +7,20 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    public static let tag = "LiveUpdate"
+    public static let version = "8.1.1"
+
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
+    private let bridge: CAPBridgeProtocol
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
+    private let eventEmitter: LiveUpdateEventEmitter
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
-    private let plugin: LiveUpdatePlugin
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
@@ -24,10 +28,11 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
+    init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter) {
+        self.bridge = bridge
         self.config = config
+        self.eventEmitter = eventEmitter
         self.httpClient = LiveUpdateHttpClient(config: config)
-        self.plugin = plugin
         self.preferences = LiveUpdatePreferences()
         super.init()
 
@@ -174,9 +179,9 @@ import CommonCrypto
     }
 
     @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
+        CAPLog.print("[", LiveUpdate.tag, "] ", "App is ready.")
         if config.readyTimeout <= 0 {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Ready timeout is set to 0. Automatic rollback is disabled.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Ready timeout is set to 0. Automatic rollback is disabled.")
         }
         // Stop the rollback timer
         stopRollbackTimer()
@@ -264,7 +269,7 @@ import CommonCrypto
         // Fetch the latest bundle
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
         guard let response = try await fetchLatestBundle(fetchLatestBundleOptions) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "No update available.")
             return SyncResult(nextBundleId: nil)
         }
         let artifactType = response.artifactType
@@ -274,7 +279,7 @@ import CommonCrypto
         let downloadUrl = response.url
         // Check if the bundle is blocked
         if isBlockedBundleId(latestBundleId) {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Bundle is blocked and will not be downloaded.")
             return SyncResult(nextBundleId: nil)
         }
         // Check if bundle already exists
@@ -372,7 +377,7 @@ import CommonCrypto
         for fileToCopy in filesToCopy {
             let success = tryCopyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
             if !success {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(fileToCopy.href)")
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to copy file: \(fileToCopy.href)")
                 // If the file could not be copied, add it to the list of missing items
                 missingItems.append(fileToCopy)
             }
@@ -387,7 +392,7 @@ import CommonCrypto
             do {
                 try FileManager.default.createDirectory(at: bundlesDirectoryUrl, withIntermediateDirectories: true, attributes: nil)
             } catch {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create bundles directory.")
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to create bundles directory.")
             }
         }
     }
@@ -419,7 +424,7 @@ import CommonCrypto
                 do {
                     try deleteBundleById(bundleId)
                 } catch {
-                    CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
+                    CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
                 }
             }
         }
@@ -432,7 +437,7 @@ import CommonCrypto
         let urlComponents = URLComponents(string: url)!
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to download file: \(error)")
             if let urlError = error.underlyingError as? URLError {
                 if urlError.code == .timedOut {
                     throw urlError
@@ -554,14 +559,14 @@ import CommonCrypto
         parameters["deviceId"] = getDeviceId()
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
-        parameters["pluginVersion"] = LiveUpdatePlugin.version
+        parameters["pluginVersion"] = LiveUpdate.version
         var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
+        CAPLog.print("[", LiveUpdate.tag, "] Fetching latest bundle: ", url)
         let response = try await self.httpClient.request(url: url, type: GetLatestBundleResponse.self)
         if let data = response.data {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
+            CAPLog.print("[", LiveUpdate.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
         }
         if let error = response.error {
             if let urlError = error.underlyingError as? URLError {
@@ -638,7 +643,7 @@ import CommonCrypto
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.bridge.viewController as? CAPBridgeViewController else {
             return nil
         }
         return viewController.getServerBasePath()
@@ -720,14 +725,14 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
-        plugin.notifyDownloadBundleProgressListeners(event)
+        eventEmitter.onDownloadBundleProgress(event)
     }
 
     private func performAutoUpdate() {
         // Check if enough time has passed since the last check
         let now = Int64(Date().timeIntervalSince1970 * 1000)
         if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
             return
         }
 
@@ -737,12 +742,12 @@ import CommonCrypto
         // Run sync in background task
         Task {
             do {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Auto-update started.")
                 let options = SyncOptions(channel: nil)
                 _ = try await sync(options)
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Auto-update completed successfully.")
             } catch {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Auto-update failed: ", error.localizedDescription)
             }
         }
     }
@@ -755,11 +760,11 @@ import CommonCrypto
         setPreviousBundleId(bundleId: currentBundleId)
         // Perform the rollback
         if let _ = currentBundleId {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "App is not ready. Rolling back to default bundle.")
             setNextBundleById(nil)
             setCurrentBundleById(nil)
         } else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "App is not ready. Default bundle is already in use.")
         }
     }
 
@@ -785,7 +790,7 @@ import CommonCrypto
                 }
             }
         } catch {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to search index.html file: \(error.localizedDescription)")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to search index.html file: \(error.localizedDescription)")
         }
         return nil
     }
@@ -797,7 +802,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPath(path: String) {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.bridge.viewController as? CAPBridgeViewController else {
             return
         }
         viewController.setServerBasePath(path: path)
@@ -816,11 +821,11 @@ import CommonCrypto
 
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
-        plugin.notifyNextBundleSetListeners(event)
+        eventEmitter.onNextBundleSet(event)
     }
 
     private func notifyReloadedListeners() {
-        plugin.notifyReloadedListeners()
+        eventEmitter.onReloaded()
     }
 
     private func addBlockedBundleId(_ bundleId: String) {
@@ -848,7 +853,7 @@ import CommonCrypto
         let newBlockedIds = blockedList.joined(separator: ",")
         preferences.setBlockedBundleIds(newBlockedIds)
 
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle blocked: ", bundleId)
+        CAPLog.print("[", LiveUpdate.tag, "] ", "Bundle blocked: ", bundleId)
     }
 
     private func isBlockedBundleId(_ bundleId: String) -> Bool {
@@ -878,7 +883,7 @@ import CommonCrypto
 
         if lastVersionCode == nil || lastVersionName == nil || lastVersionCode != currentVersionCode || lastVersionName != currentVersionName {
             CAPLog.print(
-                "[", LiveUpdatePlugin.tag, "] ",
+                "[", LiveUpdate.tag, "] ",
                 "App version changed (last: \(lastVersionName ?? "nil")/\(lastVersionCode ?? "nil"), current: \(currentVersionName)/\(currentVersionCode)), resetting config."
             )
             resetConfig()
@@ -964,7 +969,7 @@ import CommonCrypto
             .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
             .replacingOccurrences(of: "\n", with: "")
         guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode public key.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to decode public key.")
             return false
         }
         let publicKeyAttributes: [CFString: Any] = [
@@ -976,12 +981,12 @@ import CommonCrypto
         var secKeyCreateWithDataError: Unmanaged<CFError>?
         guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &secKeyCreateWithDataError) else {
             if let error = secKeyCreateWithDataError?.takeRetainedValue() {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create public key with error: \(error)")
+                CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to create public key with error: \(error)")
             }
             return false
         }
         guard let signatureData = Data(base64Encoded: signature) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to decode signature.")
             return false
         }
 
@@ -1011,7 +1016,7 @@ import CommonCrypto
         let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
         let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &secKeyVerifySignatureError)
         if let error = secKeyVerifySignatureError?.takeRetainedValue() {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to verify signature with error: \(error)")
+            CAPLog.print("[", LiveUpdate.tag, "] ", "Failed to verify signature with error: \(error)")
         }
         return verificationResult
     }

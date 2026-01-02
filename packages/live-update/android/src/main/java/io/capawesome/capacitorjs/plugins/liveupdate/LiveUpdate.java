@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
@@ -44,6 +46,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.LiveUpdateEventEmitter;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import java.io.File;
@@ -77,18 +80,27 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
+    public static final String TAG = "LiveUpdate";
+    public static final String VERSION = "8.1.1";
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
+
+    @NonNull
+    private final Bridge bridge;
 
     @NonNull
     private final LiveUpdateConfig config;
 
+    @NonNull
+    private final Context context;
+
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
-    private final LiveUpdateHttpClient httpClient;
+    private final LiveUpdateEventEmitter eventEmitter;
 
     @NonNull
-    private final LiveUpdatePlugin plugin;
+    private final LiveUpdateHttpClient httpClient;
 
     @NonNull
     private final LiveUpdatePreferences preferences;
@@ -105,12 +117,19 @@ public class LiveUpdate {
     private boolean rollbackPerformed = false;
     private boolean syncInProgress = false;
 
-    public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
+    public LiveUpdate(
+        @NonNull Context context,
+        @NonNull Bridge bridge,
+        @NonNull LiveUpdateConfig config,
+        @NonNull LiveUpdateEventEmitter eventEmitter
+    ) throws PackageManager.NameNotFoundException {
+        this.context = context;
+        this.bridge = bridge;
         this.config = config;
+        this.eventEmitter = eventEmitter;
         this.httpClient = new LiveUpdateHttpClient(config);
-        this.plugin = plugin;
-        this.preferences = new LiveUpdatePreferences(plugin.getContext());
-        this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
+        this.preferences = new LiveUpdatePreferences(context);
+        this.webViewSettingsEditor = context.getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
@@ -128,7 +147,7 @@ public class LiveUpdate {
         String bundleId = options.getBundleId();
 
         if (!hasBundleById(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
+            Exception exception = CustomExceptions.BUNDLE_NOT_FOUND;
             callback.error(exception);
             return;
         }
@@ -284,9 +303,9 @@ public class LiveUpdate {
     }
 
     public void ready(@NonNull NonEmptyCallback callback) {
-        Logger.debug(LiveUpdatePlugin.TAG, "App is ready.");
+        Logger.debug(LiveUpdate.TAG, "App is ready.");
         if (config.getReadyTimeout() <= 0) {
-            Logger.warn(LiveUpdatePlugin.TAG, "Ready timeout is set to 0. Automatic rollback is disabled.");
+            Logger.warn(LiveUpdate.TAG, "Ready timeout is set to 0. Automatic rollback is disabled.");
         }
         // Stop the rollback timer
         stopRollbackTimer();
@@ -352,7 +371,7 @@ public class LiveUpdate {
             if (hasBundleById(bundleId)) {
                 setNextBundleById(bundleId);
             } else {
-                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
+                Exception exception = CustomExceptions.BUNDLE_NOT_FOUND;
                 callback.error(exception);
                 return;
             }
@@ -362,7 +381,7 @@ public class LiveUpdate {
 
     public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) {
         if (syncInProgress) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_SYNC_IN_PROGRESS);
+            Exception exception = CustomExceptions.SYNC_IN_PROGRESS;
             callback.error(exception);
             return;
         }
@@ -378,7 +397,7 @@ public class LiveUpdate {
                 public void success(@Nullable GetLatestBundleResponse response) {
                     try {
                         if (response == null) {
-                            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+                            Logger.debug(LiveUpdate.TAG, "No update available.");
                             syncInProgress = false;
                             SyncResult syncResult = new SyncResult(null);
                             callback.success(syncResult);
@@ -391,7 +410,7 @@ public class LiveUpdate {
                         String url = response.getUrl();
                         // Check if the bundle is blocked
                         if (isBlockedBundleId(latestBundleId)) {
-                            Logger.warn(LiveUpdatePlugin.TAG, "Bundle is blocked and will not be downloaded.");
+                            Logger.warn(LiveUpdate.TAG, "Bundle is blocked and will not be downloaded.");
                             syncInProgress = false;
                             SyncResult syncResult = new SyncResult(null);
                             callback.success(syncResult);
@@ -459,7 +478,7 @@ public class LiveUpdate {
         // Search folder with index.html file
         File indexHtmlFile = searchIndexHtmlFile(sourceDirectory);
         if (indexHtmlFile == null) {
-            throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_INDEX_HTML_MISSING);
+            throw CustomExceptions.BUNDLE_INDEX_HTML_MISSING;
         }
 
         // Create the bundles directory if it does not exist
@@ -482,21 +501,21 @@ public class LiveUpdate {
     }
 
     private File buildBundlesDirectory() {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
+        return new File(context.getFilesDir(), bundlesDirectory);
     }
 
     private File buildBundleDirectoryFor(@NonNull String bundleId) {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
+        return new File(context.getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private File buildTemporaryDirectory() {
         String fileName = UUID.randomUUID().toString();
-        return new File(plugin.getContext().getCacheDir(), fileName);
+        return new File(context.getCacheDir(), fileName);
     }
 
     private File buildTemporaryZipFile() {
         String fileName = UUID.randomUUID().toString() + ".zip";
-        return new File(plugin.getContext().getCacheDir(), fileName);
+        return new File(context.getCacheDir(), fileName);
     }
 
     private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
@@ -504,7 +523,7 @@ public class LiveUpdate {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
             // Create the source input stream
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
             // Create the destination file
             File destination = new File(destinationDirectory, href);
@@ -532,7 +551,7 @@ public class LiveUpdate {
         for (ManifestItem fileToCopy : filesToCopy) {
             boolean success = tryCopyCurrentBundleFile(fileToCopy, destinationDirectory);
             if (!success) {
-                Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + fileToCopy.getHref());
+                Logger.warn(LiveUpdate.TAG, "Failed to copy file: " + fileToCopy.getHref());
                 // If the file could not be copied, add it to the list of missing items
                 missingItems.add(fileToCopy);
             }
@@ -578,8 +597,8 @@ public class LiveUpdate {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             return keyFactory.generatePublic(X509publicKey);
         } catch (Exception exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID);
+            Logger.error(LiveUpdate.TAG, exception.getMessage(), exception);
+            throw CustomExceptions.PUBLIC_KEY_INVALID;
         }
     }
 
@@ -645,8 +664,8 @@ public class LiveUpdate {
                             completionCallback.success();
                         } else {
                             String errorMessage = response.body().string();
-                            Exception exception = new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
-                            Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
+                            Exception exception = CustomExceptions.DOWNLOAD_FAILED;
+                            Logger.error(LiveUpdate.TAG, errorMessage, exception);
                             completionCallback.error(exception);
                         }
                     } catch (Exception e) {
@@ -749,7 +768,7 @@ public class LiveUpdate {
                     public void error(@NonNull Exception e) {
                         // Capture first error and cancel all remaining downloads
                         if (firstError.compareAndSet(null, e)) {
-                            Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
+                            Logger.error(LiveUpdate.TAG, "Failed to download file: " + item.getHref(), e);
                             // Cancel all in-flight downloads (fail-fast)
                             synchronized (activeCalls) {
                                 for (Call activeCall : activeCalls) {
@@ -924,10 +943,10 @@ public class LiveUpdate {
                 .addQueryParameter("deviceId", getDeviceId())
                 .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))
                 .addQueryParameter("platform", "0")
-                .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
+                .addQueryParameter("pluginVersion", LiveUpdate.VERSION)
                 .build()
                 .toString();
-            Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
+            Logger.debug(LiveUpdate.TAG, "Fetching latest bundle: " + url);
 
             httpClient.enqueue(
                 url,
@@ -936,7 +955,7 @@ public class LiveUpdate {
                     public void success(@NonNull Response response) {
                         try {
                             String responseBodyString = response.body().string();
-                            Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
+                            Logger.debug(LiveUpdate.TAG, "Latest bundle response: " + responseBodyString);
                             if (response.isSuccessful()) {
                                 JSONObject responseJson = new JSONObject(responseBodyString);
                                 GetLatestBundleResponse result = new GetLatestBundleResponse(responseJson);
@@ -986,8 +1005,8 @@ public class LiveUpdate {
             source.close();
             return digest.digest();
         } catch (IOException exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_CALCULATION_FAILED);
+            Logger.error(LiveUpdate.TAG, exception.getMessage(), exception);
+            throw CustomExceptions.CHECKSUM_CALCULATION_FAILED;
         }
     }
 
@@ -1037,7 +1056,7 @@ public class LiveUpdate {
      * @return The absolute path to the current bundle directory (`public` for the built-in bundle).
      */
     private String getCurrentCapacitorServerPath() {
-        return plugin.getBridge().getServerBasePath();
+        return bridge.getServerBasePath();
     }
 
     @NonNull
@@ -1067,8 +1086,7 @@ public class LiveUpdate {
      */
     @NonNull
     private String getNextCapacitorServerPath() {
-        String path = plugin
-            .getContext()
+        String path = context
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
         // Empty path means default path
@@ -1113,7 +1131,7 @@ public class LiveUpdate {
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
                 InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
@@ -1145,14 +1163,14 @@ public class LiveUpdate {
     }
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
-        plugin.notifyDownloadBundleProgressListeners(event);
+        eventEmitter.onDownloadBundleProgress(event);
     }
 
     private void performAutoUpdate() {
         // Check if enough time has passed since the last check
         long now = System.currentTimeMillis();
         if (lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs) {
-            Logger.debug(LiveUpdatePlugin.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
+            Logger.debug(LiveUpdate.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
             return;
         }
 
@@ -1160,17 +1178,17 @@ public class LiveUpdate {
         lastAutoUpdateCheckTimestamp = now;
 
         // Run sync
-        Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
+        Logger.debug(LiveUpdate.TAG, "Auto-update started.");
         SyncOptions options = new SyncOptions((String) null);
         NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
             @Override
             public void success(@NonNull Result result) {
-                Logger.debug(LiveUpdatePlugin.TAG, "Auto-update completed successfully.");
+                Logger.debug(LiveUpdate.TAG, "Auto-update completed successfully.");
             }
 
             @Override
             public void error(@NonNull Exception exception) {
-                Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+                Logger.error(LiveUpdate.TAG, "Auto-update failed: " + exception.getMessage(), exception);
             }
         };
         sync(options, callback);
@@ -1184,9 +1202,9 @@ public class LiveUpdate {
         setPreviousBundleId(currentBundleId);
         // Log the rollback result
         if (currentBundleId == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
+            Logger.debug(LiveUpdate.TAG, "App is not ready. Default bundle is already in use.");
         } else {
-            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
+            Logger.debug(LiveUpdate.TAG, "App is not ready. Rolling back to default bundle.");
             // Rollback to the default bundle
             setNextBundleById(null);
             setCurrentBundleById(null);
@@ -1232,11 +1250,11 @@ public class LiveUpdate {
 
     private void setCurrentCapacitorServerPath(@NonNull String path) {
         if (path.equals(defaultWebAssetDir)) {
-            this.plugin.getBridge().setServerAssetPath(path);
+            this.bridge.setServerAssetPath(path);
         } else {
-            this.plugin.getBridge().setServerBasePath(path);
+            this.bridge.setServerBasePath(path);
         }
-        this.plugin.getBridge().reload();
+        this.bridge.reload();
         // Notify listeners
         notifyReloadedListeners();
     }
@@ -1258,11 +1276,11 @@ public class LiveUpdate {
 
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
-        plugin.notifyNextBundleSetListeners(event);
+        eventEmitter.onNextBundleSet(event);
     }
 
     private void notifyReloadedListeners() {
-        plugin.notifyReloadedListeners();
+        eventEmitter.onReloaded();
     }
 
     private void addBlockedBundleId(@NonNull String bundleId) {
@@ -1292,7 +1310,7 @@ public class LiveUpdate {
         String newBlockedIds = String.join(",", blockedList);
         preferences.setBlockedBundleIds(newBlockedIds);
 
-        Logger.debug(LiveUpdatePlugin.TAG, "Bundle blocked: " + bundleId);
+        Logger.debug(LiveUpdate.TAG, "Bundle blocked: " + bundleId);
     }
 
     private boolean isBlockedBundleId(@NonNull String bundleId) {
@@ -1316,7 +1334,7 @@ public class LiveUpdate {
 
         if (lastVersionCode == -1 || lastVersionCode != currentVersionCode) {
             Logger.debug(
-                LiveUpdatePlugin.TAG,
+                LiveUpdate.TAG,
                 "App version changed (last: " + lastVersionCode + ", current: " + currentVersionCode + "), resetting config."
             );
             resetConfig();
@@ -1366,12 +1384,12 @@ public class LiveUpdate {
         if (publicKey != null) {
             // Verify the signature
             if (signature == null) {
-                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
+                throw CustomExceptions.SIGNATURE_MISSING;
             }
             // Verify the signature
             boolean verified = verifySignatureForFile(file, signature, publicKey);
             if (!verified) {
-                throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+                throw CustomExceptions.SIGNATURE_VERIFICATION_FAILED;
             }
         }
         // Verify the checksum
@@ -1379,7 +1397,7 @@ public class LiveUpdate {
             // Calculate the checksum
             boolean verified = verifyChecksumForFile(file, checksum);
             if (!verified) {
-                throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
+                throw CustomExceptions.CHECKSUM_MISMATCH;
             }
         }
     }
@@ -1402,17 +1420,17 @@ public class LiveUpdate {
             source.close();
             return sig.verify(signatureBytes);
         } catch (Exception exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
+            Logger.error(LiveUpdate.TAG, exception.getMessage(), exception);
+            throw CustomExceptions.SIGNATURE_VERIFICATION_FAILED;
         }
     }
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {
-        String packageName = this.plugin.getContext().getPackageName();
+        String packageName = this.context.getPackageName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
+            return this.context.getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
         } else {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, 0);
+            return this.context.getPackageManager().getPackageInfo(packageName, 0);
         }
     }
 }

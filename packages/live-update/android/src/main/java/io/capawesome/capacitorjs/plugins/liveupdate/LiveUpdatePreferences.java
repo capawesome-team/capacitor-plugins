@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public class LiveUpdatePreferences {
 
+    private static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
+
     @NonNull
     private final Context context;
 
@@ -25,53 +27,45 @@ public class LiveUpdatePreferences {
 
     public LiveUpdatePreferences(@NonNull Context context) {
         this.context = context;
-        this.settingsEditor = context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).edit();
+        this.settingsEditor = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).edit();
     }
 
     @Nullable
     public String getAppId() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(appIdKey, null);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(appIdKey, null);
     }
 
     @Nullable
     public String getChannel() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(channelKey, null);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(channelKey, null);
     }
 
     @Nullable
     public String getCustomId() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(customIdKey, null);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(customIdKey, null);
     }
 
     @Nullable
     public String getDeviceIdForApp(@Nullable String appId) {
         if (appId == null) {
-            return context
-                .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-                .getString(deviceIdKey, null);
+            return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(deviceIdKey, null);
         } else {
-            return context
-                .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-                .getString(deviceIdKey + "_" + appId, null);
+            return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(deviceIdKey + "_" + appId, null);
         }
     }
 
     public int getLastVersionCode() {
-        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getInt(lastVersionCodeKey, -1);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getInt(lastVersionCodeKey, -1);
     }
 
     @Nullable
     public String getPreviousBundleId() {
-        return context
-            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-            .getString(previousBundleIdKey, null);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(previousBundleIdKey, null);
     }
 
     @Nullable
     public String getBlockedBundleIds() {
-        return context
-            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-            .getString(blockedBundleIdsKey, null);
+        return context.getSharedPreferences(SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(blockedBundleIdsKey, null);
     }
 
     public void setAppId(@Nullable String appId) {
