@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [`1a11ae351b96dbf12b74efe423acf3e3cbc52643`](https://github.com/capawesome-team/capacitor-plugins/commit/1a11ae351b96dbf12b74efe423acf3e3cbc52643) ([#732](https://github.com/capawesome-team/capacitor-plugins/pull/732)): fix(android): add missing ProGuard rules
+
 ## 8.0.0
 
 ### Major Changes
