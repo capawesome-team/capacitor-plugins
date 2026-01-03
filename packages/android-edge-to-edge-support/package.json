@@ -9,6 +9,7 @@
   "files": [
     "android/src/main/",
     "android/build.gradle",
+    "android/consumer-rules.pro",
     "dist/"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
