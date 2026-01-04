@@ -56,12 +56,15 @@ npx cap sync
 
 #### Variables
 
-If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
+If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `22.3.1`)
+- `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `4.12.0`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
+- `$conscryptVersion` version of `org.conscrypt:conscrypt-android` (default: `2.5.3`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
+
+**Note**: The plugin uses Google Conscrypt as the security provider to ensure better SSL/TLS certificate compatibility on older Android versions (especially Android 7 and below).
 
 ### iOS
 

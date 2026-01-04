@@ -8,6 +8,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import java.io.File;
 import java.io.IOException;
+import java.security.Security;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -19,6 +20,7 @@ import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
+import org.conscrypt.Conscrypt;
 
 public class LiveUpdateHttpClient {
 
@@ -49,6 +51,13 @@ public class LiveUpdateHttpClient {
     public LiveUpdateHttpClient(@NonNull LiveUpdateConfig config) {
         this.config = config;
         int httpTimeout = config.getHttpTimeout();
+
+        // Install Conscrypt as the preferred security provider for better SSL/TLS support on older Android versions
+        try {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        } catch (Exception e) {
+            Logger.warn("LiveUpdateHttpClient", "Failed to install Conscrypt security provider: " + e.getMessage());
+        }
 
         // Increase max requests per host to allow multiple parallel downloads from the same host
         okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
