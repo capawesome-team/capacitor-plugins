@@ -8,8 +8,15 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyStore;
 import java.security.Security;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -63,12 +70,34 @@ public class LiveUpdateHttpClient {
         okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
         dispatcher.setMaxRequestsPerHost(30);
 
-        this.okHttpClient = new OkHttpClient.Builder()
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
             .dispatcher(dispatcher)
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-            .build();
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS);
+
+        // Configure OkHttp to use Conscrypt for SSL/TLS
+        try {
+            SSLContext sslContext = SSLContext.getInstance("TLS", Conscrypt.newProvider());
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(
+                TrustManagerFactory.getDefaultAlgorithm()
+            );
+            trustManagerFactory.init((KeyStore) null);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            if (trustManagers.length != 1 || !(trustManagers[0] instanceof X509TrustManager)) {
+                throw new IllegalStateException(
+                    "Unexpected default trust managers:" + Arrays.toString(trustManagers)
+                );
+            }
+            X509TrustManager trustManager = (X509TrustManager) trustManagers[0];
+            sslContext.init(null, new TrustManager[] { trustManager }, null);
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            builder.sslSocketFactory(sslSocketFactory, trustManager);
+        } catch (Exception e) {
+            Logger.warn("LiveUpdateHttpClient", "Failed to configure Conscrypt SSL: " + e.getMessage());
+        }
+
+        this.okHttpClient = builder.build();
     }
 
     public Call enqueue(String url, NonEmptyCallback<Response> callback) {
