@@ -50,6 +50,7 @@ body:
         - label: Speech Recognition
         - label: Speech Synthesis
         - label: Share Target
+        - label: Square Mobile Payments
         - label: SQLite
         - label: Superwall
         - label: Torch
