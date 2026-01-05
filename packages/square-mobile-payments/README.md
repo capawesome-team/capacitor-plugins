@@ -19,6 +19,12 @@ This plugin provides a comprehensive integration with Square's Mobile Payments S
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.1.x          | >=8.x.x           | Active support |
+
 ## Installation
 
 ```bash
@@ -48,6 +54,10 @@ Add the `NSLocationWhenInUseUsageDescription` and `NSBluetoothAlwaysUsageDescrip
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>We need your location to confirm payments are occurring in a supported Square location.</string>
 ```
+
+## Configuration
+
+No configuration required for this plugin.
 
 ## Usage
 
@@ -1179,5 +1189,13 @@ Callback to receive payment cancellation notifications.
 | **`Other`**           | <code>'OTHER'</code>            | Other or unknown card brand. | 0.0.1 |
 
 </docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/square-mobile-payments/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/square-mobile-payments/LICENSE).
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Square, Inc. or any of their affiliates or subsidiaries.
