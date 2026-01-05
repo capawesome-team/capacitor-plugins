@@ -44,6 +44,21 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ### iOS
 
+#### Build Phases
+
+Add a new "Run Script Phase" in Xcode to run the Square SDK setup script by following these steps:
+
+1. On the **Build Phases** tab for your application target in Xcode, choose the + button (at the top left of the pane).
+2. Choose **New Run Script Phase**. The new run script phase should be the last build phase.
+3. Expand the new Run Script phase and enter the following script:
+
+```
+FRAMEWORKS="${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}"
+"${FRAMEWORKS}/SquareMobilePaymentsSDK.framework/setup"
+```
+
+More details can be found in the [Square Mobile Payments SDK iOS setup guide](https://developer.squareup.com/docs/mobile-payments-sdk/ios).
+
 #### Privacy Descriptions
 
 Add the `NSLocationWhenInUseUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `ios/App/App/Info.plist` file, which tells the user why your app is requesting location and Bluetooth permissions:
