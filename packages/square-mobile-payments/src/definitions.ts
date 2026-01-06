@@ -58,7 +58,7 @@ export interface SquareMobilePaymentsPlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 0.1.0
+   * @since 0.1.1
    */
   showMockReader(): Promise<void>;
   /**
@@ -66,7 +66,7 @@ export interface SquareMobilePaymentsPlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 0.1.0
+   * @since 0.1.1
    */
   hideMockReader(): Promise<void>;
   /**

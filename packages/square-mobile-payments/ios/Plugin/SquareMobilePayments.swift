@@ -342,7 +342,7 @@ import CoreBluetooth
             }
         }
         #else
-        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available when using Swift Package Manager. Please use Swift Package Manager instead of CocoaPods to access this feature."]))
+        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration."]))
         #endif
     }
 
@@ -354,7 +354,7 @@ import CoreBluetooth
             completion(nil)
         }
         #else
-        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available when using Swift Package Manager. Please use Swift Package Manager instead of CocoaPods to access this feature."]))
+        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration."]))
         #endif
     }
 
