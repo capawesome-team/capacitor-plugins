@@ -165,6 +165,50 @@ public class SquareMobilePaymentsPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void showMockReader(PluginCall call) {
+        try {
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.showMockReader(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void hideMockReader(PluginCall call) {
+        try {
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.hideMockReader(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getSettings(PluginCall call) {
         try {
             NonEmptyResultCallback<GetSettingsResult> callback = new NonEmptyResultCallback<>() {

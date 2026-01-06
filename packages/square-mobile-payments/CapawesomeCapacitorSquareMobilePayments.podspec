@@ -13,5 +13,11 @@ Pod::Spec.new do |s|
   s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
   s.ios.deployment_target = '15.0'
   s.dependency 'Capacitor'
+  s.dependency 'SquareMobilePaymentsSDK', '~> 2.3.1'
   s.swift_version = '5.1'
+
+  # Optional MockReaderUI dependency for Debug builds
+  s.xcconfig = {
+    'OTHER_LDFLAGS[config=Debug]' => '$(inherited) -weak_framework MockReaderUI'
+  }
 end

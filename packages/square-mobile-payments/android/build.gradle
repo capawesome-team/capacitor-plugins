@@ -57,6 +57,8 @@ dependencies {
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "com.squareup.sdk:mobile-payments-sdk:$squareMobilePaymentsSdkVersion"
+    // MockReader UI dependency for testing with simulated reader
+    debugImplementation "com.squareup.sdk:mockreader-ui:$squareMobilePaymentsSdkVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

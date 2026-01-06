@@ -17,6 +17,8 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "isAuthorized", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deauthorize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showSettings", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "showMockReader", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "hideMockReader", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getSettings", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startPairing", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stopPairing", returnType: CAPPluginReturnPromise),
@@ -103,6 +105,34 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func showSettings(_ call: CAPPluginCall) {
         do {
             try implementation?.showSettings(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func showMockReader(_ call: CAPPluginCall) {
+        do {
+            try implementation?.showMockReader(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func hideMockReader(_ call: CAPPluginCall) {
+        do {
+            try implementation?.hideMockReader(completion: { error in
                 if let error = error {
                     self.rejectCall(call, error)
                 } else {

@@ -1,6 +1,9 @@
 import Foundation
 import Capacitor
 import SquareMobilePaymentsSDK
+#if canImport(MockReaderUI)
+import MockReaderUI
+#endif
 import CoreLocation
 import CoreBluetooth
 
@@ -8,6 +11,9 @@ import CoreBluetooth
     private weak var plugin: SquareMobilePaymentsPlugin?
     private var pairingHandle: SquareMobilePaymentsSDK.PairingHandle?
     private var paymentHandle: SquareMobilePaymentsSDK.PaymentHandle?
+    #if canImport(MockReaderUI)
+    private var mockReaderUI: MockReaderUI?
+    #endif
     private var squareApplicationId: String?
     private var locationId: String?
     private var locationManager: CLLocationManager?
@@ -98,8 +104,11 @@ import CoreBluetooth
             return
         }
 
-        MobilePaymentsSDK.shared.settingsManager.presentSettings(with: viewController) { error in
-            completion(error)
+        // Present settings - MUST be called on main thread for UI presentation
+        DispatchQueue.main.async {
+            MobilePaymentsSDK.shared.settingsManager.presentSettings(with: viewController) { error in
+                completion(error)
+            }
         }
     }
 
@@ -263,15 +272,16 @@ import CoreBluetooth
             additionalMethods: additionalMethods
         )
 
-        // Start payment
-        paymentHandle = MobilePaymentsSDK.shared.paymentManager.startPayment(
-            paymentParams,
-            promptParameters: squarePromptParams,
-            from: viewController,
-            delegate: self
-        )
-
-        completion(nil)
+        // Start payment - MUST be called on main thread for UI presentation
+        DispatchQueue.main.async {
+            self.paymentHandle = MobilePaymentsSDK.shared.paymentManager.startPayment(
+                paymentParams,
+                promptParameters: squarePromptParams,
+                from: viewController,
+                delegate: self
+            )
+            completion(nil)
+        }
     }
 
     @objc public func cancelPayment(completion: @escaping (_ error: Error?) -> Void) throws {
@@ -301,6 +311,51 @@ import CoreBluetooth
 
         let result = GetAvailableCardInputMethodsResult(cardInputMethods: cardInputMethods)
         completion(result, nil)
+    }
+
+    @objc public func showMockReader(completion: @escaping (_ error: Error?) -> Void) throws {
+        #if canImport(MockReaderUI)
+        guard locationId != nil else {
+            throw CustomError.notInitialized
+        }
+        guard MobilePaymentsSDK.shared.authorizationManager.state == .authorized else {
+            throw CustomError.notAuthorized
+        }
+
+        // Initialize Mock Reader UI if not already created
+        if mockReaderUI == nil {
+            do {
+                mockReaderUI = try MockReaderUI(for: MobilePaymentsSDK.shared)
+            } catch {
+                completion(error)
+                return
+            }
+        }
+
+        // Present the mock reader UI on main thread
+        DispatchQueue.main.async {
+            do {
+                try self.mockReaderUI?.present()
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
+        #else
+        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available when using Swift Package Manager. Please use Swift Package Manager instead of CocoaPods to access this feature."]))
+        #endif
+    }
+
+    @objc public func hideMockReader(completion: @escaping (_ error: Error?) -> Void) throws {
+        #if canImport(MockReaderUI)
+        // Dismiss the mock reader UI on main thread
+        DispatchQueue.main.async {
+            self.mockReaderUI?.dismiss()
+            completion(nil)
+        }
+        #else
+        completion(NSError(domain: "SquareMobilePayments", code: -1, userInfo: [NSLocalizedDescriptionKey: "MockReaderUI is only available when using Swift Package Manager. Please use Swift Package Manager instead of CocoaPods to access this feature."]))
+        #endif
     }
 
     // MARK: - Helper Methods

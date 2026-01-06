@@ -50,6 +50,26 @@ export interface SquareMobilePaymentsPlugin {
    */
   showSettings(): Promise<void>;
   /**
+   * Show the Mock Reader UI for testing.
+   *
+   * This displays a mock reader interface for testing payment flows without
+   * physical hardware. This is only for development and testing purposes and
+   * is therefore only available in debug builds.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  showMockReader(): Promise<void>;
+  /**
+   * Hide the Mock Reader UI.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  hideMockReader(): Promise<void>;
+  /**
    * Get the current SDK settings.
    *
    * Only available on Android and iOS.

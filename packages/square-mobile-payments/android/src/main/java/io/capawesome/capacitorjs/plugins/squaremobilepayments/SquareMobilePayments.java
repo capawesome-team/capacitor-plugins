@@ -473,6 +473,46 @@ public class SquareMobilePayments {
         }
     }
 
+    public void showMockReader(@NonNull EmptyCallback callback) {
+        try {
+            if (!isInitialized) {
+                throw CustomExceptions.NOT_INITIALIZED;
+            }
+
+            if (!isAuthorized) {
+                throw CustomExceptions.NOT_AUTHORIZED;
+            }
+
+            // Show MockReader UI - only available in Debug builds with mockreader-ui dependency
+            // Use reflection to avoid compile-time dependency
+            Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
+            mockReaderUIClass.getMethod("show").invoke(null);
+            callback.success();
+        } catch (ClassNotFoundException e) {
+            callback.error(
+                new Exception("MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration.")
+            );
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void hideMockReader(@NonNull EmptyCallback callback) {
+        try {
+            // Hide MockReader UI
+            // Use reflection to avoid compile-time dependency
+            Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
+            mockReaderUIClass.getMethod("hide").invoke(null);
+            callback.success();
+        } catch (ClassNotFoundException e) {
+            callback.error(
+                new Exception("MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration.")
+            );
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
     public void setReaderChangedCallback() {
         if (!isInitialized) {
             return;
