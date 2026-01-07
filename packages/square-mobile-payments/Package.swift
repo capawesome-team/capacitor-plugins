@@ -19,7 +19,8 @@ let package = Package(
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
-                .product(name: "SquareMobilePaymentsSDK", package: "mobile-payments-sdk-ios")
+                .product(name: "SquareMobilePaymentsSDK", package: "mobile-payments-sdk-ios"),
+                .product(name: "MockReaderUI", package: "mobile-payments-sdk-ios")
             ],
             path: "ios/Plugin"),
         .testTarget(

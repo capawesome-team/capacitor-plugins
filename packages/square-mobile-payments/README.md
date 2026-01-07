@@ -44,6 +44,44 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ### iOS
 
+#### SDK Initialization
+
+The Square Mobile Payments SDK must be initialized in your `AppDelegate.swift` file before using the plugin. Add the following code to your `AppDelegate.swift`:
+
+1. Import the `SquareMobilePaymentsSDK` at the top of the file:
+
+```swift
+import SquareMobilePaymentsSDK
+```
+
+2. Add the Square Application ID to your `Info.plist` file:
+
+```xml
+<key>SquareApplicationID</key>
+<string>YOUR_SQUARE_APPLICATION_ID_HERE</string>
+```
+
+**Note**: Replace `YOUR_SQUARE_APPLICATION_ID_HERE` with your actual Square Application ID. Do not use the placeholder value in production.
+
+3. Initialize the SDK in the `application(_:didFinishLaunchingWithOptions:)` method:
+
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // Initialize Square Mobile Payments SDK
+    // Get the Square Application ID from info.plist
+    if let squareAppID = Bundle.main.object(forInfoDictionaryKey: "SquareApplicationID") as? String,
+       !squareAppID.isEmpty && squareAppID != "YOUR_SQUARE_APPLICATION_ID_HERE" {
+        MobilePaymentsSDK.initialize(
+            applicationLaunchOptions: launchOptions,
+            squareApplicationID: squareAppID
+        )
+    }
+
+    // Override point for customization after application launch.
+    return true
+}
+```
+
 #### Build Phases
 
 Add a new "Run Script Phase" in Xcode to run the Square SDK setup script by following these steps:
@@ -166,6 +204,8 @@ const getAvailableMethods = async () => {
 * [`isAuthorized()`](#isauthorized)
 * [`deauthorize()`](#deauthorize)
 * [`showSettings()`](#showsettings)
+* [`showMockReader()`](#showmockreader)
+* [`hideMockReader()`](#hidemockreader)
 * [`getSettings()`](#getsettings)
 * [`startPairing()`](#startpairing)
 * [`stopPairing()`](#stoppairing)
@@ -284,6 +324,40 @@ their paired readers.
 Only available on Android and iOS.
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### showMockReader()
+
+```typescript
+showMockReader() => Promise<void>
+```
+
+Show the Mock Reader UI for testing.
+
+This displays a mock reader interface for testing payment flows without
+physical hardware. This is only for development and testing purposes and
+is therefore only available in debug builds.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.1
+
+--------------------
+
+
+### hideMockReader()
+
+```typescript
+hideMockReader() => Promise<void>
+```
+
+Hide the Mock Reader UI.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.1
 
 --------------------
 

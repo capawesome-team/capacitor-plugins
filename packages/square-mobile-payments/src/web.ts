@@ -39,6 +39,14 @@ export class SquareMobilePaymentsWeb
     throw this.unimplemented('Not implemented on web.');
   }
 
+  async showMockReader(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async hideMockReader(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   async getSettings(): Promise<GetSettingsResult> {
     throw this.unimplemented('Not implemented on web.');
   }

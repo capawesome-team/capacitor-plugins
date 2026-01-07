@@ -6,6 +6,8 @@ def capacitor_pods
   pod 'Capacitor', :path => '../../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../../node_modules/@capacitor/ios'
   pod 'SquareMobilePaymentsSDK', '~> 2.3.1'
+  # To use a simulated reader device to take sandbox payments, add the optional MockReaderUI:
+  pod 'MockReaderUI', '~> 2.3.1', :configurations => ['Debug']
 end
 
 target 'Plugin' do
