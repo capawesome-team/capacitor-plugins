@@ -35,6 +35,7 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     public static let permissionLocation = "location"
     public static let permissionBluetooth = "bluetooth"
+    public static let permissionMicrophone = "microphone"
 
     private var implementation: SquareMobilePayments?
 
@@ -315,9 +316,22 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             bluetoothResult = "prompt"
         }
 
+        var microphoneResult: String
+        switch implementation?.checkMicrophonePermission() {
+        case .none, .undetermined:
+            microphoneResult = "prompt"
+        case .denied:
+            microphoneResult = "denied"
+        case .granted:
+            microphoneResult = "granted"
+        @unknown default:
+            microphoneResult = "prompt"
+        }
+
         var result = JSObject()
         result[SquareMobilePaymentsPlugin.permissionLocation] = locationResult
         result[SquareMobilePaymentsPlugin.permissionBluetooth] = bluetoothResult
+        result[SquareMobilePaymentsPlugin.permissionMicrophone] = microphoneResult
         call.resolve(result)
     }
 
@@ -327,6 +341,10 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         if !hasUsageDescription(forKey: "NSBluetoothAlwaysUsageDescription") {
+            rejectCall(call, CustomError.privacyDescriptionsMissing)
+            return
+        }
+        if !hasUsageDescription(forKey: "NSMicrophoneUsageDescription") {
             rejectCall(call, CustomError.privacyDescriptionsMissing)
             return
         }
@@ -343,6 +361,13 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         if implementation?.checkBluetoothPermission() == .notDetermined {
             group.enter()
             implementation?.requestBluetoothPermission {
+                group.leave()
+            }
+        }
+
+        if implementation?.checkMicrophonePermission() == .undetermined {
+            group.enter()
+            implementation?.requestMicrophonePermission { _ in
                 group.leave()
             }
         }

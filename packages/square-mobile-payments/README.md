@@ -99,13 +99,15 @@ More details can be found in the [Square Mobile Payments SDK iOS setup guide](ht
 
 #### Privacy Descriptions
 
-Add the `NSLocationWhenInUseUsageDescription` and `NSBluetoothAlwaysUsageDescription` keys to the `ios/App/App/Info.plist` file, which tells the user why your app is requesting location and Bluetooth permissions:
+Add the `NSLocationWhenInUseUsageDescription`, `NSBluetoothAlwaysUsageDescription`, and `NSMicrophoneUsageDescription` keys to the `ios/App/App/Info.plist` file, which tells the user why your app is requesting location, Bluetooth, and microphone permissions:
 
 ```xml
 <key>NSBluetoothAlwaysUsageDescription</key>
 <string>We need Bluetooth access to connect to Square card readers.</string>
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>We need your location to confirm payments are occurring in a supported Square location.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>We need microphone access to receive data from magstripe card readers.</string>
 ```
 
 ## Configuration
@@ -946,6 +948,7 @@ Only available on Android and iOS.
 | ---------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for accessing location. Required to confirm that payments are occurring in a supported Square location.                    | 0.0.1 |
 | **`recordAudio`**      | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for recording audio. Required to receive data from magstripe readers. Only available on Android.                           | 0.0.1 |
+| **`microphone`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for using the microphone. Required to receive data from magstripe readers.                                                 | 0.2.0 |
 | **`bluetoothConnect`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for Bluetooth connect. Required to receive data from contactless and chip readers. Only available on Android.              | 0.0.1 |
 | **`bluetoothScan`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for Bluetooth scan. Required to store information during checkout. Only available on Android.                              | 0.0.1 |
 | **`readPhoneState`**   | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for reading phone state. Required to identify the device sending information to Square servers. Only available on Android. | 0.0.1 |

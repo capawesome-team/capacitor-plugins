@@ -20,6 +20,7 @@ import io.capawesome.capacitorjs.plugins.squaremobilepayments.interfaces.*;
     permissions = {
         @Permission(strings = { Manifest.permission.ACCESS_FINE_LOCATION }, alias = SquareMobilePaymentsPlugin.PERMISSION_LOCATION),
         @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = SquareMobilePaymentsPlugin.PERMISSION_RECORD_AUDIO),
+        @Permission(strings = { Manifest.permission.RECORD_AUDIO }, alias = SquareMobilePaymentsPlugin.PERMISSION_MICROPHONE),
         @Permission(strings = { Manifest.permission.BLUETOOTH_CONNECT }, alias = SquareMobilePaymentsPlugin.PERMISSION_BLUETOOTH_CONNECT),
         @Permission(strings = { Manifest.permission.BLUETOOTH_SCAN }, alias = SquareMobilePaymentsPlugin.PERMISSION_BLUETOOTH_SCAN),
         @Permission(strings = { Manifest.permission.READ_PHONE_STATE }, alias = SquareMobilePaymentsPlugin.PERMISSION_READ_PHONE_STATE)
@@ -31,6 +32,7 @@ public class SquareMobilePaymentsPlugin extends Plugin {
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error occurred.";
     public static final String PERMISSION_LOCATION = "location";
     public static final String PERMISSION_RECORD_AUDIO = "recordAudio";
+    public static final String PERMISSION_MICROPHONE = "microphone";
     public static final String PERMISSION_BLUETOOTH_CONNECT = "bluetoothConnect";
     public static final String PERMISSION_BLUETOOTH_SCAN = "bluetoothScan";
     public static final String PERMISSION_READ_PHONE_STATE = "readPhoneState";

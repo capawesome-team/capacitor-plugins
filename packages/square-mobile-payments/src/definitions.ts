@@ -1452,6 +1452,14 @@ export interface PermissionStatus {
    */
   recordAudio?: PermissionState;
   /**
+   * Permission state for using the microphone.
+   *
+   * Required to receive data from magstripe readers.
+   *
+   * @since 0.2.0
+   */
+  microphone?: PermissionState;
+  /**
    * Permission state for Bluetooth connect.
    *
    * Required to receive data from contactless and chip readers.
