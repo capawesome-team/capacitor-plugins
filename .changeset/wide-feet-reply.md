@@ -2,4 +2,4 @@
 '@capawesome/capacitor-square-mobile-payments': patch
 ---
 
-feat: add `microphone` permission
+feat(ios): support `recordAudio` permission

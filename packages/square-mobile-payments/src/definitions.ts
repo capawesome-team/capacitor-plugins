@@ -1446,19 +1446,9 @@ export interface PermissionStatus {
    *
    * Required to receive data from magstripe readers.
    *
-   * Only available on Android.
-   *
    * @since 0.0.1
    */
   recordAudio?: PermissionState;
-  /**
-   * Permission state for using the microphone.
-   *
-   * Required to receive data from magstripe readers.
-   *
-   * @since 0.2.0
-   */
-  microphone?: PermissionState;
   /**
    * Permission state for Bluetooth connect.
    *

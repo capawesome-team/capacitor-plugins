@@ -35,7 +35,7 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     public static let permissionLocation = "location"
     public static let permissionBluetooth = "bluetooth"
-    public static let permissionMicrophone = "microphone"
+    public static let permissionRecordAudio = "recordAudio"
 
     private var implementation: SquareMobilePayments?
 
@@ -316,22 +316,22 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             bluetoothResult = "prompt"
         }
 
-        var microphoneResult: String
-        switch implementation?.checkMicrophonePermission() {
+        var recordAudioResult: String
+        switch implementation?.checkRecordAudioPermission() {
         case .none, .undetermined:
-            microphoneResult = "prompt"
+            recordAudioResult = "prompt"
         case .denied:
-            microphoneResult = "denied"
+            recordAudioResult = "denied"
         case .granted:
-            microphoneResult = "granted"
+            recordAudioResult = "granted"
         @unknown default:
-            microphoneResult = "prompt"
+            recordAudioResult = "prompt"
         }
 
         var result = JSObject()
         result[SquareMobilePaymentsPlugin.permissionLocation] = locationResult
         result[SquareMobilePaymentsPlugin.permissionBluetooth] = bluetoothResult
-        result[SquareMobilePaymentsPlugin.permissionMicrophone] = microphoneResult
+        result[SquareMobilePaymentsPlugin.permissionRecordAudio] = recordAudioResult
         call.resolve(result)
     }
 
@@ -365,9 +365,9 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
 
-        if implementation?.checkMicrophonePermission() == .undetermined {
+        if implementation?.checkRecordAudioPermission() == .undetermined {
             group.enter()
-            implementation?.requestMicrophonePermission { _ in
+            implementation?.requestRecordAudioPermission { _ in
                 group.leave()
             }
         }

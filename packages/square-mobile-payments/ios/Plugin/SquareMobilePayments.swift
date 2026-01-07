@@ -21,7 +21,7 @@ import AVFoundation
     private var bluetoothManager: CBCentralManager?
     private var locationPermissionCompletion: ((CLAuthorizationStatus) -> Void)?
     private var bluetoothPermissionCompletion: (() -> Void)?
-    private var microphonePermissionCompletion: ((AVAudioSession.RecordPermission) -> Void)?
+    private var recordAudioPermissionCompletion: ((AVAudioSession.RecordPermission) -> Void)?
 
     init(plugin: SquareMobilePaymentsPlugin) {
         self.plugin = plugin
@@ -654,23 +654,23 @@ extension SquareMobilePayments: PaymentManagerDelegate {
         )
     }
 
-    @objc public func checkMicrophonePermission() -> AVAudioSession.RecordPermission {
+    @objc public func checkRecordAudioPermission() -> AVAudioSession.RecordPermission {
         return AVAudioSession.sharedInstance().recordPermission
     }
 
-    @objc public func requestMicrophonePermission(completion: @escaping (AVAudioSession.RecordPermission) -> Void) {
+    @objc public func requestRecordAudioPermission(completion: @escaping (AVAudioSession.RecordPermission) -> Void) {
         let currentPermission = AVAudioSession.sharedInstance().recordPermission
         guard currentPermission == .undetermined else {
             completion(currentPermission)
             return
         }
 
-        microphonePermissionCompletion = completion
+        recordAudioPermissionCompletion = completion
         AVAudioSession.sharedInstance().requestRecordPermission { granted in
             DispatchQueue.main.async {
                 let newPermission = AVAudioSession.sharedInstance().recordPermission
-                self.microphonePermissionCompletion?(newPermission)
-                self.microphonePermissionCompletion = nil
+                self.recordAudioPermissionCompletion?(newPermission)
+                self.recordAudioPermissionCompletion = nil
             }
         }
     }
