@@ -38,7 +38,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Guides
 
-- [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
+- [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/cloud/live-updates/setup/)
 - [Migrating from Ionic Appflow to Capawesome Cloud](https://capawesome.io/blog/migrating-from-ionic-appflow-to-capawesome-cloud/)
 - [Migrating from App Center to Capawesome Cloud](https://capawesome.io/blog/migrating-from-app-center-to-capawesome-cloud/)
 
