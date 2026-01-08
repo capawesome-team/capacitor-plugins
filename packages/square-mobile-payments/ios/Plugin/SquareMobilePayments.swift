@@ -6,6 +6,7 @@ import MockReaderUI
 #endif
 import CoreLocation
 import CoreBluetooth
+import AVFoundation
 
 @objc public class SquareMobilePayments: NSObject {
     private weak var plugin: SquareMobilePaymentsPlugin?
@@ -20,6 +21,7 @@ import CoreBluetooth
     private var bluetoothManager: CBCentralManager?
     private var locationPermissionCompletion: ((CLAuthorizationStatus) -> Void)?
     private var bluetoothPermissionCompletion: (() -> Void)?
+    private var recordAudioPermissionCompletion: ((AVAudioSession.RecordPermission) -> Void)?
 
     init(plugin: SquareMobilePaymentsPlugin) {
         self.plugin = plugin
@@ -650,6 +652,27 @@ extension SquareMobilePayments: PaymentManagerDelegate {
             queue: .main,
             options: nil
         )
+    }
+
+    @objc public func checkRecordAudioPermission() -> AVAudioSession.RecordPermission {
+        return AVAudioSession.sharedInstance().recordPermission
+    }
+
+    @objc public func requestRecordAudioPermission(completion: @escaping (AVAudioSession.RecordPermission) -> Void) {
+        let currentPermission = AVAudioSession.sharedInstance().recordPermission
+        guard currentPermission == .undetermined else {
+            completion(currentPermission)
+            return
+        }
+
+        recordAudioPermissionCompletion = completion
+        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+            DispatchQueue.main.async {
+                let newPermission = AVAudioSession.sharedInstance().recordPermission
+                self.recordAudioPermissionCompletion?(newPermission)
+                self.recordAudioPermissionCompletion = nil
+            }
+        }
     }
 }
 

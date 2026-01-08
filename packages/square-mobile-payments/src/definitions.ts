@@ -1446,8 +1446,6 @@ export interface PermissionStatus {
    *
    * Required to receive data from magstripe readers.
    *
-   * Only available on Android.
-   *
    * @since 0.0.1
    */
   recordAudio?: PermissionState;

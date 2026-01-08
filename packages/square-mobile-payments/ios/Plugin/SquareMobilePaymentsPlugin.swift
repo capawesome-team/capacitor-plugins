@@ -35,6 +35,7 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     public static let permissionLocation = "location"
     public static let permissionBluetooth = "bluetooth"
+    public static let permissionRecordAudio = "recordAudio"
 
     private var implementation: SquareMobilePayments?
 
@@ -315,9 +316,22 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             bluetoothResult = "prompt"
         }
 
+        var recordAudioResult: String
+        switch implementation?.checkRecordAudioPermission() {
+        case .none, .undetermined:
+            recordAudioResult = "prompt"
+        case .denied:
+            recordAudioResult = "denied"
+        case .granted:
+            recordAudioResult = "granted"
+        @unknown default:
+            recordAudioResult = "prompt"
+        }
+
         var result = JSObject()
         result[SquareMobilePaymentsPlugin.permissionLocation] = locationResult
         result[SquareMobilePaymentsPlugin.permissionBluetooth] = bluetoothResult
+        result[SquareMobilePaymentsPlugin.permissionRecordAudio] = recordAudioResult
         call.resolve(result)
     }
 
@@ -327,6 +341,10 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         if !hasUsageDescription(forKey: "NSBluetoothAlwaysUsageDescription") {
+            rejectCall(call, CustomError.privacyDescriptionsMissing)
+            return
+        }
+        if !hasUsageDescription(forKey: "NSMicrophoneUsageDescription") {
             rejectCall(call, CustomError.privacyDescriptionsMissing)
             return
         }
@@ -343,6 +361,13 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         if implementation?.checkBluetoothPermission() == .notDetermined {
             group.enter()
             implementation?.requestBluetoothPermission {
+                group.leave()
+            }
+        }
+
+        if implementation?.checkRecordAudioPermission() == .undetermined {
+            group.enter()
+            implementation?.requestRecordAudioPermission { _ in
                 group.leave()
             }
         }
