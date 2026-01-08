@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`ed16bee59509ac1dd243655761f85072640c3f99`](https://github.com/capawesome-team/capacitor-plugins/commit/ed16bee59509ac1dd243655761f85072640c3f99) ([#740](https://github.com/capawesome-team/capacitor-plugins/pull/740)): feat(ios): support `recordAudio` permission
+
 ## 0.1.1
 
 ### Patch Changes
