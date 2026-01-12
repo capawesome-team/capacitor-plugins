@@ -13,7 +13,7 @@ Capacitor plugin that allows you to update your app remotely in real-time withou
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for Over-the-Air (OTA) updates. Here are some of the key features:
 
 - 🔋 Supports **Android and iOS**
-- ⚡️ **Capacitor 7** support
+- ⚡️ **Capacitor 6/7/8** support
 - 📦 **Bundle Management**: Download, set, and delete bundles.
 - ☁️ **Cloud Support**: Use the [Capawesome Cloud](https://cloud.capawesome.io/) to manage your app updates.
 - 📺 **Channel Support**: Set a channel for the app to manage different versions.
