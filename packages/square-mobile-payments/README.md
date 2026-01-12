@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [Square Mobile Payments SDK](https://developer.squareup.com/docs/mobile-payments-sdk).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  </a>
+</div>
+
 ## Features
 
 This plugin provides a comprehensive integration with Square's Mobile Payments SDK for in-person payment processing. Here are some of the key features:
