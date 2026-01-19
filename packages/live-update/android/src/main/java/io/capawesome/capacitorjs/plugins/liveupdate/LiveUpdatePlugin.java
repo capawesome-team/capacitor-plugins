@@ -69,7 +69,7 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             config = getLiveUpdateConfig();
             LiveUpdateEventEmitter eventEmitter = new PluginLiveUpdateEventEmitter();
-            implementation = new LiveUpdate(getContext(), getBridge(), config, eventEmitter);
+            implementation = LiveUpdate.getInstance(getContext(), getBridge(), config, eventEmitter);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }

@@ -10,6 +10,9 @@ import CommonCrypto
     public static let tag = "LiveUpdate"
     public static let version = "8.1.1"
 
+    private static var _sharedInstance: LiveUpdate?
+    private static let queue = DispatchQueue(label: "io.capawesome.liveupdate.singleton")
+
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bridge: CAPBridgeProtocol
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
@@ -28,7 +31,7 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter) {
+    private init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter) {
         self.bridge = bridge
         self.config = config
         self.eventEmitter = eventEmitter
@@ -42,6 +45,28 @@ import CommonCrypto
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer()
+    }
+
+    public static func getInstance(
+        bridge: CAPBridgeProtocol,
+        config: LiveUpdateConfig,
+        eventEmitter: LiveUpdateEventEmitter
+    ) -> LiveUpdate {
+        return queue.sync {
+            if _sharedInstance == nil {
+                _sharedInstance = LiveUpdate(bridge: bridge, config: config, eventEmitter: eventEmitter)
+            }
+            return _sharedInstance!
+        }
+    }
+
+    public static func getInstance() -> LiveUpdate {
+        return queue.sync {
+            guard let instance = _sharedInstance else {
+                fatalError("LiveUpdate not initialized. Call getInstance(bridge:config:eventEmitter:) first.")
+            }
+            return instance
+        }
     }
 
     @objc public func clearBlockedBundles() {

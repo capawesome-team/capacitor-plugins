@@ -83,6 +83,11 @@ public class LiveUpdate {
     public static final String TAG = "LiveUpdate";
     public static final String VERSION = "8.1.1";
 
+    @Nullable
+    private static LiveUpdate instance = null;
+
+    private static final Object LOCK = new Object();
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
     @NonNull
@@ -117,7 +122,7 @@ public class LiveUpdate {
     private boolean rollbackPerformed = false;
     private boolean syncInProgress = false;
 
-    public LiveUpdate(
+    private LiveUpdate(
         @NonNull Context context,
         @NonNull Bridge bridge,
         @NonNull LiveUpdateConfig config,
@@ -137,6 +142,31 @@ public class LiveUpdate {
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer();
+    }
+
+    @NonNull
+    public static LiveUpdate getInstance(
+        @NonNull Context context,
+        @NonNull Bridge bridge,
+        @NonNull LiveUpdateConfig config,
+        @NonNull LiveUpdateEventEmitter eventEmitter
+    ) throws PackageManager.NameNotFoundException {
+        if (instance == null) {
+            synchronized (LOCK) {
+                if (instance == null) {
+                    instance = new LiveUpdate(context, bridge, config, eventEmitter);
+                }
+            }
+        }
+        return instance;
+    }
+
+    @NonNull
+    public static LiveUpdate getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("LiveUpdate not initialized. Call getInstance with dependencies first.");
+        }
+        return instance;
     }
 
     public void clearBlockedBundles() {

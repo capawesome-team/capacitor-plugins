@@ -54,7 +54,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         let config = liveUpdateConfig()
         self.config = config
         let eventEmitter = PluginLiveUpdateEventEmitter(plugin: self)
-        self.implementation = LiveUpdate(bridge: bridge, config: config, eventEmitter: eventEmitter)
+        self.implementation = LiveUpdate.getInstance(bridge: bridge, config: config, eventEmitter: eventEmitter)
 
         // Notify implementation about load
         implementation?.handleLoad()
