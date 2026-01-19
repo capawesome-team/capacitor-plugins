@@ -53,8 +53,9 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         }
         let config = liveUpdateConfig()
         self.config = config
+        let bridgeWrapper = PluginLiveUpdateBridge(bridge: bridge)
         let eventEmitter = PluginLiveUpdateEventEmitter(plugin: self)
-        self.implementation = LiveUpdate.getInstance(bridge: bridge, config: config, eventEmitter: eventEmitter)
+        self.implementation = LiveUpdate.getInstance(bridge: bridgeWrapper, config: config, eventEmitter: eventEmitter)
 
         // Notify implementation about load
         implementation?.handleLoad()
@@ -425,6 +426,28 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func resolveCall(_ call: CAPPluginCall, _ result: JSObject) {
         call.resolve(result)
+    }
+
+    private class PluginLiveUpdateBridge: NSObject, LiveUpdateBridge {
+        private weak var bridge: CAPBridgeProtocol?
+
+        init(bridge: CAPBridgeProtocol) {
+            self.bridge = bridge
+        }
+
+        func getServerBasePath() -> String? {
+            guard let viewController = bridge?.viewController as? CAPBridgeViewController else {
+                return nil
+            }
+            return viewController.getServerBasePath()
+        }
+
+        func setServerBasePath(path: String) {
+            guard let viewController = bridge?.viewController as? CAPBridgeViewController else {
+                return
+            }
+            viewController.setServerBasePath(path: path)
+        }
     }
 
     private class PluginLiveUpdateEventEmitter: NSObject, LiveUpdateEventEmitter {

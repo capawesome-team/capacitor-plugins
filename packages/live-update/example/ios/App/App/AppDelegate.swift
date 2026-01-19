@@ -1,5 +1,6 @@
 import UIKit
 import Capacitor
+import CapawesomeCapacitorLiveUpdate
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -8,6 +9,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let config = LiveUpdateConfig()
+        let bridge = AppDelegateBridge(window: window)
+        let liveUpdate = LiveUpdate.getInstance(bridge: bridge, config: config, eventEmitter: nil)
+        CAPLog.print(liveUpdate.getVersionCode(completion: { result, error in
+            if let result = result {
+                CAPLog.print("Live Update Version Code: \(result.toJSObject())")
+            }
+        }))
         return true
     }
 
@@ -46,4 +55,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return ApplicationDelegateProxy.shared.application(application, continue: userActivity, restorationHandler: restorationHandler)
     }
 
+}
+
+private class AppDelegateBridge: NSObject, LiveUpdateBridge {
+    private weak var window: UIWindow?
+
+    init(window: UIWindow?) {
+        self.window = window
+    }
+
+    func getServerBasePath() -> String? {
+        if let vc = window?.rootViewController as? CAPBridgeViewController {
+            if let bridge = vc.bridge {
+                return (bridge.viewController as? CAPBridgeViewController)?.getServerBasePath()
+            }
+        }
+        return nil
+    }
+
+    func setServerBasePath(path: String) {
+        if let vc = window?.rootViewController as? CAPBridgeViewController {
+            if let bridge = vc.bridge {
+                (bridge.viewController as? CAPBridgeViewController)?.setServerBasePath(path: path)
+            }
+        }
+    }
 }

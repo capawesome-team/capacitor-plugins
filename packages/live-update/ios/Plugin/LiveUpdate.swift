@@ -14,7 +14,7 @@ import CommonCrypto
     private static let queue = DispatchQueue(label: "io.capawesome.liveupdate.singleton")
 
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
-    private let bridge: CAPBridgeProtocol
+    private let bridge: LiveUpdateBridge
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
@@ -31,7 +31,7 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    private init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter?) {
+    private init(bridge: LiveUpdateBridge, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter?) {
         self.bridge = bridge
         self.config = config
         self.eventEmitter = eventEmitter
@@ -48,7 +48,7 @@ import CommonCrypto
     }
 
     public static func getInstance(
-        bridge: CAPBridgeProtocol,
+        bridge: LiveUpdateBridge,
         config: LiveUpdateConfig,
         eventEmitter: LiveUpdateEventEmitter?
     ) -> LiveUpdate {
@@ -666,12 +666,9 @@ import CommonCrypto
         return bundleId
     }
 
-    /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
+    /// - Returns: The path to the current bundle directory or `nil` if the bridge does not provide a path.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.bridge.viewController as? CAPBridgeViewController else {
-            return nil
-        }
-        return viewController.getServerBasePath()
+        return bridge.getServerBasePath()
     }
 
     private func getDeviceId() -> String {
@@ -829,10 +826,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPath(path: String) {
-        guard let viewController = self.bridge.viewController as? CAPBridgeViewController else {
-            return
-        }
-        viewController.setServerBasePath(path: path)
+        bridge.setServerBasePath(path: path)
         // Notify listeners
         notifyReloadedListeners()
     }
