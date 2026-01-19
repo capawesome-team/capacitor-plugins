@@ -101,7 +101,7 @@ public class LiveUpdate {
 
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
-    @NonNull
+    @Nullable
     private final LiveUpdateEventEmitter eventEmitter;
 
     @NonNull
@@ -126,7 +126,7 @@ public class LiveUpdate {
         @NonNull Context context,
         @NonNull Bridge bridge,
         @NonNull LiveUpdateConfig config,
-        @NonNull LiveUpdateEventEmitter eventEmitter
+        @Nullable LiveUpdateEventEmitter eventEmitter
     ) throws PackageManager.NameNotFoundException {
         this.context = context;
         this.bridge = bridge;
@@ -149,7 +149,7 @@ public class LiveUpdate {
         @NonNull Context context,
         @NonNull Bridge bridge,
         @NonNull LiveUpdateConfig config,
-        @NonNull LiveUpdateEventEmitter eventEmitter
+        @Nullable LiveUpdateEventEmitter eventEmitter
     ) throws PackageManager.NameNotFoundException {
         if (instance == null) {
             synchronized (LOCK) {
@@ -1193,6 +1193,9 @@ public class LiveUpdate {
     }
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+        if (eventEmitter == null) {
+            return;
+        }
         eventEmitter.onDownloadBundleProgress(event);
     }
 
@@ -1305,11 +1308,17 @@ public class LiveUpdate {
     }
 
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
+        if (eventEmitter == null) {
+            return;
+        }
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
         eventEmitter.onNextBundleSet(event);
     }
 
     private void notifyReloadedListeners() {
+        if (eventEmitter == null) {
+            return;
+        }
         eventEmitter.onReloaded();
     }
 

@@ -20,7 +20,7 @@ import CommonCrypto
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let eventEmitter: LiveUpdateEventEmitter
+    private let eventEmitter: LiveUpdateEventEmitter?
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -31,7 +31,7 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    private init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter) {
+    private init(bridge: CAPBridgeProtocol, config: LiveUpdateConfig, eventEmitter: LiveUpdateEventEmitter?) {
         self.bridge = bridge
         self.config = config
         self.eventEmitter = eventEmitter
@@ -50,7 +50,7 @@ import CommonCrypto
     public static func getInstance(
         bridge: CAPBridgeProtocol,
         config: LiveUpdateConfig,
-        eventEmitter: LiveUpdateEventEmitter
+        eventEmitter: LiveUpdateEventEmitter?
     ) -> LiveUpdate {
         return queue.sync {
             if _sharedInstance == nil {
@@ -750,7 +750,9 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
-        eventEmitter.onDownloadBundleProgress(event)
+        if let eventEmitter = eventEmitter {
+            eventEmitter.onDownloadBundleProgress(event)
+        }
     }
 
     private func performAutoUpdate() {
@@ -845,12 +847,16 @@ import CommonCrypto
     }
 
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
-        let event = NextBundleSetEvent(bundleId: bundleId)
-        eventEmitter.onNextBundleSet(event)
+        if let eventEmitter = eventEmitter {
+            let event = NextBundleSetEvent(bundleId: bundleId)
+            eventEmitter.onNextBundleSet(event)
+        }
     }
 
     private func notifyReloadedListeners() {
-        eventEmitter.onReloaded()
+        if let eventEmitter = eventEmitter {
+            eventEmitter.onReloaded()
+        }
     }
 
     private func addBlockedBundleId(_ bundleId: String) {
