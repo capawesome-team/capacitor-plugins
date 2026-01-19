@@ -13,7 +13,7 @@ Capacitor plugin that allows you to update your app remotely in real-time withou
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for Over-the-Air (OTA) updates. Here are some of the key features:
 
 - 🔋 Supports **Android and iOS**
-- ⚡️ **Capacitor 7** support
+- ⚡️ **Capacitor 6/7/8** support
 - 📦 **Bundle Management**: Download, set, and delete bundles.
 - ☁️ **Cloud Support**: Use the [Capawesome Cloud](https://cloud.capawesome.io/) to manage your app updates.
 - 📺 **Channel Support**: Set a channel for the app to manage different versions.
@@ -38,12 +38,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Guides
 
-- [Announcing the Capacitor Live Update Plugin](https://capawesome.io/blog/announcing-the-capacitor-live-update-plugin/)
-- [Exploring the Capacitor Live Update API](https://capawesome.io/blog/exploring-the-capacitor-live-update-api/)
-- [How Live Updates for Capacitor work](https://capawesome.io/blog/how-live-updates-for-capacitor-work/)
-- [How to gradually roll out Capacitor Live Updates](https://capawesome.io/blog/how-to-gradually-roll-out-capacitor-live-updates/#update-a-bundle)
-- [How to restrict Capacitor Live Updates to Native Versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/)
-- [Live Updates for Nuxt Capacitor Apps with Capawesome Cloud](https://capawesome.io/blog/live-updates-for-nuxt-capacitor/)
+- [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/cloud/live-updates/setup/)
+- [Migrating from Ionic Appflow to Capawesome Cloud](https://capawesome.io/blog/migrating-from-ionic-appflow-to-capawesome-cloud/)
 - [Migrating from App Center to Capawesome Cloud](https://capawesome.io/blog/migrating-from-app-center-to-capawesome-cloud/)
 
 ## Installation

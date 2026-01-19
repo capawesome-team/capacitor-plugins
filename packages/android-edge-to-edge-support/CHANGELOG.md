@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`ea1941c3f730560665465b4110bdb2ed70e4582f`](https://github.com/capawesome-team/capacitor-plugins/commit/ea1941c3f730560665465b4110bdb2ed70e4582f) ([#734](https://github.com/capawesome-team/capacitor-plugins/pull/734)): fix(android): include `consumer-rules.pro` in package files
+
+## 8.0.1
+
+### Patch Changes
+
+- [`1a11ae351b96dbf12b74efe423acf3e3cbc52643`](https://github.com/capawesome-team/capacitor-plugins/commit/1a11ae351b96dbf12b74efe423acf3e3cbc52643) ([#732](https://github.com/capawesome-team/capacitor-plugins/pull/732)): fix(android): add missing ProGuard rules
+
 ## 8.0.0
 
 ### Major Changes

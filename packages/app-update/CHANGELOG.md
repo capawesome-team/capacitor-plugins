@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [`a9d94f8a7aa8f07baf8d96565b19b359bd10088b`](https://github.com/capawesome-team/capacitor-plugins/commit/a9d94f8a7aa8f07baf8d96565b19b359bd10088b) ([#742](https://github.com/capawesome-team/capacitor-plugins/pull/742)): fix(android): replace deprecated method call
+
 ## 8.0.0
 
 ### Major Changes

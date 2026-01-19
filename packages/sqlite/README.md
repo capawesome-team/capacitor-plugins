@@ -196,7 +196,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   optimizeDeps: {
-    include: ['@sqlite.org/sqlite-wasm'],
+    exclude: ['@sqlite.org/sqlite-wasm'],
   },
   server: {
     headers: {
@@ -730,6 +730,17 @@ This error occurs when OPFS (Origin Private File System) cannot be instantiated.
 'Cross-Origin-Embedder-Policy': 'require-corp'
 'Cross-Origin-Opener-Policy': 'same-origin'
 ```
+
+##### `Sqlite.open()` never resolves in production
+
+If `open()` hangs or never resolves while working in dev mode, this is typically caused by missing COOP/COEP headers in your production deployment. You need to configure your production web server (Netlify, Vercel, Nginx, Apache, etc.) to send these headers:
+
+```
+'Cross-Origin-Embedder-Policy': 'require-corp'
+'Cross-Origin-Opener-Policy': 'same-origin'
+```
+
+To verify this is the issue, open Chrome DevTools → Network tab and check if these headers are present in the response for your HTML document.
 
 ##### `No such module 'SQLite'`
 

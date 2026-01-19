@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
 import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
@@ -132,10 +133,11 @@ public class AppUpdatePlugin extends Plugin {
             }
             savedPluginCall = call;
             try {
+                AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build();
                 this.appUpdateManager.startUpdateFlowForResult(
                         this.appUpdateInfo,
-                        AppUpdateType.IMMEDIATE,
                         getActivity(),
+                        appUpdateOptions,
                         AppUpdatePlugin.REQUEST_IMMEDIATE_UPDATE
                     );
             } catch (IntentSender.SendIntentException e) {
@@ -166,10 +168,11 @@ public class AppUpdatePlugin extends Plugin {
                 notifyListeners("onFlexibleUpdateStateChange", ret);
             };
             this.appUpdateManager.registerListener(this.listener);
+            AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build();
             this.appUpdateManager.startUpdateFlowForResult(
                     this.appUpdateInfo,
-                    AppUpdateType.FLEXIBLE,
                     getActivity(),
+                    appUpdateOptions,
                     AppUpdatePlugin.REQUEST_FLEXIBLE_UPDATE
                 );
         } catch (Exception exception) {
