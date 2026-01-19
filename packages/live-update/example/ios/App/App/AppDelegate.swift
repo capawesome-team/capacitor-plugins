@@ -9,14 +9,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let config = LiveUpdateConfig()
-        let bridge = AppDelegateBridge(window: window)
-        let liveUpdate = LiveUpdate.getInstance(bridge: bridge, config: config, eventEmitter: nil)
-        CAPLog.print(liveUpdate.getVersionCode(completion: { result, error in
-            if let result = result {
-                CAPLog.print("Live Update Version Code: \(result.toJSObject())")
-            }
-        }))
+        // let config = LiveUpdateConfig()
+        // let bridge = AppDelegateBridge(window: window)
+        // let liveUpdate = LiveUpdate.getInstance(bridge: bridge, config: config, eventEmitter: nil)
+        // CAPLog.print(liveUpdate.getVersionCode(completion: { result, error in
+        //     if let result = result {
+        //         CAPLog.print("Live Update Version Code: \(result.toJSObject())")
+        //     }
+        // }))
         return true
     }
 
