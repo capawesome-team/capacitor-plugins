@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-update",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Capacitor plugin that assists with app updates.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

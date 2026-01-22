@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`e3d77ea1b43514d08cbc9ba55a5398bb7cb26b89`](https://github.com/capawesome-team/capacitor-plugins/commit/e3d77ea1b43514d08cbc9ba55a5398bb7cb26b89) ([#745](https://github.com/capawesome-team/capacitor-plugins/pull/745)): chore: remove deprecated code
+
 ## 8.0.1
 
 ### Patch Changes
