@@ -6,11 +6,14 @@ import static com.google.android.play.core.install.model.ActivityResult.RESULT_I
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -29,7 +32,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 
-@CapacitorPlugin(name = "AppUpdate", requestCodes = { AppUpdatePlugin.REQUEST_IMMEDIATE_UPDATE, AppUpdatePlugin.REQUEST_FLEXIBLE_UPDATE })
+@CapacitorPlugin(name = "AppUpdate")
 public class AppUpdatePlugin extends Plugin {
 
     public static final String TAG = "AppUpdate";
@@ -46,18 +49,27 @@ public class AppUpdatePlugin extends Plugin {
     public static final int UPDATE_NOT_ALLOWED = 4;
     /** Update result: update info missing. */
     public static final int UPDATE_INFO_MISSING = 5;
-    /** Request code for immediate update */
-    public static final int REQUEST_IMMEDIATE_UPDATE = 10;
-    /** Request code for flexible update */
-    public static final int REQUEST_FLEXIBLE_UPDATE = 11;
     public static final String ERROR_GOOGLE_PLAY_SERVICES_UNAVAILABLE = "GooglePlayServices are not available.";
     private AppUpdateManager appUpdateManager;
     private AppUpdateInfo appUpdateInfo;
     private InstallStateUpdatedListener listener;
-    private PluginCall savedPluginCall;
+    private PluginCall savedImmediateUpdateCall;
+    private PluginCall savedFlexibleUpdateCall;
+    private ActivityResultLauncher<IntentSenderRequest> immediateUpdateLauncher;
+    private ActivityResultLauncher<IntentSenderRequest> flexibleUpdateLauncher;
 
     public void load() {
         this.appUpdateManager = AppUpdateManagerFactory.create(this.getContext());
+
+        // Register activity result launcher for immediate updates
+        this.immediateUpdateLauncher = bridge.registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result ->
+            handleImmediateUpdateResult(result)
+        );
+
+        // Register activity result launcher for flexible updates
+        this.flexibleUpdateLauncher = bridge.registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), result ->
+            handleFlexibleUpdateResult(result)
+        );
     }
 
     @PluginMethod
@@ -131,18 +143,9 @@ public class AppUpdatePlugin extends Plugin {
             if (!ready) {
                 return;
             }
-            savedPluginCall = call;
-            try {
-                AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build();
-                this.appUpdateManager.startUpdateFlowForResult(
-                        this.appUpdateInfo,
-                        getActivity(),
-                        appUpdateOptions,
-                        AppUpdatePlugin.REQUEST_IMMEDIATE_UPDATE
-                    );
-            } catch (IntentSender.SendIntentException e) {
-                call.reject(e.getMessage());
-            }
+            savedImmediateUpdateCall = call;
+            AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build();
+            this.appUpdateManager.startUpdateFlowForResult(this.appUpdateInfo, this.immediateUpdateLauncher, appUpdateOptions);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());
@@ -156,7 +159,7 @@ public class AppUpdatePlugin extends Plugin {
             if (!ready) {
                 return;
             }
-            savedPluginCall = call;
+            savedFlexibleUpdateCall = call;
             this.listener = state -> {
                 int installStatus = state.installStatus();
                 JSObject ret = new JSObject();
@@ -169,12 +172,7 @@ public class AppUpdatePlugin extends Plugin {
             };
             this.appUpdateManager.registerListener(this.listener);
             AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build();
-            this.appUpdateManager.startUpdateFlowForResult(
-                    this.appUpdateInfo,
-                    getActivity(),
-                    appUpdateOptions,
-                    AppUpdatePlugin.REQUEST_FLEXIBLE_UPDATE
-                );
+            this.appUpdateManager.startUpdateFlowForResult(this.appUpdateInfo, this.flexibleUpdateLauncher, appUpdateOptions);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());
@@ -193,15 +191,40 @@ public class AppUpdatePlugin extends Plugin {
         }
     }
 
-    @Override
-    protected void handleOnActivityResult(int requestCode, int resultCode, Intent data) {
+    private void handleImmediateUpdateResult(ActivityResult result) {
         try {
-            super.handleOnActivityResult(requestCode, resultCode, data);
-            if (resultCode != RESULT_OK && requestCode == REQUEST_FLEXIBLE_UPDATE) {
+            this.appUpdateInfo = null;
+            if (savedImmediateUpdateCall == null) {
+                return;
+            }
+            JSObject ret = new JSObject();
+            int resultCode = result.getResultCode();
+            if (resultCode == RESULT_OK) {
+                ret.put("code", UPDATE_OK);
+            } else if (resultCode == RESULT_CANCELED) {
+                ret.put("code", UPDATE_CANCELED);
+            } else if (resultCode == RESULT_IN_APP_UPDATE_FAILED) {
+                ret.put("code", UPDATE_FAILED);
+            }
+            savedImmediateUpdateCall.resolve(ret);
+            savedImmediateUpdateCall = null;
+        } catch (Exception exception) {
+            Logger.error(TAG, exception.getMessage(), exception);
+            if (savedImmediateUpdateCall != null) {
+                savedImmediateUpdateCall.reject(exception.getMessage());
+                savedImmediateUpdateCall = null;
+            }
+        }
+    }
+
+    private void handleFlexibleUpdateResult(ActivityResult result) {
+        try {
+            int resultCode = result.getResultCode();
+            if (resultCode != RESULT_OK) {
                 this.unregisterListener();
             }
             this.appUpdateInfo = null;
-            if (savedPluginCall == null) {
+            if (savedFlexibleUpdateCall == null) {
                 return;
             }
             JSObject ret = new JSObject();
@@ -212,13 +235,14 @@ public class AppUpdatePlugin extends Plugin {
             } else if (resultCode == RESULT_IN_APP_UPDATE_FAILED) {
                 ret.put("code", UPDATE_FAILED);
             }
-            savedPluginCall.resolve(ret);
+            savedFlexibleUpdateCall.resolve(ret);
+            savedFlexibleUpdateCall = null;
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
-            if (savedPluginCall == null) {
-                return;
+            if (savedFlexibleUpdateCall != null) {
+                savedFlexibleUpdateCall.reject(exception.getMessage());
+                savedFlexibleUpdateCall = null;
             }
-            savedPluginCall.reject(exception.getMessage());
         }
     }
 
