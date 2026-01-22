@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`5e859255cda7680b8f0cb883652509f660be3860`](https://github.com/capawesome-team/capacitor-plugins/commit/5e859255cda7680b8f0cb883652509f660be3860) ([#749](https://github.com/capawesome-team/capacitor-plugins/pull/749)): fix(android): restore color overlays on enable
+
 ## 8.0.2
 
 ### Patch Changes
