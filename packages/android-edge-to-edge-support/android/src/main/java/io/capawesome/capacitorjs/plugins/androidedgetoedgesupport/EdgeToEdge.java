@@ -28,19 +28,27 @@ public class EdgeToEdge {
     @Nullable
     private View statusBarOverlay;
 
+    private int currentNavigationBarColor;
+
+    private int currentStatusBarColor;
+
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
         this.config = config;
         this.plugin = plugin;
-        // Create color overlays
-        createColorOverlays();
-        // Set colors from config
-        setStatusBarColor(config.getStatusBarColor());
-        setNavigationBarColor(config.getNavigationBarColor());
-        // Apply insets to enable the edge-to-edge feature
-        applyInsets();
+        // Store initial colors from config
+        this.currentStatusBarColor = config.getStatusBarColor();
+        this.currentNavigationBarColor = config.getNavigationBarColor();
+        // Enable edge-to-edge
+        enable();
     }
 
     public void enable() {
+        // Create color overlays if they don't exist
+        createColorOverlays();
+        // Restore previously set colors
+        setStatusBarColor(currentStatusBarColor);
+        setNavigationBarColor(currentNavigationBarColor);
+        // Apply insets
         applyInsets();
     }
 
@@ -169,12 +177,14 @@ public class EdgeToEdge {
     }
 
     private void setNavigationBarColor(int color) {
+        this.currentNavigationBarColor = color;
         if (navigationBarOverlay != null) {
             navigationBarOverlay.setBackgroundColor(color);
         }
     }
 
     private void setStatusBarColor(int color) {
+        this.currentStatusBarColor = color;
         if (statusBarOverlay != null) {
             statusBarOverlay.setBackgroundColor(color);
         }
