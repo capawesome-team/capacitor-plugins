@@ -98,27 +98,44 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
       input.type = 'file';
       input.accept = accept;
       input.multiple = limit === 0;
-      input.addEventListener(
-        'change',
-        () => {
-          onChangeFired = true;
-          const files = Array.from(input.files || []);
-          resolve(files);
-        },
-        { once: true },
-      );
-      // Workaround to detect when Cancel is selected in the File Selection dialog box.
-      window.addEventListener(
-        'focus',
-        async () => {
-          await this.wait(1000);
-          if (onChangeFired) {
-            return;
-          }
-          resolve(undefined);
-        },
-        { once: true },
-      );
+
+      const hasCancelEvent = 'oncancel' in input;
+
+      const onChangeHandler = () => {
+        onChangeFired = true;
+        removeAllListeners();
+
+        const files = Array.from(input.files || []);
+        resolve(files);
+      };
+      const onCancelHandler = () => {
+        removeAllListeners();
+        resolve(undefined);
+      };
+      const onFocusHandler = async () => {
+        await this.wait(500);
+        if (onChangeFired) {
+          return;
+        }
+        removeAllListeners();
+        resolve(undefined);
+      };
+      const removeAllListeners = () => {
+        input.removeEventListener('change', onChangeHandler);
+        if (hasCancelEvent) {
+          input.removeEventListener('cancel', onCancelHandler);
+        } else {
+          window.removeEventListener('focus', onFocusHandler);
+        }
+      };
+
+      input.addEventListener('change', onChangeHandler, { once: true });
+      if (hasCancelEvent) {
+        input.addEventListener('cancel', onCancelHandler, { once: true });
+      } else {
+        // Workaround to detect when Cancel is selected in the File Selection dialog box.
+        window.addEventListener('focus', onFocusHandler, { once: true });
+      }
       input.click();
     });
   }
