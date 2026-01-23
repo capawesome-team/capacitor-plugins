@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.1
+
+### Patch Changes
+
+- [`d3493234a5dcbd270eea86d33d4b307dc685d4e8`](https://github.com/capawesome-team/capacitor-plugins/commit/d3493234a5dcbd270eea86d33d4b307dc685d4e8) ([#753](https://github.com/capawesome-team/capacitor-plugins/pull/753)): fix(web): use input `cancel` event if supported
+
 ## 8.0.0
 
 ### Major Changes
