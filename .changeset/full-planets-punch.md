@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-file-picker': minor
+'@capawesome/capacitor-file-picker': patch
 ---
 
-Switched to `cancel` event when possible
+fix(web): use input `cancel` event if supported
