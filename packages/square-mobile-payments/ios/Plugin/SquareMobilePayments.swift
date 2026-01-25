@@ -315,6 +315,64 @@ import AVFoundation
         completion(result, nil)
     }
 
+    @objc public func linkAppleAccount(completion: @escaping (_ error: Error?) -> Void) throws {
+        guard locationId != nil else {
+            throw CustomError.notInitialized
+        }
+        guard MobilePaymentsSDK.shared.authorizationManager.state == .authorized else {
+            throw CustomError.notAuthorized
+        }
+
+        DispatchQueue.main.async {
+            MobilePaymentsSDK.shared.readerManager.tapToPaySettings.linkAppleAccount { error in
+                completion(error)
+            }
+        }
+    }
+
+    @objc public func relinkAppleAccount(completion: @escaping (_ error: Error?) -> Void) throws {
+        guard locationId != nil else {
+            throw CustomError.notInitialized
+        }
+        guard MobilePaymentsSDK.shared.authorizationManager.state == .authorized else {
+            throw CustomError.notAuthorized
+        }
+
+        DispatchQueue.main.async {
+            MobilePaymentsSDK.shared.readerManager.tapToPaySettings.relinkAppleAccount { error in
+                completion(error)
+            }
+        }
+    }
+
+    @objc public func isAppleAccountLinked(completion: @escaping (_ result: IsAppleAccountLinkedResult?, _ error: Error?) -> Void) throws {
+        guard locationId != nil else {
+            throw CustomError.notInitialized
+        }
+        guard MobilePaymentsSDK.shared.authorizationManager.state == .authorized else {
+            throw CustomError.notAuthorized
+        }
+
+        MobilePaymentsSDK.shared.readerManager.tapToPaySettings.isAppleAccountLinked { linked, error in
+            if let error = error {
+                completion(nil, error)
+            } else {
+                let result = IsAppleAccountLinkedResult(linked: linked)
+                completion(result, nil)
+            }
+        }
+    }
+
+    @objc public func isDeviceCapable(completion: @escaping (_ result: IsDeviceCapableResult?, _ error: Error?) -> Void) throws {
+        guard locationId != nil else {
+            throw CustomError.notInitialized
+        }
+
+        let capable = MobilePaymentsSDK.shared.readerManager.tapToPaySettings.isDeviceCapable
+        let result = IsDeviceCapableResult(capable: capable)
+        completion(result, nil)
+    }
+
     @objc public func showMockReader(completion: @escaping (_ error: Error?) -> Void) throws {
         #if canImport(MockReaderUI)
         guard locationId != nil else {
@@ -666,7 +724,7 @@ extension SquareMobilePayments: PaymentManagerDelegate {
         }
 
         recordAudioPermissionCompletion = completion
-        AVAudioSession.sharedInstance().requestRecordPermission { granted in
+        AVAudioSession.sharedInstance().requestRecordPermission { _ in
             DispatchQueue.main.async {
                 let newPermission = AVAudioSession.sharedInstance().recordPermission
                 self.recordAudioPermissionCompletion?(newPermission)

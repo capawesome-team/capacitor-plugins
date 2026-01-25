@@ -36,6 +36,8 @@
 		7C6089782F04705700A83CCA /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6089532F04705700A83CCA /* Card.swift */; };
 		7C6089792F04705700A83CCA /* GetReadersResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6089562F04705700A83CCA /* GetReadersResult.swift */; };
 		7C60897A2F04705700A83CCA /* AuthorizeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60894A2F04705700A83CCA /* AuthorizeOptions.swift */; };
+		7C60897B2F04705700A83CCA /* IsAppleAccountLinkedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60897D2F04705700A83CCA /* IsAppleAccountLinkedResult.swift */; };
+		7C60897C2F04705700A83CCA /* IsDeviceCapableResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C60897E2F04705700A83CCA /* IsDeviceCapableResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +83,8 @@
 		7C6089602F04705700A83CCA /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		7C6089622F04705700A83CCA /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7C6089642F04705700A83CCA /* SquareMobilePaymentsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquareMobilePaymentsHelper.swift; sourceTree = "<group>"; };
+		7C60897D2F04705700A83CCA /* IsAppleAccountLinkedResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsAppleAccountLinkedResult.swift; sourceTree = "<group>"; };
+		7C60897E2F04705700A83CCA /* IsDeviceCapableResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsDeviceCapableResult.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -175,7 +179,9 @@
 				7C6089552F04705700A83CCA /* GetAvailableCardInputMethodsResult.swift */,
 				7C6089562F04705700A83CCA /* GetReadersResult.swift */,
 				7C6089572F04705700A83CCA /* GetSettingsResult.swift */,
+				7C60897D2F04705700A83CCA /* IsAppleAccountLinkedResult.swift */,
 				7C6089582F04705700A83CCA /* IsAuthorizedResult.swift */,
+				7C60897E2F04705700A83CCA /* IsDeviceCapableResult.swift */,
 				7C6089592F04705700A83CCA /* IsPairingInProgressResult.swift */,
 				7C60895A2F04705700A83CCA /* MoneyResult.swift */,
 				7C60895B2F04705700A83CCA /* Payment.swift */,
@@ -432,6 +438,8 @@
 				7C6089782F04705700A83CCA /* Card.swift in Sources */,
 				7C6089792F04705700A83CCA /* GetReadersResult.swift in Sources */,
 				7C60897A2F04705700A83CCA /* AuthorizeOptions.swift in Sources */,
+				7C60897B2F04705700A83CCA /* IsAppleAccountLinkedResult.swift in Sources */,
+				7C60897C2F04705700A83CCA /* IsDeviceCapableResult.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* SquareMobilePayments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
