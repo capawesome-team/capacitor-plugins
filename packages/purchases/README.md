@@ -8,7 +8,9 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🛍️ **Product Types**: Supports subscriptions, consumables, and non-consumable in-app products.
+- 🎁 **Intro Offer Eligibility**: Check if introductory offers are available for subscription products.
 - 🔒 **Server Validation**: Provides verification tokens (iOS JWS, Android purchase tokens) for server-side validation.
+- 🔗 **Third-Party Validation**: Includes transaction properties for third-party validation.
 - 📋 **Transaction Management**: Track current, unfinished, and historical transactions.
 - 🔄 **Purchase Restoration**: Easily sync and restore purchases across devices.
 - 🚀 **Modern APIs**: Uses StoreKit 2 and Google Play Billing Library 8.0.
@@ -98,6 +100,7 @@ const restorePurchases = async () => {
 * [`getProductById(...)`](#getproductbyid)
 * [`getUnfinishedTransactions()`](#getunfinishedtransactions)
 * [`isAvailable()`](#isavailable)
+* [`isIntroOfferAvailableForProduct(...)`](#isintroofferavailableforproduct)
 * [`purchaseProduct(...)`](#purchaseproduct)
 * [`syncTransactions()`](#synctransactions)
 * [Interfaces](#interfaces)
@@ -223,6 +226,34 @@ Check if in-app purchases are supported on the device.
 --------------------
 
 
+### isIntroOfferAvailableForProduct(...)
+
+```typescript
+isIntroOfferAvailableForProduct(options: IsIntroOfferAvailableForProductOptions) => Promise<IsIntroOfferAvailableForProductResult>
+```
+
+Check if an introductory offer is available for a product.
+
+On **iOS**, this uses StoreKit 2's `isEligibleForIntroOffer` to check if the customer
+has already used an introductory offer for any subscription within the same subscription group.
+
+On **Android**, this checks if the product has any introductory pricing phases available.
+Google Play automatically filters offers based on eligibility when querying products,
+so if an intro offer is present, the user can purchase it.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                                      |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#isintroofferavailableforproductoptions">IsIntroOfferAvailableForProductOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isintroofferavailableforproductresult">IsIntroOfferAvailableForProductResult</a>&gt;</code>
+
+**Since:** 0.3.2
+
+--------------------
+
+
 ### purchaseProduct(...)
 
 ```typescript
@@ -296,6 +327,9 @@ Only available on Android and iOS (15.0+).
 | **`id`**                 | <code>string</code> | The unique identifier for the transaction.                                                                                                                                                                                        | 0.1.0 |
 | **`verificationResult`** | <code>string</code> | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS. | 0.1.0 |
 | **`token`**              | <code>string</code> | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                              | 0.2.1 |
+| **`productId`**          | <code>string</code> | The product identifier associated with the transaction.                                                                                                                                                                           | 0.3.2 |
+| **`originalJson`**       | <code>string</code> | The original JSON purchase data. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                    | 0.3.2 |
+| **`signature`**          | <code>string</code> | The RSA signature for purchase verification. Pass this to your server to validate the purchase. Only available on Android.                                                                                                        | 0.3.2 |
 
 
 #### GetCurrentTransactionsResult
@@ -346,6 +380,20 @@ Represents an in-app product available for purchase.
 | Prop              | Type                 | Description                                                     | Since |
 | ----------------- | -------------------- | --------------------------------------------------------------- | ----- |
 | **`isAvailable`** | <code>boolean</code> | Indicates whether in-app purchases are available on the device. | 0.1.0 |
+
+
+#### IsIntroOfferAvailableForProductResult
+
+| Prop                        | Type                 | Description                                                 | Since |
+| --------------------------- | -------------------- | ----------------------------------------------------------- | ----- |
+| **`isIntroOfferAvailable`** | <code>boolean</code> | Whether an introductory offer is available for the product. | 0.3.2 |
+
+
+#### IsIntroOfferAvailableForProductOptions
+
+| Prop            | Type                | Description                                  | Since |
+| --------------- | ------------------- | -------------------------------------------- | ----- |
+| **`productId`** | <code>string</code> | The product ID of the subscription to check. | 0.3.2 |
 
 
 #### PurchaseProductResult
