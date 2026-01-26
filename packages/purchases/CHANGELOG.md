@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.2
+
+### Patch Changes
+
+- [`1c5ccb7e2bd15ad991e92308fb69a8d5a96f5844`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1c5ccb7e2bd15ad991e92308fb69a8d5a96f5844) ([#378](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/378)): feat: add transaction properties for IAP validation
+
+- [`a63b313b65304738bc3fcd2aefdf12b7596c7b08`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a63b313b65304738bc3fcd2aefdf12b7596c7b08) ([#381](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/381)): fix(android): ensure billing client is connected before checking availability
+
+- [`cf5d58a3200afbdf0c359f787c6ff6417413fb35`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cf5d58a3200afbdf0c359f787c6ff6417413fb35) ([#377](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/377)): feat(ios): add intro offer availability check for subscriptions
+
 ## 0.3.1
 
 ### Patch Changes
