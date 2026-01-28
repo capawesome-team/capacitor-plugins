@@ -98,6 +98,7 @@ const restorePurchases = async () => {
 * [`getAllTransactions()`](#getalltransactions)
 * [`getCurrentTransactions()`](#getcurrenttransactions)
 * [`getProductById(...)`](#getproductbyid)
+* [`getProductsByIds(...)`](#getproductsbyids)
 * [`getUnfinishedTransactions()`](#getunfinishedtransactions)
 * [`isAvailable()`](#isavailable)
 * [`isIntroOfferAvailableForProduct(...)`](#isintroofferavailableforproduct)
@@ -187,6 +188,27 @@ Only available on Android and iOS (15.0+).
 **Returns:** <code>Promise&lt;<a href="#getproductbyidresult">GetProductByIdResult</a>&gt;</code>
 
 **Since:** 0.3.1
+
+--------------------
+
+
+### getProductsByIds(...)
+
+```typescript
+getProductsByIds(options: GetProductsByIdsOptions) => Promise<GetProductsByIdsResult>
+```
+
+Get product details for multiple products by their IDs.
+
+Only available on Android and iOS (15.0+).
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getproductsbyidsoptions">GetProductsByIdsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getproductsbyidsresult">GetProductsByIdsResult</a>&gt;</code>
+
+**Since:** 7.2.0
 
 --------------------
 
@@ -366,6 +388,20 @@ Represents an in-app product available for purchase.
 | Prop            | Type                | Description                                                                                                                                                                                                                    | Since |
 | --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | **`productId`** | <code>string</code> | The product ID of the product to retrieve. On Android, this is the <a href="#product">Product</a> ID configured in Google Play Console. On iOS, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.3.1 |
+
+
+#### GetProductsByIdsResult
+
+| Prop           | Type                   | Description                                                                                                                                                                        | Since |
+| -------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`products`** | <code>Product[]</code> | The product details for the requested products. Note: If some products are not found, they will not be included in the array. The array may contain fewer products than requested. | 7.2.0 |
+
+
+#### GetProductsByIdsOptions
+
+| Prop             | Type                  | Description                                                                                                                                                                                                                            | Since |
+| ---------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`productIds`** | <code>string[]</code> | The product IDs of the products to retrieve. On Android, these are the <a href="#product">Product</a> IDs configured in Google Play Console. On iOS, these are the <a href="#product">Product</a> IDs configured in App Store Connect. | 7.2.0 |
 
 
 #### GetUnfinishedTransactionsResult
