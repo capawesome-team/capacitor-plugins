@@ -18,6 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
+- ⏩ **Playback Speed**: Adjustable playback rate with pitch preservation.
 - 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
 - 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Media Session](https://capawesome.io/plugins/media-session/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
@@ -139,6 +140,7 @@ const isPlaying = async () => {
 * [`play(...)`](#play)
 * [`resume()`](#resume)
 * [`seekTo(...)`](#seekto)
+* [`setRate(...)`](#setrate)
 * [`setVolume(...)`](#setvolume)
 * [`stop()`](#stop)
 * [`addListener('stop', ...)`](#addlistenerstop-)
@@ -254,6 +256,27 @@ Seek to a specific position in the audio playback.
 --------------------
 
 
+### setRate(...)
+
+```typescript
+setRate(options: SetRateOptions) => Promise<void>
+```
+
+Set the playback rate for the audio playback.
+
+This only affects the current playback session and is not persisted.
+
+Only available on Android (SDK 23+), iOS and Web.
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code><a href="#setrateoptions">SetRateOptions</a></code> |
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### setVolume(...)
 
 ```typescript
@@ -261,6 +284,8 @@ setVolume(options: SetVolumeOptions) => Promise<void>
 ```
 
 Set the volume level for the audio playback.
+
+This only affects the current playback session and is not persisted.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -330,14 +355,15 @@ Called when the audio has stopped playing.
 
 #### PlayOptions
 
-| Prop           | Type                 | Description                                                                                                                                                                                                                       | Since |
-| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`**     | <code>Blob</code>    | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                      | 0.0.1 |
-| **`loop`**     | <code>boolean</code> | Whether to loop the audio playback.                                                                                                                                                                                               | 0.0.1 |
-| **`position`** | <code>number</code>  | The position to start playback from (in milliseconds).                                                                                                                                                                            | 0.0.1 |
-| **`src`**      | <code>string</code>  | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms. | 0.1.2 |
-| **`uri`**      | <code>string</code>  | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                         | 0.0.1 |
-| **`volume`**   | <code>number</code>  | The volume level to set (0-100).                                                                                                                                                                                                  | 0.0.1 |
+| Prop           | Type                 | Description                                                                                                                                                                                                                       | Default          | Since |
+| -------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`blob`**     | <code>Blob</code>    | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                      |                  | 0.0.1 |
+| **`loop`**     | <code>boolean</code> | Whether to loop the audio playback.                                                                                                                                                                                               |                  | 0.0.1 |
+| **`position`** | <code>number</code>  | The position to start playback from (in milliseconds).                                                                                                                                                                            |                  | 0.0.1 |
+| **`rate`**     | <code>number</code>  | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Only available on Android (SDK 23+), iOS and Web.                                                         | <code>1.0</code> | 8.2.0 |
+| **`src`**      | <code>string</code>  | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms. |                  | 0.1.2 |
+| **`uri`**      | <code>string</code>  | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                         |                  | 0.0.1 |
+| **`volume`**   | <code>number</code>  | The volume level to set (0-100).                                                                                                                                                                                                  | <code>100</code> | 0.0.1 |
 
 
 #### SeekToOptions
@@ -345,6 +371,13 @@ Called when the audio has stopped playing.
 | Prop           | Type                | Description                                | Since |
 | -------------- | ------------------- | ------------------------------------------ | ----- |
 | **`position`** | <code>number</code> | The position to seek to (in milliseconds). | 0.0.1 |
+
+
+#### SetRateOptions
+
+| Prop       | Type                | Description                                                                                                             | Since |
+| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`rate`** | <code>number</code> | The playback rate to set. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. | 8.2.0 |
 
 
 #### SetVolumeOptions
