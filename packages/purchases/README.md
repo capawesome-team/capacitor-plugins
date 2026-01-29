@@ -8,6 +8,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🛍️ **Product Types**: Supports subscriptions, consumables, and non-consumable in-app products.
+- 🗂️ **Product Retrieval**: Fetch multiple products in a single call for efficient loading.
 - 🎁 **Intro Offer Eligibility**: Check if introductory offers are available for subscription products.
 - 🔒 **Server Validation**: Provides verification tokens (iOS JWS, Android purchase tokens) for server-side validation.
 - 🔗 **Third-Party Validation**: Includes transaction properties for third-party validation.
@@ -208,7 +209,7 @@ Only available on Android and iOS (15.0+).
 
 **Returns:** <code>Promise&lt;<a href="#getproductsbyidsresult">GetProductsByIdsResult</a>&gt;</code>
 
-**Since:** 7.2.0
+**Since:** 0.3.3
 
 --------------------
 
@@ -385,23 +386,25 @@ Represents an in-app product available for purchase.
 
 #### GetProductByIdOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                                    | Since |
-| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to retrieve. On Android, this is the <a href="#product">Product</a> ID configured in Google Play Console. On iOS, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.3.1 |
+| Prop                  | Type                                                        | Description                                                                                                                                                                                                                    | Since |
+| --------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`productCategory`** | <code><a href="#productcategory">ProductCategory</a></code> | The category of product to fetch. If not specified, the plugin will query both categories. Only available on Android.                                                                                                          | 0.3.3 |
+| **`productId`**       | <code>string</code>                                         | The product ID of the product to retrieve. On Android, this is the <a href="#product">Product</a> ID configured in Google Play Console. On iOS, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.3.1 |
 
 
 #### GetProductsByIdsResult
 
 | Prop           | Type                   | Description                                                                                                                                                                        | Since |
 | -------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`products`** | <code>Product[]</code> | The product details for the requested products. Note: If some products are not found, they will not be included in the array. The array may contain fewer products than requested. | 7.2.0 |
+| **`products`** | <code>Product[]</code> | The product details for the requested products. Note: If some products are not found, they will not be included in the array. The array may contain fewer products than requested. | 0.3.3 |
 
 
 #### GetProductsByIdsOptions
 
-| Prop             | Type                  | Description                                                                                                                                                                                                                            | Since |
-| ---------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`productIds`** | <code>string[]</code> | The product IDs of the products to retrieve. On Android, these are the <a href="#product">Product</a> IDs configured in Google Play Console. On iOS, these are the <a href="#product">Product</a> IDs configured in App Store Connect. | 7.2.0 |
+| Prop                  | Type                                                        | Description                                                                                                                                                                                                                            | Since |
+| --------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`productCategory`** | <code><a href="#productcategory">ProductCategory</a></code> | The category of products to fetch. If not specified, the plugin will query both categories. Only available on Android.                                                                                                                 | 0.3.3 |
+| **`productIds`**      | <code>string[]</code>                                       | The product IDs of the products to retrieve. On Android, these are the <a href="#product">Product</a> IDs configured in Google Play Console. On iOS, these are the <a href="#product">Product</a> IDs configured in App Store Connect. | 0.3.3 |
 
 
 #### GetUnfinishedTransactionsResult
@@ -457,6 +460,14 @@ Represents an in-app product available for purchase.
 | **`NonConsumable`**             | <code>'NON_CONSUMABLE'</code>              | A non-consumable in-app product. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonConsumable. Only available on iOS.                                          | 0.3.1 |
 | **`AutoRenewableSubscription`** | <code>'AUTO_RENEWABLE_SUBSCRIPTION'</code> | An auto-renewable subscription. On Android, this is <a href="#producttype">ProductType</a>.SUBS. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.autoRenewable. | 0.3.1 |
 | **`NonRenewableSubscription`**  | <code>'NON_RENEWABLE_SUBSCRIPTION'</code>  | A non-renewing subscription. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonRenewable. Only available on iOS.                                               | 0.3.1 |
+
+
+#### ProductCategory
+
+| Members            | Value                       | Description                                                                                                                               | Since |
+| ------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.INAPP`. | 0.3.3 |
+| **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.SUBS`.                              | 0.3.3 |
 
 </docgen-api>
 
