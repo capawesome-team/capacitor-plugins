@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.1
+
+### Patch Changes
+
+- [`b0e38c8b440a7bdd47e224e2fb84d76d215c0de0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b0e38c8b440a7bdd47e224e2fb84d76d215c0de0): fix(ios): build error
+
 ## 8.2.0
 
 ### Minor Changes
