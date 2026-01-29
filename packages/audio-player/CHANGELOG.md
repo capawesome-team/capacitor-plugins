@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`8386aa050629dc813e80111ee4ad98c05f1b0c4a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8386aa050629dc813e80111ee4ad98c05f1b0c4a) ([#385](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/385)): feat: add playback rate control
+
+### Patch Changes
+
+- [`7fc12607e3e217c74c8ad24809adac16d0f70406`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7fc12607e3e217c74c8ad24809adac16d0f70406): fix(ios): resolve `seekTo(...)` call even if player is not active
+
 ## 8.1.1
 
 ### Patch Changes
