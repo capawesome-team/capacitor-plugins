@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.3
+
+### Patch Changes
+
+- [`4d5e8e9ebc9852f6a5f20420e4bc58d00855f0a8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4d5e8e9ebc9852f6a5f20420e4bc58d00855f0a8) ([#384](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/384)): feat: add `productCategory` option to filter products
+
+- [`2f7890be70b88695ae3f7cfac6b0e7283f06acec`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2f7890be70b88695ae3f7cfac6b0e7283f06acec) ([#382](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/382)): feat: add `getProductsByIds(...)` method
+
 ## 0.3.2
 
 ### Patch Changes
