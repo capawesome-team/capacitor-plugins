@@ -159,6 +159,44 @@ export interface SquareMobilePaymentsPlugin {
    */
   getAvailableCardInputMethods(): Promise<GetAvailableCardInputMethodsResult>;
   /**
+   * Link a Square seller account with an Apple ID for Tap to Pay on iPhone.
+   *
+   * Presents an Apple sheet prompting the user to accept the Tap to Pay
+   * on iPhone terms and conditions.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.3
+   */
+  linkAppleAccount(): Promise<void>;
+  /**
+   * Re-link a Square seller account with a different Apple ID.
+   *
+   * Presents an Apple sheet to change the associated Apple ID by
+   * showing the Tap to Pay terms and conditions again.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.3
+   */
+  relinkAppleAccount(): Promise<void>;
+  /**
+   * Check if an Apple ID is already linked to a Square seller account.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.3
+   */
+  isAppleAccountLinked(): Promise<IsAppleAccountLinkedResult>;
+  /**
+   * Check if the device is capable of Tap to Pay on iPhone.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.3
+   */
+  isDeviceCapable(): Promise<IsDeviceCapableResult>;
+  /**
    * Check the current permission status.
    *
    * Only available on Android and iOS.
@@ -558,6 +596,30 @@ export interface GetAvailableCardInputMethodsResult {
    * @since 0.0.1
    */
   cardInputMethods: CardInputMethod[];
+}
+
+/**
+ * @since 0.1.3
+ */
+export interface IsAppleAccountLinkedResult {
+  /**
+   * Whether an Apple ID is linked to the Square seller account.
+   *
+   * @since 0.1.3
+   */
+  linked: boolean;
+}
+
+/**
+ * @since 0.1.3
+ */
+export interface IsDeviceCapableResult {
+  /**
+   * Whether the device is capable of Tap to Pay on iPhone.
+   *
+   * @since 0.1.3
+   */
+  capable: boolean;
 }
 
 /**
@@ -1137,6 +1199,12 @@ export enum ReaderModel {
    * @since 0.0.1
    */
   Stand = 'STAND',
+  /**
+   * Tap to Pay on iPhone.
+   *
+   * @since 0.1.3
+   */
+  TapToPay = 'TAP_TO_PAY',
   /**
    * Unknown reader model.
    *
