@@ -17,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📳 **HCE**: Emulate an NFC card that other devices can interact with.
 - ⌘ **Raw Commands**: Send raw commands to an NFC tag and receive the response.
 - 🛠️ **Utils**: Utility functions to make your life easier.
-- ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- ⚔️ **Battle-Tested**: Used in more than 500 projects.
 - 📚 **Documentation**: Comprehensive documentation to help you get started.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
