@@ -87,10 +87,12 @@ public class EdgeToEdge {
             );
             Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
+            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
+            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
-            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
             mlp.topMargin = systemBarsInsets.top;
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
@@ -109,11 +111,13 @@ public class EdgeToEdge {
             // Retrieve keyboard (IME) insets
             Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
+            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
+            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
 
             // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
-            mlp.bottomMargin = keyboardVisible ? imeInsets.bottom : systemBarsInsets.bottom;
+            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
 
             // Set the other margins using system bars insets
             mlp.topMargin = systemBarsInsets.top;
