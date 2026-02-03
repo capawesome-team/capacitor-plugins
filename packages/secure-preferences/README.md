@@ -100,7 +100,7 @@ Create a new file `res/xml/data_extraction_rules.xml` with the following content
 <data-extraction-rules>
  <cloud-backup [disableIfNoEncryptionCapabilities="true|false"]>
    <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
+   <exclude domain="sharedpref" path="CAPAWESOME_SECURE_PREFERENCES.xml"/>
  </cloud-backup>
 </data-extraction-rules>
 ```
