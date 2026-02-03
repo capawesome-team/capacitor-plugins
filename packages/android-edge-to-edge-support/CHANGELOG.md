@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`ad12a6955d6a8247f0320aa35038d7ecbfb6a18f`](https://github.com/capawesome-team/capacitor-plugins/commit/ad12a6955d6a8247f0320aa35038d7ecbfb6a18f) ([#757](https://github.com/capawesome-team/capacitor-plugins/pull/757)): fix(android): preserve bottom inset with external keyboard
+
 ## 8.0.3
 
 ### Patch Changes
