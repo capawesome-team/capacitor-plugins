@@ -21,7 +21,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - ⏳ **Command Queue**: Queue up incoming commands to prevent operation failures.
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier.
-- ⚔️ **Battle-Tested**: Used in more than 30 projects.
+- ⚔️ **Battle-Tested**: Used in more than 300 projects.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
