@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`47771cda07d09dec0821de6e1db26d2c027d986e`](https://github.com/capawesome-team/capacitor-plugins/commit/47771cda07d09dec0821de6e1db26d2c027d986e) ([#760](https://github.com/capawesome-team/capacitor-plugins/pull/760)): fix(android): use no-op listener instead of null on disable
+
 ## 8.0.4
 
 ### Patch Changes
