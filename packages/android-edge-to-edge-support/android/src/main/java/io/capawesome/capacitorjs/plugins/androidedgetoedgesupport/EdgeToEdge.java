@@ -144,8 +144,10 @@ public class EdgeToEdge {
         mlp.rightMargin = 0;
         mlp.bottomMargin = 0;
         view.setLayoutParams(mlp);
-        // Reset listener
-        ViewCompat.setOnApplyWindowInsetsListener(view, null);
+        // Set a no-op listener that consumes insets without applying them.
+        // Using null would allow Android 15's default edge-to-edge handling to take over,
+        // which can cause extra padding when re-enabling.
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> WindowInsetsCompat.CONSUMED);
         // Remove color overlays
         removeColorOverlays();
     }
