@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- [`08e5cbdfdbc4b6fa4fff4c5cde1deac7da7d0fcc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/08e5cbdfdbc4b6fa4fff4c5cde1deac7da7d0fcc) ([#389](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/389)): feat: add `getBiometricType()` method
+
 ## 0.5.0
 
 ### Minor Changes
