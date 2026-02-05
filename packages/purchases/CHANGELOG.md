@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.4
+
+### Patch Changes
+
+- [`2e17c45db794e771ceaf53bc63772f1cf29699df`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2e17c45db794e771ceaf53bc63772f1cf29699df) ([#388](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/388)): fix(android): return regular price instead of intro offer price
+
 ## 0.3.3
 
 ### Patch Changes
