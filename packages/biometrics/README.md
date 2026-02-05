@@ -154,6 +154,7 @@ const isEnrolled = async () => {
 * [`enroll()`](#enroll)
 * [`getAuthenticationType()`](#getauthenticationtype)
 * [`getBiometricStrengthLevel()`](#getbiometricstrengthlevel)
+* [`getBiometricType()`](#getbiometrictype)
 * [`hasDeviceCredential()`](#hasdevicecredential)
 * [`isAvailable()`](#isavailable)
 * [`isEnrolled()`](#isenrolled)
@@ -262,6 +263,23 @@ Only available on Android.
 --------------------
 
 
+### getBiometricType()
+
+```typescript
+getBiometricType() => Promise<GetBiometricTypeResult>
+```
+
+Returns the type of biometric authentication available on the device.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getbiometrictyperesult">GetBiometricTypeResult</a>&gt;</code>
+
+**Since:** 0.5.1
+
+--------------------
+
+
 ### hasDeviceCredential()
 
 ```typescript
@@ -344,6 +362,13 @@ Only available on Android and iOS.
 | **`strengthLevel`** | <code><a href="#biometricstrength">BiometricStrength</a></code> | The supported biometric strength level of the device. | 0.1.0 |
 
 
+#### GetBiometricTypeResult
+
+| Prop                | Type                                                    | Description                                                   | Since |
+| ------------------- | ------------------------------------------------------- | ------------------------------------------------------------- | ----- |
+| **`biometricType`** | <code><a href="#biometrictype">BiometricType</a></code> | The type of biometric authentication available on the device. | 0.5.1 |
+
+
 #### HasDeviceCredentialResult
 
 | Prop                      | Type                 | Description                                                                                                     | Since |
@@ -383,6 +408,16 @@ Only available on Android and iOS.
 | **`Biometric`**        | <code>'BIOMETRIC'</code>         | The user authenticated using a biometric credential.                                                                                                | 0.2.0 |
 | **`DeviceCredential`** | <code>'DEVICE_CREDENTIAL'</code> | The user authenticated using a device credential (e.g., PIN, password).                                                                             | 0.2.0 |
 | **`Unknown`**          | <code>'UNKNOWN'</code>           | The user authenticated via an unknown method. This value may be returned on older Android versions due to partial incompatibility with a newer API. | 0.2.0 |
+
+
+#### BiometricType
+
+| Members           | Value                      | Description                                                           | Since |
+| ----------------- | -------------------------- | --------------------------------------------------------------------- | ----- |
+| **`Face`**        | <code>'FACE'</code>        | Face authentication (Face ID on iOS, face recognition on Android).    | 0.5.1 |
+| **`Fingerprint`** | <code>'FINGERPRINT'</code> | Fingerprint authentication (Touch ID on iOS, fingerprint on Android). | 0.5.1 |
+| **`Iris`**        | <code>'IRIS'</code>        | Iris authentication. Only available on Android.                       | 0.5.1 |
+| **`None`**        | <code>'NONE'</code>        | No biometric authentication available on the device.                  | 0.5.1 |
 
 </docgen-api>
 
