@@ -271,6 +271,9 @@ getBiometricType() => Promise<GetBiometricTypeResult>
 
 Returns the type of biometric authentication available on the device.
 
+If multiple biometric types are available, returns the highest priority type
+based on the following order: Face &gt; Iris &gt; Fingerprint.
+
 Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getbiometrictyperesult">GetBiometricTypeResult</a>&gt;</code>
