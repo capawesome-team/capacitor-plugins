@@ -7,7 +7,9 @@ import type {
   GetReadersResult,
   GetSettingsResult,
   InitializeOptions,
+  IsAppleAccountLinkedResult,
   IsAuthorizedResult,
+  IsDeviceCapableResult,
   IsPairingInProgressResult,
   PermissionStatus,
   RetryConnectionOptions,
@@ -84,6 +86,22 @@ export class SquareMobilePaymentsWeb
   }
 
   async getAvailableCardInputMethods(): Promise<GetAvailableCardInputMethodsResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async linkAppleAccount(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async relinkAppleAccount(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async isAppleAccountLinked(): Promise<IsAppleAccountLinkedResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async isDeviceCapable(): Promise<IsDeviceCapableResult> {
     throw this.unimplemented('Not implemented on web.');
   }
 

@@ -224,6 +224,10 @@ const getAvailableMethods = async () => {
 * [`startPayment(...)`](#startpayment)
 * [`cancelPayment()`](#cancelpayment)
 * [`getAvailableCardInputMethods()`](#getavailablecardinputmethods)
+* [`linkAppleAccount()`](#linkappleaccount)
+* [`relinkAppleAccount()`](#relinkappleaccount)
+* [`isAppleAccountLinked()`](#isappleaccountlinked)
+* [`isDeviceCapable()`](#isdevicecapable)
 * [`checkPermissions()`](#checkpermissions)
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('readerPairingDidBegin', ...)`](#addlistenerreaderpairingdidbegin-)
@@ -545,6 +549,76 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getavailablecardinputmethodsresult">GetAvailableCardInputMethodsResult</a>&gt;</code>
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### linkAppleAccount()
+
+```typescript
+linkAppleAccount() => Promise<void>
+```
+
+Link a Square seller account with an Apple ID for Tap to Pay on iPhone.
+
+Presents an Apple sheet prompting the user to accept the Tap to Pay
+on iPhone terms and conditions.
+
+Only available on iOS.
+
+**Since:** 0.1.3
+
+--------------------
+
+
+### relinkAppleAccount()
+
+```typescript
+relinkAppleAccount() => Promise<void>
+```
+
+Re-link a Square seller account with a different Apple ID.
+
+Presents an Apple sheet to change the associated Apple ID by
+showing the Tap to Pay terms and conditions again.
+
+Only available on iOS.
+
+**Since:** 0.1.3
+
+--------------------
+
+
+### isAppleAccountLinked()
+
+```typescript
+isAppleAccountLinked() => Promise<IsAppleAccountLinkedResult>
+```
+
+Check if an Apple ID is already linked to a Square seller account.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#isappleaccountlinkedresult">IsAppleAccountLinkedResult</a>&gt;</code>
+
+**Since:** 0.1.3
+
+--------------------
+
+
+### isDeviceCapable()
+
+```typescript
+isDeviceCapable() => Promise<IsDeviceCapableResult>
+```
+
+Check if the device is capable of Tap to Pay on iPhone.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#isdevicecapableresult">IsDeviceCapableResult</a>&gt;</code>
+
+**Since:** 0.1.3
 
 --------------------
 
@@ -948,6 +1022,20 @@ Only available on Android and iOS.
 | **`cardInputMethods`** | <code>CardInputMethod[]</code> | The available card input methods. | 0.0.1 |
 
 
+#### IsAppleAccountLinkedResult
+
+| Prop         | Type                 | Description                                                 | Since |
+| ------------ | -------------------- | ----------------------------------------------------------- | ----- |
+| **`linked`** | <code>boolean</code> | Whether an Apple ID is linked to the Square seller account. | 0.1.3 |
+
+
+#### IsDeviceCapableResult
+
+| Prop          | Type                 | Description                                            | Since |
+| ------------- | -------------------- | ------------------------------------------------------ | ----- |
+| **`capable`** | <code>boolean</code> | Whether the device is capable of Tap to Pay on iPhone. | 0.1.3 |
+
+
 #### PermissionStatus
 
 | Prop                   | Type                                                        | Description                                                                                                                                 | Since |
@@ -1167,6 +1255,7 @@ Callback to receive payment cancellation notifications.
 | **`ContactlessAndChip`** | <code>'CONTACTLESS_AND_CHIP'</code> | Square Reader for contactless and chip. | 0.0.1 |
 | **`Magstripe`**          | <code>'MAGSTRIPE'</code>            | Square Reader for magstripe.            | 0.0.1 |
 | **`Stand`**              | <code>'STAND'</code>                | Square Stand.                           | 0.0.1 |
+| **`TapToPay`**           | <code>'TAP_TO_PAY'</code>           | Tap to Pay on iPhone.                   | 0.1.3 |
 | **`Unknown`**            | <code>'UNKNOWN'</code>              | Unknown reader model.                   | 0.0.1 |
 
 
