@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`2deaf66b9819d478c9c03f3027adda50a3e4858e`](https://github.com/capawesome-team/capacitor-plugins/commit/2deaf66b9819d478c9c03f3027adda50a3e4858e) ([#755](https://github.com/capawesome-team/capacitor-plugins/pull/755)): feat(ios): add Tap to Pay account linking methods
+
 ## 0.1.2
 
 ### Patch Changes
