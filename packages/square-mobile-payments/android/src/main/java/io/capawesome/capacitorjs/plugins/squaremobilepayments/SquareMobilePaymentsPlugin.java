@@ -432,6 +432,26 @@ public class SquareMobilePaymentsPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void linkAppleAccount(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
+    public void relinkAppleAccount(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
+    public void isAppleAccountLinked(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
+    public void isDeviceCapable(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
     public void checkPermissions(PluginCall call) {
         super.checkPermissions(call);
     }
@@ -448,6 +468,10 @@ public class SquareMobilePaymentsPlugin extends Plugin {
         }
         Logger.error(TAG, message, exception);
         call.reject(message);
+    }
+
+    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
+        call.unimplemented("This method is not available on this platform.");
     }
 
     private void resolveCall(@NonNull PluginCall call) {

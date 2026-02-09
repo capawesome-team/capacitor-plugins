@@ -29,6 +29,10 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "startPayment", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "cancelPayment", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getAvailableCardInputMethods", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "linkAppleAccount", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "relinkAppleAccount", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isAppleAccountLinked", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isDeviceCapable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
     ]
@@ -280,6 +284,62 @@ public class SquareMobilePaymentsPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func getAvailableCardInputMethods(_ call: CAPPluginCall) {
         do {
             try implementation?.getAvailableCardInputMethods(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func linkAppleAccount(_ call: CAPPluginCall) {
+        do {
+            try implementation?.linkAppleAccount(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func relinkAppleAccount(_ call: CAPPluginCall) {
+        do {
+            try implementation?.relinkAppleAccount(completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func isAppleAccountLinked(_ call: CAPPluginCall) {
+        do {
+            try implementation?.isAppleAccountLinked(completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func isDeviceCapable(_ call: CAPPluginCall) {
+        do {
+            try implementation?.isDeviceCapable(completion: { result, error in
                 if let error = error {
                     self.rejectCall(call, error)
                 } else {
