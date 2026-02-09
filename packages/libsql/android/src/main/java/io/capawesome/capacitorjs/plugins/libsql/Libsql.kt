@@ -4,6 +4,7 @@ import io.capawesome.capacitorjs.plugins.libsql.classes.options.*
 import io.capawesome.capacitorjs.plugins.libsql.classes.results.*
 import io.capawesome.capacitorjs.plugins.libsql.interfaces.*
 import tech.turso.libsql.Database
+import tech.turso.libsql.EmbeddedReplicaDatabase
 import java.io.File
 import tech.turso.libsql.Connection as LibsqlConnection
 import java.util.concurrent.ConcurrentHashMap
@@ -181,14 +182,18 @@ class Libsql(private val plugin: LibsqlPlugin) {
     // START sync - Parity with iOS: packages/libsql/ios/Plugin/Libsql.swift
     // Syncs the embedded replica database with the remote Turso database.
     // Uses connectionId to look up the database (not connection) and calls database.sync().
+    // Note: sync() is only available on EmbeddedReplicaDatabase, not base Database class.
     @Throws(Exception::class)
     fun sync(options: SyncOptions, callback: EmptyCallback) {
         try {
             val database = databases[options.connectionId]
                 ?: throw Exception("Database not found: ${options.connectionId}")
 
-            // Sync is executed synchronously to mirror iOS behavior and libsql-android SDK semantics
-            database.sync()
+            // Cast to EmbeddedReplicaDatabase to access sync() method
+            val embeddedDb = database as? EmbeddedReplicaDatabase
+                ?: throw Exception("Sync is only available for embedded replica databases")
+
+            embeddedDb.sync()
             callback.success()
         } catch (exception: Exception) {
             callback.error(exception)
