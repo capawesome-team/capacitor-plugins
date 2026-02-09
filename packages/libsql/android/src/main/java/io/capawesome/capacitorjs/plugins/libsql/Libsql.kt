@@ -23,7 +23,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
             
             val database = when {
                 options.url != null && options.path != null -> {
-                    // Embedded replica mode
+                
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!,
@@ -31,18 +31,18 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     )
                 }
                 options.url != null -> {
-                    // Remote-only mode
+                
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!
                     )
                 }
                 options.path != null -> {
-                    // Local-only mode
+                
                     tech.turso.libsql.Libsql.open(path = resolvePath(options.path!!))
                 }
                 else -> {
-                    // In-memory database
+                    
                     tech.turso.libsql.Libsql.open(path = ":memory:")
                 }
             }
@@ -179,17 +179,14 @@ class Libsql(private val plugin: LibsqlPlugin) {
         }
     }
 
-    // START sync - Parity with iOS: packages/libsql/ios/Plugin/Libsql.swift
-    // Syncs the embedded replica database with the remote Turso database.
-    // Uses connectionId to look up the database (not connection) and calls database.sync().
-    // Note: sync() is only available on EmbeddedReplicaDatabase, not base Database class.
+    
     @Throws(Exception::class)
     fun sync(options: SyncOptions, callback: EmptyCallback) {
         try {
             val database = databases[options.connectionId]
                 ?: throw Exception("Database not found: ${options.connectionId}")
 
-            // Cast to EmbeddedReplicaDatabase to access sync() method
+    
             val embeddedDb = database as? EmbeddedReplicaDatabase
                 ?: throw Exception("Sync is only available for embedded replica databases")
 
@@ -199,7 +196,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
             callback.error(exception)
         }
     }
-    // END sync
+    
 
     private fun resolvePath(path: String): String {
         var file = File(path)

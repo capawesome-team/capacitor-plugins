@@ -185,8 +185,7 @@ public class LibsqlPlugin extends Plugin {
         }
     }
 
-    // START sync - Parity with iOS: packages/libsql/ios/Plugin/LibsqlPlugin.swift
-    // Syncs the embedded replica database with the remote Turso database.
+   
     @PluginMethod
     public void sync(PluginCall call) {
         try {
@@ -209,7 +208,7 @@ public class LibsqlPlugin extends Plugin {
             rejectCall(call, exception);
         }
     }
-    // END sync
+    
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
         String message = exception.getMessage();
