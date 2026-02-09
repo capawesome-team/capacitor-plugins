@@ -178,6 +178,24 @@ class Libsql(private val plugin: LibsqlPlugin) {
         }
     }
 
+    // START sync - Parity with iOS: packages/libsql/ios/Plugin/Libsql.swift
+    // Syncs the embedded replica database with the remote Turso database.
+    // Uses connectionId to look up the database (not connection) and calls database.sync().
+    @Throws(Exception::class)
+    fun sync(options: SyncOptions, callback: EmptyCallback) {
+        try {
+            val database = databases[options.connectionId]
+                ?: throw Exception("Database not found: ${options.connectionId}")
+
+            // Sync is executed synchronously to mirror iOS behavior and libsql-android SDK semantics
+            database.sync()
+            callback.success()
+        } catch (exception: Exception) {
+            callback.error(exception)
+        }
+    }
+    // END sync
+
     private fun resolvePath(path: String): String {
         var file = File(path)
         if (!file.isAbsolute) {
