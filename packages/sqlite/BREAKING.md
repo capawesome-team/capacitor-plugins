@@ -4,7 +4,17 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 0.3.x](#version-03x)
 - [Version 0.2.x](#version-02x)
+
+## Version 0.3.x
+
+### `@sqlite.org/sqlite-wasm`
+
+The minimum required version of `@sqlite.org/sqlite-wasm` is now `3.51.2-build2`. This version includes a new distribution structure that requires the following changes:
+
+- The asset input path has changed from `node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm/` to `node_modules/@sqlite.org/sqlite-wasm/dist/`.
+- The worker file has been renamed from `sqlite3-worker1-bundler-friendly.mjs` to `sqlite3-worker1.mjs`.
 
 ## Version 0.2.x
 
