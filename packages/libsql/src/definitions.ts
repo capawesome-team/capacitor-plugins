@@ -9,7 +9,6 @@ export interface LibsqlPlugin {
   beginTransaction(
     options: BeginTransactionOptions,
   ): Promise<BeginTransactionResult>;
-
   /**
    * Commit the current transaction on the specified database connection.
    *
@@ -18,7 +17,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   commitTransaction(options: CommitTransactionOptions): Promise<void>;
-
   /**
    * Connect to a database.
    *
@@ -27,7 +25,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   connect(options: ConnectOptions): Promise<ConnectResult>;
-
   /**
    * Execute a single SQL statement on the specified database connection.
    *
@@ -37,7 +34,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   execute(options: ExecuteOptions): Promise<void>;
-
   /**
    * Execute a batch of SQL statements on the specified database connection.
    *
@@ -46,7 +42,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   executeBatch(options: ExecuteBatchOptions): Promise<void>;
-
   /**
    * Query the database and return the result set.
    *
@@ -56,7 +51,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   query(options: QueryOptions): Promise<QueryResult>;
-
   /**
    * Rollback the current transaction on the specified database connection.
    *
@@ -67,7 +61,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   rollbackTransaction(options: RollbackTransactionOptions): Promise<void>;
-
   /**
    * Synchronize the database with the remote server.
    *
@@ -112,7 +105,6 @@ export interface CommitTransactionOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The ID of the transaction to commit.
    *
@@ -132,7 +124,6 @@ export interface ConnectOptions {
    * @since 0.0.0
    */
   authToken?: string;
-
   /**
    * The path to the database file.
    *
@@ -146,7 +137,6 @@ export interface ConnectOptions {
    * @example '/data/user/0/com.example.plugin/cache/data.db'
    */
   path?: string;
-
   /**
    * The URL of the database.
    *
@@ -191,7 +181,6 @@ export interface ExecuteOptions {
    * @example 'INSERT INTO users (name, age) VALUES (?, ?)'
    */
   statement: string;
-
   /**
    * The transaction ID to use for the SQL statement.
    *
@@ -200,7 +189,6 @@ export interface ExecuteOptions {
    * @since 0.0.0
    */
   transactionId?: string;
-
   /**
    * The values to bind to the SQL statement.
    *
@@ -220,7 +208,6 @@ export interface ExecuteBatchOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statements to execute in the batch.
    *
@@ -231,7 +218,6 @@ export interface ExecuteBatchOptions {
    * ]
    */
   statement: string[];
-
   /**
    * The values to bind to the SQL statements.
    *
@@ -250,7 +236,6 @@ export interface QueryOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statement to execute.
    *
@@ -258,7 +243,6 @@ export interface QueryOptions {
    * @example 'SELECT name, age FROM users WHERE age > ?'
    */
   statement: string;
-
   /**
    * The transaction ID to use for the query.
    *
@@ -267,7 +251,6 @@ export interface QueryOptions {
    * @since 0.0.0
    */
   transactionId?: string;
-
   /**
    * The values to bind to the SQL statement.
    *
@@ -300,7 +283,6 @@ export interface RollbackTransactionOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The ID of the transaction to rollback.
    *
