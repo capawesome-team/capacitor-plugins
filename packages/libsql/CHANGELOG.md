@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- [`0150c933d6c0765cf1192e415341c9a9a6be7739`](https://github.com/capawesome-team/capacitor-plugins/commit/0150c933d6c0765cf1192e415341c9a9a6be7739) ([#763](https://github.com/capawesome-team/capacitor-plugins/pull/763)): feat(android): support `sync()` method
+
 ## 0.2.0
 
 ### Minor Changes
