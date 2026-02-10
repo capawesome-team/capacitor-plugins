@@ -273,7 +273,7 @@ sync(options: SyncOptions) => Promise<void>
 
 Synchronize the database with the remote server.
 
-Available on iOS and Android .
+Available on iOS and Android (embedded replica databases only).
 
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
