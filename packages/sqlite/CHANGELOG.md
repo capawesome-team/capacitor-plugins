@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`cf5f5f61248658fbf8bfe368453410fce6e35af7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cf5f5f61248658fbf8bfe368453410fce6e35af7) ([#395](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/395)): feat(web)!: update `@sqlite.org/sqlite-wasm` version to `>=3.51.2-build2`
+
+- [`9344d09da941003be0894c8df52160b5382c1da7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9344d09da941003be0894c8df52160b5382c1da7) ([#376](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/376)): feat!: add electron support
+
 ## 0.2.0
 
 ### Minor Changes
