@@ -9,6 +9,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Version 0.3.x
 
+### Electron Native Support
+
+The plugin now uses native SQLite for Electron via the `node:sqlite` module. This change improves performance and reliability when using the plugin in Electron applications. Please note that this change may require you to migrate your existing databases if you were previously using the web implementation which relied on SQLite WASM and OPFS (Origin Private File System).
+
 ### `@sqlite.org/sqlite-wasm`
 
 The minimum required version of `@sqlite.org/sqlite-wasm` is now `3.51.2-build2`. This version includes a new distribution structure that requires the following changes:
