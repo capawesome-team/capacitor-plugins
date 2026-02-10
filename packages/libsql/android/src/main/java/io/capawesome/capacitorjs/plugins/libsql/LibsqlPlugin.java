@@ -185,7 +185,6 @@ public class LibsqlPlugin extends Plugin {
         }
     }
 
-   
     @PluginMethod
     public void sync(PluginCall call) {
         try {
@@ -208,7 +207,6 @@ public class LibsqlPlugin extends Plugin {
             rejectCall(call, exception);
         }
     }
-    
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {
         String message = exception.getMessage();
