@@ -9,7 +9,6 @@ export interface LibsqlPlugin {
   beginTransaction(
     options: BeginTransactionOptions,
   ): Promise<BeginTransactionResult>;
-
   /**
    * Commit the current transaction on the specified database connection.
    *
@@ -18,7 +17,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   commitTransaction(options: CommitTransactionOptions): Promise<void>;
-
   /**
    * Connect to a database.
    *
@@ -27,7 +25,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   connect(options: ConnectOptions): Promise<ConnectResult>;
-
   /**
    * Execute a single SQL statement on the specified database connection.
    *
@@ -37,7 +34,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   execute(options: ExecuteOptions): Promise<void>;
-
   /**
    * Execute a batch of SQL statements on the specified database connection.
    *
@@ -46,7 +42,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   executeBatch(options: ExecuteBatchOptions): Promise<void>;
-
   /**
    * Query the database and return the result set.
    *
@@ -56,7 +51,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   query(options: QueryOptions): Promise<QueryResult>;
-
   /**
    * Rollback the current transaction on the specified database connection.
    *
@@ -67,7 +61,6 @@ export interface LibsqlPlugin {
    * @since 0.0.0
    */
   rollbackTransaction(options: RollbackTransactionOptions): Promise<void>;
-
   /**
    * Synchronize the database with the remote server.
    *
@@ -183,7 +176,6 @@ export interface ExecuteOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statement to execute.
    *
@@ -191,7 +183,6 @@ export interface ExecuteOptions {
    * @example 'INSERT INTO users (name, age) VALUES (?, ?)'
    */
   statement: string;
-
   /**
    * The transaction ID to use for the SQL statement.
    *
@@ -200,7 +191,6 @@ export interface ExecuteOptions {
    * @since 0.0.0
    */
   transactionId?: string;
-
   /**
    * The values to bind to the SQL statement.
    *
