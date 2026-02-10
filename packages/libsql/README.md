@@ -191,7 +191,7 @@ execute(options: ExecuteOptions) => Promise<void>
 
 Execute a single SQL statement on the specified database connection.
 
-This method can be used to execute any SQL statement, including
+This method can be used to execute any SQL statement, including 
 `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
 
 | Param         | Type                                                      |
@@ -230,7 +230,7 @@ query(options: QueryOptions) => Promise<QueryResult>
 
 Query the database and return the result set.
 
-This method can be used to execute `SELECT` statements
+This method can be used to execute `SELECT` statements 
 and retrieve the result set.
 
 | Param         | Type                                                  |
