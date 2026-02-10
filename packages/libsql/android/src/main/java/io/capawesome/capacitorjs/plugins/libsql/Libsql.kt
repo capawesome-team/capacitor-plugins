@@ -4,6 +4,7 @@ import io.capawesome.capacitorjs.plugins.libsql.classes.options.*
 import io.capawesome.capacitorjs.plugins.libsql.classes.results.*
 import io.capawesome.capacitorjs.plugins.libsql.interfaces.*
 import tech.turso.libsql.Database
+import tech.turso.libsql.EmbeddedReplicaDatabase
 import java.io.File
 import tech.turso.libsql.Connection as LibsqlConnection
 import java.util.concurrent.ConcurrentHashMap
@@ -22,7 +23,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
             
             val database = when {
                 options.url != null && options.path != null -> {
-                    // Embedded replica mode
+                 // Embedded replica mode
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!,
@@ -30,18 +31,18 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     )
                 }
                 options.url != null -> {
-                    // Remote-only mode
+                 // Remote-only mode
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!
                     )
                 }
                 options.path != null -> {
-                    // Local-only mode
+                 // Local-only mode
                     tech.turso.libsql.Libsql.open(path = resolvePath(options.path!!))
                 }
                 else -> {
-                    // In-memory database
+                // In-memory database
                     tech.turso.libsql.Libsql.open(path = ":memory:")
                 }
             }
@@ -177,6 +178,25 @@ class Libsql(private val plugin: LibsqlPlugin) {
             callback.error(exception)
         }
     }
+
+    
+    @Throws(Exception::class)
+    fun sync(options: SyncOptions, callback: EmptyCallback) {
+        try {
+            val database = databases[options.connectionId]
+                ?: throw Exception("Database not found: ${options.connectionId}")
+
+    
+            val embeddedDb = database as? EmbeddedReplicaDatabase
+                ?: throw Exception("Sync is only available for embedded replica databases")
+
+            embeddedDb.sync()
+            callback.success()
+        } catch (exception: Exception) {
+            callback.error(exception)
+        }
+    }
+    
 
     private fun resolvePath(path: String): String {
         var file = File(path)

@@ -28,7 +28,8 @@ export interface LibsqlPlugin {
   /**
    * Execute a single SQL statement on the specified database connection.
    *
-   * This method can be used to execute any SQL statement, including `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
+   * This method can be used to execute any SQL statement, including
+   * `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
    *
    * @since 0.0.0
    */
@@ -44,7 +45,8 @@ export interface LibsqlPlugin {
   /**
    * Query the database and return the result set.
    *
-   * This method can be used to execute `SELECT` statements and retrieve the result set.
+   * This method can be used to execute `SELECT` statements
+   * and retrieve the result set.
    *
    * @since 0.0.0
    */
@@ -62,7 +64,7 @@ export interface LibsqlPlugin {
   /**
    * Synchronize the database with the remote server.
    *
-   * Only available on iOS.
+   * Available on iOS and Android.
    *
    * @since 0.0.0
    */
@@ -116,7 +118,8 @@ export interface ConnectOptions {
    * The authentication token for the database.
    *
    * This is required for connecting to a remote database.
-   * If the database is local (i.e., a file on the device), this can be omitted.
+   * If the database is local (i.e., a file on the device),
+   * this can be omitted.
    *
    * @since 0.0.0
    */
@@ -124,9 +127,11 @@ export interface ConnectOptions {
   /**
    * The path to the database file.
    *
-   * If no path or URL is provided, the plugin will create a new in-memory database.
+   * If no path or URL is provided, the plugin will create
+   * a new in-memory database.
    *
-   * If no file exists at the specified path, a new file will be created.
+   * If no file exists at the specified path,
+   * a new file will be created.
    *
    * @since 0.0.0
    * @example '/data/user/0/com.example.plugin/cache/data.db'
@@ -138,7 +143,8 @@ export interface ConnectOptions {
    * This can be used to connect to a remote database.
    * If the URL is provided, the `authToken` must also be provided.
    *
-   * If no path or URL is provided, the plugin will create a new in-memory database.
+   * If no path or URL is provided, the plugin will create
+   * a new in-memory database.
    *
    * @since 0.0.0
    */
@@ -205,13 +211,14 @@ export interface ExecuteBatchOptions {
    * The SQL statements to execute in the batch.
    *
    * @since 0.0.0
-   * @example ['INSERT INTO users (name, age) VALUES (?, ?)', 'UPDATE users SET age = ? WHERE name = ?']
+   * @example [
+   *   'INSERT INTO users (name, age) VALUES (?, ?)',
+   *   'UPDATE users SET age = ? WHERE name = ?'
+   * ]
    */
   statement: string[];
   /**
-   * The transaction ID to use for the batch.
-   *
-   * Only available on Android.
+   * The values to bind to the SQL statements.
    *
    * @since 0.0.0
    */

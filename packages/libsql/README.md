@@ -191,7 +191,8 @@ execute(options: ExecuteOptions) => Promise<void>
 
 Execute a single SQL statement on the specified database connection.
 
-This method can be used to execute any SQL statement, including `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
+This method can be used to execute any SQL statement, including
+`INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
@@ -229,7 +230,8 @@ query(options: QueryOptions) => Promise<QueryResult>
 
 Query the database and return the result set.
 
-This method can be used to execute `SELECT` statements and retrieve the result set.
+This method can be used to execute `SELECT` statements
+and retrieve the result set.
 
 | Param         | Type                                                  |
 | ------------- | ----------------------------------------------------- |
@@ -271,7 +273,7 @@ sync(options: SyncOptions) => Promise<void>
 
 Synchronize the database with the remote server.
 
-Only available on iOS.
+Available on iOS and Android.
 
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
@@ -335,11 +337,11 @@ Only available on iOS.
 
 #### ExecuteBatchOptions
 
-| Prop               | Type                   | Description                                                         | Since |
-| ------------------ | ---------------------- | ------------------------------------------------------------------- | ----- |
-| **`connectionId`** | <code>string</code>    | The ID of the connection to execute the batch on.                   | 0.0.0 |
-| **`statement`**    | <code>string[]</code>  | The SQL statements to execute in the batch.                         | 0.0.0 |
-| **`values`**       | <code>Value[][]</code> | The transaction ID to use for the batch. Only available on Android. | 0.0.0 |
+| Prop               | Type                   | Description                                       | Since |
+| ------------------ | ---------------------- | ------------------------------------------------- | ----- |
+| **`connectionId`** | <code>string</code>    | The ID of the connection to execute the batch on. | 0.0.0 |
+| **`statement`**    | <code>string[]</code>  | The SQL statements to execute in the batch.       | 0.0.0 |
+| **`values`**       | <code>Value[][]</code> | The values to bind to the SQL statements.         | 0.0.0 |
 
 
 #### QueryResult
