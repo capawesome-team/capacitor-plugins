@@ -12,7 +12,7 @@ Capacitor plugin to access SQLite databases with support for encryption, transac
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins to access SQLite databases. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
 - 📖 **Read-only mode**: Open databases in read-only mode to prevent modifications.
 - 📂 **File-based**: Open existing databases or create new ones with a file path.
@@ -23,6 +23,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔢 **Data Types**: Supports all SQLite data types: `NULL`, `INTEGER`, `REAL`, `TEXT`, and `BLOB`.
 - 🛡️ **Prepared Statements**: Uses prepared statements to prevent SQL injection attacks.
 - 🕸️ **SQLite WASM**: Uses SQLite WebAssembly for web platform support.
+- ⚛️ **Electron Native**: Uses native SQLite for Electron via the `node:sqlite` module.
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
 - 🗃️ **ORM Support**: Works with popular ORMs like TypeORM, Drizzle, and Kysely.
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
@@ -204,6 +205,40 @@ export default defineConfig({
     },
   },
 });
+```
+
+### Electron
+
+This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 33+).
+
+#### Database Storage
+
+By default, databases are stored directly in Electron's `userData` directory:
+
+- **Windows**: `%APPDATA%\YourAppName\`
+- **macOS**: `~/Library/Application Support/YourAppName/`
+- **Linux**: `~/.config/YourAppName/`
+
+You can organize databases into subfolders by including the subfolder path in the `path` parameter:
+
+```typescript
+// Open database directly in userData directory
+const { databaseId } = await Sqlite.open({
+  path: 'mydb.db'
+});
+
+// Open database in a subfolder
+const { databaseId } = await Sqlite.open({
+  path: 'app/mydb.db'
+});
+
+// Open database from absolute path
+const { databaseId } = await Sqlite.open({
+  path: '/Users/username/Databases/MyApp/mydb.db'
+});
+
+// Open in-memory database
+const { databaseId } = await Sqlite.open();
 ```
 
 ## Configuration
@@ -513,8 +548,6 @@ Rollback the current transaction on the specified database.
 
 This method will undo all changes made in the current transaction.
 
-Only available on Android.
-
 | Param         | Type                                                                              |
 | ------------- | --------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#rollbacktransactionoptions">RollbackTransactionOptions</a></code> |
@@ -718,6 +751,13 @@ The iOS implementation of this plugin has the following limitations:
 The web implementation of this plugin has the following limitations:
 
 - **BLOBs**: Arrays of numbers (BLOBs) are not supported. You can only use strings, numbers, and `null` as values in SQL statements.
+
+### Electron
+
+The Electron implementation of this plugin has the following limitations:
+
+- **Encryption**: Database encryption is not supported.
+- **Node.js version**: Requires Node.js 22.5.0 or later (Electron 33+) to use the native `node:sqlite` module.
 
 ## Troubleshooting
 
