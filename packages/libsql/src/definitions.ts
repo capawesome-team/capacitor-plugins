@@ -276,7 +276,6 @@ export interface RollbackTransactionOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The ID of the transaction to rollback.
    *
