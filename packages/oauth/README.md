@@ -32,6 +32,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 0.1.x          | >=8.x.x           | Active support |
 
+## Demo
+
+| Android                                                                                                                                            | iOS                                                                                                                                            | Web |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| <img src="https://github.com/user-attachments/assets/95ec6fe8-ba1d-4be0-898d-6b63a9170347" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/0f06193f-15c5-4c72-a3dd-ada5163ce3eb" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/267c8536-2c83-455a-ab8f-76ed99011ba1" width="266" alt="Web Demo" /> |
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/).
