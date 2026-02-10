@@ -23,7 +23,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
             
             val database = when {
                 options.url != null && options.path != null -> {
-                
+                 // Embedded replica mode
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!,
@@ -31,6 +31,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     )
                 }
                 options.url != null -> {
+                    // Remote-only mode
                 
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
@@ -38,11 +39,11 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     )
                 }
                 options.path != null -> {
-                
+                 // Local-only mode
                     tech.turso.libsql.Libsql.open(path = resolvePath(options.path!!))
                 }
                 else -> {
-                    
+                  // In-memory database
                     tech.turso.libsql.Libsql.open(path = ":memory:")
                 }
             }
