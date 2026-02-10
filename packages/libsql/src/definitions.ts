@@ -28,7 +28,7 @@ export interface LibsqlPlugin {
   /**
    * Execute a single SQL statement on the specified database connection.
    *
-   * This method can be used to execute any SQL statement, including
+   * This method can be used to execute any SQL statement, including 
    * `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
    *
    * @since 0.0.0
@@ -45,7 +45,7 @@ export interface LibsqlPlugin {
   /**
    * Query the database and return the result set.
    *
-   * This method can be used to execute `SELECT` statements
+   * This method can be used to execute `SELECT` statements 
    * and retrieve the result set.
    *
    * @since 0.0.0
@@ -118,7 +118,7 @@ export interface ConnectOptions {
    * The authentication token for the database.
    *
    * This is required for connecting to a remote database.
-   * If the database is local (i.e., a file on the device),
+   * If the database is local (i.e., a file on the device), 
    * this can be omitted.
    *
    * @since 0.0.0
@@ -127,10 +127,10 @@ export interface ConnectOptions {
   /**
    * The path to the database file.
    *
-   * If no path or URL is provided, the plugin will create
+   * If no path or URL is provided, the plugin will create 
    * a new in-memory database.
    *
-   * If no file exists at the specified path,
+   * If no file exists at the specified path, 
    * a new file will be created.
    *
    * @since 0.0.0
@@ -143,7 +143,7 @@ export interface ConnectOptions {
    * This can be used to connect to a remote database.
    * If the URL is provided, the `authToken` must also be provided.
    *
-   * If no path or URL is provided, the plugin will create
+   * If no path or URL is provided, the plugin will create 
    * a new in-memory database.
    *
    * @since 0.0.0
