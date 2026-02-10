@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`4f5b2b70f2b3407f1b6488a3f246219d24428a6f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4f5b2b70f2b3407f1b6488a3f246219d24428a6f) ([#393](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/393)): fix(ios): call completion callback in `stopAdvertising`
+
 ## 8.0.2
 
 ### Patch Changes
