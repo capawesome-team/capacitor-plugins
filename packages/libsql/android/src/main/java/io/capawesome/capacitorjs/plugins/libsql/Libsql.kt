@@ -31,8 +31,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     )
                 }
                 options.url != null -> {
-                    // Remote-only mode
-                
+                 // Remote-only mode
                     tech.turso.libsql.Libsql.open(
                         url = options.url!!,
                         authToken = options.authToken!!
@@ -43,7 +42,7 @@ class Libsql(private val plugin: LibsqlPlugin) {
                     tech.turso.libsql.Libsql.open(path = resolvePath(options.path!!))
                 }
                 else -> {
-                  // In-memory database
+                // In-memory database
                     tech.turso.libsql.Libsql.open(path = ":memory:")
                 }
             }

@@ -64,7 +64,7 @@ export interface LibsqlPlugin {
   /**
    * Synchronize the database with the remote server.
    *
-   * Available on iOS and Android (embedded replica databases only).
+   * Available on iOS and Android.
    *
    * @since 0.0.0
    */
