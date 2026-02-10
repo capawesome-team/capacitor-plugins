@@ -38,6 +38,7 @@ body:
         - label: Managed Configurations
         - label: Media Session
         - label: NFC
+        - label: OAuth
         - label: Pedometer
         - label: Photo Editor
         - label: Posthog
