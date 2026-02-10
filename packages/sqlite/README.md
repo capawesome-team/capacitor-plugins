@@ -37,7 +37,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.2.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Deprecated     |
 | 0.1.x          | 7.x.x             | Deprecated     |
 
 ## Guides
@@ -64,11 +65,9 @@ npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 Next, install the package:
 
 ```
-npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm@3.50.3-build1
+npm install @capawesome-team/capacitor-sqlite @sqlite.org/sqlite-wasm
 npx cap sync
 ```
-
-**Attention**: Make sure to install version `3.50.3-build1` of `@sqlite.org/sqlite-wasm` to ensure compatibility with this plugin since version `3.50.4-build1` contains a bug that prevents the plugin from working correctly on the web platform (see [sqlite/sqlite-wasm/#123](https://github.com/sqlite/sqlite-wasm/issues/123)).
 
 ### Android
 
@@ -150,7 +149,7 @@ If you are using Angular, you need to add the following configuration to your `a
             "assets": [
 +              {
 +                "glob": "**/*",
-+                "input": "node_modules/@sqlite.org/sqlite-wasm/sqlite-wasm/jswasm/",
++                "input": "node_modules/@sqlite.org/sqlite-wasm/dist/",
 +                "output": "/assets/sqlite-wasm/"
 +              }
             ]
@@ -181,7 +180,7 @@ const initialize = async () => {
   if (isWeb) {
     // Initialize the SQLite WASM module
     await Sqlite.initialize({
-      worker: new Worker('/assets/sqlite-wasm/sqlite3-worker1-bundler-friendly.mjs', { type: 'module' })
+      worker: new Worker('/assets/sqlite-wasm/sqlite3-worker1.mjs', { type: 'module' })
     });
   }
 };
