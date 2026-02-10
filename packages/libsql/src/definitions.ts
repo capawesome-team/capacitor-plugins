@@ -71,7 +71,7 @@ export interface LibsqlPlugin {
   /**
    * Synchronize the database with the remote server.
    *
-   * Available on iOS and Android .
+   * Available on iOS and Android (embedded replica databases only).
    *
    * @since 0.0.0
    */
@@ -225,10 +225,6 @@ export interface ExecuteBatchOptions {
    * The SQL statements to execute in the batch.
    *
    * @since 0.0.0
-   * @example [
-   *   'INSERT INTO users (name, age) VALUES (?, ?)',
-   *   'UPDATE users SET age = ? WHERE name = ?'
-   * ]
    */
   statement: string[];
 
@@ -272,7 +268,6 @@ export interface QueryOptions {
    * The values to bind to the SQL statement.
    *
    * @since 0.0.0
-   * @example ['Alice', 30]
    */
   values?: Value[];
 }
@@ -285,7 +280,6 @@ export interface QueryResult {
    * The values returned by the query.
    *
    * @since 0.0.0
-   * @example [['Alice', 30], ['Bob', 25]]
    */
   rows: Value[][];
 }
