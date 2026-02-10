@@ -105,7 +105,6 @@ export interface CommitTransactionOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The ID of the transaction to commit.
    *
@@ -125,7 +124,6 @@ export interface ConnectOptions {
    * @since 0.0.0
    */
   authToken?: string;
-
   /**
    * The path to the database file.
    *
@@ -139,7 +137,6 @@ export interface ConnectOptions {
    * @example '/data/user/0/com.example.plugin/cache/data.db'
    */
   path?: string;
-
   /**
    * The URL of the database.
    *
@@ -210,14 +207,12 @@ export interface ExecuteBatchOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statements to execute in the batch.
    *
    * @since 0.0.0
    */
   statement: string[];
-
   /**
    * The values to bind to the SQL statements.
    *
@@ -236,7 +231,6 @@ export interface QueryOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statement to execute.
    *
@@ -244,7 +238,6 @@ export interface QueryOptions {
    * @example 'SELECT name, age FROM users WHERE age > ?'
    */
   statement: string;
-
   /**
    * The transaction ID to use for the query.
    *
@@ -253,7 +246,6 @@ export interface QueryOptions {
    * @since 0.0.0
    */
   transactionId?: string;
-
   /**
    * The values to bind to the SQL statement.
    *
