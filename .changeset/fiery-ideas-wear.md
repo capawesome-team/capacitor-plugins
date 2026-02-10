@@ -1,5 +1,6 @@
 ---
-'@capawesome/capacitor-libsql': patch
+"@capawesome/capacitor-libsql": minor
 ---
 
-Add Android sync support for embedded replica databases
+feat(android): support sync() method
+
