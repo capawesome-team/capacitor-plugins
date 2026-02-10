@@ -173,7 +173,6 @@ export interface ExecuteOptions {
    * @since 0.0.0
    */
   connectionId: string;
-
   /**
    * The SQL statement to execute.
    *
