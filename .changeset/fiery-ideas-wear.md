@@ -1,6 +1,6 @@
 ---
-"@capawesome/capacitor-libsql": minor
+"@capawesome/capacitor-libsql": patch
 ---
 
-feat(android): support sync() method
+feat(android): support `sync()` method
 
