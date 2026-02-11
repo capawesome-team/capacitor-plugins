@@ -430,7 +430,7 @@ export interface DownloadBundleOptions {
   bundleId: string;
   /**
    * The checksum of the self-hosted bundle as a SHA-256 hash
-   * in base64 format to verify the integrity of the bundle.
+   * in hex format to verify the integrity of the bundle.
    *
    * **Attention**: Only supported for the `zip` artifact type.
    *
@@ -456,7 +456,7 @@ export interface DownloadBundleOptions {
    * with the href `index.html` from `https://example.com/download?href=index.html`.
    *
    * To **verify the integrity** of the file, the server should return
-   * a `X-Checksum` header with the SHA-256 hash in base64 format.
+   * a `X-Checksum` header with the SHA-256 hash in hex format.
    *
    * To **verify the signature** of the file, the server should return
    * a `X-Signature` header with the signed SHA-256 hash in base64 format.
