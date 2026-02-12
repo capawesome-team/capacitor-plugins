@@ -13,9 +13,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
-    "@capacitor/camera": "latest",
-    "@capacitor/splash-screen": "latest",
+    "@capacitor/core": "8.0.0",
     "@capawesome/capacitor-google-sign-in": "file:..",
     "@capacitor/ios": "8.0.0",
     "@capacitor/android": "8.0.0"
