@@ -18,6 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔍 **Auto-discovery**: Automatically fetches endpoints via OpenID Connect discovery.
 - 🔄 **Token Refresh**: Refresh access tokens using a refresh token.
 - 🪪 **JWT Decoding**: Decode JWT ID tokens without verification.
+- 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin to securely store tokens.
 - 📦 **SPM**: Supports Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
