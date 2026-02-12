@@ -17,8 +17,9 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🌐 **WebView OAuth**: Implements Apple OAuth flow on Android without external dependencies.
 - 📧 **Scope support**: Request email and full name on all platforms.
 - 🔐 **Nonce & state**: Supports nonce for replay protection and state for CSRF protection.
+- 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
 - 🤝 **Compatibility**: Compatible with the [Google Sign-In](https://capawesome.io/plugins/google-sign-in) and [OAuth](https://capawesome.io/plugins/oauth) plugins.
-- 📦 **SPM & CocoaPods**: Supports Swift Package Manager and CocoaPods for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
