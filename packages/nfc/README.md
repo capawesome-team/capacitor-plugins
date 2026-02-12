@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 500 projects.
 - 📚 **Documentation**: Comprehensive documentation to help you get started.
-📦  **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
