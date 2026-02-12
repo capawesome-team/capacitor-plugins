@@ -1,6 +1,18 @@
-import { AppleSignIn } from '@capawesome/capacitor-apple-sign-in';
+import { AppleSignIn, SignInScope } from '@capawesome/capacitor-apple-sign-in';
 
-window.testEcho = () => {
-    const inputValue = document.getElementById("echoInput").value;
-    AppleSignIn.echo({ value: inputValue })
-}
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelector('#initialize').addEventListener('click', async () => {
+    await AppleSignIn.initialize({
+      clientId: 'com.example.app.signin',
+    });
+  });
+  document.querySelector('#sign-in').addEventListener('click', async () => {
+    const result = await AppleSignIn.signIn({
+      scopes: [SignInScope.Email, SignInScope.FullName],
+      redirectUrl: 'https://example.com/callback',
+      nonce: 'dummy-nonce',
+      state: 'dummy-state',
+    });
+    alert(JSON.stringify(result, null, 2));
+  });
+});

@@ -14,6 +14,10 @@
 		50ADFF97201F53D600D50D53 /* AppleSignInTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* AppleSignInTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50E1A94820377CB70090CE1A /* AppleSignInPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* AppleSignInPlugin.swift */; };
+		A1B2C3D400000001000000AA /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000001000000AB /* Result.swift */; };
+		A1B2C3D400000002000000AA /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000002000000AB /* CustomError.swift */; };
+		A1B2C3D400000003000000AA /* SignInOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000003000000AB /* SignInOptions.swift */; };
+		A1B2C3D400000004000000AA /* SignInResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D400000004000000AB /* SignInResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		50ADFF98201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E1A94720377CB70090CE1A /* AppleSignInPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleSignInPlugin.swift; sourceTree = "<group>"; };
+		A1B2C3D400000001000000AB /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		A1B2C3D400000002000000AB /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
+		A1B2C3D400000003000000AB /* SignInOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInOptions.swift; sourceTree = "<group>"; };
+		A1B2C3D400000004000000AB /* SignInResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResult.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -90,9 +98,53 @@
 			children = (
 				50E1A94720377CB70090CE1A /* AppleSignInPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* AppleSignIn.swift */,
+				A1B2C3D400000010000000CC /* Classes */,
+				A1B2C3D400000011000000CC /* Enums */,
+				A1B2C3D400000012000000CC /* Protocols */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
+			sourceTree = "<group>";
+		};
+		A1B2C3D400000010000000CC /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D400000013000000CC /* Options */,
+				A1B2C3D400000014000000CC /* Results */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		A1B2C3D400000013000000CC /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D400000003000000AB /* SignInOptions.swift */,
+			);
+			path = Options;
+			sourceTree = "<group>";
+		};
+		A1B2C3D400000014000000CC /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D400000004000000AB /* SignInResult.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		A1B2C3D400000011000000CC /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D400000002000000AB /* CustomError.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		A1B2C3D400000012000000CC /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D400000001000000AB /* Result.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		50ADFF95201F53D600D50D53 /* PluginTests */ = {
@@ -301,6 +353,10 @@
 			files = (
 				50E1A94820377CB70090CE1A /* AppleSignInPlugin.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* AppleSignIn.swift in Sources */,
+				A1B2C3D400000001000000AA /* Result.swift in Sources */,
+				A1B2C3D400000002000000AA /* CustomError.swift in Sources */,
+				A1B2C3D400000003000000AA /* SignInOptions.swift in Sources */,
+				A1B2C3D400000004000000AA /* SignInResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,7 +434,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -438,7 +494,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -461,7 +517,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
@@ -487,7 +543,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Plugin/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;

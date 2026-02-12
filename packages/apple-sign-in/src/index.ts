@@ -1,10 +1,10 @@
-import { registerPlugin } from "@capacitor/core";
+import { registerPlugin } from '@capacitor/core';
 
-import type { AppleSignInPlugin } from "./definitions";
+import type { AppleSignInPlugin } from './definitions';
 
-const AppleSignIn = registerPlugin<AppleSignInPlugin>("AppleSignIn", {
-  web: () => import("./web").then((m) => new m.AppleSignInWeb()),
+const AppleSignIn = registerPlugin<AppleSignInPlugin>('AppleSignIn', {
+  web: () => import('./web').then(m => new m.AppleSignInWeb()),
 });
 
-export * from "./definitions";
+export * from './definitions';
 export { AppleSignIn };
