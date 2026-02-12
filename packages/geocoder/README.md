@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🌍 **Localization**: Customize the locale for geocoding requests.
 - 🔢 **Configurable Results**: Limit the number of addresses returned in reverse geocoding operations.
 - 🛠️ **Native APIs**: Uses platform-native geocoding services on Android and iOS for reliable and accurate results.
-📦  **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
