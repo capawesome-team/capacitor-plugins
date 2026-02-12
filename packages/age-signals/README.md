@@ -21,7 +21,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 👨‍👩‍👧‍👦 **Parental Controls**: Support for supervised accounts with parental approval status.
 - 🧪 **Testing Support**: Built-in `FakeAgeSignalsManager` integration for testing different age verification scenarios (Android).
 - 🌍 **Compliance Ready**: Built for US state age verification requirements (effective January 1, 2026).
-- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
