@@ -20,7 +20,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📍 **Position State**: Track and display playback position, duration, and playback rate.
 - 🔧 **Native APIs**: Uses MediaSession API on Android and MPNowPlayingInfoCenter on iOS for the best possible integration.
 - 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/) plugin.
-- 📦 **SPM**: Supports Swift Package Manager for iOS.
+📦  **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
@@ -72,8 +72,8 @@ If needed, you can define the following project variable in your app’s `variab
 
 These configuration options are available:
 
-| Prop          | Type     | Description                                                                                                                                                                                                                                                | Default            | Since  |
-| ------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ------ |
+| Prop          | Type     | Description                                                                                                                                                                                                                                               | Default           | Since |
+| ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
 | **smallIcon** | `string` | The name of the drawable resource to use as the small icon in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_play"` | 8.1.0 |
 
 ### Examples
