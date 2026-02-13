@@ -25,6 +25,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🕸️ **SQLite WASM**: Uses SQLite WebAssembly for web platform support.
 - ⚛️ **Electron Native**: Uses native SQLite for Electron via the `node:sqlite` module.
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
+- 🗄️ **Key-Value Store**: Built-in key-value store for simple data persistence without SQL.
 - 🗃️ **ORM Support**: Works with popular ORMs like TypeORM, Drizzle, and Kysely.
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
@@ -712,6 +713,39 @@ This can include strings, numbers, arrays of numbers (for BLOBs), or `null`.
 <code>string | number | number[] | null</code>
 
 </docgen-api>
+
+## Key-Value Store
+
+This plugin includes a built-in key-value store (`SqliteKeyValueStore`) that provides a simple API for storing and retrieving key-value pairs without writing SQL. The database is automatically created and managed under the hood.
+
+```typescript
+import { Sqlite, SqliteKeyValueStore } from '@capawesome-team/capacitor-sqlite';
+
+const store = new SqliteKeyValueStore(Sqlite);
+
+// Set a value
+await store.set({ key: 'settings', value: JSON.stringify({ theme: 'dark', notifications: true }) });
+
+// Get a value
+const result = await store.get({ key: 'settings' });
+if (result.value) {
+  const settings = JSON.parse(result.value);
+  console.log(settings.theme); // 'dark'
+  console.log(settings.notifications); // true
+}
+
+// Remove a value
+await store.remove({ key: 'settings' });
+
+// Clear all values
+await store.clear();
+
+// Get all keys
+const keysResult = await store.keys();
+console.log(keysResult.keys); // ['settings', 'user', 'preferences', ...]
+```
+
+Perfect for storing small amounts of data such as user preferences, app settings, or session data without risking data loss due to web view data clearing.
 
 ## ORMs
 
