@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- [`d645ccb4b81a83953516068175a712a0b28ce7ae`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d645ccb4b81a83953516068175a712a0b28ce7ae) ([#399](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/399)): feat: add key-value store
+
 ## 0.3.0
 
 ### Minor Changes
