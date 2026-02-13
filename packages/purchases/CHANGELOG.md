@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.5
+
+### Patch Changes
+
+- [`36fc667fc45657c5b2cd0339bc8df1cd34d1685c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/36fc667fc45657c5b2cd0339bc8df1cd34d1685c) ([#401](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/401)): feat: add `basePlanId` and `offerId` to PurchaseProductOptions
+
 ## 0.3.4
 
 ### Patch Changes
