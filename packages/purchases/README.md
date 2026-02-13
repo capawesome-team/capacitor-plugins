@@ -444,9 +444,11 @@ Represents an in-app product available for purchase.
 
 #### PurchaseProductOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                                            | Since |
-| --------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
+| Prop             | Type                | Description                                                                                                                                                                                                                            | Since |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`basePlanId`** | <code>string</code> | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                           | 0.3.5 |
+| **`offerId`**    | <code>string</code> | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                         | 0.3.5 |
+| **`productId`**  | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
 
 
 ### Enums
