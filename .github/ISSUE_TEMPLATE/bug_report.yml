@@ -41,6 +41,7 @@ body:
         - label: OAuth
         - label: Pedometer
         - label: Photo Editor
+        - label: PixLive
         - label: Posthog
         - label: Purchases
         - label: Printer
