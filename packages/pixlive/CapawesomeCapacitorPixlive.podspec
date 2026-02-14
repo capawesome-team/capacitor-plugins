@@ -18,6 +18,13 @@ Pod::Spec.new do |s|
   s.frameworks = 'ARKit', 'AVFoundation', 'AVKit', 'Accelerate', 'AudioToolbox', 'CoreBluetooth', 'CoreGraphics', 'CoreImage', 'CoreLocation', 'CoreMotion', 'CoreVideo', 'ImageIO', 'JavaScriptCore', 'MediaPlayer', 'MessageUI', 'Metal', 'MetalKit', 'OpenGLES', 'QuartzCore', 'QuickLook', 'Security', 'Social', 'UIKit', 'UserNotifications', 'WebKit'
   s.libraries = 'z', 'c++', 'iconv'
   s.pod_target_xcconfig = {
-    'FRAMEWORK_SEARCH_PATHS' => '"${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64" "${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64_x86_64-simulator"'
+    'FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]' => '$(inherited) "${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64"',
+    'FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]' => '$(inherited) "${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64_x86_64-simulator"',
+    'OTHER_LDFLAGS' => '-framework VDARSDK'
+  }
+  s.user_target_xcconfig = {
+    'FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]' => '$(inherited) "${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64"',
+    'FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]' => '$(inherited) "${PODS_ROOT}/../Frameworks/VDARSDK.xcframework/ios-arm64_x86_64-simulator"',
+    'OTHER_LDFLAGS' => '-framework VDARSDK'
   }
 end
