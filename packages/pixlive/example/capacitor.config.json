@@ -5,6 +5,11 @@
   "plugins": {
     "SplashScreen": {
       "launchAutoHide": false
+    },
+    "Pixlive": {
+      "licenseKey": "DUMMY_LICENSE_KEY",
+      "apiUrl": "https://ar.vidinoti.com/api/api.php",
+      "sdkUrl": "https://sdk.vidinoti.com"
     }
   }
 }

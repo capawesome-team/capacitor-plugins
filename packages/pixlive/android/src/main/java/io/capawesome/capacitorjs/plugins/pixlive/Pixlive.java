@@ -1,11 +1,514 @@
 package io.capawesome.capacitorjs.plugins.pixlive;
 
-import android.util.Log;
+import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.FrameLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.getcapacitor.JSArray;
+import com.getcapacitor.JSObject;
+import com.vidinoti.android.vdarsdk.VDARAnnotationView;
+import com.vidinoti.android.vdarsdk.VDARCode;
+import com.vidinoti.android.vdarsdk.VDARContentEventReceiver;
+import com.vidinoti.android.vdarsdk.VDARContext;
+import com.vidinoti.android.vdarsdk.VDARPrior;
+import com.vidinoti.android.vdarsdk.VDARRemoteController;
+import com.vidinoti.android.vdarsdk.VDARRemoteControllerListener;
+import com.vidinoti.android.vdarsdk.VDARSDKController;
+import com.vidinoti.android.vdarsdk.VDARSDKControllerEventReceiver;
+import com.vidinoti.android.vdarsdk.camera.DeviceCameraImageSender;
+import com.vidinoti.android.vdarsdk.geopoint.GeoPointManager;
+import com.vidinoti.android.vdarsdk.geopoint.VDARGPSPoint;
+import io.capawesome.capacitorjs.plugins.pixlive.classes.CustomExceptions;
+import io.capawesome.capacitorjs.plugins.pixlive.classes.options.*;
+import io.capawesome.capacitorjs.plugins.pixlive.classes.results.*;
+import io.capawesome.capacitorjs.plugins.pixlive.interfaces.EmptyCallback;
+import io.capawesome.capacitorjs.plugins.pixlive.interfaces.NonEmptyResultCallback;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Pixlive {
+public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEventReceiver, VDARRemoteControllerListener {
 
-    public String echo(String value) {
-        Log.i("Echo", value);
-        return value;
+    @NonNull
+    private final PixlivePlugin plugin;
+
+    @Nullable
+    private VDARAnnotationView annotationView;
+
+    private boolean touchEnabled = true;
+
+    @Nullable
+    private Rect touchHole;
+
+    public Pixlive(@NonNull PixlivePlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void initialize() {
+        Activity activity = plugin.getActivity();
+        String licenseKey = plugin.getConfig().getString("licenseKey", "");
+        String apiUrl = plugin.getConfig().getString("apiUrl", null);
+        String sdkUrl = plugin.getConfig().getString("sdkUrl", null);
+
+        File storageDir = new File(activity.getFilesDir(), "pixlive");
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        VDARSDKController.startSDK(activity, storageDir.getAbsolutePath(), licenseKey);
+        VDARSDKController controller = VDARSDKController.getInstance();
+        if (apiUrl != null) {
+            VDARRemoteController.getInstance().setCustomRemoteApiServerEndpoint(apiUrl);
+        }
+        if (sdkUrl != null) {
+            VDARRemoteController.getInstance().setCustomRemoteSdkApiServerEndpoint(sdkUrl);
+        }
+        controller.setEnableCodesRecognition(true);
+        try {
+            controller.setImageSender(new DeviceCameraImageSender());
+        } catch (Exception e) {
+            // Camera not available
+        }
+        controller.registerEventReceiver(this);
+        controller.registerContentEventReceiver(this);
+        VDARRemoteController.getInstance().addProgressListener(this);
+    }
+
+    public void handleOnPause() {
+        VDARSDKController controller = VDARSDKController.getInstance();
+        if (controller != null) {
+            controller.onActivityPaused(plugin.getActivity());
+        }
+    }
+
+    public void handleOnResume() {
+        VDARSDKController controller = VDARSDKController.getInstance();
+        if (controller != null) {
+            controller.onActivityResumed(plugin.getActivity());
+        }
+    }
+
+    public void handleOnDestroy() {
+        VDARSDKController controller = VDARSDKController.getInstance();
+        if (controller != null) {
+            controller.unregisterEventReceiver(this);
+            controller.unregisterContentEventReceiver(this);
+            VDARRemoteController.getInstance().removeProgressListener(this);
+        }
+    }
+
+    public void synchronize(@NonNull SynchronizeOptions options, @NonNull EmptyCallback callback) {
+        try {
+            List<VDARPrior> priors = PixliveHelper.buildTagPriors(options.getTags());
+            ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
+            VDARRemoteController.getInstance()
+                .syncRemoteContextsAsynchronouslyWithPriors(
+                    priorsList,
+                    new Observer() {
+                        @Override
+                        public void update(Observable o, Object arg) {
+                            callback.success();
+                        }
+                    }
+                );
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void synchronizeWithToursAndContexts(@NonNull SynchronizeWithToursAndContextsOptions options, @NonNull EmptyCallback callback) {
+        try {
+            List<VDARPrior> priors = PixliveHelper.buildFullPriors(options.getTags(), options.getTourIds(), options.getContextIds());
+            ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
+            VDARRemoteController.getInstance()
+                .syncRemoteContextsAsynchronouslyWithPriors(
+                    priorsList,
+                    new Observer() {
+                        @Override
+                        public void update(Observable o, Object arg) {
+                            callback.success();
+                        }
+                    }
+                );
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void updateTagMapping(@NonNull UpdateTagMappingOptions options, @NonNull EmptyCallback callback) {
+        try {
+            List<String> tags = new ArrayList<>();
+            for (int i = 0; i < options.getTags().length(); i++) {
+                tags.add(options.getTags().getString(i));
+            }
+            VDARRemoteController.getInstance()
+                .syncTagContexts(
+                    tags,
+                    new VDARRemoteController.Callback<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            callback.success();
+                        }
+
+                        @Override
+                        public void onError(String message, Throwable throwable) {
+                            callback.error(new Exception(message, throwable));
+                        }
+                    }
+                );
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void enableContextsWithTags(@NonNull EnableContextsWithTagsOptions options, @NonNull EmptyCallback callback) {
+        try {
+            List<String> tags = new ArrayList<>();
+            for (int i = 0; i < options.getTags().length(); i++) {
+                tags.add(options.getTags().getString(i));
+            }
+            VDARSDKController.getInstance().enableContextsWithTags(tags);
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void getContexts(@NonNull NonEmptyResultCallback<GetContextsResult> callback) {
+        try {
+            ArrayList<String> contextIds = VDARSDKController.getInstance().getAllContextIDs();
+            JSArray contextsArray = new JSArray();
+            if (contextIds != null) {
+                for (String contextId : contextIds) {
+                    VDARContext context = VDARSDKController.getInstance().getContext(contextId);
+                    if (context != null) {
+                        contextsArray.put(PixliveHelper.contextToJSObject(context));
+                    }
+                }
+            }
+            callback.success(new GetContextsResult(contextsArray));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void getContext(@NonNull GetContextOptions options, @NonNull NonEmptyResultCallback<GetContextResult> callback) {
+        try {
+            VDARContext context = VDARSDKController.getInstance().getContext(options.getContextId());
+            if (context == null) {
+                callback.error(CustomExceptions.CONTEXT_NOT_FOUND);
+                return;
+            }
+            callback.success(new GetContextResult(PixliveHelper.contextToJSObject(context)));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void activateContext(@NonNull ActivateContextOptions options, @NonNull EmptyCallback callback) {
+        try {
+            VDARContext context = VDARSDKController.getInstance().getContext(options.getContextId());
+            if (context != null) {
+                context.activate();
+            }
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void stopContext(@NonNull EmptyCallback callback) {
+        try {
+            ArrayList<String> contextIds = VDARSDKController.getInstance().getAllContextIDs();
+            if (contextIds != null) {
+                for (String contextId : contextIds) {
+                    VDARContext context = VDARSDKController.getInstance().getContext(contextId);
+                    if (context != null) {
+                        context.stop();
+                    }
+                }
+            }
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void getNearbyGPSPoints(
+        @NonNull GetNearbyGPSPointsOptions options,
+        @NonNull NonEmptyResultCallback<GetNearbyGPSPointsResult> callback
+    ) {
+        try {
+            List<VDARGPSPoint> points = GeoPointManager.getNearbyGPSPoints((float) options.getLatitude(), (float) options.getLongitude());
+            JSArray pointsArray = new JSArray();
+            if (points != null) {
+                for (VDARGPSPoint point : points) {
+                    pointsArray.put(PixliveHelper.gpsPointToJSObject(point));
+                }
+            }
+            callback.success(new GetNearbyGPSPointsResult(pointsArray));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void getGPSPointsInBoundingBox(
+        @NonNull GetGPSPointsInBoundingBoxOptions options,
+        @NonNull NonEmptyResultCallback<GetGPSPointsInBoundingBoxResult> callback
+    ) {
+        try {
+            List<VDARGPSPoint> points = GeoPointManager.getGPSPointsInBoundingBox(
+                (float) options.getMinLatitude(),
+                (float) options.getMinLongitude(),
+                (float) options.getMaxLatitude(),
+                (float) options.getMaxLongitude()
+            );
+            JSArray pointsArray = new JSArray();
+            if (points != null) {
+                for (VDARGPSPoint point : points) {
+                    pointsArray.put(PixliveHelper.gpsPointToJSObject(point));
+                }
+            }
+            callback.success(new GetGPSPointsInBoundingBoxResult(pointsArray));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void getNearbyBeacons(@NonNull NonEmptyResultCallback<GetNearbyBeaconsResult> callback) {
+        try {
+            List<String> beaconContextIds = VDARSDKController.getInstance().getNearbyBeacons();
+            JSArray contextsArray = new JSArray();
+            if (beaconContextIds != null) {
+                for (String contextId : beaconContextIds) {
+                    VDARContext context = VDARSDKController.getInstance().getContext(contextId);
+                    if (context != null) {
+                        contextsArray.put(PixliveHelper.contextToJSObject(context));
+                    }
+                }
+            }
+            callback.success(new GetNearbyBeaconsResult(contextsArray));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void startNearbyGPSDetection(@NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().startNearbyGPSDetection();
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void stopNearbyGPSDetection(@NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().stopNearbyGPSDetection();
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void startGPSNotifications(@NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().startGPSNotifications();
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void stopGPSNotifications(@NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().stopGPSNotifications();
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void setInterfaceLanguage(@NonNull SetInterfaceLanguageOptions options, @NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().forceLanguage(options.getLanguage());
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void createARView(@NonNull CreateARViewOptions options, @NonNull EmptyCallback callback) {
+        if (annotationView != null) {
+            callback.error(CustomExceptions.AR_VIEW_ALREADY_EXISTS);
+            return;
+        }
+        Activity activity = plugin.getActivity();
+        activity.runOnUiThread(() -> {
+            try {
+                WebView webView = plugin.getBridge().getWebView();
+                annotationView = new VDARAnnotationView(activity);
+                float density = activity.getResources().getDisplayMetrics().density;
+                int x = (int) (options.getX() * density);
+                int y = (int) (options.getY() * density);
+                int width = (int) (options.getWidth() * density);
+                int height = (int) (options.getHeight() * density);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+                params.leftMargin = x;
+                params.topMargin = y;
+                annotationView.setLayoutParams(params);
+                webView.setBackgroundColor(Color.TRANSPARENT);
+                ((ViewGroup) webView.getParent()).addView(annotationView, 0);
+                callback.success();
+            } catch (Exception exception) {
+                callback.error(exception);
+            }
+        });
+    }
+
+    public void destroyARView(@NonNull EmptyCallback callback) {
+        if (annotationView == null) {
+            callback.error(CustomExceptions.AR_VIEW_NOT_FOUND);
+            return;
+        }
+        Activity activity = plugin.getActivity();
+        activity.runOnUiThread(() -> {
+            try {
+                WebView webView = plugin.getBridge().getWebView();
+                webView.setBackgroundColor(Color.WHITE);
+                ((ViewGroup) annotationView.getParent()).removeView(annotationView);
+                annotationView = null;
+                touchHole = null;
+                callback.success();
+            } catch (Exception exception) {
+                callback.error(exception);
+            }
+        });
+    }
+
+    public void resizeARView(@NonNull ResizeARViewOptions options, @NonNull EmptyCallback callback) {
+        if (annotationView == null) {
+            callback.error(CustomExceptions.AR_VIEW_NOT_FOUND);
+            return;
+        }
+        Activity activity = plugin.getActivity();
+        activity.runOnUiThread(() -> {
+            try {
+                float density = activity.getResources().getDisplayMetrics().density;
+                int x = (int) (options.getX() * density);
+                int y = (int) (options.getY() * density);
+                int width = (int) (options.getWidth() * density);
+                int height = (int) (options.getHeight() * density);
+                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(width, height);
+                params.leftMargin = x;
+                params.topMargin = y;
+                annotationView.setLayoutParams(params);
+                callback.success();
+            } catch (Exception exception) {
+                callback.error(exception);
+            }
+        });
+    }
+
+    public void setARViewTouchEnabled(@NonNull SetARViewTouchEnabledOptions options, @NonNull EmptyCallback callback) {
+        this.touchEnabled = options.isEnabled();
+        if (annotationView != null) {
+            plugin
+                .getActivity()
+                .runOnUiThread(() -> {
+                    if (annotationView != null) {
+                        annotationView.setClickable(touchEnabled);
+                        annotationView.setFocusable(touchEnabled);
+                    }
+                });
+        }
+        callback.success();
+    }
+
+    public void setARViewTouchHole(@NonNull SetARViewTouchHoleOptions options, @NonNull EmptyCallback callback) {
+        float density = plugin.getActivity().getResources().getDisplayMetrics().density;
+        this.touchHole = new Rect(
+            (int) (options.getLeft() * density),
+            (int) (options.getTop() * density),
+            (int) (options.getRight() * density),
+            (int) (options.getBottom() * density)
+        );
+        callback.success();
+    }
+
+    // VDARSDKControllerEventReceiver
+
+    @Override
+    public void onCodesRecognized(@NonNull ArrayList<VDARCode> codes) {
+        for (VDARCode code : codes) {
+            JSObject data = new JSObject();
+            data.put("code", code.getCodeData());
+            data.put("type", PixliveHelper.codeTypeToString(code.getCodeType()));
+            plugin.notifyListenersFromImplementation("codeRecognize", data);
+        }
+    }
+
+    @Override
+    public void onFatalError(@NonNull String error) {
+        // Not needed
+    }
+
+    @Override
+    public void onPresentAnnotations() {
+        plugin.notifyListenersFromImplementation("presentAnnotations", new JSObject());
+    }
+
+    @Override
+    public void onAnnotationsHidden() {
+        plugin.notifyListenersFromImplementation("hideAnnotations", new JSObject());
+    }
+
+    @Override
+    public void onTrackingStarted(int width, int height) {
+        // Not needed
+    }
+
+    @Override
+    public void onEnterContext(@NonNull VDARContext context) {
+        JSObject data = new JSObject();
+        data.put("contextId", context.getRemoteID());
+        plugin.notifyListenersFromImplementation("enterContext", data);
+    }
+
+    @Override
+    public void onExitContext(@NonNull VDARContext context) {
+        JSObject data = new JSObject();
+        data.put("contextId", context.getRemoteID());
+        plugin.notifyListenersFromImplementation("exitContext", data);
+    }
+
+    @Override
+    public void onRequireSynchronization(@NonNull ArrayList<VDARPrior> priors) {
+        // Not needed
+    }
+
+    // VDARContentEventReceiver
+
+    @Override
+    public void onReceiveContentEvent(@NonNull String eventName, @NonNull String eventParams) {
+        JSObject data = new JSObject();
+        data.put("name", eventName);
+        data.put("params", eventParams);
+        plugin.notifyListenersFromImplementation("eventFromContent", data);
+    }
+
+    // VDARRemoteControllerListener
+
+    @Override
+    public void onSyncProgress(@NonNull VDARRemoteController controller, float progress, boolean isDone, @Nullable String error) {
+        JSObject data = new JSObject();
+        data.put("progress", progress);
+        plugin.notifyListenersFromImplementation("syncProgress", data);
     }
 }

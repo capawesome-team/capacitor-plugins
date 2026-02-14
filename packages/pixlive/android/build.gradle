@@ -45,11 +45,15 @@ android {
 repositories {
     google()
     mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(name: 'vdarsdk-release', ext: 'aar')
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     testImplementation "junit:junit:$junitVersion"
