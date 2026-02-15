@@ -1,0 +1,53 @@
+{
+  "name": "@capawesome/camera",
+  "version": "0.0.1",
+  "description": "Capacitor plugin for taking multiple photos.",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "unpkg": "dist/plugin.js",
+  "files": [
+    "android/",
+    "dist/",
+    "ios/",
+    "CapawesomeCamera.podspec"
+  ],
+  "author": "Capawesome",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"
+  },
+  "bugs": {
+    "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
+  },
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "scripts": {
+    "verify": "npm run build",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/ios": "^5.0.0",
+    "typescript": "~4.8.4"
+  },
+  "peerDependencies": {
+    "@capacitor/core": "^5.0.0"
+  },
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  }
+}
