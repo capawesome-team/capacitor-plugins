@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.6
+
+### Patch Changes
+
+- [`256f6a14d93d124e6f64ddb6e7a6baf8757baaf6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/256f6a14d93d124e6f64ddb6e7a6baf8757baaf6) ([#404](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/404)): fix(android): fix NPE race condition in `onPurchasesUpdated`
+
 ## 0.3.5
 
 ### Patch Changes
