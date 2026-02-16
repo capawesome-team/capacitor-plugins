@@ -7,4 +7,7 @@ export default defineConfig({
     minify: false,
     emptyOutDir: true,
   },
+  server: {
+    allowedHosts: ['want-convertible-awards-machinery.trycloudflare.com'],
+  },
 });

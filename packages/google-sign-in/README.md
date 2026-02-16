@@ -113,6 +113,7 @@ const signOut = async () => {
 
 <docgen-index>
 
+* [`handleRedirectCallback()`](#handleredirectcallback)
 * [`initialize(...)`](#initialize)
 * [`signIn(...)`](#signin)
 * [`signOut()`](#signout)
@@ -122,6 +123,26 @@ const signOut = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### handleRedirectCallback()
+
+```typescript
+handleRedirectCallback() => Promise<SignInResult>
+```
+
+Handle the redirect callback from the OAuth provider.
+
+This method must be called when the app is redirected back from the OAuth provider.
+It exchanges the authorization code for tokens and returns the sign-in result.
+
+Only available on Web.
+
+**Returns:** <code>Promise&lt;<a href="#signinresult">SignInResult</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
 
 ### initialize(...)
 
@@ -150,6 +171,11 @@ signIn(options?: SignInOptions | undefined) => Promise<SignInResult>
 
 Start the Google Sign-In flow.
 
+On Web, this redirects to the Google OAuth authorization page.
+The promise will never resolve on Web. After the user signs in,
+the app will be redirected back to the `redirectUrl`.
+Use `handleRedirectCallback()` to complete the sign-in flow.
+
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#signinoptions">SignInOptions</a></code> |
@@ -171,7 +197,7 @@ Sign out the current user.
 
 On Android, this clears the credential state.
 On iOS, this signs out from the Google Sign-In SDK.
-On Web, this disables auto-select for One Tap.
+On Web, this is a no-op.
 
 **Since:** 0.1.0
 
@@ -179,15 +205,6 @@ On Web, this disables auto-select for One Tap.
 
 
 ### Interfaces
-
-
-#### InitializeOptions
-
-| Prop              | Type                  | Description                                                                                                                                                                                                                                                                                                                                | Since |
-| ----------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`clientId`**    | <code>string</code>   | The web client ID from Google Cloud Console. Required on Android and Web. On Android, this is passed as the server client ID to the Credential Manager API and the AuthorizationClient API. On iOS, this is used as the server client ID for the Google Sign-In SDK. On Web, this is used to initialize the Google Sign-In JavaScript API. | 0.1.0 |
-| **`iosClientId`** | <code>string</code>   | The iOS client ID from Google Cloud Console. Only available on iOS. If not provided, the plugin falls back to the `GIDClientID` value in `Info.plist`.                                                                                                                                                                                     | 0.1.0 |
-| **`scopes`**      | <code>string[]</code> | The OAuth scopes to request. If provided, the plugin will request authorization in addition to authentication. This enables `accessToken` and `serverAuthCode` in the sign-in result.                                                                                                                                                      | 0.1.0 |
 
 
 #### SignInResult
@@ -203,6 +220,17 @@ On Web, this disables auto-select for One Tap.
 | **`imageUrl`**       | <code>string \| null</code> | The URL of the user's profile picture.                                                                                                                                      | 0.1.0 |
 | **`accessToken`**    | <code>string \| null</code> | The access token for accessing Google APIs. Only available when `scopes` are configured in `initialize()`.                                                                  | 0.1.0 |
 | **`serverAuthCode`** | <code>string \| null</code> | The server auth code that can be exchanged on your backend for access and refresh tokens. Only available on Android and iOS when `scopes` are configured in `initialize()`. | 0.1.0 |
+
+
+#### InitializeOptions
+
+| Prop               | Type                  | Description                                                                                                                                                                                                                                                                                                                                | Since |
+| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`clientId`**     | <code>string</code>   | The web client ID from Google Cloud Console. Required on Android and Web. On Android, this is passed as the server client ID to the Credential Manager API and the AuthorizationClient API. On iOS, this is used as the server client ID for the Google Sign-In SDK. On Web, this is used to initialize the Google Sign-In JavaScript API. | 0.1.0 |
+| **`clientSecret`** | <code>string</code>   | The web client secret from Google Cloud Console. Required on Web for the OAuth 2.0 authorization code exchange. Only available on Web.                                                                                                                                                                                                     | 0.1.0 |
+| **`iosClientId`**  | <code>string</code>   | The iOS client ID from Google Cloud Console. Only available on iOS. If not provided, the plugin falls back to the `GIDClientID` value in `Info.plist`.                                                                                                                                                                                     | 0.1.0 |
+| **`redirectUrl`**  | <code>string</code>   | The URL to redirect to after the OAuth flow. Only available on Web.                                                                                                                                                                                                                                                                        | 0.1.0 |
+| **`scopes`**       | <code>string[]</code> | The OAuth scopes to request. If provided, the plugin will request authorization in addition to authentication. This enables `accessToken` and `serverAuthCode` in the sign-in result.                                                                                                                                                      | 0.1.0 |
 
 
 #### SignInOptions

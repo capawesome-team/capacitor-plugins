@@ -7,147 +7,173 @@ import type {
   SignInResult,
 } from './definitions';
 
+const AUTHORIZATION_ENDPOINT =
+  'https://accounts.google.com/o/oauth2/v2/auth';
+const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
+
+const SESSION_STORAGE_KEY_CODE_VERIFIER =
+  '__capawesome_google_sign_in_code_verifier';
+const SESSION_STORAGE_KEY_OPTIONS =
+  '__capawesome_google_sign_in_options';
+const SESSION_STORAGE_KEY_NONCE = '__capawesome_google_sign_in_nonce';
+const SESSION_STORAGE_KEY_STATE = '__capawesome_google_sign_in_state';
+
 export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
-  private static readonly GIS_SCRIPT_URL =
-    'https://accounts.google.com/gsi/client';
-
   private clientId: string | undefined;
+  private clientSecret: string | undefined;
+  private redirectUrl: string | undefined;
   private scopes: string[] | undefined;
-  private scriptLoaded = false;
 
-  async initialize(options?: InitializeOptions): Promise<void> {
-    this.clientId = options?.clientId;
-    this.scopes = options?.scopes;
-    await this.loadScript();
-  }
+  async handleRedirectCallback(): Promise<SignInResult> {
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+    const state = url.searchParams.get('state');
+    const error = url.searchParams.get('error');
 
-  async signIn(options?: SignInOptions): Promise<SignInResult> {
-    const google = this.getGoogleApi();
-    if (!this.clientId) {
-      throw new Error('clientId must be provided.');
+    if (error) {
+      const errorDescription =
+        url.searchParams.get('error_description') || error;
+      throw new Error(errorDescription);
     }
-    const credential = await this.promptOneTap(
-      google,
-      this.clientId,
-      options?.nonce,
-    );
-    const payload = this.decodeJwtPayload(credential);
-    const idToken = credential;
-    const userId = payload.sub;
-    const email: string | null = payload.email ?? null;
-    const displayName: string | null = payload.name ?? null;
-    const givenName: string | null = payload.given_name ?? null;
-    const familyName: string | null = payload.family_name ?? null;
-    const imageUrl: string | null = payload.picture ?? null;
 
-    let accessToken: string | null = null;
-    if (this.scopes && this.scopes.length > 0) {
-      accessToken = await this.requestAccessToken(
-        google,
-        this.clientId,
-        this.scopes,
-      );
+    if (!code) {
+      throw new Error('No authorization code found in the URL.');
+    }
+
+    const storedState = sessionStorage.getItem(SESSION_STORAGE_KEY_STATE);
+    if (state !== storedState) {
+      throw new Error('State mismatch. Possible CSRF attack.');
+    }
+
+    const codeVerifier = sessionStorage.getItem(
+      SESSION_STORAGE_KEY_CODE_VERIFIER,
+    );
+    const optionsJson = sessionStorage.getItem(SESSION_STORAGE_KEY_OPTIONS);
+    if (!codeVerifier || !optionsJson) {
+      throw new Error('No stored sign-in state found. Call signIn() first.');
+    }
+
+    const options: {
+      clientId: string;
+      clientSecret: string;
+      redirectUrl: string;
+    } = JSON.parse(optionsJson);
+
+    const body = new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: options.redirectUrl,
+      client_id: options.clientId,
+      client_secret: options.clientSecret,
+      code_verifier: codeVerifier,
+    });
+
+    const response = await fetch(TOKEN_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body.toString(),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(`Token exchange failed: ${errorBody}`);
+    }
+
+    const tokenResponse = await response.json();
+
+    const storedNonce = sessionStorage.getItem(SESSION_STORAGE_KEY_NONCE);
+
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_CODE_VERIFIER);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_NONCE);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_OPTIONS);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_STATE);
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+
+    const idToken: string = tokenResponse['id_token'];
+    const accessToken: string = tokenResponse['access_token'];
+    const payload = this.decodeJwtPayload(idToken);
+
+    if (storedNonce && payload.nonce !== storedNonce) {
+      throw new Error('Nonce mismatch. Possible replay attack.');
     }
 
     return {
       idToken,
-      userId,
-      email,
-      displayName,
-      givenName,
-      familyName,
-      imageUrl,
+      userId: payload.sub,
+      email: payload.email ?? null,
+      displayName: payload.name ?? null,
+      givenName: payload.given_name ?? null,
+      familyName: payload.family_name ?? null,
+      imageUrl: payload.picture ?? null,
       accessToken,
       serverAuthCode: null,
     };
   }
 
+  async initialize(options?: InitializeOptions): Promise<void> {
+    this.clientId = options?.clientId;
+    this.clientSecret = options?.clientSecret;
+    this.redirectUrl = options?.redirectUrl;
+    this.scopes = options?.scopes;
+  }
+
+  async signIn(options?: SignInOptions): Promise<SignInResult> {
+    if (!this.clientId) {
+      throw new Error('clientId must be provided.');
+    }
+    if (!this.clientSecret) {
+      throw new Error('clientSecret must be provided.');
+    }
+    if (!this.redirectUrl) {
+      throw new Error('redirectUrl must be provided.');
+    }
+
+    const codeVerifier = this.generateCodeVerifier();
+    const codeChallenge = await this.generateCodeChallenge(codeVerifier);
+    const state = this.generateRandomString(32);
+
+    sessionStorage.setItem(SESSION_STORAGE_KEY_CODE_VERIFIER, codeVerifier);
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEY_OPTIONS,
+      JSON.stringify({
+        clientId: this.clientId,
+        clientSecret: this.clientSecret,
+        redirectUrl: this.redirectUrl,
+      }),
+    );
+    sessionStorage.setItem(SESSION_STORAGE_KEY_STATE, state);
+
+    const defaultScopes = ['openid', 'email', 'profile'];
+    const userScopes = this.scopes ?? [];
+    const allScopes = [...new Set([...defaultScopes, ...userScopes])];
+
+    const params = new URLSearchParams({
+      response_type: 'code',
+      client_id: this.clientId,
+      redirect_uri: this.redirectUrl,
+      scope: allScopes.join(' '),
+      code_challenge: codeChallenge,
+      code_challenge_method: 'S256',
+      state,
+    });
+    if (options?.nonce) {
+      params.set('nonce', options.nonce);
+      sessionStorage.setItem(SESSION_STORAGE_KEY_NONCE, options.nonce);
+    }
+
+    window.location.href = `${AUTHORIZATION_ENDPOINT}?${params.toString()}`;
+
+    // This promise never resolves because the page redirects
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    return new Promise<SignInResult>(() => {});
+  }
+
   async signOut(): Promise<void> {
-    const google = this.getGoogleApi();
-    google.accounts.id.disableAutoSelect();
-  }
-
-  private getGoogleApi(): GoogleApi {
-    const google = (window as WindowWithGoogle).google;
-    if (!google) {
-      throw new Error('Google Identity Services library is not loaded.');
-    }
-    return google;
-  }
-
-  private loadScript(): Promise<void> {
-    if (this.scriptLoaded || (window as WindowWithGoogle).google) {
-      this.scriptLoaded = true;
-      return Promise.resolve();
-    }
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = GoogleSignInWeb.GIS_SCRIPT_URL;
-      script.onload = () => {
-        this.scriptLoaded = true;
-        resolve();
-      };
-      script.onerror = () => {
-        reject(new Error('Failed to load Google Identity Services SDK.'));
-      };
-      document.head.appendChild(script);
-    });
-  }
-
-  private promptOneTap(
-    google: GoogleApi,
-    clientId: string,
-    nonce?: string,
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      google.accounts.id.initialize({
-        client_id: clientId,
-        callback: (response: CredentialResponse) => {
-          resolve(response.credential);
-        },
-        nonce: nonce,
-      });
-      google.accounts.id.prompt((notification: PromptNotification) => {
-        if (notification.isNotDisplayed()) {
-          reject(
-            new Error(
-              'One Tap is not displayed: ' +
-                notification.getNotDisplayedReason(),
-            ),
-          );
-        } else if (notification.isSkippedMoment()) {
-          reject(
-            new Error(
-              'One Tap was skipped: ' + notification.getSkippedReason(),
-            ),
-          );
-        }
-      });
-    });
-  }
-
-  private requestAccessToken(
-    google: GoogleApi,
-    clientId: string,
-    scopes: string[],
-  ): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: clientId,
-        scope: scopes.join(' '),
-        callback: (response: TokenResponse) => {
-          if (response.error) {
-            reject(new Error(response.error));
-            return;
-          }
-          resolve(response.access_token);
-        },
-        error_callback: (error: TokenClientError) => {
-          reject(new Error(error.message));
-        },
-      });
-      tokenClient.requestAccessToken();
-    });
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_CODE_VERIFIER);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_NONCE);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_OPTIONS);
+    sessionStorage.removeItem(SESSION_STORAGE_KEY_STATE);
   }
 
   private decodeJwtPayload(token: string): JwtPayload {
@@ -165,62 +191,30 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
     );
     return JSON.parse(jsonPayload);
   }
-}
 
-interface WindowWithGoogle extends Window {
-  google?: GoogleApi;
-}
+  private generateCodeVerifier(): string {
+    return this.generateRandomString(64);
+  }
 
-interface GoogleApi {
-  accounts: {
-    id: {
-      initialize(config: OneTapConfig): void;
-      prompt(callback: (notification: PromptNotification) => void): void;
-      disableAutoSelect(): void;
-    };
-    oauth2: {
-      initTokenClient(config: TokenClientConfig): TokenClient;
-    };
-  };
-}
+  private async generateCodeChallenge(verifier: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(verifier);
+    const digest = await crypto.subtle.digest('SHA-256', data);
+    return btoa(String.fromCharCode(...new Uint8Array(digest)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+  }
 
-interface OneTapConfig {
-  client_id: string;
-  callback: (response: CredentialResponse) => void;
-  nonce?: string;
-}
-
-interface CredentialResponse {
-  credential: string;
-}
-
-interface PromptNotification {
-  isNotDisplayed(): boolean;
-  isSkippedMoment(): boolean;
-  isDismissedMoment(): boolean;
-  getNotDisplayedReason(): string;
-  getSkippedReason(): string;
-  getDismissedReason(): string;
-}
-
-interface TokenClientConfig {
-  client_id: string;
-  scope: string;
-  callback: (response: TokenResponse) => void;
-  error_callback: (error: TokenClientError) => void;
-}
-
-interface TokenResponse {
-  access_token: string;
-  error?: string;
-}
-
-interface TokenClient {
-  requestAccessToken(): void;
-}
-
-interface TokenClientError {
-  message: string;
+  private generateRandomString(length: number): string {
+    const array = new Uint8Array(length);
+    crypto.getRandomValues(array);
+    return btoa(String.fromCharCode(...array))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '')
+      .substring(0, length);
+  }
 }
 
 interface JwtPayload {
@@ -230,4 +224,5 @@ interface JwtPayload {
   given_name?: string;
   family_name?: string;
   picture?: string;
+  nonce?: string;
 }

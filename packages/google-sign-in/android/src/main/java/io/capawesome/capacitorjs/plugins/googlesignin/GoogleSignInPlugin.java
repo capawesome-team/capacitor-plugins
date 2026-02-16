@@ -84,6 +84,11 @@ public class GoogleSignInPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void handleRedirectCallback(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
     public void signOut(PluginCall call) {
         try {
             EmptyCallback callback = new EmptyCallback() {
@@ -121,6 +126,10 @@ public class GoogleSignInPlugin extends Plugin {
         } else {
             implementation.handleAuthorizationCanceled();
         }
+    }
+
+    private void rejectCallAsUnimplemented(@NonNull PluginCall call) {
+        call.unimplemented("This method is not available on this platform.");
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

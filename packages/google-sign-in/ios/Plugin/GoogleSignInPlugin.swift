@@ -8,7 +8,8 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "handleRedirectCallback", returnType: CAPPluginReturnPromise)
     ]
     public let tag = "GoogleSignIn"
     private var implementation: GoogleSignInImpl?
@@ -16,6 +17,10 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
     override public func load() {
         super.load()
         self.implementation = GoogleSignInImpl(plugin: self)
+    }
+
+    @objc func handleRedirectCallback(_ call: CAPPluginCall) {
+        rejectCallAsUnimplemented(call)
     }
 
     @objc func initialize(_ call: CAPPluginCall) {
@@ -47,6 +52,10 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
                 self.resolveCall(call)
             }
         })
+    }
+
+    private func rejectCallAsUnimplemented(_ call: CAPPluginCall) {
+        call.unimplemented("This method is not available on this platform.")
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

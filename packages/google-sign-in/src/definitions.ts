@@ -3,6 +3,17 @@
  */
 export interface GoogleSignInPlugin {
   /**
+   * Handle the redirect callback from the OAuth provider.
+   *
+   * This method must be called when the app is redirected back from the OAuth provider.
+   * It exchanges the authorization code for tokens and returns the sign-in result.
+   *
+   * Only available on Web.
+   *
+   * @since 0.1.0
+   */
+  handleRedirectCallback(): Promise<SignInResult>;
+  /**
    * Initialize the Google Sign-In plugin.
    *
    * This method must be called once before all other methods.
@@ -13,6 +24,11 @@ export interface GoogleSignInPlugin {
   /**
    * Start the Google Sign-In flow.
    *
+   * On Web, this redirects to the Google OAuth authorization page.
+   * The promise will never resolve on Web. After the user signs in,
+   * the app will be redirected back to the `redirectUrl`.
+   * Use `handleRedirectCallback()` to complete the sign-in flow.
+   *
    * @since 0.1.0
    */
   signIn(options?: SignInOptions): Promise<SignInResult>;
@@ -21,7 +37,7 @@ export interface GoogleSignInPlugin {
    *
    * On Android, this clears the credential state.
    * On iOS, this signs out from the Google Sign-In SDK.
-   * On Web, this disables auto-select for One Tap.
+   * On Web, this is a no-op.
    *
    * @since 0.1.0
    */
@@ -46,6 +62,16 @@ export interface InitializeOptions {
    */
   clientId?: string;
   /**
+   * The web client secret from Google Cloud Console.
+   *
+   * Required on Web for the OAuth 2.0 authorization code exchange.
+   *
+   * Only available on Web.
+   *
+   * @since 0.1.0
+   */
+  clientSecret?: string;
+  /**
    * The iOS client ID from Google Cloud Console.
    *
    * Only available on iOS.
@@ -55,6 +81,15 @@ export interface InitializeOptions {
    * @example "123456789-xyz.apps.googleusercontent.com"
    */
   iosClientId?: string;
+  /**
+   * The URL to redirect to after the OAuth flow.
+   *
+   * Only available on Web.
+   *
+   * @since 0.1.0
+   * @example "http://localhost:4200"
+   */
+  redirectUrl?: string;
   /**
    * The OAuth scopes to request.
    *
