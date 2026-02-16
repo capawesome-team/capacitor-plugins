@@ -9,35 +9,31 @@ import type {
 
 const AUTHORIZATION_ENDPOINT =
   'https://accounts.google.com/o/oauth2/v2/auth';
-const TOKEN_ENDPOINT = 'https://oauth2.googleapis.com/token';
 
-const SESSION_STORAGE_KEY_CODE_VERIFIER =
-  '__capawesome_google_sign_in_code_verifier';
-const SESSION_STORAGE_KEY_OPTIONS =
-  '__capawesome_google_sign_in_options';
 const SESSION_STORAGE_KEY_NONCE = '__capawesome_google_sign_in_nonce';
 const SESSION_STORAGE_KEY_STATE = '__capawesome_google_sign_in_state';
 
 export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
   private clientId: string | undefined;
-  private clientSecret: string | undefined;
   private redirectUrl: string | undefined;
   private scopes: string[] | undefined;
 
   async handleRedirectCallback(): Promise<SignInResult> {
-    const url = new URL(window.location.href);
-    const code = url.searchParams.get('code');
-    const state = url.searchParams.get('state');
-    const error = url.searchParams.get('error');
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
 
+    const error = params.get('error');
     if (error) {
-      const errorDescription =
-        url.searchParams.get('error_description') || error;
+      const errorDescription = params.get('error_description') || error;
       throw new Error(errorDescription);
     }
 
-    if (!code) {
-      throw new Error('No authorization code found in the URL.');
+    const idToken = params.get('id_token');
+    const accessToken = params.get('access_token');
+    const state = params.get('state');
+
+    if (!idToken) {
+      throw new Error('No ID token found in the URL.');
     }
 
     const storedState = sessionStorage.getItem(SESSION_STORAGE_KEY_STATE);
@@ -45,53 +41,17 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
       throw new Error('State mismatch. Possible CSRF attack.');
     }
 
-    const codeVerifier = sessionStorage.getItem(
-      SESSION_STORAGE_KEY_CODE_VERIFIER,
-    );
-    const optionsJson = sessionStorage.getItem(SESSION_STORAGE_KEY_OPTIONS);
-    if (!codeVerifier || !optionsJson) {
-      throw new Error('No stored sign-in state found. Call signIn() first.');
-    }
-
-    const options: {
-      clientId: string;
-      clientSecret: string;
-      redirectUrl: string;
-    } = JSON.parse(optionsJson);
-
-    const body = new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      redirect_uri: options.redirectUrl,
-      client_id: options.clientId,
-      client_secret: options.clientSecret,
-      code_verifier: codeVerifier,
-    });
-
-    const response = await fetch(TOKEN_ENDPOINT, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body.toString(),
-    });
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(`Token exchange failed: ${errorBody}`);
-    }
-
-    const tokenResponse = await response.json();
-
     const storedNonce = sessionStorage.getItem(SESSION_STORAGE_KEY_NONCE);
 
-    sessionStorage.removeItem(SESSION_STORAGE_KEY_CODE_VERIFIER);
     sessionStorage.removeItem(SESSION_STORAGE_KEY_NONCE);
-    sessionStorage.removeItem(SESSION_STORAGE_KEY_OPTIONS);
     sessionStorage.removeItem(SESSION_STORAGE_KEY_STATE);
 
-    window.history.replaceState({}, document.title, window.location.pathname);
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname + window.location.search,
+    );
 
-    const idToken: string = tokenResponse['id_token'];
-    const accessToken: string = tokenResponse['access_token'];
     const payload = this.decodeJwtPayload(idToken);
 
     if (storedNonce && payload.nonce !== storedNonce) {
@@ -106,14 +66,13 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
       givenName: payload.given_name ?? null,
       familyName: payload.family_name ?? null,
       imageUrl: payload.picture ?? null,
-      accessToken,
+      accessToken: accessToken ?? null,
       serverAuthCode: null,
     };
   }
 
   async initialize(options?: InitializeOptions): Promise<void> {
     this.clientId = options?.clientId;
-    this.clientSecret = options?.clientSecret;
     this.redirectUrl = options?.redirectUrl;
     this.scopes = options?.scopes;
   }
@@ -122,45 +81,28 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
     if (!this.clientId) {
       throw new Error('clientId must be provided.');
     }
-    if (!this.clientSecret) {
-      throw new Error('clientSecret must be provided.');
-    }
     if (!this.redirectUrl) {
       throw new Error('redirectUrl must be provided.');
     }
 
-    const codeVerifier = this.generateCodeVerifier();
-    const codeChallenge = await this.generateCodeChallenge(codeVerifier);
     const state = this.generateRandomString(32);
+    const nonce = options?.nonce ?? this.generateRandomString(32);
 
-    sessionStorage.setItem(SESSION_STORAGE_KEY_CODE_VERIFIER, codeVerifier);
-    sessionStorage.setItem(
-      SESSION_STORAGE_KEY_OPTIONS,
-      JSON.stringify({
-        clientId: this.clientId,
-        clientSecret: this.clientSecret,
-        redirectUrl: this.redirectUrl,
-      }),
-    );
     sessionStorage.setItem(SESSION_STORAGE_KEY_STATE, state);
+    sessionStorage.setItem(SESSION_STORAGE_KEY_NONCE, nonce);
 
     const defaultScopes = ['openid', 'email', 'profile'];
     const userScopes = this.scopes ?? [];
     const allScopes = [...new Set([...defaultScopes, ...userScopes])];
 
     const params = new URLSearchParams({
-      response_type: 'code',
+      response_type: 'id_token token',
       client_id: this.clientId,
       redirect_uri: this.redirectUrl,
       scope: allScopes.join(' '),
-      code_challenge: codeChallenge,
-      code_challenge_method: 'S256',
       state,
+      nonce,
     });
-    if (options?.nonce) {
-      params.set('nonce', options.nonce);
-      sessionStorage.setItem(SESSION_STORAGE_KEY_NONCE, options.nonce);
-    }
 
     window.location.href = `${AUTHORIZATION_ENDPOINT}?${params.toString()}`;
 
@@ -170,9 +112,7 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
   }
 
   async signOut(): Promise<void> {
-    sessionStorage.removeItem(SESSION_STORAGE_KEY_CODE_VERIFIER);
     sessionStorage.removeItem(SESSION_STORAGE_KEY_NONCE);
-    sessionStorage.removeItem(SESSION_STORAGE_KEY_OPTIONS);
     sessionStorage.removeItem(SESSION_STORAGE_KEY_STATE);
   }
 
@@ -190,20 +130,6 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
         .join(''),
     );
     return JSON.parse(jsonPayload);
-  }
-
-  private generateCodeVerifier(): string {
-    return this.generateRandomString(64);
-  }
-
-  private async generateCodeChallenge(verifier: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(verifier);
-    const digest = await crypto.subtle.digest('SHA-256', data);
-    return btoa(String.fromCharCode(...new Uint8Array(digest)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
   }
 
   private generateRandomString(length: number): string {
