@@ -85,6 +85,7 @@ No configuration required for this plugin.
 
 ```typescript
 import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+import { Capacitor } from '@capacitor/core';
 
 const initialize = async () => {
   await GoogleSignIn.initialize({
@@ -95,6 +96,19 @@ const initialize = async () => {
 
 const signIn = async () => {
   const result = await GoogleSignIn.signIn();
+  console.log(result.idToken);
+  console.log(result.userId);
+  console.log(result.email);
+  console.log(result.displayName);
+  console.log(result.accessToken);
+  console.log(result.serverAuthCode);
+};
+
+const handleRedirectCallback = async () => {
+  if (Capacitor.getPlatform() !== 'web') {
+    return;
+  }
+  const result = await GoogleSignIn.handleRedirectCallback();
   console.log(result.idToken);
   console.log(result.userId);
   console.log(result.email);
