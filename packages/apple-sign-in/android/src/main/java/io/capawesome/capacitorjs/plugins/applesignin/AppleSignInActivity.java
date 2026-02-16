@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -17,6 +18,7 @@ import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -29,6 +31,9 @@ import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import org.json.JSONObject;
 
 public class AppleSignInActivity extends Activity {
@@ -118,6 +123,12 @@ public class AppleSignInActivity extends Activity {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
+        String userAgent = webSettings.getUserAgentString()
+            .replaceAll("; wv\\b", "")
+            .replaceAll("\\s*Version/\\S+", "");
+        webSettings.setUserAgentString(userAgent);
+        Log.d("AppleSignIn", "User-Agent: " + userAgent);
+        Log.d("AppleSignIn", "Loading URL: " + url);
 
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true);
 
@@ -132,6 +143,64 @@ public class AppleSignInActivity extends Activity {
         });
         webView.setWebViewClient(
             new WebViewClient() {
+                @Override
+                public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
+                    String requestUrl = request.getUrl().toString();
+                    if (!requestUrl.startsWith("https://appleid.apple.com")) {
+                        return super.shouldInterceptRequest(view, request);
+                    }
+                    try {
+                        HttpURLConnection conn = (HttpURLConnection) new URL(requestUrl).openConnection();
+                        conn.setRequestMethod(request.getMethod());
+                        for (java.util.Map.Entry<String, String> entry : request.getRequestHeaders().entrySet()) {
+                            if (!entry.getKey().equalsIgnoreCase("X-Requested-With")) {
+                                conn.setRequestProperty(entry.getKey(), entry.getValue());
+                            }
+                        }
+                        conn.setInstanceFollowRedirects(false);
+                        int statusCode = conn.getResponseCode();
+                        String reasonPhrase = conn.getResponseMessage();
+                        InputStream inputStream = (statusCode >= 400) ? conn.getErrorStream() : conn.getInputStream();
+                        String contentType = conn.getContentType();
+                        String mimeType = "text/html";
+                        String encoding = "utf-8";
+                        if (contentType != null) {
+                            String[] parts = contentType.split(";");
+                            mimeType = parts[0].trim();
+                            for (String part : parts) {
+                                String trimmed = part.trim();
+                                if (trimmed.startsWith("charset=")) {
+                                    encoding = trimmed.substring(8).trim();
+                                }
+                            }
+                        }
+                        java.util.Map<String, String> responseHeaders = new java.util.HashMap<>();
+                        for (java.util.Map.Entry<String, java.util.List<String>> header : conn.getHeaderFields().entrySet()) {
+                            if (header.getKey() != null && !header.getValue().isEmpty()) {
+                                responseHeaders.put(header.getKey(), header.getValue().get(0));
+                            }
+                        }
+                        return new WebResourceResponse(mimeType, encoding, statusCode, reasonPhrase != null ? reasonPhrase : "OK", responseHeaders, inputStream);
+                    } catch (Exception e) {
+                        Log.e("AppleSignIn", "Intercept failed: " + e.getMessage());
+                        return super.shouldInterceptRequest(view, request);
+                    }
+                }
+
+                @Override
+                public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                    super.onReceivedHttpError(view, request, errorResponse);
+                    Log.e("AppleSignIn", "HTTP error " + errorResponse.getStatusCode()
+                        + " for URL: " + request.getUrl()
+                        + " | Reason: " + errorResponse.getReasonPhrase());
+                    java.util.Map<String, String> headers = errorResponse.getResponseHeaders();
+                    if (headers != null) {
+                        for (java.util.Map.Entry<String, String> entry : headers.entrySet()) {
+                            Log.d("AppleSignIn", "Response header: " + entry.getKey() + " = " + entry.getValue());
+                        }
+                    }
+                }
+
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
