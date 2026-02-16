@@ -3,9 +3,16 @@ package io.capawesome.capacitorjs.plugins.applesignin;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -15,8 +22,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import org.json.JSONObject;
 
 public class AppleSignInActivity extends Activity {
@@ -32,6 +44,8 @@ public class AppleSignInActivity extends Activity {
     public static final String EXTRA_STATE = "state";
 
     private String redirectUrl;
+    private TextView domainTextView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,33 +54,66 @@ public class AppleSignInActivity extends Activity {
         String url = getIntent().getStringExtra(EXTRA_URL);
         redirectUrl = getIntent().getStringExtra(EXTRA_REDIRECT_URL);
 
-        RelativeLayout rootLayout = new RelativeLayout(this);
+        LinearLayout rootLayout = new LinearLayout(this);
+        rootLayout.setOrientation(LinearLayout.VERTICAL);
         rootLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
+        // Toolbar
+        RelativeLayout toolbar = new RelativeLayout(this);
+        toolbar.setBackgroundColor(0xFFF8F8F8);
+        LinearLayout.LayoutParams toolbarParams = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(56)
+        );
+        toolbar.setLayoutParams(toolbarParams);
+
         ImageButton closeButton = new ImageButton(this);
-        closeButton.setImageResource(android.R.drawable.ic_menu_close_clear_cancel);
+        closeButton.setImageResource(R.drawable.ic_close);
         closeButton.setBackgroundColor(0x00000000);
-        closeButton.setPadding(24, 24, 24, 24);
+        int closePadding = dpToPx(12);
+        closeButton.setPadding(closePadding, closePadding, closePadding, closePadding);
+        closeButton.setContentDescription("Close");
         closeButton.setOnClickListener(v -> {
             setResult(RESULT_CANCELED);
             finish();
         });
+        RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(dpToPx(48), dpToPx(48));
+        closeParams.addRule(RelativeLayout.ALIGN_PARENT_START);
+        closeParams.addRule(RelativeLayout.CENTER_VERTICAL);
+        closeParams.setMarginStart(dpToPx(4));
 
-        RelativeLayout.LayoutParams closeParams = new RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
+        domainTextView = new TextView(this);
+        domainTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        domainTextView.setTextColor(0xFF5F6368);
+        domainTextView.setSingleLine(true);
+        domainTextView.setEllipsize(TextUtils.TruncateAt.END);
+        domainTextView.setGravity(Gravity.CENTER);
+        RelativeLayout.LayoutParams domainParams = new RelativeLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        closeParams.addRule(RelativeLayout.ALIGN_PARENT_END);
-        closeParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        int closeButtonId = 1001;
-        closeButton.setId(closeButtonId);
+        domainParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+        int domainHorizontalMargin = dpToPx(56);
+        domainParams.setMarginStart(domainHorizontalMargin);
+        domainParams.setMarginEnd(domainHorizontalMargin);
 
+        toolbar.addView(closeButton, closeParams);
+        toolbar.addView(domainTextView, domainParams);
+
+        // Progress bar
+        progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal);
+        progressBar.setIndeterminate(false);
+        progressBar.setMax(100);
+        progressBar.setProgress(0);
+        progressBar.getProgressDrawable().setColorFilter(0xFF007AFF, PorterDuff.Mode.SRC_IN);
+        progressBar.setVisibility(View.GONE);
+        LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(3)
+        );
+
+        // WebView
         WebView webView = new WebView(this);
-        RelativeLayout.LayoutParams webViewParams = new RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.MATCH_PARENT
+        LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
         );
-        webViewParams.addRule(RelativeLayout.BELOW, closeButtonId);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -76,12 +123,19 @@ public class AppleSignInActivity extends Activity {
 
         webView.addJavascriptInterface(new AppleSignInBridge(), "AppleSignInBridge");
 
-        webView.setWebChromeClient(new WebChromeClient());
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
+                progressBar.setVisibility(newProgress < 100 ? View.VISIBLE : View.GONE);
+            }
+        });
         webView.setWebViewClient(
             new WebViewClient() {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     super.onPageStarted(view, url, favicon);
+                    updateDomainText(url);
                     String js =
                         "(function() {" +
                         "  var origSubmit = HTMLFormElement.prototype.submit;" +
@@ -116,9 +170,17 @@ public class AppleSignInActivity extends Activity {
             }
         );
 
-        rootLayout.addView(closeButton, closeParams);
+        rootLayout.addView(toolbar);
+        rootLayout.addView(progressBar, progressParams);
         rootLayout.addView(webView, webViewParams);
         setContentView(rootLayout);
+        setupStatusBar();
+
+        ViewCompat.setOnApplyWindowInsetsListener(rootLayout, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
+            v.setPadding(0, insets.top, 0, 0);
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         webView.loadUrl(url);
     }
@@ -141,9 +203,43 @@ public class AppleSignInActivity extends Activity {
         finish();
     }
 
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()
+        );
+    }
+
     @NonNull
     private static String escapeJsString(@NonNull String input) {
         return input.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"");
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setupStatusBar() {
+        Window window = getWindow();
+        window.setStatusBarColor(0xFFF8F8F8);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            android.view.WindowInsetsController controller = window.getInsetsController();
+            if (controller != null) {
+                controller.setSystemBarsAppearance(
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                );
+            }
+        } else {
+            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+        }
+    }
+
+    private void updateDomainText(@NonNull String url) {
+        try {
+            String host = Uri.parse(url).getHost();
+            if (host != null) {
+                domainTextView.setText(host);
+            }
+        } catch (Exception e) {
+            // ignore
+        }
     }
 
     private class AppleSignInBridge {

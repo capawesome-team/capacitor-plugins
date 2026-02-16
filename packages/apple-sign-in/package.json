@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-apple-sign-in",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Capacitor plugin to sign-in with Apple.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
