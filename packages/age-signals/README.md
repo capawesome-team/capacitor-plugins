@@ -8,10 +8,6 @@ Capacitor plugin to use the [Play Age Signals API](https://developer.android.com
   </a>
 </div>
 
-???+ info "Important Notice"
-
-    The **Play Age Signals API** is returning "Not yet implemented" because its live functionality is scheduled to begin on January 1, 2026.
-
 ## Features
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for age verification. Here are some of the key features:
