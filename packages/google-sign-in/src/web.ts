@@ -7,8 +7,7 @@ import type {
   SignInResult,
 } from './definitions';
 
-const AUTHORIZATION_ENDPOINT =
-  'https://accounts.google.com/o/oauth2/v2/auth';
+const AUTHORIZATION_ENDPOINT = 'https://accounts.google.com/o/oauth2/v2/auth';
 
 const SESSION_STORAGE_KEY_NONCE = '__capawesome_google_sign_in_nonce';
 const SESSION_STORAGE_KEY_STATE = '__capawesome_google_sign_in_state';
@@ -71,10 +70,10 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
     };
   }
 
-  async initialize(options?: InitializeOptions): Promise<void> {
-    this.clientId = options?.clientId;
-    this.redirectUrl = options?.redirectUrl;
-    this.scopes = options?.scopes;
+  async initialize(options: InitializeOptions): Promise<void> {
+    this.clientId = options.clientId;
+    this.redirectUrl = options.redirectUrl;
+    this.scopes = options.scopes;
   }
 
   async signIn(options?: SignInOptions): Promise<SignInResult> {

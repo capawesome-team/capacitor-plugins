@@ -20,7 +20,7 @@ export interface GoogleSignInPlugin {
    *
    * @since 0.1.0
    */
-  initialize(options?: InitializeOptions): Promise<void>;
+  initialize(options: InitializeOptions): Promise<void>;
   /**
    * Start the Google Sign-In flow.
    *
@@ -51,36 +51,17 @@ export interface InitializeOptions {
   /**
    * The web client ID from Google Cloud Console.
    *
-   * Required on Android and Web.
    * On Android, this is passed as the server client ID to the Credential Manager API
    * and the AuthorizationClient API.
    * On iOS, this is used as the server client ID for the Google Sign-In SDK.
    * On Web, this is used to initialize the Google Sign-In JavaScript API.
    *
+   * **Attention**: This must be a web client ID on all platforms, even on Android and iOS.
+   * 
    * @since 0.1.0
    * @example "123456789-abc.apps.googleusercontent.com"
    */
-  clientId?: string;
-  /**
-   * The web client secret from Google Cloud Console.
-   *
-   * Required on Web for the OAuth 2.0 authorization code exchange.
-   *
-   * Only available on Web.
-   *
-   * @since 0.1.0
-   */
-  clientSecret?: string;
-  /**
-   * The iOS client ID from Google Cloud Console.
-   *
-   * Only available on iOS.
-   * If not provided, the plugin falls back to the `GIDClientID` value in `Info.plist`.
-   *
-   * @since 0.1.0
-   * @example "123456789-xyz.apps.googleusercontent.com"
-   */
-  iosClientId?: string;
+  clientId: string;
   /**
    * The URL to redirect to after the OAuth flow.
    *

@@ -24,14 +24,18 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func initialize(_ call: CAPPluginCall) {
-        let options = InitializeOptions(call)
-        implementation?.initialize(options, completion: { error in
-            if let error = error {
-                self.rejectCall(call, error)
-            } else {
-                self.resolveCall(call)
-            }
-        })
+        do {
+            let options = try InitializeOptions(call)
+            implementation?.initialize(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
     }
 
     @objc func signIn(_ call: CAPPluginCall) {

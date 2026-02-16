@@ -11,12 +11,12 @@ import GoogleSignIn
     }
 
     @objc public func initialize(_ options: InitializeOptions, completion: @escaping (_ error: Error?) -> Void) {
-        let iosClientId = options.iosClientId ?? Bundle.main.object(forInfoDictionaryKey: "GIDClientID") as? String
-        let serverClientId = options.clientId
-        if let iosClientId = iosClientId {
-            let configuration = GIDConfiguration(clientID: iosClientId, serverClientID: serverClientId)
-            GIDSignIn.sharedInstance.configuration = configuration
+        guard let iosClientId = Bundle.main.object(forInfoDictionaryKey: "GIDClientID") as? String else {
+            completion(CustomError.iosClientIdMissing)
+            return
         }
+        let configuration = GIDConfiguration(clientID: iosClientId, serverClientID: options.clientId)
+        GIDSignIn.sharedInstance.configuration = configuration
         self.scopes = options.scopes
         completion(nil)
     }

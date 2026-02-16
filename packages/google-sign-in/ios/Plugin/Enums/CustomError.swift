@@ -1,6 +1,8 @@
 import Foundation
 
 public enum CustomError: Error {
+    case clientIdMissing
+    case iosClientIdMissing
     case signInCanceled
     case viewControllerUnavailable
     case idTokenMissing
@@ -10,6 +12,10 @@ public enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .clientIdMissing:
+            return NSLocalizedString("clientId must be provided.", comment: "clientIdMissing")
+        case .iosClientIdMissing:
+            return NSLocalizedString("GIDClientID is missing from Info.plist.", comment: "iosClientIdMissing")
         case .signInCanceled:
             return NSLocalizedString("The user canceled the sign-in flow.", comment: "signInCanceled")
         case .viewControllerUnavailable:

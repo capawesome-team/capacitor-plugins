@@ -49,7 +49,7 @@ This plugin will use the following project variables (defined in your app's `var
 
 - `$androidxCredentialsVersion` version of `androidx.credentials:credentials` (default: `1.5.0`)
 - `$googleIdVersion` version of `com.google.android.libraries.identity.googleid:googleid` (default: `1.1.1`)
-- `$playServicesAuthVersion` version of `com.google.android.gms:play-services-auth` (default: `21.3.0`)
+- `$playServicesAuthVersion` version of `com.google.android.gms:play-services-auth` (default: `21.5.0`)
 
 ### iOS
 
@@ -59,8 +59,6 @@ Add the `GIDClientID` key to the `ios/App/App/Info.plist` file with your iOS cli
 <key>GIDClientID</key>
 <string>YOUR_IOS_CLIENT_ID</string>
 ```
-
-Alternatively, you can provide the iOS client ID at runtime using the `iosClientId` option in the `initialize()` method.
 
 You also need to add the URL scheme for your iOS client ID to the `ios/App/App/Info.plist` file:
 
@@ -147,7 +145,7 @@ Only available on Web.
 ### initialize(...)
 
 ```typescript
-initialize(options?: InitializeOptions | undefined) => Promise<void>
+initialize(options: InitializeOptions) => Promise<void>
 ```
 
 Initialize the Google Sign-In plugin.
@@ -224,13 +222,11 @@ On Web, this is a no-op.
 
 #### InitializeOptions
 
-| Prop               | Type                  | Description                                                                                                                                                                                                                                                                                                                                | Since |
-| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`clientId`**     | <code>string</code>   | The web client ID from Google Cloud Console. Required on Android and Web. On Android, this is passed as the server client ID to the Credential Manager API and the AuthorizationClient API. On iOS, this is used as the server client ID for the Google Sign-In SDK. On Web, this is used to initialize the Google Sign-In JavaScript API. | 0.1.0 |
-| **`clientSecret`** | <code>string</code>   | The web client secret from Google Cloud Console. Required on Web for the OAuth 2.0 authorization code exchange. Only available on Web.                                                                                                                                                                                                     | 0.1.0 |
-| **`iosClientId`**  | <code>string</code>   | The iOS client ID from Google Cloud Console. Only available on iOS. If not provided, the plugin falls back to the `GIDClientID` value in `Info.plist`.                                                                                                                                                                                     | 0.1.0 |
-| **`redirectUrl`**  | <code>string</code>   | The URL to redirect to after the OAuth flow. Only available on Web.                                                                                                                                                                                                                                                                        | 0.1.0 |
-| **`scopes`**       | <code>string[]</code> | The OAuth scopes to request. If provided, the plugin will request authorization in addition to authentication. This enables `accessToken` and `serverAuthCode` in the sign-in result.                                                                                                                                                      | 0.1.0 |
+| Prop              | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                                          | Since |
+| ----------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`clientId`**    | <code>string</code>   | The web client ID from Google Cloud Console. On Android, this is passed as the server client ID to the Credential Manager API and the AuthorizationClient API. On iOS, this is used as the server client ID for the Google Sign-In SDK. On Web, this is used to initialize the Google Sign-In JavaScript API. **Attention**: This must be a web client ID on all platforms, even on Android and iOS. | 0.1.0 |
+| **`redirectUrl`** | <code>string</code>   | The URL to redirect to after the OAuth flow. Only available on Web.                                                                                                                                                                                                                                                                                                                                  | 0.1.0 |
+| **`scopes`**      | <code>string[]</code> | The OAuth scopes to request. If provided, the plugin will request authorization in addition to authentication. This enables `accessToken` and `serverAuthCode` in the sign-in result.                                                                                                                                                                                                                | 0.1.0 |
 
 
 #### SignInOptions

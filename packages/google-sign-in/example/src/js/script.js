@@ -5,8 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     .querySelector('#initialize-button')
     .addEventListener('click', async () => {
       await GoogleSignIn.initialize({
-        clientId: '85678314176-1e4f8ur01p711jf9t1mu1g68opjt3oh0.apps.googleusercontent.com',
-        redirectUrl: 'https://want-convertible-awards-machinery.trycloudflare.com',
+        clientId:
+          '85678314176-1e4f8ur01p711jf9t1mu1g68opjt3oh0.apps.googleusercontent.com',
+        redirectUrl:
+          'https://want-convertible-awards-machinery.trycloudflare.com',
         scopes: ['https://www.googleapis.com/auth/userinfo.email'],
       });
     });
