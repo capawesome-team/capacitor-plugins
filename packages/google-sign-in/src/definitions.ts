@@ -57,7 +57,7 @@ export interface InitializeOptions {
    * On Web, this is used to initialize the Google Sign-In JavaScript API.
    *
    * **Attention**: This must be a web client ID on all platforms, even on Android and iOS.
-   * 
+   *
    * @since 0.1.0
    * @example "123456789-abc.apps.googleusercontent.com"
    */
