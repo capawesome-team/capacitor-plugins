@@ -18,6 +18,7 @@ We are proud to offer a comprehensive Capacitor plugin for Google Sign-In. Here 
 - 👤 **User Profile**: Retrieve the user's email, display name, profile picture, and more.
 - 🛡️ **Nonce Support**: Prevent replay attacks with a custom nonce on Android and Web.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
+- 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - 🤝 **Compatibility**: Compatible with the [OAuth](https://capawesome.io/plugins/oauth) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -236,6 +237,19 @@ On Web, this is a no-op.
 | **`nonce`** | <code>string</code> | A nonce to prevent replay attacks. Only available on Android and Web. | 0.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### What's the difference between this plugin and other Google Sign-In plugins?
+
+This plugin is purpose-built for Google Sign-In and focuses on providing a clean and modern API with the latest platform features. Here are some of the key differences:
+
+- **Cross-platform**: Supports Android, iOS, and Web.
+- **Lightweight**: No unnecessary dependencies. Just Google Sign-In, nothing else.
+- **No deprecated APIs**: Uses the latest platform APIs (Credential Manager on Android, Google Sign-In SDK on iOS).
+- **Authentication + Authorization**: Supports both authentication (ID tokens) and authorization (access tokens, server auth codes) in a single flow.
+- **Error codes**: Provides typed error codes for proper error handling.
+- **Redirect flow on Web**: Uses a redirect-based OAuth flow instead of popups, resulting in a more reliable and user-friendly experience.
 
 ## Changelog
 
