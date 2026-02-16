@@ -100,6 +100,7 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
       client_id: this.clientId,
       redirect_uri: this.redirectUrl,
       scope: allScopes.join(' '),
+      prompt: 'select_account',
       state,
       nonce,
     });
