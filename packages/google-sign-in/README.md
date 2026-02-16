@@ -18,7 +18,7 @@ We are proud to offer a comprehensive Capacitor plugin for Google Sign-In. Here 
 - 👤 **User Profile**: Retrieve the user's email, display name, profile picture, and more.
 - 🛡️ **Nonce Support**: Prevent replay attacks with a custom nonce on Android and Web.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
-- 🤝 **Compatibility**: Compatible with the [Apple Sign-In](https://capawesome.io/plugins/apple-sign-in) and [OAuth](https://capawesome.io/plugins/oauth) plugins.
+- 🤝 **Compatibility**: Compatible with the [OAuth](https://capawesome.io/plugins/oauth) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
