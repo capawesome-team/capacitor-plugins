@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		030596DF2D798515001EC5F7 /* GetFeatureFlagPayloadOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030596DE2D79850D001EC5F7 /* GetFeatureFlagPayloadOptions.swift */; };
 		030596E12D79853F001EC5F7 /* GetFeatureFlagPayloadResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030596E02D798532001EC5F7 /* GetFeatureFlagPayloadResult.swift */; };
+		B1D2E3F52F0C112300AABB01 /* GetDistinctIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1D2E3F42F0C112200AABB01 /* GetDistinctIdResult.swift */; };
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
 		2F98D68224C9AAE500613A4C /* Posthog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* Posthog.swift */; };
@@ -48,6 +49,7 @@
 /* Begin PBXFileReference section */
 		030596DE2D79850D001EC5F7 /* GetFeatureFlagPayloadOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFeatureFlagPayloadOptions.swift; sourceTree = "<group>"; };
 		030596E02D798532001EC5F7 /* GetFeatureFlagPayloadResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetFeatureFlagPayloadResult.swift; sourceTree = "<group>"; };
+		B1D2E3F42F0C112200AABB01 /* GetDistinctIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDistinctIdResult.swift; sourceTree = "<group>"; };
 		2F98D68124C9AAE400613A4C /* Posthog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Posthog.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +152,7 @@
 		7C27474E2D3BFEF900589048 /* Results */ = {
 			isa = PBXGroup;
 			children = (
+				B1D2E3F42F0C112200AABB01 /* GetDistinctIdResult.swift */,
 				030596E02D798532001EC5F7 /* GetFeatureFlagPayloadResult.swift */,
 				7C2747532D3BFF0A00589048 /* IsFeatureEnabledResult.swift */,
 				7C27474F2D3BFEFD00589048 /* GetFeatureFlagResult.swift */,
@@ -416,6 +419,7 @@
 				7C28C8CE2C8AE9D800271553 /* UnregisterOptions.swift in Sources */,
 				7C28C8C22C8AE99100271553 /* AliasOptions.swift in Sources */,
 				030596E12D79853F001EC5F7 /* GetFeatureFlagPayloadResult.swift in Sources */,
+				B1D2E3F52F0C112300AABB01 /* GetDistinctIdResult.swift in Sources */,
 				7C2747502D3BFEFE00589048 /* GetFeatureFlagResult.swift in Sources */,
 				7CFD6A9E2C8B046100FF2B17 /* GroupOptions.swift in Sources */,
 				7C28C8C42C8AE99E00271553 /* CaptureOptions.swift in Sources */,
