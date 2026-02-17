@@ -242,6 +242,15 @@ export interface PixlivePlugin {
     listenerFunc: (event: SyncProgressEvent) => void,
   ): Promise<PluginListenerHandle>;
   /**
+   * Called when the SDK requires synchronization with specific tags.
+   *
+   * @since 8.0.0
+   */
+  addListener(
+    eventName: 'requireSync',
+    listenerFunc: (event: RequireSyncEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
    * Remove all listeners for this plugin.
    *
    * @since 8.0.0
@@ -724,4 +733,16 @@ export interface SyncProgressEvent {
    * @since 8.0.0
    */
   progress: number;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface RequireSyncEvent {
+  /**
+   * The tags that require synchronization.
+   *
+   * @since 8.0.0
+   */
+  tags: string[];
 }

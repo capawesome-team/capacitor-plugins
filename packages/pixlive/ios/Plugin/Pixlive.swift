@@ -325,6 +325,20 @@ import VDARSDK
         plugin?.notifyListenersFromImplementation("eventFromContent", data: data)
     }
 
+    // swiftlint:disable:next implicitly_unwrapped_optional
+    @objc public func contextDidRequireSynchronization(_ priors: [VDARPrior]!) {
+        guard let priors = priors else { return }
+        var tags: [String] = []
+        for prior in priors {
+            if let tagPrior = prior as? VDARTagPrior {
+                tags.append(tagPrior.tagName)
+            }
+        }
+        var data = JSObject()
+        data["tags"] = tags
+        plugin?.notifyListenersFromImplementation("requireSync", data: data)
+    }
+
     // MARK: - RemoteControllerDelegate
 
     // swiftlint:disable:next implicitly_unwrapped_optional

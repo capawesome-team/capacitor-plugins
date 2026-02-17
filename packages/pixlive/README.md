@@ -95,6 +95,7 @@ const createARView = async () => {
 * [`addListener('hideAnnotations', ...)`](#addlistenerhideannotations-)
 * [`addListener('eventFromContent', ...)`](#addlistenereventfromcontent-)
 * [`addListener('syncProgress', ...)`](#addlistenersyncprogress-)
+* [`addListener('requireSync', ...)`](#addlistenerrequiresync-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 
@@ -620,6 +621,26 @@ Called during synchronization with progress updates.
 --------------------
 
 
+### addListener('requireSync', ...)
+
+```typescript
+addListener(eventName: 'requireSync', listenerFunc: (event: RequireSyncEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the SDK requires synchronization with specific tags.
+
+| Param              | Type                                                                              |
+| ------------------ | --------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'requireSync'</code>                                                        |
+| **`listenerFunc`** | <code>(event: <a href="#requiresyncevent">RequireSyncEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -845,5 +866,12 @@ Remove all listeners for this plugin.
 | Prop           | Type                | Description                                  | Since |
 | -------------- | ------------------- | -------------------------------------------- | ----- |
 | **`progress`** | <code>number</code> | The sync progress value between 0.0 and 1.0. | 8.0.0 |
+
+
+#### RequireSyncEvent
+
+| Prop       | Type                  | Description                            | Since |
+| ---------- | --------------------- | -------------------------------------- | ----- |
+| **`tags`** | <code>string[]</code> | The tags that require synchronization. | 8.0.0 |
 
 </docgen-api>

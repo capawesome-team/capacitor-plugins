@@ -16,6 +16,7 @@ import com.vidinoti.android.vdarsdk.VDARContentEventReceiver;
 import com.vidinoti.android.vdarsdk.VDARContext;
 import com.vidinoti.android.vdarsdk.VDARPrior;
 import com.vidinoti.android.vdarsdk.VDARRemoteController;
+import com.vidinoti.android.vdarsdk.VDARTagPrior;
 import com.vidinoti.android.vdarsdk.VDARRemoteControllerListener;
 import com.vidinoti.android.vdarsdk.VDARSDKController;
 import com.vidinoti.android.vdarsdk.VDARSDKControllerEventReceiver;
@@ -493,7 +494,15 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     @Override
     public void onRequireSynchronization(@NonNull ArrayList<VDARPrior> priors) {
-        // Not needed
+        JSArray tagsArray = new JSArray();
+        for (VDARPrior prior : priors) {
+            if (prior instanceof VDARTagPrior) {
+                tagsArray.put(((VDARTagPrior) prior).getTag());
+            }
+        }
+        JSObject data = new JSObject();
+        data.put("tags", tagsArray);
+        plugin.notifyListenersFromImplementation("requireSync", data);
     }
 
     // VDARContentEventReceiver
