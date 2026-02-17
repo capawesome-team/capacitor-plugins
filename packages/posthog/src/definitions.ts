@@ -57,6 +57,12 @@ export interface PosthogPlugin {
    */
   flush(): Promise<void>;
   /**
+   * Get the current distinct ID.
+   *
+   * @since 8.2.0
+   */
+  getDistinctId(): Promise<GetDistinctIdResult>;
+  /**
    * Get the value of a feature flag.
    *
    * @since 7.0.0
@@ -70,12 +76,6 @@ export interface PosthogPlugin {
   getFeatureFlagPayload(
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult>;
-  /**
-   * Get the current distinct ID.
-   *
-   * @since 8.2.0
-   */
-  getDistinctId(): Promise<GetDistinctIdResult>;
   /**
    * Associate the events for that user with a group.
    *
@@ -227,6 +227,15 @@ export interface GetFeatureFlagPayloadOptions {
   key: string;
 }
 
+export interface GetDistinctIdResult {
+  /**
+   * The current distinct ID.
+   *
+   * @since 8.2.0
+   */
+  distinctId: string;
+}
+
 export interface GetFeatureFlagResult {
   /**
    * The value of the feature flag.
@@ -245,15 +254,6 @@ export interface GetFeatureFlagPayloadResult {
    * @since 7.1.0
    */
   value: JsonType;
-}
-
-export interface GetDistinctIdResult {
-  /**
-   * The current distinct ID.
-   *
-   * @since 8.2.0
-   */
-  distinctId: string;
 }
 
 /**

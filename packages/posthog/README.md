@@ -173,9 +173,9 @@ const unregister = async () => {
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
+* [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
 * [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
-* [`getDistinctId()`](#getdistinctid)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
@@ -247,6 +247,21 @@ Only available on Android and iOS.
 --------------------
 
 
+### getDistinctId()
+
+```typescript
+getDistinctId() => Promise<GetDistinctIdResult>
+```
+
+Get the current distinct ID.
+
+**Returns:** <code>Promise&lt;<a href="#getdistinctidresult">GetDistinctIdResult</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### getFeatureFlag(...)
 
 ```typescript
@@ -281,21 +296,6 @@ Get the payload of a feature flag.
 **Returns:** <code>Promise&lt;<a href="#getfeatureflagpayloadresult">GetFeatureFlagPayloadResult</a>&gt;</code>
 
 **Since:** 7.1.0
-
---------------------
-
-
-### getDistinctId()
-
-```typescript
-getDistinctId() => Promise<GetDistinctIdResult>
-```
-
-Get the current distinct ID.
-
-**Returns:** <code>Promise&lt;<a href="#getdistinctidresult">GetDistinctIdResult</a>&gt;</code>
-
-**Since:** 8.2.0
 
 --------------------
 
@@ -541,6 +541,13 @@ Remove a super property.
 | **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### GetDistinctIdResult
+
+| Prop             | Type                | Description              | Since |
+| ---------------- | ------------------- | ------------------------ | ----- |
+| **`distinctId`** | <code>string</code> | The current distinct ID. | 8.2.0 |
+
+
 #### GetFeatureFlagResult
 
 | Prop        | Type                                   | Description                                                                                  | Since |
@@ -567,13 +574,6 @@ Remove a super property.
 | Prop      | Type                | Description                  | Since |
 | --------- | ------------------- | ---------------------------- | ----- |
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.1.0 |
-
-
-#### GetDistinctIdResult
-
-| Prop             | Type                | Description              | Since |
-| ---------------- | ------------------- | ------------------------ | ----- |
-| **`distinctId`** | <code>string</code> | The current distinct ID. | 8.2.0 |
 
 
 #### GroupOptions
