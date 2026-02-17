@@ -355,6 +355,15 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         }
     }
 
+    public void setNotificationsSupport(@NonNull SetNotificationsSupportOptions options, @NonNull EmptyCallback callback) {
+        try {
+            VDARSDKController.getInstance().setNotificationsSupport(options.isEnabled());
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
     public void setInterfaceLanguage(@NonNull SetInterfaceLanguageOptions options, @NonNull EmptyCallback callback) {
         try {
             VDARSDKController.getInstance().forceLanguage(options.getLanguage());

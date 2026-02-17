@@ -63,6 +63,10 @@ export class PixliveWeb extends WebPlugin implements PixlivePlugin {
     this.throwUnimplemented();
   }
 
+  async setNotificationsSupport(): Promise<void> {
+    this.throwUnimplemented();
+  }
+
   async setInterfaceLanguage(): Promise<void> {
     this.throwUnimplemented();
   }

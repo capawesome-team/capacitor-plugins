@@ -82,6 +82,7 @@ const createARView = async () => {
 * [`stopNearbyGPSDetection()`](#stopnearbygpsdetection)
 * [`startGPSNotifications()`](#startgpsnotifications)
 * [`stopGPSNotifications()`](#stopgpsnotifications)
+* [`setNotificationsSupport(...)`](#setnotificationssupport)
 * [`setInterfaceLanguage(...)`](#setinterfacelanguage)
 * [`createARView(...)`](#createarview)
 * [`destroyARView()`](#destroyarview)
@@ -365,6 +366,25 @@ stopGPSNotifications() => Promise<void>
 Disable GPS-triggered local notifications.
 
 Only available on Android and iOS.
+
+**Since:** 8.0.0
+
+--------------------
+
+
+### setNotificationsSupport(...)
+
+```typescript
+setNotificationsSupport(options: SetNotificationsSupportOptions) => Promise<void>
+```
+
+Enable or disable notification support.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnotificationssupportoptions">SetNotificationsSupportOptions</a></code> |
 
 **Since:** 8.0.0
 
@@ -778,6 +798,13 @@ Remove all listeners for this plugin.
 | Prop           | Type                   | Description                                  | Since |
 | -------------- | ---------------------- | -------------------------------------------- | ----- |
 | **`contexts`** | <code>Context[]</code> | The contexts associated with nearby beacons. | 8.0.0 |
+
+
+#### SetNotificationsSupportOptions
+
+| Prop          | Type                 | Description                                      | Since |
+| ------------- | -------------------- | ------------------------------------------------ | ----- |
+| **`enabled`** | <code>boolean</code> | Whether notifications support should be enabled. | 8.0.0 |
 
 
 #### SetInterfaceLanguageOptions

@@ -389,6 +389,29 @@ public class PixlivePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setNotificationsSupport(PluginCall call) {
+        try {
+            SetNotificationsSupportOptions options = new SetNotificationsSupportOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.setNotificationsSupport(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void setInterfaceLanguage(PluginCall call) {
         try {
             SetInterfaceLanguageOptions options = new SetInterfaceLanguageOptions(call);

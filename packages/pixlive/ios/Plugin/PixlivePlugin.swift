@@ -22,6 +22,7 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "stopNearbyGPSDetection", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startGPSNotifications", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stopGPSNotifications", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setNotificationsSupport", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setInterfaceLanguage", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "createARView", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroyARView", returnType: CAPPluginReturnPromise),
@@ -227,6 +228,21 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
                 self.resolveCall(call)
             }
         })
+    }
+
+    @objc func setNotificationsSupport(_ call: CAPPluginCall) {
+        do {
+            let options = try SetNotificationsSupportOptions(call)
+            implementation?.setNotificationsSupport(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func setInterfaceLanguage(_ call: CAPPluginCall) {

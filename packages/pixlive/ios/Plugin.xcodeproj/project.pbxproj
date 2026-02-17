@@ -35,6 +35,7 @@
 		AA0001252D0A000000000013 /* GetNearbyBeaconsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001242D0A000000000013 /* GetNearbyBeaconsResult.swift */; };
 		AA0001272D0A000000000014 /* GetNearbyGPSPointsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001262D0A000000000014 /* GetNearbyGPSPointsResult.swift */; };
 		AA0001292D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001282D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift */; };
+		AA00012F2D0A00000000001B /* SetNotificationsSupportOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00012E2D0A00000000001B /* SetNotificationsSupportOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		AA0001242D0A000000000013 /* GetNearbyBeaconsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNearbyBeaconsResult.swift; sourceTree = "<group>"; };
 		AA0001262D0A000000000014 /* GetNearbyGPSPointsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNearbyGPSPointsResult.swift; sourceTree = "<group>"; };
 		AA0001282D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGPSPointsInBoundingBoxResult.swift; sourceTree = "<group>"; };
+		AA00012E2D0A00000000001B /* SetNotificationsSupportOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationsSupportOptions.swift; sourceTree = "<group>"; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8C201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50ADFF91201F53D600D50D53 /* PluginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PluginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +165,7 @@
 				AA00011C2D0A00000000000F /* SetARViewTouchEnabledOptions.swift */,
 				AA00011E2D0A000000000010 /* SetARViewTouchHoleOptions.swift */,
 				AA0001162D0A00000000000C /* SetInterfaceLanguageOptions.swift */,
+				AA00012E2D0A00000000001B /* SetNotificationsSupportOptions.swift */,
 				AA0001062D0A000000000004 /* SynchronizeOptions.swift */,
 				AA0001082D0A000000000005 /* SynchronizeWithToursAndContextsOptions.swift */,
 				AA00010A2D0A000000000006 /* UpdateTagMappingOptions.swift */,
@@ -425,6 +428,7 @@
 				AA0001252D0A000000000013 /* GetNearbyBeaconsResult.swift in Sources */,
 				AA0001272D0A000000000014 /* GetNearbyGPSPointsResult.swift in Sources */,
 				AA0001292D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift in Sources */,
+				AA00012F2D0A00000000001B /* SetNotificationsSupportOptions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

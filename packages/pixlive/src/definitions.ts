@@ -131,6 +131,16 @@ export interface PixlivePlugin {
    */
   stopGPSNotifications(): Promise<void>;
   /**
+   * Enable or disable notification support.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.0.0
+   */
+  setNotificationsSupport(
+    options: SetNotificationsSupportOptions,
+  ): Promise<void>;
+  /**
    * Set the language for SDK UI elements.
    *
    * Only available on Android and iOS.
@@ -390,6 +400,18 @@ export interface GetGPSPointsInBoundingBoxOptions {
    * @since 8.0.0
    */
   maxLongitude: number;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface SetNotificationsSupportOptions {
+  /**
+   * Whether notifications support should be enabled.
+   *
+   * @since 8.0.0
+   */
+  enabled: boolean;
 }
 
 /**

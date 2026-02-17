@@ -207,6 +207,11 @@ import VDARSDK
         completion(nil)
     }
 
+    @objc public func setNotificationsSupport(_ options: SetNotificationsSupportOptions, completion: @escaping (_ error: Error?) -> Void) {
+        VDARSDKController.sharedInstance()?.isNotificationsEnabled = options.enabled
+        completion(nil)
+    }
+
     @objc public func setInterfaceLanguage(_ options: SetInterfaceLanguageOptions, completion: @escaping (_ error: Error?) -> Void) {
         VDARSDKController.sharedInstance()?.forceLanguage(options.language)
         completion(nil)
