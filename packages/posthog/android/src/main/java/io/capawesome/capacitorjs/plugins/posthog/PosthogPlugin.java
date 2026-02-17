@@ -118,6 +118,16 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getDistinctId(PluginCall call) {
+        try {
+            Result result = implementation.getDistinctId();
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void group(PluginCall call) {
         try {
             String type = call.getString("type");

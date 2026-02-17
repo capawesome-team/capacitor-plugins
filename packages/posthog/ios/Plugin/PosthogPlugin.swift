@@ -17,6 +17,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getDistinctId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
@@ -90,6 +91,13 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         } catch let error {
             rejectCall(call, error)
+        }
+    }
+
+    @objc func getDistinctId(_ call: CAPPluginCall) {
+        let result = implementation?.getDistinctId()
+        if let result = result?.toJSObject() as? JSObject {
+            self.resolveCall(call, result)
         }
     }
 

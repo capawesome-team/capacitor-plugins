@@ -18,6 +18,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOp
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetDistinctIdResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
 class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
@@ -57,6 +58,11 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
 
         val value = com.posthog.PostHog.getFeatureFlagPayload(key = key)
         return GetFeatureFlagPayloadResult(value)
+    }
+
+    fun getDistinctId(): GetDistinctIdResult {
+        val distinctId = com.posthog.PostHog.distinctId()
+        return GetDistinctIdResult(distinctId)
     }
 
     fun group(options: GroupOptions) {

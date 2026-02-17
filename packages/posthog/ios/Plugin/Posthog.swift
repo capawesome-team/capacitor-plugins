@@ -50,6 +50,11 @@ import PostHog
         return GetFeatureFlagPayloadResult(value: value)
     }
 
+    @objc public func getDistinctId() -> GetDistinctIdResult {
+        let distinctId = PostHogSDK.shared.getDistinctId()
+        return GetDistinctIdResult(distinctId: distinctId)
+    }
+
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
         let key = options.getKey()
