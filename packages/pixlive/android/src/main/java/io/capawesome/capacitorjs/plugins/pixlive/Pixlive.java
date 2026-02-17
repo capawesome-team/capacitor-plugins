@@ -117,7 +117,15 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                     new Observer() {
                         @Override
                         public void update(Observable o, Object arg) {
-                            callback.success();
+                            VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
+                            if (!info.isCompleted()) {
+                                return;
+                            }
+                            if (info.getError() != null) {
+                                callback.error(new Exception(info.getError()));
+                            } else {
+                                callback.success();
+                            }
                         }
                     }
                 );
@@ -136,7 +144,15 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                     new Observer() {
                         @Override
                         public void update(Observable o, Object arg) {
-                            callback.success();
+                            VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
+                            if (!info.isCompleted()) {
+                                return;
+                            }
+                            if (info.getError() != null) {
+                                callback.error(new Exception(info.getError()));
+                            } else {
+                                callback.success();
+                            }
                         }
                     }
                 );
