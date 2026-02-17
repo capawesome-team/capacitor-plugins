@@ -46,7 +46,7 @@ repositories {
     google()
     mavenCentral()
     flatDir {
-        dirs 'libs'
+        dirs "${rootProject.projectDir}/app/libs"
     }
 }
 

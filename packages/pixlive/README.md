@@ -13,7 +13,7 @@ npx cap sync
 
 #### SDK Setup
 
-Copy the `vdarsdk-release.aar` file into the `android/libs/` directory of the plugin (or your app's `android/app/libs/` directory).
+Copy the `vdarsdk-release.aar` file into your app's `android/app/libs/` directory.
 
 ### iOS
 
