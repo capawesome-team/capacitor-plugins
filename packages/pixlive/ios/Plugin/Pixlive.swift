@@ -10,6 +10,8 @@ import VDARSDK
     private var arViewController: VDARLiveAnnotationViewController?
     private var touchEnabled = true
     private var touchHole: CGRect?
+    private var lastSyncProgressTime: TimeInterval = 0
+    private let syncProgressThrottleInterval: TimeInterval = 0.5
 
     public init(_ plugin: PixlivePlugin) {
         self.plugin = plugin
@@ -327,6 +329,11 @@ import VDARSDK
 
     // swiftlint:disable:next implicitly_unwrapped_optional
     @objc public func remoteController(_ controller: VDARRemoteController!, didProgress prc: Float, isReady: Bool, folder: String!) {
+        let now = Date().timeIntervalSince1970
+        if !isReady && prc < 1.0 && (now - lastSyncProgressTime) < syncProgressThrottleInterval {
+            return
+        }
+        lastSyncProgressTime = now
         var data = JSObject()
         data["progress"] = prc
         plugin?.notifyListenersFromImplementation("syncProgress", data: data)
