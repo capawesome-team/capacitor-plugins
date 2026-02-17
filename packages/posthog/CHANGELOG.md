@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`957183564aab64d8cbc4dd4da973ce64377d5747`](https://github.com/capawesome-team/capacitor-plugins/commit/957183564aab64d8cbc4dd4da973ce64377d5747) ([#773](https://github.com/capawesome-team/capacitor-plugins/pull/773)): feat: add `getDistinctId()` method
+
 ## 8.1.0
 
 ### Minor Changes
