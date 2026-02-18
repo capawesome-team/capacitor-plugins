@@ -44,9 +44,6 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     private boolean touchEnabled = true;
 
-    private long lastSyncProgressTime = 0;
-    private static final long SYNC_PROGRESS_THROTTLE_MS = 500;
-
     @Nullable
     private Rect touchHole;
 
@@ -544,11 +541,6 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     @Override
     public void onSyncProgress(@NonNull VDARRemoteController controller, float progress, boolean isDone, @Nullable String error) {
-        long now = System.currentTimeMillis();
-        if (!isDone && progress < 1.0f && (now - lastSyncProgressTime) < SYNC_PROGRESS_THROTTLE_MS) {
-            return;
-        }
-        lastSyncProgressTime = now;
         JSObject data = new JSObject();
         data.put("progress", progress);
         plugin.notifyListenersFromImplementation("syncProgress", data);
