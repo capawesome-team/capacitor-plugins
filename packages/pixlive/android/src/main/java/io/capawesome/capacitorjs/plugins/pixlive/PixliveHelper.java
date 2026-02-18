@@ -7,6 +7,7 @@ import com.getcapacitor.JSObject;
 import com.vidinoti.android.vdarsdk.VDARCodeType;
 import com.vidinoti.android.vdarsdk.VDARContext;
 import com.vidinoti.android.vdarsdk.VDARContextPrior;
+import com.vidinoti.android.vdarsdk.VDARIntersectionPrior;
 import com.vidinoti.android.vdarsdk.VDARPrior;
 import com.vidinoti.android.vdarsdk.VDARTagPrior;
 import com.vidinoti.android.vdarsdk.VDARTourPrior;
@@ -23,9 +24,12 @@ public class PixliveHelper {
         List<VDARPrior> priors = new ArrayList<>();
         for (int i = 0; i < tags.length(); i++) {
             JSONArray tagGroup = tags.getJSONArray(i);
+
+            ArrayList<VDARPrior> innerPriors = new ArrayList<>();
             for (int j = 0; j < tagGroup.length(); j++) {
-                priors.add(new VDARTagPrior(tagGroup.getString(j)));
+                innerPriors.add(new VDARTagPrior(tagGroup.getString(j)));
             }
+            priors.add(new VDARIntersectionPrior(innerPriors));
         }
         return priors;
     }
