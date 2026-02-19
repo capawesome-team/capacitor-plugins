@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-superwall",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Unofficial Capacitor plugin for Superwall SDK.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

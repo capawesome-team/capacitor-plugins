@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-android-foreground-service",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Capacitor plugin to run a foreground service on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
