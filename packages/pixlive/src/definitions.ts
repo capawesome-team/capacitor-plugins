@@ -660,6 +660,18 @@ export interface GPSPoint {
    */
   contextId: string;
   /**
+   * The category of the GPS point.
+   *
+   * @since 8.0.0
+   */
+  category: string;
+  /**
+   * The label of the GPS point.
+   *
+   * @since 8.0.0
+   */
+  label: string;
+  /**
    * The latitude of the GPS point.
    *
    * @since 8.0.0
