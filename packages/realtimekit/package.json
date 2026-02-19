@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-realtimekit",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Unofficial Capacitor plugin for using the RealtimeKit SDK.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

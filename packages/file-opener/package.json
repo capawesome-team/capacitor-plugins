@@ -1,6 +1,6 @@
 {
   "name": "@capawesome-team/capacitor-file-opener",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Capacitor plugin to open a file with the default application.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
