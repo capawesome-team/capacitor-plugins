@@ -7,9 +7,11 @@ public class PixliveHelper {
     static func buildTagPriors(_ tags: [[String]]) -> [VDARPrior] {
         var priors: [VDARPrior] = []
         for tagGroup in tags {
+            var innerPriors: [VDARPrior] = []
             for tag in tagGroup {
-                priors.append(VDARTagPrior(tagName: tag))
+                innerPriors.append(VDARTagPrior(tagName: tag))
             }
+            priors.append(VDARIntersectionPrior(priors: innerPriors))
         }
         return priors
     }
