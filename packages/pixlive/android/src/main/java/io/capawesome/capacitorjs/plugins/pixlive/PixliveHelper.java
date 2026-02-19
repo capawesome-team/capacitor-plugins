@@ -66,6 +66,8 @@ public class PixliveHelper {
     public static JSObject gpsPointToJSObject(@NonNull VDARGPSPoint point) {
         JSObject obj = new JSObject();
         obj.put("contextId", point.getContextID() != null ? point.getContextID() : "");
+        obj.put("category", point.getCategory() != null ? point.getCategory() : "");
+        obj.put("label", point.getLabel() != null ? point.getLabel() : "");
         obj.put("latitude", point.getLat());
         obj.put("longitude", point.getLon());
         float detectionRadius = point.getDetectionRadius();

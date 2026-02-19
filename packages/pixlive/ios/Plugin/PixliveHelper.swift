@@ -46,6 +46,8 @@ public class PixliveHelper {
     static func gpsPointToJSObject(_ point: VDARGPSPoint) -> JSObject {
         var obj = JSObject()
         obj["contextId"] = point.contextId ?? ""
+        obj["category"] = point.category ?? ""
+        obj["label"] = point.label ?? ""
         obj["latitude"] = point.lat
         obj["longitude"] = point.lon
         obj["detectionRadius"] = point.detectionRadius > 0 ? point.detectionRadius : NSNull()
