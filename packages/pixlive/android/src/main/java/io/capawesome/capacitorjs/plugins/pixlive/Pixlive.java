@@ -542,7 +542,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     @Override
     public void onSyncProgress(@NonNull VDARRemoteController controller, float progress, boolean isDone, @Nullable String error) {
         JSObject data = new JSObject();
-        data.put("progress", progress);
+        data.put("progress", progress / 100.0f);
         plugin.notifyListenersFromImplementation("syncProgress", data);
     }
 }
