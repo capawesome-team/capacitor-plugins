@@ -17,15 +17,11 @@ Copy the `vdarsdk-release.aar` file into your app's `android/app/libs/` director
 
 ### iOS
 
+Please note, that this plugin does not support SPM but only Cocoapods as iOS dependency manager.
+
 #### SDK Setup
 
-The PixLive iOS SDK (`VDARSDK.xcframework`) must be manually installed:
-
-1. Copy `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project.
-2. Open `ios/App/App.xcworkspace` in Xcode.
-3. Select the **App** target, go to **General** > **Frameworks, Libraries, and Embedded Content**.
-4. Click **+**, then **Add Other...** > **Add Files...** and select `ios/App/Frameworks/VDARSDK.xcframework`.
-5. Set the embed option to **Embed & Sign**.
+The PixLive iOS SDK (`VDARSDK.xcframework`) must be manually added by copying `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project.
 
 ## Configuration
 
@@ -762,6 +758,8 @@ Remove all listeners for this plugin.
 | Prop                              | Type                        | Description                                       | Since |
 | --------------------------------- | --------------------------- | ------------------------------------------------- | ----- |
 | **`contextId`**                   | <code>string</code>         | The ID of the associated context.                 | 8.0.0 |
+| **`category`**                    | <code>string</code>         | The category of the GPS point.                    | 8.0.0 |
+| **`label`**                       | <code>string</code>         | The label of the GPS point.                       | 8.0.0 |
 | **`latitude`**                    | <code>number</code>         | The latitude of the GPS point.                    | 8.0.0 |
 | **`longitude`**                   | <code>number</code>         | The longitude of the GPS point.                   | 8.0.0 |
 | **`detectionRadius`**             | <code>number \| null</code> | The detection radius in meters.                   | 8.0.0 |
