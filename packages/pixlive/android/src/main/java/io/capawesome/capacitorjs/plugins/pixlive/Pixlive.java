@@ -471,6 +471,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     @Override
     public void onCodesRecognized(@NonNull ArrayList<VDARCode> codes) {
         for (VDARCode code : codes) {
+            if (code.isSpecialCode()) {
+                continue;
+            }
             JSObject data = new JSObject();
             data.put("code", code.getCodeData());
             data.put("type", PixliveHelper.codeTypeToString(code.getCodeType()));

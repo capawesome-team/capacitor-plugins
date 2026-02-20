@@ -314,6 +314,9 @@ import VDARSDK
     @objc public func codesDetected(_ codes: [VDARCode]!) {
         guard let codes = codes else { return }
         for code in codes {
+            if code.isSpecialCode {
+                continue
+            }
             var data = JSObject()
             data["code"] = code.codeData ?? ""
             data["type"] = PixliveHelper.codeTypeToString(code.codeType)
