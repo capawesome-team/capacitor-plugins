@@ -389,6 +389,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                 annotationView.setLayoutParams(params);
                 webView.setBackgroundColor(Color.TRANSPARENT);
                 ((ViewGroup) webView.getParent()).addView(annotationView, 0);
+                annotationView.onResume();
                 callback.success();
             } catch (Exception exception) {
                 callback.error(exception);
