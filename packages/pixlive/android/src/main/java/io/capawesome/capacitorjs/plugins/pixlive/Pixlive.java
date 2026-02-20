@@ -416,6 +416,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             try {
                 WebView webView = plugin.getBridge().getWebView();
                 webView.setBackgroundColor(Color.WHITE);
+                annotationView.onPause();
                 ((ViewGroup) annotationView.getParent()).removeView(annotationView);
                 annotationView = null;
                 touchHole = null;
