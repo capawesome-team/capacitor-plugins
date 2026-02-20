@@ -220,12 +220,16 @@ import VDARSDK
             let arVC = CapacitorARViewController()
             arVC.pixlive = self
             self.arViewController = arVC
+            _ = arVC.view
+            arVC.viewDidLoad()
             let frame = CGRect(x: options.x, y: options.y, width: options.width, height: options.height)
             arVC.view.frame = frame
             webView.isOpaque = false
             webView.backgroundColor = .clear
             webView.scrollView.backgroundColor = .clear
             webView.superview?.insertSubview(arVC.view, belowSubview: webView)
+            arVC.viewWillAppear(false)
+            arVC.viewDidAppear(false)
             completion(nil)
         }
     }
