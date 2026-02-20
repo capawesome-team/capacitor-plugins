@@ -193,6 +193,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             for (int i = 0; i < options.getTags().length(); i++) {
                 tags.add(options.getTags().getString(i));
             }
+            VDARSDKController.getInstance().disableContexts();
             VDARSDKController.getInstance().enableContextsWithTags(tags);
             callback.success();
         } catch (Exception exception) {

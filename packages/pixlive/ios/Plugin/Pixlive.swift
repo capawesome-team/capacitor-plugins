@@ -78,6 +78,7 @@ import VDARSDK
     }
 
     @objc public func enableContextsWithTags(_ options: EnableContextsWithTagsOptions, completion: @escaping (_ error: Error?) -> Void) {
+        VDARSDKController.sharedInstance()?.disableContexts()
         VDARSDKController.sharedInstance()?.enableContexts(withTags: options.tags)
         completion(nil)
     }
