@@ -37,6 +37,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 - [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
 - [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
 
+## Videos
+
+- [How to use Biometrics in a Capacitor Mobile App](https://youtu.be/ixUvTX6n7x8?si=27_X3KiLGAkI9-vJ)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
