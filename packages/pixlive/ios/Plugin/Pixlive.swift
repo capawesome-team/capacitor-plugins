@@ -8,8 +8,7 @@ import VDARSDK
 
     private weak var plugin: PixlivePlugin?
     private var arViewController: VDARLiveAnnotationViewController?
-    private var touchEnabled = true
-    private var touchHole: CGRect?
+    private var touchForwarderView: TouchForwarderView?
     private var currentContext: VDARContext?
 
     public init(_ plugin: PixlivePlugin) {
@@ -216,7 +215,7 @@ import VDARSDK
         }
         guard let plugin = plugin else { return }
         DispatchQueue.main.async {
-            guard let webView = plugin.webView else { return }
+            guard let webView = plugin.webView, let superview = webView.superview else { return }
             let arVC = CapacitorARViewController()
             arVC.pixlive = self
             self.arViewController = arVC
@@ -227,7 +226,19 @@ import VDARSDK
             webView.isOpaque = false
             webView.backgroundColor = .clear
             webView.scrollView.backgroundColor = .clear
-            webView.superview?.insertSubview(arVC.view, belowSubview: webView)
+
+            let forwarder = TouchForwarderView(frame: webView.frame)
+            forwarder.autoresizingMask = webView.autoresizingMask
+            superview.insertSubview(forwarder, aboveSubview: webView)
+            webView.removeFromSuperview()
+            forwarder.addSubview(webView)
+            webView.frame = forwarder.bounds
+            webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+            forwarder.arView = arVC.view
+            self.touchForwarderView = forwarder
+
+            superview.insertSubview(arVC.view, belowSubview: forwarder)
             arVC.viewWillAppear(false)
             arVC.viewDidAppear(false)
             completion(nil)
@@ -247,7 +258,18 @@ import VDARSDK
             arVC.view.removeFromSuperview()
             arVC.stopAndUnload()
             self.arViewController = nil
-            self.touchHole = nil
+
+            if let forwarder = self.touchForwarderView, let superview = forwarder.superview {
+                webView.removeFromSuperview()
+                let savedFrame = forwarder.frame
+                let savedMask = forwarder.autoresizingMask
+                superview.insertSubview(webView, aboveSubview: forwarder)
+                forwarder.removeFromSuperview()
+                webView.frame = savedFrame
+                webView.autoresizingMask = savedMask
+                self.touchForwarderView = nil
+            }
+
             completion(nil)
         }
     }
@@ -265,22 +287,22 @@ import VDARSDK
     }
 
     @objc public func setARViewTouchEnabled(_ options: SetARViewTouchEnabledOptions, completion: @escaping (_ error: Error?) -> Void) {
-        self.touchEnabled = options.enabled
-        if let arVC = arViewController {
-            DispatchQueue.main.async {
-                arVC.view.isUserInteractionEnabled = options.enabled
-            }
+        DispatchQueue.main.async {
+            self.touchForwarderView?.touchEnabled = options.enabled
         }
         completion(nil)
     }
 
     @objc public func setARViewTouchHole(_ options: SetARViewTouchHoleOptions, completion: @escaping (_ error: Error?) -> Void) {
-        self.touchHole = CGRect(
+        let hole = CGRect(
             x: options.left,
             y: options.top,
             width: options.right - options.left,
             height: options.bottom - options.top
         )
+        DispatchQueue.main.async {
+            self.touchForwarderView?.touchHole = hole
+        }
         completion(nil)
     }
 

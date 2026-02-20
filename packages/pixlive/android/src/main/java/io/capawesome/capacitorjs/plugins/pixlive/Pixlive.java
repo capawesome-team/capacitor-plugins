@@ -2,7 +2,6 @@ package io.capawesome.capacitorjs.plugins.pixlive;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -43,10 +42,8 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     @Nullable
     private VDARAnnotationView annotationView;
 
-    private boolean touchEnabled = true;
-
     @Nullable
-    private Rect touchHole;
+    private TouchInterceptorView touchInterceptorView;
 
     @Nullable
     private VDARContext currentContext;
@@ -396,7 +393,25 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                 params.topMargin = y;
                 annotationView.setLayoutParams(params);
                 webView.setBackgroundColor(Color.TRANSPARENT);
-                ((ViewGroup) webView.getParent()).addView(annotationView, 0);
+
+                ViewGroup parent = (ViewGroup) webView.getParent();
+                int index = parent.indexOfChild(webView);
+                ViewGroup.LayoutParams webViewParams = webView.getLayoutParams();
+                parent.removeView(webView);
+
+                TouchInterceptorView interceptor = new TouchInterceptorView(activity);
+                interceptor.setLayoutParams(webViewParams);
+                parent.addView(interceptor, index);
+
+                webView.setLayoutParams(new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                ));
+                interceptor.addView(webView);
+                interceptor.addView(annotationView, 0);
+                interceptor.setAnnotationView(annotationView);
+                touchInterceptorView = interceptor;
+
                 VDARSDKController.getInstance().setActivity(activity);
                 annotationView.onResume();
                 callback.success();
@@ -417,9 +432,22 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                 WebView webView = plugin.getBridge().getWebView();
                 webView.setBackgroundColor(Color.WHITE);
                 annotationView.onPause();
-                ((ViewGroup) annotationView.getParent()).removeView(annotationView);
+
+                if (touchInterceptorView != null) {
+                    ViewGroup parent = (ViewGroup) touchInterceptorView.getParent();
+                    int index = parent.indexOfChild(touchInterceptorView);
+                    ViewGroup.LayoutParams interceptorParams = touchInterceptorView.getLayoutParams();
+
+                    touchInterceptorView.removeView(annotationView);
+                    touchInterceptorView.removeView(webView);
+                    parent.removeView(touchInterceptorView);
+
+                    webView.setLayoutParams(interceptorParams);
+                    parent.addView(webView, index);
+                    touchInterceptorView = null;
+                }
+
                 annotationView = null;
-                touchHole = null;
                 callback.success();
             } catch (Exception exception) {
                 callback.error(exception);
@@ -452,14 +480,12 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void setARViewTouchEnabled(@NonNull SetARViewTouchEnabledOptions options, @NonNull EmptyCallback callback) {
-        this.touchEnabled = options.isEnabled();
-        if (annotationView != null) {
+        if (touchInterceptorView != null) {
             plugin
                 .getActivity()
                 .runOnUiThread(() -> {
-                    if (annotationView != null) {
-                        annotationView.setClickable(touchEnabled);
-                        annotationView.setFocusable(touchEnabled);
+                    if (touchInterceptorView != null) {
+                        touchInterceptorView.setTouchEnabled(options.isEnabled());
                     }
                 });
         }
@@ -468,12 +494,19 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     public void setARViewTouchHole(@NonNull SetARViewTouchHoleOptions options, @NonNull EmptyCallback callback) {
         float density = plugin.getActivity().getResources().getDisplayMetrics().density;
-        this.touchHole = new Rect(
-            (int) (options.getLeft() * density),
-            (int) (options.getTop() * density),
-            (int) (options.getRight() * density),
-            (int) (options.getBottom() * density)
-        );
+        float top = (float) (options.getTop() * density);
+        float bottom = (float) (options.getBottom() * density);
+        float left = (float) (options.getLeft() * density);
+        float right = (float) (options.getRight() * density);
+        if (touchInterceptorView != null) {
+            plugin
+                .getActivity()
+                .runOnUiThread(() -> {
+                    if (touchInterceptorView != null) {
+                        touchInterceptorView.setTouchHole(top, bottom, left, right);
+                    }
+                });
+        }
         callback.success();
     }
 
