@@ -217,7 +217,8 @@ import VDARSDK
         guard let plugin = plugin else { return }
         DispatchQueue.main.async {
             guard let webView = plugin.webView else { return }
-            let arVC = VDARLiveAnnotationViewController()
+            let arVC = CapacitorARViewController()
+            arVC.pixlive = self
             self.arViewController = arVC
             let frame = CGRect(x: options.x, y: options.y, width: options.width, height: options.height)
             arVC.view.frame = frame
@@ -277,6 +278,16 @@ import VDARSDK
             height: options.bottom - options.top
         )
         completion(nil)
+    }
+
+    // MARK: - CapacitorARViewController
+
+    func annotationViewDidBecomeEmpty() {
+        plugin?.notifyListenersFromImplementation("hideAnnotations", data: JSObject())
+    }
+
+    func annotationViewDidPresentAnnotations() {
+        plugin?.notifyListenersFromImplementation("presentAnnotations", data: JSObject())
     }
 
     // MARK: - VDARSDKControllerDelegate

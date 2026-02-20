@@ -36,6 +36,7 @@
 		AA0001272D0A000000000014 /* GetNearbyGPSPointsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001262D0A000000000014 /* GetNearbyGPSPointsResult.swift */; };
 		AA0001292D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001282D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift */; };
 		AA00012F2D0A00000000001B /* SetNotificationsSupportOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA00012E2D0A00000000001B /* SetNotificationsSupportOptions.swift */; };
+		AA0001312D0A00000000001C /* CapacitorARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0001302D0A00000000001C /* CapacitorARViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		AA0001262D0A000000000014 /* GetNearbyGPSPointsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetNearbyGPSPointsResult.swift; sourceTree = "<group>"; };
 		AA0001282D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetGPSPointsInBoundingBoxResult.swift; sourceTree = "<group>"; };
 		AA00012E2D0A00000000001B /* SetNotificationsSupportOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNotificationsSupportOptions.swift; sourceTree = "<group>"; };
+		AA0001302D0A00000000001C /* CapacitorARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapacitorARViewController.swift; sourceTree = "<group>"; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8C201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50ADFF91201F53D600D50D53 /* PluginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PluginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +137,7 @@
 				AA00012A2D0A000000000016 /* Classes */,
 				AA00012D2D0A000000000019 /* Enums */,
 				AA00012E2D0A00000000001A /* Protocols */,
+				AA0001302D0A00000000001C /* CapacitorARViewController.swift */,
 				50E1A94720377CB70090CE1A /* PixlivePlugin.swift */,
 				2F98D68124C9AAE400613A4C /* Pixlive.swift */,
 				AA0001002D0A000000000001 /* PixliveHelper.swift */,
@@ -429,6 +432,7 @@
 				AA0001272D0A000000000014 /* GetNearbyGPSPointsResult.swift in Sources */,
 				AA0001292D0A000000000015 /* GetGPSPointsInBoundingBoxResult.swift in Sources */,
 				AA00012F2D0A00000000001B /* SetNotificationsSupportOptions.swift in Sources */,
+				AA0001312D0A00000000001C /* CapacitorARViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
