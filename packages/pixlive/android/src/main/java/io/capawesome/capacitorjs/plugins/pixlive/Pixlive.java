@@ -3,6 +3,7 @@ package io.capawesome.capacitorjs.plugins.pixlive;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
@@ -86,6 +87,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void handleOnPause() {
+        if (annotationView != null && annotationView.getParent() != null && annotationView.getVisibility() == View.VISIBLE) {
+            annotationView.onPause();
+        }
         VDARSDKController controller = VDARSDKController.getInstance();
         if (controller != null) {
             controller.onActivityPaused(plugin.getActivity());
@@ -93,6 +97,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void handleOnResume() {
+        if (annotationView != null && annotationView.getParent() != null && annotationView.getVisibility() == View.VISIBLE) {
+            annotationView.onResume();
+        }
         VDARSDKController controller = VDARSDKController.getInstance();
         if (controller != null) {
             controller.onActivityResumed(plugin.getActivity());
