@@ -47,6 +47,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     @Nullable
     private Rect touchHole;
 
+    @Nullable
+    private VDARContext currentContext;
+
     public Pixlive(@NonNull PixlivePlugin plugin) {
         this.plugin = plugin;
     }
@@ -242,14 +245,8 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     public void stopContext(@NonNull EmptyCallback callback) {
         try {
-            ArrayList<String> contextIds = VDARSDKController.getInstance().getAllContextIDs();
-            if (contextIds != null) {
-                for (String contextId : contextIds) {
-                    VDARContext context = VDARSDKController.getInstance().getContext(contextId);
-                    if (context != null) {
-                        context.stop();
-                    }
-                }
+            if (currentContext != null) {
+                currentContext.stop();
             }
             callback.success();
         } catch (Exception exception) {
@@ -502,6 +499,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     @Override
     public void onEnterContext(@NonNull VDARContext context) {
+        this.currentContext = context;
         JSObject data = new JSObject();
         data.put("contextId", context.getRemoteID());
         plugin.notifyListenersFromImplementation("enterContext", data);
@@ -509,6 +507,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     @Override
     public void onExitContext(@NonNull VDARContext context) {
+        this.currentContext = null;
         JSObject data = new JSObject();
         data.put("contextId", context.getRemoteID());
         plugin.notifyListenersFromImplementation("exitContext", data);

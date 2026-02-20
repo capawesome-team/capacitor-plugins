@@ -10,6 +10,7 @@ import VDARSDK
     private var arViewController: VDARLiveAnnotationViewController?
     private var touchEnabled = true
     private var touchHole: CGRect?
+    private var currentContext: VDARContext?
 
     public init(_ plugin: PixlivePlugin) {
         self.plugin = plugin
@@ -121,16 +122,8 @@ import VDARSDK
     }
 
     @objc public func stopContext(completion: @escaping (_ error: Error?) -> Void) {
-        guard let controller = VDARSDKController.sharedInstance() else {
-            completion(CustomError.sdkNotInitialized)
-            return
-        }
-        if let contextIds = controller.contextIDs as? [String] {
-            for contextId in contextIds {
-                if let context = controller.getContext(contextId) {
-                    context.stop()
-                }
-            }
+        if let context = currentContext {
+            context.stop()
         }
         completion(nil)
     }
@@ -290,6 +283,7 @@ import VDARSDK
     // swiftlint:disable:next implicitly_unwrapped_optional
     @objc public func didEnter(_ context: VDARContext!) {
         guard let context = context else { return }
+        self.currentContext = context
         var data = JSObject()
         data["contextId"] = context.remoteID ?? ""
         plugin?.notifyListenersFromImplementation("enterContext", data: data)
@@ -298,6 +292,7 @@ import VDARSDK
     // swiftlint:disable:next implicitly_unwrapped_optional
     @objc public func didExit(_ context: VDARContext!) {
         guard let context = context else { return }
+        self.currentContext = nil
         var data = JSObject()
         data["contextId"] = context.remoteID ?? ""
         plugin?.notifyListenersFromImplementation("exitContext", data: data)
