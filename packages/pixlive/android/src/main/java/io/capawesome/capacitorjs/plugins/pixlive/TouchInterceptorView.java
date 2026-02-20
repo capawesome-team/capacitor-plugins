@@ -41,8 +41,9 @@ public class TouchInterceptorView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (!touchEnabled || annotationView == null
-                || annotationView.getVisibility() != View.VISIBLE || annotationView.getParent() == null) {
+        if (
+            !touchEnabled || annotationView == null || annotationView.getVisibility() != View.VISIBLE || annotationView.getParent() == null
+        ) {
             return super.onInterceptTouchEvent(event);
         }
 
@@ -60,8 +61,12 @@ public class TouchInterceptorView extends FrameLayout {
             float xPos = event.getX(i);
             float yPos = event.getY(i);
 
-            if (xPos >= arViewX && xPos < arViewX + annotationView.getWidth()
-                    && yPos >= arViewY && yPos < arViewY + annotationView.getHeight()) {
+            if (
+                xPos >= arViewX &&
+                xPos < arViewX + annotationView.getWidth() &&
+                yPos >= arViewY &&
+                yPos < arViewY + annotationView.getHeight()
+            ) {
                 return true;
             }
         }

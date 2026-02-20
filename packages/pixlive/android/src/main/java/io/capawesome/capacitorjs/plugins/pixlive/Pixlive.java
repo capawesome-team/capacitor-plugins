@@ -403,10 +403,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                 interceptor.setLayoutParams(webViewParams);
                 parent.addView(interceptor, index);
 
-                webView.setLayoutParams(new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
-                ));
+                webView.setLayoutParams(
+                    new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+                );
                 interceptor.addView(webView);
                 interceptor.addView(annotationView, 0);
                 interceptor.setAnnotationView(annotationView);
