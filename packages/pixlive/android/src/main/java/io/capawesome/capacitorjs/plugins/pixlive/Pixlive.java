@@ -60,7 +60,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         String apiUrl = plugin.getConfig().getString("apiUrl", null);
         String sdkUrl = plugin.getConfig().getString("sdkUrl", null);
 
-        File storageDir = new File(activity.getFilesDir(), "pixlive");
+        File storageDir = new File(activity.getFilesDir(), "pixliveSDK");
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }

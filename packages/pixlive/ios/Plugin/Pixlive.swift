@@ -24,7 +24,7 @@ import VDARSDK
         let sdkUrl = plugin.getConfig().getString("sdkUrl")
 
         guard let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first else { return }
-        let storagePath = (documentsPath as NSString).appendingPathComponent("pixlive")
+        let storagePath = (documentsPath as NSString).appendingPathComponent("pixliveSDK")
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: storagePath) {
             try? fileManager.createDirectory(atPath: storagePath, withIntermediateDirectories: true)
