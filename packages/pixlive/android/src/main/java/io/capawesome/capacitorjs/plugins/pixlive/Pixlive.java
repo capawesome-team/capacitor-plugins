@@ -74,6 +74,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             VDARRemoteController.getInstance().setCustomRemoteSdkApiServerEndpoint(sdkUrl);
         }
         controller.setEnableCodesRecognition(true);
+        controller.setActivity(activity);
         try {
             controller.setImageSender(new DeviceCameraImageSender());
         } catch (Exception e) {
@@ -389,6 +390,7 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
                 annotationView.setLayoutParams(params);
                 webView.setBackgroundColor(Color.TRANSPARENT);
                 ((ViewGroup) webView.getParent()).addView(annotationView, 0);
+                VDARSDKController.getInstance().setActivity(activity);
                 annotationView.onResume();
                 callback.success();
             } catch (Exception exception) {
