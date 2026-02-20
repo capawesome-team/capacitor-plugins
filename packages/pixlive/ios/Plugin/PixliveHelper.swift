@@ -58,22 +58,32 @@ public class PixliveHelper {
     }
 
     static func codeTypeToString(_ codeType: VDARCodeType) -> String {
-        if codeType.rawValue == VDAR_CODE_TYPE_QRCODE.rawValue {
-            return "qrcode"
+        if codeType.rawValue == VDAR_CODE_TYPE_NONE.rawValue {
+            return "none"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_EAN2.rawValue {
+            return "ean2"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_EAN5.rawValue {
+            return "ean5"
         } else if codeType.rawValue == VDAR_CODE_TYPE_EAN8.rawValue {
             return "ean8"
-        } else if codeType.rawValue == VDAR_CODE_TYPE_EAN13.rawValue {
-            return "ean13"
-        } else if codeType.rawValue == VDAR_CODE_TYPE_UPCA.rawValue {
-            return "upca"
         } else if codeType.rawValue == VDAR_CODE_TYPE_UPCE.rawValue {
             return "upce"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_ISBN10.rawValue {
+            return "isbn10"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_UPCA.rawValue {
+            return "upca"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_EAN13.rawValue {
+            return "ean13"
         } else if codeType.rawValue == VDAR_CODE_TYPE_ISBN13.rawValue {
             return "isbn13"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_COMPOSITE.rawValue {
+            return "composite"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_I25.rawValue {
+            return "i25"
         } else if codeType.rawValue == VDAR_CODE_TYPE_CODE39.rawValue {
             return "code39"
-        } else if codeType.rawValue == VDAR_CODE_TYPE_I25.rawValue {
-            return "itf"
+        } else if codeType.rawValue == VDAR_CODE_TYPE_QRCODE.rawValue {
+            return "qrcode"
         } else {
             return "unknown"
         }

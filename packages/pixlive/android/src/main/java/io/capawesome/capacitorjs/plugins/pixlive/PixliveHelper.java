@@ -79,22 +79,32 @@ public class PixliveHelper {
     @NonNull
     public static String codeTypeToString(@NonNull VDARCodeType codeType) {
         switch (codeType) {
-            case VDAR_CODE_TYPE_QRCODE:
-                return "qrcode";
+            case VDAR_CODE_TYPE_NONE:
+                return "none";
+            case VDAR_CODE_TYPE_EAN2:
+                return "ean2";
+            case VDAR_CODE_TYPE_EAN5:
+                return "ean5";
             case VDAR_CODE_TYPE_EAN8:
                 return "ean8";
-            case VDAR_CODE_TYPE_EAN13:
-                return "ean13";
-            case VDAR_CODE_TYPE_UPCA:
-                return "upca";
             case VDAR_CODE_TYPE_UPCE:
                 return "upce";
+            case VDAR_CODE_TYPE_ISBN10:
+                return "isbn10";
+            case VDAR_CODE_TYPE_UPCA:
+                return "upca";
+            case VDAR_CODE_TYPE_EAN13:
+                return "ean13";
             case VDAR_CODE_TYPE_ISBN13:
                 return "isbn13";
+            case VDAR_CODE_TYPE_COMPOSITE:
+                return "composite";
+            case VDAR_CODE_TYPE_I25:
+                return "i25";
             case VDAR_CODE_TYPE_CODE39:
                 return "code39";
-            case VDAR_CODE_TYPE_I25:
-                return "itf";
+            case VDAR_CODE_TYPE_QRCODE:
+                return "qrcode";
             default:
                 return "unknown";
         }
