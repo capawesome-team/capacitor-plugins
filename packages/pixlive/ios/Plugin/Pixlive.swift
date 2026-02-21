@@ -255,7 +255,9 @@ import VDARSDK
             webView.isOpaque = true
             webView.backgroundColor = .white
             webView.scrollView.backgroundColor = .white
+            arVC.viewWillDisappear(false)
             arVC.view.removeFromSuperview()
+            arVC.viewDidDisappear(false)
             arVC.stopAndUnload()
             self.arViewController = nil
 
