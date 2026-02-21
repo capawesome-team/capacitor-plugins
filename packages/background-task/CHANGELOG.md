@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`aee55a2e4d1996ba839a3a0e91d75e628d1d43a9`](https://github.com/capawesome-team/capacitor-plugins/commit/aee55a2e4d1996ba839a3a0e91d75e628d1d43a9) ([#779](https://github.com/capawesome-team/capacitor-plugins/pull/779)): fix(ios): ensure thread-safety
+
 ## 8.0.1
 
 ### Patch Changes
