@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-background-task': major
+'@capawesome/capacitor-background-task': patch
 ---
 
-ensure thread-safety of the background-task plugin on ios
+fix(ios): ensure thread-safety
