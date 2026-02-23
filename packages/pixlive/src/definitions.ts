@@ -1,9 +1,44 @@
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
+
+/**
+ * @since 8.0.0
+ */
+export type PixlivePermissionType =
+  | 'bluetooth'
+  | 'bluetoothConnect'
+  | 'bluetoothScan'
+  | 'camera'
+  | 'location'
+  | 'notifications';
 
 /**
  * @since 8.0.0
  */
 export interface PixlivePlugin {
+  /**
+   * Initialize the PixLive SDK.
+   *
+   * This must be called before any other method.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.0.0
+   */
+  initialize(): Promise<void>;
+  /**
+   * Check the status of permissions.
+   *
+   * @since 8.0.0
+   */
+  checkPermissions(): Promise<PermissionStatus>;
+  /**
+   * Request permissions.
+   *
+   * @since 8.0.0
+   */
+  requestPermissions(
+    options?: PixlivePluginPermission,
+  ): Promise<PermissionStatus>;
   /**
    * Sync content from PixLive Maker filtered by tags.
    *
@@ -527,6 +562,68 @@ export interface SetARViewTouchHoleOptions {
    * @since 8.0.0
    */
   right: number;
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface PixlivePluginPermission {
+  /**
+   * The permissions to request.
+   *
+   * @since 8.0.0
+   */
+  permissions: PixlivePermissionType[];
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface PermissionStatus {
+  /**
+   * Permission state of the Bluetooth permission.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.0.0
+   */
+  bluetooth?: PermissionState;
+  /**
+   * Permission state of the Bluetooth Connect permission.
+   *
+   * Only available on Android.
+   *
+   * @since 8.0.0
+   */
+  bluetoothConnect?: PermissionState;
+  /**
+   * Permission state of the Bluetooth Scan permission.
+   *
+   * Only available on Android.
+   *
+   * @since 8.0.0
+   */
+  bluetoothScan?: PermissionState;
+  /**
+   * Permission state of the Camera permission.
+   *
+   * @since 8.0.0
+   */
+  camera: PermissionState;
+  /**
+   * Permission state of the Location permission.
+   *
+   * Only available on Android.
+   *
+   * @since 8.0.0
+   */
+  location?: PermissionState;
+  /**
+   * Permission state of the Notifications permission.
+   *
+   * @since 8.0.0
+   */
+  notifications?: PermissionState;
 }
 
 /**

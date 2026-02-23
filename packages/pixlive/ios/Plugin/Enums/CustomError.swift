@@ -14,7 +14,7 @@ enum CustomError: Error {
     case maxLongitudeMissing
     case minLatitudeMissing
     case minLongitudeMissing
-    case sdkNotInitialized
+    case notInitialized
     case tagsMissing
     case topMissing
     case bottomMissing
@@ -56,8 +56,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("minLatitude must be provided.", comment: "minLatitudeMissing")
         case .minLongitudeMissing:
             return NSLocalizedString("minLongitude must be provided.", comment: "minLongitudeMissing")
-        case .sdkNotInitialized:
-            return NSLocalizedString("SDK is not initialized.", comment: "sdkNotInitialized")
+        case .notInitialized:
+            return NSLocalizedString("Plugin is not initialized.", comment: "notInitialized")
         case .tagsMissing:
             return NSLocalizedString("tags must be provided.", comment: "tagsMissing")
         case .topMissing:

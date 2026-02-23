@@ -1,29 +1,55 @@
 package io.capawesome.capacitorjs.plugins.pixlive;
 
+import android.Manifest;
+import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import io.capawesome.capacitorjs.plugins.pixlive.classes.options.*;
 import io.capawesome.capacitorjs.plugins.pixlive.classes.results.*;
 import io.capawesome.capacitorjs.plugins.pixlive.interfaces.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@CapacitorPlugin(name = "Pixlive")
+@CapacitorPlugin(
+    name = "Pixlive",
+    permissions = {
+        @Permission(strings = { Manifest.permission.BLUETOOTH }, alias = PixlivePlugin.PERMISSION_BLUETOOTH),
+        @Permission(strings = { Manifest.permission.BLUETOOTH_CONNECT }, alias = PixlivePlugin.PERMISSION_BLUETOOTH_CONNECT),
+        @Permission(strings = { Manifest.permission.BLUETOOTH_SCAN }, alias = PixlivePlugin.PERMISSION_BLUETOOTH_SCAN),
+        @Permission(strings = { Manifest.permission.CAMERA }, alias = PixlivePlugin.PERMISSION_CAMERA),
+        @Permission(strings = { Manifest.permission.ACCESS_FINE_LOCATION }, alias = PixlivePlugin.PERMISSION_LOCATION),
+        @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = PixlivePlugin.PERMISSION_NOTIFICATIONS)
+    }
+)
 public class PixlivePlugin extends Plugin {
 
     public static final String TAG = "Pixlive";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error occurred.";
+
+    static final String PERMISSION_BLUETOOTH = "bluetooth";
+    static final String PERMISSION_BLUETOOTH_CONNECT = "bluetoothConnect";
+    static final String PERMISSION_BLUETOOTH_SCAN = "bluetoothScan";
+    static final String PERMISSION_CAMERA = "camera";
+    static final String PERMISSION_LOCATION = "location";
+    static final String PERMISSION_NOTIFICATIONS = "notifications";
+
+    private static final String CALLBACK_PERMISSION = "handlePermissionCallback";
 
     private Pixlive implementation;
 
     @Override
     public void load() {
         implementation = new Pixlive(this);
-        implementation.initialize();
     }
 
     @Override
@@ -48,6 +74,51 @@ public class PixlivePlugin extends Plugin {
             implementation.handleOnDestroy();
         }
         super.handleOnDestroy();
+    }
+
+    @PluginMethod
+    public void initialize(PluginCall call) {
+        try {
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.initialize(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    @Override
+    public void checkPermissions(PluginCall call) {
+        super.checkPermissions(call);
+    }
+
+    @PluginMethod
+    @Override
+    public void requestPermissions(PluginCall call) {
+        try {
+            List<String> aliases = getPermissionAliasesFromCall(call);
+            String[] aliasArray = aliases.toArray(new String[0]);
+            requestPermissionForAliases(aliasArray, call, CALLBACK_PERMISSION);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PermissionCallback
+    private void handlePermissionCallback(PluginCall call) {
+        checkPermissions(call);
     }
 
     @PluginMethod
@@ -550,6 +621,29 @@ public class PixlivePlugin extends Plugin {
 
     public void notifyListenersFromImplementation(@NonNull String eventName, @NonNull JSObject data) {
         notifyListeners(eventName, data);
+    }
+
+    @NonNull
+    private List<String> getPermissionAliasesFromCall(@NonNull PluginCall call) throws Exception {
+        JSArray permissionsArray = call.getArray("permissions");
+        List<String> aliases = new ArrayList<>();
+        if (permissionsArray != null) {
+            List<String> permissionsList = permissionsArray.toList();
+            for (String permission : permissionsList) {
+                aliases.add(permission);
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                aliases.add(PERMISSION_BLUETOOTH_CONNECT);
+                aliases.add(PERMISSION_BLUETOOTH_SCAN);
+            } else {
+                aliases.add(PERMISSION_BLUETOOTH);
+            }
+            aliases.add(PERMISSION_CAMERA);
+            aliases.add(PERMISSION_LOCATION);
+            aliases.add(PERMISSION_NOTIFICATIONS);
+        }
+        return aliases;
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

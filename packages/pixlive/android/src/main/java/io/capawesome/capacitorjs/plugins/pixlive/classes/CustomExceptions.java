@@ -23,7 +23,7 @@ public class CustomExceptions {
     public static final CustomException LEFT_MISSING = new CustomException(null, "left must be provided.");
     public static final CustomException RIGHT_MISSING = new CustomException(null, "right must be provided.");
     public static final CustomException CONTEXT_NOT_FOUND = new CustomException(null, "Context not found.");
-    public static final CustomException SDK_NOT_INITIALIZED = new CustomException(null, "SDK is not initialized.");
+    public static final CustomException NOT_INITIALIZED = new CustomException(null, "Plugin is not initialized.");
     public static final CustomException AR_VIEW_ALREADY_EXISTS = new CustomException(null, "AR view already exists.");
     public static final CustomException AR_VIEW_NOT_FOUND = new CustomException(null, "AR view not found.");
 }

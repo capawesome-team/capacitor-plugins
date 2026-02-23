@@ -48,39 +48,51 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     @Nullable
     private VDARContext currentContext;
 
+    private boolean isInitialized = false;
+
     public Pixlive(@NonNull PixlivePlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void initialize() {
-        Activity activity = plugin.getActivity();
-        String licenseKey = plugin.getConfig().getString("licenseKey", "");
-        String apiUrl = plugin.getConfig().getString("apiUrl", null);
-        String sdkUrl = plugin.getConfig().getString("sdkUrl", null);
+    public boolean isInitialized() {
+        return isInitialized;
+    }
 
-        File storageDir = new File(activity.getFilesDir(), "pixliveSDK");
-        if (!storageDir.exists()) {
-            storageDir.mkdirs();
-        }
-
-        VDARSDKController.startSDK(activity, storageDir.getAbsolutePath(), licenseKey);
-        VDARSDKController controller = VDARSDKController.getInstance();
-        if (apiUrl != null) {
-            VDARRemoteController.getInstance().setCustomRemoteApiServerEndpoint(apiUrl);
-        }
-        if (sdkUrl != null) {
-            VDARRemoteController.getInstance().setCustomRemoteSdkApiServerEndpoint(sdkUrl);
-        }
-        controller.setEnableCodesRecognition(true);
-        controller.setActivity(activity);
+    public void initialize(@NonNull EmptyCallback callback) {
         try {
-            controller.setImageSender(new DeviceCameraImageSender());
-        } catch (Exception e) {
-            // Camera not available
+            Activity activity = plugin.getActivity();
+            String licenseKey = plugin.getConfig().getString("licenseKey", "");
+            String apiUrl = plugin.getConfig().getString("apiUrl", null);
+            String sdkUrl = plugin.getConfig().getString("sdkUrl", null);
+
+            File storageDir = new File(activity.getFilesDir(), "pixliveSDK");
+            if (!storageDir.exists()) {
+                storageDir.mkdirs();
+            }
+
+            VDARSDKController.startSDK(activity, storageDir.getAbsolutePath(), licenseKey);
+            VDARSDKController controller = VDARSDKController.getInstance();
+            if (apiUrl != null) {
+                VDARRemoteController.getInstance().setCustomRemoteApiServerEndpoint(apiUrl);
+            }
+            if (sdkUrl != null) {
+                VDARRemoteController.getInstance().setCustomRemoteSdkApiServerEndpoint(sdkUrl);
+            }
+            controller.setEnableCodesRecognition(true);
+            controller.setActivity(activity);
+            try {
+                controller.setImageSender(new DeviceCameraImageSender());
+            } catch (Exception e) {
+                // Camera not available
+            }
+            controller.registerEventReceiver(this);
+            controller.registerContentEventReceiver(this);
+            VDARRemoteController.getInstance().addProgressListener(this);
+            isInitialized = true;
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
         }
-        controller.registerEventReceiver(this);
-        controller.registerContentEventReceiver(this);
-        VDARRemoteController.getInstance().addProgressListener(this);
     }
 
     public void handleOnPause() {
@@ -113,6 +125,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void synchronize(@NonNull SynchronizeOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<VDARPrior> priors = PixliveHelper.buildTagPriors(options.getTags());
             ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
@@ -140,6 +156,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void synchronizeWithToursAndContexts(@NonNull SynchronizeWithToursAndContextsOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<VDARPrior> priors = PixliveHelper.buildFullPriors(options.getTags(), options.getTourIds(), options.getContextIds());
             ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
@@ -167,6 +187,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void updateTagMapping(@NonNull UpdateTagMappingOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<String> tags = new ArrayList<>();
             for (int i = 0; i < options.getTags().length(); i++) {
@@ -193,6 +217,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void enableContextsWithTags(@NonNull EnableContextsWithTagsOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<String> tags = new ArrayList<>();
             for (int i = 0; i < options.getTags().length(); i++) {
@@ -207,6 +235,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void getContexts(@NonNull NonEmptyResultCallback<GetContextsResult> callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             ArrayList<String> contextIds = VDARSDKController.getInstance().getAllContextIDs();
             JSArray contextsArray = new JSArray();
@@ -225,6 +257,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void getContext(@NonNull GetContextOptions options, @NonNull NonEmptyResultCallback<GetContextResult> callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARContext context = VDARSDKController.getInstance().getContext(options.getContextId());
             if (context == null) {
@@ -238,6 +274,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void activateContext(@NonNull ActivateContextOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARContext context = VDARSDKController.getInstance().getContext(options.getContextId());
             if (context != null) {
@@ -250,6 +290,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void stopContext(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             if (currentContext != null) {
                 currentContext.stop();
@@ -264,6 +308,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         @NonNull GetNearbyGPSPointsOptions options,
         @NonNull NonEmptyResultCallback<GetNearbyGPSPointsResult> callback
     ) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<VDARGPSPoint> points = GeoPointManager.getNearbyGPSPoints((float) options.getLatitude(), (float) options.getLongitude());
             JSArray pointsArray = new JSArray();
@@ -282,6 +330,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         @NonNull GetGPSPointsInBoundingBoxOptions options,
         @NonNull NonEmptyResultCallback<GetGPSPointsInBoundingBoxResult> callback
     ) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<VDARGPSPoint> points = GeoPointManager.getGPSPointsInBoundingBox(
                 (float) options.getMinLatitude(),
@@ -302,6 +354,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void getNearbyBeacons(@NonNull NonEmptyResultCallback<GetNearbyBeaconsResult> callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             List<String> beaconContextIds = VDARSDKController.getInstance().getNearbyBeacons();
             JSArray contextsArray = new JSArray();
@@ -320,6 +376,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void startNearbyGPSDetection(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().startNearbyGPSDetection();
             callback.success();
@@ -329,6 +389,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void stopNearbyGPSDetection(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().stopNearbyGPSDetection();
             callback.success();
@@ -338,6 +402,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void startGPSNotifications(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().startGPSNotifications();
             callback.success();
@@ -347,6 +415,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void stopGPSNotifications(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().stopGPSNotifications();
             callback.success();
@@ -356,6 +428,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void setNotificationsSupport(@NonNull SetNotificationsSupportOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().setNotificationsSupport(options.isEnabled());
             callback.success();
@@ -365,6 +441,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void setInterfaceLanguage(@NonNull SetInterfaceLanguageOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         try {
             VDARSDKController.getInstance().forceLanguage(options.getLanguage());
             callback.success();
@@ -374,6 +454,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void createARView(@NonNull CreateARViewOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         if (annotationView != null) {
             callback.error(CustomExceptions.AR_VIEW_ALREADY_EXISTS);
             return;
@@ -421,6 +505,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void destroyARView(@NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         if (annotationView == null) {
             callback.error(CustomExceptions.AR_VIEW_NOT_FOUND);
             return;
@@ -455,6 +543,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void resizeARView(@NonNull ResizeARViewOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         if (annotationView == null) {
             callback.error(CustomExceptions.AR_VIEW_NOT_FOUND);
             return;
@@ -479,6 +571,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void setARViewTouchEnabled(@NonNull SetARViewTouchEnabledOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         if (touchInterceptorView != null) {
             plugin
                 .getActivity()
@@ -492,6 +588,10 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
     }
 
     public void setARViewTouchHole(@NonNull SetARViewTouchHoleOptions options, @NonNull EmptyCallback callback) {
+        if (!isInitialized) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
         float density = plugin.getActivity().getResources().getDisplayMetrics().density;
         float top = (float) (options.getTop() * density);
         float bottom = (float) (options.getBottom() * density);

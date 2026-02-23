@@ -1,4 +1,9 @@
+import AVFoundation
+import CoreBluetooth
+import CoreLocation
 import Foundation
+import UIKit
+import UserNotifications
 import Capacitor
 
 @objc(PixlivePlugin)
@@ -7,6 +12,9 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "PixlivePlugin"
     public let jsName = "Pixlive"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "synchronize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "synchronizeWithToursAndContexts", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "updateTagMapping", returnType: CAPPluginReturnPromise),
@@ -34,10 +42,65 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "Pixlive"
 
     private var implementation: Pixlive?
+    private var locationManager: CLLocationManager?
 
     override public func load() {
         implementation = Pixlive(self)
-        implementation?.initialize()
+    }
+
+    @objc func initialize(_ call: CAPPluginCall) {
+        implementation?.initialize(completion: { error in
+            if let error = error {
+                self.rejectCall(call, error)
+            } else {
+                self.resolveCall(call)
+            }
+        })
+    }
+
+    @objc override public func checkPermissions(_ call: CAPPluginCall) {
+        var result = JSObject()
+        result["bluetooth"] = mapBluetoothPermissionState()
+        result["camera"] = mapCameraPermissionState()
+        result["notifications"] = "prompt"
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            result["notifications"] = self.mapNotificationPermissionState(settings.authorizationStatus)
+            call.resolve(result)
+        }
+    }
+
+    @objc override public func requestPermissions(_ call: CAPPluginCall) {
+        let permissions = call.getArray("permissions", String.self) ?? ["bluetooth", "camera", "location", "notifications"]
+        let group = DispatchGroup()
+
+        if permissions.contains("camera") {
+            group.enter()
+            AVCaptureDevice.requestAccess(for: .video) { _ in
+                group.leave()
+            }
+        }
+
+        if permissions.contains("location") {
+            group.enter()
+            DispatchQueue.main.async {
+                if self.locationManager == nil {
+                    self.locationManager = CLLocationManager()
+                }
+                self.locationManager?.requestWhenInUseAuthorization()
+                group.leave()
+            }
+        }
+
+        if permissions.contains("notifications") {
+            group.enter()
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in
+                group.leave()
+            }
+        }
+
+        group.notify(queue: .main) {
+            self.checkPermissions(call)
+        }
     }
 
     @objc func synchronize(_ call: CAPPluginCall) {
@@ -332,6 +395,48 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
 
     public func notifyListenersFromImplementation(_ eventName: String, data: JSObject) {
         notifyListeners(eventName, data: data)
+    }
+
+    private func mapBluetoothPermissionState() -> String {
+        if #available(iOS 13.1, *) {
+            switch CBCentralManager.authorization {
+            case .allowedAlways:
+                return "granted"
+            case .denied, .restricted:
+                return "denied"
+            case .notDetermined:
+                return "prompt"
+            @unknown default:
+                return "prompt"
+            }
+        }
+        return "granted"
+    }
+
+    private func mapCameraPermissionState() -> String {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            return "granted"
+        case .denied, .restricted:
+            return "denied"
+        case .notDetermined:
+            return "prompt"
+        @unknown default:
+            return "prompt"
+        }
+    }
+
+    private func mapNotificationPermissionState(_ status: UNAuthorizationStatus) -> String {
+        switch status {
+        case .authorized, .provisional, .ephemeral:
+            return "granted"
+        case .denied:
+            return "denied"
+        case .notDetermined:
+            return "prompt"
+        @unknown default:
+            return "prompt"
+        }
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

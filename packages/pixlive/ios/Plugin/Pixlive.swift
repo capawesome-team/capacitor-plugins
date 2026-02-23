@@ -10,13 +10,14 @@ import VDARSDK
     private var arViewController: VDARLiveAnnotationViewController?
     private var touchForwarderView: TouchForwarderView?
     private var currentContext: VDARContext?
+    private var isInitialized = false
 
     public init(_ plugin: PixlivePlugin) {
         self.plugin = plugin
         super.init()
     }
 
-    @objc public func initialize() {
+    @objc public func initialize(completion: @escaping (_ error: Error?) -> Void) {
         guard let plugin = plugin else { return }
         let licenseKey = plugin.getConfig().getString("licenseKey") ?? ""
         let apiUrl = plugin.getConfig().getString("apiUrl")
@@ -42,9 +43,15 @@ import VDARSDK
         controller.imageSender = cameraSender
         controller.detectionDelegates.add(self)
         VDARRemoteController.sharedInstance()?.delegate = self
+        isInitialized = true
+        completion(nil)
     }
 
     @objc public func synchronize(_ options: SynchronizeOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         let priors = PixliveHelper.buildTagPriors(options.tags)
         VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
             if let err = err {
@@ -56,6 +63,10 @@ import VDARSDK
     }
 
     @objc public func synchronizeWithToursAndContexts(_ options: SynchronizeWithToursAndContextsOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         let priors = PixliveHelper.buildFullPriors(tags: options.tags, tourIds: options.tourIds, contextIds: options.contextIds)
         VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
             if let err = err {
@@ -67,6 +78,10 @@ import VDARSDK
     }
 
     @objc public func updateTagMapping(_ options: UpdateTagMappingOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARRemoteController.sharedInstance()?.syncTagContexts(options.tags, withCompletionBlock: { _, err in
             if let err = err {
                 completion(err)
@@ -77,14 +92,22 @@ import VDARSDK
     }
 
     @objc public func enableContextsWithTags(_ options: EnableContextsWithTagsOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.disableContexts()
         VDARSDKController.sharedInstance()?.enableContexts(withTags: options.tags)
         completion(nil)
     }
 
     @objc public func getContexts(completion: @escaping (_ result: GetContextsResult?, _ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(nil, CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(nil, CustomError.sdkNotInitialized)
+            completion(nil, CustomError.notInitialized)
             return
         }
         var contextsArray = JSArray()
@@ -99,8 +122,12 @@ import VDARSDK
     }
 
     @objc public func getContext(_ options: GetContextOptions, completion: @escaping (_ result: GetContextResult?, _ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(nil, CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(nil, CustomError.sdkNotInitialized)
+            completion(nil, CustomError.notInitialized)
             return
         }
         guard let context = controller.getContext(options.contextId) else {
@@ -111,8 +138,12 @@ import VDARSDK
     }
 
     @objc public func activateContext(_ options: ActivateContextOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(CustomError.sdkNotInitialized)
+            completion(CustomError.notInitialized)
             return
         }
         if let context = controller.getContext(options.contextId) {
@@ -122,6 +153,10 @@ import VDARSDK
     }
 
     @objc public func stopContext(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         if let context = currentContext {
             context.stop()
         }
@@ -129,8 +164,12 @@ import VDARSDK
     }
 
     @objc public func getNearbyGPSPoints(_ options: GetNearbyGPSPointsOptions, completion: @escaping (_ result: GetNearbyGPSPointsResult?, _ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(nil, CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(nil, CustomError.sdkNotInitialized)
+            completion(nil, CustomError.notInitialized)
             return
         }
         let points = controller.getNearbyGPSPointsfromLat(options.latitude, lon: options.longitude)
@@ -144,8 +183,12 @@ import VDARSDK
     }
 
     @objc public func getGPSPointsInBoundingBox(_ options: GetGPSPointsInBoundingBoxOptions, completion: @escaping (_ result: GetGPSPointsInBoundingBoxResult?, _ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(nil, CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(nil, CustomError.sdkNotInitialized)
+            completion(nil, CustomError.notInitialized)
             return
         }
         let points = controller.getGPSPoints(
@@ -162,8 +205,12 @@ import VDARSDK
     }
 
     @objc public func getNearbyBeacons(completion: @escaping (_ result: GetNearbyBeaconsResult?, _ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(nil, CustomError.notInitialized)
+            return
+        }
         guard let controller = VDARSDKController.sharedInstance() else {
-            completion(nil, CustomError.sdkNotInitialized)
+            completion(nil, CustomError.notInitialized)
             return
         }
         let beaconContextIds = controller.getNearbyBeacons()
@@ -179,36 +226,64 @@ import VDARSDK
     }
 
     @objc public func startNearbyGPSDetection(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.startNearbyGPSDetection()
         completion(nil)
     }
 
     @objc public func stopNearbyGPSDetection(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.stopNearbyGPSDetection()
         completion(nil)
     }
 
     @objc public func startGPSNotifications(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.startGPSNotifications()
         completion(nil)
     }
 
     @objc public func stopGPSNotifications(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.stopGPSNotifications()
         completion(nil)
     }
 
     @objc public func setNotificationsSupport(_ options: SetNotificationsSupportOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.isNotificationsEnabled = options.enabled
         completion(nil)
     }
 
     @objc public func setInterfaceLanguage(_ options: SetInterfaceLanguageOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         VDARSDKController.sharedInstance()?.forceLanguage(options.language)
         completion(nil)
     }
 
     @objc public func createARView(_ options: CreateARViewOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         if arViewController != nil {
             completion(CustomError.arViewAlreadyExists)
             return
@@ -246,6 +321,10 @@ import VDARSDK
     }
 
     @objc public func destroyARView(completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         guard let arVC = arViewController else {
             completion(CustomError.arViewNotFound)
             return
@@ -277,6 +356,10 @@ import VDARSDK
     }
 
     @objc public func resizeARView(_ options: ResizeARViewOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         guard let arVC = arViewController else {
             completion(CustomError.arViewNotFound)
             return
@@ -289,6 +372,10 @@ import VDARSDK
     }
 
     @objc public func setARViewTouchEnabled(_ options: SetARViewTouchEnabledOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         DispatchQueue.main.async {
             self.touchForwarderView?.touchEnabled = options.enabled
         }
@@ -296,6 +383,10 @@ import VDARSDK
     }
 
     @objc public func setARViewTouchHole(_ options: SetARViewTouchHoleOptions, completion: @escaping (_ error: Error?) -> Void) {
+        guard isInitialized else {
+            completion(CustomError.notInitialized)
+            return
+        }
         let hole = CGRect(
             x: options.left,
             y: options.top,

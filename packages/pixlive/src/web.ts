@@ -3,6 +3,18 @@ import { WebPlugin } from '@capacitor/core';
 import type { PixlivePlugin } from './definitions';
 
 export class PixliveWeb extends WebPlugin implements PixlivePlugin {
+  async initialize(): Promise<void> {
+    this.throwUnimplemented();
+  }
+
+  async checkPermissions(): Promise<never> {
+    this.throwUnimplemented();
+  }
+
+  async requestPermissions(): Promise<never> {
+    this.throwUnimplemented();
+  }
+
   async synchronize(): Promise<void> {
     this.throwUnimplemented();
   }

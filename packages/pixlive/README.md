@@ -63,6 +63,9 @@ const createARView = async () => {
 
 <docgen-index>
 
+* [`initialize()`](#initialize)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions(...)`](#requestpermissions)
 * [`synchronize(...)`](#synchronize)
 * [`synchronizeWithToursAndContexts(...)`](#synchronizewithtoursandcontexts)
 * [`updateTagMapping(...)`](#updatetagmapping)
@@ -95,11 +98,63 @@ const createARView = async () => {
 * [`addListener('requireSync', ...)`](#addlistenerrequiresync-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### initialize()
+
+```typescript
+initialize() => Promise<void>
+```
+
+Initialize the PixLive SDK.
+
+This must be called before any other method.
+
+Only available on Android and iOS.
+
+**Since:** 8.0.0
+
+--------------------
+
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check the status of permissions.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
+
+### requestPermissions(...)
+
+```typescript
+requestPermissions(options?: PixlivePluginPermission | undefined) => Promise<PermissionStatus>
+```
+
+Request permissions.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#pixlivepluginpermission">PixlivePluginPermission</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
 
 ### synchronize(...)
 
@@ -673,6 +728,25 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
+#### PermissionStatus
+
+| Prop                   | Type                                                        | Description                                                                      | Since |
+| ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------- | ----- |
+| **`bluetooth`**        | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth permission. Only available on iOS.             | 8.0.0 |
+| **`bluetoothConnect`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Connect permission. Only available on Android. | 8.0.0 |
+| **`bluetoothScan`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Scan permission. Only available on Android.    | 8.0.0 |
+| **`camera`**           | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Camera permission.                                       | 8.0.0 |
+| **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Location permission. Only available on Android.          | 8.0.0 |
+| **`notifications`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Notifications permission.                                | 8.0.0 |
+
+
+#### PixlivePluginPermission
+
+| Prop              | Type                                 | Description                 | Since |
+| ----------------- | ------------------------------------ | --------------------------- | ----- |
+| **`permissions`** | <code>PixlivePermissionType[]</code> | The permissions to request. | 8.0.0 |
+
+
 #### SynchronizeOptions
 
 | Prop       | Type                    | Description                    | Since |
@@ -898,5 +972,18 @@ Remove all listeners for this plugin.
 | Prop       | Type                  | Description                            | Since |
 | ---------- | --------------------- | -------------------------------------- | ----- |
 | **`tags`** | <code>string[]</code> | The tags that require synchronization. | 8.0.0 |
+
+
+### Type Aliases
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### PixlivePermissionType
+
+<code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'camera' | 'location' | 'notifications'</code>
 
 </docgen-api>
