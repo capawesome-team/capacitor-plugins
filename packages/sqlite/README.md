@@ -14,9 +14,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
+- 📦 **Bundled SQLite**: Opt-in bundling of the latest SQLite version.
 - 📖 **Read-only mode**: Open databases in read-only mode to prevent modifications.
 - 📂 **File-based**: Open existing databases or create new ones with a file path.
-- 📦 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
+- 💾 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
 - 📈 **Schema migrations**: Automatically apply schema migrations when opening a database.
 - 🔄 **Transactions**: Supports transactions with `beginTransaction(...)`, `commitTransaction(...)`, and `rollbackTransaction(...)`.
 - 🔍 **Querying**: Execute SQL queries with `query(...)` and `execute(...)`.
@@ -85,6 +86,28 @@ ext {
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+#### Bundled SQLite
+
+By default, this plugin uses the system SQLite version provided by the Android device. If you want to use a newer, consistent SQLite version across all devices, you can opt in to bundling [requery/sqlite-android](https://github.com/requery/sqlite-android) by setting the `capawesomeCapacitorSqliteIncludeRequery` variable to `true` in your app's `variables.gradle` file:
+
+```diff
+ext {
++  capawesomeCapacitorSqliteIncludeRequery = true // Default: false
+}
+```
+
+**Attention**: This option cannot be combined with `capawesomeCapacitorSqliteIncludeSqlcipher`. SQLCipher already bundles its own SQLite version.
+
+You also need to add the JitPack repository to your app's `build.gradle` file:
+
+```diff
+repositories {
+    google()
+    mavenCentral()
++   maven { url 'https://jitpack.io' }
+}
+```
+
 #### Proguard
 
 If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
@@ -100,6 +123,7 @@ If needed, you can define the following project variable in your app’s `variab
 - `$androidxSqliteVersion` version of `androidx.sqlite:sqlite` (default: `2.6.2`)
 - `$androidxSqliteFrameworkAndroidVersion` version of `androidx.sqlite:sqlite-framework-android` (default: `2.6.2`)
 - `$netZeteticSqlcipherVersion` version of `net.zetetic:sqlcipher-android` (default: `4.12.0`)
+- `$requeryVersion` version of `com.github.requery:sqlite-android` (default: `3.49.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
