@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.3
+
+### Patch Changes
+
+- [`235bf91c9d7160626bc72a7a6470d29d6c5442ac`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/235bf91c9d7160626bc72a7a6470d29d6c5442ac) ([#411](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/411)): feat(android): add opt-in requery/sqlite-android bundling
+
+- [`15169cad8e4a83092830caf24d7db44079e75455`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/15169cad8e4a83092830caf24d7db44079e75455) ([#413](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/413)): fix(android): report correct SQLite version for bundled engines
+
 ## 0.3.2
 
 ### Patch Changes
