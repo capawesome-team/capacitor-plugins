@@ -31,7 +31,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Guides
 
-- [How to Set Up In-App Purchases with Capacitor](https://capawesome.io/blog/how-to-set-up-in-app-purchases-with-capacitor/)
+- [Tips for Setting Up In-App Purchases with Capacitor](https://capawesome.io/blog/tips-for-setting-up-in-app-purchases-with-capacitor/)
 
 ## Installation
 
