@@ -29,6 +29,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 0.3.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [How to Set Up In-App Purchases with Capacitor](https://capawesome.io/blog/how-to-set-up-in-app-purchases-with-capacitor/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
