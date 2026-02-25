@@ -30,21 +30,23 @@ import VDARSDK
             try? fileManager.createDirectory(atPath: storagePath, withIntermediateDirectories: true)
         }
 
-        VDARSDKController.startSDK(storagePath, withLicenseKey: licenseKey)
-        guard let controller = VDARSDKController.sharedInstance() else { return }
-        if let apiUrl = apiUrl {
-            VDARRemoteController.sharedInstance()?.customAPIServer = apiUrl
+        DispatchQueue.main.async {
+            VDARSDKController.startSDK(storagePath, withLicenseKey: licenseKey)
+            guard let controller = VDARSDKController.sharedInstance() else { return }
+            if let apiUrl = apiUrl {
+                VDARRemoteController.sharedInstance()?.customAPIServer = apiUrl
+            }
+            if let sdkUrl = sdkUrl {
+                VDARRemoteController.sharedInstance()?.customSdkServer = sdkUrl
+            }
+            controller.enableCodesRecognition = true
+            let cameraSender = VDARCameraImageSource()
+            controller.imageSender = cameraSender
+            controller.detectionDelegates.add(self)
+            VDARRemoteController.sharedInstance()?.delegate = self
+            self.isInitialized = true
+            completion(nil)
         }
-        if let sdkUrl = sdkUrl {
-            VDARRemoteController.sharedInstance()?.customSdkServer = sdkUrl
-        }
-        controller.enableCodesRecognition = true
-        let cameraSender = VDARCameraImageSource()
-        controller.imageSender = cameraSender
-        controller.detectionDelegates.add(self)
-        VDARRemoteController.sharedInstance()?.delegate = self
-        isInitialized = true
-        completion(nil)
     }
 
     @objc public func synchronize(_ options: SynchronizeOptions, completion: @escaping (_ error: Error?) -> Void) {
