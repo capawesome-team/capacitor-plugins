@@ -51,6 +51,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 - [Announcing the SQLite Plugin for Capacitor](https://capawesome.io/blog/announcing-the-capacitor-sqlite-plugin/)
 - [Encrypting SQLite databases in Capacitor](https://capawesome.io/blog/encrypting-capacitor-sqlite-database/)
 - [Exploring the Capacitor SQLite API](https://capawesome.io/blog/exploring-the-capacitor-sqlite-api/)
+- [How to Use Drizzle ORM with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-and-sqlite/)
+- [How to Use Kysely with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-and-sqlite/)
+- [How to Use TypeORM with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-and-sqlite/)
 
 ## Installation
 
@@ -788,6 +791,8 @@ const db = drizzle(Sqlite, { databaseId, schema });
 const users = await db.select().from(schema.users);
 ```
 
+Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
+
 ### Kysely
 
 This plugin is compatible with [Kysely](https://kysely.dev/) via the [`@capawesome/capacitor-sqlite-kysely`](https://github.com/capawesome-team/capacitor-sqlite-drivers/tree/main/packages/kysely) dialect.
@@ -804,6 +809,8 @@ const db = new Kysely<Database>({
 
 const users = await db.selectFrom('users').selectAll().execute();
 ```
+
+Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
 
 ### TypeORM
 
@@ -825,6 +832,8 @@ const createDataSource = async () => {
   });
 };
 ```
+
+Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
 
 ## Limitations
 
