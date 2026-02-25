@@ -26,8 +26,8 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🕸️ **SQLite WASM**: Uses SQLite WebAssembly for web platform support.
 - ⚛️ **Electron Native**: Uses native SQLite for Electron via the `node:sqlite` module.
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
-- 🗄️ **Key-Value Store**: Built-in key-value store for simple data persistence without SQL.
-- 🗃️ **ORM Support**: Works with popular ORMs like TypeORM, Drizzle, and Kysely.
+- 🗄️ **Key-Value Store**: Built-in [key-value store](#key-value-store) for simple data persistence without SQL.
+- 🗃️ **ORM Support**: Works with popular ORMs like [Drizzle](#drizzle), [Kysely](#kysely) and [TypeORM](#typeorm).
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -773,9 +773,41 @@ Perfect for storing small amounts of data such as user preferences, app settings
 
 ## ORMs
 
+### Drizzle
+
+This plugin is compatible with [Drizzle ORM](https://orm.drizzle.team/) via the [`@capawesome/capacitor-sqlite-drizzle`](https://github.com/capawesome-team/capacitor-sqlite-drivers/tree/main/packages/drizzle) adapter.
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+import { drizzle } from '@capawesome/capacitor-sqlite-drizzle';
+import * as schema from './schema';
+
+const { databaseId } = await Sqlite.open({ path: 'my.db' });
+const db = drizzle(Sqlite, { databaseId, schema });
+
+const users = await db.select().from(schema.users);
+```
+
+### Kysely
+
+This plugin is compatible with [Kysely](https://kysely.dev/) via the [`@capawesome/capacitor-sqlite-kysely`](https://github.com/capawesome-team/capacitor-sqlite-drivers/tree/main/packages/kysely) dialect.
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+import { Kysely } from 'kysely';
+import { CapacitorSqliteDialect } from '@capawesome/capacitor-sqlite-kysely';
+
+const { databaseId } = await Sqlite.open({ path: 'my.db' });
+const db = new Kysely<Database>({
+  dialect: new CapacitorSqliteDialect(Sqlite, { databaseId }),
+});
+
+const users = await db.selectFrom('users').selectAll().execute();
+```
+
 ### TypeORM
 
-This plugin is compatible with [TypeORM](https://typeorm.io/), a popular ORM for TypeScript and JavaScript. 
+This plugin is compatible with [TypeORM](https://typeorm.io/), a popular ORM for TypeScript and JavaScript.
 
 ```typescript
 import { Sqlite, SQLiteConnection } from '@capawesome-team/capacitor-sqlite';
