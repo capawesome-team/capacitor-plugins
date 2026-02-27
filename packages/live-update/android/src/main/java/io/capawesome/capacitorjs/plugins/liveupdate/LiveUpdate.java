@@ -1012,6 +1012,10 @@ public class LiveUpdate {
     @Nullable
     private String getChannel() {
         String channel = null;
+        String nativeChannel = getNativeChannel();
+        if (nativeChannel != null) {
+            channel = nativeChannel;
+        }
         if (config.getDefaultChannel() != null) {
             channel = config.getDefaultChannel();
         }
@@ -1019,6 +1023,19 @@ public class LiveUpdate {
             channel = preferences.getChannel();
         }
         return channel;
+    }
+
+    @Nullable
+    private String getNativeChannel() {
+        int resId = plugin.getContext().getResources().getIdentifier(
+            "capawesome_live_update_default_channel",
+            "string",
+            plugin.getContext().getPackageName()
+        );
+        if (resId == 0) {
+            return null;
+        }
+        return plugin.getContext().getResources().getString(resId);
     }
 
     /**

@@ -57,6 +57,11 @@ declare module '@capacitor/cli' {
       /**
        * The default channel of the app.
        *
+       * This can be overridden by `setChannel()` or the `channel` parameter of `sync()`.
+       * It takes priority over the native channel configuration
+       * (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel`
+       * in `strings.xml` on Android).
+       *
        * @since 6.3.0
        * @example 'production'
        */
@@ -165,6 +170,15 @@ export interface LiveUpdatePlugin {
   getBundles(): Promise<GetBundlesResult>;
   /**
    * Get the channel that is used for the update.
+   *
+   * The channel is resolved in the following order (highest priority first):
+   * 1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
+   * 2. Capacitor config `defaultChannel`
+   * 3. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+   *    `capawesome_live_update_default_channel` in `strings.xml` on Android)
+   *
+   * **Note**: The `channel` parameter of `sync()` takes the highest priority
+   * but is not persisted and therefore not returned by this method.
    *
    * Only available on Android and iOS.
    *
