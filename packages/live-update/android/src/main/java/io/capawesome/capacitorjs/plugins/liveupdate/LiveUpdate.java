@@ -633,8 +633,9 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
+        String urlWithDeviceId = HttpUrl.parse(url).newBuilder().addQueryParameter("deviceId", getDeviceId()).build().toString();
         return httpClient.enqueue(
-            url,
+            urlWithDeviceId,
             new NonEmptyCallback<Response>() {
                 @Override
                 public void success(@NonNull Response response) {

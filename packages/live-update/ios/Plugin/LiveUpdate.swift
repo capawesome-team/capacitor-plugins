@@ -435,7 +435,10 @@ import CommonCrypto
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
-        let urlComponents = URLComponents(string: url)!
+        var urlComponents = URLComponents(string: url)!
+        var queryItems = urlComponents.queryItems ?? []
+        queryItems.append(URLQueryItem(name: "deviceId", value: getDeviceId()))
+        urlComponents.queryItems = queryItems
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
