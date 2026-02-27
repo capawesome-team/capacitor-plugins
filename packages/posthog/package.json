@@ -65,7 +65,6 @@
     "@capacitor/docgen": "0.3.1",
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
-    "@ionic/swiftlint-config": "2.0.0",
     "eslint": "8.57.0",
     "posthog-js": "1.160.3",
     "prettier": "3.4.2",
@@ -84,7 +83,6 @@
       "optional": true
     }
   },
-  "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },

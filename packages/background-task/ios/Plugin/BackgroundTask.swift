@@ -9,7 +9,7 @@ import UIKit
         // Use the isolation queue to synchronize access to the taskIds dictionary
         isolationQueue.async { [weak self] in
             guard let self = self else { return }
-            
+
             var taskId = UIBackgroundTaskIdentifier.invalid
             taskId = UIApplication.shared.beginBackgroundTask {
                 // Finish the task if time expires. This expiration handler can run on any thread,
