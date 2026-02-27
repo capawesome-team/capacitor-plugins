@@ -132,6 +132,12 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func getDefaultChannel(completion: @escaping (Result?, Error?) -> Void) {
+        let channel = getDefaultChannel()
+        let result = GetDefaultChannelResult(channel: channel)
+        completion(result, nil)
+    }
+
     @objc public func getDeviceId(completion: @escaping (Result?, Error?) -> Void) {
         let deviceId = getDeviceId()
         let result = GetDeviceIdResult(deviceId: deviceId)
@@ -600,15 +606,20 @@ import CommonCrypto
     }
 
     private func getChannel() -> String? {
+        var channel = getDefaultChannel()
+        if let _ = preferences.getChannel() {
+            channel = preferences.getChannel()
+        }
+        return channel
+    }
+
+    private func getDefaultChannel() -> String? {
         var channel: String?
         if let nativeChannel = getNativeChannel() {
             channel = nativeChannel
         }
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
-        }
-        if let _ = preferences.getChannel() {
-            channel = preferences.getChannel()
         }
         return channel
     }

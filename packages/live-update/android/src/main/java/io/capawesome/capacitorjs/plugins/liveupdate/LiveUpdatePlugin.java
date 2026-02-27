@@ -24,6 +24,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestB
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDefaultChannelResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
@@ -352,6 +353,28 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.getCustomId(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getDefaultChannel(PluginCall call) {
+        try {
+            NonEmptyCallback<GetDefaultChannelResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(GetDefaultChannelResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getDefaultChannel(callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

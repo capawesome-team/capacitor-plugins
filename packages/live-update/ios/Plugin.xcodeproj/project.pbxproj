@@ -34,6 +34,7 @@
 		7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */; };
 		7C6715D12BB1BC9E0000878A /* SetCustomIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */; };
 		7C6715D32BB1BCAB0000878A /* GetChannelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D22BB1BCAB0000878A /* GetChannelResult.swift */; };
+		7CAB12912DEFA500003BB4A1 /* GetDefaultChannelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12902DEFA500003BB4A1 /* GetDefaultChannelResult.swift */; };
 		7C6715D52BB1BCB70000878A /* GetDeviceIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */; };
 		7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */; };
 		7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */; };
@@ -91,6 +92,7 @@
 		7C6715CE2BB1BC920000878A /* SetChannelOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetChannelOptions.swift; sourceTree = "<group>"; };
 		7C6715D02BB1BC9E0000878A /* SetCustomIdOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetCustomIdOptions.swift; sourceTree = "<group>"; };
 		7C6715D22BB1BCAB0000878A /* GetChannelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetChannelResult.swift; sourceTree = "<group>"; };
+		7CAB12902DEFA500003BB4A1 /* GetDefaultChannelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDefaultChannelResult.swift; sourceTree = "<group>"; };
 		7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDeviceIdResult.swift; sourceTree = "<group>"; };
 		7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCustomIdResult.swift; sourceTree = "<group>"; };
 		7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdatePreferences.swift; sourceTree = "<group>"; };
@@ -224,6 +226,7 @@
 				7CAB12772DEFA3F0003BB5F8 /* GetConfigResult.swift */,
 				7CAB12442DEFA1C0003BB2D5 /* GetDownloadedBundlesResult.swift */,
 				7C6715D22BB1BCAB0000878A /* GetChannelResult.swift */,
+				7CAB12902DEFA500003BB4A1 /* GetDefaultChannelResult.swift */,
 				7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */,
 				7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */,
 				7C2E4CE62BC29C1100C80C2A /* SyncResult.swift */,
@@ -470,6 +473,7 @@
 				7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */,
 				7C29FB532CBCE2B5007DCB06 /* ArtifactType.swift in Sources */,
 				7C6715D32BB1BCAB0000878A /* GetChannelResult.swift in Sources */,
+				7CAB12912DEFA500003BB4A1 /* GetDefaultChannelResult.swift in Sources */,
 				7C33FC432BCBFE27003AA8B4 /* GetVersionCodeResult.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* LiveUpdate.swift in Sources */,
 				7C62B6512BA9AD220025240F /* CustomError.swift in Sources */,
