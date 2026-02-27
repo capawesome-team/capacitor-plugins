@@ -139,6 +139,21 @@ export interface LiveUpdatePlugin {
    */
   downloadBundle(options: DownloadBundleOptions): Promise<void>;
   /**
+   * Fetch channels from [Capawesome Cloud](https://capawesome.io/cloud/).
+   *
+   * This is primarily intended for development and QA purposes.
+   * It allows you to retrieve a list of available channels so you can
+   * dynamically switch between them using `setChannel(...)`.
+   *
+   * Only public channels are returned. Private channels can still be
+   * set using `setChannel(...)` but will not appear in the results.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.2.0
+   */
+  fetchChannels(options?: FetchChannelsOptions): Promise<FetchChannelsResult>;
+  /**
    * Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
    * Only available on Android and iOS.
@@ -495,6 +510,62 @@ export interface DownloadBundleOptions {
    * @example 'https://example.com/bundle.zip'
    */
   url: string;
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface FetchChannelsOptions {
+  /**
+   * The maximum number of channels to return.
+   *
+   * @since 8.2.0
+   * @default 50
+   */
+  limit?: number;
+  /**
+   * The number of channels to skip.
+   *
+   * @since 8.2.0
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * The query to filter channels by name.
+   *
+   * @since 8.2.0
+   */
+  query?: string;
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface FetchChannelsResult {
+  /**
+   * The list of channels.
+   *
+   * @since 8.2.0
+   */
+  channels: Channel[];
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface Channel {
+  /**
+   * The unique identifier of the channel.
+   *
+   * @since 8.2.0
+   */
+  id: string;
+  /**
+   * The name of the channel.
+   *
+   * @since 8.2.0
+   */
+  name: string;
 }
 
 /**

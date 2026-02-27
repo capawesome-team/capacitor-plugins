@@ -83,6 +83,36 @@ import CommonCrypto
         }
     }
 
+    @objc public func fetchChannels(_ options: FetchChannelsOptions) async throws -> FetchChannelsResult {
+        var parameters = [String: String]()
+        if let limit = options.getLimit() {
+            parameters["limit"] = String(limit)
+        }
+        if let offset = options.getOffset() {
+            parameters["offset"] = String(offset)
+        }
+        if let query = options.getQuery() {
+            parameters["query"] = query
+        }
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/channels")!
+        if !parameters.isEmpty {
+            urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        }
+        let url = try urlComponents.asURL()
+        let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
+        if let error = response.error {
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
+                }
+            }
+            throw error
+        }
+        let items = response.value ?? []
+        let channels = items.map { ChannelResult(id: $0.id, name: $0.name) }
+        return FetchChannelsResult(channels: channels)
+    }
+
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
         return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
