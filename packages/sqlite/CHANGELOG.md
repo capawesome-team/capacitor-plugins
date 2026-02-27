@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.4
+
+### Patch Changes
+
+- [`f07d25e9cb0dc2560f7694d3a810a534ad0b2594`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f07d25e9cb0dc2560f7694d3a810a534ad0b2594): fix(android): load SQLCipher native library before querying version
+
 ## 0.3.3
 
 ### Patch Changes
