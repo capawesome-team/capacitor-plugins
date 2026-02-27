@@ -25,6 +25,9 @@ public class LiveUpdateHttpClient {
     @NonNull
     private final LiveUpdateConfig config;
 
+    @Nullable
+    private String deviceId;
+
     @NonNull
     private final OkHttpClient okHttpClient;
 
@@ -62,8 +65,16 @@ public class LiveUpdateHttpClient {
             .build();
     }
 
+    public void setDeviceId(@NonNull String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public Call enqueue(String url, NonEmptyCallback<Response> callback) {
-        Request request = new Request.Builder().url(url).build();
+        Request.Builder builder = new Request.Builder().url(url);
+        if (deviceId != null) {
+            builder.addHeader("X-Device-Id", deviceId);
+        }
+        Request request = builder.build();
 
         Call call = okHttpClient.newCall(request);
         call.enqueue(

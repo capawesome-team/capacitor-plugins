@@ -34,6 +34,9 @@ import CommonCrypto
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged()
 
+        // Set the device ID on the HTTP client (after any potential config reset)
+        self.httpClient.setDeviceId(getDeviceId())
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer()
