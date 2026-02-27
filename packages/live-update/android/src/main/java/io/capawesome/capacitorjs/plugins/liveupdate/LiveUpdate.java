@@ -1028,12 +1028,12 @@ public class LiveUpdate {
     @Nullable
     private String getDefaultChannel() {
         String channel = null;
+        if (config.getDefaultChannel() != null) {
+            channel = config.getDefaultChannel();
+        }
         String nativeChannel = getNativeChannel();
         if (nativeChannel != null) {
             channel = nativeChannel;
-        }
-        if (config.getDefaultChannel() != null) {
-            channel = config.getDefaultChannel();
         }
         return channel;
     }

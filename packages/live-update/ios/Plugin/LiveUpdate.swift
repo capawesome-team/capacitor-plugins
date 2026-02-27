@@ -615,11 +615,11 @@ import CommonCrypto
 
     private func getDefaultChannel() -> String? {
         var channel: String?
-        if let nativeChannel = getNativeChannel() {
-            channel = nativeChannel
-        }
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
+        }
+        if let nativeChannel = getNativeChannel() {
+            channel = nativeChannel
         }
         return channel
     }

@@ -127,7 +127,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`autoBlockRolledBackBundles`** | <code>boolean</code>                | Whether or not to automatically block bundles that have been rolled back. When enabled, the plugin will automatically block bundles that caused a rollback (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked. Blocked bundles will be skipped in future sync operations. **Attention**: This option has no effect if `readyTimeout` is set to `0`. Only available on Android and iOS. | <code>false</code>                     | 7.3.0 |
 | **`autoDeleteBundles`**          | <code>boolean</code>                | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`.                                                                                                                                                                                                                                                                          | <code>false</code>                     | 5.0.0 |
 | **`autoUpdateStrategy`**         | <code>'none' \| 'background'</code> | The auto-update strategy for live updates. - `none`: Live updates will not be applied automatically. - `background`: Live updates will be automatically downloaded and applied in the background at app startup and when the app resumes (if the last check was more than 15 minutes ago). Only available on Android and iOS.                                                                                              | <code>'none'</code>                    | 7.3.0 |
-| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app. This can be overridden by `setChannel()` or the `channel` parameter of `sync()`. It takes priority over the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel` in `strings.xml` on Android).                                                                                                            |                                        | 6.3.0 |
+| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app. This can be overridden by `setChannel()`, the `channel` parameter of `sync()`, or the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel` in `strings.xml` on Android).                                                                                                                                  |                                        | 6.3.0 |
 | **`httpTimeout`**                | <code>number</code>                 | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                                             | <code>60000</code>                     | 6.4.0 |
 | **`publicKey`**                  | <code>string</code>                 | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                                                 |                                        | 6.1.0 |
 | **`readyTimeout`**               | <code>number</code>                 | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option (e.g. `10000` ms) so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout.          | <code>0</code>                         | 5.0.0 |
@@ -459,9 +459,9 @@ Get the channel that is used for the update.
 
 The channel is resolved in the following order (highest priority first):
 1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
-2. Capacitor config `defaultChannel`
-3. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
    `capawesome_live_update_default_channel` in `strings.xml` on Android)
+3. Capacitor config `defaultChannel`
 
 **Note**: The `channel` parameter of `sync()` takes the highest priority
 but is not persisted and therefore not returned by this method.
@@ -556,9 +556,9 @@ getDefaultChannel() => Promise<GetDefaultChannelResult>
 Get the default channel of the app.
 
 The default channel is resolved in the following order (highest priority first):
-1. Capacitor config `defaultChannel`
-2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+1. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
    `capawesome_live_update_default_channel` in `strings.xml` on Android)
+2. Capacitor config `defaultChannel`
 
 Unlike `getChannel()`, this method does **not** include
 the channel set by `setChannel()`.
