@@ -113,6 +113,9 @@ public class LiveUpdate {
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
         this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
+        // Set the device ID on the HTTP client
+        this.httpClient.setDeviceId(getDeviceId());
+
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
 
@@ -633,9 +636,8 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        String urlWithDeviceId = HttpUrl.parse(url).newBuilder().addQueryParameter("deviceId", getDeviceId()).build().toString();
         return httpClient.enqueue(
-            urlWithDeviceId,
+            url,
             new NonEmptyCallback<Response>() {
                 @Override
                 public void success(@NonNull Response response) {

@@ -31,6 +31,9 @@ import CommonCrypto
         self.preferences = LiveUpdatePreferences()
         super.init()
 
+        // Set the device ID on the HTTP client
+        self.httpClient.setDeviceId(getDeviceId())
+
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged()
 
@@ -435,10 +438,7 @@ import CommonCrypto
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
-        var urlComponents = URLComponents(string: url)!
-        var queryItems = urlComponents.queryItems ?? []
-        queryItems.append(URLQueryItem(name: "deviceId", value: getDeviceId()))
-        urlComponents.queryItems = queryItems
+        let urlComponents = URLComponents(string: url)!
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
