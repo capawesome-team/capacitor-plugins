@@ -21,6 +21,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
+- ⚙️ **Runtime Configuration**: Update plugin configuration at runtime without rebuilding the app.
+- 📡 **Update Lifecycle Events**: Track download progress, react to bundle changes, and detect reloads with auto-blocking of rolled back bundles.
+- 🏠 **Self-Hosted Bundles**: Download bundles from any URL, no Capawesome Cloud dependency required.
+- 🏷️ **Custom Properties**: Associate custom key-value metadata with bundles via Capawesome Cloud.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 1,000 projects to update apps on more than 20,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
