@@ -1027,11 +1027,10 @@ public class LiveUpdate {
 
     @Nullable
     private String getNativeChannel() {
-        int resId = plugin.getContext().getResources().getIdentifier(
-            "capawesome_live_update_default_channel",
-            "string",
-            plugin.getContext().getPackageName()
-        );
+        int resId = plugin
+            .getContext()
+            .getResources()
+            .getIdentifier("capawesome_live_update_default_channel", "string", plugin.getContext().getPackageName());
         if (resId == 0) {
             return null;
         }
