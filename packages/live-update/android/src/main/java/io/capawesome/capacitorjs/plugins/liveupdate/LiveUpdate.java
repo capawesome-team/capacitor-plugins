@@ -113,11 +113,11 @@ public class LiveUpdate {
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
         this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
-        // Set the device ID on the HTTP client
-        this.httpClient.setDeviceId(getDeviceId());
-
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
+
+        // Set the device ID on the HTTP client (after any potential config reset)
+        this.httpClient.setDeviceId(getDeviceId());
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time

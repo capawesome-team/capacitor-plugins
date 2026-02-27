@@ -29,7 +29,7 @@ public class LiveUpdateHttpClient: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
-        if let deviceId = deviceId {
+        if let deviceId = deviceId, !deviceId.isEmpty {
             request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
         }
         return try await withCheckedThrowingContinuation { continuation in
@@ -47,7 +47,7 @@ public class LiveUpdateHttpClient: NSObject {
         var request = URLRequest(url: url)
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
-        if let deviceId = deviceId {
+        if let deviceId = deviceId, !deviceId.isEmpty {
             request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
         }
         return try await withCheckedThrowingContinuation { continuation in
