@@ -30,7 +30,7 @@ public class LiveUpdateHttpClient: NSObject {
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         if let deviceId = deviceId, !deviceId.isEmpty {
-            request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
+            request.setValue(deviceId, forHTTPHeaderField: "X-Capawesome-Device-Id")
         }
         return try await withCheckedThrowingContinuation { continuation in
             AF.download(request, to: destination).downloadProgress { progress in
@@ -48,7 +48,7 @@ public class LiveUpdateHttpClient: NSObject {
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         if let deviceId = deviceId, !deviceId.isEmpty {
-            request.setValue(deviceId, forHTTPHeaderField: "X-Device-Id")
+            request.setValue(deviceId, forHTTPHeaderField: "X-Capawesome-Device-Id")
         }
         return try await withCheckedThrowingContinuation { continuation in
             AF.request(request).validate().responseDecodable(of: type) { response in

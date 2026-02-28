@@ -72,7 +72,7 @@ public class LiveUpdateHttpClient {
     public Call enqueue(String url, NonEmptyCallback<Response> callback) {
         Request.Builder builder = new Request.Builder().url(url);
         if (deviceId != null) {
-            builder.addHeader("X-Device-Id", deviceId);
+            builder.addHeader("X-Capawesome-Device-Id", deviceId);
         }
         Request request = builder.build();
 
