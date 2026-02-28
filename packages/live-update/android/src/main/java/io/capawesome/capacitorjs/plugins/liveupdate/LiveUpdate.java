@@ -203,6 +203,8 @@ public class LiveUpdate {
                                 }
                                 FetchChannelsResult result = new FetchChannelsResult(channels);
                                 callback.success(result);
+                            } else if (response.code() == 401) {
+                                callback.error(new Exception("Unauthorized. Channel Discovery may not be enabled for this app."));
                             } else {
                                 callback.error(new Exception(responseBodyString));
                             }

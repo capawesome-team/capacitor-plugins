@@ -101,6 +101,9 @@ import CommonCrypto
         let url = try urlComponents.asURL()
         let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
         if let error = response.error {
+            if response.response?.statusCode == 401 {
+                throw CustomError.channelDiscoveryNotEnabled
+            }
             if let urlError = error.underlyingError as? URLError {
                 if urlError.code == .timedOut {
                     throw urlError

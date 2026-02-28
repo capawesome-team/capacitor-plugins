@@ -6,6 +6,7 @@ public enum CustomError: Error {
     case bundleIdMissing
     case bundleIndexHtmlMissing
     case bundleNotFound
+    case channelDiscoveryNotEnabled
     case channelMissing
     case checksumCalculationFailed
     case checksumMismatch
@@ -32,6 +33,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("The bundle does not contain an index.html file.", comment: "bundleIndexHtmlMissing")
         case .bundleNotFound:
             return NSLocalizedString("bundle not found.", comment: "bundleNotFound")
+        case .channelDiscoveryNotEnabled:
+            return NSLocalizedString("Unauthorized. Channel Discovery may not be enabled for this app.", comment: "channelDiscoveryNotEnabled")
         case .channelMissing:
             return NSLocalizedString("channel must be provided.", comment: "channelMissing")
         case .checksumCalculationFailed:
