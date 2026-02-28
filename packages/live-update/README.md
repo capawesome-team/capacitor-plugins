@@ -413,8 +413,9 @@ This is primarily intended for development and QA purposes.
 It allows you to retrieve a list of available channels so you can
 dynamically switch between them using `setChannel(...)`.
 
-Only public channels are returned. Private channels can still be
-set using `setChannel(...)` but will not appear in the results.
+**Attention**: Only works for apps with public channels enabled.
+If channels are private, they can still be set using `setChannel(...)`
+but won't be returned by this method.
 
 Only available on Android and iOS.
 
