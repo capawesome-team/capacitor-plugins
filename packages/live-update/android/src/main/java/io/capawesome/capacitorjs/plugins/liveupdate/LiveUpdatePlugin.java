@@ -14,12 +14,14 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundl
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchChannelsOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchChannelsResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
@@ -174,6 +176,34 @@ public class LiveUpdatePlugin extends Plugin {
             };
 
             implementation.downloadBundle(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void fetchChannels(PluginCall call) {
+        try {
+            String appId = config.getAppId();
+            if (appId == null || appId.isEmpty()) {
+                call.reject(ERROR_APP_ID_MISSING);
+                return;
+            }
+
+            FetchChannelsOptions options = new FetchChannelsOptions(call);
+            NonEmptyCallback<FetchChannelsResult> callback = new NonEmptyCallback<>() {
+                @Override
+                public void success(FetchChannelsResult result) {
+                    resolveCall(call, result.toJSObject());
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.fetchChannels(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

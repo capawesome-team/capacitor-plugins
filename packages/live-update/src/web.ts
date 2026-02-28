@@ -3,6 +3,7 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   DeleteBundleOptions,
   DownloadBundleOptions,
+  FetchChannelsResult,
   FetchLatestBundleResult,
   GetBlockedBundlesResult,
   GetBundleResult,
@@ -38,6 +39,10 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async downloadBundle(_options: DownloadBundleOptions): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  public async fetchChannels(): Promise<FetchChannelsResult> {
     this.throwUnimplementedError();
   }
 

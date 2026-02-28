@@ -200,6 +200,11 @@ const downloadBundle = async () => {
   await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
 };
 
+const fetchChannels = async () => {
+  const result = await LiveUpdate.fetchChannels();
+  return result.channels;
+};
+
 const fetchLatestBundle = async () => {
   await LiveUpdate.fetchLatestBundle();
 };
@@ -304,6 +309,7 @@ const isNewBundleAvailable = async () => {
 * [`clearBlockedBundles()`](#clearblockedbundles)
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
+* [`fetchChannels(...)`](#fetchchannels)
 * [`fetchLatestBundle(...)`](#fetchlatestbundle)
 * [`getBlockedBundles()`](#getblockedbundles)
 * [`getBundles()`](#getbundles)
@@ -391,6 +397,35 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#downloadbundleoptions">DownloadBundleOptions</a></code> |
 
 **Since:** 5.0.0
+
+--------------------
+
+
+### fetchChannels(...)
+
+```typescript
+fetchChannels(options?: FetchChannelsOptions | undefined) => Promise<FetchChannelsResult>
+```
+
+Fetch channels from [Capawesome Cloud](https://capawesome.io/cloud/).
+
+This is primarily intended for development and QA purposes.
+It allows you to retrieve a list of available channels so you can
+dynamically switch between them using `setChannel(...)`.
+
+**Attention**: Only works for apps with public channels enabled.
+If channels are private, they can still be set using `setChannel(...)`
+but won't be returned by this method.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#fetchchannelsoptions">FetchChannelsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#fetchchannelsresult">FetchChannelsResult</a>&gt;</code>
+
+**Since:** 8.2.0
 
 --------------------
 
@@ -955,6 +990,30 @@ Remove all listeners for this plugin.
 | **`checksum`**     | <code>string</code>              | The checksum of the self-hosted bundle as a SHA-256 hash in hex format to verify the integrity of the bundle. **Attention**: Only supported for the `zip` artifact type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |                    | 7.1.0 |
 | **`signature`**    | <code>string</code>              | The signature of the self-hosted bundle as a signed SHA-256 hash in base64 format to verify the integrity of the bundle. **Attention**: Only supported for the `zip` artifact type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                    | 7.1.0 |
 | **`url`**          | <code>string</code>              | The URL of the bundle to download. For the `zip` artifact type, the URL must point to a ZIP file. For the `manifest` artifact type, the URL serves as the base URL to download the individual files. For example, if the URL is `https://example.com/download`, the plugin will download the file with the href `index.html` from `https://example.com/download?href=index.html`. To **verify the integrity** of the file, the server should return a `X-Checksum` header with the SHA-256 hash in hex format. To **verify the signature** of the file, the server should return a `X-Signature` header with the signed SHA-256 hash in base64 format. |                    | 5.0.0 |
+
+
+#### FetchChannelsResult
+
+| Prop           | Type                   | Description           | Since |
+| -------------- | ---------------------- | --------------------- | ----- |
+| **`channels`** | <code>Channel[]</code> | The list of channels. | 8.2.0 |
+
+
+#### Channel
+
+| Prop       | Type                | Description                           | Since |
+| ---------- | ------------------- | ------------------------------------- | ----- |
+| **`id`**   | <code>string</code> | The unique identifier of the channel. | 8.2.0 |
+| **`name`** | <code>string</code> | The name of the channel.              | 8.2.0 |
+
+
+#### FetchChannelsOptions
+
+| Prop         | Type                | Description                               | Default         | Since |
+| ------------ | ------------------- | ----------------------------------------- | --------------- | ----- |
+| **`limit`**  | <code>number</code> | The maximum number of channels to return. | <code>50</code> | 8.2.0 |
+| **`offset`** | <code>number</code> | The number of channels to skip.           | <code>0</code>  | 8.2.0 |
+| **`query`**  | <code>string</code> | The query to filter channels by name.     |                 | 8.2.0 |
 
 
 #### FetchLatestBundleResult

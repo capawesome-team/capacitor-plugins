@@ -15,17 +15,21 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetChannelsResponseItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchChannelsOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchChannelsResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
@@ -160,6 +164,61 @@ public class LiveUpdate {
             downloadBundleOfTypeManifest(bundleId, url, callback);
         } else {
             downloadBundleOfTypeZip(bundleId, checksum, signature, url, callback);
+        }
+    }
+
+    public void fetchChannels(@NonNull FetchChannelsOptions options, @NonNull NonEmptyCallback<FetchChannelsResult> callback) {
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(config.getServerDomain())
+                .addPathSegment("v1")
+                .addPathSegment("apps")
+                .addPathSegment(getAppId())
+                .addPathSegment("channels");
+            if (options.getLimit() != null) {
+                urlBuilder.addQueryParameter("limit", String.valueOf(options.getLimit()));
+            }
+            if (options.getOffset() != null) {
+                urlBuilder.addQueryParameter("offset", String.valueOf(options.getOffset()));
+            }
+            if (options.getQuery() != null) {
+                urlBuilder.addQueryParameter("query", options.getQuery());
+            }
+            String url = urlBuilder.build().toString();
+
+            httpClient.enqueue(
+                url,
+                new NonEmptyCallback<Response>() {
+                    @Override
+                    public void success(@NonNull Response response) {
+                        try {
+                            String responseBodyString = response.body().string();
+                            if (response.isSuccessful()) {
+                                JSONArray responseJsonArray = new JSONArray(responseBodyString);
+                                ChannelResult[] channels = new ChannelResult[responseJsonArray.length()];
+                                for (int i = 0; i < responseJsonArray.length(); i++) {
+                                    GetChannelsResponseItem item = new GetChannelsResponseItem(responseJsonArray.getJSONObject(i));
+                                    channels[i] = new ChannelResult(item.getId(), item.getName());
+                                }
+                                FetchChannelsResult result = new FetchChannelsResult(channels);
+                                callback.success(result);
+                            } else {
+                                callback.error(new Exception(responseBodyString));
+                            }
+                        } catch (Exception e) {
+                            callback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        callback.error(exception);
+                    }
+                }
+            );
+        } catch (Exception e) {
+            callback.error(e);
         }
     }
 
