@@ -45,7 +45,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>CapawesomeLiveUpdateDefaultChannel</key>
-	<string>production-$(CURRENT_PROJECT_VERSION)</string>
 </dict>
 </plist>
