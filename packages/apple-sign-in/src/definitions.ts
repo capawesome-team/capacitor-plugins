@@ -6,32 +6,32 @@ export interface AppleSignInPlugin {
    *
    * Only available on Android and Web.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   initialize(options: InitializeOptions): Promise<void>;
   /**
    * Sign in with Apple.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   signIn(options?: SignInOptions): Promise<SignInResult>;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export interface InitializeOptions {
   /**
    * The Apple Service ID to use for sign-in.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    * @example "com.example.app.signin"
    */
   clientId: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export interface SignInOptions {
   /**
@@ -39,20 +39,20 @@ export interface SignInOptions {
    *
    * Only available on Android and Web.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    * @example "https://example.com/callback"
    */
   redirectUrl?: string;
   /**
    * The scopes to request during sign-in.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   scopes?: SignInScope[];
   /**
    * A nonce for replay protection.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   nonce?: string;
   /**
@@ -60,25 +60,25 @@ export interface SignInOptions {
    *
    * Only available on Android and Web.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   state?: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export interface SignInResult {
   /**
    * The authorization code.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   authorizationCode: string;
   /**
    * The ID token (JWT).
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   idToken: string;
   /**
@@ -86,7 +86,7 @@ export interface SignInResult {
    *
    * On **Android** and **Web**, this is decoded from the JWT `sub` claim.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    * @example "001234.abcdef1234567890abcdef1234567890.1234"
    */
   user: string;
@@ -95,7 +95,7 @@ export interface SignInResult {
    *
    * On **iOS**, this is only provided on the first sign-in.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   email: string | null;
   /**
@@ -103,7 +103,7 @@ export interface SignInResult {
    *
    * On **iOS**, this is only provided on the first sign-in.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   givenName: string | null;
   /**
@@ -111,7 +111,7 @@ export interface SignInResult {
    *
    * On **iOS**, this is only provided on the first sign-in.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   familyName: string | null;
   /**
@@ -119,7 +119,7 @@ export interface SignInResult {
    *
    * Only available on Android and Web.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   state?: string;
   /**
@@ -127,61 +127,61 @@ export interface SignInResult {
    *
    * Only available on iOS.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   realUserStatus?: RealUserStatus;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export enum SignInScope {
   /**
    * Request the user's email address.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   Email = 'EMAIL',
   /**
    * Request the user's full name.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   FullName = 'FULL_NAME',
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export enum RealUserStatus {
   /**
    * The user appears to be a real person.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   LikelyReal = 'LIKELY_REAL',
   /**
    * The system can't determine whether the user is a real person.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   Unknown = 'UNKNOWN',
   /**
    * The real user status is not supported on this platform.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   Unsupported = 'UNSUPPORTED',
 }
 
 /**
- * @since 8.0.0
+ * @since 0.1.0
  */
 export enum ErrorCode {
   /**
    * The sign-in was canceled by the user.
    *
-   * @since 8.0.0
+   * @since 0.1.0
    */
   SignInCanceled = 'SIGN_IN_CANCELED',
 }

@@ -110,7 +110,7 @@ Only available on Android and Web.
 | ------------- | --------------------------------------------------------------- |
 | **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -129,7 +129,7 @@ Sign in with Apple.
 
 **Returns:** <code>Promise&lt;<a href="#signinresult">SignInResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -141,31 +141,31 @@ Sign in with Apple.
 
 | Prop           | Type                | Description                              | Since |
 | -------------- | ------------------- | ---------------------------------------- | ----- |
-| **`clientId`** | <code>string</code> | The Apple Service ID to use for sign-in. | 8.0.0 |
+| **`clientId`** | <code>string</code> | The Apple Service ID to use for sign-in. | 0.1.0 |
 
 
 #### SignInResult
 
 | Prop                    | Type                                                      | Description                                                                                             | Since |
 | ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----- |
-| **`authorizationCode`** | <code>string</code>                                       | The authorization code.                                                                                 | 8.0.0 |
-| **`idToken`**           | <code>string</code>                                       | The ID token (JWT).                                                                                     | 8.0.0 |
-| **`user`**              | <code>string</code>                                       | The stable Apple user identifier. On **Android** and **Web**, this is decoded from the JWT `sub` claim. | 8.0.0 |
-| **`email`**             | <code>string \| null</code>                               | The user's email address. On **iOS**, this is only provided on the first sign-in.                       | 8.0.0 |
-| **`givenName`**         | <code>string \| null</code>                               | The user's given name. On **iOS**, this is only provided on the first sign-in.                          | 8.0.0 |
-| **`familyName`**        | <code>string \| null</code>                               | The user's family name. On **iOS**, this is only provided on the first sign-in.                         | 8.0.0 |
-| **`state`**             | <code>string</code>                                       | The state value from the sign-in request. Only available on Android and Web.                            | 8.0.0 |
-| **`realUserStatus`**    | <code><a href="#realuserstatus">RealUserStatus</a></code> | The real user status. Only available on iOS.                                                            | 8.0.0 |
+| **`authorizationCode`** | <code>string</code>                                       | The authorization code.                                                                                 | 0.1.0 |
+| **`idToken`**           | <code>string</code>                                       | The ID token (JWT).                                                                                     | 0.1.0 |
+| **`user`**              | <code>string</code>                                       | The stable Apple user identifier. On **Android** and **Web**, this is decoded from the JWT `sub` claim. | 0.1.0 |
+| **`email`**             | <code>string \| null</code>                               | The user's email address. On **iOS**, this is only provided on the first sign-in.                       | 0.1.0 |
+| **`givenName`**         | <code>string \| null</code>                               | The user's given name. On **iOS**, this is only provided on the first sign-in.                          | 0.1.0 |
+| **`familyName`**        | <code>string \| null</code>                               | The user's family name. On **iOS**, this is only provided on the first sign-in.                         | 0.1.0 |
+| **`state`**             | <code>string</code>                                       | The state value from the sign-in request. Only available on Android and Web.                            | 0.1.0 |
+| **`realUserStatus`**    | <code><a href="#realuserstatus">RealUserStatus</a></code> | The real user status. Only available on iOS.                                                            | 0.1.0 |
 
 
 #### SignInOptions
 
 | Prop              | Type                       | Description                                                                   | Since |
 | ----------------- | -------------------------- | ----------------------------------------------------------------------------- | ----- |
-| **`redirectUrl`** | <code>string</code>        | The OAuth redirect URL to use for sign-in. Only available on Android and Web. | 8.0.0 |
-| **`scopes`**      | <code>SignInScope[]</code> | The scopes to request during sign-in.                                         | 8.0.0 |
-| **`nonce`**       | <code>string</code>        | A nonce for replay protection.                                                | 8.0.0 |
-| **`state`**       | <code>string</code>        | A state value for CSRF protection. Only available on Android and Web.         | 8.0.0 |
+| **`redirectUrl`** | <code>string</code>        | The OAuth redirect URL to use for sign-in. Only available on Android and Web. | 0.1.0 |
+| **`scopes`**      | <code>SignInScope[]</code> | The scopes to request during sign-in.                                         | 0.1.0 |
+| **`nonce`**       | <code>string</code>        | A nonce for replay protection.                                                | 0.1.0 |
+| **`state`**       | <code>string</code>        | A state value for CSRF protection. Only available on Android and Web.         | 0.1.0 |
 
 
 ### Enums
@@ -175,17 +175,17 @@ Sign in with Apple.
 
 | Members           | Value                      | Description                                                   | Since |
 | ----------------- | -------------------------- | ------------------------------------------------------------- | ----- |
-| **`LikelyReal`**  | <code>'LIKELY_REAL'</code> | The user appears to be a real person.                         | 8.0.0 |
-| **`Unknown`**     | <code>'UNKNOWN'</code>     | The system can't determine whether the user is a real person. | 8.0.0 |
-| **`Unsupported`** | <code>'UNSUPPORTED'</code> | The real user status is not supported on this platform.       | 8.0.0 |
+| **`LikelyReal`**  | <code>'LIKELY_REAL'</code> | The user appears to be a real person.                         | 0.1.0 |
+| **`Unknown`**     | <code>'UNKNOWN'</code>     | The system can't determine whether the user is a real person. | 0.1.0 |
+| **`Unsupported`** | <code>'UNSUPPORTED'</code> | The real user status is not supported on this platform.       | 0.1.0 |
 
 
 #### SignInScope
 
 | Members        | Value                    | Description                       | Since |
 | -------------- | ------------------------ | --------------------------------- | ----- |
-| **`Email`**    | <code>'EMAIL'</code>     | Request the user's email address. | 8.0.0 |
-| **`FullName`** | <code>'FULL_NAME'</code> | Request the user's full name.     | 8.0.0 |
+| **`Email`**    | <code>'EMAIL'</code>     | Request the user's email address. | 0.1.0 |
+| **`FullName`** | <code>'FULL_NAME'</code> | Request the user's full name.     | 0.1.0 |
 
 </docgen-api>
 
