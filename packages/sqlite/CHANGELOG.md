@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.3.4
+
+### Patch Changes
+
+- [`f07d25e9cb0dc2560f7694d3a810a534ad0b2594`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f07d25e9cb0dc2560f7694d3a810a534ad0b2594): fix(android): load SQLCipher native library before querying version
+
+## 0.3.3
+
+### Patch Changes
+
+- [`235bf91c9d7160626bc72a7a6470d29d6c5442ac`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/235bf91c9d7160626bc72a7a6470d29d6c5442ac) ([#411](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/411)): feat(android): add opt-in requery/sqlite-android bundling
+
+- [`15169cad8e4a83092830caf24d7db44079e75455`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/15169cad8e4a83092830caf24d7db44079e75455) ([#413](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/413)): fix(android): report correct SQLite version for bundled engines
+
+## 0.3.2
+
+### Patch Changes
+
+- [`ae03cf50eb66ad15f91d922443cfb4e9c071ed8f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae03cf50eb66ad15f91d922443cfb4e9c071ed8f) ([#406](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/406)): fix(android): AGP 9.0 no longer supports `proguard-android.txt`
+
+## 0.3.1
+
+### Patch Changes
+
+- [`d645ccb4b81a83953516068175a712a0b28ce7ae`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d645ccb4b81a83953516068175a712a0b28ce7ae) ([#399](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/399)): feat: add key-value store
+
 ## 0.3.0
 
 ### Minor Changes

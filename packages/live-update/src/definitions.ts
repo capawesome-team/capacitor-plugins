@@ -57,6 +57,11 @@ declare module '@capacitor/cli' {
       /**
        * The default channel of the app.
        *
+       * This can be overridden by `setChannel()`, the `channel` parameter of `sync()`,
+       * or the native channel configuration
+       * (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel`
+       * in `strings.xml` on Android).
+       *
        * @since 6.3.0
        * @example 'production'
        */
@@ -134,6 +139,22 @@ export interface LiveUpdatePlugin {
    */
   downloadBundle(options: DownloadBundleOptions): Promise<void>;
   /**
+   * Fetch channels from [Capawesome Cloud](https://capawesome.io/cloud/).
+   *
+   * This is primarily intended for development and QA purposes.
+   * It allows you to retrieve a list of available channels so you can
+   * dynamically switch between them using `setChannel(...)`.
+   *
+   * **Attention**: Only works for apps with public channels enabled.
+   * If channels are private, they can still be set using `setChannel(...)`
+   * but won't be returned by this method.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.2.0
+   */
+  fetchChannels(options?: FetchChannelsOptions): Promise<FetchChannelsResult>;
+  /**
    * Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
    * Only available on Android and iOS.
@@ -165,6 +186,15 @@ export interface LiveUpdatePlugin {
   getBundles(): Promise<GetBundlesResult>;
   /**
    * Get the channel that is used for the update.
+   *
+   * The channel is resolved in the following order (highest priority first):
+   * 1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
+   * 2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+   *    `capawesome_live_update_default_channel` in `strings.xml` on Android)
+   * 3. Capacitor config `defaultChannel`
+   *
+   * **Note**: The `channel` parameter of `sync()` takes the highest priority
+   * but is not persisted and therefore not returned by this method.
    *
    * Only available on Android and iOS.
    *
@@ -465,6 +495,62 @@ export interface DownloadBundleOptions {
    * @example 'https://example.com/bundle.zip'
    */
   url: string;
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface FetchChannelsOptions {
+  /**
+   * The maximum number of channels to return.
+   *
+   * @since 8.2.0
+   * @default 50
+   */
+  limit?: number;
+  /**
+   * The number of channels to skip.
+   *
+   * @since 8.2.0
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * The query to filter channels by name.
+   *
+   * @since 8.2.0
+   */
+  query?: string;
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface FetchChannelsResult {
+  /**
+   * The list of channels.
+   *
+   * @since 8.2.0
+   */
+  channels: Channel[];
+}
+
+/**
+ * @since 8.2.0
+ */
+export interface Channel {
+  /**
+   * The unique identifier of the channel.
+   *
+   * @since 8.2.0
+   */
+  id: string;
+  /**
+   * The name of the channel.
+   *
+   * @since 8.2.0
+   */
+  name: string;
 }
 
 /**

@@ -173,6 +173,7 @@ const unregister = async () => {
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
 * [`flush()`](#flush)
+* [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
 * [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
 * [`group(...)`](#group)
@@ -242,6 +243,21 @@ Flush all events in the queue.
 Only available on Android and iOS.
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### getDistinctId()
+
+```typescript
+getDistinctId() => Promise<GetDistinctIdResult>
+```
+
+Get the current distinct ID.
+
+**Returns:** <code>Promise&lt;<a href="#getdistinctidresult">GetDistinctIdResult</a>&gt;</code>
+
+**Since:** 8.2.0
 
 --------------------
 
@@ -519,10 +535,17 @@ Remove a super property.
 
 #### CaptureOptions
 
-| Prop             | Type                                   | Description                            | Since |
-| ---------------- | -------------------------------------- | -------------------------------------- | ----- |
-| **`event`**      | <code>string</code>                    | The name of the event to capture.      | 6.0.0 |
-| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+| Prop             | Type                                                         | Description                            | Since |
+| ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
+| **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
+| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+
+
+#### GetDistinctIdResult
+
+| Prop             | Type                | Description              | Since |
+| ---------------- | ------------------- | ------------------------ | ----- |
+| **`distinctId`** | <code>string</code> | The current distinct ID. | 8.2.0 |
 
 
 #### GetFeatureFlagResult
@@ -555,19 +578,19 @@ Remove a super property.
 
 #### GroupOptions
 
-| Prop                  | Type                                   | Description                                  | Since |
-| --------------------- | -------------------------------------- | -------------------------------------------- | ----- |
-| **`type`**            | <code>string</code>                    | The group type.                              | 6.0.0 |
-| **`key`**             | <code>string</code>                    | The group key.                               | 6.0.0 |
-| **`groupProperties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
+| Prop                  | Type                                                         | Description                                  | Since |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------- | ----- |
+| **`type`**            | <code>string</code>                                          | The group type.                              | 6.0.0 |
+| **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
+| **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
 
 
 #### IdentifyOptions
 
-| Prop                 | Type                                   | Description                   | Since |
-| -------------------- | -------------------------------------- | ----------------------------- | ----- |
-| **`distinctId`**     | <code>string</code>                    | The distinct ID of the user.  | 6.0.0 |
-| **`userProperties`** | <code>Record&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+| Prop                 | Type                                                         | Description                   | Since |
+| -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
+| **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
+| **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
 
 
 #### IsFeatureEnabledResult
@@ -601,10 +624,10 @@ Remove a super property.
 
 #### ScreenOptions
 
-| Prop              | Type                                   | Description                                   | Since |
-| ----------------- | -------------------------------------- | --------------------------------------------- | ----- |
-| **`screenTitle`** | <code>string</code>                    | The name of the screen.                       | 6.0.0 |
-| **`properties`**  | <code>Record&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
+| Prop              | Type                                                         | Description                                   | Since |
+| ----------------- | ------------------------------------------------------------ | --------------------------------------------- | ----- |
+| **`screenTitle`** | <code>string</code>                                          | The name of the screen.                       | 6.0.0 |
+| **`properties`**  | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
 
 #### SetupOptions
@@ -639,6 +662,13 @@ Remove a super property.
 
 
 ### Type Aliases
+
+
+#### Record
+
+Construct a type with a set of properties K of type T
+
+<code>{ [P in K]: T; }</code>
 
 
 #### JsonType

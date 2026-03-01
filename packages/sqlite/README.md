@@ -14,9 +14,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
+- 📦 **Bundled SQLite**: Opt-in bundling of the latest SQLite version.
 - 📖 **Read-only mode**: Open databases in read-only mode to prevent modifications.
 - 📂 **File-based**: Open existing databases or create new ones with a file path.
-- 📦 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
+- 💾 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
 - 📈 **Schema migrations**: Automatically apply schema migrations when opening a database.
 - 🔄 **Transactions**: Supports transactions with `beginTransaction(...)`, `commitTransaction(...)`, and `rollbackTransaction(...)`.
 - 🔍 **Querying**: Execute SQL queries with `query(...)` and `execute(...)`.
@@ -25,9 +26,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🕸️ **SQLite WASM**: Uses SQLite WebAssembly for web platform support.
 - ⚛️ **Electron Native**: Uses native SQLite for Electron via the `node:sqlite` module.
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
-- 🗃️ **ORM Support**: Works with popular ORMs like TypeORM, Drizzle, and Kysely.
+- 🗄️ **Key-Value Store**: Built-in [key-value store](#key-value-store) for simple data persistence without SQL.
+- 🗃️ **ORM Support**: Works with popular ORMs like [Drizzle](#drizzle), [Kysely](#kysely) and [TypeORM](#typeorm).
 - 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
-- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
@@ -49,6 +51,9 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 - [Announcing the SQLite Plugin for Capacitor](https://capawesome.io/blog/announcing-the-capacitor-sqlite-plugin/)
 - [Encrypting SQLite databases in Capacitor](https://capawesome.io/blog/encrypting-capacitor-sqlite-database/)
 - [Exploring the Capacitor SQLite API](https://capawesome.io/blog/exploring-the-capacitor-sqlite-api/)
+- [How to Use Drizzle ORM with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-and-sqlite/)
+- [How to Use Kysely with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-and-sqlite/)
+- [How to Use TypeORM with Capacitor and SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-and-sqlite/)
 
 ## Installation
 
@@ -84,6 +89,28 @@ ext {
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+#### Bundled SQLite
+
+By default, this plugin uses the system SQLite version provided by the Android device. If you want to use a newer, consistent SQLite version across all devices, you can opt in to bundling [requery/sqlite-android](https://github.com/requery/sqlite-android) by setting the `capawesomeCapacitorSqliteIncludeRequery` variable to `true` in your app's `variables.gradle` file:
+
+```diff
+ext {
++  capawesomeCapacitorSqliteIncludeRequery = true // Default: false
+}
+```
+
+**Attention**: This option cannot be combined with `capawesomeCapacitorSqliteIncludeSqlcipher`. SQLCipher already bundles its own SQLite version.
+
+You also need to add the JitPack repository to your app's `build.gradle` file:
+
+```diff
+repositories {
+    google()
+    mavenCentral()
++   maven { url 'https://jitpack.io' }
+}
+```
+
 #### Proguard
 
 If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
@@ -99,6 +126,7 @@ If needed, you can define the following project variable in your app’s `variab
 - `$androidxSqliteVersion` version of `androidx.sqlite:sqlite` (default: `2.6.2`)
 - `$androidxSqliteFrameworkAndroidVersion` version of `androidx.sqlite:sqlite-framework-android` (default: `2.6.2`)
 - `$netZeteticSqlcipherVersion` version of `net.zetetic:sqlcipher-android` (default: `4.12.0`)
+- `$requeryVersion` version of `com.github.requery:sqlite-android` (default: `3.49.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
@@ -713,11 +741,80 @@ This can include strings, numbers, arrays of numbers (for BLOBs), or `null`.
 
 </docgen-api>
 
+## Key-Value Store
+
+This plugin includes a built-in key-value store (`SqliteKeyValueStore`) that provides a simple API for storing and retrieving key-value pairs without writing SQL. The database is automatically created and managed under the hood.
+
+```typescript
+import { Sqlite, SqliteKeyValueStore } from '@capawesome-team/capacitor-sqlite';
+
+const store = new SqliteKeyValueStore(Sqlite);
+
+// Set a value
+await store.set({ key: 'settings', value: JSON.stringify({ theme: 'dark', notifications: true }) });
+
+// Get a value
+const result = await store.get({ key: 'settings' });
+if (result.value) {
+  const settings = JSON.parse(result.value);
+  console.log(settings.theme); // 'dark'
+  console.log(settings.notifications); // true
+}
+
+// Remove a value
+await store.remove({ key: 'settings' });
+
+// Clear all values
+await store.clear();
+
+// Get all keys
+const keysResult = await store.keys();
+console.log(keysResult.keys); // ['settings', 'user', 'preferences', ...]
+```
+
+Perfect for storing small amounts of data such as user preferences, app settings, or session data without risking data loss due to web view data clearing.
+
 ## ORMs
+
+### Drizzle
+
+This plugin is compatible with [Drizzle ORM](https://orm.drizzle.team/) via the [`@capawesome/capacitor-sqlite-drizzle`](https://github.com/capawesome-team/capacitor-sqlite-drivers/tree/main/packages/drizzle) adapter.
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+import { drizzle } from '@capawesome/capacitor-sqlite-drizzle';
+import * as schema from './schema';
+
+const { databaseId } = await Sqlite.open({ path: 'my.db' });
+const db = drizzle(Sqlite, { databaseId, schema });
+
+const users = await db.select().from(schema.users);
+```
+
+Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
+
+### Kysely
+
+This plugin is compatible with [Kysely](https://kysely.dev/) via the [`@capawesome/capacitor-sqlite-kysely`](https://github.com/capawesome-team/capacitor-sqlite-drivers/tree/main/packages/kysely) dialect.
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+import { Kysely } from 'kysely';
+import { CapacitorSqliteDialect } from '@capawesome/capacitor-sqlite-kysely';
+
+const { databaseId } = await Sqlite.open({ path: 'my.db' });
+const db = new Kysely<Database>({
+  dialect: new CapacitorSqliteDialect(Sqlite, { databaseId }),
+});
+
+const users = await db.selectFrom('users').selectAll().execute();
+```
+
+Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
 
 ### TypeORM
 
-This plugin is compatible with [TypeORM](https://typeorm.io/), a popular ORM for TypeScript and JavaScript. 
+This plugin is compatible with [TypeORM](https://typeorm.io/), a popular ORM for TypeScript and JavaScript.
 
 ```typescript
 import { Sqlite, SQLiteConnection } from '@capawesome-team/capacitor-sqlite';
@@ -735,6 +832,8 @@ const createDataSource = async () => {
   });
 };
 ```
+
+Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
 
 ## Limitations
 

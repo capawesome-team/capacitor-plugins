@@ -16,7 +16,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔄 **Purchase Restoration**: Easily sync and restore purchases across devices.
 - 🚀 **Modern APIs**: Uses StoreKit 2 and Google Play Billing Library 8.0.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
-- 📦 **SPM**: Supports Swift Package Manager for iOS.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
@@ -28,6 +28,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.3.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [Tips for Setting Up In-App Purchases with Capacitor](https://capawesome.io/blog/tips-for-setting-up-in-app-purchases-with-capacitor/)
 
 ## Installation
 
@@ -444,9 +448,11 @@ Represents an in-app product available for purchase.
 
 #### PurchaseProductOptions
 
-| Prop            | Type                | Description                                                                                                                                                                                                                            | Since |
-| --------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`productId`** | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
+| Prop             | Type                | Description                                                                                                                                                                                                                            | Since |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`basePlanId`** | <code>string</code> | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                           | 0.3.5 |
+| **`offerId`**    | <code>string</code> | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                         | 0.3.5 |
+| **`productId`**  | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
 
 
 ### Enums

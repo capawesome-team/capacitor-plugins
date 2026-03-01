@@ -1,5 +1,21 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`780fdcebabdac14a8bc93ad4b4d7863a1fbd03de`](https://github.com/capawesome-team/capacitor-plugins/commit/780fdcebabdac14a8bc93ad4b4d7863a1fbd03de) ([#783](https://github.com/capawesome-team/capacitor-plugins/pull/783)): feat: add native channel configuration support
+
+- [`fd6711d63359f77cc00f752b9b6396f9bc6b8541`](https://github.com/capawesome-team/capacitor-plugins/commit/fd6711d63359f77cc00f752b9b6396f9bc6b8541) ([#787](https://github.com/capawesome-team/capacitor-plugins/pull/787)): feat: add `fetchChannels(...)` method
+
+- [`b4181e9af6fe7dd0c8c9c0cbc6d0359a887d50a2`](https://github.com/capawesome-team/capacitor-plugins/commit/b4181e9af6fe7dd0c8c9c0cbc6d0359a887d50a2) ([#785](https://github.com/capawesome-team/capacitor-plugins/pull/785)): feat: track device ID on bundle download
+
+## 8.1.1
+
+### Patch Changes
+
+- [`198ceeb1d81c734f198ab100dd9f3ea96fc4a511`](https://github.com/capawesome-team/capacitor-plugins/commit/198ceeb1d81c734f198ab100dd9f3ea96fc4a511) ([#776](https://github.com/capawesome-team/capacitor-plugins/pull/776)): fix(android): AGP 9.0 no longer supports `proguard-android.txt`
+
 ## 8.1.0
 
 ### Minor Changes

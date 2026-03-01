@@ -5,6 +5,7 @@ import type { PostHogConfig } from 'posthog-js';
 import type {
   AliasOptions,
   CaptureOptions,
+  GetDistinctIdResult,
   GetFeatureFlagOptions,
   GetFeatureFlagPayloadOptions,
   GetFeatureFlagPayloadResult,
@@ -30,6 +31,14 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.capture(options.event, options.properties);
   }
 
+  async flush(): Promise<void> {
+    this.throwUnimplementedError();
+  }
+
+  async getDistinctId(): Promise<GetDistinctIdResult> {
+    return { distinctId: posthog.get_distinct_id() };
+  }
+
   async getFeatureFlag(
     options: GetFeatureFlagOptions,
   ): Promise<GetFeatureFlagResult> {
@@ -41,10 +50,6 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult> {
     return { value: posthog.getFeatureFlagPayload(options.key) };
-  }
-
-  async flush(): Promise<void> {
-    this.throwUnimplementedError();
   }
 
   async group(options: GroupOptions): Promise<void> {

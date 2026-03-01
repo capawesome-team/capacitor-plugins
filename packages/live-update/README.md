@@ -21,6 +21,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🛟 **Rollback**: Reset the app to the default bundle if an incompatible bundle has been set.
 - 🚀 **Rollout**: Gradually roll out new bundles to gather valuable feedback.
 - 🔁 **Delta Updates**: Make your updates faster by only downloading changed files.
+- ⚙️ **Runtime Configuration**: Update plugin configuration at runtime without rebuilding the app.
+- 📡 **Update Lifecycle Events**: Track download progress, react to bundle changes, and detect reloads with auto-blocking of rolled back bundles.
+- 🏠 **Self-Hosted Bundles**: Download bundles from any URL, no Capawesome Cloud dependency required.
+- 🏷️ **Custom Properties**: Associate custom key-value metadata with bundles via Capawesome Cloud.
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 1,000 projects to update apps on more than 20,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
@@ -51,6 +55,21 @@ npx cap sync
 
 ### Android
 
+#### Channel
+
+If you are using [Versioned Channels](https://capawesome.io/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a string resource.
+This allows you to tie the channel to the version code at build time.
+
+Add the following to your app's `build.gradle` file:
+
+```groovy
+android {
+    defaultConfig {
+        resValue "string", "capawesome_live_update_default_channel", "production-" + defaultConfig.versionCode
+    }
+}
+```
+
 #### Variables
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
@@ -61,6 +80,18 @@ If needed, you can define the following project variable in your app’s `variab
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
 ### iOS
+
+#### Channel
+
+If you are using [Versioned Channels](https://capawesome.io/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a key to your `Info.plist` file.
+This allows you to tie the channel to the build version at build time.
+
+Add the following to your `Info.plist` file:
+
+```xml
+<key>CapawesomeLiveUpdateDefaultChannel</key>
+<string>production-$(CURRENT_PROJECT_VERSION)</string>
+```
 
 #### Privacy manifest
 
@@ -100,7 +131,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 | **`autoBlockRolledBackBundles`** | <code>boolean</code>                | Whether or not to automatically block bundles that have been rolled back. When enabled, the plugin will automatically block bundles that caused a rollback (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked. Blocked bundles will be skipped in future sync operations. **Attention**: This option has no effect if `readyTimeout` is set to `0`. Only available on Android and iOS. | <code>false</code>                     | 7.3.0 |
 | **`autoDeleteBundles`**          | <code>boolean</code>                | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`.                                                                                                                                                                                                                                                                          | <code>false</code>                     | 5.0.0 |
 | **`autoUpdateStrategy`**         | <code>'none' \| 'background'</code> | The auto-update strategy for live updates. - `none`: Live updates will not be applied automatically. - `background`: Live updates will be automatically downloaded and applied in the background at app startup and when the app resumes (if the last check was more than 15 minutes ago). Only available on Android and iOS.                                                                                              | <code>'none'</code>                    | 7.3.0 |
-| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app.                                                                                                                                                                                                                                                                                                                                                                                            |                                        | 6.3.0 |
+| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app. This can be overridden by `setChannel()`, the `channel` parameter of `sync()`, or the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel` in `strings.xml` on Android).                                                                                                                                  |                                        | 6.3.0 |
 | **`httpTimeout`**                | <code>number</code>                 | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                                             | <code>60000</code>                     | 6.4.0 |
 | **`publicKey`**                  | <code>string</code>                 | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                                                 |                                        | 6.1.0 |
 | **`readyTimeout`**               | <code>number</code>                 | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option (e.g. `10000` ms) so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout.          | <code>0</code>                         | 5.0.0 |
@@ -167,6 +198,11 @@ const deleteBundle = async () => {
 
 const downloadBundle = async () => {
   await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+};
+
+const fetchChannels = async () => {
+  const result = await LiveUpdate.fetchChannels();
+  return result.channels;
 };
 
 const fetchLatestBundle = async () => {
@@ -273,6 +309,7 @@ const isNewBundleAvailable = async () => {
 * [`clearBlockedBundles()`](#clearblockedbundles)
 * [`deleteBundle(...)`](#deletebundle)
 * [`downloadBundle(...)`](#downloadbundle)
+* [`fetchChannels(...)`](#fetchchannels)
 * [`fetchLatestBundle(...)`](#fetchlatestbundle)
 * [`getBlockedBundles()`](#getblockedbundles)
 * [`getBundles()`](#getbundles)
@@ -363,6 +400,35 @@ Only available on Android and iOS.
 --------------------
 
 
+### fetchChannels(...)
+
+```typescript
+fetchChannels(options?: FetchChannelsOptions | undefined) => Promise<FetchChannelsResult>
+```
+
+Fetch channels from [Capawesome Cloud](https://capawesome.io/cloud/).
+
+This is primarily intended for development and QA purposes.
+It allows you to retrieve a list of available channels so you can
+dynamically switch between them using `setChannel(...)`.
+
+**Attention**: Only works for apps with public channels enabled.
+If channels are private, they can still be set using `setChannel(...)`
+but won't be returned by this method.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#fetchchannelsoptions">FetchChannelsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#fetchchannelsresult">FetchChannelsResult</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### fetchLatestBundle(...)
 
 ```typescript
@@ -428,6 +494,15 @@ getChannel() => Promise<GetChannelResult>
 ```
 
 Get the channel that is used for the update.
+
+The channel is resolved in the following order (highest priority first):
+1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
+2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+   `capawesome_live_update_default_channel` in `strings.xml` on Android)
+3. Capacitor config `defaultChannel`
+
+**Note**: The `channel` parameter of `sync()` takes the highest priority
+but is not persisted and therefore not returned by this method.
 
 Only available on Android and iOS.
 
@@ -891,6 +966,30 @@ Remove all listeners for this plugin.
 | **`url`**          | <code>string</code>              | The URL of the bundle to download. For the `zip` artifact type, the URL must point to a ZIP file. For the `manifest` artifact type, the URL serves as the base URL to download the individual files. For example, if the URL is `https://example.com/download`, the plugin will download the file with the href `index.html` from `https://example.com/download?href=index.html`. To **verify the integrity** of the file, the server should return a `X-Checksum` header with the SHA-256 hash in hex format. To **verify the signature** of the file, the server should return a `X-Signature` header with the signed SHA-256 hash in base64 format. |                    | 5.0.0 |
 
 
+#### FetchChannelsResult
+
+| Prop           | Type                   | Description           | Since |
+| -------------- | ---------------------- | --------------------- | ----- |
+| **`channels`** | <code>Channel[]</code> | The list of channels. | 8.2.0 |
+
+
+#### Channel
+
+| Prop       | Type                | Description                           | Since |
+| ---------- | ------------------- | ------------------------------------- | ----- |
+| **`id`**   | <code>string</code> | The unique identifier of the channel. | 8.2.0 |
+| **`name`** | <code>string</code> | The name of the channel.              | 8.2.0 |
+
+
+#### FetchChannelsOptions
+
+| Prop         | Type                | Description                               | Default         | Since |
+| ------------ | ------------------- | ----------------------------------------- | --------------- | ----- |
+| **`limit`**  | <code>number</code> | The maximum number of channels to return. | <code>50</code> | 8.2.0 |
+| **`offset`** | <code>number</code> | The number of channels to skip.           | <code>0</code>  | 8.2.0 |
+| **`query`**  | <code>string</code> | The query to filter channels by name.     |                 | 8.2.0 |
+
+
 #### FetchLatestBundleResult
 
 | Prop                   | Type                                    | Description                                                                                                                                                                                  | Since |
@@ -1128,6 +1227,18 @@ If you change native code, such as adding a new plugin, you need to resubmit you
 For this reason, you must be careful to [restrict live updates to compatible native versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/) of your app.
 
 ## FAQ
+
+### How do I set a channel?
+
+There are four ways to set a channel, listed from lowest to highest priority:
+
+1. **Capacitor config**: Set the `defaultChannel` property in the [plugin configuration](#configuration). This is the simplest way to set a static default channel.
+2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/cloud/live-updates/guides/best-practices/#versioned-channels) where the channel is tied to the build version.
+3. **[`setChannel(...)`](#setchannel)**: Set the channel at runtime. The value is persisted across app restarts.
+4. **[`sync(...)`](#sync)**: Pass a `channel` option to override the channel for a single sync call. This does **not** persist the channel.
+
+Each method overrides the ones above it.
+You can check the currently resolved channel by calling [`getChannel()`](#getchannel).
 
 ### Why can't I see my changes during development?
 

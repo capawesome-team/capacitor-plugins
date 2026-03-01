@@ -33,6 +33,7 @@ body:
         - label: File Opener
         - label: File Picker
         - label: Geocoder
+        - label: Google Sign-In
         - label: libSQL
         - label: Live Update
         - label: Managed Configurations
