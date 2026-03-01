@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.squaremobilepayments;
 
-import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
@@ -43,8 +44,14 @@ public class SquareMobilePayments {
     @NonNull
     private final SquareMobilePaymentsPlugin plugin;
 
+    @NonNull
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     private boolean isInitialized = false;
     private boolean isAuthorized = false;
+
+    @Nullable
+    private String locationId;
 
     @Nullable
     private Object pairingHandle;
@@ -58,18 +65,30 @@ public class SquareMobilePayments {
     @Nullable
     private CallbackReference availableCardInputMethodsCallbackReference;
 
+    @Nullable
+    private CallbackReference authorizationCallbackReference;
+
     public SquareMobilePayments(@NonNull SquareMobilePaymentsPlugin plugin) {
         this.plugin = plugin;
     }
 
-    private String locationId;
-
     public void initialize(@NonNull InitializeOptions options, @NonNull EmptyCallback callback) {
         try {
             this.locationId = options.getLocationId();
-            Application application = (Application) plugin.getContext().getApplicationContext();
 
-            MobilePaymentsSdk.initialize(locationId, application);
+            // SDK must already be initialized in Application.onCreate() with the Square Application ID.
+            // Verify the SDK is ready by attempting to access the settings manager.
+            try {
+                MobilePaymentsSdk.settingsManager();
+            } catch (Exception e) {
+                callback.error(
+                    new Exception(
+                        "Square SDK not initialized. Make sure to call MobilePaymentsSdk.initialize() in your Application.onCreate().",
+                        e
+                    )
+                );
+                return;
+            }
 
             isInitialized = true;
             callback.success();
@@ -86,13 +105,33 @@ public class SquareMobilePayments {
 
             String accessToken = options.getAccessToken();
 
-            AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
-            authManager.authorize(accessToken, locationId, result -> {
-                if (result.isSuccess()) {
-                    isAuthorized = true;
-                    callback.success();
-                } else {
-                    callback.error(new Exception(result.errorMessage()));
+            mainHandler.post(() -> {
+                try {
+                    AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
+
+                    authorizationCallbackReference = authManager.authorize(accessToken, locationId, result -> {
+                        if (result.isSuccess()) {
+                            isAuthorized = true;
+                            callback.success();
+                        } else {
+                            isAuthorized = false;
+                            String errorMsg = result.errorMessage();
+                            if (errorMsg == null || errorMsg.isEmpty()) {
+                                errorMsg = "Authorization failed";
+                            }
+                            if (result.errorCode() != null) {
+                                errorMsg = errorMsg + " (Error code: " + result.errorCode().toString() + ")";
+                            }
+                            callback.error(new Exception(errorMsg));
+                        }
+                        if (authorizationCallbackReference != null) {
+                            authorizationCallbackReference.clear();
+                            authorizationCallbackReference = null;
+                        }
+                    });
+                } catch (Exception exception) {
+                    isAuthorized = false;
+                    callback.error(exception);
                 }
             });
         } catch (Exception exception) {
@@ -107,9 +146,11 @@ public class SquareMobilePayments {
             }
 
             AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
-            boolean authorized = authManager.getAuthorizationState().isAuthorized();
+            boolean sdkAuthorized = authManager.getAuthorizationState().isAuthorized();
 
-            IsAuthorizedResult result = new IsAuthorizedResult(authorized);
+            isAuthorized = sdkAuthorized;
+
+            IsAuthorizedResult result = new IsAuthorizedResult(sdkAuthorized);
             callback.success(result);
         } catch (Exception exception) {
             callback.error(exception);
@@ -122,10 +163,16 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_INITIALIZED;
             }
 
-            AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
-            authManager.deauthorize();
-            isAuthorized = false;
-            callback.success();
+            mainHandler.post(() -> {
+                try {
+                    AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
+                    authManager.deauthorize();
+                    isAuthorized = false;
+                    callback.success();
+                } catch (Exception exception) {
+                    callback.error(exception);
+                }
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -140,14 +187,20 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            SettingsManager settingsManager = MobilePaymentsSdk.settingsManager();
-            settingsManager.showSettings(result -> {
-                if (result.isSuccess()) {
-                    callback.success();
-                } else {
-                    callback.error(new Exception(result.errorMessage()));
+            mainHandler.post(() -> {
+                try {
+                    SettingsManager settingsManager = MobilePaymentsSdk.settingsManager();
+                    settingsManager.showSettings(result -> {
+                        if (result.isSuccess()) {
+                            callback.success();
+                        } else {
+                            callback.error(new Exception(result.errorMessage()));
+                        }
+                        return null;
+                    });
+                } catch (Exception exception) {
+                    callback.error(exception);
                 }
-                return null;
             });
         } catch (Exception exception) {
             callback.error(exception);
@@ -182,31 +235,34 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            ReaderManager readerManager = MobilePaymentsSdk.readerManager();
+            mainHandler.post(() -> {
+                try {
+                    ReaderManager readerManager = MobilePaymentsSdk.readerManager();
 
-            if (readerManager.isPairingInProgress()) {
-                throw CustomExceptions.PAIRING_ALREADY_IN_PROGRESS;
-            }
+                    if (readerManager.isPairingInProgress()) {
+                        throw CustomExceptions.PAIRING_ALREADY_IN_PROGRESS;
+                    }
 
-            // Notify that pairing has begun
-            plugin.notifyReaderPairingDidBeginListeners();
+                    plugin.notifyReaderPairingDidBeginListeners();
 
-            pairingHandle = readerManager.pairReader(result -> {
-                if (result.isSuccess()) {
-                    // Notify that pairing succeeded
-                    plugin.notifyReaderPairingDidSucceedListeners();
-                } else {
-                    // Notify that pairing failed
-                    ReaderPairingDidFailEvent event = new ReaderPairingDidFailEvent(
-                        result.errorCode() != null ? result.errorCode().toString() : null,
-                        result.errorMessage()
-                    );
-                    plugin.notifyReaderPairingDidFailListeners(event);
+                    pairingHandle = readerManager.pairReader(result -> {
+                        if (result.isSuccess()) {
+                            plugin.notifyReaderPairingDidSucceedListeners();
+                        } else {
+                            ReaderPairingDidFailEvent event = new ReaderPairingDidFailEvent(
+                                result.errorCode() != null ? result.errorCode().toString() : null,
+                                result.errorMessage()
+                            );
+                            plugin.notifyReaderPairingDidFailListeners(event);
+                        }
+                        pairingHandle = null;
+                    });
+
+                    callback.success();
+                } catch (Exception exception) {
+                    callback.error(exception);
                 }
-                pairingHandle = null;
             });
-
-            callback.success();
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -335,24 +391,20 @@ public class SquareMobilePayments {
 
             PaymentManager paymentManager = MobilePaymentsSdk.paymentManager();
 
-            // Build Money object
             Money amountMoney = new Money(params.getAmountMoney().getAmount(), CurrencyCode.valueOf(params.getAmountMoney().getCurrency()));
 
-            // Determine processing mode
             ProcessingMode processingMode = ProcessingMode.AUTO_DETECT;
             if (params.getProcessingMode() != null) {
                 processingMode = ProcessingMode.valueOf(params.getProcessingMode());
             }
 
-            // Determine autocomplete
             boolean autocomplete = params.getAutocomplete() != null ? params.getAutocomplete() : true;
 
-            // Build PaymentParameters
             PaymentParameters.Builder paramsBuilder = new PaymentParameters.Builder(
                 amountMoney,
                 params.getPaymentAttemptId(),
                 processingMode,
-                false // allowCardSurcharge - not supported yet
+                false
             );
 
             paramsBuilder.autocomplete(autocomplete);
@@ -393,7 +445,6 @@ public class SquareMobilePayments {
 
             PaymentParameters sdkPaymentParams = paramsBuilder.build();
 
-            // Build PromptParameters
             PromptMode promptMode = PromptMode.DEFAULT;
             if (promptParams.getMode() != null) {
                 promptMode = PromptMode.valueOf(promptParams.getMode());
@@ -406,28 +457,32 @@ public class SquareMobilePayments {
 
             PromptParameters sdkPromptParams = new PromptParameters(promptMode, additionalMethods);
 
-            // Start payment
-            paymentHandle = paymentManager.startPaymentActivity(sdkPaymentParams, sdkPromptParams, result -> {
-                if (result.isSuccess()) {
-                    Payment sdkPayment = result.value();
-                    io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment payment = convertSdkPaymentToPayment(
-                        sdkPayment
-                    );
+            mainHandler.post(() -> {
+                try {
+                    paymentHandle = paymentManager.startPaymentActivity(sdkPaymentParams, sdkPromptParams, result -> {
+                        if (result.isSuccess()) {
+                            Payment sdkPayment = result.value();
+                            io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment payment =
+                                convertSdkPaymentToPayment(sdkPayment);
 
-                    PaymentDidFinishEvent event = new PaymentDidFinishEvent(payment);
-                    plugin.notifyPaymentDidFinishListeners(event);
-                } else {
-                    PaymentDidFailEvent event = new PaymentDidFailEvent(
-                        null,
-                        result.errorCode() != null ? result.errorCode().toString() : null,
-                        result.errorMessage()
-                    );
-                    plugin.notifyPaymentDidFailListeners(event);
+                            PaymentDidFinishEvent event = new PaymentDidFinishEvent(payment);
+                            plugin.notifyPaymentDidFinishListeners(event);
+                        } else {
+                            PaymentDidFailEvent event = new PaymentDidFailEvent(
+                                null,
+                                result.errorCode() != null ? result.errorCode().toString() : null,
+                                result.errorMessage()
+                            );
+                            plugin.notifyPaymentDidFailListeners(event);
+                        }
+                        paymentHandle = null;
+                    });
+
+                    callback.success();
+                } catch (Exception exception) {
+                    callback.error(exception);
                 }
-                paymentHandle = null;
             });
-
-            callback.success();
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -439,17 +494,23 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_INITIALIZED;
             }
 
-            if (paymentHandle != null) {
-                paymentHandle.cancel();
-                paymentHandle = null;
+            mainHandler.post(() -> {
+                try {
+                    if (paymentHandle != null) {
+                        paymentHandle.cancel();
+                        paymentHandle = null;
 
-                PaymentDidCancelEvent event = new PaymentDidCancelEvent(null);
-                plugin.notifyPaymentDidCancelListeners(event);
-            } else {
-                throw CustomExceptions.NO_PAYMENT_IN_PROGRESS;
-            }
+                        PaymentDidCancelEvent event = new PaymentDidCancelEvent(null);
+                        plugin.notifyPaymentDidCancelListeners(event);
+                    } else {
+                        throw CustomExceptions.NO_PAYMENT_IN_PROGRESS;
+                    }
 
-            callback.success();
+                    callback.success();
+                } catch (Exception exception) {
+                    callback.error(exception);
+                }
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -483,15 +544,21 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            // Show MockReader UI - only available in Debug builds with mockreader-ui dependency
-            // Use reflection to avoid compile-time dependency
-            Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
-            mockReaderUIClass.getMethod("show").invoke(null);
-            callback.success();
-        } catch (ClassNotFoundException e) {
-            callback.error(
-                new Exception("MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration.")
-            );
+            mainHandler.post(() -> {
+                try {
+                    Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
+                    mockReaderUIClass.getMethod("show").invoke(null);
+                    callback.success();
+                } catch (ClassNotFoundException e) {
+                    callback.error(
+                        new Exception(
+                            "MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration."
+                        )
+                    );
+                } catch (Exception exception) {
+                    callback.error(exception);
+                }
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -499,15 +566,21 @@ public class SquareMobilePayments {
 
     public void hideMockReader(@NonNull EmptyCallback callback) {
         try {
-            // Hide MockReader UI
-            // Use reflection to avoid compile-time dependency
-            Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
-            mockReaderUIClass.getMethod("hide").invoke(null);
-            callback.success();
-        } catch (ClassNotFoundException e) {
-            callback.error(
-                new Exception("MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration.")
-            );
+            mainHandler.post(() -> {
+                try {
+                    Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
+                    mockReaderUIClass.getMethod("hide").invoke(null);
+                    callback.success();
+                } catch (ClassNotFoundException e) {
+                    callback.error(
+                        new Exception(
+                            "MockReaderUI is only available in Debug builds. Please ensure you're using a Debug build configuration."
+                        )
+                    );
+                } catch (Exception exception) {
+                    callback.error(exception);
+                }
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -528,7 +601,6 @@ public class SquareMobilePayments {
                 sdkReader
             );
 
-            // Notify based on change type
             if (change == ReaderChangedEvent.Change.ADDED) {
                 ReaderWasAddedEvent addedEvent = new ReaderWasAddedEvent(reader);
                 plugin.notifyReaderWasAddedListeners(addedEvent);
@@ -537,7 +609,6 @@ public class SquareMobilePayments {
                 plugin.notifyReaderWasRemovedListeners(removedEvent);
             }
 
-            // Also notify general reader changed event
             ReaderDidChangeEvent didChangeEvent = new ReaderDidChangeEvent(reader, convertReaderChangeToString(change));
             plugin.notifyReaderDidChangeListeners(didChangeEvent);
         });
@@ -572,8 +643,6 @@ public class SquareMobilePayments {
         }
     }
 
-    // Helper methods for converting SDK types to plugin types
-
     @Nullable
     private com.squareup.sdk.mobilepayments.cardreader.ReaderInfo findReaderBySerialNumber(@NonNull String serialNumber) {
         ReaderManager readerManager = MobilePaymentsSdk.readerManager();
@@ -596,8 +665,14 @@ public class SquareMobilePayments {
         String model = convertReaderModelToString(sdkReader.getModel());
         String status = convertReaderStatusToString(sdkReader.getStatus());
         String firmwareVersion = sdkReader.getFirmwareVersion();
-        Integer batteryLevel = sdkReader.getBatteryStatus().getPercent();
-        Boolean isCharging = sdkReader.getBatteryStatus().isCharging();
+
+        Integer batteryLevel = null;
+        Boolean isCharging = null;
+        com.squareup.sdk.mobilepayments.cardreader.ReaderInfo.BatteryStatus batteryStatus = sdkReader.getBatteryStatus();
+        if (batteryStatus != null) {
+            batteryLevel = batteryStatus.getPercent();
+            isCharging = batteryStatus.isCharging();
+        }
 
         List<String> supportedCardInputMethods = sdkReader
             .getSupportedCardEntryMethods()
@@ -638,7 +713,6 @@ public class SquareMobilePayments {
             type = "ONLINE";
             status = convertPaymentStatusToString(onlinePayment.getStatus());
 
-            // Extract card details
             com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails = onlinePayment.getCardDetails();
             if (sdkCardDetails != null) {
                 cardDetails = convertSdkCardDetailsToCardPaymentDetails(sdkCardDetails);
@@ -649,7 +723,6 @@ public class SquareMobilePayments {
             type = "OFFLINE";
             status = "PENDING";
 
-            // Extract card details
             com.squareup.sdk.mobilepayments.payment.CardPaymentDetails sdkCardDetails = offlinePayment.getCardDetails();
             if (sdkCardDetails != null) {
                 cardDetails = convertSdkCardDetailsToCardPaymentDetails(sdkCardDetails);
@@ -770,7 +843,6 @@ public class SquareMobilePayments {
         } else if (change == ReaderChangedEvent.Change.REMOVED) {
             return "REMOVED";
         }
-        // Default for any other status changes
         return "STATUS_DID_CHANGE";
     }
 
