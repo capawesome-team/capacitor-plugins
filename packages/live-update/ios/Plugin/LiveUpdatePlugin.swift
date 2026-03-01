@@ -26,7 +26,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getDownloadedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCurrentBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCustomId", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getDefaultChannel", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDeviceId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getNextBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getVersionCode", returnType: CAPPluginReturnPromise),
@@ -225,18 +224,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func getCustomId(_ call: CAPPluginCall) {
         implementation?.getCustomId(completion: { result, error in
-            if let error = error {
-                self.rejectCall(call, error)
-                return
-            }
-            if let result = result?.toJSObject() as? JSObject {
-                self.resolveCall(call, result)
-            }
-        })
-    }
-
-    @objc func getDefaultChannel(_ call: CAPPluginCall) {
-        implementation?.getDefaultChannel(completion: { result, error in
             if let error = error {
                 self.rejectCall(call, error)
                 return

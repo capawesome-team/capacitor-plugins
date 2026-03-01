@@ -145,13 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = await LiveUpdate.getCurrentBundle();
       console.log(result);
     });
-  document
-    .querySelector('#get-default-channel-button')
-    .addEventListener('click', async () => {
-      const result = await LiveUpdate.getDefaultChannel();
-      console.log(result);
-    });
-  document
+document
     .querySelector('#get-custom-id-button')
     .addEventListener('click', async () => {
       const result = await LiveUpdate.getCustomId();

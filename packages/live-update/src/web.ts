@@ -12,7 +12,6 @@ import type {
   GetConfigResult,
   GetCurrentBundleResult,
   GetCustomIdResult,
-  GetDefaultChannelResult,
   GetDeviceIdResult,
   GetDownloadedBundlesResult,
   GetNextBundleResult,
@@ -79,10 +78,6 @@ export class LiveUpdateWeb extends WebPlugin implements LiveUpdatePlugin {
   }
 
   public async getCustomId(): Promise<GetCustomIdResult> {
-    this.throwUnimplementedError();
-  }
-
-  public async getDefaultChannel(): Promise<GetDefaultChannelResult> {
     this.throwUnimplementedError();
   }
 

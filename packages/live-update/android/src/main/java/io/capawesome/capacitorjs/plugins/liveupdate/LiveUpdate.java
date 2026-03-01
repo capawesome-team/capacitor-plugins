@@ -37,7 +37,6 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelRe
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDefaultChannelResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
@@ -301,12 +300,6 @@ public class LiveUpdate {
     public void getCustomId(@NonNull NonEmptyCallback callback) {
         String customId = preferences.getCustomId();
         GetCustomIdResult result = new GetCustomIdResult(customId);
-        callback.success(result);
-    }
-
-    public void getDefaultChannel(@NonNull NonEmptyCallback<GetDefaultChannelResult> callback) {
-        String channel = getDefaultChannel();
-        GetDefaultChannelResult result = new GetDefaultChannelResult(channel);
         callback.success(result);
     }
 
@@ -1082,15 +1075,6 @@ public class LiveUpdate {
 
     @Nullable
     private String getChannel() {
-        String channel = getDefaultChannel();
-        if (preferences.getChannel() != null) {
-            channel = preferences.getChannel();
-        }
-        return channel;
-    }
-
-    @Nullable
-    private String getDefaultChannel() {
         String channel = null;
         if (config.getDefaultChannel() != null) {
             channel = config.getDefaultChannel();
@@ -1098,6 +1082,9 @@ public class LiveUpdate {
         String nativeChannel = getNativeChannel();
         if (nativeChannel != null) {
             channel = nativeChannel;
+        }
+        if (preferences.getChannel() != null) {
+            channel = preferences.getChannel();
         }
         return channel;
     }

@@ -318,7 +318,6 @@ const isNewBundleAvailable = async () => {
 * [`getDownloadedBundles()`](#getdownloadedbundles)
 * [`getCurrentBundle()`](#getcurrentbundle)
 * [`getCustomId()`](#getcustomid)
-* [`getDefaultChannel()`](#getdefaultchannel)
 * [`getDeviceId()`](#getdeviceid)
 * [`isSyncing()`](#issyncing)
 * [`getNextBundle()`](#getnextbundle)
@@ -582,31 +581,6 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getcustomidresult">GetCustomIdResult</a>&gt;</code>
 
 **Since:** 5.0.0
-
---------------------
-
-
-### getDefaultChannel()
-
-```typescript
-getDefaultChannel() => Promise<GetDefaultChannelResult>
-```
-
-Get the default channel of the app.
-
-The default channel is resolved in the following order (highest priority first):
-1. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
-   `capawesome_live_update_default_channel` in `strings.xml` on Android)
-2. Capacitor config `defaultChannel`
-
-Unlike `getChannel()`, this method does **not** include
-the channel set by `setChannel()`.
-
-Only available on Android and iOS.
-
-**Returns:** <code>Promise&lt;<a href="#getdefaultchannelresult">GetDefaultChannelResult</a>&gt;</code>
-
-**Since:** 8.2.0
 
 --------------------
 
@@ -1083,13 +1057,6 @@ Remove all listeners for this plugin.
 | Prop           | Type                        | Description                                                                  | Since |
 | -------------- | --------------------------- | ---------------------------------------------------------------------------- | ----- |
 | **`customId`** | <code>string \| null</code> | The custom identifier of the device. If `null`, no custom identifier is set. | 5.0.0 |
-
-
-#### GetDefaultChannelResult
-
-| Prop          | Type                        | Description                                                            | Since |
-| ------------- | --------------------------- | ---------------------------------------------------------------------- | ----- |
-| **`channel`** | <code>string \| null</code> | The default channel name. If `null`, no default channel is configured. | 8.2.0 |
 
 
 #### GetDeviceIdResult

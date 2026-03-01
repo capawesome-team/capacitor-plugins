@@ -238,22 +238,6 @@ export interface LiveUpdatePlugin {
    */
   getCustomId(): Promise<GetCustomIdResult>;
   /**
-   * Get the default channel of the app.
-   *
-   * The default channel is resolved in the following order (highest priority first):
-   * 1. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
-   *    `capawesome_live_update_default_channel` in `strings.xml` on Android)
-   * 2. Capacitor config `defaultChannel`
-   *
-   * Unlike `getChannel()`, this method does **not** include
-   * the channel set by `setChannel()`.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 8.2.0
-   */
-  getDefaultChannel(): Promise<GetDefaultChannelResult>;
-  /**
    * Get the unique device identifier.
    *
    * Only available on Android and iOS.
@@ -694,21 +678,6 @@ export interface GetChannelResult {
    * If `null`, the app is using the default channel.
    *
    * @since 5.0.0
-   * @example 'production'
-   */
-  channel: string | null;
-}
-
-/**
- * @since 8.2.0
- */
-export interface GetDefaultChannelResult {
-  /**
-   * The default channel name.
-   *
-   * If `null`, no default channel is configured.
-   *
-   * @since 8.2.0
    * @example 'production'
    */
   channel: string | null;
