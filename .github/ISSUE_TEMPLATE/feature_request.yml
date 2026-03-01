@@ -18,6 +18,7 @@ body:
         - label: App Review
         - label: App Shortcuts
         - label: App Update
+        - label: Apple Sign-In
         - label: Asset Manager
         - label: Audio Player
         - label: Audio Recorder
