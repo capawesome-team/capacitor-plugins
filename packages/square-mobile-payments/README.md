@@ -40,6 +40,38 @@ npx cap sync
 
 ### Android
 
+#### SDK Initialization
+
+The Square Mobile Payments SDK must be initialized in your `Application` class before using the plugin. Create a custom `Application` class (if you don't already have one) and add the following code:
+
+1. Create a file `MainApplication.java` in your app's `android/app/src/main/java/<your-package>/` directory:
+
+```java
+package com.example.app;
+
+import android.app.Application;
+import com.squareup.sdk.mobilepayments.MobilePaymentsSdk;
+
+public class MainApplication extends Application {
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        MobilePaymentsSdk.initialize("YOUR_SQUARE_APPLICATION_ID", this);
+    }
+}
+```
+
+**Note**: Replace `YOUR_SQUARE_APPLICATION_ID` with your actual Square Application ID.
+
+2. Register the custom `Application` class in your `AndroidManifest.xml`:
+
+```xml
+<application
+    android:name=".MainApplication"
+    ...>
+```
+
 #### Variables
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
