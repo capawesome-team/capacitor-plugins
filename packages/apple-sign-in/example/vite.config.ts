@@ -7,4 +7,7 @@ export default defineConfig({
     minify: false,
     emptyOutDir: true,
   },
+  server: {
+    allowedHosts: ['tony-firewire-surprise-automobiles.trycloudflare.com'],
+  },
 });
