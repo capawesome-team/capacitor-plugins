@@ -4,7 +4,7 @@ import AuthenticationServices
 
 @objc public class SignInResult: NSObject, Result {
     private let authorizationCode: String
-    private let identityToken: String
+    private let idToken: String
     private let user: String
     private let email: String?
     private let givenName: String?
@@ -13,7 +13,7 @@ import AuthenticationServices
 
     init(credential: ASAuthorizationAppleIDCredential) {
         self.authorizationCode = String(data: credential.authorizationCode ?? Data(), encoding: .utf8) ?? ""
-        self.identityToken = String(data: credential.identityToken ?? Data(), encoding: .utf8) ?? ""
+        self.idToken = String(data: credential.identityToken ?? Data(), encoding: .utf8) ?? ""
         self.user = credential.user
         self.email = credential.email
         self.givenName = credential.fullName?.givenName
@@ -24,7 +24,7 @@ import AuthenticationServices
     @objc public func toJSObject() -> AnyObject {
         var result = JSObject()
         result["authorizationCode"] = authorizationCode
-        result["identityToken"] = identityToken
+        result["idToken"] = idToken
         result["user"] = user
         result["email"] = email == nil ? NSNull() : email
         result["givenName"] = givenName == nil ? NSNull() : givenName

@@ -12,7 +12,7 @@ public class SignInResult implements Result {
     private final String authorizationCode;
 
     @NonNull
-    private final String identityToken;
+    private final String idToken;
 
     @NonNull
     private final String user;
@@ -31,7 +31,7 @@ public class SignInResult implements Result {
 
     public SignInResult(
         @NonNull String authorizationCode,
-        @NonNull String identityToken,
+        @NonNull String idToken,
         @NonNull String user,
         @Nullable String email,
         @Nullable String givenName,
@@ -39,7 +39,7 @@ public class SignInResult implements Result {
         @Nullable String state
     ) {
         this.authorizationCode = authorizationCode;
-        this.identityToken = identityToken;
+        this.idToken = idToken;
         this.user = user;
         this.email = email;
         this.givenName = givenName;
@@ -52,7 +52,7 @@ public class SignInResult implements Result {
     public JSObject toJSObject() {
         JSObject result = new JSObject();
         result.put("authorizationCode", authorizationCode);
-        result.put("identityToken", identityToken);
+        result.put("idToken", idToken);
         result.put("user", user);
         result.put("email", email == null ? JSONObject.NULL : email);
         result.put("givenName", givenName == null ? JSONObject.NULL : givenName);

@@ -37,11 +37,11 @@ export class AppleSignInWeb extends WebPlugin implements AppleSignInPlugin {
     const response = await (window as any).AppleID.auth.signIn();
 
     const authorization = response.authorization;
-    const identityToken: string = authorization.id_token;
+    const idToken: string = authorization.id_token;
     const authorizationCode: string = authorization.code;
     const state: string | undefined = authorization.state;
 
-    const payload = this.decodeJwtPayload(identityToken);
+    const payload = this.decodeJwtPayload(idToken);
     const user: string = payload.sub;
     const email: string | null = payload.email ?? null;
 
@@ -54,7 +54,7 @@ export class AppleSignInWeb extends WebPlugin implements AppleSignInPlugin {
 
     const result: SignInResult = {
       authorizationCode,
-      identityToken,
+      idToken,
       user,
       email: response.user?.email ?? email,
       givenName,

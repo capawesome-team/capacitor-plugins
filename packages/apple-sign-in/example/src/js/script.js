@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#sign-in').addEventListener('click', async () => {
     const result = await AppleSignIn.signIn({
       scopes: [SignInScope.Email, SignInScope.FullName],
-      redirectUrl: 'https://tony-firewire-surprise-automobiles.trycloudflare.com/callback',
+      redirectUrl:
+        'https://tony-firewire-surprise-automobiles.trycloudflare.com/callback',
       nonce: 'dummy-nonce',
       state: 'dummy-state',
     });

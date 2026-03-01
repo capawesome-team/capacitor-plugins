@@ -7,8 +7,8 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -41,7 +41,7 @@ public class AppleSignInActivity extends Activity {
     public static final String EXTRA_URL = "url";
     public static final String EXTRA_REDIRECT_URL = "redirectUrl";
     public static final String EXTRA_AUTHORIZATION_CODE = "authorizationCode";
-    public static final String EXTRA_IDENTITY_TOKEN = "identityToken";
+    public static final String EXTRA_ID_TOKEN = "idToken";
     public static final String EXTRA_USER = "user";
     public static final String EXTRA_EMAIL = "email";
     public static final String EXTRA_GIVEN_NAME = "givenName";
@@ -66,9 +66,7 @@ public class AppleSignInActivity extends Activity {
         // Toolbar
         RelativeLayout toolbar = new RelativeLayout(this);
         toolbar.setBackgroundColor(0xFFF8F8F8);
-        LinearLayout.LayoutParams toolbarParams = new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(56)
-        );
+        LinearLayout.LayoutParams toolbarParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(56));
         toolbar.setLayoutParams(toolbarParams);
 
         ImageButton closeButton = new ImageButton(this);
@@ -93,7 +91,8 @@ public class AppleSignInActivity extends Activity {
         domainTextView.setEllipsize(TextUtils.TruncateAt.END);
         domainTextView.setGravity(Gravity.CENTER);
         RelativeLayout.LayoutParams domainParams = new RelativeLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
         );
         domainParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         int domainHorizontalMargin = dpToPx(56);
@@ -110,22 +109,16 @@ public class AppleSignInActivity extends Activity {
         progressBar.setProgress(0);
         progressBar.getProgressDrawable().setColorFilter(0xFF007AFF, PorterDuff.Mode.SRC_IN);
         progressBar.setVisibility(View.GONE);
-        LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(3)
-        );
+        LinearLayout.LayoutParams progressParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dpToPx(3));
 
         // WebView
         WebView webView = new WebView(this);
-        LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f
-        );
+        LinearLayout.LayoutParams webViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
 
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
-        String userAgent = webSettings.getUserAgentString()
-            .replaceAll("; wv\\b", "")
-            .replaceAll("\\s*Version/\\S+", "");
+        String userAgent = webSettings.getUserAgentString().replaceAll("; wv\\b", "").replaceAll("\\s*Version/\\S+", "");
         webSettings.setUserAgentString(userAgent);
         Log.d("AppleSignIn", "User-Agent: " + userAgent);
         Log.d("AppleSignIn", "Loading URL: " + url);
@@ -134,13 +127,15 @@ public class AppleSignInActivity extends Activity {
 
         webView.addJavascriptInterface(new AppleSignInBridge(), "AppleSignInBridge");
 
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public void onProgressChanged(WebView view, int newProgress) {
-                progressBar.setProgress(newProgress);
-                progressBar.setVisibility(newProgress < 100 ? View.VISIBLE : View.GONE);
+        webView.setWebChromeClient(
+            new WebChromeClient() {
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+                    progressBar.setProgress(newProgress);
+                    progressBar.setVisibility(newProgress < 100 ? View.VISIBLE : View.GONE);
+                }
             }
-        });
+        );
         webView.setWebViewClient(
             new WebViewClient() {
                 @Override
@@ -180,7 +175,14 @@ public class AppleSignInActivity extends Activity {
                                 responseHeaders.put(header.getKey(), header.getValue().get(0));
                             }
                         }
-                        return new WebResourceResponse(mimeType, encoding, statusCode, reasonPhrase != null ? reasonPhrase : "OK", responseHeaders, inputStream);
+                        return new WebResourceResponse(
+                            mimeType,
+                            encoding,
+                            statusCode,
+                            reasonPhrase != null ? reasonPhrase : "OK",
+                            responseHeaders,
+                            inputStream
+                        );
                     } catch (Exception e) {
                         Log.e("AppleSignIn", "Intercept failed: " + e.getMessage());
                         return super.shouldInterceptRequest(view, request);
@@ -190,9 +192,15 @@ public class AppleSignInActivity extends Activity {
                 @Override
                 public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
                     super.onReceivedHttpError(view, request, errorResponse);
-                    Log.e("AppleSignIn", "HTTP error " + errorResponse.getStatusCode()
-                        + " for URL: " + request.getUrl()
-                        + " | Reason: " + errorResponse.getReasonPhrase());
+                    Log.e(
+                        "AppleSignIn",
+                        "HTTP error " +
+                        errorResponse.getStatusCode() +
+                        " for URL: " +
+                        request.getUrl() +
+                        " | Reason: " +
+                        errorResponse.getReasonPhrase()
+                    );
                     java.util.Map<String, String> headers = errorResponse.getResponseHeaders();
                     if (headers != null) {
                         for (java.util.Map.Entry<String, String> entry : headers.entrySet()) {
@@ -263,7 +271,7 @@ public class AppleSignInActivity extends Activity {
         if (code != null && idToken != null) {
             Intent resultIntent = new Intent();
             resultIntent.putExtra(EXTRA_AUTHORIZATION_CODE, code);
-            resultIntent.putExtra(EXTRA_IDENTITY_TOKEN, idToken);
+            resultIntent.putExtra(EXTRA_ID_TOKEN, idToken);
             resultIntent.putExtra(EXTRA_STATE, state);
             setResult(RESULT_OK, resultIntent);
         } else {
@@ -273,9 +281,7 @@ public class AppleSignInActivity extends Activity {
     }
 
     private int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics()
-        );
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     @NonNull
@@ -343,7 +349,7 @@ public class AppleSignInActivity extends Activity {
 
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(EXTRA_AUTHORIZATION_CODE, code);
-                resultIntent.putExtra(EXTRA_IDENTITY_TOKEN, idToken);
+                resultIntent.putExtra(EXTRA_ID_TOKEN, idToken);
                 resultIntent.putExtra(EXTRA_STATE, state);
                 resultIntent.putExtra(EXTRA_EMAIL, email);
                 resultIntent.putExtra(EXTRA_GIVEN_NAME, givenName);

@@ -62,20 +62,20 @@ public class AppleSignIn {
         }
 
         String authorizationCode = data.getStringExtra(AppleSignInActivity.EXTRA_AUTHORIZATION_CODE);
-        String identityToken = data.getStringExtra(AppleSignInActivity.EXTRA_IDENTITY_TOKEN);
+        String idToken = data.getStringExtra(AppleSignInActivity.EXTRA_ID_TOKEN);
         String state = data.getStringExtra(AppleSignInActivity.EXTRA_STATE);
         String email = data.getStringExtra(AppleSignInActivity.EXTRA_EMAIL);
         String givenName = data.getStringExtra(AppleSignInActivity.EXTRA_GIVEN_NAME);
         String familyName = data.getStringExtra(AppleSignInActivity.EXTRA_FAMILY_NAME);
 
-        if (authorizationCode == null || identityToken == null) {
+        if (authorizationCode == null || idToken == null) {
             callback.error(CustomExceptions.SIGN_IN_FAILED);
             return;
         }
 
         String user = null;
         try {
-            JSONObject payload = decodeJwtPayload(identityToken);
+            JSONObject payload = decodeJwtPayload(idToken);
             user = payload.getString("sub");
             if (email == null) {
                 email = payload.optString("email", null);
@@ -85,7 +85,7 @@ public class AppleSignIn {
             return;
         }
 
-        SignInResult result = new SignInResult(authorizationCode, identityToken, user, email, givenName, familyName, state);
+        SignInResult result = new SignInResult(authorizationCode, idToken, user, email, givenName, familyName, state);
         callback.success(result);
     }
 

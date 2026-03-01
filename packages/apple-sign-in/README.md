@@ -149,7 +149,7 @@ Sign in with Apple.
 | Prop                    | Type                                                      | Description                                                                                             | Since |
 | ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----- |
 | **`authorizationCode`** | <code>string</code>                                       | The authorization code.                                                                                 | 8.0.0 |
-| **`identityToken`**     | <code>string</code>                                       | The identity token (JWT).                                                                               | 8.0.0 |
+| **`idToken`**           | <code>string</code>                                       | The ID token (JWT).                                                                                     | 8.0.0 |
 | **`user`**              | <code>string</code>                                       | The stable Apple user identifier. On **Android** and **Web**, this is decoded from the JWT `sub` claim. | 8.0.0 |
 | **`email`**             | <code>string \| null</code>                               | The user's email address. On **iOS**, this is only provided on the first sign-in.                       | 8.0.0 |
 | **`givenName`**         | <code>string \| null</code>                               | The user's given name. On **iOS**, this is only provided on the first sign-in.                          | 8.0.0 |

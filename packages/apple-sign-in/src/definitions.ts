@@ -76,11 +76,11 @@ export interface SignInResult {
    */
   authorizationCode: string;
   /**
-   * The identity token (JWT).
+   * The ID token (JWT).
    *
    * @since 8.0.0
    */
-  identityToken: string;
+  idToken: string;
   /**
    * The stable Apple user identifier.
    *
