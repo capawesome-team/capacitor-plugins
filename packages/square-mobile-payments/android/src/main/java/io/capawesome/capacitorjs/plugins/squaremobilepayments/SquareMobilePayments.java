@@ -44,6 +44,9 @@ public class SquareMobilePayments {
     @NonNull
     private final SquareMobilePaymentsPlugin plugin;
 
+    @NonNull
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
+
     private boolean isInitialized = false;
     private boolean isAuthorized = false;
 
@@ -80,7 +83,8 @@ public class SquareMobilePayments {
             } catch (Exception e) {
                 callback.error(
                     new Exception(
-                        "Square SDK not initialized. Make sure to call MobilePaymentsSdk.initialize() in your Application.onCreate()."
+                        "Square SDK not initialized. Make sure to call MobilePaymentsSdk.initialize() in your Application.onCreate().",
+                        e
                     )
                 );
                 return;
@@ -101,7 +105,7 @@ public class SquareMobilePayments {
 
             String accessToken = options.getAccessToken();
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
 
@@ -119,6 +123,10 @@ public class SquareMobilePayments {
                                 errorMsg = errorMsg + " (Error code: " + result.errorCode().toString() + ")";
                             }
                             callback.error(new Exception(errorMsg));
+                        }
+                        if (authorizationCallbackReference != null) {
+                            authorizationCallbackReference.clear();
+                            authorizationCallbackReference = null;
                         }
                     });
                 } catch (Exception exception) {
@@ -155,7 +163,7 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_INITIALIZED;
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     AuthorizationManager authManager = MobilePaymentsSdk.authorizationManager();
                     authManager.deauthorize();
@@ -179,7 +187,7 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     SettingsManager settingsManager = MobilePaymentsSdk.settingsManager();
                     settingsManager.showSettings(result -> {
@@ -227,7 +235,7 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     ReaderManager readerManager = MobilePaymentsSdk.readerManager();
 
@@ -449,7 +457,7 @@ public class SquareMobilePayments {
 
             PromptParameters sdkPromptParams = new PromptParameters(promptMode, additionalMethods);
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     paymentHandle = paymentManager.startPaymentActivity(sdkPaymentParams, sdkPromptParams, result -> {
                         if (result.isSuccess()) {
@@ -486,7 +494,7 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_INITIALIZED;
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     if (paymentHandle != null) {
                         paymentHandle.cancel();
@@ -536,7 +544,7 @@ public class SquareMobilePayments {
                 throw CustomExceptions.NOT_AUTHORIZED;
             }
 
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
                     mockReaderUIClass.getMethod("show").invoke(null);
@@ -558,7 +566,7 @@ public class SquareMobilePayments {
 
     public void hideMockReader(@NonNull EmptyCallback callback) {
         try {
-            new Handler(Looper.getMainLooper()).post(() -> {
+            mainHandler.post(() -> {
                 try {
                     Class<?> mockReaderUIClass = Class.forName("com.squareup.sdk.mockreader.ui.MockReaderUI");
                     mockReaderUIClass.getMethod("hide").invoke(null);
