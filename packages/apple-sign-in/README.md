@@ -189,6 +189,26 @@ Sign in with Apple.
 
 </docgen-api>
 
+## Security
+
+This plugin handles the OAuth flow and returns tokens to your app. To keep your integration secure, be aware of the following:
+
+- **Server-side token verification is required.** The `idToken` (JWT) is **not** verified client-side. Your backend **must** verify the JWT signature using [Apple's public keys](https://appleid.apple.com/auth/keys) before trusting any claims (e.g. `user`, `email`). Never use client-side token data for authorization decisions without server-side verification.
+- **Validate the `state` parameter.** The plugin passes the `state` value through to the result but does **not** validate it. Your app must compare the returned `state` against the value it originally sent to protect against CSRF attacks.
+- **Android uses a WebView-based OAuth flow.** Unlike iOS (which uses native `AuthenticationServices`), the Android implementation renders Apple's sign-in page in a WebView. Unlike a system browser flow, the WebView is controlled by the app and has access to page content. Ensure your `redirectUrl` uses HTTPS and points to a domain you control.
+
+## FAQ
+
+### What's the difference between this plugin and other Apple Sign-In plugins?
+
+This plugin is purpose-built for Apple Sign-In and focuses on providing a clean and modern API with the latest platform features. Here are some of the key differences:
+
+- **Cross-platform**: Supports Android, iOS, and Web.
+- **Lightweight**: No unnecessary dependencies. Just Apple Sign-In, nothing else.
+- **No deprecated APIs**: Uses the latest platform APIs (AuthenticationServices on iOS).
+- **Scope support**: Request email and full name on all platforms.
+- **Error codes**: Provides typed error codes for proper error handling.
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/apple-sign-in/CHANGELOG.md).

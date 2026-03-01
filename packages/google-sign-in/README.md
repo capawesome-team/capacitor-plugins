@@ -252,6 +252,13 @@ On Web, this is a no-op.
 
 </docgen-api>
 
+## Security
+
+This plugin handles the OAuth flow and returns tokens to your app. To keep your integration secure, be aware of the following:
+
+- **Server-side token verification is required.** The `idToken` (JWT) is **not** verified client-side. Your backend **must** verify the JWT signature using [Google's public keys](https://www.googleapis.com/oauth2/v3/certs) before trusting any claims (e.g. `userId`, `email`). Never use client-side token data for authorization decisions without server-side verification.
+- **Exchange `serverAuthCode` on your backend.** If you use scopes, send the `serverAuthCode` to your backend and exchange it there for access and refresh tokens. Never exchange it client-side, as this would expose your client secret.
+
 ## FAQ
 
 ### What's the difference between this plugin and other Google Sign-In plugins?
