@@ -1228,6 +1228,18 @@ For this reason, you must be careful to [restrict live updates to compatible nat
 
 ## FAQ
 
+### How do I set a channel?
+
+There are four ways to set a channel, listed from lowest to highest priority:
+
+1. **Capacitor config**: Set the `defaultChannel` property in the [plugin configuration](#configuration). This is the simplest way to set a static default channel.
+2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/cloud/live-updates/guides/best-practices/#versioned-channels) where the channel is tied to the build version.
+3. **[`setChannel(...)`](#setchannel)**: Set the channel at runtime. The value is persisted across app restarts.
+4. **[`sync(...)`](#sync)**: Pass a `channel` option to override the channel for a single sync call. This does **not** persist the channel.
+
+Each method overrides the ones above it.
+You can check the currently resolved channel by calling [`getChannel()`](#getchannel).
+
 ### Why can't I see my changes during development?
 
 As soon as you have installed a live update, the app will use the live update bundle and no longer the default bundle. 
