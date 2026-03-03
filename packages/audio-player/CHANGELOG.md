@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [`b38fc63d49d20a910208e692e3d90bd5aa149d93`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b38fc63d49d20a910208e692e3d90bd5aa149d93) ([#410](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/410)): feat: add `deactivateAudioSession` option to `stop()`
+
 ## 8.2.2
 
 ### Patch Changes
