@@ -142,7 +142,7 @@ const isPlaying = async () => {
 * [`seekTo(...)`](#seekto)
 * [`setRate(...)`](#setrate)
 * [`setVolume(...)`](#setvolume)
-* [`stop()`](#stop)
+* [`stop(...)`](#stop)
 * [`addListener('stop', ...)`](#addlistenerstop-)
 * [Interfaces](#interfaces)
 
@@ -296,13 +296,17 @@ This only affects the current playback session and is not persisted.
 --------------------
 
 
-### stop()
+### stop(...)
 
 ```typescript
-stop() => Promise<void>
+stop(options?: StopOptions | undefined) => Promise<void>
 ```
 
 Stop the audio playback.
+
+| Param         | Type                                                |
+| ------------- | --------------------------------------------------- |
+| **`options`** | <code><a href="#stopoptions">StopOptions</a></code> |
 
 **Since:** 0.0.1
 
@@ -387,6 +391,13 @@ Called when the audio has stopped playing.
 | **`volume`** | <code>number</code> | The volume level to set (0-100). | 0.0.1 |
 
 
+#### StopOptions
+
+| Prop                         | Type                 | Description                                                                                                                                                                                                                                                           | Default           | Since |
+| ---------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
+| **`deactivateAudioSession`** | <code>boolean</code> | Whether to deactivate the audio session when stopping playback. Set to `false` if you intend to call `play()` again shortly after stopping, to avoid `CoreMediaErrorDomain -16042` errors on iOS or audio focus issues on Android. Only available on Android and iOS. | <code>true</code> | 8.3.0 |
+
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
@@ -394,6 +405,16 @@ Called when the audio has stopped playing.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>
+
+## Troubleshooting
+
+##### `CoreMediaErrorDomain -16042` error on iOS when calling `play()` after `stop()`
+
+When `stop()` is called, the audio session is deactivated by default. If `play()` is called shortly after, `AVAudioSession.setActive(true)` can fail with `CoreMediaErrorDomain -16042`, breaking all subsequent playback. To avoid this, set `deactivateAudioSession` to `false` in the `stop()` options:
+
+```typescript
+await AudioPlayer.stop({ deactivateAudioSession: false });
+```
 
 ## Changelog
 
