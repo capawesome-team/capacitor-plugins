@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.5
+
+### Patch Changes
+
+- [`ee4cb9b5809db5c7c2eeda2781ec392eefc60eac`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ee4cb9b5809db5c7c2eeda2781ec392eefc60eac) ([#418](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/418)): fix(android): handle null values in query options
+
 ## 0.3.4
 
 ### Patch Changes
