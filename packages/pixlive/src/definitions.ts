@@ -613,7 +613,7 @@ export interface PermissionStatus {
   /**
    * Permission state of the Location permission.
    *
-   * Only available on Android.
+   * Only available on Android and iOS.
    *
    * @since 8.0.0
    */

@@ -62,6 +62,7 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
         var result = JSObject()
         result["bluetooth"] = mapBluetoothPermissionState()
         result["camera"] = mapCameraPermissionState()
+        result["location"] = mapLocationPermissionState()
         result["notifications"] = "prompt"
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             result["notifications"] = self.mapNotificationPermissionState(settings.authorizationStatus)
@@ -411,6 +412,19 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
             }
         }
         return "granted"
+    }
+
+    private func mapLocationPermissionState() -> String {
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedAlways, .authorizedWhenInUse:
+            return "granted"
+        case .denied, .restricted:
+            return "denied"
+        case .notDetermined:
+            return "prompt"
+        @unknown default:
+            return "prompt"
+        }
     }
 
     private func mapCameraPermissionState() -> String {
