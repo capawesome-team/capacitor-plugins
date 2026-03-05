@@ -57,6 +57,12 @@ export interface PosthogPlugin {
    */
   flush(): Promise<void>;
   /**
+   * Get the current distinct ID.
+   *
+   * @since 8.2.0
+   */
+  getDistinctId(): Promise<GetDistinctIdResult>;
+  /**
    * Get the value of a feature flag.
    *
    * @since 7.0.0
@@ -219,6 +225,15 @@ export interface GetFeatureFlagPayloadOptions {
    * @since 7.1.0
    */
   key: string;
+}
+
+export interface GetDistinctIdResult {
+  /**
+   * The current distinct ID.
+   *
+   * @since 8.2.0
+   */
+  distinctId: string;
 }
 
 export interface GetFeatureFlagResult {

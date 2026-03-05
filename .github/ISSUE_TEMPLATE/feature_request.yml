@@ -18,6 +18,7 @@ body:
         - label: App Review
         - label: App Shortcuts
         - label: App Update
+        - label: Apple Sign-In
         - label: Asset Manager
         - label: Audio Player
         - label: Audio Recorder
@@ -33,6 +34,7 @@ body:
         - label: File Opener
         - label: File Picker
         - label: Geocoder
+        - label: Google Sign-In
         - label: libSQL
         - label: Live Update
         - label: Managed Configurations

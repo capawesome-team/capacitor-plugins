@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-asset-manager",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Capacitor plugin to access native asset files.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -64,7 +64,6 @@
     "@capacitor/docgen": "0.3.1",
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
-    "@ionic/swiftlint-config": "2.0.0",
     "eslint": "8.57.0",
     "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
@@ -76,7 +75,6 @@
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"
   },
-  "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },

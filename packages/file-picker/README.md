@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
 - 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
 - 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
-- 📦 **SPM**: Supports Swift Package Manager for iOS. 
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS. 
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.7
+
+### Patch Changes
+
+- [`ae03cf50eb66ad15f91d922443cfb4e9c071ed8f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae03cf50eb66ad15f91d922443cfb4e9c071ed8f) ([#406](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/406)): fix(android): AGP 9.0 no longer supports `proguard-android.txt`
+
+## 0.3.6
+
+### Patch Changes
+
+- [`256f6a14d93d124e6f64ddb6e7a6baf8757baaf6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/256f6a14d93d124e6f64ddb6e7a6baf8757baaf6) ([#404](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/404)): fix(android): fix NPE race condition in `onPurchasesUpdated`
+
+## 0.3.5
+
+### Patch Changes
+
+- [`36fc667fc45657c5b2cd0339bc8df1cd34d1685c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/36fc667fc45657c5b2cd0339bc8df1cd34d1685c) ([#401](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/401)): feat: add `basePlanId` and `offerId` to PurchaseProductOptions
+
 ## 0.3.4
 
 ### Patch Changes

@@ -87,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   document
+    .querySelector('#fetch-channels-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.fetchChannels();
+      console.log(result);
+    });
+  document
     .querySelector('#fetch-latest-bundle-button')
     .addEventListener('click', async () => {
       const channel =

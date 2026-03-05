@@ -8,7 +8,7 @@ import Capacitor
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "LiveUpdate"
-    public static let version = "8.1.0"
+    public static let version = "8.2.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
@@ -17,6 +17,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "clearBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "deleteBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadBundle", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "fetchChannels", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "fetchLatestBundle", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBlockedBundles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getBundles", returnType: CAPPluginReturnPromise),
@@ -105,6 +106,25 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
                 try await implementation?.downloadBundle(options)
                 self.resolveCall(call)
+            } catch {
+                rejectCall(call, error)
+            }
+        }
+    }
+
+    @objc func fetchChannels(_ call: CAPPluginCall) {
+        Task {
+            do {
+                guard let appId = config?.appId, !appId.isEmpty else {
+                    call.reject(CustomError.appIdMissing.localizedDescription)
+                    return
+                }
+
+                let options = FetchChannelsOptions(call)
+                let result = try await implementation?.fetchChannels(options)
+                if let result = result?.toJSObject() as? JSObject {
+                    self.resolveCall(call, result)
+                }
             } catch {
                 rejectCall(call, error)
             }
