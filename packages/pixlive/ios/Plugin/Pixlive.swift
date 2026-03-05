@@ -43,6 +43,7 @@ import VDARSDK
             let cameraSender = VDARCameraImageSource()
             controller.imageSender = cameraSender
             controller.detectionDelegates.add(self)
+            controller.enableGPSNotifications()
             VDARRemoteController.sharedInstance()?.delegate = self
             self.isInitialized = true
             completion(nil)

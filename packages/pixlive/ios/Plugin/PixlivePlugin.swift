@@ -86,7 +86,7 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
                 if self.locationManager == nil {
                     self.locationManager = CLLocationManager()
                 }
-                self.locationManager?.requestWhenInUseAuthorization()
+                self.locationManager?.requestAlwaysAuthorization()
                 group.leave()
             }
         }
