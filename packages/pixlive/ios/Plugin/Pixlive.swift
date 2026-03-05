@@ -148,6 +148,9 @@ import VDARSDK
             completion(CustomError.notInitialized)
             return
         }
+        if let current = currentContext {
+            current.stop()
+        }
         if let context = controller.getContext(options.contextId) {
             context.activate()
         }
