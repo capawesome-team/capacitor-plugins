@@ -149,9 +149,6 @@ import VDARSDK
             completion(CustomError.notInitialized)
             return
         }
-        if let current = currentContext {
-            current.stop()
-        }
         if let context = controller.getContext(options.contextId) {
             context.activate()
         }
@@ -429,6 +426,7 @@ import VDARSDK
     // swiftlint:disable:next implicitly_unwrapped_optional
     @objc public func didExit(_ context: VDARContext!) {
         guard let context = context else { return }
+        context.stop()
         self.currentContext = nil
         var data = JSObject()
         data["contextId"] = context.remoteID ?? ""

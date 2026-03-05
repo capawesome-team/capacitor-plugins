@@ -279,9 +279,6 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             return;
         }
         try {
-            if (currentContext != null) {
-                currentContext.stop();
-            }
             VDARContext context = VDARSDKController.getInstance().getContext(options.getContextId());
             if (context != null) {
                 context.activate();
@@ -657,6 +654,9 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
 
     @Override
     public void onExitContext(@NonNull VDARContext context) {
+        if (currentContext != null) {
+            currentContext.stop();
+        }
         this.currentContext = null;
         JSObject data = new JSObject();
         data.put("contextId", context.getRemoteID());
