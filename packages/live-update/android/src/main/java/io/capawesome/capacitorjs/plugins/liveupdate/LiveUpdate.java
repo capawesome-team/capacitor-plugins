@@ -69,6 +69,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -1432,7 +1433,13 @@ public class LiveUpdate {
     private File unzipFile(@NonNull File zipFile) throws IOException {
         File destination = buildTemporaryDirectory();
         String destinationPath = destination.getPath();
-        new ZipFile(zipFile).extractAll(destinationPath);
+        ZipFile zip = new ZipFile(zipFile);
+        // Clear stored Unix permissions to prevent EACCES errors on newer Android versions
+        // where restrictive directory permissions from the zip block file creation.
+        for (FileHeader fileHeader : zip.getFileHeaders()) {
+            fileHeader.setExternalFileAttributes(null);
+        }
+        zip.extractAll(destinationPath);
         return destination;
     }
 
