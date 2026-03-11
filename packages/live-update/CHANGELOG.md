@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.1
+
+### Patch Changes
+
+- [`04e530df241e3c2dd82dd12b406b6b885f973a4a`](https://github.com/capawesome-team/capacitor-plugins/commit/04e530df241e3c2dd82dd12b406b6b885f973a4a) ([#792](https://github.com/capawesome-team/capacitor-plugins/pull/792)): fix(android): clear zip file attributes before extraction to prevent EACCES errors
+
 ## 8.2.0
 
 ### Minor Changes
