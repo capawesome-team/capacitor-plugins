@@ -39,6 +39,15 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/user-attachments/assets/95ec6fe8-ba1d-4be0-898d-6b63a9170347" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/0f06193f-15c5-4c72-a3dd-ada5163ce3eb" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/267c8536-2c83-455a-ab8f-76ed99011ba1" width="266" alt="Web Demo" /> |
 
+## Guides
+
+- [Announcing the Capacitor OAuth Plugin](https://capawesome.io/blog/announcing-the-capacitor-oauth-plugin/)
+- [How to Use Better Auth in Capacitor Apps](https://capawesome.io/blog/how-to-use-better-auth-in-capacitor-apps/)
+- [How to Sign in with Okta using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-okta-using-capacitor/)
+- [How to Sign in with Auth0 using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-auth0-using-capacitor/)
+- [How to Sign in with Azure Entra ID using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-azure-entra-id-using-capacitor/)
+- [Alternatives to Ionic Enterprise Plugins](https://capawesome.io/blog/alternatives-to-ionic-enterprise-plugins/)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/).
