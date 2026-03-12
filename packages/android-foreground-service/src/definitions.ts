@@ -110,6 +110,17 @@ export interface ForegroundServicePlugin {
     listenerFunc: ButtonClickedEventListener,
   ): Promise<PluginListenerHandle>;
   /**
+   * Called when the foreground service notification is tapped.
+   *
+   * Only available on Android.
+   *
+   * @since 8.1.0
+   */
+  addListener(
+    eventName: 'notificationTapped',
+    listenerFunc: NotificationTappedEventListener,
+  ): Promise<PluginListenerHandle>;
+  /**
    * Remove all listeners for this plugin.
    *
    * @since 0.2.0
@@ -225,6 +236,25 @@ export interface ManageOverlayPermissionResult {
  * @since 0.2.0
  */
 export type ButtonClickedEventListener = (event: ButtonClickedEvent) => void;
+
+/**
+ * @since 8.1.0
+ */
+export type NotificationTappedEventListener = (
+  event: NotificationTappedEvent,
+) => void;
+
+/**
+ * @since 8.1.0
+ */
+export interface NotificationTappedEvent {
+  /**
+   * The notification identifier.
+   *
+   * @since 8.1.0
+   */
+  notificationId: number;
+}
 
 /**
  * @since 0.2.0

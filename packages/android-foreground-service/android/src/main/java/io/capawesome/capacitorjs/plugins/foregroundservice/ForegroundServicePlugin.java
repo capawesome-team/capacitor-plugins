@@ -34,6 +34,7 @@ public class ForegroundServicePlugin extends Plugin {
 
     public static final String TAG = "ForegroundService";
     public static final String BUTTON_CLICKED_EVENT = "buttonClicked";
+    public static final String NOTIFICATION_TAPPED_EVENT = "notificationTapped";
     public static Bridge staticBridge = null;
 
     private static final String MOVE_TO_FOREGROUND_CALLBACK_NAME = "moveToForegroundResult";
@@ -230,6 +231,18 @@ public class ForegroundServicePlugin extends Plugin {
         }
     }
 
+    public static void onNotificationTapped(int notificationId) {
+        try {
+            ForegroundServicePlugin plugin = ForegroundServicePlugin.getForegroundServicePluginInstance();
+            if (plugin == null) {
+                return;
+            }
+            plugin.handleNotificationTapped(notificationId);
+        } catch (Exception exception) {
+            Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
+        }
+    }
+
     public static void onButtonClicked(int buttonId) {
         try {
             ForegroundServicePlugin plugin = ForegroundServicePlugin.getForegroundServicePluginInstance();
@@ -261,6 +274,12 @@ public class ForegroundServicePlugin extends Plugin {
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
+    }
+
+    private void handleNotificationTapped(int notificationId) {
+        JSObject result = new JSObject();
+        result.put("notificationId", notificationId);
+        notifyListeners(NOTIFICATION_TAPPED_EVENT, result, true);
     }
 
     private void handleButtonClicked(int buttonId) {

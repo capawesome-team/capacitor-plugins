@@ -77,15 +77,14 @@ public class AndroidForegroundService extends Service {
     }
 
     private PendingIntent buildContentIntent(int id) {
-        String packageName = getApplicationContext().getPackageName();
-        Intent intent = getApplicationContext().getPackageManager().getLaunchIntentForPackage(packageName);
-        int pendingIntentFlags;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            pendingIntentFlags = PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE;
-        } else {
-            pendingIntentFlags = PendingIntent.FLAG_CANCEL_CURRENT;
-        }
-        return PendingIntent.getActivity(getApplicationContext(), id, intent, pendingIntentFlags);
+        Intent intent = new Intent(this, NotificationTapBroadcastReceiver.class);
+        intent.putExtra("notificationId", id);
+        return PendingIntent.getBroadcast(
+            this,
+            id,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_CANCEL_CURRENT
+        );
     }
 
     private Notification.Action[] convertBundlesToNotificationActions(Bundle[] bundles) {

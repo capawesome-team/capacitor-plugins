@@ -40,6 +40,7 @@ You also need to add the following receiver and service **inside** the `applicat
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationActionBroadcastReceiver" />
+<receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationTapBroadcastReceiver" />
 <service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" />
 ```
 
@@ -128,6 +129,7 @@ const deleteNotificationChannel = async () => {
 * [`createNotificationChannel(...)`](#createnotificationchannel)
 * [`deleteNotificationChannel(...)`](#deletenotificationchannel)
 * [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
+* [`addListener('notificationTapped', ...)`](#addlistenernotificationtapped-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -344,6 +346,28 @@ Only available on iOS.
 --------------------
 
 
+### addListener('notificationTapped', ...)
+
+```typescript
+addListener(eventName: 'notificationTapped', listenerFunc: NotificationTappedEventListener) => Promise<PluginListenerHandle>
+```
+
+Called when the foreground service notification is tapped.
+
+Only available on Android.
+
+| Param              | Type                                                                                          |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'notificationTapped'</code>                                                             |
+| **`listenerFunc`** | <code><a href="#notificationtappedeventlistener">NotificationTappedEventListener</a></code>   |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.1.0
+
+--------------------
+
+
 ### removeAllListeners()
 
 ```typescript
@@ -427,6 +451,13 @@ Remove all listeners for this plugin.
 | **`buttonId`** | <code>number</code> | The button identifier. | 0.2.0 |
 
 
+#### NotificationTappedEvent
+
+| Prop                 | Type                | Description                  | Since |
+| -------------------- | ------------------- | ---------------------------- | ----- |
+| **`notificationId`** | <code>number</code> | The notification identifier. | 8.1.0 |
+
+
 ### Type Aliases
 
 
@@ -443,6 +474,11 @@ Remove all listeners for this plugin.
 #### ButtonClickedEventListener
 
 <code>(event: <a href="#buttonclickedevent">ButtonClickedEvent</a>): void</code>
+
+
+#### NotificationTappedEventListener
+
+<code>(event: <a href="#notificationtappedevent">NotificationTappedEvent</a>): void</code>
 
 
 ### Enums
