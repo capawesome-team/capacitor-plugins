@@ -35,6 +35,7 @@ public class ForegroundServicePlugin extends Plugin {
     public static final String TAG = "ForegroundService";
     public static final String BUTTON_CLICKED_EVENT = "buttonClicked";
     public static final String NOTIFICATION_TAPPED_EVENT = "notificationTapped";
+    public static final String NOTIFICATION_TAP_EXTRA = "foregroundServiceNotificationId";
     public static Bridge staticBridge = null;
 
     private static final String MOVE_TO_FOREGROUND_CALLBACK_NAME = "moveToForegroundResult";
@@ -48,9 +49,25 @@ public class ForegroundServicePlugin extends Plugin {
         try {
             staticBridge = this.bridge;
             implementation = new ForegroundService(this);
+            handleNotificationTapIntent(getActivity().getIntent());
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
         }
+    }
+
+    @Override
+    protected void handleOnNewIntent(Intent intent) {
+        super.handleOnNewIntent(intent);
+        handleNotificationTapIntent(intent);
+    }
+
+    private void handleNotificationTapIntent(Intent intent) {
+        if (intent == null || !intent.hasExtra(NOTIFICATION_TAP_EXTRA)) {
+            return;
+        }
+        int notificationId = intent.getIntExtra(NOTIFICATION_TAP_EXTRA, -1);
+        intent.removeExtra(NOTIFICATION_TAP_EXTRA);
+        handleNotificationTapped(notificationId);
     }
 
     @PluginMethod

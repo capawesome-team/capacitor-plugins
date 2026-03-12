@@ -15,10 +15,9 @@ public class NotificationTapBroadcastReceiver extends BroadcastReceiver {
             Intent launchIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
             if (launchIntent != null) {
                 launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                launchIntent.putExtra(ForegroundServicePlugin.NOTIFICATION_TAP_EXTRA, notificationId);
                 context.startActivity(launchIntent);
             }
-
-            ForegroundServicePlugin.onNotificationTapped(notificationId);
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
         }
