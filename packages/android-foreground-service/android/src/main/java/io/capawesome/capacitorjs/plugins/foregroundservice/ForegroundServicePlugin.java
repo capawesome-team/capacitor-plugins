@@ -248,18 +248,6 @@ public class ForegroundServicePlugin extends Plugin {
         }
     }
 
-    public static void onNotificationTapped(int notificationId) {
-        try {
-            ForegroundServicePlugin plugin = ForegroundServicePlugin.getForegroundServicePluginInstance();
-            if (plugin == null) {
-                return;
-            }
-            plugin.handleNotificationTapped(notificationId);
-        } catch (Exception exception) {
-            Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
-        }
-    }
-
     public static void onButtonClicked(int buttonId) {
         try {
             ForegroundServicePlugin plugin = ForegroundServicePlugin.getForegroundServicePluginInstance();
