@@ -94,16 +94,21 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   }
 
   async screen(_options: ScreenOptions): Promise<void> {
+    void _options;
     this.throwUnimplementedError();
   }
 
   async setup(options: SetupOptions): Promise<void> {
-    const host = options.host || 'https://us.i.posthog.com';
+    const apiHost = this.getApiHost(options.apiHost, options.host);
     const config: Partial<PostHogConfig> & {
       cookieless_mode?: 'always' | 'on_reject';
     } = {
-      api_host: host,
+      api_host: apiHost,
     };
+
+    if (options.uiHost) {
+      config.ui_host = options.uiHost;
+    }
 
     if (options.optOut) {
       config.opt_out_capturing_by_default = true;
@@ -143,5 +148,21 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   private throwUnimplementedError(): never {
     throw this.unimplemented('Not implemented on web.');
+  }
+
+  private getApiHost(apiHost?: string, host?: string): string {
+    if (apiHost) {
+      if (host && host !== apiHost) {
+        console.warn('[Posthog] Both apiHost and host are set. Using apiHost.');
+      }
+      return apiHost;
+    }
+
+    if (host) {
+      console.warn('[Posthog] host is deprecated. Use apiHost instead.');
+      return host;
+    }
+
+    return 'https://us.i.posthog.com';
   }
 }

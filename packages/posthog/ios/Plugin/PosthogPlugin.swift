@@ -37,7 +37,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     private var implementation: Posthog?
 
     override public func load() {
-        self.implementation = Posthog(config: posthogConfig(), plugin: self)
+        self.implementation = Posthog(config: posthogConfig())
     }
 
     @objc func alias(_ call: CAPPluginCall) {
@@ -202,12 +202,14 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject(CustomError.apiKeyMissing.localizedDescription)
             return
         }
-        let host = call.getString("host", "https://us.i.posthog.com")
+        let apiHost = getApiHost(apiHost: call.getString("apiHost"), host: call.getString("host"))
+        let uiHost = call.getString("uiHost")
+        warnIfUiHostIsIgnored(uiHost)
         let enableSessionReplay = call.getBool("enableSessionReplay", false)
         let optOut = call.getBool("optOut", false)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
-        let options = SetupOptions(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
+        let options = SetupOptions(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
 
         implementation?.setup(options)
         call.resolve()
@@ -239,7 +241,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         var config = PosthogConfig()
 
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
-        config.host = getConfig().getString("host") ?? config.host
+        config.apiHost = getApiHost(apiHost: getConfig().getString("apiHost"), host: getConfig().getString("host"), defaultValue: config.apiHost)
+        warnIfUiHostIsIgnored(getConfig().getString("uiHost"))
         config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
 
         if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
@@ -254,6 +257,30 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
 
         return config
+    }
+
+    private func getApiHost(apiHost: String?, host: String?, defaultValue: String = "https://us.i.posthog.com") -> String {
+        if let apiHost {
+            if let host, host != apiHost {
+                CAPLog.print("[", PosthogPlugin.tag, "] Both apiHost and host are set. Using apiHost.")
+            }
+            return apiHost
+        }
+
+        if let host {
+            CAPLog.print("[", PosthogPlugin.tag, "] host is deprecated. Use apiHost instead.")
+            return host
+        }
+
+        return defaultValue
+    }
+
+    private func warnIfUiHostIsIgnored(_ uiHost: String?) {
+        guard let uiHost, !uiHost.isEmpty else {
+            return
+        }
+
+        CAPLog.print("[", PosthogPlugin.tag, "] uiHost is currently ignored on iOS because the native PostHog SDK only accepts a single host.")
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

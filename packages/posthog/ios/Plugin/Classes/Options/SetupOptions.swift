@@ -2,14 +2,14 @@ import Foundation
 
 @objc public class SetupOptions: NSObject {
     private var apiKey: String
-    private var host: String
+    private var apiHost: String
     private var enableSessionReplay: Bool
     private var optOut: Bool
     private var sessionReplayConfig: SessionReplayOptions?
 
-    init(apiKey: String, host: String, enableSessionReplay: Bool, optOut: Bool, sessionReplayConfig: [String: Any]?) {
+    init(apiKey: String, apiHost: String, enableSessionReplay: Bool, optOut: Bool, sessionReplayConfig: [String: Any]?) {
         self.apiKey = apiKey
-        self.host = host
+        self.apiHost = apiHost
         self.enableSessionReplay = enableSessionReplay
         self.optOut = optOut
 
@@ -29,8 +29,8 @@ import Foundation
         return apiKey
     }
 
-    func getHost() -> String {
-        return host
+    func getApiHost() -> String {
+        return apiHost
     }
 
     func getEnableSessionReplay() -> Bool {

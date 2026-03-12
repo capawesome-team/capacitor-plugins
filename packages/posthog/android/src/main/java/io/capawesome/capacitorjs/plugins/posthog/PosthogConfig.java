@@ -8,7 +8,7 @@ public class PosthogConfig {
     @Nullable
     private String apiKey = null;
 
-    private String host = "https://us.i.posthog.com";
+    private String apiHost = "https://us.i.posthog.com";
 
     private boolean enableSessionReplay = false;
 
@@ -20,8 +20,8 @@ public class PosthogConfig {
         return apiKey;
     }
 
-    public String getHost() {
-        return host;
+    public String getApiHost() {
+        return apiHost;
     }
 
     public boolean getEnableSessionReplay() {
@@ -37,8 +37,8 @@ public class PosthogConfig {
         this.apiKey = apiKey;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setApiHost(String apiHost) {
+        this.apiHost = apiHost;
     }
 
     public void setEnableSessionReplay(boolean enableSessionReplay) {

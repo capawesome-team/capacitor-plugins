@@ -11,13 +11,33 @@ declare module '@capacitor/cli' {
        */
       apiKey?: string;
       /**
-       * The host of your PostHog instance.
+       * The API host of your PostHog instance or reverse proxy.
+       *
+       * @since 8.3.0
+       * @default 'https://us.i.posthog.com'
+       * @example 'https://eu.i.posthog.com'
+       */
+      apiHost?: string;
+      /**
+       * The API host of your PostHog instance.
+       *
+       * Deprecated alias for `apiHost`.
        *
        * @since 7.1.0
        * @default 'https://us.i.posthog.com'
        * @example 'https://eu.i.posthog.com'
+       * @deprecated Use `apiHost` instead.
        */
       host?: string;
+      /**
+       * The PostHog UI host used when `apiHost` points to a reverse proxy.
+       *
+       * This is currently only used on Web. Native SDKs log a warning and ignore it.
+       *
+       * @since 8.3.0
+       * @example 'https://eu.posthog.com'
+       */
+      uiHost?: string;
       /**
        * Whether to enable session recording automatically.
        *
@@ -386,6 +406,36 @@ export interface SetupOptions {
    */
   apiKey: string;
   /**
+   * The API host of your PostHog instance or reverse proxy.
+   *
+   * If both `apiHost` and `host` are provided, `apiHost` takes precedence.
+   *
+   * @since 8.3.0
+   * @default 'https://us.i.posthog.com'
+   * @example 'https://eu.i.posthog.com'
+   */
+  apiHost?: string;
+  /**
+   * The API host of your PostHog instance.
+   *
+   * Deprecated alias for `apiHost`.
+   *
+   * @since 6.0.0
+   * @default 'https://us.i.posthog.com'
+   * @example 'https://eu.i.posthog.com'
+   * @deprecated Use `apiHost` instead.
+   */
+  host?: string;
+  /**
+   * The PostHog UI host used when `apiHost` points to a reverse proxy.
+   *
+   * This is currently only used on Web. Native SDKs log a warning and ignore it.
+   *
+   * @since 8.3.0
+   * @example 'https://eu.posthog.com'
+   */
+  uiHost?: string;
+  /**
    * Cookieless tracking mode.
    *
    * - `'always'`: Always use cookieless tracking with server-side anonymous hash.
@@ -404,14 +454,6 @@ export interface SetupOptions {
    * @default false
    */
   enableSessionReplay?: boolean;
-  /**
-   * The host of your PostHog instance.
-   *
-   * @since 6.0.0
-   * @default 'https://us.i.posthog.com'
-   * @example 'https://eu.i.posthog.com'
-   */
-  host?: string;
   /**
    * Whether to opt out of capturing by default.
    *
