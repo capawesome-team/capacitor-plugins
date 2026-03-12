@@ -40,7 +40,6 @@ You also need to add the following receiver and service **inside** the `applicat
 
 ```xml
 <receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationActionBroadcastReceiver" />
-<receiver android:name="io.capawesome.capacitorjs.plugins.foregroundservice.NotificationTapBroadcastReceiver" />
 <service android:name="io.capawesome.capacitorjs.plugins.foregroundservice.AndroidForegroundService" android:foregroundServiceType="location" />
 ```
 
