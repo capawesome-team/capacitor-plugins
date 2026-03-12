@@ -61,6 +61,10 @@ public class ForegroundServicePlugin extends Plugin {
         handleNotificationTapIntent(intent);
     }
 
+    // Notification taps are delivered via an intent extra rather than a static method call so that
+    // the tap is always handled by the current plugin instance. A static bridge reference can go
+    // stale when the activity is recreated (e.g. after a configuration change or process death),
+    // which would silently drop the event.
     private void handleNotificationTapIntent(Intent intent) {
         if (intent == null || !intent.hasExtra(NOTIFICATION_TAP_EXTRA)) {
             return;
