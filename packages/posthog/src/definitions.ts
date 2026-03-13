@@ -32,7 +32,7 @@ declare module '@capacitor/cli' {
       /**
        * The PostHog UI host used when `apiHost` points to a reverse proxy.
        *
-       * This is currently only used on Web. Native SDKs log a warning and ignore it.
+       * Only available on Web.
        *
        * @since 8.3.0
        * @example 'https://eu.posthog.com'
@@ -429,7 +429,7 @@ export interface SetupOptions {
   /**
    * The PostHog UI host used when `apiHost` points to a reverse proxy.
    *
-   * This is currently only used on Web. Native SDKs log a warning and ignore it.
+   * Only available on Web.
    *
    * @since 8.3.0
    * @example 'https://eu.posthog.com'

@@ -284,8 +284,6 @@ public class PosthogPlugin extends Plugin {
                 return;
             }
             String apiHost = getApiHost(call.getString("apiHost"), call.getString("host"));
-            String uiHost = call.getString("uiHost");
-            warnIfUiHostIsIgnored(uiHost);
             Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
             Boolean optOut = call.getBoolean("optOut", false);
 
@@ -338,7 +336,6 @@ public class PosthogPlugin extends Plugin {
         config.setApiKey(apiKey);
         String apiHost = getApiHost(getConfig().getString("apiHost"), getConfig().getString("host"));
         config.setApiHost(apiHost);
-        warnIfUiHostIsIgnored(getConfig().getString("uiHost"));
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
 
@@ -357,12 +354,6 @@ public class PosthogPlugin extends Plugin {
             return host;
         }
         return "https://us.i.posthog.com";
-    }
-
-    private void warnIfUiHostIsIgnored(@Nullable String uiHost) {
-        if (uiHost != null && !uiHost.isEmpty()) {
-            Logger.warn(TAG, "uiHost is currently ignored on Android because the native PostHog SDK only accepts a single host.");
-        }
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {

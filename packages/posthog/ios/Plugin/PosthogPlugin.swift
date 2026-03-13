@@ -203,8 +203,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         let apiHost = getApiHost(apiHost: call.getString("apiHost"), host: call.getString("host"))
-        let uiHost = call.getString("uiHost")
-        warnIfUiHostIsIgnored(uiHost)
         let enableSessionReplay = call.getBool("enableSessionReplay", false)
         let optOut = call.getBool("optOut", false)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
@@ -242,7 +240,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
 
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.apiHost = getApiHost(apiHost: getConfig().getString("apiHost"), host: getConfig().getString("host"), defaultValue: config.apiHost)
-        warnIfUiHostIsIgnored(getConfig().getString("uiHost"))
         config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
 
         if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
@@ -273,14 +270,6 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         }
 
         return defaultValue
-    }
-
-    private func warnIfUiHostIsIgnored(_ uiHost: String?) {
-        guard let uiHost, !uiHost.isEmpty else {
-            return
-        }
-
-        CAPLog.print("[", PosthogPlugin.tag, "] uiHost is currently ignored on iOS because the native PostHog SDK only accepts a single host.")
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

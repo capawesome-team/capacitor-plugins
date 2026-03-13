@@ -38,14 +38,14 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                      | Type                                                                  | Description                                                                                                                                     | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                                                                            |                                         | 7.1.0 |
-| **`apiHost`**             | <code>string</code>                                                   | The API host of your PostHog instance or reverse proxy.                                                                                         | <code>'https://us.i.posthog.com'</code> | 8.3.0 |
-| **`host`**                | <code>string</code>                                                   | The API host of your PostHog instance. Deprecated alias for `apiHost`.                                                                          | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. This is currently only used on Web. Native SDKs log a warning and ignore it. |                                         | 8.3.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                                                                              | <code>false</code>                      | 7.3.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                                                                        |                                         | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                                                               | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                      |                                         | 7.1.0 |
+| **`apiHost`**             | <code>string</code>                                                   | The API host of your PostHog instance or reverse proxy.                                   | <code>'https://us.i.posthog.com'</code> | 8.3.0 |
+| **`host`**                | <code>string</code>                                                   | The API host of your PostHog instance. Deprecated alias for `apiHost`.                    | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. Only available on Web. |                                         | 8.3.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                        | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                  |                                         | 7.3.0 |
 
 ### Examples
 
@@ -57,6 +57,8 @@ In `capacitor.config.json`:
     "Posthog": {
       "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       "apiHost": 'https://eu.i.posthog.com',
+      "host": 'https://eu.i.posthog.com',
+      "uiHost": 'https://eu.posthog.com',
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined
     }
@@ -76,6 +78,8 @@ const config: CapacitorConfig = {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
       apiHost: 'https://eu.i.posthog.com',
+      host: 'https://eu.i.posthog.com',
+      uiHost: 'https://eu.posthog.com',
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
     },
@@ -87,7 +91,7 @@ export default config;
 
 </docgen-config>
 
-For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. On Android and iOS, `uiHost` is currently ignored because the native PostHog SDK only accepts a single host.
+For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
 
 ## Demo
 
@@ -641,7 +645,7 @@ Remove a super property.
 | **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                                                                                                                                                                                                                         |                                         | 6.0.0 |
 | **`apiHost`**             | <code>string</code>                                                   | The API host of your PostHog instance or reverse proxy. If both `apiHost` and `host` are provided, `apiHost` takes precedence.                                                                                                                                                               | <code>'https://us.i.posthog.com'</code> | 8.3.0 |
 | **`host`**                | <code>string</code>                                                   | The API host of your PostHog instance. Deprecated alias for `apiHost`.                                                                                                                                                                                                                       | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
-| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. This is currently only used on Web. Native SDKs log a warning and ignore it.                                                                                                                                              |                                         | 8.3.0 |
+| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. Only available on Web.                                                                                                                                                                                                    |                                         | 8.3.0 |
 | **`cookielessMode`**      | <code>'always' \| 'on_reject'</code>                                  | Cookieless tracking mode. - `'always'`: Always use cookieless tracking with server-side anonymous hash. - `'on_reject'`: Normal tracking until `optOut()` is called, then switches to cookieless. Only available on Web. Requires cookieless mode to be enabled in PostHog project settings. |                                         | 8.1.0 |
 | **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                                                                                                                                                                                                                           | <code>false</code>                      | 7.3.0 |
 | **`optOut`**              | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
