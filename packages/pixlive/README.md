@@ -736,7 +736,7 @@ Remove all listeners for this plugin.
 | **`bluetoothConnect`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Connect permission. Only available on Android. | 8.0.0 |
 | **`bluetoothScan`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Scan permission. Only available on Android.    | 8.0.0 |
 | **`camera`**           | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Camera permission.                                       | 8.0.0 |
-| **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Location permission. Only available on Android.          | 8.0.0 |
+| **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Location permission. Only available on Android and iOS.  | 8.0.0 |
 | **`notifications`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Notifications permission.                                | 8.0.0 |
 
 

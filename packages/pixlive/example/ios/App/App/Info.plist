@@ -45,5 +45,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs camera access for AR features.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app needs your location for nearby content.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs your location for nearby content and notifications.</string>
 </dict>
 </plist>

@@ -8,7 +8,7 @@ import Capacitor
 
 @objc(PixlivePlugin)
 // swiftlint:disable:next type_body_length
-public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
+public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelegate {
     public let identifier = "PixlivePlugin"
     public let jsName = "Pixlive"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -43,6 +43,7 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private var implementation: Pixlive?
     private var locationManager: CLLocationManager?
+    private var locationPermissionCallback: (() -> Void)?
 
     override public func load() {
         implementation = Pixlive(self)
@@ -87,8 +88,16 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
                 if self.locationManager == nil {
                     self.locationManager = CLLocationManager()
                 }
-                self.locationManager?.requestAlwaysAuthorization()
-                group.leave()
+                self.locationManager?.delegate = self
+                let status = CLLocationManager.authorizationStatus()
+                if status != .notDetermined {
+                    group.leave()
+                } else {
+                    self.locationPermissionCallback = {
+                        group.leave()
+                    }
+                    self.locationManager?.requestAlwaysAuthorization()
+                }
             }
         }
 
@@ -391,6 +400,13 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin {
             })
         } catch {
             rejectCall(call, error)
+        }
+    }
+
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        if let callback = locationPermissionCallback {
+            locationPermissionCallback = nil
+            callback()
         }
     }
 
