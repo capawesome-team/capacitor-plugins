@@ -34,6 +34,8 @@ public class ForegroundServicePlugin extends Plugin {
 
     public static final String TAG = "ForegroundService";
     public static final String BUTTON_CLICKED_EVENT = "buttonClicked";
+    public static final String NOTIFICATION_TAPPED_EVENT = "notificationTapped";
+    public static final String NOTIFICATION_TAP_EXTRA = "foregroundServiceNotificationId";
     public static Bridge staticBridge = null;
 
     private static final String MOVE_TO_FOREGROUND_CALLBACK_NAME = "moveToForegroundResult";
@@ -47,9 +49,29 @@ public class ForegroundServicePlugin extends Plugin {
         try {
             staticBridge = this.bridge;
             implementation = new ForegroundService(this);
+            handleNotificationTapIntent(getActivity().getIntent());
         } catch (Exception exception) {
             Logger.error(ForegroundServicePlugin.TAG, exception.getMessage(), exception);
         }
+    }
+
+    @Override
+    protected void handleOnNewIntent(Intent intent) {
+        super.handleOnNewIntent(intent);
+        handleNotificationTapIntent(intent);
+    }
+
+    // Notification taps are delivered via an intent extra rather than a static method call so that
+    // the tap is always handled by the current plugin instance. A static bridge reference can go
+    // stale when the activity is recreated (e.g. after a configuration change or process death),
+    // which would silently drop the event.
+    private void handleNotificationTapIntent(Intent intent) {
+        if (intent == null || !intent.hasExtra(NOTIFICATION_TAP_EXTRA)) {
+            return;
+        }
+        int notificationId = intent.getIntExtra(NOTIFICATION_TAP_EXTRA, -1);
+        intent.removeExtra(NOTIFICATION_TAP_EXTRA);
+        handleNotificationTapped(notificationId);
     }
 
     @PluginMethod
@@ -261,6 +283,12 @@ public class ForegroundServicePlugin extends Plugin {
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
+    }
+
+    private void handleNotificationTapped(int notificationId) {
+        JSObject result = new JSObject();
+        result.put("notificationId", notificationId);
+        notifyListeners(NOTIFICATION_TAPPED_EVENT, result, true);
     }
 
     private void handleButtonClicked(int buttonId) {
