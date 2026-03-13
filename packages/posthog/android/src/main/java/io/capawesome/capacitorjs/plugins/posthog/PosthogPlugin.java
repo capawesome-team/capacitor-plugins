@@ -283,11 +283,11 @@ public class PosthogPlugin extends Plugin {
                 call.reject(ERROR_API_KEY_MISSING);
                 return;
             }
-            String host = call.getString("host", "https://us.i.posthog.com");
+            String apiHost = getApiHost(call.getString("apiHost"), call.getString("host"));
             Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
             Boolean optOut = call.getBoolean("optOut", false);
 
-            SetupOptions options = new SetupOptions(apiKey, host);
+            SetupOptions options = new SetupOptions(apiKey, apiHost);
             options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
             options.setOptOut(optOut != null ? optOut : false);
 
@@ -334,12 +334,26 @@ public class PosthogPlugin extends Plugin {
 
         String apiKey = getConfig().getString("apiKey", config.getApiKey());
         config.setApiKey(apiKey);
-        String host = getConfig().getString("host", config.getHost());
-        config.setHost(host);
+        String apiHost = getApiHost(getConfig().getString("apiHost"), getConfig().getString("host"));
+        config.setApiHost(apiHost);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
 
         return config;
+    }
+
+    private String getApiHost(@Nullable String apiHost, @Nullable String host) {
+        if (apiHost != null) {
+            if (host != null && !host.equals(apiHost)) {
+                Logger.warn(TAG, "Both apiHost and host are set. Using apiHost.");
+            }
+            return apiHost;
+        }
+        if (host != null) {
+            Logger.warn(TAG, "host is deprecated. Use apiHost instead.");
+            return host;
+        }
+        return "https://us.i.posthog.com";
     }
 
     private void resolveCall(@NonNull PluginCall call, @Nullable JSObject result) {
