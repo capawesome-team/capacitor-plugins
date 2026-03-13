@@ -91,8 +91,6 @@ export default config;
 
 </docgen-config>
 
-For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
-
 ## Demo
 
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
@@ -686,6 +684,12 @@ Construct a type with a set of properties K of type T
 <code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
+
+## Advanced
+
+### Reverse Proxy
+
+For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
 
 ## Changelog
 
