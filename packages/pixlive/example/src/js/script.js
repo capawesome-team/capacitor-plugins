@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document
     .querySelector('#requestPermissions')
     .addEventListener('click', async () => {
-      await Pixlive.requestPermissions();
+      await Pixlive.requestPermissions({
+        permissions: ['location'],
+      });
     });
 
   document.querySelector('#getContext').addEventListener('click', async () => {

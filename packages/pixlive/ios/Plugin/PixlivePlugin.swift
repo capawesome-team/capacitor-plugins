@@ -404,6 +404,10 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelega
     }
 
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        let status = CLLocationManager.authorizationStatus()
+        if status == .notDetermined {
+            return
+        }
         if let callback = locationPermissionCallback {
             locationPermissionCallback = nil
             callback()
