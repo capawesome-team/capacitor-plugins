@@ -995,7 +995,7 @@ Remove all listeners for this plugin.
 | Prop                   | Type                                    | Description                                                                                                                                                                                  | Since |
 | ---------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle.                                                                                                                                                             | 6.7.0 |
-| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. If `null`, no bundle is available.                                                                                                               | 6.6.0 |
+| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                | 6.6.0 |
 | **`checksum`**         | <code>string</code>                     | The checksum of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the checksum will be returned as response header when downloading the bundle.   | 7.1.0 |
 | **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the latest bundle.                                                                                                                                | 7.0.0 |
 | **`downloadUrl`**      | <code>string</code>                     | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle.                                                                          | 6.7.0 |
@@ -1228,6 +1228,13 @@ For this reason, you must be careful to [restrict live updates to compatible nat
 
 ## FAQ
 
+### What is a bundle?
+
+A bundle is a set of web assets (HTML, CSS, JavaScript, etc.) that make up your app's user interface.
+The plugin manages two types of bundles: the **built-in bundle** that ships with the native app binary, and **live update bundles** that are downloaded at runtime to update the app without a native release.
+Each live update bundle has a unique **bundle ID** returned by the [`fetchLatestBundle(...)`](#fetchlatestbundle) method.
+On Capawesome Cloud, the bundle ID corresponds to the ID of the app build artifact.
+
 ### How do I set a channel?
 
 There are four ways to set a channel, listed from lowest to highest priority:
@@ -1237,8 +1244,9 @@ There are four ways to set a channel, listed from lowest to highest priority:
 3. **[`setChannel(...)`](#setchannel)**: Set the channel at runtime. The value is persisted across app restarts.
 4. **[`sync(...)`](#sync)**: Pass a `channel` option to override the channel for a single sync call. This does **not** persist the channel.
 
-Each method overrides the ones above it.
-You can check the currently resolved channel by calling [`getChannel()`](#getchannel).
+Each method overrides the ones above it. You can check the currently resolved channel by calling [`getChannel()`](#getchannel).
+
+Additionally, Capawesome Cloud supports [forced channel assignments](https://capawesome.io/blog/capawesome-cloud-forced-channel-assignments/) which allow you to override the channel for a specific device without any app code changes. Please note that forced channel assignments have a higher priority than all of the above methods and should be used with caution.
 
 ### Why can't I see my changes during development?
 

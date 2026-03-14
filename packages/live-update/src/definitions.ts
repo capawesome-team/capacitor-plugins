@@ -577,6 +577,8 @@ export interface FetchLatestBundleResult {
   artifactType?: 'manifest' | 'zip';
   /**
    * The unique identifier of the latest bundle.
+   * 
+   * On Capawesome Cloud, this is the ID of the app build artifact.
    *
    * If `null`, no bundle is available.
    *
