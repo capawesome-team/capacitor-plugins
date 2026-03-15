@@ -992,21 +992,22 @@ Remove all listeners for this plugin.
 
 #### FetchLatestBundleResult
 
-| Prop                   | Type                                    | Description                                                                                                                                                                                  | Since |
-| ---------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle.                                                                                                                                                             | 6.7.0 |
-| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                | 6.6.0 |
-| **`checksum`**         | <code>string</code>                     | The checksum of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the checksum will be returned as response header when downloading the bundle.   | 7.1.0 |
-| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the latest bundle.                                                                                                                                | 7.0.0 |
-| **`downloadUrl`**      | <code>string</code>                     | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle.                                                                          | 6.7.0 |
-| **`signature`**        | <code>string</code>                     | The signature of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the signature will be returned as response header when downloading the bundle. | 7.1.0 |
+| Prop                   | Type                                    | Description                                                                                                                                                                                     | Since |
+| ---------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle.                                                                                                                                                                | 6.7.0 |
+| **`channel`**          | <code>string</code>                     | The name of the channel that the bundle is actually from. This is the resolved channel after applying any forced channel assignment and may differ from the channel set by the Live Update SDK. | 8.3.0 |
+| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                   | 6.6.0 |
+| **`checksum`**         | <code>string</code>                     | The checksum of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the checksum will be returned as response header when downloading the bundle.      | 7.1.0 |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the latest bundle.                                                                                                                                   | 7.0.0 |
+| **`downloadUrl`**      | <code>string</code>                     | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method to download the bundle.                                                                             | 6.7.0 |
+| **`signature`**        | <code>string</code>                     | The signature of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the signature will be returned as response header when downloading the bundle.    | 7.1.0 |
 
 
 #### FetchLatestBundleOptions
 
-| Prop          | Type                | Description                                                      | Since |
-| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
-| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
+| Prop          | Type                | Description                                                                                                                                                                                            | Since |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`channel`** | <code>string</code> | The preferred channel name from which the latest bundle should be fetched. This is the SDK preference and may be overridden by a forced channel assignment configured in the Capawesome Cloud Console. | 6.7.0 |
 
 
 #### GetBlockedBundlesResult
@@ -1140,9 +1141,9 @@ Remove all listeners for this plugin.
 
 #### SyncOptions
 
-| Prop          | Type                | Description                                                      | Since |
-| ------------- | ------------------- | ---------------------------------------------------------------- | ----- |
-| **`channel`** | <code>string</code> | The name of the channel where the latest bundle is fetched from. | 6.7.0 |
+| Prop          | Type                | Description                                                                                                                                                                                            | Since |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`channel`** | <code>string</code> | The preferred channel name from which the latest bundle should be fetched. This is the SDK preference and may be overridden by a forced channel assignment configured in the Capawesome Cloud Console. | 6.7.0 |
 
 
 #### PluginListenerHandle
