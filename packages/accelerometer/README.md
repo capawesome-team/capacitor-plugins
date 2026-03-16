@@ -32,7 +32,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Installation
 
-This plugin is only available to [Capawesome Insiders](https://capawesome.io/sponsors/insiders/). 
+This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 
 First, make sure you have the Capawesome npm registry set up.
 You can do this by running the following commands:
 
@@ -41,11 +41,22 @@ npm config set @capawesome-team:registry https://npm.registry.capawesome.io
 npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 ```
 
-**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/sponsors/insiders/).
+**Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
-Next, install the package:
+Next, you can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
 
+```bash
+npx skills add capawesome-team/skills
 ```
+
+Then use the following prompt:
+
+> Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome-team/capacitor-accelerometer` plugin in my project.
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
+```bash
 npm install @capawesome-team/capacitor-accelerometer
 npx cap sync
 ```
