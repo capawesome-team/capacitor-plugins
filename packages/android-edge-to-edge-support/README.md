@@ -14,6 +14,10 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 
 **Attention:** Despite its name, this plugin doesn't enable edge-to-edge mode by default. Instead, it preserves the traditional app behavior by applying proper insets to the webview, preventing Android's edge-to-edge changes from affecting apps that haven't been designed to support it.
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
