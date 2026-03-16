@@ -35,6 +35,10 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 -- [PadelBand](https://padel-band.com) Development Team
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -78,7 +82,9 @@ npx skills add capawesome-team/skills
 
 Then use the following prompt:
 
-> Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome-team/capacitor-bluetooth-low-energy` plugin in my project.
+```
+Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome-team/capacitor-bluetooth-low-energy` plugin in my project.
+```
 
 If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
