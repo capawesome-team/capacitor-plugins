@@ -32,7 +32,9 @@ npx skills add capawesome-team/skills
 
 Then use the following prompt:
 
-> Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-background-task` plugin in my project.
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-background-task` plugin in my project.
+```
 
 If you prefer **Manual Setup**, install the plugin by running the following commands:
 
