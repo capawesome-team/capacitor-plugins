@@ -16,6 +16,19 @@ Capacitor plugin for seamless Android dark mode support. Enhance user experience
 
 ## Installation
 
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+> Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-android-dark-mode-support` plugin in my project.
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
 ```bash
 npm install @capawesome/capacitor-android-dark-mode-support
 npx cap sync

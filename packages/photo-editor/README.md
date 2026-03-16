@@ -19,6 +19,19 @@ Capacitor plugin that allows the user to edit a photo.
 
 ## Installation
 
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+> Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-photo-editor` plugin in my project.
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
 ```bash
 npm install @capawesome/capacitor-photo-editor
 npx cap sync
