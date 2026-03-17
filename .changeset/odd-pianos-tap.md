@@ -1,5 +1,5 @@
 ---
-"@capawesome/capacitor-live-update": patch
+"@capawesome/capacitor-live-update": minor
 ---
 
-fix(live-update): add Brotli download support on Android
+feat(android): support Brotli compression
