@@ -77,6 +77,7 @@ import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.Okio;
+import org.brotli.dec.BrotliInputStream;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -674,6 +675,17 @@ public class LiveUpdate {
         file.delete();
     }
 
+    private void decompressBrotliFile(@NonNull File compressedFile, @NonNull File destinationFile) throws IOException {
+        try (BrotliInputStream input = new BrotliInputStream(new FileInputStream(compressedFile));
+            FileOutputStream output = new FileOutputStream(destinationFile)) {
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = input.read(buffer)) != -1) {
+                output.write(buffer, 0, length);
+            }
+        }
+    }
+
     private void deleteUnusedBundles() {
         String[] bundleIds = getDownloadedBundleIds();
         for (String bundleId : bundleIds) {
@@ -932,11 +944,11 @@ public class LiveUpdate {
         @NonNull String downloadUrl,
         @NonNull EmptyCallback completionCallback
     ) {
-        File file = buildTemporaryZipFile();
+        File downloadedFile = buildTemporaryZipFile();
         // Download the bundle
         downloadAndVerifyFile(
             downloadUrl,
-            file,
+            downloadedFile,
             checksum,
             signature,
             (downloadedBytes, totalBytes) -> {
@@ -946,21 +958,31 @@ public class LiveUpdate {
             new EmptyCallback() {
                 @Override
                 public void success() {
+                    File fileToExtract = downloadedFile;
+                    File decompressedFile = null;
                     try {
+                        if (downloadUrl.toLowerCase().endsWith(".br")) {
+                            decompressedFile = buildTemporaryZipFile();
+                            decompressBrotliFile(downloadedFile, decompressedFile);
+                            fileToExtract = decompressedFile;
+                        }
                         // Add the bundle
-                        addBundleOfTypeZip(bundleId, file);
-                        // Delete the temporary file
-                        file.delete();
+                        addBundleOfTypeZip(bundleId, fileToExtract);
                         completionCallback.success();
                     } catch (Exception e) {
                         completionCallback.error(e);
+                    } finally {
+                        downloadedFile.delete();
+                        if (decompressedFile != null) {
+                            decompressedFile.delete();
+                        }
                     }
                 }
 
                 @Override
                 public void error(@NonNull Exception exception) {
                     // Delete the temporary file on error
-                    file.delete();
+                    downloadedFile.delete();
                     completionCallback.error(exception);
                 }
             }
