@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`d50a3c579e1ec79547517681b32511d722cd56cb`](https://github.com/capawesome-team/capacitor-plugins/commit/d50a3c579e1ec79547517681b32511d722cd56cb) ([#795](https://github.com/capawesome-team/capacitor-plugins/pull/795)): feat(android): add `notificationTapped` event listener
+
 ## 8.0.1
 
 ### Patch Changes
