@@ -8,6 +8,10 @@ Capacitor plugin to run a foreground service on Android.
   </a>
 </div>
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -15,6 +19,21 @@ Capacitor plugin to run a foreground service on Android.
 | 8.x.x          | >=8.x.x           | Active support |
 
 ## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome-team/capacitor-android-foreground-service` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capawesome-team/capacitor-android-foreground-service
@@ -117,22 +136,50 @@ const deleteNotificationChannel = async () => {
 
 <docgen-index>
 
-* [`moveToForeground()`](#movetoforeground)
-* [`startForegroundService(...)`](#startforegroundservice)
-* [`updateForegroundService(...)`](#updateforegroundservice)
-* [`stopForegroundService()`](#stopforegroundservice)
-* [`checkPermissions()`](#checkpermissions)
-* [`requestPermissions()`](#requestpermissions)
-* [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
-* [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
-* [`createNotificationChannel(...)`](#createnotificationchannel)
-* [`deleteNotificationChannel(...)`](#deletenotificationchannel)
-* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
-* [`addListener('notificationTapped', ...)`](#addlistenernotificationtapped-)
-* [`removeAllListeners()`](#removealllisteners)
-* [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
-* [Enums](#enums)
+- [@capawesome-team/capacitor-android-foreground-service](#capawesome-teamcapacitor-android-foreground-service)
+  - [Newsletter](#newsletter)
+  - [Compatibility](#compatibility)
+  - [Installation](#installation)
+    - [Android](#android)
+  - [Configuration](#configuration)
+  - [Demo](#demo)
+  - [Usage](#usage)
+  - [API](#api)
+    - [moveToForeground()](#movetoforeground)
+    - [startForegroundService(...)](#startforegroundservice)
+    - [updateForegroundService(...)](#updateforegroundservice)
+    - [stopForegroundService()](#stopforegroundservice)
+    - [checkPermissions()](#checkpermissions)
+    - [requestPermissions()](#requestpermissions)
+    - [checkManageOverlayPermission()](#checkmanageoverlaypermission)
+    - [requestManageOverlayPermission()](#requestmanageoverlaypermission)
+    - [createNotificationChannel(...)](#createnotificationchannel)
+    - [deleteNotificationChannel(...)](#deletenotificationchannel)
+    - [addListener('buttonClicked', ...)](#addlistenerbuttonclicked-)
+    - [addListener('notificationTapped', ...)](#addlistenernotificationtapped-)
+    - [removeAllListeners()](#removealllisteners)
+    - [Interfaces](#interfaces)
+      - [StartForegroundServiceOptions](#startforegroundserviceoptions)
+      - [NotificationButton](#notificationbutton)
+      - [PermissionStatus](#permissionstatus)
+      - [ManageOverlayPermissionResult](#manageoverlaypermissionresult)
+      - [CreateNotificationChannelOptions](#createnotificationchanneloptions)
+      - [DeleteNotificationChannelOptions](#deletenotificationchanneloptions)
+      - [PluginListenerHandle](#pluginlistenerhandle)
+      - [ButtonClickedEvent](#buttonclickedevent)
+      - [NotificationTappedEvent](#notificationtappedevent)
+    - [Type Aliases](#type-aliases)
+      - [UpdateForegroundServiceOptions](#updateforegroundserviceoptions)
+      - [PermissionState](#permissionstate)
+      - [ButtonClickedEventListener](#buttonclickedeventlistener)
+      - [NotificationTappedEventListener](#notificationtappedeventlistener)
+    - [Enums](#enums)
+      - [ServiceType](#servicetype)
+      - [Importance](#importance)
+  - [FAQ](#faq)
+    - [Why can the user dismiss the notification?](#why-can-the-user-dismiss-the-notification)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 </docgen-index>
 

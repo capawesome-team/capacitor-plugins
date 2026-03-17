@@ -25,6 +25,10 @@ This plugin provides a comprehensive integration with Square's Mobile Payments S
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -32,6 +36,21 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | 0.1.x          | >=8.x.x           | Active support |
 
 ## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-square-mobile-payments` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capawesome/capacitor-square-mobile-payments

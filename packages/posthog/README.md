@@ -8,6 +8,10 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
   </a>
 </div>
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -16,6 +20,21 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 | 7.x.x          | 7.x.x             | Deprecated     |
 
 ## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-posthog` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capawesome/capacitor-posthog posthog-js
@@ -38,12 +57,14 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                      | Type                                                                  | Description                                        | Default                                 | Since |
-| ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------- | --------------------------------------- | ----- |
-| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.               |                                         | 7.1.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                 | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
-| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically. | <code>false</code>                      | 7.3.0 |
-| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.           |                                         | 7.3.0 |
+| Prop                      | Type                                                                  | Description                                                                               | Default                                 | Since |
+| ------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
+| **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                      |                                         | 7.1.0 |
+| **`apiHost`**             | <code>string</code>                                                   | The API host of your PostHog instance or reverse proxy.                                   | <code>'https://us.i.posthog.com'</code> | 8.3.0 |
+| **`host`**                | <code>string</code>                                                   | The API host of your PostHog instance. Deprecated alias for `apiHost`.                    | <code>'https://us.i.posthog.com'</code> | 7.1.0 |
+| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. Only available on Web. |                                         | 8.3.0 |
+| **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                        | <code>false</code>                      | 7.3.0 |
+| **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                  |                                         | 7.3.0 |
 
 ### Examples
 
@@ -54,7 +75,9 @@ In `capacitor.config.json`:
   "plugins": {
     "Posthog": {
       "apiKey": 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      "apiHost": 'https://eu.i.posthog.com',
       "host": 'https://eu.i.posthog.com',
+      "uiHost": 'https://eu.posthog.com',
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined
     }
@@ -73,7 +96,9 @@ const config: CapacitorConfig = {
   plugins: {
     Posthog: {
       apiKey: 'phc_g8wMenebiIQ1pYd5v9Vy7oakn6MczVKIsNG5ZHCspdy',
+      apiHost: 'https://eu.i.posthog.com',
       host: 'https://eu.i.posthog.com',
+      uiHost: 'https://eu.posthog.com',
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
     },
@@ -155,7 +180,7 @@ const screen = async () => {
 const setup = async () => {
   await Posthog.setup({
     apiKey: 'YOUR_API_KEY',
-    host: 'https://eu.i.posthog.com',
+    apiHost: 'https://eu.i.posthog.com',
   });
 };
 
@@ -535,10 +560,10 @@ Remove a super property.
 
 #### CaptureOptions
 
-| Prop             | Type                                                         | Description                            | Since |
-| ---------------- | ------------------------------------------------------------ | -------------------------------------- | ----- |
-| **`event`**      | <code>string</code>                                          | The name of the event to capture.      | 6.0.0 |
-| **`properties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
+| Prop             | Type                                   | Description                            | Since |
+| ---------------- | -------------------------------------- | -------------------------------------- | ----- |
+| **`event`**      | <code>string</code>                    | The name of the event to capture.      | 6.0.0 |
+| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
 #### GetDistinctIdResult
@@ -578,19 +603,19 @@ Remove a super property.
 
 #### GroupOptions
 
-| Prop                  | Type                                                         | Description                                  | Since |
-| --------------------- | ------------------------------------------------------------ | -------------------------------------------- | ----- |
-| **`type`**            | <code>string</code>                                          | The group type.                              | 6.0.0 |
-| **`key`**             | <code>string</code>                                          | The group key.                               | 6.0.0 |
-| **`groupProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
+| Prop                  | Type                                   | Description                                  | Since |
+| --------------------- | -------------------------------------- | -------------------------------------------- | ----- |
+| **`type`**            | <code>string</code>                    | The group type.                              | 6.0.0 |
+| **`key`**             | <code>string</code>                    | The group key.                               | 6.0.0 |
+| **`groupProperties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the group event. | 6.0.0 |
 
 
 #### IdentifyOptions
 
-| Prop                 | Type                                                         | Description                   | Since |
-| -------------------- | ------------------------------------------------------------ | ----------------------------- | ----- |
-| **`distinctId`**     | <code>string</code>                                          | The distinct ID of the user.  | 6.0.0 |
-| **`userProperties`** | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
+| Prop                 | Type                                   | Description                   | Since |
+| -------------------- | -------------------------------------- | ----------------------------- | ----- |
+| **`distinctId`**     | <code>string</code>                    | The distinct ID of the user.  | 6.0.0 |
+| **`userProperties`** | <code>Record&lt;string, any&gt;</code> | The person properties to set. | 6.0.0 |
 
 
 #### IsFeatureEnabledResult
@@ -624,10 +649,10 @@ Remove a super property.
 
 #### ScreenOptions
 
-| Prop              | Type                                                         | Description                                   | Since |
-| ----------------- | ------------------------------------------------------------ | --------------------------------------------- | ----- |
-| **`screenTitle`** | <code>string</code>                                          | The name of the screen.                       | 6.0.0 |
-| **`properties`**  | <code><a href="#record">Record</a>&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
+| Prop              | Type                                   | Description                                   | Since |
+| ----------------- | -------------------------------------- | --------------------------------------------- | ----- |
+| **`screenTitle`** | <code>string</code>                    | The name of the screen.                       | 6.0.0 |
+| **`properties`**  | <code>Record&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
 
 #### SetupOptions
@@ -635,9 +660,11 @@ Remove a super property.
 | Prop                      | Type                                                                  | Description                                                                                                                                                                                                                                                                                  | Default                                 | Since |
 | ------------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ----- |
 | **`apiKey`**              | <code>string</code>                                                   | The API key of your PostHog project.                                                                                                                                                                                                                                                         |                                         | 6.0.0 |
+| **`apiHost`**             | <code>string</code>                                                   | The API host of your PostHog instance or reverse proxy. If both `apiHost` and `host` are provided, `apiHost` takes precedence.                                                                                                                                                               | <code>'https://us.i.posthog.com'</code> | 8.3.0 |
+| **`host`**                | <code>string</code>                                                   | The API host of your PostHog instance. Deprecated alias for `apiHost`.                                                                                                                                                                                                                       | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
+| **`uiHost`**              | <code>string</code>                                                   | The PostHog UI host used when `apiHost` points to a reverse proxy. Only available on Web.                                                                                                                                                                                                    |                                         | 8.3.0 |
 | **`cookielessMode`**      | <code>'always' \| 'on_reject'</code>                                  | Cookieless tracking mode. - `'always'`: Always use cookieless tracking with server-side anonymous hash. - `'on_reject'`: Normal tracking until `optOut()` is called, then switches to cookieless. Only available on Web. Requires cookieless mode to be enabled in PostHog project settings. |                                         | 8.1.0 |
 | **`enableSessionReplay`** | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                                                                                                                                                                                                                           | <code>false</code>                      | 7.3.0 |
-| **`host`**                | <code>string</code>                                                   | The host of your PostHog instance.                                                                                                                                                                                                                                                           | <code>'https://us.i.posthog.com'</code> | 6.0.0 |
 | **`optOut`**              | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
 | **`sessionReplayConfig`** | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 
@@ -664,18 +691,17 @@ Remove a super property.
 ### Type Aliases
 
 
-#### Record
-
-Construct a type with a set of properties K of type T
-
-<code>{ [P in K]: T; }</code>
-
-
 #### JsonType
 
 <code>string | number | boolean | null | { [key: string]: <a href="#jsontype">JsonType</a>; } | JsonType[]</code>
 
 </docgen-api>
+
+## Advanced
+
+### Reverse Proxy
+
+For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
 
 ## Changelog
 

@@ -14,6 +14,10 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 
 **Attention:** Despite its name, this plugin doesn't enable edge-to-edge mode by default. Instead, it preserves the traditional app behavior by applying proper insets to the webview, preventing Android's edge-to-edge changes from affecting apps that haven't been designed to support it.
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -22,6 +26,21 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 | 7.x.x          | 7.x.x             | Deprecated     |
 
 ## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-android-edge-to-edge-support` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capawesome/capacitor-android-edge-to-edge-support

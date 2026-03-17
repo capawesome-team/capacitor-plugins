@@ -578,6 +578,8 @@ export interface FetchLatestBundleResult {
   /**
    * The unique identifier of the latest bundle.
    *
+   * On Capawesome Cloud, this is the ID of the app build artifact.
+   *
    * If `null`, no bundle is available.
    *
    * @since 6.6.0

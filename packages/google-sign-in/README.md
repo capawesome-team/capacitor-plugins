@@ -25,6 +25,10 @@ We are proud to offer a comprehensive Capacitor plugin for Google Sign-In. Here 
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -35,9 +39,24 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 - [How to Sign In with Google using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-google-using-capacitor/) 
 
-## Installation 
+## Installation
 
-```bash 
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-google-sign-in` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
+```bash
 npm install @capawesome/capacitor-google-sign-in
 npx cap sync
 ```

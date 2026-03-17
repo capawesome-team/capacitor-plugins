@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [`578fce907bc01da7bb8e17b7e9aa69c84bcd04f4`](https://github.com/capawesome-team/capacitor-plugins/commit/578fce907bc01da7bb8e17b7e9aa69c84bcd04f4) ([#797](https://github.com/capawesome-team/capacitor-plugins/pull/797)): feat: add `apiHost` and `uiHost` configuration options
+
 ## 8.2.1
 
 ### Patch Changes

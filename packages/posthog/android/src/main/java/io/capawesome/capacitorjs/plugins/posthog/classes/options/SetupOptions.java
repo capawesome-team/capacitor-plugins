@@ -9,7 +9,7 @@ public class SetupOptions {
     private String apiKey;
 
     @NonNull
-    private String host;
+    private String apiHost;
 
     @Nullable
     private Boolean enableSessionReplay;
@@ -20,9 +20,9 @@ public class SetupOptions {
     @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
-    public SetupOptions(@NonNull String apiKey, @NonNull String host) {
+    public SetupOptions(@NonNull String apiKey, @NonNull String apiHost) {
         this.apiKey = apiKey;
-        this.host = host;
+        this.apiHost = apiHost;
     }
 
     @NonNull
@@ -31,8 +31,8 @@ public class SetupOptions {
     }
 
     @NonNull
-    public String getHost() {
-        return host;
+    public String getApiHost() {
+        return apiHost;
     }
 
     public boolean getEnableSessionReplay() {

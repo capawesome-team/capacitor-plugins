@@ -2,15 +2,10 @@ import Foundation
 import PostHog
 
 @objc public class Posthog: NSObject {
-    private let config: PosthogConfig
-    private let plugin: PosthogPlugin
-
-    init(config: PosthogConfig, plugin: PosthogPlugin) {
-        self.config = config
-        self.plugin = plugin
+    init(config: PosthogConfig) {
         super.init()
         if let apiKey = config.apiKey {
-            self.setup(apiKey: apiKey, host: config.host, enableSessionReplay: config.enableSessionReplay, sessionReplayConfig: config.sessionReplayConfig)
+            self.setup(apiKey: apiKey, apiHost: config.apiHost, enableSessionReplay: config.enableSessionReplay, sessionReplayConfig: config.sessionReplayConfig)
 
             // Start session recording if configured
             if config.enableSessionReplay {
@@ -115,12 +110,12 @@ import PostHog
 
     @objc public func setup(_ options: SetupOptions) {
         let apiKey = options.getApiKey()
-        let host = options.getHost()
+        let apiHost = options.getApiHost()
         let enableSessionReplay = options.getEnableSessionReplay()
         let optOut = options.getOptOut()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, host: host, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
+        setup(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
     }
 
     @objc public func startSessionRecording() {
@@ -131,8 +126,8 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, host: String, enableSessionReplay: Bool = false, optOut: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
-        let config = PostHogConfig(apiKey: apiKey, host: host)
+    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
+        let config = PostHogConfig(apiKey: apiKey, host: apiHost)
         config.captureScreenViews = false
         config.optOut = optOut
         config.sessionReplay = enableSessionReplay

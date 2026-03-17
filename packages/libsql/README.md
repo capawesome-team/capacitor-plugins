@@ -8,6 +8,10 @@ Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
   </a>
 </div>
 
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -16,6 +20,21 @@ Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
 | 0.1.x          | 7.x.x             | Deprecated     |
 
 ## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the Capawesome Skills to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-libsql` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
 npm install @capawesome/capacitor-libsql
@@ -191,7 +210,7 @@ execute(options: ExecuteOptions) => Promise<void>
 
 Execute a single SQL statement on the specified database connection.
 
-This method can be used to execute any SQL statement, including 
+This method can be used to execute any SQL statement, including
 `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`.
 
 | Param         | Type                                                      |
@@ -230,7 +249,7 @@ query(options: QueryOptions) => Promise<QueryResult>
 
 Query the database and return the result set.
 
-This method can be used to execute `SELECT` statements 
+This method can be used to execute `SELECT` statements
 and retrieve the result set.
 
 | Param         | Type                                                  |
