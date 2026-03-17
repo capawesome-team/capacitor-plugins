@@ -35,7 +35,7 @@ public class ForegroundServicePlugin extends Plugin {
     public static final String TAG = "ForegroundService";
     public static final String BUTTON_CLICKED_EVENT = "buttonClicked";
     public static final String NOTIFICATION_TAPPED_EVENT = "notificationTapped";
-    public static final String NOTIFICATION_TAP_EXTRA = "foregroundServiceNotificationId";
+    public static final String NOTIFICATION_TAP_EXTRA = "io.capawesome.capacitorjs.plugins.foregroundservice.NOTIFICATION_TAP_ID";
     public static Bridge staticBridge = null;
 
     private static final String MOVE_TO_FOREGROUND_CALLBACK_NAME = "moveToForegroundResult";
@@ -71,6 +71,9 @@ public class ForegroundServicePlugin extends Plugin {
         }
         int notificationId = intent.getIntExtra(NOTIFICATION_TAP_EXTRA, -1);
         intent.removeExtra(NOTIFICATION_TAP_EXTRA);
+        if (notificationId < 0) {
+            return;
+        }
         handleNotificationTapped(notificationId);
     }
 
