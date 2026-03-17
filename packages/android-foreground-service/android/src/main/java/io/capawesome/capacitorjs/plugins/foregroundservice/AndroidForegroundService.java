@@ -83,12 +83,13 @@ public class AndroidForegroundService extends Service {
         }
         launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         launchIntent.putExtra(ForegroundServicePlugin.NOTIFICATION_TAP_EXTRA, id);
-        return PendingIntent.getActivity(
-            getApplicationContext(),
-            id,
-            launchIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
+        int pendingIntentFlags;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE;
+        } else {
+            pendingIntentFlags = PendingIntent.FLAG_UPDATE_CURRENT;
+        }
+        return PendingIntent.getActivity(getApplicationContext(), id, launchIntent, pendingIntentFlags);
     }
 
     private Notification.Action[] convertBundlesToNotificationActions(Bundle[] bundles) {
