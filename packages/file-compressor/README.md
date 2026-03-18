@@ -60,7 +60,7 @@ npm config set //npm.registry.capawesome.io/:_authToken <YOUR_LICENSE_KEY>
 **Attention**: Replace `<YOUR_LICENSE_KEY>` with the license key you received from Polar. If you don't have a license key yet, you can get one by becoming a [Capawesome Insider](https://capawesome.io/insiders/).
 
 Next, you can use our **AI-Assisted Setup** to install the plugin.
-Add the Capawesome Skills to your AI tool using the following command:
+Add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool using the following command:
 
 ```bash
 npx skills add capawesome-team/skills
