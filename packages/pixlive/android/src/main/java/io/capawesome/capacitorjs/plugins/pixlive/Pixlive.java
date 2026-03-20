@@ -609,6 +609,11 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         callback.success();
     }
 
+    public void getVersion(@NonNull NonEmptyResultCallback<GetVersionResult> callback) {
+        String version = VDARSDKController.getSDKVersion();
+        callback.success(new GetVersionResult(version));
+    }
+
     // VDARSDKControllerEventReceiver
 
     @Override

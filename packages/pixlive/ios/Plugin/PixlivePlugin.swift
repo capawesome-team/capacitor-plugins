@@ -36,7 +36,8 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelega
         CAPPluginMethod(name: "destroyARView", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "resizeARView", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setARViewTouchEnabled", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "setARViewTouchHole", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "setARViewTouchHole", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getVersion", returnType: CAPPluginReturnPromise)
     ]
 
     public static let tag = "Pixlive"
@@ -401,6 +402,16 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelega
         } catch {
             rejectCall(call, error)
         }
+    }
+    
+    @objc func getVersion(_ call: CAPPluginCall) {
+        implementation?.getVersion(completion: { result, error in
+            if let error = error {
+                self.rejectCall(call, error)
+            } else {
+                self.resolveCall(call, result)
+            }
+        })
     }
 
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

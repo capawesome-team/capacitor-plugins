@@ -20,4 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#getContext').addEventListener('click', async () => {
     await Pixlive.getContext({ contextId: '12345' });
   });
+
+  document.querySelector('#getVersion').addEventListener('click', async () => {
+    const response = await Pixlive.getVersion();
+    alert(response.version);
+  });
 });

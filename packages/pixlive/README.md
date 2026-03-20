@@ -88,6 +88,7 @@ const createARView = async () => {
 * [`resizeARView(...)`](#resizearview)
 * [`setARViewTouchEnabled(...)`](#setarviewtouchenabled)
 * [`setARViewTouchHole(...)`](#setarviewtouchhole)
+* [`getVersion()`](#getversion)
 * [`addListener('codeRecognize', ...)`](#addlistenercoderecognize-)
 * [`addListener('enterContext', ...)`](#addlistenerentercontext-)
 * [`addListener('exitContext', ...)`](#addlistenerexitcontext-)
@@ -552,6 +553,21 @@ Only available on Android and iOS.
 --------------------
 
 
+### getVersion()
+
+```typescript
+getVersion() => Promise<GetVersionResponse>
+```
+
+Get the version of the sdk.
+
+**Returns:** <code>Promise&lt;<a href="#getversionresponse">GetVersionResponse</a>&gt;</code>
+
+**Since:** 8.0.0
+
+--------------------
+
+
 ### addListener('codeRecognize', ...)
 
 ```typescript
@@ -921,6 +937,13 @@ Remove all listeners for this plugin.
 | **`bottom`** | <code>number</code> | The bottom coordinate of the touch hole region. | 8.0.0 |
 | **`left`**   | <code>number</code> | The left coordinate of the touch hole region.   | 8.0.0 |
 | **`right`**  | <code>number</code> | The right coordinate of the touch hole region.  | 8.0.0 |
+
+
+#### GetVersionResponse
+
+| Prop          | Type                | Description             | Since |
+| ------------- | ------------------- | ----------------------- | ----- |
+| **`version`** | <code>string</code> | The version of the sdk. | 8.0.0 |
 
 
 #### PluginListenerHandle

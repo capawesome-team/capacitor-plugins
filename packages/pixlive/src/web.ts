@@ -103,6 +103,10 @@ export class PixliveWeb extends WebPlugin implements PixlivePlugin {
     this.throwUnimplemented();
   }
 
+  async getVersion(): Promise<never> {
+    this.throwUnimplemented();
+  }
+
   private throwUnimplemented(): never {
     throw this.unimplemented('Not implemented on web.');
   }

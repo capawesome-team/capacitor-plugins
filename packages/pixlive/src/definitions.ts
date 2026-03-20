@@ -224,6 +224,12 @@ export interface PixlivePlugin {
    */
   setARViewTouchHole(options: SetARViewTouchHoleOptions): Promise<void>;
   /**
+   * Get the version of the sdk.
+   *
+   * @since 8.0.0
+   */
+  getVersion(): Promise<GetVersionResponse>;
+  /**
    * Called when a QR code or barcode is scanned by the AR camera.
    *
    * @since 8.0.0
@@ -876,4 +882,16 @@ export interface RequireSyncEvent {
    * @since 8.0.0
    */
   tags: string[];
+}
+
+/**
+ * @since 8.0.0
+ */
+export interface GetVersionResponse {
+  /**
+   * The version of the sdk.
+   *
+   * @since 8.0.0
+   */
+  version: string;
 }

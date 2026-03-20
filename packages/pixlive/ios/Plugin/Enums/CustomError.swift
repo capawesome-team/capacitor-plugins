@@ -25,6 +25,7 @@ enum CustomError: Error {
     case widthMissing
     case xMissing
     case yMissing
+    case versionNotExists
 }
 
 extension CustomError: LocalizedError {
@@ -78,6 +79,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("x must be provided.", comment: "xMissing")
         case .yMissing:
             return NSLocalizedString("y must be provided.", comment: "yMissing")
+        case .versionNotExists:
+            return NSLocalizedString("Version does not exist", comment: "versionNotExists")
         }
     }
 }

@@ -619,6 +619,28 @@ public class PixlivePlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void getVersion(PluginCall call) {
+        try {
+            NonEmptyResultCallback<GetVersionResult> callback = new NonEmptyResultCallback<>() {
+                @Override
+                public void success(@NonNull GetVersionResult result) {
+                    resolveCall(call, result);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.getVersion(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
     public void notifyListenersFromImplementation(@NonNull String eventName, @NonNull JSObject data) {
         notifyListeners(eventName, data);
     }
