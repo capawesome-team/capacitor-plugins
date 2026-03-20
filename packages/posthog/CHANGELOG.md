@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.0
+
+### Minor Changes
+
+- [`666ca4a88dc1af7bdbe1c3b8e8c0861607c0198f`](https://github.com/capawesome-team/capacitor-plugins/commit/666ca4a88dc1af7bdbe1c3b8e8c0861607c0198f) ([#805](https://github.com/capawesome-team/capacitor-plugins/pull/805)): feat: add `captureApplicationLifecycleEvents` configuration option
+
 ## 8.3.0
 
 ### Minor Changes
