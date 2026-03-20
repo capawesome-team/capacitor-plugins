@@ -286,10 +286,14 @@ public class PosthogPlugin extends Plugin {
             String apiHost = getApiHost(call.getString("apiHost"), call.getString("host"));
             Boolean enableSessionReplay = call.getBoolean("enableSessionReplay", false);
             Boolean optOut = call.getBoolean("optOut", false);
+            Boolean captureApplicationLifecycleEvents = call.getBoolean("captureApplicationLifecycleEvents", true);
 
             SetupOptions options = new SetupOptions(apiKey, apiHost);
             options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
             options.setOptOut(optOut != null ? optOut : false);
+            options.setCaptureApplicationLifecycleEvents(
+                captureApplicationLifecycleEvents != null ? captureApplicationLifecycleEvents : true
+            );
 
             JSObject sessionReplayConfigObject = call.getObject("sessionReplayConfig");
             if (sessionReplayConfigObject != null) {
@@ -338,6 +342,9 @@ public class PosthogPlugin extends Plugin {
         config.setApiHost(apiHost);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
+        boolean captureApplicationLifecycleEvents = getConfig()
+            .getBoolean("captureApplicationLifecycleEvents", config.getCaptureApplicationLifecycleEvents());
+        config.setCaptureApplicationLifecycleEvents(captureApplicationLifecycleEvents);
 
         return config;
     }

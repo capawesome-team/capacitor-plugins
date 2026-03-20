@@ -5,13 +5,22 @@ import Foundation
     private var apiHost: String
     private var enableSessionReplay: Bool
     private var optOut: Bool
+    private var captureApplicationLifecycleEvents: Bool
     private var sessionReplayConfig: SessionReplayOptions?
 
-    init(apiKey: String, apiHost: String, enableSessionReplay: Bool, optOut: Bool, sessionReplayConfig: [String: Any]?) {
+    init(
+        apiKey: String,
+        apiHost: String,
+        enableSessionReplay: Bool,
+        optOut: Bool,
+        captureApplicationLifecycleEvents: Bool,
+        sessionReplayConfig: [String: Any]?
+    ) {
         self.apiKey = apiKey
         self.apiHost = apiHost
         self.enableSessionReplay = enableSessionReplay
         self.optOut = optOut
+        self.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
 
         if let config = sessionReplayConfig {
             self.sessionReplayConfig = SessionReplayOptions(
@@ -39,6 +48,10 @@ import Foundation
 
     func getOptOut() -> Bool {
         return optOut
+    }
+
+    func getCaptureApplicationLifecycleEvents() -> Bool {
+        return captureApplicationLifecycleEvents
     }
 
     func getSessionReplayConfig() -> SessionReplayOptions? {

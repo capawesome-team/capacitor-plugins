@@ -26,7 +26,14 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     init {
         val apiKey = config.getApiKey()
         if (apiKey != null) {
-            setup(apiKey, config.getApiHost(), config.getEnableSessionReplay(), false, config.getSessionReplayConfig())
+            setup(
+                apiKey,
+                config.getApiHost(),
+                config.getEnableSessionReplay(),
+                false,
+                config.getCaptureApplicationLifecycleEvents(),
+                config.getSessionReplayConfig()
+            )
         }
     }
 
@@ -126,9 +133,17 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val apiHost = options.apiHost
         val enableSessionReplay = options.enableSessionReplay
         val optOut = options.optOut
+        val captureApplicationLifecycleEvents = options.captureApplicationLifecycleEvents
         val sessionReplayConfig = options.sessionReplayConfig
 
-        setup(apiKey, apiHost, enableSessionReplay, optOut, sessionReplayConfig)
+        setup(
+            apiKey,
+            apiHost,
+            enableSessionReplay,
+            optOut,
+            captureApplicationLifecycleEvents,
+            sessionReplayConfig
+        )
     }
 
     fun unregister(options: UnregisterOptions) {
@@ -137,12 +152,20 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.unregister(key = key)
     }
 
-    private fun setup(apiKey: String, apiHost: String, enableSessionReplay: Boolean = false, optOut: Boolean = false, sessionReplayConfig: SessionReplayOptions? = null) {
+    private fun setup(
+        apiKey: String,
+        apiHost: String,
+        enableSessionReplay: Boolean = false,
+        optOut: Boolean = false,
+        captureApplicationLifecycleEvents: Boolean = true,
+        sessionReplayConfig: SessionReplayOptions? = null
+    ) {
         val posthogConfig = PostHogAndroidConfig(
             apiKey = apiKey,
             host = apiHost
         )
         posthogConfig.captureScreenViews = false
+        posthogConfig.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         posthogConfig.optOut = optOut
         posthogConfig.sessionReplay = enableSessionReplay
 

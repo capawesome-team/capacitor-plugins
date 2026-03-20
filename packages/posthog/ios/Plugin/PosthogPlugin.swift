@@ -205,9 +205,17 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let apiHost = getApiHost(apiHost: call.getString("apiHost"), host: call.getString("host"))
         let enableSessionReplay = call.getBool("enableSessionReplay", false)
         let optOut = call.getBool("optOut", false)
+        let captureApplicationLifecycleEvents = call.getBool("captureApplicationLifecycleEvents", true)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
-        let options = SetupOptions(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
+        let options = SetupOptions(
+            apiKey: apiKey,
+            apiHost: apiHost,
+            enableSessionReplay: enableSessionReplay,
+            optOut: optOut,
+            captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
+            sessionReplayConfig: sessionReplayConfig
+        )
 
         implementation?.setup(options)
         call.resolve()
@@ -241,6 +249,10 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         config.apiKey = getConfig().getString("apiKey", config.apiKey)
         config.apiHost = getApiHost(apiHost: getConfig().getString("apiHost"), host: getConfig().getString("host"), defaultValue: config.apiHost)
         config.enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.enableSessionReplay)
+        config.captureApplicationLifecycleEvents = getConfig().getBoolean(
+            "captureApplicationLifecycleEvents",
+            config.captureApplicationLifecycleEvents
+        )
 
         if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
             config.sessionReplayConfig = SessionReplayOptions(
