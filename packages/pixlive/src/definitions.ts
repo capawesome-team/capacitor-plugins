@@ -228,7 +228,7 @@ export interface PixlivePlugin {
    *
    * @since 8.0.0
    */
-  getVersion(): Promise<GetVersionResponse>;
+  getVersion(): Promise<GetVersionResult>;
   /**
    * Called when a QR code or barcode is scanned by the AR camera.
    *
@@ -887,7 +887,7 @@ export interface RequireSyncEvent {
 /**
  * @since 8.0.0
  */
-export interface GetVersionResponse {
+export interface GetVersionResult {
   /**
    * The version of the sdk.
    *

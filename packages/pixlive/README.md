@@ -556,12 +556,12 @@ Only available on Android and iOS.
 ### getVersion()
 
 ```typescript
-getVersion() => Promise<GetVersionResponse>
+getVersion() => Promise<GetVersionResult>
 ```
 
 Get the version of the sdk.
 
-**Returns:** <code>Promise&lt;<a href="#getversionresponse">GetVersionResponse</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getversionresult">GetVersionResult</a>&gt;</code>
 
 **Since:** 8.0.0
 
@@ -939,7 +939,7 @@ Remove all listeners for this plugin.
 | **`right`**  | <code>number</code> | The right coordinate of the touch hole region.  | 8.0.0 |
 
 
-#### GetVersionResponse
+#### GetVersionResult
 
 | Prop          | Type                | Description             | Since |
 | ------------- | ------------------- | ----------------------- | ----- |
