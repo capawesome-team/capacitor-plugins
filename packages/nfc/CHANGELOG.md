@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`0db01f15d04421fb29c346cc87965978ab726792`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0db01f15d04421fb29c346cc87965978ab726792) ([#422](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/422)): feat: implement `isEnabled` on iOS and Web to reflect NFC reading availability
+
 ## 8.0.1
 
 ### Patch Changes
