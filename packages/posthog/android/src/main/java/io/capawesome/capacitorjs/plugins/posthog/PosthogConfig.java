@@ -12,6 +12,8 @@ public class PosthogConfig {
 
     private boolean enableSessionReplay = false;
 
+    private boolean captureApplicationLifecycleEvents = true;
+
     @Nullable
     private SessionReplayOptions sessionReplayConfig = null;
 
@@ -26,6 +28,10 @@ public class PosthogConfig {
 
     public boolean getEnableSessionReplay() {
         return enableSessionReplay;
+    }
+
+    public boolean getCaptureApplicationLifecycleEvents() {
+        return captureApplicationLifecycleEvents;
     }
 
     @Nullable
@@ -43,6 +49,10 @@ public class PosthogConfig {
 
     public void setEnableSessionReplay(boolean enableSessionReplay) {
         this.enableSessionReplay = enableSessionReplay;
+    }
+
+    public void setCaptureApplicationLifecycleEvents(boolean captureApplicationLifecycleEvents) {
+        this.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents;
     }
 
     public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {

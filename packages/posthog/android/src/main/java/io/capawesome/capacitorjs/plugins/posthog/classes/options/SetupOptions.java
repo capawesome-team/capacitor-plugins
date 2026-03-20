@@ -18,6 +18,9 @@ public class SetupOptions {
     private Boolean optOut;
 
     @Nullable
+    private Boolean captureApplicationLifecycleEvents;
+
+    @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
     public SetupOptions(@NonNull String apiKey, @NonNull String apiHost) {
@@ -49,6 +52,14 @@ public class SetupOptions {
 
     public void setOptOut(boolean optOut) {
         this.optOut = optOut;
+    }
+
+    public boolean getCaptureApplicationLifecycleEvents() {
+        return captureApplicationLifecycleEvents != null ? captureApplicationLifecycleEvents : true;
+    }
+
+    public void setCaptureApplicationLifecycleEvents(boolean captureApplicationLifecycleEvents) {
+        this.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents;
     }
 
     @Nullable

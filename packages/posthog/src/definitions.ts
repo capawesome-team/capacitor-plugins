@@ -51,6 +51,13 @@ declare module '@capacitor/cli' {
        * @since 7.3.0
        */
       sessionReplayConfig?: SessionReplayOptions;
+      /**
+       * Whether to capture application lifecycle events.
+       *
+       * @since 8.3.0
+       * @default true
+       */
+      captureApplicationLifecycleEvents?: boolean;
     };
   }
 }
@@ -469,6 +476,16 @@ export interface SetupOptions {
    * @since 7.3.0
    */
   sessionReplayConfig?: SessionReplayOptions;
+  /**
+   * Whether to capture application lifecycle events.
+   *
+   * Only available on iOS and Android.
+   *
+   * @since 8.3.0
+   * @default true
+   * @platform iOS, Android
+   */
+  captureApplicationLifecycleEvents?: boolean;
 }
 
 /**

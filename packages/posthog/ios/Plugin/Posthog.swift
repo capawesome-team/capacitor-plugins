@@ -5,7 +5,13 @@ import PostHog
     init(config: PosthogConfig) {
         super.init()
         if let apiKey = config.apiKey {
-            self.setup(apiKey: apiKey, apiHost: config.apiHost, enableSessionReplay: config.enableSessionReplay, sessionReplayConfig: config.sessionReplayConfig)
+            self.setup(
+                apiKey: apiKey,
+                apiHost: config.apiHost,
+                enableSessionReplay: config.enableSessionReplay,
+                captureApplicationLifecycleEvents: config.captureApplicationLifecycleEvents,
+                sessionReplayConfig: config.sessionReplayConfig
+            )
 
             // Start session recording if configured
             if config.enableSessionReplay {
@@ -113,9 +119,10 @@ import PostHog
         let apiHost = options.getApiHost()
         let enableSessionReplay = options.getEnableSessionReplay()
         let optOut = options.getOptOut()
+        let captureApplicationLifecycleEvents = options.getCaptureApplicationLifecycleEvents()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, sessionReplayConfig: sessionReplayConfig)
+        setup(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, captureApplicationLifecycleEvents: captureApplicationLifecycleEvents, sessionReplayConfig: sessionReplayConfig)
     }
 
     @objc public func startSessionRecording() {
@@ -126,10 +133,11 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
+    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, sessionReplayConfig: SessionReplayOptions? = nil) {
         let config = PostHogConfig(apiKey: apiKey, host: apiHost)
         config.captureScreenViews = false
         config.optOut = optOut
+        config.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         config.sessionReplay = enableSessionReplay
         config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
         config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true
