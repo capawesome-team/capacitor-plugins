@@ -483,7 +483,6 @@ export interface SetupOptions {
    *
    * @since 8.3.0
    * @default true
-   * @platform iOS, Android
    */
   captureApplicationLifecycleEvents?: boolean;
 }
