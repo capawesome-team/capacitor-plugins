@@ -665,7 +665,8 @@ isEnabled() => Promise<IsEnabledResult>
 
 Returns whether or not NFC is enabled.
 
-Only available on Android.
+On **iOS** and **Web**, this method reflects whether NFC reading is
+available on the device. iOS does not expose a global NFC on/off setting.
 
 **Returns:** <code>Promise&lt;<a href="#isenabledresult">IsEnabledResult</a>&gt;</code>
 
