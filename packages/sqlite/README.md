@@ -149,23 +149,9 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ### iOS
 
-#### Encryption
+#### CocoaPods
 
-If you want to use encryption, you must include the `SQLCipher` dependency in your app's `Podfile` by adding the following line:
-
-```diff
-target 'App' do
-capacitor_pods
-# Add your Pods here
-+  pod 'CapawesomeTeamCapacitorSqlite/SQLCipher', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
-end
-```
-
-**Attention**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM). If you need database encryption, you must use CocoaPods for the Capacitor iOS platform. See the [Limitations](#limitations) section for more details.
-
-**Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
-
-If you do NOT want to use encryption, you need to add the `Plain` pod to your app's `Podfile` by adding the following line:
+Add the `Plain` pod to your app's `Podfile`:
 
 ```diff
 target 'App' do
@@ -175,7 +161,46 @@ capacitor_pods
 end
 ```
 
-**Attention**: In both cases, do not add the pod in the section `def capacitor_pods`, but under the comment `# Add your Pods here`.
+If you want to use encryption, add the `SQLCipher` pod instead:
+
+```diff
+target 'App' do
+capacitor_pods
+# Add your Pods here
+- pod 'CapawesomeTeamCapacitorSqlite/Plain', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
++  pod 'CapawesomeTeamCapacitorSqlite/SQLCipher', :path => '../../node_modules/@capawesome-team/capacitor-sqlite'
+end
+```
+
+**Attention**: Do not add the pod in the section `def capacitor_pods`, but under the comment `# Add your Pods here`.
+
+**Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
+
+#### Swift Package Manager
+
+No additional setup is required for SPM.
+
+If you want to use encryption, you must enable the `SQLCipher` package trait.
+Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
+
+```json
+{
+  "experimental": {
+    "ios": {
+      "spm": {
+        "swiftToolsVersion": "6.1",
+        "packageTraits": {
+          "@capawesome-team/capacitor-sqlite": ["SQLCipher"]
+        }
+      }
+    }
+  }
+}
+```
+
+**Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+
+**Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
 ### Web
 
@@ -855,12 +880,6 @@ Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/b
 ## Limitations
 
 This plugin has some limitations on certain platforms.
-
-### iOS
-
-The iOS implementation of this plugin has the following limitations:
-
-- **Encryption**: Encryption is only supported with CocoaPods and not with Swift Package Manager (SPM). SQLCipher does not officially support SPM due to technical limitations in its build system (see [sqlcipher/sqlcipher#371](https://github.com/sqlcipher/sqlcipher/issues/371)). If you need database encryption, you must use CocoaPods for the Capacitor iOS platform.
 
 ### Web
 

@@ -4,8 +4,15 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 0.4.x](#version-04x)
 - [Version 0.3.x](#version-03x)
 - [Version 0.2.x](#version-02x)
+
+## Version 0.4.x
+
+### SQLite.swift
+
+The minimum required version of `SQLite.swift` on iOS has been updated from `0.15.4` to `0.15.5`.
 
 ## Version 0.3.x
 
