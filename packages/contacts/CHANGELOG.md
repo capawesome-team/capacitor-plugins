@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`16ccfce33a8b06f4181dcf863cf57f48eb018292`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/16ccfce33a8b06f4181dcf863cf57f48eb018292): fix(ios): set correct SPM product name in `Package.swift`
+
 ## 8.0.1
 
 ### Patch Changes
