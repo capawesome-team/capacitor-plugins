@@ -76,10 +76,12 @@ import GoogleSignIn
             completion(signInResult, nil)
         }
 
-        if let scopes = self.scopes, !scopes.isEmpty {
-            GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: scopes, completion: signInCompletion)
-        } else {
-            GIDSignIn.sharedInstance.signIn(withPresenting: viewController, completion: signInCompletion)
+        DispatchQueue.main.async {
+            if let scopes = self.scopes, !scopes.isEmpty {
+                GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: scopes, completion: signInCompletion)
+            } else {
+                GIDSignIn.sharedInstance.signIn(withPresenting: viewController, completion: signInCompletion)
+            }
         }
     }
 
