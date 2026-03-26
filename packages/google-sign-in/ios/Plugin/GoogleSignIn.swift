@@ -22,11 +22,6 @@ import GoogleSignIn
     }
 
     @objc public func signIn(completion: @escaping (_ result: SignInResult?, _ error: Error?) -> Void) {
-        guard let viewController = plugin.bridge?.viewController else {
-            completion(nil, CustomError.viewControllerUnavailable)
-            return
-        }
-
         let signInCompletion: (GIDSignInResult?, Error?) -> Void = { result, error in
             if let error = error {
                 if (error as NSError).code == GIDSignInError.canceled.rawValue {
@@ -77,6 +72,10 @@ import GoogleSignIn
         }
 
         DispatchQueue.main.async {
+            guard let viewController = self.plugin.bridge?.viewController else {
+                completion(nil, CustomError.viewControllerUnavailable)
+                return
+            }
             if let scopes = self.scopes, !scopes.isEmpty {
                 GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: scopes, completion: signInCompletion)
             } else {
