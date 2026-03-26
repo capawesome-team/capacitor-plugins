@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.6
+
+### Patch Changes
+
+- [`83d7c02dc14e77fd0aa8d5f4243d5451f4b2cee1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/83d7c02dc14e77fd0aa8d5f4243d5451f4b2cee1): feat(ios): add SPM package traits for SQLCipher support
+
 ## 0.3.5
 
 ### Patch Changes

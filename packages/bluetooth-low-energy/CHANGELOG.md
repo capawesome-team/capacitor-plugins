@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`dba12979fd3d107182b3b5e0c5480a8bf605d91f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/dba12979fd3d107182b3b5e0c5480a8bf605d91f): fix(android): add null check for CCCD descriptor
+
 ## 8.0.4
 
 ### Patch Changes
