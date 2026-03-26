@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`897b29e8e895eb22c39ba70914a1363faa9c68ad`](https://github.com/capawesome-team/capacitor-plugins/commit/897b29e8e895eb22c39ba70914a1363faa9c68ad) ([#808](https://github.com/capawesome-team/capacitor-plugins/pull/808)): fix(ios): dispatch sign-in UI presentation to main thread
+
 ## 0.1.1
 
 ### Patch Changes
