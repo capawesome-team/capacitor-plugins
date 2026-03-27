@@ -136,50 +136,22 @@ const deleteNotificationChannel = async () => {
 
 <docgen-index>
 
-- [@capawesome-team/capacitor-android-foreground-service](#capawesome-teamcapacitor-android-foreground-service)
-  - [Newsletter](#newsletter)
-  - [Compatibility](#compatibility)
-  - [Installation](#installation)
-    - [Android](#android)
-  - [Configuration](#configuration)
-  - [Demo](#demo)
-  - [Usage](#usage)
-  - [API](#api)
-    - [moveToForeground()](#movetoforeground)
-    - [startForegroundService(...)](#startforegroundservice)
-    - [updateForegroundService(...)](#updateforegroundservice)
-    - [stopForegroundService()](#stopforegroundservice)
-    - [checkPermissions()](#checkpermissions)
-    - [requestPermissions()](#requestpermissions)
-    - [checkManageOverlayPermission()](#checkmanageoverlaypermission)
-    - [requestManageOverlayPermission()](#requestmanageoverlaypermission)
-    - [createNotificationChannel(...)](#createnotificationchannel)
-    - [deleteNotificationChannel(...)](#deletenotificationchannel)
-    - [addListener('buttonClicked', ...)](#addlistenerbuttonclicked-)
-    - [addListener('notificationTapped', ...)](#addlistenernotificationtapped-)
-    - [removeAllListeners()](#removealllisteners)
-    - [Interfaces](#interfaces)
-      - [StartForegroundServiceOptions](#startforegroundserviceoptions)
-      - [NotificationButton](#notificationbutton)
-      - [PermissionStatus](#permissionstatus)
-      - [ManageOverlayPermissionResult](#manageoverlaypermissionresult)
-      - [CreateNotificationChannelOptions](#createnotificationchanneloptions)
-      - [DeleteNotificationChannelOptions](#deletenotificationchanneloptions)
-      - [PluginListenerHandle](#pluginlistenerhandle)
-      - [ButtonClickedEvent](#buttonclickedevent)
-      - [NotificationTappedEvent](#notificationtappedevent)
-    - [Type Aliases](#type-aliases)
-      - [UpdateForegroundServiceOptions](#updateforegroundserviceoptions)
-      - [PermissionState](#permissionstate)
-      - [ButtonClickedEventListener](#buttonclickedeventlistener)
-      - [NotificationTappedEventListener](#notificationtappedeventlistener)
-    - [Enums](#enums)
-      - [ServiceType](#servicetype)
-      - [Importance](#importance)
-  - [FAQ](#faq)
-    - [Why can the user dismiss the notification?](#why-can-the-user-dismiss-the-notification)
-  - [Changelog](#changelog)
-  - [License](#license)
+* [`moveToForeground()`](#movetoforeground)
+* [`startForegroundService(...)`](#startforegroundservice)
+* [`updateForegroundService(...)`](#updateforegroundservice)
+* [`stopForegroundService()`](#stopforegroundservice)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
+* [`checkManageOverlayPermission()`](#checkmanageoverlaypermission)
+* [`requestManageOverlayPermission()`](#requestmanageoverlaypermission)
+* [`createNotificationChannel(...)`](#createnotificationchannel)
+* [`deleteNotificationChannel(...)`](#deletenotificationchannel)
+* [`addListener('buttonClicked', ...)`](#addlistenerbuttonclicked-)
+* [`addListener('notificationTapped', ...)`](#addlistenernotificationtapped-)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -402,10 +374,10 @@ Called when the foreground service notification is tapped.
 
 Only available on Android.
 
-| Param              | Type                                                                                          |
-| ------------------ | --------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'notificationTapped'</code>                                                             |
-| **`listenerFunc`** | <code><a href="#notificationtappedeventlistener">NotificationTappedEventListener</a></code>   |
+| Param              | Type                                                                                        |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'notificationTapped'</code>                                                           |
+| **`listenerFunc`** | <code><a href="#notificationtappedeventlistener">NotificationTappedEventListener</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
