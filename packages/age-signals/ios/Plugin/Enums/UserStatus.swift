@@ -4,5 +4,6 @@ enum UserStatus: String {
     case supervisedApprovalPending = "SUPERVISED_APPROVAL_PENDING"
     case supervisedApprovalDenied = "SUPERVISED_APPROVAL_DENIED"
     case unknown = "UNKNOWN"
+    case declared = "DECLARED"
     case empty = "EMPTY"
 }

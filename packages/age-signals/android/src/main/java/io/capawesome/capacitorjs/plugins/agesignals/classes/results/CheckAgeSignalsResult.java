@@ -59,12 +59,21 @@ public class CheckAgeSignalsResult implements Result {
             return UserStatus.EMPTY;
         }
 
-        UserStatus[] values = UserStatus.values();
-
-        if (status < 0 || status >= values.length) {
-            throw new IllegalArgumentException("Invalid UserStatus: " + status);
+        switch (status) {
+            case 0:
+                return UserStatus.VERIFIED;
+            case 1:
+                return UserStatus.SUPERVISED;
+            case 2:
+                return UserStatus.SUPERVISED_APPROVAL_PENDING;
+            case 3:
+                return UserStatus.SUPERVISED_APPROVAL_DENIED;
+            case 4:
+                return UserStatus.UNKNOWN;
+            case 5:
+                return UserStatus.DECLARED;
+            default:
+                throw new IllegalArgumentException("Invalid UserStatus: " + status);
         }
-
-        return values[status];
     }
 }

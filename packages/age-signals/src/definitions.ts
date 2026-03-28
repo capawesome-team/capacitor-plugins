@@ -115,6 +115,14 @@ export interface CheckAgeSignalsResult {
    * @example "abc123xyz"
    */
   installId?: string;
+  /**
+   * The age range declaration type.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.4.0
+   */
+  ageRangeDeclaration?: AgeRangeDeclaration;
 }
 
 /**
@@ -173,6 +181,14 @@ export enum UserStatus {
    * @since 0.0.1
    */
   Unknown = 'UNKNOWN',
+  /**
+   * The user has self-declared or guardian-declared their age.
+   *
+   * Only available on Android.
+   *
+   * @since 0.4.0
+   */
+  Declared = 'DECLARED',
   /**
    * All other users return this value.
    *
@@ -245,6 +261,32 @@ export enum ErrorCode {
    * @since 0.0.1
    */
   InternalError = 'INTERNAL_ERROR',
+  /**
+   * The Age Signals SDK version is outdated.
+   *
+   * Only available on Android.
+   *
+   * @since 0.4.0
+   */
+  SdkVersionOutdated = 'SDK_VERSION_OUTDATED',
+}
+
+/**
+ * @since 0.4.0
+ */
+export enum AgeRangeDeclaration {
+  /**
+   * The age range was self-declared by the user.
+   *
+   * @since 0.4.0
+   */
+  SelfDeclared = 'SELF_DECLARED',
+  /**
+   * The age range was declared by a guardian.
+   *
+   * @since 0.4.0
+   */
+  GuardianDeclared = 'GUARDIAN_DECLARED',
 }
 
 /**

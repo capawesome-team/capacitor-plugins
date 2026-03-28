@@ -88,6 +88,8 @@ public class SetNextAgeSignalsResultOptions {
                 return AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED;
             case UNKNOWN:
                 return AgeSignalsVerificationStatus.UNKNOWN;
+            case DECLARED:
+                return AgeSignalsVerificationStatus.DECLARED;
             default:
                 return AgeSignalsVerificationStatus.UNKNOWN;
         }

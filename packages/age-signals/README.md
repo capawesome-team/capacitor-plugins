@@ -61,7 +61,7 @@ npx cap sync
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.2`)
+- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.3`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
@@ -316,13 +316,14 @@ Only available on Android.
 
 #### CheckAgeSignalsResult
 
-| Prop                         | Type                                              | Description                                                                                                                                                                                                                                                                                                       | Since |
-| ---------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`userStatus`**             | <code><a href="#userstatus">UserStatus</a></code> | The user's verification status.                                                                                                                                                                                                                                                                                   | 0.0.1 |
-| **`ageLower`**               | <code>number</code>                               | The (inclusive) lower bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.                                                                                                                                   | 0.0.1 |
-| **`ageUpper`**               | <code>number</code>                               | The (inclusive) upper bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED` and the user's age is under 18.                                                                                                    | 0.0.1 |
-| **`mostRecentApprovalDate`** | <code>string</code>                               | The effective from date of the most recent significant change that was approved. When an app is installed, the date of the most recent significant change prior to install is used. Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`. Only available on Android. | 0.0.1 |
-| **`installId`**              | <code>string</code>                               | An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`. Only available on Android.                                           | 0.0.1 |
+| Prop                         | Type                                                                | Description                                                                                                                                                                                                                                                                                                       | Since |
+| ---------------------------- | ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`userStatus`**             | <code><a href="#userstatus">UserStatus</a></code>                   | The user's verification status.                                                                                                                                                                                                                                                                                   | 0.0.1 |
+| **`ageLower`**               | <code>number</code>                                                 | The (inclusive) lower bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`.                                                                                                                                   | 0.0.1 |
+| **`ageUpper`**               | <code>number</code>                                                 | The (inclusive) upper bound of a supervised user's age range. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED` and the user's age is under 18.                                                                                                    | 0.0.1 |
+| **`mostRecentApprovalDate`** | <code>string</code>                                                 | The effective from date of the most recent significant change that was approved. When an app is installed, the date of the most recent significant change prior to install is used. Only available when `userStatus` is `SUPERVISED_APPROVAL_PENDING` or `SUPERVISED_APPROVAL_DENIED`. Only available on Android. | 0.0.1 |
+| **`installId`**              | <code>string</code>                                                 | An ID assigned to supervised user installs by Google Play, used for the purposes of notifying you of revoked app approval. Only available when `userStatus` is `SUPERVISED`, `SUPERVISED_APPROVAL_PENDING`, or `SUPERVISED_APPROVAL_DENIED`. Only available on Android.                                           | 0.0.1 |
+| **`ageRangeDeclaration`**    | <code><a href="#agerangedeclaration">AgeRangeDeclaration</a></code> | The age range declaration type. Only available on iOS.                                                                                                                                                                                                                                                            | 0.4.0 |
 
 
 #### CheckAgeSignalsOptions
@@ -376,7 +377,16 @@ Only available on Android.
 | **`SupervisedApprovalPending`** | <code>'SUPERVISED_APPROVAL_PENDING'</code> | The user has a supervised Google Account, and their supervising parent has not yet approved one or more pending significant changes. Use `ageLower` and `ageUpper` to determine the user's age range. Use `mostRecentApprovalDate` to determine the last significant change that was approved. | 0.0.1 |
 | **`SupervisedApprovalDenied`**  | <code>'SUPERVISED_APPROVAL_DENIED'</code>  | The user has a supervised Google Account, and their supervising parent denied approval for one or more significant changes. Use `ageLower` and `ageUpper` to determine the user's age range. Use `mostRecentApprovalDate` to determine the last significant change that was approved.          | 0.0.1 |
 | **`Unknown`**                   | <code>'UNKNOWN'</code>                     | The user is not verified or supervised in applicable jurisdictions and regions. These users could be over or under 18. To obtain an age signal from Google Play, ask the user to visit the Play Store to resolve their status.                                                                 | 0.0.1 |
+| **`Declared`**                  | <code>'DECLARED'</code>                    | The user has self-declared or guardian-declared their age. Only available on Android.                                                                                                                                                                                                          | 0.4.0 |
 | **`Empty`**                     | <code>'EMPTY'</code>                       | All other users return this value.                                                                                                                                                                                                                                                             | 0.0.1 |
+
+
+#### AgeRangeDeclaration
+
+| Members                | Value                            | Description                                  | Since |
+| ---------------------- | -------------------------------- | -------------------------------------------- | ----- |
+| **`SelfDeclared`**     | <code>'SELF_DECLARED'</code>     | The age range was self-declared by the user. | 0.4.0 |
+| **`GuardianDeclared`** | <code>'GUARDIAN_DECLARED'</code> | The age range was declared by a guardian.    | 0.4.0 |
 
 
 #### ErrorCode
@@ -393,6 +403,7 @@ Only available on Android.
 | **`ClientTransientError`**        | <code>'CLIENT_TRANSIENT_ERROR'</code>         | There was a transient error in the client device.                                                                                                                | 0.0.1 |
 | **`AppNotOwned`**                 | <code>'APP_NOT_OWNED'</code>                  | The app was not installed by Google Play.                                                                                                                        | 0.0.1 |
 | **`InternalError`**               | <code>'INTERNAL_ERROR'</code>                 | Unknown internal error.                                                                                                                                          | 0.0.1 |
+| **`SdkVersionOutdated`**          | <code>'SDK_VERSION_OUTDATED'</code>           | The Age Signals SDK version is outdated. Only available on Android.                                                                                              | 0.4.0 |
 
 </docgen-api>
 
