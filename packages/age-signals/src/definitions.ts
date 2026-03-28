@@ -118,7 +118,7 @@ export interface CheckAgeSignalsResult {
   /**
    * The age range declaration type.
    *
-   * Only available on iOS.
+   * Only available on iOS (26.2+).
    *
    * @since 0.4.0
    */
