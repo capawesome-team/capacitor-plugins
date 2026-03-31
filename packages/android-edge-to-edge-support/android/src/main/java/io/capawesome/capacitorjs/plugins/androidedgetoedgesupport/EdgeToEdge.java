@@ -80,16 +80,16 @@ public class EdgeToEdge {
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            applyInsetsIntenal(view, currentInsets);
+            applyInsetsInternal(view, currentInsets);
         }
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            applyInsetsIntenal(v, windowInsets);
+            applyInsetsInternal(v, windowInsets);
             return WindowInsetsCompat.CONSUMED;
         });
     }
 
-    private void applyInsetsIntenal(View view, WindowInsetsCompat currentInsets) {
+    private void applyInsetsInternal(View view, WindowInsetsCompat currentInsets) {
         Insets systemBarsInsets = currentInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
             );
