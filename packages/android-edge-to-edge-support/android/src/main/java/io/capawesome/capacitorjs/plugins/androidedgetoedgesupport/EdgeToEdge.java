@@ -95,12 +95,15 @@ public class EdgeToEdge {
             );
             Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
             boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
-            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
-            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
+            int bottomMargin = 0;
+            if (!keyboardVisible) {
+                // HM TODO: need to add the relevant comment here, waiting for code review first.
+                bottomMargin = Math.max(imeInsets.bottom, systemBarsInsets.bottom);
+            }
 
             ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
 
-            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
+            mlp.bottomMargin = bottomMargin;
             mlp.topMargin = systemBarsInsets.top;
             mlp.leftMargin = systemBarsInsets.left;
             mlp.rightMargin = systemBarsInsets.right;
