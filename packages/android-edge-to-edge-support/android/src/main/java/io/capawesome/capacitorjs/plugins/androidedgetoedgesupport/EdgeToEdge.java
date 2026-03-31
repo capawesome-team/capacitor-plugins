@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,35 +76,21 @@ public class EdgeToEdge {
 
     private void applyInsets() {
         View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            Insets systemBarsInsets = currentInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
-            Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
-            boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
-            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
-            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
-
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-
-            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
-            mlp.topMargin = systemBarsInsets.top;
-            mlp.leftMargin = systemBarsInsets.left;
-            mlp.rightMargin = systemBarsInsets.right;
-
-            view.setLayoutParams(mlp);
-
-            // Update color overlays based on current insets
-            updateColorOverlays(systemBarsInsets);
+            applyInsetsInternal(view, currentInsets);
         }
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             // Retrieve system bars insets (for status/navigation bars)
-            Insets systemBarsInsets = windowInsets.getInsets(
+            applyInsetsInternal(v, windowInsets);
+            return WindowInsetsCompat.CONSUMED;
+        });
+    }
+
+    private void applyInsetsInternal(View v, WindowInsetsCompat windowInsets) {
+        Insets systemBarsInsets = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
             );
             // Retrieve keyboard (IME) insets
@@ -128,9 +113,6 @@ public class EdgeToEdge {
 
             // Update color overlays based on current insets
             updateColorOverlays(systemBarsInsets);
-
-            return WindowInsetsCompat.CONSUMED;
-        });
     }
 
     private void removeInsets() {
