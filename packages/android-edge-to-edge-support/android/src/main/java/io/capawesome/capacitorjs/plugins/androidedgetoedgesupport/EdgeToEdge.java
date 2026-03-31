@@ -77,12 +77,20 @@ public class EdgeToEdge {
 
     private void applyInsets() {
         View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            Insets systemBarsInsets = currentInsets.getInsets(
+            applyInsetsIntenal(view, currentInsets);
+        }
+        // Set listener
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
+            applyInsetsIntenal(v, windowInsets);
+            return WindowInsetsCompat.CONSUMED;
+        });
+    }
+
+    private void applyInsetsIntenal(View view, WindowInsetsCompat currentInsets) {
+        Insets systemBarsInsets = currentInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
             );
             Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
@@ -101,36 +109,6 @@ public class EdgeToEdge {
 
             // Update color overlays based on current insets
             updateColorOverlays(systemBarsInsets);
-        }
-        // Set listener
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            // Retrieve system bars insets (for status/navigation bars)
-            Insets systemBarsInsets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
-            // Retrieve keyboard (IME) insets
-            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
-            boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
-            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
-            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
-
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-
-            // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
-            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
-
-            // Set the other margins using system bars insets
-            mlp.topMargin = systemBarsInsets.top;
-            mlp.leftMargin = systemBarsInsets.left;
-            mlp.rightMargin = systemBarsInsets.right;
-
-            v.setLayoutParams(mlp);
-
-            // Update color overlays based on current insets
-            updateColorOverlays(systemBarsInsets);
-
-            return WindowInsetsCompat.CONSUMED;
-        });
     }
 
     private void removeInsets() {
