@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
