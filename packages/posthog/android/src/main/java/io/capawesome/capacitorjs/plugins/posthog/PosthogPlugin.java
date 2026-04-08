@@ -354,7 +354,7 @@ public class PosthogPlugin extends Plugin {
                 sessionReplayConfigObject.optBoolean("maskAllTextInputs", true),
                 sessionReplayConfigObject.optBoolean("maskAllImages", true),
                 sessionReplayConfigObject.optBoolean("maskAllSandboxedViews", true),
-                sessionReplayConfigObject.optBoolean("captureNetworkTelemetry", true),
+                sessionReplayConfigObject.optBoolean("captureNetworkTelemetry", false),
                 sessionReplayConfigObject.optDouble("debouncerDelay", 1.0)
             );
             config.setSessionReplayConfig(sessionReplayOptions);
