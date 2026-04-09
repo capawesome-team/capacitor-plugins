@@ -11,14 +11,12 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  # Use the IonicProvider subspec so the plugin pulls in the optional
-  # `LiveUpdateProvider` pod and registers itself with the registry.
-  pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => '../../..'
+  pod 'CapawesomeCapacitorLiveUpdate', :path => '../../..'
 end
 
 target 'App' do
   capacitor_pods
-  # Add your Pods here
+  pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => '../../..'
 end
 
 post_install do |installer|

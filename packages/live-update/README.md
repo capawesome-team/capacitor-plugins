@@ -159,6 +159,8 @@ ext {
 
 When enabled, the plugin pulls in `io.ionic:liveupdateprovider` and registers the Capawesome provider with `LiveUpdateProviderRegistry` automatically when the Capacitor plugin loads.
 
+**Attention**: The Ionic Live Update Provider SDK requires `minSdkVersion` **24** or higher. If your app targets a lower minimum, bump `minSdkVersion` in your `variables.gradle` when opting in.
+
 ### iOS
 
 #### CocoaPods

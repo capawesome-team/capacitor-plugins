@@ -40,7 +40,7 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
         }
     }
 
-    public func sync() async throws -> any SyncResult {
+    public func sync() async throws -> any LiveUpdateProvider.SyncResult {
         do {
             let fetchOptions = FetchLatestBundleOptions(appId: appId, channel: channel)
             let result = try await liveUpdate.fetchLatestBundle(fetchOptions)
