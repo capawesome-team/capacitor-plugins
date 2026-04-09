@@ -298,6 +298,17 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    /**
+     * @return The on-disk directory of a downloaded bundle, or `null` if the bundle does not exist.
+     */
+    @Nullable
+    public File getBundleDirectory(@NonNull String bundleId) {
+        if (!hasBundleById(bundleId)) {
+            return null;
+        }
+        return buildBundleDirectoryFor(bundleId);
+    }
+
     public void getCustomId(@NonNull NonEmptyCallback callback) {
         String customId = preferences.getCustomId();
         GetCustomIdResult result = new GetCustomIdResult(customId);
@@ -972,13 +983,14 @@ public class LiveUpdate {
         @NonNull NonEmptyCallback<GetLatestBundleResponse> callback
     ) {
         try {
+            String appId = options.getAppId() == null ? getAppId() : options.getAppId();
             String channel = options.getChannel() == null ? getChannel() : options.getChannel();
             String url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(config.getServerDomain())
                 .addPathSegment("v1")
                 .addPathSegment("apps")
-                .addPathSegment(getAppId())
+                .addPathSegment(appId)
                 .addPathSegment("bundles")
                 .addPathSegment("latest")
                 .addQueryParameter("appVersionCode", getVersionCodeAsString())

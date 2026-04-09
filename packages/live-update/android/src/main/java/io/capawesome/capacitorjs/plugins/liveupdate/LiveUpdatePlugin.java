@@ -32,6 +32,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
+import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicProviderRegistration;
 
 @CapacitorPlugin(name = "LiveUpdate")
 public class LiveUpdatePlugin extends Plugin {
@@ -71,6 +72,10 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             config = getLiveUpdateConfig();
             implementation = new LiveUpdate(config, this);
+            // Register the Ionic Live Update Provider when the optional SDK is on the classpath.
+            if (LiveUpdateIonicProviderRegistration.isAvailable()) {
+                LiveUpdateIonicProviderRegistration.tryRegister(implementation);
+            }
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }

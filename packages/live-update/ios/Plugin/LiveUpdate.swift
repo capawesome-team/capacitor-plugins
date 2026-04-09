@@ -161,6 +161,14 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    /// - Returns: The on-disk URL of a downloaded bundle, or `nil` if the bundle does not exist.
+    public func getBundleDirectory(bundleId: String) -> URL? {
+        guard hasBundleById(bundleId) else {
+            return nil
+        }
+        return buildBundleURLFor(bundleId: bundleId)
+    }
+
     @objc public func getCustomId(completion: @escaping (Result?, Error?) -> Void) {
         let customId = preferences.getCustomId()
 
@@ -580,6 +588,7 @@ import CommonCrypto
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
+        let appId = options.getAppId() ?? getAppId() ?? ""
         let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
@@ -591,7 +600,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(appId)/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
