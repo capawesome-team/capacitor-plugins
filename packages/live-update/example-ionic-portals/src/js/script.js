@@ -14,8 +14,7 @@ const log = (label, value) => {
   const stamp = new Date().toLocaleTimeString();
   const formatted =
     typeof value === 'string' ? value : JSON.stringify(value, null, 2);
-  out.textContent =
-    `[${stamp}] ${label}\n${formatted}\n\n` + out.textContent;
+  out.textContent = `[${stamp}] ${label}\n${formatted}\n\n` + out.textContent;
 };
 
 const readConfig = () => {
@@ -62,14 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     .addEventListener('click', () => {
       const config = readConfig();
       log('syncManager →', config);
-      void safeCall('syncManager', () =>
-        IonicProviderTest.syncManager(config),
-      );
+      void safeCall('syncManager', () => IonicProviderTest.syncManager(config));
     });
 
-  document
-    .querySelector('#clear-log-button')
-    .addEventListener('click', () => {
-      logOutput().textContent = '';
-    });
+  document.querySelector('#clear-log-button').addEventListener('click', () => {
+    logOutput().textContent = '';
+  });
 });

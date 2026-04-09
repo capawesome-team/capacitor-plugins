@@ -984,6 +984,9 @@ public class LiveUpdate {
     ) {
         try {
             String appId = options.getAppId() == null ? getAppId() : options.getAppId();
+            if (appId == null || appId.isEmpty()) {
+                throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
+            }
             String channel = options.getChannel() == null ? getChannel() : options.getChannel();
             String url = new HttpUrl.Builder()
                 .scheme("https")

@@ -41,6 +41,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String VERSION = "8.2.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
+    public static final String ERROR_BUNDLE_DIRECTORY_NOT_FOUND = "Bundle directory could not be resolved.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
@@ -49,7 +50,9 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
+    public static final String ERROR_DOWNLOAD_URL_MISSING = "Bundle does not have a valid download URL.";
     public static final String ERROR_HTTP_TIMEOUT = "Request timed out.";
+    public static final String ERROR_MANAGER_KEY_MISSING = "managerKey must be provided.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";

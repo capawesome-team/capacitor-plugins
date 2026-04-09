@@ -64,7 +64,7 @@ public class LiveUpdateIonicManager implements LiveUpdateProviderManager {
         throws LiveUpdateProviderError.InvalidConfiguration {
         Object managerKeyValue = config.get("managerKey");
         if (!(managerKeyValue instanceof String) || ((String) managerKeyValue).isEmpty()) {
-            throw new LiveUpdateProviderError.InvalidConfiguration("Missing required config key: managerKey", null);
+            throw new LiveUpdateProviderError.InvalidConfiguration(LiveUpdatePlugin.ERROR_MANAGER_KEY_MISSING, null);
         }
         this.managerKey = (String) managerKeyValue;
 
@@ -134,6 +134,11 @@ public class LiveUpdateIonicManager implements LiveUpdateProviderManager {
             }
 
             // Otherwise, download and then apply.
+            String downloadUrl = result.getDownloadUrl();
+            if (downloadUrl == null || downloadUrl.isEmpty()) {
+                notifyFailure(callback, new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_URL_MISSING));
+                return;
+            }
             ArtifactType artifactType = result.getArtifactType() == null ? ArtifactType.ZIP : result.getArtifactType();
             String artifactTypeString = artifactType == ArtifactType.MANIFEST ? "manifest" : "zip";
             DownloadBundleOptions downloadOptions = new DownloadBundleOptions(
@@ -141,7 +146,7 @@ public class LiveUpdateIonicManager implements LiveUpdateProviderManager {
                 bundleId,
                 result.getChecksum(),
                 result.getSignature(),
-                result.getDownloadUrl()
+                downloadUrl
             );
             liveUpdate.downloadBundle(
                 downloadOptions,
@@ -150,7 +155,7 @@ public class LiveUpdateIonicManager implements LiveUpdateProviderManager {
                     public void success() {
                         File downloadedDirectory = liveUpdate.getBundleDirectory(bundleId);
                         if (downloadedDirectory == null) {
-                            notifyFailure(callback, new Exception("Downloaded bundle directory could not be resolved."));
+                            notifyFailure(callback, new Exception(LiveUpdatePlugin.ERROR_BUNDLE_DIRECTORY_NOT_FOUND));
                             return;
                         }
                         applySyncedBundle(bundleId, downloadedDirectory);
@@ -202,7 +207,7 @@ public class LiveUpdateIonicManager implements LiveUpdateProviderManager {
         if (callback == null) {
             return;
         }
-        String message = exception.getMessage() == null ? "Unknown error" : exception.getMessage();
+        String message = exception.getMessage() == null ? LiveUpdatePlugin.ERROR_UNKNOWN_ERROR : exception.getMessage();
         callback.onFailure(new LiveUpdateProviderError.SyncFailed(message, exception));
     }
 

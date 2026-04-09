@@ -7,13 +7,7 @@ body {
 #log-output {
   white-space: pre-wrap;
   word-break: break-all;
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Monaco,
-    Consolas,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
   background: #f4f5f8;
   padding: 12px;

@@ -7,6 +7,10 @@ import LiveUpdateProvider
 /// without needing a real Federated Capacitor or Portals host.
 @objc(IonicProviderTestPlugin)
 public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
+    public static let errorManagerKeyMissing = "managerKey must be provided."
+    public static let errorProviderNotRegistered =
+        "Provider 'capawesome' is not registered. Make sure the IonicProvider subspec is used in the Podfile."
+
     public let identifier = "IonicProviderTestPlugin"
     public let jsName = "IonicProviderTest"
     public let pluginMethods: [CAPPluginMethod] = [
@@ -63,13 +67,10 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func createManager(from call: CAPPluginCall) throws -> any LiveUpdateManaging {
         guard let managerKey = call.getString("managerKey"), !managerKey.isEmpty else {
-            throw PluginCallError("managerKey must be provided")
+            throw PluginCallError(IonicProviderTestPlugin.errorManagerKeyMissing)
         }
         guard let provider = LiveUpdateProviderRegistry.shared.resolve(IonicProviderTestPlugin.providerId) else {
-            throw PluginCallError(
-                "Provider '\(IonicProviderTestPlugin.providerId)' is not registered. " +
-                "Make sure the IonicProvider subspec is used in the Podfile."
-            )
+            throw PluginCallError(IonicProviderTestPlugin.errorProviderNotRegistered)
         }
         var config: [String: Any] = ["managerKey": managerKey]
         if let appId = call.getString("appId") {

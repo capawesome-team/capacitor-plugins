@@ -588,7 +588,9 @@ import CommonCrypto
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
-        let appId = options.getAppId() ?? getAppId() ?? ""
+        guard let appId = options.getAppId() ?? getAppId(), !appId.isEmpty else {
+            throw CustomError.appIdMissing
+        }
         let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()

@@ -25,7 +25,7 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
     public init(config: [String: Any], liveUpdate: LiveUpdate) throws {
         guard let managerKey = config["managerKey"] as? String, !managerKey.isEmpty else {
             throw LiveUpdateProviderError.invalidConfiguration(
-                "Missing required config key: managerKey",
+                CustomError.managerKeyMissing.localizedDescription,
                 underlyingError: nil
             )
         }
@@ -59,19 +59,25 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
             }
 
             // Otherwise, download and then apply.
+            guard let downloadUrl = result.getDownloadUrl(), !downloadUrl.isEmpty else {
+                throw LiveUpdateProviderError.syncFailed(
+                    CustomError.downloadUrlMissing.localizedDescription,
+                    underlyingError: nil
+                )
+            }
             let artifactType = result.getArtifactType() ?? "zip"
             let downloadOptions = DownloadBundleOptions(
                 artifactType: artifactType,
                 bundleId: bundleId,
                 checksum: result.getChecksum(),
                 signature: result.getSignature(),
-                url: result.getDownloadUrl() ?? ""
+                url: downloadUrl
             )
             try await liveUpdate.downloadBundle(downloadOptions)
 
             guard let downloadedDirectory = liveUpdate.getBundleDirectory(bundleId: bundleId) else {
                 throw LiveUpdateProviderError.syncFailed(
-                    "Downloaded bundle directory could not be resolved.",
+                    CustomError.bundleDirectoryNotFound.localizedDescription,
                     underlyingError: nil
                 )
             }

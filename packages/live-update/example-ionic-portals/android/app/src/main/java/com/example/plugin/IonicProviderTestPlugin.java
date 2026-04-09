@@ -25,6 +25,13 @@ import java.util.Map;
 @CapacitorPlugin(name = "IonicProviderTest")
 public class IonicProviderTestPlugin extends Plugin {
 
+    public static final String ERROR_INVALID_CONFIGURATION = "Invalid configuration.";
+    public static final String ERROR_MANAGER_KEY_MISSING = "managerKey must be provided.";
+    public static final String ERROR_PROVIDER_NOT_REGISTERED =
+        "Provider 'capawesome' is not registered. Make sure capawesomeCapacitorLiveUpdateIncludeIonicProvider = true in variables.gradle.";
+    public static final String ERROR_SYNC_FAILED = "Sync failed.";
+    public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
+
     private static final String PROVIDER_ID = "capawesome";
 
     @PluginMethod
@@ -47,7 +54,7 @@ public class IonicProviderTestPlugin extends Plugin {
             ret.put("latestAppDirectory", directory == null ? null : directory.getAbsolutePath());
             call.resolve(ret);
         } catch (Exception exception) {
-            call.reject(exception.getMessage() == null ? "Unknown error" : exception.getMessage());
+            call.reject(exception.getMessage() == null ? ERROR_UNKNOWN_ERROR : exception.getMessage());
         }
     }
 
@@ -80,28 +87,24 @@ public class IonicProviderTestPlugin extends Plugin {
 
                     @Override
                     public void onFailure(@NonNull LiveUpdateProviderError.SyncFailed error) {
-                        call.reject(error.getMessage() == null ? "Sync failed" : error.getMessage());
+                        call.reject(error.getMessage() == null ? ERROR_SYNC_FAILED : error.getMessage());
                     }
                 }
             );
         } catch (Exception exception) {
-            call.reject(exception.getMessage() == null ? "Unknown error" : exception.getMessage());
+            call.reject(exception.getMessage() == null ? ERROR_UNKNOWN_ERROR : exception.getMessage());
         }
     }
 
     private LiveUpdateProviderManager createManagerFromCall(PluginCall call) {
         String managerKey = call.getString("managerKey");
         if (managerKey == null || managerKey.isEmpty()) {
-            call.reject("managerKey must be provided");
+            call.reject(ERROR_MANAGER_KEY_MISSING);
             return null;
         }
         LiveUpdateProvider provider = LiveUpdateProviderRegistry.resolve(PROVIDER_ID);
         if (provider == null) {
-            call.reject(
-                "Provider '" +
-                PROVIDER_ID +
-                "' is not registered. Make sure capawesomeCapacitorLiveUpdateIncludeIonicProvider = true in variables.gradle."
-            );
+            call.reject(ERROR_PROVIDER_NOT_REGISTERED);
             return null;
         }
         Map<String, Object> config = new HashMap<>();
@@ -117,7 +120,7 @@ public class IonicProviderTestPlugin extends Plugin {
         try {
             return provider.createManager(getContext().getApplicationContext(), config);
         } catch (LiveUpdateProviderError.InvalidConfiguration error) {
-            call.reject(error.getMessage() == null ? "Invalid configuration" : error.getMessage());
+            call.reject(error.getMessage() == null ? ERROR_INVALID_CONFIGURATION : error.getMessage());
             return null;
         }
     }
