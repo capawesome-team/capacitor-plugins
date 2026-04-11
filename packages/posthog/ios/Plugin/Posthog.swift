@@ -22,14 +22,12 @@ import PostHog
 
     @objc public func alias(_ options: AliasOptions) {
         let alias = options.getAlias()
-
         PostHogSDK.shared.alias(alias)
     }
 
     @objc public func capture(_ options: CaptureOptions) {
         let event = options.getEvent()
         let properties = options.getProperties()
-
         PostHogSDK.shared.capture(event, properties: properties)
     }
 
@@ -44,14 +42,12 @@ import PostHog
 
     @objc public func getFeatureFlag(_ options: GetFeatureFlagOptions) -> GetFeatureFlagResult {
         let key = options.getKey()
-
         let value = PostHogSDK.shared.getFeatureFlag(key)
         return GetFeatureFlagResult(value: value)
     }
 
     @objc public func getFeatureFlagPayload(_ options: GetFeatureFlagPayloadOptions) -> GetFeatureFlagPayloadResult {
         let key = options.getKey()
-
         let value = PostHogSDK.shared.getFeatureFlagPayload(key)
         return GetFeatureFlagPayloadResult(value: value)
     }
@@ -60,20 +56,17 @@ import PostHog
         let type = options.getType()
         let key = options.getKey()
         let groupProperties = options.getGroupProperties()
-
         PostHogSDK.shared.group(type: type, key: key, groupProperties: groupProperties)
     }
 
     @objc public func identify(_ options: IdentifyOptions) {
         let distinctId = options.getDistinctId()
         let userProperties = options.getUserProperties()
-
         PostHogSDK.shared.identify(distinctId, userProperties: userProperties)
     }
 
     @objc public func isFeatureEnabled(_ options: IsFeatureEnabledOptions) -> IsFeatureEnabledResult {
         let key = options.getKey()
-
         let isEnabled = PostHogSDK.shared.isFeatureEnabled(key)
         return IsFeatureEnabledResult(enabled: isEnabled)
     }
@@ -93,9 +86,7 @@ import PostHog
     @objc public func register(_ options: RegisterOptions) {
         let key = options.getKey()
         let value = options.getValue()
-
         let properties = [key: value]
-
         PostHogSDK.shared.register(properties)
     }
 
@@ -110,7 +101,6 @@ import PostHog
     @objc public func screen(_ options: ScreenOptions) {
         let screenTitle = options.getScreenTitle()
         let properties = options.getProperties()
-
         PostHogSDK.shared.screen(screenTitle, properties: properties)
     }
 
@@ -122,7 +112,14 @@ import PostHog
         let captureApplicationLifecycleEvents = options.getCaptureApplicationLifecycleEvents()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, captureApplicationLifecycleEvents: captureApplicationLifecycleEvents, sessionReplayConfig: sessionReplayConfig)
+        setup(
+            apiKey: apiKey,
+            apiHost: apiHost,
+            enableSessionReplay: enableSessionReplay,
+            optOut: optOut,
+            captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
+            sessionReplayConfig: sessionReplayConfig
+        )
     }
 
     @objc public func startSessionRecording() {
@@ -133,25 +130,36 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, sessionReplayConfig: SessionReplayOptions? = nil) {
+    @objc public func unregister(_ options: UnregisterOptions) {
+        let key = options.getKey()
+        PostHogSDK.shared.unregister(key)
+    }
+
+    private func setup(
+        apiKey: String,
+        apiHost: String,
+        enableSessionReplay: Bool = false,
+        optOut: Bool = false,
+        captureApplicationLifecycleEvents: Bool = true,
+        sessionReplayConfig: SessionReplayOptions? = nil
+    ) {
         let config = PostHogConfig(apiKey: apiKey, host: apiHost)
         config.captureScreenViews = false
         config.optOut = optOut
         config.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         config.sessionReplay = enableSessionReplay
+
+        // Correct person profiles mode — ensures identify() links events to users properly
+        config.personProfiles = .identifiedOnly
+
         config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
         config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true
         config.sessionReplayConfig.maskAllTextInputs = sessionReplayConfig?.getMaskAllTextInputs() ?? true
         config.sessionReplayConfig.maskAllSandboxedViews = sessionReplayConfig?.getMaskAllSandboxedViews() ?? true
         config.sessionReplayConfig.captureNetworkTelemetry = sessionReplayConfig?.getCaptureNetworkTelemetry() ?? true
-        config.sessionReplayConfig.debouncerDelay = sessionReplayConfig?.getDebouncerDelay() ?? 1.0
+        // debouncerDelay deprecated in newer SDK — use throttleDelay instead
+        config.sessionReplayConfig.throttleDelay = sessionReplayConfig?.getDebouncerDelay() ?? 1.0
 
         PostHogSDK.shared.setup(config)
-    }
-
-    @objc public func unregister(_ options: UnregisterOptions) {
-        let key = options.getKey()
-
-        PostHogSDK.shared.unregister(key)
     }
 }

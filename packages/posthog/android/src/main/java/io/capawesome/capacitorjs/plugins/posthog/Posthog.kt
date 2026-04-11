@@ -2,19 +2,20 @@ package io.capawesome.capacitorjs.plugins.posthog
 
 import com.posthog.PostHog
 import com.posthog.android.PostHogAndroid
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
-
 import com.posthog.android.PostHogAndroidConfig
+import com.posthog.PostHogOnFeatureFlags
+import com.posthog.PersonProfiles
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagPayloadOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.IdentifyOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetDistinctIdResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
@@ -45,7 +46,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     fun capture(options: CaptureOptions) {
         val event = options.event
         val properties = options.properties
-
         com.posthog.PostHog.capture(event = event, properties = properties)
     }
 
@@ -60,14 +60,12 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
 
     fun getFeatureFlag(options: GetFeatureFlagOptions): GetFeatureFlagResult {
         val key = options.key
-
         val value = com.posthog.PostHog.getFeatureFlag(key = key)
         return GetFeatureFlagResult(value)
     }
 
     fun getFeatureFlagPayload(options: GetFeatureFlagPayloadOptions): GetFeatureFlagPayloadResult {
         val key = options.key
-
         val value = com.posthog.PostHog.getFeatureFlagPayload(key = key)
         return GetFeatureFlagPayloadResult(value)
     }
@@ -76,20 +74,17 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val type = options.type
         val key = options.key
         val groupProperties = options.groupProperties
-
         com.posthog.PostHog.group(type = type, key = key, groupProperties = groupProperties)
     }
 
     fun identify(options: IdentifyOptions) {
         val distinctId = options.distinctId
         val userProperties = options.userProperties
-
         com.posthog.PostHog.identify(distinctId = distinctId, userProperties = userProperties)
     }
 
     fun isFeatureEnabled(options: IsFeatureEnabledOptions): IsFeatureEnabledResult {
         val key = options.key
-
         val isEnabled = com.posthog.PostHog.isFeatureEnabled(key = key, defaultValue = false)
         return IsFeatureEnabledResult(isEnabled)
     }
@@ -109,7 +104,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     fun register(options: RegisterOptions) {
         val key = options.key
         val value = options.value
-
         com.posthog.PostHog.register(key = key, value = value)
     }
 
@@ -124,7 +118,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
     fun screen(options: ScreenOptions) {
         val name = options.screenTitle
         val properties = options.properties
-
         com.posthog.PostHog.screen(screenTitle = name, properties = properties)
     }
 
@@ -148,7 +141,6 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
 
     fun unregister(options: UnregisterOptions) {
         val key = options.key
-
         com.posthog.PostHog.unregister(key = key)
     }
 
@@ -169,21 +161,18 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         posthogConfig.optOut = optOut
         posthogConfig.sessionReplay = enableSessionReplay
 
+        // Correct person profiles mode — ensures identify() works properly
+        // and events are linked to users after login
+        posthogConfig.personProfiles = PersonProfiles.IDENTIFIED_ONLY
+
         // Configure session replay options if provided
         sessionReplayConfig?.let { replayConfig ->
-            // Screenshot mode configuration
             posthogConfig.sessionReplayConfig.screenshot = replayConfig.getScreenshotMode() ?: false
-
-            // Text input masking
             posthogConfig.sessionReplayConfig.maskAllTextInputs = replayConfig.getMaskAllTextInputs() ?: true
-
-            // Image masking
             posthogConfig.sessionReplayConfig.maskAllImages = replayConfig.getMaskAllImages() ?: true
-
-            // Network telemetry capture
             posthogConfig.sessionReplayConfig.captureLogcat = replayConfig.getCaptureNetworkTelemetry() ?: true
 
-            // Debounce delay for performance (convert seconds to milliseconds)
+            // throttleDelayMs replaces old debouncerDelayMs in 3.x SDK
             val debouncerDelaySeconds = replayConfig.getDebouncerDelay() ?: 1.0
             posthogConfig.sessionReplayConfig.throttleDelayMs = (debouncerDelaySeconds * 1000).toLong()
         }
