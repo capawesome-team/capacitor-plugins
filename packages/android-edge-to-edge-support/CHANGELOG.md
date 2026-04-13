@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.7
+
+### Patch Changes
+
+- [`783ed90bc627e300c6583df7a9fc376c551ea706`](https://github.com/capawesome-team/capacitor-plugins/commit/783ed90bc627e300c6583df7a9fc376c551ea706) ([#830](https://github.com/capawesome-team/capacitor-plugins/pull/830)): fix(android): only apply top margin on Android 15+
+
+- [`78d8bfde51ffa9dc9956d04255aeda850afdd1e4`](https://github.com/capawesome-team/capacitor-plugins/commit/78d8bfde51ffa9dc9956d04255aeda850afdd1e4) ([#829](https://github.com/capawesome-team/capacitor-plugins/pull/829)): fix(android): fix bottom margin double-counting when keyboard is visible
+
 ## 8.0.6
 
 ### Patch Changes
