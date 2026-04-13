@@ -98,7 +98,9 @@ public class EdgeToEdge {
 
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.bottomMargin = bottomMargin;
-        mlp.topMargin = systemBarsInsets.top;
+        // Only apply top margin on Android 15+ where edge-to-edge is enforced.
+        // On older versions, the system already positions content below the status bar.
+        mlp.topMargin = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM ? systemBarsInsets.top : 0;
         mlp.leftMargin = systemBarsInsets.left;
         mlp.rightMargin = systemBarsInsets.right;
         view.setLayoutParams(mlp);
