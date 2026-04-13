@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,9 +98,14 @@ public class EdgeToEdge {
 
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.bottomMargin = bottomMargin;
-        // Only apply top margin on Android 15+ where edge-to-edge is enforced.
-        // On older versions, the system already positions content below the status bar.
-        mlp.topMargin = Build.VERSION.SDK_INT >= 35 ? systemBarsInsets.top : 0;
+        // Apply top margin when edge-to-edge is active. On Android 15+ it is always enforced.
+        // On older versions, use the system content view's top padding only as a heuristic that
+        // the top inset may already be handled elsewhere (for example by decor fitting or another
+        // insets/padding adjustment), rather than as a guaranteed signal of decorFitsSystemWindows.
+        View contentView = plugin.getActivity().findViewById(android.R.id.content);
+        boolean topInsetLikelyHandledBySystem =
+            contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
+        mlp.topMargin = topInsetLikelyHandledBySystem ? 0 : systemBarsInsets.top;
         mlp.leftMargin = systemBarsInsets.left;
         mlp.rightMargin = systemBarsInsets.right;
         view.setLayoutParams(mlp);
