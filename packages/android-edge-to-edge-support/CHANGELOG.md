@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.8
+
+### Patch Changes
+
+- [`332479f4185ab8c5473d6e8879f86036febdfcdd`](https://github.com/capawesome-team/capacitor-plugins/commit/332479f4185ab8c5473d6e8879f86036febdfcdd) ([#832](https://github.com/capawesome-team/capacitor-plugins/pull/832)): fix(android-edge-to-edge-support): detect edge-to-edge at runtime instead of checking API level
+
 ## 8.0.7
 
 ### Patch Changes
