@@ -99,12 +99,13 @@ public class EdgeToEdge {
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.bottomMargin = bottomMargin;
         // Apply top margin when edge-to-edge is active. On Android 15+ it is always enforced.
-        // On older versions, detect edge-to-edge by checking whether the system's content view
-        // has top padding (which means decorFitsSystemWindows is true and the system handles insets).
+        // On older versions, use the system content view's top padding only as a heuristic that
+        // the top inset may already be handled elsewhere (for example by decor fitting or another
+        // insets/padding adjustment), rather than as a guaranteed signal of decorFitsSystemWindows.
         View contentView = plugin.getActivity().findViewById(android.R.id.content);
-        boolean systemHandlesTopInset =
+        boolean topInsetLikelyHandledBySystem =
             contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
-        mlp.topMargin = systemHandlesTopInset ? 0 : systemBarsInsets.top;
+        mlp.topMargin = topInsetLikelyHandledBySystem ? 0 : systemBarsInsets.top;
         mlp.leftMargin = systemBarsInsets.left;
         mlp.rightMargin = systemBarsInsets.right;
         view.setLayoutParams(mlp);
