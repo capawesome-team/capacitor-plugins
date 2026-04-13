@@ -89,9 +89,7 @@ public class EdgeToEdge {
     }
 
     private void applyInsetsInternal(View view, WindowInsetsCompat currentInsets) {
-        Insets systemBarsInsets = currentInsets.getInsets(
-            WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-        );
+        Insets systemBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
         Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
         boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
         // When keyboard is visible, don't apply bottom margin to avoid double-counting
