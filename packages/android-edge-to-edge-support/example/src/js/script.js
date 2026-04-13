@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .querySelector('#get-insets-button')
     .addEventListener('click', async () => {
       const result = await EdgeToEdge.getInsets();
-      console.log(result);
+      document.querySelector('#insets-input').value =
+        `${result.top} / ${result.right} / ${result.bottom} / ${result.left}`;
     });
   document
     .querySelector('#set-background-color-button')
