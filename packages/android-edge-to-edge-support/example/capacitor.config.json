@@ -3,6 +3,9 @@
   "appName": "example",
   "webDir": "dist",
   "plugins": {
+    "Keyboard": {
+      "resizeOnFullScreen": false
+    },
     "SystemBars": {
       "insetsHandling": "disable"
     }
