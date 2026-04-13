@@ -102,7 +102,8 @@ public class EdgeToEdge {
         // On older versions, detect edge-to-edge by checking whether the system's content view
         // has top padding (which means decorFitsSystemWindows is true and the system handles insets).
         View contentView = plugin.getActivity().findViewById(android.R.id.content);
-        boolean systemHandlesTopInset = contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
+        boolean systemHandlesTopInset =
+            contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
         mlp.topMargin = systemHandlesTopInset ? 0 : systemBarsInsets.top;
         mlp.leftMargin = systemBarsInsets.left;
         mlp.rightMargin = systemBarsInsets.right;
@@ -182,10 +183,10 @@ public class EdgeToEdge {
         if (statusBarOverlay != null) {
             // Position status bar overlay at top
             ViewGroup.LayoutParams statusParams = createLayoutParams(
-                    parent,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    systemBarsInsets.top,
-                    Gravity.TOP
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.top,
+                Gravity.TOP
             );
             statusBarOverlay.setLayoutParams(statusParams);
         }
@@ -193,10 +194,10 @@ public class EdgeToEdge {
         if (navigationBarOverlay != null) {
             // Position navigation bar overlay at bottom
             ViewGroup.LayoutParams navParams = createLayoutParams(
-                    parent,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    systemBarsInsets.bottom,
-                    Gravity.BOTTOM
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.bottom,
+                Gravity.BOTTOM
             );
             navigationBarOverlay.setLayoutParams(navParams);
         }
