@@ -26,6 +26,7 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
     override public func load() {
         NotificationCenter.default.addObserver(self, selector: #selector(onResume), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.implementation = Badge(config: badgeConfig())
+        self.implementation?.handleOnResume()
     }
 
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
