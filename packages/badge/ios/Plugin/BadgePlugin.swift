@@ -26,6 +26,7 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
     override public func load() {
         NotificationCenter.default.addObserver(self, selector: #selector(onResume), name: UIApplication.willEnterForegroundNotification, object: nil)
         self.implementation = Badge(config: badgeConfig())
+        // Handle cold launch, as `willEnterForegroundNotification` is not fired on initial app launch
         self.implementation?.handleOnResume()
     }
 
