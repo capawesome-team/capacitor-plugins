@@ -109,6 +109,7 @@ No configuration required for this plugin.
 ```typescript
 import { AudioRecorder, AudioSessionCategoryOption, AudioSessionMode } from '@capawesome-team/capacitor-audio-recorder';
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 const startRecording = async () => {
   await AudioRecorder.startRecording({
@@ -117,6 +118,14 @@ const startRecording = async () => {
     bitRate: 192000,
     sampleRate: 44100
   });
+};
+
+const startRecordingToCustomLocation = async () => {
+  const { uri } = await Filesystem.getUri({
+    directory: Directory.Data,
+    path: 'recordings/my-recording.aac'
+  });
+  await AudioRecorder.startRecording({ uri });
 };
 
 const stopRecording = async () => {
@@ -399,12 +408,13 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop                              | Type                                                          | Description                                                                              | Default                               | Since |
-| --------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
-| **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                 | <code>['duckOthers']</code>           | 7.5.0 |
-| **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Default</code> | 7.4.0 |
-| **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                   | 7.2.0 |
-| **`sampleRate`**                  | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                    | 7.1.0 |
+| Prop                              | Type                                                          | Description                                                                                                                                                                                                                                                                 | Default                               | Since |
+| --------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
+| **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                                                                                                                                                                                                    | <code>['duckOthers']</code>           | 7.5.0 |
+| **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                                                                                                                                                                                                                | <code>AudioSessionMode.Default</code> | 7.4.0 |
+| **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS.                                                                                                                                                                                    | <code>192000</code>                   | 7.2.0 |
+| **`sampleRate`**                  | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.                                                                                                                                                                                              | <code>44100</code>                    | 7.1.0 |
+| **`uri`**                         | <code>string</code>                                           | The URI where the recorded audio should be saved. If not provided, the recording is saved to a temporary location in the cache directory. **Tip:** Generate this path using the `getUri(...)` method of the Capacitor Filesystem plugin. Only available on Android and iOS. |                                       | 8.1.0 |
 
 
 #### StopRecordingResult
