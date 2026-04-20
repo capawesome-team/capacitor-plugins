@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`a69866e4ca49dab710e93641d4ed7d7b85cc3e7c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a69866e4ca49dab710e93641d4ed7d7b85cc3e7c) ([#439](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/439)): feat: add `uri` option to `startRecording(...)`
+
 ## 8.0.1
 
 ### Patch Changes
