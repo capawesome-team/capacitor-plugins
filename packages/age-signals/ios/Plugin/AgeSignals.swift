@@ -108,6 +108,18 @@ import DeclaredAgeRange
                     declaration = .selfDeclared
                 case .guardianDeclared:
                     declaration = .guardianDeclared
+                case .checkedByOtherMethod:
+                    declaration = .checkedByOtherMethod
+                case .guardianCheckedByOtherMethod:
+                    declaration = .guardianCheckedByOtherMethod
+                case .governmentIDChecked:
+                    declaration = .governmentIdChecked
+                case .guardianGovernmentIDChecked:
+                    declaration = .guardianGovernmentIdChecked
+                case .paymentChecked:
+                    declaration = .paymentChecked
+                case .guardianPaymentChecked:
+                    declaration = .guardianPaymentChecked
                 @unknown default:
                     declaration = nil
                 }

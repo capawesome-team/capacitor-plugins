@@ -175,7 +175,7 @@ export enum UserStatus {
    */
   SupervisedApprovalDenied = 'SUPERVISED_APPROVAL_DENIED',
   /**
-   * The user is not verified or supervised in applicable jurisdictions and regions. These users could be over or under 18.
+   * The user's age is unknown and the user is in an applicable jurisdiction or region.
    * To obtain an age signal from Google Play, ask the user to visit the Play Store to resolve their status.
    *
    * @since 0.0.1
@@ -190,7 +190,7 @@ export enum UserStatus {
    */
   Declared = 'DECLARED',
   /**
-   * All other users return this value.
+   * The user is either not in an applicable jurisdiction or region, or the user does not share their age with apps.
    *
    * @since 0.0.1
    */
@@ -276,17 +276,53 @@ export enum ErrorCode {
  */
 export enum AgeRangeDeclaration {
   /**
-   * The age range was self-declared by the user.
+   * The age range was self-declared by the user without external verification.
    *
    * @since 0.4.0
    */
   SelfDeclared = 'SELF_DECLARED',
   /**
-   * The age range was declared by a guardian.
+   * The age range was declared by a guardian without external verification.
    *
    * @since 0.4.0
    */
   GuardianDeclared = 'GUARDIAN_DECLARED',
+  /**
+   * The user's age was verified using a third-party method.
+   *
+   * @since 0.4.0
+   */
+  CheckedByOtherMethod = 'CHECKED_BY_OTHER_METHOD',
+  /**
+   * The guardian's age was verified using a third-party method.
+   *
+   * @since 0.4.0
+   */
+  GuardianCheckedByOtherMethod = 'GUARDIAN_CHECKED_BY_OTHER_METHOD',
+  /**
+   * The user's age was verified using a government-issued ID.
+   *
+   * @since 0.4.0
+   */
+  GovernmentIdChecked = 'GOVERNMENT_ID_CHECKED',
+  /**
+   * The guardian's age was verified using a government-issued ID.
+   *
+   * @since 0.4.0
+   */
+  GuardianGovernmentIdChecked = 'GUARDIAN_GOVERNMENT_ID_CHECKED',
+  /**
+   * The user's age was verified using a payment method.
+   *
+   * @since 0.4.0
+   */
+  PaymentChecked = 'PAYMENT_CHECKED',
+  /**
+   * The guardian's age was verified using a payment method.
+   *
+   * @since 0.4.0
+   */
+  GuardianPaymentChecked = 'GUARDIAN_PAYMENT_CHECKED',
 }
 
 /**

@@ -376,17 +376,23 @@ Only available on Android.
 | **`Supervised`**                | <code>'SUPERVISED'</code>                  | The user has a supervised Google Account managed by a parent who sets their age. Use `ageLower` and `ageUpper` to determine the user's age range.                                                                                                                                              | 0.0.1 |
 | **`SupervisedApprovalPending`** | <code>'SUPERVISED_APPROVAL_PENDING'</code> | The user has a supervised Google Account, and their supervising parent has not yet approved one or more pending significant changes. Use `ageLower` and `ageUpper` to determine the user's age range. Use `mostRecentApprovalDate` to determine the last significant change that was approved. | 0.0.1 |
 | **`SupervisedApprovalDenied`**  | <code>'SUPERVISED_APPROVAL_DENIED'</code>  | The user has a supervised Google Account, and their supervising parent denied approval for one or more significant changes. Use `ageLower` and `ageUpper` to determine the user's age range. Use `mostRecentApprovalDate` to determine the last significant change that was approved.          | 0.0.1 |
-| **`Unknown`**                   | <code>'UNKNOWN'</code>                     | The user is not verified or supervised in applicable jurisdictions and regions. These users could be over or under 18. To obtain an age signal from Google Play, ask the user to visit the Play Store to resolve their status.                                                                 | 0.0.1 |
+| **`Unknown`**                   | <code>'UNKNOWN'</code>                     | The user's age is unknown and the user is in an applicable jurisdiction or region. To obtain an age signal from Google Play, ask the user to visit the Play Store to resolve their status.                                                                                                     | 0.0.1 |
 | **`Declared`**                  | <code>'DECLARED'</code>                    | The user has self-declared or guardian-declared their age. Only available on Android.                                                                                                                                                                                                          | 0.4.0 |
-| **`Empty`**                     | <code>'EMPTY'</code>                       | All other users return this value.                                                                                                                                                                                                                                                             | 0.0.1 |
+| **`Empty`**                     | <code>'EMPTY'</code>                       | The user is either not in an applicable jurisdiction or region, or the user does not share their age with apps.                                                                                                                                                                                | 0.0.1 |
 
 
 #### AgeRangeDeclaration
 
-| Members                | Value                            | Description                                  | Since |
-| ---------------------- | -------------------------------- | -------------------------------------------- | ----- |
-| **`SelfDeclared`**     | <code>'SELF_DECLARED'</code>     | The age range was self-declared by the user. | 0.4.0 |
-| **`GuardianDeclared`** | <code>'GUARDIAN_DECLARED'</code> | The age range was declared by a guardian.    | 0.4.0 |
+| Members                            | Value                                           | Description                                                                | Since |
+| ---------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------- | ----- |
+| **`SelfDeclared`**                 | <code>'SELF_DECLARED'</code>                    | The age range was self-declared by the user without external verification. | 0.4.0 |
+| **`GuardianDeclared`**             | <code>'GUARDIAN_DECLARED'</code>                | The age range was declared by a guardian without external verification.    | 0.4.0 |
+| **`CheckedByOtherMethod`**         | <code>'CHECKED_BY_OTHER_METHOD'</code>          | The user's age was verified using a third-party method.                    | 0.4.0 |
+| **`GuardianCheckedByOtherMethod`** | <code>'GUARDIAN_CHECKED_BY_OTHER_METHOD'</code> | The guardian's age was verified using a third-party method.                | 0.4.0 |
+| **`GovernmentIdChecked`**          | <code>'GOVERNMENT_ID_CHECKED'</code>            | The user's age was verified using a government-issued ID.                  | 0.4.0 |
+| **`GuardianGovernmentIdChecked`**  | <code>'GUARDIAN_GOVERNMENT_ID_CHECKED'</code>   | The guardian's age was verified using a government-issued ID.              | 0.4.0 |
+| **`PaymentChecked`**               | <code>'PAYMENT_CHECKED'</code>                  | The user's age was verified using a payment method.                        | 0.4.0 |
+| **`GuardianPaymentChecked`**       | <code>'GUARDIAN_PAYMENT_CHECKED'</code>         | The guardian's age was verified using a payment method.                    | 0.4.0 |
 
 
 #### ErrorCode
