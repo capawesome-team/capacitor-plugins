@@ -401,13 +401,13 @@ import VDARSDK
         }
         completion(nil)
     }
-    
+
     @objc public func getVersion(completion: @escaping (_ result: GetVersionResult?, _ error: Error?) -> Void) {
         guard let version = VDARSDKController.vdarsdkVersion() else {
             completion(nil, CustomError.versionNotExists)
             return
         }
-        
+
         completion(GetVersionResult(version: version), nil)
     }
 

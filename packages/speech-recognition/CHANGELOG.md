@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`fdec9b60b4eca9bcf80729244107c5add52f125a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/fdec9b60b4eca9bcf80729244107c5add52f125a): feat: add on-device recognition support
+
 ## 8.0.1
 
 ### Patch Changes

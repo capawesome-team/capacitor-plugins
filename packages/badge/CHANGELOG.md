@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`fe76197ce195a3a5107ceee2d57ffef74e2a5bec`](https://github.com/capawesome-team/capacitor-plugins/commit/fe76197ce195a3a5107ceee2d57ffef74e2a5bec) ([#835](https://github.com/capawesome-team/capacitor-plugins/pull/835)): fix(ios): clear badge on cold launch when `autoClear` is enabled
+
 ## 8.0.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.1
+
+### Patch Changes
+
+- [`e2df0974e263d1da6c859245ca91e3531d5fafc5`](https://github.com/capawesome-team/capacitor-plugins/commit/e2df0974e263d1da6c859245ca91e3531d5fafc5) ([#822](https://github.com/capawesome-team/capacitor-plugins/pull/822)): fix(ios): align PostHog SDK version rule across Podfile and podspec
+
 ## 8.4.0
 
 ### Minor Changes

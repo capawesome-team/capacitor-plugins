@@ -403,7 +403,7 @@ public class PixlivePlugin: CAPPlugin, CAPBridgedPlugin, CLLocationManagerDelega
             rejectCall(call, error)
         }
     }
-    
+
     @objc func getVersion(_ call: CAPPluginCall) {
         implementation?.getVersion(completion: { result, error in
             if let error = error {

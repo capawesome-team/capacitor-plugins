@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`e021420d2c356bbc020b4223a3eba9f6135ce1ef`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e021420d2c356bbc020b4223a3eba9f6135ce1ef) ([#437](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/437)): fix(ios): resume AppAuth session on app URL open
+
 ## 0.1.2
 
 ### Patch Changes
