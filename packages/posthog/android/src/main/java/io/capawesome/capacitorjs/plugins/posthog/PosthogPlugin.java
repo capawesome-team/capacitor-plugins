@@ -8,7 +8,6 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import org.json.JSONObject;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.AliasOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.CaptureOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagOptions;
@@ -23,6 +22,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "Posthog")
 public class PosthogPlugin extends Plugin {
