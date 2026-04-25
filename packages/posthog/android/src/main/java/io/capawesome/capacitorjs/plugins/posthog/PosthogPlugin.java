@@ -22,6 +22,7 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
+import org.json.JSONObject;
 
 @CapacitorPlugin(name = "Posthog")
 public class PosthogPlugin extends Plugin {
@@ -345,6 +346,19 @@ public class PosthogPlugin extends Plugin {
         boolean captureApplicationLifecycleEvents = getConfig()
             .getBoolean("captureApplicationLifecycleEvents", config.getCaptureApplicationLifecycleEvents());
         config.setCaptureApplicationLifecycleEvents(captureApplicationLifecycleEvents);
+
+        JSONObject sessionReplayConfigObject = getConfig().getObject("sessionReplayConfig");
+        if (sessionReplayConfigObject != null) {
+            SessionReplayOptions sessionReplayOptions = new SessionReplayOptions(
+                sessionReplayConfigObject.optBoolean("screenshotMode", false),
+                sessionReplayConfigObject.optBoolean("maskAllTextInputs", true),
+                sessionReplayConfigObject.optBoolean("maskAllImages", true),
+                sessionReplayConfigObject.optBoolean("maskAllSandboxedViews", true),
+                sessionReplayConfigObject.optBoolean("captureNetworkTelemetry", false),
+                sessionReplayConfigObject.optDouble("debouncerDelay", 1.0)
+            );
+            config.setSessionReplayConfig(sessionReplayOptions);
+        }
 
         return config;
     }
