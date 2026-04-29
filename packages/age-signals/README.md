@@ -383,16 +383,11 @@ Only available on Android.
 
 #### AgeRangeDeclaration
 
-| Members                            | Value                                           | Description                                                                | Since |
-| ---------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------- | ----- |
-| **`SelfDeclared`**                 | <code>'SELF_DECLARED'</code>                    | The age range was self-declared by the user without external verification. | 0.4.0 |
-| **`GuardianDeclared`**             | <code>'GUARDIAN_DECLARED'</code>                | The age range was declared by a guardian without external verification.    | 0.4.0 |
-| **`CheckedByOtherMethod`**         | <code>'CHECKED_BY_OTHER_METHOD'</code>          | The user's age was verified using a third-party method.                    | 0.4.0 |
-| **`GuardianCheckedByOtherMethod`** | <code>'GUARDIAN_CHECKED_BY_OTHER_METHOD'</code> | The guardian's age was verified using a third-party method.                | 0.4.0 |
-| **`GovernmentIdChecked`**          | <code>'GOVERNMENT_ID_CHECKED'</code>            | The user's age was verified using a government-issued ID.                  | 0.4.0 |
-| **`GuardianGovernmentIdChecked`**  | <code>'GUARDIAN_GOVERNMENT_ID_CHECKED'</code>   | The guardian's age was verified using a government-issued ID.              | 0.4.0 |
-| **`PaymentChecked`**               | <code>'PAYMENT_CHECKED'</code>                  | The user's age was verified using a payment method.                        | 0.4.0 |
-| **`GuardianPaymentChecked`**       | <code>'GUARDIAN_PAYMENT_CHECKED'</code>         | The guardian's age was verified using a payment method.                    | 0.4.0 |
+| Members                | Value                            | Description                                                                            | Since |
+| ---------------------- | -------------------------------- | -------------------------------------------------------------------------------------- | ----- |
+| **`SelfDeclared`**     | <code>'SELF_DECLARED'</code>     | The age range was self-declared by the user without external verification.             | 0.4.0 |
+| **`GuardianDeclared`** | <code>'GUARDIAN_DECLARED'</code> | The age range was declared by a guardian without external verification.                | 0.4.0 |
+| **`Confirmed`**        | <code>'CONFIRMED'</code>         | The age range was set using a scrutinized method, like a credit card or government ID. | 0.4.0 |
 
 
 #### ErrorCode

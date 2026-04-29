@@ -288,41 +288,11 @@ export enum AgeRangeDeclaration {
    */
   GuardianDeclared = 'GUARDIAN_DECLARED',
   /**
-   * The user's age was verified using a third-party method.
+   * The age range was set using a scrutinized method, like a credit card or government ID.
    *
    * @since 0.4.0
    */
-  CheckedByOtherMethod = 'CHECKED_BY_OTHER_METHOD',
-  /**
-   * The guardian's age was verified using a third-party method.
-   *
-   * @since 0.4.0
-   */
-  GuardianCheckedByOtherMethod = 'GUARDIAN_CHECKED_BY_OTHER_METHOD',
-  /**
-   * The user's age was verified using a government-issued ID.
-   *
-   * @since 0.4.0
-   */
-  GovernmentIdChecked = 'GOVERNMENT_ID_CHECKED',
-  /**
-   * The guardian's age was verified using a government-issued ID.
-   *
-   * @since 0.4.0
-   */
-  GuardianGovernmentIdChecked = 'GUARDIAN_GOVERNMENT_ID_CHECKED',
-  /**
-   * The user's age was verified using a payment method.
-   *
-   * @since 0.4.0
-   */
-  PaymentChecked = 'PAYMENT_CHECKED',
-  /**
-   * The guardian's age was verified using a payment method.
-   *
-   * @since 0.4.0
-   */
-  GuardianPaymentChecked = 'GUARDIAN_PAYMENT_CHECKED',
+  Confirmed = 'CONFIRMED',
 }
 
 /**
