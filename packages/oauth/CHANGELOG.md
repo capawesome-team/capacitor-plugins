@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`9384ad6f9af27dac62963e3fa3cd49bfd9ffeda2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9384ad6f9af27dac62963e3fa3cd49bfd9ffeda2) ([#442](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/442)): fix(ios): forward `prompt` and `loginHint` to the authorization request
+
+- [`80a3f077ca1c9b34e54cf6d4d5cbdfbbca76c986`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/80a3f077ca1c9b34e54cf6d4d5cbdfbbca76c986) ([#444](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/444)): feat: add `uiLocales` option to `login()`
+
 ## 0.1.3
 
 ### Patch Changes
