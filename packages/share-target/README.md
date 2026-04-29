@@ -613,7 +613,10 @@ extension UIImage {
 Finally, you need to modify the `AppDelegate.swift` file of your main app target to handle the URLs opened by the share extension. Add the missing import and the following code to the `application(_:open:options:)` method:
 
 ```diff
+// If you are using CocoaPods, add the following import:
 + import CapawesomeTeamCapacitorShareTarget
+// Or if you are using Swift Package Manager, add the following import:
+// import ShareTargetPlugin
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 +    // Handle share target URLs
@@ -624,6 +627,8 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
     return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
 }
 ```
+
+**Attention**: If you are using **Swift Package Manager** instead of CocoaPods, replace `import CapawesomeTeamCapacitorShareTarget` with `import ShareTargetPlugin`.
 
 #### Capabilities
 
