@@ -881,6 +881,13 @@ Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/b
 
 This plugin has some limitations on certain platforms.
 
+### Android
+
+The Android implementation of this plugin has the following limitations:
+
+- **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
+- **Statements that return data must use `query(...)`**: `execute(...)` cannot run statements that return rows. For example, `PRAGMA journal_mode = WAL` and `PRAGMA journal_size_limit = ...` both return the resulting value and must be run via `query(...)`. `PRAGMA synchronous = ...` does not return a value and can be run via `execute(...)`.
+
 ### Web
 
 The web implementation of this plugin has the following limitations:
@@ -893,6 +900,7 @@ The Electron implementation of this plugin has the following limitations:
 
 - **Encryption**: Database encryption is not supported.
 - **Node.js version**: Requires Node.js 22.5.0 or later (Electron 33+) to use the native `node:sqlite` module.
+- **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
 
 ## Troubleshooting
 
