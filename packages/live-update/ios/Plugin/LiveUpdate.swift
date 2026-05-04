@@ -568,6 +568,10 @@ import CommonCrypto
     }
 
     private func downloadBundleOfTypeZip(bundleId: String, checksum: String?, signature: String?, url: String) async throws {
+        if url.hasPrefix("file://") {
+            try await copyFromFileSchemeAndAddBundle(bundleId: bundleId, sourceFileUri: url, checksum: checksum, signature: signature)
+            return
+        }
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         // Download the bundle
@@ -577,6 +581,30 @@ import CommonCrypto
         })
         // Add the bundle
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
+    }
+
+    private func copyFromFileSchemeAndAddBundle(bundleId: String, sourceFileUri: String, checksum: String?, signature: String?) async throws {
+        let timestamp = String(Int(Date().timeIntervalSince1970))
+        let destination = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
+        do {
+            guard let source = URL(string: sourceFileUri) else {
+                throw CustomError.downloadFailed
+            }
+            _ = try LiveUpdateFileScheme.copyAndReportProgress(
+                source: source,
+                destination: destination,
+                progress: { [weak self] downloadedBytes, totalBytes in
+                    let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: downloadedBytes, totalBytes: totalBytes)
+                    self?.notifyDownloadBundleProgressListeners(event)
+                }
+            )
+            try verifyFile(url: destination, checksum: checksum, signature: signature)
+            try await addBundleOfTypeZip(bundleId: bundleId, zipFile: destination)
+            try? FileManager.default.removeItem(at: destination)
+        } catch {
+            try? FileManager.default.removeItem(at: destination)
+            throw error
+        }
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {

@@ -55,6 +55,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
@@ -932,6 +933,10 @@ public class LiveUpdate {
         @NonNull String downloadUrl,
         @NonNull EmptyCallback completionCallback
     ) {
+        if (downloadUrl.startsWith("file://")) {
+            copyFromFileSchemeAndAddBundle(bundleId, downloadUrl, checksum, signature, completionCallback);
+            return;
+        }
         File file = buildTemporaryZipFile();
         // Download the bundle
         downloadAndVerifyFile(
@@ -965,6 +970,36 @@ public class LiveUpdate {
                 }
             }
         );
+    }
+
+    private void copyFromFileSchemeAndAddBundle(
+        @NonNull String bundleId,
+        @NonNull String sourceFileUri,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        File destination = buildTemporaryZipFile();
+        try {
+            File source = new File(URI.create(sourceFileUri));
+            LiveUpdateFileScheme.copyAndReportProgress(
+                source,
+                destination,
+                (downloadedBytes, totalBytes) -> {
+                    DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+                    notifyDownloadBundleProgressListeners(event);
+                }
+            );
+            verifyFile(destination, checksum, signature);
+            addBundleOfTypeZip(bundleId, destination);
+            destination.delete();
+            completionCallback.success();
+        } catch (Exception e) {
+            if (destination.exists()) {
+                destination.delete();
+            }
+            completionCallback.error(e);
+        }
     }
 
     private void fetchLatestBundleInternal(
