@@ -587,19 +587,16 @@ import CommonCrypto
     private func copyFromFileSchemeAndAddBundle(bundleId: String, sourceFileUri: String, checksum: String?, signature: String?) async throws {
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let destination = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
+        let fileManager = FileManager.default
         do {
             let source = try LiveUpdateFileScheme.resolveFileUrl(
                 sourceFileUri,
                 allowedPrefixes: sandboxPrefixes()
             )
-            _ = try LiveUpdateFileScheme.copyAndReportProgress(
-                source: source,
-                destination: destination,
-                progress: { [weak self] downloadedBytes, totalBytes in
-                    let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: downloadedBytes, totalBytes: totalBytes)
-                    self?.notifyDownloadBundleProgressListeners(event)
-                }
-            )
+            if fileManager.fileExists(atPath: destination.path) {
+                try fileManager.removeItem(at: destination)
+            }
+            try fileManager.copyItem(at: source, to: destination)
             try verifyFile(url: destination, checksum: checksum, signature: signature)
             try await addBundleOfTypeZip(bundleId: bundleId, zipFile: destination)
             removeTemporaryFile(at: destination)

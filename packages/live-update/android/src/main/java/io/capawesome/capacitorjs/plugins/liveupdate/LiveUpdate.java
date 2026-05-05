@@ -988,13 +988,10 @@ public class LiveUpdate {
                 context.getCacheDir().getCanonicalPath(),
                 context.getNoBackupFilesDir().getCanonicalPath()
             );
-            LiveUpdateFileScheme.copyAndReportProgress(
-                source,
-                destination,
-                (downloadedBytes, totalBytes) -> {
-                    DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
-                    notifyDownloadBundleProgressListeners(event);
-                }
+            java.nio.file.Files.copy(
+                source.toPath(),
+                destination.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING
             );
             verifyFile(destination, checksum, signature);
             addBundleOfTypeZip(bundleId, destination);
