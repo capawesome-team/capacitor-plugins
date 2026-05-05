@@ -569,6 +569,7 @@ import CommonCrypto
 
     private func downloadBundleOfTypeZip(bundleId: String, checksum: String?, signature: String?, url: String) async throws {
         if url.hasPrefix("file://") {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Copying sideloaded bundle from: \(url)")
             try await copyFromFileSchemeAndAddBundle(bundleId: bundleId, sourceFileUri: url, checksum: checksum, signature: signature)
             return
         }
@@ -587,9 +588,10 @@ import CommonCrypto
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let destination = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         do {
-            guard let source = URL(string: sourceFileUri) else {
-                throw CustomError.downloadFailed
-            }
+            let source = try LiveUpdateFileScheme.resolveFileUrl(
+                sourceFileUri,
+                allowedPrefixes: sandboxPrefixes()
+            )
             _ = try LiveUpdateFileScheme.copyAndReportProgress(
                 source: source,
                 destination: destination,
@@ -600,11 +602,42 @@ import CommonCrypto
             )
             try verifyFile(url: destination, checksum: checksum, signature: signature)
             try await addBundleOfTypeZip(bundleId: bundleId, zipFile: destination)
-            try? FileManager.default.removeItem(at: destination)
+            removeTemporaryFile(at: destination)
         } catch {
-            try? FileManager.default.removeItem(at: destination)
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy sideloaded bundle: \(error.localizedDescription)")
+            removeTemporaryFile(at: destination)
             throw error
         }
+    }
+
+    private func removeTemporaryFile(at url: URL) {
+        let fileManager = FileManager.default
+        guard fileManager.fileExists(atPath: url.path) else {
+            return
+        }
+        do {
+            try fileManager.removeItem(at: url)
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to clean up temp zip: \(error.localizedDescription)")
+        }
+    }
+
+    private func sandboxPrefixes() -> [String] {
+        let manager = FileManager.default
+        let domains: [FileManager.SearchPathDirectory] = [
+            .documentDirectory,
+            .libraryDirectory,
+            .cachesDirectory,
+            .applicationSupportDirectory
+        ]
+        var prefixes: [String] = []
+        for domain in domains {
+            for url in manager.urls(for: domain, in: .userDomainMask) {
+                prefixes.append(url.standardizedFileURL.path)
+            }
+        }
+        prefixes.append((NSTemporaryDirectory() as NSString).standardizingPath)
+        return prefixes
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {

@@ -7,23 +7,57 @@ enum LiveUpdateFileScheme {
     typealias ProgressCallback = (Int64, Int64) -> Void
 
     enum FileSchemeError: Swift.Error, LocalizedError {
-        case sourceNotFound(path: String)
-        case streamOpenFailed(path: String)
+        case invalidFileUri
+        case sourceNotFound
+        case sourceOutsideSandbox
+        case streamOpenFailed
         case streamReadFailed
         case streamWriteFailed
 
         var errorDescription: String? {
             switch self {
-            case .sourceNotFound(let path):
-                return "Sideloaded bundle not found at \(path)"
-            case .streamOpenFailed(let path):
-                return "Could not open stream at \(path)"
+            case .invalidFileUri:
+                return "Invalid file:// URI"
+            case .sourceNotFound:
+                return "Sideloaded bundle not found"
+            case .sourceOutsideSandbox:
+                return "Sideloaded bundle path is outside the app sandbox"
+            case .streamOpenFailed:
+                return "Could not open stream"
             case .streamReadFailed:
                 return "Failed to read sideloaded bundle"
             case .streamWriteFailed:
                 return "Failed to write sideloaded bundle"
             }
         }
+    }
+
+    /// Parses and validates a `file://` URI string. Rejects non-file schemes,
+    /// malformed URLs, and any path that resolves outside `allowedPrefixes`
+    /// after `.standardizedFileURL` resolution. Each prefix must be the
+    /// `.standardizedFileURL.path` of an allowed sandbox directory; the caller
+    /// is responsible for collecting them (e.g. from `FileManager.urls(for:in:)`
+    /// for documents/library/caches/applicationSupport plus
+    /// `NSTemporaryDirectory()`).
+    ///
+    /// - Throws: `FileSchemeError.invalidFileUri` for malformed or non-file URIs;
+    ///           `FileSchemeError.sourceOutsideSandbox` for sandbox escapes.
+    static func resolveFileUrl(
+        _ sourceFileUri: String,
+        allowedPrefixes: [String]
+    ) throws -> URL {
+        guard let parsed = URL(string: sourceFileUri), parsed.isFileURL else {
+            throw FileSchemeError.invalidFileUri
+        }
+        let standardized = parsed.standardizedFileURL
+        let path = standardized.path
+        let inSandbox = allowedPrefixes.contains { prefix in
+            path == prefix || path.hasPrefix(prefix + "/")
+        }
+        guard inSandbox else {
+            throw FileSchemeError.sourceOutsideSandbox
+        }
+        return standardized
     }
 
     /// Copies `source` to `destination`, reporting incremental progress to
@@ -41,7 +75,7 @@ enum LiveUpdateFileScheme {
     ) throws -> Int64 {
         let fileManager = FileManager.default
         guard fileManager.fileExists(atPath: source.path) else {
-            throw FileSchemeError.sourceNotFound(path: source.path)
+            throw FileSchemeError.sourceNotFound
         }
         let attributes = try fileManager.attributesOfItem(atPath: source.path)
         let total = (attributes[.size] as? NSNumber)?.int64Value ?? 0
@@ -49,10 +83,10 @@ enum LiveUpdateFileScheme {
             try fileManager.removeItem(at: destination)
         }
         guard let input = InputStream(url: source) else {
-            throw FileSchemeError.streamOpenFailed(path: source.path)
+            throw FileSchemeError.streamOpenFailed
         }
         guard let output = OutputStream(url: destination, append: false) else {
-            throw FileSchemeError.streamOpenFailed(path: destination.path)
+            throw FileSchemeError.streamOpenFailed
         }
         input.open()
         defer { input.close() }
@@ -72,7 +106,9 @@ enum LiveUpdateFileScheme {
             }
             var written = 0
             while written < read {
-                let n = output.write(buffer.withUnsafeBufferPointer { $0.baseAddress! + written }, maxLength: read - written)
+                let n = buffer.withUnsafeBufferPointer { ptr -> Int in
+                    output.write(ptr.baseAddress! + written, maxLength: read - written)
+                }
                 if n <= 0 {
                     throw output.streamError ?? FileSchemeError.streamWriteFailed
                 }
