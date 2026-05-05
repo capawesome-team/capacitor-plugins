@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`293be4b0c9fb4f28479849f5c93c69bbcaea0b75`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/293be4b0c9fb4f28479849f5c93c69bbcaea0b75) ([#447](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/447)): feat(ios): add `prefersEphemeralWebBrowserSession` option
+
 ## 0.1.4
 
 ### Patch Changes
