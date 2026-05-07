@@ -833,7 +833,7 @@ const db = drizzle(Sqlite, { databaseId, schema });
 const users = await db.select().from(schema.users);
 ```
 
-Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
+Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
 
 ### Kysely
 
@@ -852,7 +852,7 @@ const db = new Kysely<Database>({
 const users = await db.selectFrom('users').selectAll().execute();
 ```
 
-Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
+Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
 
 ### TypeORM
 
@@ -875,7 +875,7 @@ const createDataSource = async () => {
 };
 ```
 
-Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
+Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
 
 ## Limitations
 
