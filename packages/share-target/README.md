@@ -40,7 +40,7 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 | Android                                                                                                                  | iOS                                                                                                              | Web                                                                                                              |
 | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-android.gif" width="240" alt="Android Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-ios.gif" width="240" alt="iOS Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-share-target-web.gif" width="240" alt="Web Demo" /> |
+| <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-android.gif" width="240" alt="Android Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-ios.gif" width="240" alt="iOS Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-web.gif" width="240" alt="Web Demo" /> |
 
 ## Installation
 

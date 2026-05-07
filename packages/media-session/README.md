@@ -42,7 +42,7 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 
 | Android                                                                                                                   | iOS                                                                                                               | Web                                                                                                               |
 | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| <img src="https://capawesome.io/assets/images/gifs/capacitor-media-session-android.gif" width="324" alt="Android Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-media-session-ios.gif" width="266" alt="iOS Demo" /> | <img src="https://capawesome.io/assets/images/gifs/capacitor-media-session-web.gif" width="324" alt="Web Demo" /> |
+| <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-media-session-android.gif" width="324" alt="Android Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-media-session-ios.gif" width="266" alt="iOS Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-media-session-web.gif" width="324" alt="Web Demo" /> |
 
 ## Installation
 
