@@ -20,7 +20,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔊 **Volume Control**: Precise volume control from 0-100.
 - ⏩ **Playback Speed**: Adjustable playback rate with pitch preservation.
 - 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/plugins/audio-recorder/), [Media Session](https://capawesome.io/plugins/media-session/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/docs/plugins/audio-recorder/), [Media Session](https://capawesome.io/docs/plugins/media-session/), [Speech Recognition](https://capawesome.io/docs/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/plugins/speech-synthesis/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.

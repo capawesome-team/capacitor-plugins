@@ -19,7 +19,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - ▶️ **Action Handlers**: Support for play, pause, seek, next/previous track, and more.
 - 📍 **Position State**: Track and display playback position, duration, and playback rate.
 - 🔧 **Native APIs**: Uses MediaSession API on Android and MPNowPlayingInfoCenter on iOS for the best possible integration.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/plugins/audio-player/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.

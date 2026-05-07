@@ -21,7 +21,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
 - 📱 **On-Device Recognition**: Force on-device-only speech recognition, query available on-device languages, and download language models.
 - 🧠 **SpeechTranscriber**: Opt-in support for Apple's modern `SpeechTranscriber` API (iOS 26+) with fully on-device processing and no "Speech data will be sent to Apple" permission dialog.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/plugins/audio-player/), [Audio Recorder](https://capawesome.io/docs/plugins/audio-recorder/) and [Speech Synthesis](https://capawesome.io/docs/plugins/speech-synthesis/) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 250 projects.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
