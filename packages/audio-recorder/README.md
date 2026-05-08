@@ -201,6 +201,7 @@ const addRecordingStoppedListener = async () => {
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
 * [`addListener('recordingPaused', ...)`](#addlistenerrecordingpaused-)
+* [`addListener('recordingResumed', ...)`](#addlistenerrecordingresumed-)
 * [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -373,6 +374,26 @@ Called when the recording is paused (e.g. when the recording is interrupted by a
 --------------------
 
 
+### addListener('recordingResumed', ...)
+
+```typescript
+addListener(eventName: 'recordingResumed', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the recording is resumed (e.g. after an audio session interruption ends, when `autoResumeAfterInterruption` is enabled).
+
+| Param              | Type                            |
+| ------------------ | ------------------------------- |
+| **`eventName`**    | <code>'recordingResumed'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>      |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### addListener('recordingStopped', ...)
 
 ```typescript
@@ -410,6 +431,7 @@ or paused or if an error occurs.
 
 | Prop                              | Type                                                          | Description                                                                                                                                                                                                                                                                 | Default                               | Since |
 | --------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
+| **`autoResumeAfterInterruption`** | <code>boolean</code>                                          | Whether the recording should automatically resume after an audio session interruption ends (e.g. after a phone call). The system only resumes the recording if it indicates that resuming is appropriate. Only available on iOS.                                            | <code>false</code>                    | 8.2.0 |
 | **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                                                                                                                                                                                                    | <code>['duckOthers']</code>           | 7.5.0 |
 | **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                                                                                                                                                                                                                | <code>AudioSessionMode.Default</code> | 7.4.0 |
 | **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS.                                                                                                                                                                                    | <code>192000</code>                   | 7.2.0 |
