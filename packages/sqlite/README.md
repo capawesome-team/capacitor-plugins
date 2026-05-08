@@ -277,6 +277,10 @@ export default defineConfig({
 });
 ```
 
+#### Debugging
+
+You can inspect the SQLite database stored in OPFS using the [OPFS Explorer](https://chromewebstore.google.com/detail/opfs-explorer/acndjpgkpaclldomagafnognkcgjignd) Chrome DevTools extension.
+
 ### Electron
 
 This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 33+).
