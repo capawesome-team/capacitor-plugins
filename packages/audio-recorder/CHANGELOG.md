@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`9435c1a90e1616a1e9f36df469712f7ea61064a0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9435c1a90e1616a1e9f36df469712f7ea61064a0) ([#448](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/448)): feat(ios): add `autoResumeAfterInterruption` option to `startRecording(...)` and `recordingResumed` event
+
 ## 8.1.0
 
 ### Minor Changes
