@@ -10,10 +10,12 @@
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
 		2F98D68224C9AAE500613A4C /* LiveUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* LiveUpdate.swift */; };
+		4FCB0DDCC89E2DE8E846B00F /* LiveUpdateFileSchemeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C25A4BC52E89C669812DC5 /* LiveUpdateFileSchemeTests.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* LiveUpdateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* LiveUpdateTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50E1A94820377CB70090CE1A /* LiveUpdatePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */; };
+		58AD2DB3CEF67FE68E1D48C3 /* LiveUpdateFileScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5DA95DF74BB51DD0BD0AAED /* LiveUpdateFileScheme.swift */; };
 		7C0C8C492BAB354A005F76D1 /* LiveUpdateConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */; };
 		7C2011512BA9653B001FABAD /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011502BA9653B001FABAD /* Result.swift */; };
 		7C2011532BA96555001FABAD /* GetBundlesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2011522BA96555001FABAD /* GetBundlesResult.swift */; };
@@ -46,12 +48,12 @@
 		7CAB12562DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12552DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift */; };
 		7CAB12672DEFA3E0003BB4F7 /* SetConfigOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12662DEFA3E0003BB4F7 /* SetConfigOptions.swift */; };
 		7CAB12782DEFA3F0003BB5F8 /* GetConfigResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12772DEFA3F0003BB5F8 /* GetConfigResult.swift */; };
-		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
-		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 		7CAB13012DEFB100003BC5A2 /* FetchChannelsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13002DEFB100003BC5A2 /* FetchChannelsOptions.swift */; };
 		7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */; };
 		7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */; };
 		7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */; };
+		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
+		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +77,7 @@
 		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveUpdatePlugin.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		65C25A4BC52E89C669812DC5 /* LiveUpdateFileSchemeTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveUpdateFileSchemeTests.swift; sourceTree = "<group>"; };
 		7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateConfig.swift; sourceTree = "<group>"; };
 		7C2011502BA9653B001FABAD /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7C2011522BA96555001FABAD /* GetBundlesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBundlesResult.swift; sourceTree = "<group>"; };
@@ -107,14 +110,15 @@
 		7CAB12552DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockedBundlesResult.swift; sourceTree = "<group>"; };
 		7CAB12662DEFA3E0003BB4F7 /* SetConfigOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetConfigOptions.swift; sourceTree = "<group>"; };
 		7CAB12772DEFA3F0003BB5F8 /* GetConfigResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConfigResult.swift; sourceTree = "<group>"; };
-		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
-		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		7CAB13002DEFB100003BC5A2 /* FetchChannelsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChannelsOptions.swift; sourceTree = "<group>"; };
 		7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelResult.swift; sourceTree = "<group>"; };
 		7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChannelsResult.swift; sourceTree = "<group>"; };
 		7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetChannelsResponseItem.swift; sourceTree = "<group>"; };
+		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
+		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C5DA95DF74BB51DD0BD0AAED /* LiveUpdateFileScheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LiveUpdateFileScheme.swift; path = Classes/LiveUpdateFileScheme.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -173,6 +177,7 @@
 				7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */,
 				7C0C8C482BAB354A005F76D1 /* LiveUpdateConfig.swift */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
+				C5DA95DF74BB51DD0BD0AAED /* LiveUpdateFileScheme.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -182,6 +187,7 @@
 			children = (
 				50ADFF96201F53D600D50D53 /* LiveUpdateTests.swift */,
 				50ADFF98201F53D600D50D53 /* Info.plist */,
+				65C25A4BC52E89C669812DC5 /* LiveUpdateFileSchemeTests.swift */,
 			);
 			path = PluginTests;
 			sourceTree = "<group>";
@@ -513,6 +519,7 @@
 				7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */,
 				7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */,
 				7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */,
+				58AD2DB3CEF67FE68E1D48C3 /* LiveUpdateFileScheme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +528,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50ADFF97201F53D600D50D53 /* LiveUpdateTests.swift in Sources */,
+				4FCB0DDCC89E2DE8E846B00F /* LiveUpdateFileSchemeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

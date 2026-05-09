@@ -932,6 +932,11 @@ public class LiveUpdate {
         @NonNull String downloadUrl,
         @NonNull EmptyCallback completionCallback
     ) {
+        if (downloadUrl.startsWith("file://")) {
+            Logger.debug(LiveUpdatePlugin.TAG, "Copying sideloaded bundle from: " + downloadUrl);
+            copyFromFileSchemeAndAddBundle(bundleId, downloadUrl, checksum, signature, completionCallback);
+            return;
+        }
         File file = buildTemporaryZipFile();
         // Download the bundle
         downloadAndVerifyFile(
@@ -965,6 +970,47 @@ public class LiveUpdate {
                 }
             }
         );
+    }
+
+    private void copyFromFileSchemeAndAddBundle(
+        @NonNull String bundleId,
+        @NonNull String sourceFileUri,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        File destination = buildTemporaryZipFile();
+        try {
+            android.content.Context context = plugin.getContext();
+            File source = LiveUpdateFileScheme.resolveSandboxedFile(
+                sourceFileUri,
+                context.getFilesDir().getCanonicalPath(),
+                context.getCacheDir().getCanonicalPath(),
+                context.getNoBackupFilesDir().getCanonicalPath()
+            );
+            java.nio.file.Files.copy(
+                source.toPath(),
+                destination.toPath(),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING
+            );
+            verifyFile(destination, checksum, signature);
+            addBundleOfTypeZip(bundleId, destination);
+            removeTemporaryFile(destination);
+            completionCallback.success();
+        } catch (Exception e) {
+            Logger.error(LiveUpdatePlugin.TAG, "Failed to copy sideloaded bundle: " + e.getMessage(), e);
+            removeTemporaryFile(destination);
+            completionCallback.error(e);
+        }
+    }
+
+    private void removeTemporaryFile(@NonNull File file) {
+        if (!file.exists()) {
+            return;
+        }
+        if (!file.delete()) {
+            Logger.warn(LiveUpdatePlugin.TAG, "Failed to clean up temp zip at " + file.getAbsolutePath());
+        }
     }
 
     private void fetchLatestBundleInternal(
