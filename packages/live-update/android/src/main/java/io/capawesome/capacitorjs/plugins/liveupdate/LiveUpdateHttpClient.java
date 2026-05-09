@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.brotli.BrotliInterceptor;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
@@ -59,6 +60,7 @@ public class LiveUpdateHttpClient {
 
         this.okHttpClient = new OkHttpClient.Builder()
             .dispatcher(dispatcher)
+            .addInterceptor(BrotliInterceptor.INSTANCE)
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
