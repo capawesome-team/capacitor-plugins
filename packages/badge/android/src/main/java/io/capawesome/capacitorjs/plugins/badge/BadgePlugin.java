@@ -1,15 +1,24 @@
 package io.capawesome.capacitorjs.plugins.badge;
 
+import android.Manifest;
+import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 
-@CapacitorPlugin(name = "Badge", permissions = @Permission(strings = {}, alias = "display"))
+@CapacitorPlugin(
+    name = "Badge",
+    permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = BadgePlugin.PERMISSION_DISPLAY)
+)
 public class BadgePlugin extends Plugin {
+
+    public static final String PERMISSION_DISPLAY = "display";
 
     private Badge implementation;
 
@@ -90,6 +99,32 @@ public class BadgePlugin extends Plugin {
         }
     }
 
+    @Override
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject result = new JSObject();
+            result.put(PERMISSION_DISPLAY, "granted");
+            call.resolve(result);
+        } else {
+            super.checkPermissions(call);
+        }
+    }
+
+    @Override
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject result = new JSObject();
+            result.put(PERMISSION_DISPLAY, "granted");
+            call.resolve(result);
+        } else if (getPermissionState(PERMISSION_DISPLAY) == PermissionState.GRANTED) {
+            checkPermissions(call);
+        } else {
+            requestPermissionForAlias(PERMISSION_DISPLAY, call, "permissionsCallback");
+        }
+    }
+
     private BadgeConfig getBadgeConfig() {
         BadgeConfig config = new BadgeConfig();
 
@@ -99,5 +134,10 @@ public class BadgePlugin extends Plugin {
         config.setAutoClear(autoClear);
 
         return config;
+    }
+
+    @PermissionCallback
+    private void permissionsCallback(PluginCall call) {
+        checkPermissions(call);
     }
 }
