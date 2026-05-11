@@ -1,15 +1,23 @@
 package io.capawesome.capacitorjs.plugins.badge;
 
+import android.Manifest;
+import android.os.Build;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 
-@CapacitorPlugin(name = "Badge", permissions = @Permission(strings = {}, alias = "display"))
+@CapacitorPlugin(
+    name = "Badge",
+    permissions = @Permission(strings = { Manifest.permission.POST_NOTIFICATIONS }, alias = BadgePlugin.DISPLAY)
+)
 public class BadgePlugin extends Plugin {
+
+    public static final String DISPLAY = "display";
 
     private Badge implementation;
 
@@ -87,6 +95,32 @@ public class BadgePlugin extends Plugin {
             call.resolve(ret);
         } catch (Exception ex) {
             call.reject(ex.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    @PluginMethod
+    public void checkPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject result = new JSObject();
+            result.put(DISPLAY, "granted");
+            call.resolve(result);
+        } else {
+            super.checkPermissions(call);
+        }
+    }
+
+    @Override
+    @PluginMethod
+    public void requestPermissions(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            JSObject result = new JSObject();
+            result.put(DISPLAY, "granted");
+            call.resolve(result);
+        } else if (getPermissionState(DISPLAY) == PermissionState.GRANTED) {
+            checkPermissions(call);
+        } else {
+            requestPermissionForAlias(DISPLAY, call, "permissionsCallback");
         }
     }
 

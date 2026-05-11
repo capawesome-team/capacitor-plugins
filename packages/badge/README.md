@@ -355,6 +355,8 @@ Request permission to display badge.
 
 On **Android** not all launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger). All supported launchers are listed [there](https://github.com/leolin310148/ShortcutBadger#supported-launchers).
 
+On **Android 13+**, call `requestPermissions()` before setting the badge count if your app targets Android's notification runtime permission.
+
 On **Web**, the app must run as an installed PWA (in the taskbar or dock).
 
 ## Changelog
