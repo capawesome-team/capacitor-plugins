@@ -64,10 +64,14 @@ export interface BadgePlugin {
   isSupported(): Promise<IsSupportedResult>;
   /**
    * Check permission to display badge.
+   *
+   * On Android 13+, this checks the notification permission.
    */
   checkPermissions(): Promise<PermissionStatus>;
   /**
    * Request permission to display badge.
+   *
+   * On Android 13+, this requests the notification permission.
    */
   requestPermissions(): Promise<PermissionStatus>;
 }

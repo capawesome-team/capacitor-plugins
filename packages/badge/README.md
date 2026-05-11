@@ -293,6 +293,8 @@ checkPermissions() => Promise<PermissionStatus>
 
 Check permission to display badge.
 
+On Android 13+, this checks the notification permission.
+
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 --------------------
@@ -305,6 +307,8 @@ requestPermissions() => Promise<PermissionStatus>
 ```
 
 Request permission to display badge.
+
+On Android 13+, this requests the notification permission.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
