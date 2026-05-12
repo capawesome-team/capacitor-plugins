@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-formbricks",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial Capacitor plugin for Formbricks.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
