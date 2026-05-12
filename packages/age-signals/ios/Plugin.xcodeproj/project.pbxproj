@@ -20,6 +20,7 @@
 		7C2FC3452ED3795D000FC952 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3442ED3795A000FC952 /* Result.swift */; };
 		7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3462ED37997000FC952 /* UserStatus.swift */; };
 		7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */; };
+		7C2FC3502ED4A000000FC952 /* AgeRangeDeclaration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		7C2FC3442ED3795A000FC952 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		7C2FC3462ED37997000FC952 /* UserStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatus.swift; sourceTree = "<group>"; };
 		7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsOptions.swift; sourceTree = "<group>"; };
+		7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeDeclaration.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 		7C2FC33C2ED36FC5000FC952 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */,
 				7C2FC3462ED37997000FC952 /* UserStatus.swift */,
 				7C2FC33D2ED36FCB000FC952 /* CustomError.swift */,
 			);
@@ -365,6 +368,7 @@
 				7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */,
 				7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */,
 				7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */,
+				7C2FC3502ED4A000000FC952 /* AgeRangeDeclaration.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

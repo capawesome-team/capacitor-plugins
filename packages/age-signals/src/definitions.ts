@@ -115,6 +115,14 @@ export interface CheckAgeSignalsResult {
    * @example "abc123xyz"
    */
   installId?: string;
+  /**
+   * The age range declaration type.
+   *
+   * Only available on iOS (26.2+).
+   *
+   * @since 0.4.0
+   */
+  ageRangeDeclaration?: AgeRangeDeclaration;
 }
 
 /**
@@ -167,14 +175,22 @@ export enum UserStatus {
    */
   SupervisedApprovalDenied = 'SUPERVISED_APPROVAL_DENIED',
   /**
-   * The user is not verified or supervised in applicable jurisdictions and regions. These users could be over or under 18.
+   * The user's age is unknown and the user is in an applicable jurisdiction or region.
    * To obtain an age signal from Google Play, ask the user to visit the Play Store to resolve their status.
    *
    * @since 0.0.1
    */
   Unknown = 'UNKNOWN',
   /**
-   * All other users return this value.
+   * The user has self-declared or guardian-declared their age.
+   *
+   * Only available on Android.
+   *
+   * @since 0.4.0
+   */
+  Declared = 'DECLARED',
+  /**
+   * The user is either not in an applicable jurisdiction or region, or the user does not share their age with apps.
    *
    * @since 0.0.1
    */
@@ -245,6 +261,38 @@ export enum ErrorCode {
    * @since 0.0.1
    */
   InternalError = 'INTERNAL_ERROR',
+  /**
+   * The Age Signals SDK version is outdated.
+   *
+   * Only available on Android.
+   *
+   * @since 0.4.0
+   */
+  SdkVersionOutdated = 'SDK_VERSION_OUTDATED',
+}
+
+/**
+ * @since 0.4.0
+ */
+export enum AgeRangeDeclaration {
+  /**
+   * The age range was self-declared by the user without external verification.
+   *
+   * @since 0.4.0
+   */
+  SelfDeclared = 'SELF_DECLARED',
+  /**
+   * The age range was declared by a guardian without external verification.
+   *
+   * @since 0.4.0
+   */
+  GuardianDeclared = 'GUARDIAN_DECLARED',
+  /**
+   * The age range was set using a scrutinized method, like a credit card or government ID.
+   *
+   * @since 0.4.0
+   */
+  Confirmed = 'CONFIRMED',
 }
 
 /**

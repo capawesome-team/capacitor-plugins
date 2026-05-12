@@ -4,7 +4,14 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 0.4.x](#version-04x)
 - [Version 0.3.x](#version-03x)
+
+## Version 0.4.x
+
+### Variables
+
+- On Android, the `androidPlayAgeSignalsVersion` variable has been updated to `0.0.3`.
 
 ## Version 0.3.x
 

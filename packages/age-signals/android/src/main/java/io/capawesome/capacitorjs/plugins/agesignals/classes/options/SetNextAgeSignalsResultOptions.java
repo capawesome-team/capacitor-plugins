@@ -75,7 +75,7 @@ public class SetNextAgeSignalsResultOptions {
         }
     }
 
-    @NonNull
+    @Nullable
     private Integer mapUserStatusToVerificationStatus(@NonNull UserStatus userStatus) {
         switch (userStatus) {
             case VERIFIED:
@@ -88,8 +88,11 @@ public class SetNextAgeSignalsResultOptions {
                 return AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED;
             case UNKNOWN:
                 return AgeSignalsVerificationStatus.UNKNOWN;
+            case DECLARED:
+                return AgeSignalsVerificationStatus.DECLARED;
+            case EMPTY:
             default:
-                return AgeSignalsVerificationStatus.UNKNOWN;
+                return null;
         }
     }
 

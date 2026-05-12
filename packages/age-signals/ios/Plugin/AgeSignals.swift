@@ -101,12 +101,35 @@ import DeclaredAgeRange
                 status = .unknown
             }
 
+            let declaration: AgeRangeDeclaration?
+            if #available(iOS 26.2, *), let value = range.ageRangeDeclaration {
+                if #available(iOS 26.5, *), value == .confirmed {
+                    declaration = .confirmed
+                } else {
+                    switch value {
+                    case .selfDeclared:
+                        declaration = .selfDeclared
+                    case .guardianDeclared:
+                        declaration = .guardianDeclared
+                    case .checkedByOtherMethod, .guardianCheckedByOtherMethod,
+                         .governmentIDChecked, .guardianGovernmentIDChecked,
+                         .paymentChecked, .guardianPaymentChecked:
+                        declaration = .confirmed
+                    default:
+                        declaration = nil
+                    }
+                }
+            } else {
+                declaration = nil
+            }
+
             return CheckAgeSignalsResult(
                 userStatus: status,
                 ageLower: lower,
                 ageUpper: upper,
                 mostRecentApprovalDate: nil,
-                installId: nil
+                installId: nil,
+                ageRangeDeclaration: declaration
             )
 
         @unknown default:

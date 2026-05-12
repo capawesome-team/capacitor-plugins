@@ -6,5 +6,6 @@ public enum UserStatus {
     SUPERVISED_APPROVAL_PENDING,
     SUPERVISED_APPROVAL_DENIED,
     UNKNOWN,
+    DECLARED,
     EMPTY
 }

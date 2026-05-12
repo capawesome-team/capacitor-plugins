@@ -33,6 +33,10 @@ public class CustomExceptions {
     );
     public static final CustomException APP_NOT_OWNED = new CustomException("APP_NOT_OWNED", "The app was not installed by Google Play.");
     public static final CustomException INTERNAL_ERROR = new CustomException("INTERNAL_ERROR", "Unknown internal error.");
+    public static final CustomException SDK_VERSION_OUTDATED = new CustomException(
+        "SDK_VERSION_OUTDATED",
+        "The Age Signals SDK version is outdated."
+    );
     public static final CustomException USER_STATUS_MISSING = new CustomException(null, "userStatus must be provided.");
     public static final CustomException FAKE_MANAGER_NOT_ENABLED = new CustomException(null, "Fake manager is not enabled.");
 }
