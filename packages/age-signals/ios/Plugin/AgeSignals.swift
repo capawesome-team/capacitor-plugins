@@ -103,25 +103,21 @@ import DeclaredAgeRange
 
             let declaration: AgeRangeDeclaration?
             if #available(iOS 26.2, *), let value = range.ageRangeDeclaration {
-                switch value {
-                case .selfDeclared:
-                    declaration = .selfDeclared
-                case .guardianDeclared:
-                    declaration = .guardianDeclared
-                case .checkedByOtherMethod:
+                if #available(iOS 26.5, *), value == .confirmed {
                     declaration = .confirmed
-                case .guardianCheckedByOtherMethod:
-                    declaration = .confirmed
-                case .governmentIDChecked:
-                    declaration = .confirmed
-                case .guardianGovernmentIDChecked:
-                    declaration = .confirmed
-                case .paymentChecked:
-                    declaration = .confirmed
-                case .guardianPaymentChecked:
-                    declaration = .confirmed
-                @unknown default:
-                    declaration = nil
+                } else {
+                    switch value {
+                    case .selfDeclared:
+                        declaration = .selfDeclared
+                    case .guardianDeclared:
+                        declaration = .guardianDeclared
+                    case .checkedByOtherMethod, .guardianCheckedByOtherMethod,
+                         .governmentIDChecked, .guardianGovernmentIDChecked,
+                         .paymentChecked, .guardianPaymentChecked:
+                        declaration = .confirmed
+                    default:
+                        declaration = nil
+                    }
                 }
             } else {
                 declaration = nil
