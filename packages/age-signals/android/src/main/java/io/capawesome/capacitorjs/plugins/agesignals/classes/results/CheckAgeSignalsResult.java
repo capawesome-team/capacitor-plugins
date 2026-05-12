@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import com.google.android.play.agesignals.AgeSignalsResult;
+import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus;
 import io.capawesome.capacitorjs.plugins.agesignals.enums.UserStatus;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.Result;
 
@@ -60,17 +61,17 @@ public class CheckAgeSignalsResult implements Result {
         }
 
         switch (status) {
-            case 0:
+            case AgeSignalsVerificationStatus.VERIFIED:
                 return UserStatus.VERIFIED;
-            case 1:
+            case AgeSignalsVerificationStatus.SUPERVISED:
                 return UserStatus.SUPERVISED;
-            case 2:
+            case AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING:
                 return UserStatus.SUPERVISED_APPROVAL_PENDING;
-            case 3:
+            case AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED:
                 return UserStatus.SUPERVISED_APPROVAL_DENIED;
-            case 4:
+            case AgeSignalsVerificationStatus.UNKNOWN:
                 return UserStatus.UNKNOWN;
-            case 5:
+            case AgeSignalsVerificationStatus.DECLARED:
                 return UserStatus.DECLARED;
             default:
                 throw new IllegalArgumentException("Invalid UserStatus: " + status);
