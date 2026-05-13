@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.8
+
+### Patch Changes
+
+- [`ed048350d3dd6652dc861248252310a38a29ffab`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ed048350d3dd6652dc861248252310a38a29ffab) ([#452](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/452)): feat(ios): support monthly-with-12-month-commitment billing plans (iOS 26.4+)
+
 ## 0.3.7
 
 ### Patch Changes
