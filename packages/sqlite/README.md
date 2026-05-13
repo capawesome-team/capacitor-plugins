@@ -106,6 +106,8 @@ ext {
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
+
 #### Bundled SQLite
 
 By default, this plugin uses the system SQLite version provided by the Android device. If you want to use a newer, consistent SQLite version across all devices, you can opt in to bundling [requery/sqlite-android](https://github.com/requery/sqlite-android) by setting the `capawesomeCapacitorSqliteIncludeRequery` variable to `true` in your app's `variables.gradle` file:
@@ -176,6 +178,8 @@ end
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
+
 #### Swift Package Manager
 
 No additional setup is required for SPM.
@@ -201,6 +205,8 @@ Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
 **Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
+
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
 
 ### Web
 
@@ -957,3 +963,14 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/sqlite/LICENSE).
+
+## Third-Party Notices
+
+If you enable SQLCipher (see the [Encryption](#encryption) section), your
+application takes on the SQLCipher Community Edition BSD-style license
+obligations. You must reproduce the copyright notice and license text in a
+**user-accessible location** — typically an "About" or "Licensing" screen,
+or product documentation linked from the application. This plugin does not
+include a SQLCipher commercial license; the BSD attribution applies. See
+the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the
+full text.

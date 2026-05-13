@@ -599,3 +599,18 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/purchases/LICENSE).
+
+## Third-Party Notices
+
+This plugin depends on the **Google Play Billing Library**
+(`com.android.billingclient:billing`), governed by the [Android Software
+Development Kit License Agreement](https://developer.android.com/studio/terms).
+The library is not bundled in this plugin; it is fetched at build time from
+Google's Maven repository by your application's build system. By building
+an Android application that uses this plugin, you accept the Android SDK
+License Agreement and the [Google Play Developer Program Policies](https://play.google.com/about/developer-content-policy/),
+and you are responsible for ensuring your app complies with both. This
+plugin is intended for use in applications distributed via the Google Play
+Store on compatible Android devices. "Google Play", "Google Play Billing",
+and "Google Play Store" are used as descriptive identifiers only — no
+affiliation with or endorsement by Google is claimed or implied.
