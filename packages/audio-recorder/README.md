@@ -526,6 +526,21 @@ or paused or if an error occurs.
 
 </docgen-api>
 
+## Troubleshooting
+
+##### `recordingError` event fires with "An unknown error occurred." and the recording file is 0 bytes
+
+This typically happens when an incompatible combination of `bitRate` and `sampleRate` is passed to `startRecording(...)`. The AAC encoder accepts the settings without error at start, but silently fails to encode, producing an empty file and triggering the `recordingError` event on stop.
+
+For example, requesting `bitRate: 256000` with `sampleRate: 16000` (mono AAC) is invalid, because the requested bitrate is far higher than what the encoder can produce from the given sample rate. As a rule of thumb, AAC requires roughly `bitRate <= sampleRate * channels * 6`. Either lower the `bitRate` or raise the `sampleRate` (the default is `44100` Hz, which works with bitrates up to ~256 kbps):
+
+```typescript
+await AudioRecorder.startRecording({
+  bitRate: 256_000,
+  sampleRate: 44_100,
+});
+```
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/audio-recorder/CHANGELOG.md).
