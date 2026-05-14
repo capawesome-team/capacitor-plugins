@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.2
+
+### Patch Changes
+
+- [`f745456d73d53e850edca6434c7c54e191be2bf1`](https://github.com/capawesome-team/capacitor-plugins/commit/f745456d73d53e850edca6434c7c54e191be2bf1) ([#855](https://github.com/capawesome-team/capacitor-plugins/pull/855)): fix(android): prevent crash during bundle cleanup when a directory is unreadable
+
 ## 8.2.1
 
 ### Patch Changes
