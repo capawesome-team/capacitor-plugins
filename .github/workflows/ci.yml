@@ -14,8 +14,9 @@ on:
   workflow_dispatch:
 
 env:
-  NODE_VERSION: 20
+  NODE_VERSION: 24
   JAVA_VERSION: 21
+  MAESTRO_VERSION: 2.5.1
   TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
 
 jobs:
@@ -144,17 +145,8 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: ${{ env.JAVA_VERSION }}
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
       - name: Install Node.js dependencies
         run: npm ci
-      - name: Install Maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
       - name: Discover packages with e2e:android
         id: pkgs
         run: |
@@ -169,20 +161,38 @@ jobs:
             echo "$dirs"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
-      - name: Build example APKs
+          if [ -n "$dirs" ]; then
+            echo "has_pkgs=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Enable KVM
+        if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          for dir in ${{ steps.pkgs.outputs.dirs }}; do
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install Maestro
+        if: steps.pkgs.outputs.has_pkgs == 'true'
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | MAESTRO_VERSION="${{ env.MAESTRO_VERSION }}" bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+      - name: Build example APKs
+        if: steps.pkgs.outputs.has_pkgs == 'true'
+        run: |
+          while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
             echo "::group::Building APK in $dir/example"
             (
+              npm --prefix "$dir" run build
               cd "$dir/example"
-              npm install
+              npm ci
               npm run build
               npx cap sync android
               cd android && ./gradlew assembleDebug
             )
             echo "::endgroup::"
-          done
+          done <<< "${{ steps.pkgs.outputs.dirs }}"
       - name: Run e2e on emulator
+        if: steps.pkgs.outputs.has_pkgs == 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: 34
@@ -193,16 +203,17 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            for dir in ${{ steps.pkgs.outputs.dirs }}; do
+            while IFS= read -r dir; do
+              [ -z "$dir" ] && continue
               adb install -r "$dir/example/android/app/build/outputs/apk/debug/app-debug.apk"
-            done
+            done <<< "${{ steps.pkgs.outputs.dirs }}"
             if [ "$GITHUB_REF" = "refs/heads/main" ]; then
               npm run e2e:android
             else
               npm run affected:e2e:android
             fi
       - name: Upload Maestro artifacts on failure
-        if: failure()
+        if: failure() && steps.pkgs.outputs.has_pkgs == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: maestro-android-${{ github.run_id }}
@@ -227,10 +238,6 @@ jobs:
           xcode-version: '16.4'
       - name: Install Node.js dependencies
         run: npm ci
-      - name: Install Maestro
-        run: |
-          curl -Ls "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
       - name: Discover packages with e2e:ios
         id: pkgs
         run: |
@@ -241,19 +248,31 @@ jobs:
             echo "$dirs"
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
+          if [ -n "$dirs" ]; then
+            echo "has_pkgs=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install Maestro
+        if: steps.pkgs.outputs.has_pkgs == 'true'
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | MAESTRO_VERSION="${{ env.MAESTRO_VERSION }}" bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
       - name: Boot iOS simulator
+        if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
           UDID=$(xcrun simctl list devices available | grep "iPhone 16 Pro " | head -1 | grep -oE '[0-9A-F-]{36}')
           echo "SIM_UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
       - name: Build and install example apps
+        if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          for dir in ${{ steps.pkgs.outputs.dirs }}; do
+          while IFS= read -r dir; do
+            [ -z "$dir" ] && continue
             echo "::group::Building .app in $dir/example"
             (
+              npm --prefix "$dir" run build
               cd "$dir/example"
-              npm install
+              npm ci
               npm run build
               npx cap sync ios
               cd ios/App
@@ -262,11 +281,12 @@ jobs:
               xcrun simctl install "$SIM_UDID" build/Build/Products/Debug-iphonesimulator/App.app
             )
             echo "::endgroup::"
-          done
+          done <<< "${{ steps.pkgs.outputs.dirs }}"
       - name: Run e2e
+        if: steps.pkgs.outputs.has_pkgs == 'true'
         run: npm run e2e:ios
       - name: Upload Maestro artifacts on failure
-        if: failure()
+        if: failure() && steps.pkgs.outputs.has_pkgs == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: maestro-ios-${{ github.run_id }}

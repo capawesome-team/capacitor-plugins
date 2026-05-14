@@ -8,7 +8,7 @@ A minimal valid zip used as a live-update bundle in e2e flows.
 
 The Maestro flow `.maestro/download-checksum-mismatch.yaml` passes a different checksum on purpose to assert that the plugin fails with `Checksum mismatch.`.
 
-## `mock-server.js`
+## `mock-server.mjs`
 
 Tiny zero-dependency HTTP server that serves `fixtures/bundle.zip` on `GET /bundle.zip`. Listens on port `4000`.
 
