@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [`cfd83abaf5639f53d009addc40664361e14da0e5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cfd83abaf5639f53d009addc40664361e14da0e5) ([#456](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/456)): feat: support custom seek offset on Android and iOS
+
 ## 8.2.2
 
 ### Patch Changes
