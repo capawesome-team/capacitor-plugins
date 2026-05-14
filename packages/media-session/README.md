@@ -277,6 +277,7 @@ const removeActionListener = async () => {
 * [`setMicrophoneActive(...)`](#setmicrophoneactive)
 * [`setPlaybackState(...)`](#setplaybackstate)
 * [`setPositionState(...)`](#setpositionstate)
+* [`setSeekOffset(...)`](#setseekoffset)
 * [`unregisterActionHandler(...)`](#unregisteractionhandler)
 * [`addListener('action', ...)`](#addlisteneraction-)
 * [`removeAllListeners()`](#removealllisteners)
@@ -400,6 +401,31 @@ Set the position state.
 --------------------
 
 
+### setSeekOffset(...)
+
+```typescript
+setSeekOffset(options: SetSeekOffsetOptions) => Promise<void>
+```
+
+Set the seek offset for the `SeekForward` and `SeekBackward` actions.
+
+The offset controls both the value emitted in the `action` event's
+`seekOffset` property and the offset displayed by the OS (e.g., the
+number badge on the iOS lock-screen skip button).
+
+Can be called at any time; the new offset is applied immediately.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setseekoffsetoptions">SetSeekOffsetOptions</a></code> |
+
+**Since:** 8.3.0
+
+--------------------
+
+
 ### unregisterActionHandler(...)
 
 ```typescript
@@ -508,6 +534,14 @@ Remove all listeners for this plugin.
 | **`duration`**     | <code>number</code> | The duration of the media in seconds.         | 0.0.1 |
 | **`playbackRate`** | <code>number</code> | The playback rate of the media.               | 0.0.1 |
 | **`position`**     | <code>number</code> | The current position of the media in seconds. | 0.0.1 |
+
+
+#### SetSeekOffsetOptions
+
+| Prop                     | Type                | Description                                                                                                                | Default         | Since |
+| ------------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------- | ----- |
+| **`seekBackwardOffset`** | <code>number</code> | The offset in seconds for the `SeekBackward` action. Must be greater than `0`. If not provided, the current value is kept. | <code>10</code> | 8.3.0 |
+| **`seekForwardOffset`**  | <code>number</code> | The offset in seconds for the `SeekForward` action. Must be greater than `0`. If not provided, the current value is kept.  | <code>10</code> | 8.3.0 |
 
 
 #### UnregisterActionHandlerOptions
