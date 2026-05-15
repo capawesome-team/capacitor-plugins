@@ -152,15 +152,11 @@ jobs:
         run: |
           filter='.tasks[] | select(.command != "<NONEXISTENT>") | .directory'
           if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-            dirs=$(npx turbo run e2e:android --dry-run=json | jq -r "$filter")
+            dirs=$(npx turbo run e2e:android --dry-run=json | jq -r "$filter" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
           else
-            dirs=$(npx turbo run e2e:android --affected --dry-run=json | jq -r "$filter")
+            dirs=$(npx turbo run e2e:android --affected --dry-run=json | jq -r "$filter" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
           fi
-          {
-            echo "dirs<<EOF"
-            echo "$dirs"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          echo "dirs=$dirs" >> "$GITHUB_OUTPUT"
           if [ -n "$dirs" ]; then
             echo "has_pkgs=true" >> "$GITHUB_OUTPUT"
           fi
@@ -178,8 +174,7 @@ jobs:
       - name: Build example APKs
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
-            [ -z "$dir" ] && continue
+          for dir in ${{ steps.pkgs.outputs.dirs }}; do
             echo "::group::Building APK in $dir/example"
             (
               npm --prefix "$dir" run build
@@ -203,15 +198,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
-              [ -z "$dir" ] && continue
-              adb install -r "$dir/example/android/app/build/outputs/apk/debug/app-debug.apk"
-            done
-            if [ "$GITHUB_REF" = "refs/heads/main" ]; then
-              npm run e2e:android
-            else
-              npm run affected:e2e:android
-            fi
+            for dir in ${{ steps.pkgs.outputs.dirs }}; do adb install -r "$dir/example/android/app/build/outputs/apk/debug/app-debug.apk"; done
+            if [ "$GITHUB_REF" = "refs/heads/main" ]; then npm run e2e:android; else npm run affected:e2e:android; fi
       - name: Upload Maestro artifacts on failure
         if: failure() && steps.pkgs.outputs.has_pkgs == 'true'
         uses: actions/upload-artifact@v4
@@ -242,12 +230,8 @@ jobs:
         id: pkgs
         run: |
           filter='.tasks[] | select(.command != "<NONEXISTENT>") | .directory'
-          dirs=$(npx turbo run e2e:ios --dry-run=json | jq -r "$filter")
-          {
-            echo "dirs<<EOF"
-            echo "$dirs"
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          dirs=$(npx turbo run e2e:ios --dry-run=json | jq -r "$filter" | tr '\n' ' ' | sed 's/[[:space:]]*$//')
+          echo "dirs=$dirs" >> "$GITHUB_OUTPUT"
           if [ -n "$dirs" ]; then
             echo "has_pkgs=true" >> "$GITHUB_OUTPUT"
           fi
@@ -266,8 +250,7 @@ jobs:
       - name: Build and install example apps
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
-            [ -z "$dir" ] && continue
+          for dir in ${{ steps.pkgs.outputs.dirs }}; do
             echo "::group::Building .app in $dir/example"
             (
               npm --prefix "$dir" run build
