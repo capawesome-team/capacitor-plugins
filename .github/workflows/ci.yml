@@ -210,7 +210,6 @@ jobs:
     name: E2E (iOS)
     runs-on: macos-latest
     needs: [build-ios, build-web]
-    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/main'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
