@@ -178,7 +178,7 @@ jobs:
       - name: Build example APKs
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          while IFS= read -r dir; do
+          echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
             [ -z "$dir" ] && continue
             echo "::group::Building APK in $dir/example"
             (
@@ -190,7 +190,7 @@ jobs:
               cd android && ./gradlew assembleDebug
             )
             echo "::endgroup::"
-          done <<< "${{ steps.pkgs.outputs.dirs }}"
+          done
       - name: Run e2e on emulator
         if: steps.pkgs.outputs.has_pkgs == 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -203,10 +203,10 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -no-boot-anim -camera-back none
           disable-animations: true
           script: |
-            while IFS= read -r dir; do
+            echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
               [ -z "$dir" ] && continue
               adb install -r "$dir/example/android/app/build/outputs/apk/debug/app-debug.apk"
-            done <<< "${{ steps.pkgs.outputs.dirs }}"
+            done
             if [ "$GITHUB_REF" = "refs/heads/main" ]; then
               npm run e2e:android
             else
@@ -266,7 +266,7 @@ jobs:
       - name: Build and install example apps
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          while IFS= read -r dir; do
+          echo "${{ steps.pkgs.outputs.dirs }}" | while IFS= read -r dir; do
             [ -z "$dir" ] && continue
             echo "::group::Building .app in $dir/example"
             (
@@ -281,7 +281,7 @@ jobs:
               xcrun simctl install "$SIM_UDID" build/Build/Products/Debug-iphonesimulator/App.app
             )
             echo "::endgroup::"
-          done <<< "${{ steps.pkgs.outputs.dirs }}"
+          done
       - name: Run e2e
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: npm run e2e:ios
