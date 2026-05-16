@@ -1,0 +1,15 @@
+appId: com.example.plugin
+name: Smoke Test
+---
+- launchApp:
+    clearState: true
+- assertVisible: 'Capacitor Live Update'
+- scrollUntilVisible:
+    element:
+      text: 'Clear Blocked Bundles'
+- scrollUntilVisible:
+    element:
+      text: 'Ready'
+- scrollUntilVisible:
+    element:
+      text: 'Sync'
