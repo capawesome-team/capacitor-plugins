@@ -52,6 +52,8 @@
 		7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */; };
 		7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */; };
 		7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */; };
+		AA0300000000000000010001 /* LiveUpdateIonicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */; };
+		AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010002 /* LiveUpdateIonicManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -113,6 +115,8 @@
 		7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelResult.swift; sourceTree = "<group>"; };
 		7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChannelsResult.swift; sourceTree = "<group>"; };
 		7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetChannelsResponseItem.swift; sourceTree = "<group>"; };
+		AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicProvider.swift; sourceTree = "<group>"; };
+		AA0200000000000000010002 /* LiveUpdateIonicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicManager.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -167,6 +171,7 @@
 				7C29FB512CBCE2A8007DCB06 /* Enums */,
 				7C20114D2BA9651D001FABAD /* Protocols */,
 				7C20114C2BA96518001FABAD /* Classes */,
+				AA0400000000000000010001 /* Providers */,
 				50E1A94720377CB70090CE1A /* LiveUpdatePlugin.swift */,
 				2F98D68124C9AAE400613A4C /* LiveUpdate.swift */,
 				7C29FB4F2CBAB66C007DCB06 /* LiveUpdateHttpClient.swift */,
@@ -175,6 +180,23 @@
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
+			sourceTree = "<group>";
+		};
+		AA0400000000000000010001 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				AA0400000000000000010002 /* Ionic */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		AA0400000000000000010002 /* Ionic */ = {
+			isa = PBXGroup;
+			children = (
+				AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */,
+				AA0200000000000000010002 /* LiveUpdateIonicManager.swift */,
+			);
+			path = Ionic;
 			sourceTree = "<group>";
 		};
 		50ADFF95201F53D600D50D53 /* PluginTests */ = {
@@ -513,6 +535,8 @@
 				7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */,
 				7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */,
 				7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */,
+				AA0300000000000000010001 /* LiveUpdateIonicProvider.swift in Sources */,
+				AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
