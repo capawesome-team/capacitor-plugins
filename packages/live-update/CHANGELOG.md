@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.3
+
+### Patch Changes
+
+- [`d7a3d10e4ba1f22f7014bf814d0e3ba4d2842aa8`](https://github.com/capawesome-team/capacitor-plugins/commit/d7a3d10e4ba1f22f7014bf814d0e3ba4d2842aa8): fix: set correct plugin version
+
 ## 8.2.2
 
 ### Patch Changes
