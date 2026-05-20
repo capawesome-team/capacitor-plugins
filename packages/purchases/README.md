@@ -34,6 +34,12 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 | -------------- | ----------------- | -------------- |
 | 0.3.x          | >=8.x.x           | Active support |
 
+## Prerequisites
+
+### iOS
+
+Xcode 26.5 or later is required to build the plugin.
+
 ## Guides
 
 - [Tips for Setting Up In-App Purchases with Capacitor](https://capawesome.io/blog/tips-for-setting-up-in-app-purchases-with-capacitor/)
