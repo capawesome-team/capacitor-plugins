@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.getcapacitor.Logger;
 import java.lang.reflect.Constructor;
@@ -42,6 +43,12 @@ public class EdgeToEdge {
     }
 
     public void enable() {
+        // Opt into edge-to-edge layout so the DecorView stops auto-consuming system bar
+        // insets as padding. Without this, inset listeners set by other plugins (notably
+        // @capacitor/keyboard >= 8.0.2) can perturb the inset dispatch chain and make the
+        // overlay views end up in the wrong place or with zero height. On Android 15+
+        // this is already enforced by the platform.
+        WindowCompat.setDecorFitsSystemWindows(plugin.getActivity().getWindow(), false);
         // Create color overlays if they don't exist
         createColorOverlays();
         // Restore previously set colors
