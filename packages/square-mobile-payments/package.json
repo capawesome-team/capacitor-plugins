@@ -64,7 +64,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",
