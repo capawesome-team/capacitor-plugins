@@ -90,6 +90,19 @@ const present = async () => {
 
   return value;
 };
+
+const presentMonthYear = async () => {
+  const { value } = await DatetimePicker.present({
+    cancelButtonText: 'Cancel',
+    doneButtonText: 'Ok',
+    mode: 'month-year',
+    value: '2026-05',
+    format: 'yyyy-MM',
+    locale: 'en-US',
+  });
+
+  return value;
+};
 ```
 
 ## API
@@ -165,7 +178,7 @@ Only available on Android and iOS.
 | **`locale`**                | <code>string</code>                         | BCP 47 language tag to define the language of the UI.                                                                                                                                                                                                                  |                                             | 0.0.2 |
 | **`max`**                   | <code>string</code>                         | The latest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string later than or equal to the one specified by the `min` attribute.                                                    |                                             | 0.0.1 |
 | **`min`**                   | <code>string</code>                         | The earliest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string earlier than or equal to the one specified by the `max` attribute.                                                |                                             | 0.0.1 |
-| **`mode`**                  | <code>'date' \| 'time' \| 'datetime'</code> | Whether you want a date or time or datetime picker.                                                                                                                                                                                                                    | <code>'datetime'</code>                     | 0.0.1 |
+| **`mode`**                  | <code>'date' \| 'time' \| 'datetime' \| 'month-year'</code> | Whether you want a date, time, datetime, or month-year picker.                                                                                                                                                                                                         | <code>'datetime'</code>                     | 0.0.1 |
 | **`theme`**                 | <code>'auto' \| 'light' \| 'dark'</code>    | Choose the theme that the datetime picker should have. With `auto` the system theme is used. This value overwrites the `theme` configuration value. Only available on Android and iOS. Spinner options only available on Android                                       |                                             | 0.0.1 |
 | **`value`**                 | <code>string</code>                         | The predefined value when opening the picker. The format of this value must match the value of the `format` parameter.                                                                                                                                                 |                                             | 0.0.1 |
 | **`androidTimePickerMode`** | <code>'clock' \| 'spinner'</code>           | Whether to use the spinner or clock mode for the time picker on Android. This value overwrites the `androidTimePickerMode` configuration value. Only available on Android.                                                                                             |                                             | 5.1.0 |

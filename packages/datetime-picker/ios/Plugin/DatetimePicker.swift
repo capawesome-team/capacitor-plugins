@@ -32,6 +32,32 @@ import Foundation
         }
     }
 
+    @objc public func presentMonthYearPicker(date: Date, minDate: Date?, maxDate: Date?, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, completion: @escaping (Date?, ErrorCode) -> Void) {
+        closeKeyboard()
+        DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
+            guard let cc = self.plugin.bridge?.viewController else { return }
+
+            let vc = MonthYearPickerController(title: "", cancelText: cancelButtonText, doneText: doneButtonText,
+                                               selectedDate: date, minDate: minDate, maxDate: maxDate,
+                                               locale: locale, theme: self.getTheme(unconvertedTheme: theme))
+
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.modalTransitionStyle = .crossDissolve
+
+            vc.onDateSelected = { (selectedDate) in
+                completion(selectedDate, ErrorCode.none)
+            }
+            vc.onCanceled = {
+                completion(nil, ErrorCode.canceled)
+            }
+            vc.onBackdropDismissed = {
+                completion(nil, ErrorCode.dismissed)
+            }
+
+            cc.present(vc, animated: true, completion: nil)
+        }
+    }
+
     @objc public func presentTimePicker(date: Date, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, minuteInterval: Int, completion: @escaping (Date?, ErrorCode) -> Void) {
         closeKeyboard()
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {

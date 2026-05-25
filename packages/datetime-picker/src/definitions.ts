@@ -107,12 +107,12 @@ export interface PresentOptions {
    */
   min?: string;
   /**
-   * Whether you want a date or time or datetime picker.
+   * Whether you want a date, time, datetime, or month-year picker.
    *
    * @since 0.0.1
    * @default 'datetime'
    */
-  mode?: 'date' | 'time' | 'datetime';
+  mode?: 'date' | 'time' | 'datetime' | 'month-year';
   /**
    * Choose the theme that the datetime picker should have.
    * With `auto` the system theme is used.
