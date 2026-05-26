@@ -92,7 +92,11 @@ export class GrafanaFaroWeb extends WebPlugin implements GrafanaFaroPlugin {
 
   public async pushEvent(options: PushEventOptions): Promise<void> {
     const faro = this.requireFaro();
-    faro.api.pushEvent(options.name, options.attributes, options.domain ?? 'web');
+    faro.api.pushEvent(
+      options.name,
+      options.attributes,
+      options.domain ?? 'web',
+    );
   }
 
   public async pushLog(options: PushLogOptions): Promise<void> {
