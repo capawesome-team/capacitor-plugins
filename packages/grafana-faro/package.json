@@ -35,8 +35,14 @@
   ],
   "keywords": [
     "capacitor",
+    "faro",
+    "grafana",
+    "monitoring",
+    "native",
+    "observability",
     "plugin",
-    "native"
+    "rum",
+    "telemetry"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -62,6 +68,7 @@
     "@capacitor/core": "8.0.0",
     "@capacitor/docgen": "0.3.1",
     "@capacitor/ios": "8.0.0",
+    "@grafana/faro-web-sdk": "2.6.3",
     "@ionic/eslint-config": "0.4.0",
     "@ionic/swiftlint-config": "2.0.0",
     "eslint": "8.57.0",
@@ -73,7 +80,13 @@
     "typescript": "5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": ">=8.0.0",
+    "@grafana/faro-web-sdk": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@grafana/faro-web-sdk": {
+      "optional": true
+    }
   },
   "swiftlint": "@ionic/swiftlint-config",
   "eslintConfig": {

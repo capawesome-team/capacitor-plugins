@@ -7,6 +7,7 @@ export default {
       name: 'capacitorGrafanaFaro',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        '@grafana/faro-web-sdk': 'grafanaFaroWebSdk',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', '@grafana/faro-web-sdk'],
 };
