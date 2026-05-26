@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`20f261efb405e6d6b1a90452a632a53e63ad3a07`](https://github.com/capawesome-team/capacitor-plugins/commit/20f261efb405e6d6b1a90452a632a53e63ad3a07) ([#862](https://github.com/capawesome-team/capacitor-plugins/pull/862)): feat: add `month` mode to `present(...)` for month and year selection
+
 ## 8.0.1
 
 ### Patch Changes
