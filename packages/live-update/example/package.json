@@ -11,8 +11,8 @@
     "start": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "e2e:android": "adb reverse tcp:4000 tcp:4000 && concurrently -k -s first \"node test/mock-server.mjs\" \"maestro test .maestro\"",
-    "e2e:ios": "concurrently -k -s first \"node test/mock-server.mjs\" \"maestro test .maestro\""
+    "e2e:android": "adb reverse tcp:4000 tcp:4000 && concurrently -k -s first \"node test/mock-server.mjs\" \"node test/run-maestro-flows.mjs\"",
+    "e2e:ios": "concurrently -k -s first \"node test/mock-server.mjs\" \"node test/run-maestro-flows.mjs\""
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
