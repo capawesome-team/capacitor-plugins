@@ -3,7 +3,9 @@ name: Smoke Test
 ---
 - launchApp:
     clearState: true
-- assertVisible: 'Capacitor Live Update'
+- extendedWaitUntil:
+    visible: 'Capacitor Live Update'
+    timeout: 10000
 - scrollUntilVisible:
     element:
       text: 'Clear Blocked Bundles'

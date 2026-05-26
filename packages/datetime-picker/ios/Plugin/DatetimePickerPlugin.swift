@@ -83,6 +83,9 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         } else if mode == "time" {
             implementation?.presentTimePicker(date: date, locale: locale, cancelButtonText: cancelButtonText,
                                               doneButtonText: doneButtonText, theme: theme, minuteInterval: minuteInterval, completion: completion)
+        } else if mode == "month" {
+            implementation?.presentMonthPicker(date: date, minDate: minDate, maxDate: maxDate, locale: locale,
+                                               cancelButtonText: cancelButtonText, doneButtonText: doneButtonText, theme: theme, completion: completion)
         } else {
             call.reject(errorModeInvalid)
         }

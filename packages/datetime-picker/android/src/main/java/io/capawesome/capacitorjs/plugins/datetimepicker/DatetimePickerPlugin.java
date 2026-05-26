@@ -125,6 +125,8 @@ public class DatetimePickerPlugin extends Plugin {
                     androidDatePickerMode,
                     androidTimePickerMode
                 );
+            } else if (mode.equals("month")) {
+                implementation.presentMonthPicker(date, minDate, maxDate, locale, cancelButtonText, doneButtonText, theme, resultCallback);
             } else {
                 call.reject(ERROR_MODE_INVALID);
             }

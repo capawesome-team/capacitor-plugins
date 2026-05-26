@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Datetime Picker</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Datetime Picker</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item>
+            <ion-select id="mode" label="Mode" value="datetime">
+              <ion-select-option value="date">date</ion-select-option>
+              <ion-select-option value="time">time</ion-select-option>
+              <ion-select-option value="datetime">datetime</ion-select-option>
+              <ion-select-option value="month">month</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select id="theme" label="Theme" value="auto">
+              <ion-select-option value="auto">auto</ion-select-option>
+              <ion-select-option value="light">light</ion-select-option>
+              <ion-select-option value="dark">dark</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="locale"
+              label="Locale"
+              placeholder="en-US"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="format"
+              label="Format"
+              placeholder="yyyy-MM-dd'T'HH:mm:ss.sss'Z'"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="value" label="Value" placeholder=""></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="min" label="Min" placeholder=""></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="max" label="Max" placeholder=""></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="cancelButtonText"
+              label="Cancel Text"
+              placeholder="Cancel"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="doneButtonText"
+              label="Done Text"
+              placeholder="Ok"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="minuteInterval"
+              label="Minute Interval (iOS)"
+              type="number"
+              placeholder="1"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              id="androidDatePickerMode"
+              label="Android Date Mode"
+              value=""
+            >
+              <ion-select-option value="">(default)</ion-select-option>
+              <ion-select-option value="calendar">calendar</ion-select-option>
+              <ion-select-option value="spinner">spinner</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select
+              id="androidTimePickerMode"
+              label="Android Time Mode"
+              value=""
+            >
+              <ion-select-option value="">(default)</ion-select-option>
+              <ion-select-option value="clock">clock</ion-select-option>
+              <ion-select-option value="spinner">spinner</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+
+        <ion-button id="present" expand="block">Present</ion-button>
+        <ion-button id="cancel" expand="block" color="medium"
+          >Cancel</ion-button
+        >
+
+        <ion-card id="result-card" style="display: none">
+          <ion-card-header>
+            <ion-card-title>Result</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <pre id="result"></pre>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

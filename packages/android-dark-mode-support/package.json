@@ -41,7 +41,6 @@
   "devDependencies": {
     "@capacitor/android": "8.0.0",
     "@capacitor/cli": "8.0.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7"
   },
   "peerDependencies": {
