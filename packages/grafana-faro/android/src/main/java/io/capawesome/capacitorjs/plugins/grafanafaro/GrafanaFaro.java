@@ -241,7 +241,7 @@ public class GrafanaFaro {
 
     public void setSession(@NonNull SetSessionOptions options) throws Exception {
         FaroMeta meta = requireMeta();
-        FaroSession session = FaroSession.createWithId(options.getId(), true);
+        FaroSession session = FaroSession.createWithId(options.getId(), sessionSamplingRate);
         session.setAttributes(options.getAttributes());
         meta.setSession(session);
     }

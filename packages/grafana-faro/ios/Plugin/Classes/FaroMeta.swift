@@ -23,7 +23,10 @@ class FaroMeta {
         if let value = app.getNamespace() { appDict["namespace"] = value }
         result["app"] = appDict
         if let session = session {
-            var sessionDict: [String: Any] = ["id": session.id]
+            var sessionDict: [String: Any] = [
+                "id": session.id,
+                "sampled": session.sampled
+            ]
             if !session.attributes.isEmpty {
                 sessionDict["attributes"] = session.attributes
             }

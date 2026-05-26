@@ -33,6 +33,9 @@ class FaroTransport {
     }
 
     func enqueue(type: FaroSignalType, payload: [String: Any]) {
+        if let session = meta.session, !session.sampled {
+            return
+        }
         queueLock.lock()
         queue.append(Signal(type: type, payload: payload))
         let shouldFlushImmediately = queue.count >= FaroTransport.itemLimit

@@ -24,13 +24,14 @@ public class FaroSession {
 
     @NonNull
     public static FaroSession create(double samplingRate) {
-        boolean sampled = new Random().nextDouble() < samplingRate;
-        return new FaroSession(UUID.randomUUID().toString(), sampled);
+        return createWithId(null, samplingRate);
     }
 
     @NonNull
-    public static FaroSession createWithId(@Nullable String id, boolean sampled) {
-        return new FaroSession(id != null && !id.isEmpty() ? id : UUID.randomUUID().toString(), sampled);
+    public static FaroSession createWithId(@Nullable String id, double samplingRate) {
+        String resolvedId = (id != null && !id.isEmpty()) ? id : UUID.randomUUID().toString();
+        boolean sampled = new Random().nextDouble() < samplingRate;
+        return new FaroSession(resolvedId, sampled);
     }
 
     @NonNull

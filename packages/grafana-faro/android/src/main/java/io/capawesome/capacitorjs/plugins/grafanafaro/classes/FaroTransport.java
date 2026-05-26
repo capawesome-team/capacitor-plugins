@@ -84,6 +84,10 @@ public class FaroTransport {
     }
 
     public synchronized void enqueue(@NonNull SignalType type, @NonNull JSONObject payload) {
+        FaroSession session = meta.getSession();
+        if (session != null && !session.isSampled()) {
+            return;
+        }
         queue.add(new Signal(type, payload));
         if (queue.size() >= ITEM_LIMIT) {
             triggerImmediateFlush();
@@ -105,22 +109,19 @@ public class FaroTransport {
     }
 
     private synchronized List<Signal> drain() {
-        if (queue.isEmpty()) {
-            return null;
-        }
-        List<Signal> snapshot = new ArrayList<>(queue);
-        queue.clear();
         if (pendingFlush != null) {
             pendingFlush.cancel(false);
             pendingFlush = null;
         }
+        if (paused.get() || queue.isEmpty()) {
+            return null;
+        }
+        List<Signal> snapshot = new ArrayList<>(queue);
+        queue.clear();
         return snapshot;
     }
 
     private void flush() {
-        if (paused.get()) {
-            return;
-        }
         List<Signal> snapshot = drain();
         if (snapshot == null) {
             return;

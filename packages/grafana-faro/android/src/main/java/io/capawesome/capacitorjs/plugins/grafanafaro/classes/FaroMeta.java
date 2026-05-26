@@ -92,6 +92,7 @@ public class FaroMeta {
         }
         JSONObject json = new JSONObject();
         JsonUtils.putIfNotNull(json, "id", session.getId());
+        JsonUtils.putIfNotNull(json, "sampled", session.isSampled());
         if (!session.getAttributes().isEmpty()) {
             JsonUtils.putIfNotNull(json, "attributes", JsonUtils.mapToJson(session.getAttributes()));
         }

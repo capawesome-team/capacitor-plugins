@@ -181,7 +181,7 @@ import Foundation
 
     func setSession(_ options: SetSessionOptions) throws {
         let meta = try requireMeta()
-        let session = FaroSession.create(id: options.getId(), samplingRate: 1.0)
+        let session = FaroSession.create(id: options.getId(), samplingRate: sessionSamplingRate)
         if let attributes = options.getAttributes() {
             session.attributes = attributes
         }
