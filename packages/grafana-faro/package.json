@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-grafana-faro",
-  "version": "0.0.1-dev.f4af2049.1779796690",
+  "version": "0.1.0",
   "description": "Unofficial Capacitor plugin for Grafana Faro.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
