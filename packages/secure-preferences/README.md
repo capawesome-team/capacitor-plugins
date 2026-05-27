@@ -12,7 +12,7 @@ Capacitor plugin to securely store key/value pairs such as passwords, tokens or 
 
 We are proud to offer one of the most complete and feature-rich Capacitor plugins for secure storage. Here are some of the key features:
 
-- 🖥️ **Cross-platform**: Supports Android, iOS and Web.
+- 🖥️ **Cross-platform**: Native secure storage on Android and iOS, with a `localStorage`-backed web implementation for development.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
 - 🔍 **Detailed Error Messages**: Get actionable error messages with specific failure reasons and error codes on iOS, making debugging keychain issues straightforward.
 - 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/plugins/biometrics/) and [SQLite](https://capawesome.io/docs/plugins/sqlite/) plugins.
@@ -129,6 +129,10 @@ If you are using Proguard, you need to add the following rules to your `proguard
 ```
 -keep class io.capawesome.capacitorjs.plugins.** { *; }
 ```
+
+### Web
+
+**Attention**: The web implementation uses `localStorage` to make cross-platform development easier. It is intended for development and testing purposes only and should NOT be used in production.
 
 ## Configuration
 
@@ -258,7 +262,7 @@ set(options: SetOptions) => Promise<void>
 Set a value given its key.
 
 On **Web**, the value is stored unencrypted in `localStorage`.
-This is for development purposes only and should not be used in production.
+This is for development purposes only and should NOT be used in production.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
