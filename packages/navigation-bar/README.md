@@ -8,6 +8,21 @@ Capacitor plugin to set the background color and button style of the navigation 
   </a>
 </div>
 
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for navigation bar customization. Here are some of the key features:
+
+- 🎨 **Background color**: Set the navigation bar background to any hex color or fully transparent.
+- 🔘 **Button style**: Choose dark or light navigation bar buttons, or follow the system appearance.
+- ➖ **Divider color**: Customize the navigation bar divider color on Android 9+.
+- 👁️ **Visibility**: Hide or show the navigation bar on demand.
+- ⚙️ **Configuration**: Apply defaults at app launch via the Capacitor configuration.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- ⭐️ **Support**: Priority support from the Capawesome Team.
+- ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
 ## Newsletter
 
 Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
