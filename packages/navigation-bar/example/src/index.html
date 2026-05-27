@@ -1,28 +1,94 @@
 <!doctype html>
-<html lang="en" dir="ltr" class="hydrated">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <title>Example Capacitor App</title>
+    <title>Capacitor Navigation Bar</title>
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
   </head>
   <body>
-    <main>
-      <h1>Capacitor Test Plugin Project</h1>
-      <p>
-        This project can be used to test out the functionality of your plugin.
-        Nothing in the
-        <em>example-app/</em> folder will be published to npm when using this
-        template, so you can create away!
-      </p>
-      <label for="echoInput">Echo Text:</label>
-      <input type="text" id="echoInput" name="echoInput" value="Hello World!" />
-      <button onclick="testEcho()">Click Me!</button>
-    </main>
-
-    <script src="./js/script.js" type="module"></script>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Navigation Bar</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-item>
+            <ion-input
+              id="color-input"
+              label="Color"
+              value="#ffffff"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="divider-color-input"
+              label="Divider Color"
+              placeholder="optional"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select id="style-select" label="Style" value="DEFAULT">
+              <ion-select-option value="DEFAULT">Default</ion-select-option>
+              <ion-select-option value="DARK">Dark</ion-select-option>
+              <ion-select-option value="LIGHT">Light</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-list>
+        <ion-list>
+          <ion-item>
+            <ion-input
+              id="current-color-input"
+              label="Current Color"
+              readonly
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="current-style-input"
+              label="Current Style"
+              readonly
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-list>
+          <ion-button id="set-color-button" expand="block"
+            >Set Color</ion-button
+          >
+          <ion-button id="set-style-button" expand="block"
+            >Set Style</ion-button
+          >
+          <ion-button id="get-color-button" expand="block"
+            >Get Color</ion-button
+          >
+          <ion-button id="get-style-button" expand="block"
+            >Get Style</ion-button
+          >
+          <ion-button id="hide-button" expand="block">Hide</ion-button>
+          <ion-button id="show-button" expand="block">Show</ion-button>
+        </ion-list>
+      </ion-content>
+    </ion-app>
   </body>
 </html>

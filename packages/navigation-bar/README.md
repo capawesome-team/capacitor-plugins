@@ -261,9 +261,9 @@ Only available on Android.
 
 #### GetColorResult
 
-| Prop        | Type                | Description                                  | Since |
-| ----------- | ------------------- | -------------------------------------------- | ----- |
-| **`color`** | <code>string</code> | The hexadecimal color of the navigation bar. | 8.0.0 |
+| Prop        | Type                | Description                                                                                                 | Since |
+| ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------- | ----- |
+| **`color`** | <code>string</code> | The hexadecimal color of the navigation bar, or `'transparent'` if the navigation bar is fully transparent. | 8.0.0 |
 
 
 #### GetStyleResult

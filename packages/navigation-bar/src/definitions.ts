@@ -97,10 +97,11 @@ export interface NavigationBarPlugin {
  */
 export interface GetColorResult {
   /**
-   * The hexadecimal color of the navigation bar.
+   * The hexadecimal color of the navigation bar, or `'transparent'` if the navigation bar is fully transparent.
    *
    * @since 8.0.0
    * @example "#ffffff"
+   * @example "transparent"
    */
   color: string;
 }
@@ -177,22 +178,4 @@ export enum Style {
    * @since 8.0.0
    */
   Light = 'LIGHT',
-}
-
-/**
- * @since 8.0.0
- */
-export enum ErrorCode {
-  /**
-   * The `color` parameter is missing.
-   *
-   * @since 8.0.0
-   */
-  ColorMissing = 'COLOR_MISSING',
-  /**
-   * The `style` parameter is missing.
-   *
-   * @since 8.0.0
-   */
-  StyleMissing = 'STYLE_MISSING',
 }
