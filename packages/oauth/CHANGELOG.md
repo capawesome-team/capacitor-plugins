@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7
+
+### Patch Changes
+
+- [`fb0745053670f387be4119a988cb72725563f9bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/fb0745053670f387be4119a988cb72725563f9bc) ([#462](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/462)): fix(android): incorrect access token expiration date
+
 ## 0.1.6
 
 ### Patch Changes
