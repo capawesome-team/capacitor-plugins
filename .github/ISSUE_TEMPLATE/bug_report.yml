@@ -41,6 +41,7 @@ body:
         - label: Live Update
         - label: Managed Configurations
         - label: Media Session
+        - label: Navigation Bar
         - label: NFC
         - label: OAuth
         - label: Pedometer
@@ -60,6 +61,8 @@ body:
         - label: SQLite
         - label: Superwall
         - label: Torch
+        - label: Vault
+        - label: Wifi
         - label: Zip
   - type: input
     attributes:
