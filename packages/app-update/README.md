@@ -3,7 +3,7 @@
 Capacitor plugin that assists with native app updates.
 It supports retrieving app update information on **Android** and **iOS** and supports [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) on **Android**.
 
-> Check out the [Capacitor Live Update](https://capawesome.io/plugins/live-update/) plugin to update your app remotely in real-time without submitting a new version to the app store. 🚀
+> Check out the [Capacitor Live Update](https://capawesome.io/docs/plugins/live-update/) plugin to update your app remotely in real-time without submitting a new version to the app store. 🚀
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
