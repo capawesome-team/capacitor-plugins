@@ -141,7 +141,7 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 
 We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278401) as the reason for accessing the [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults) API.
 
-## Ionic Live Update Provider SDK integration
+## Ionic Live Update Provider SDK Integration
 
 This plugin can register itself as a provider for the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk), so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
 

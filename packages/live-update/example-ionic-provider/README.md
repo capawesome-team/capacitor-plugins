@@ -1,15 +1,17 @@
-# example-ionic-portals
+# example-ionic-provider
 
-Example app for testing the **Ionic Live Update Provider SDK** integration in
+Isolated test harness for the **Ionic Live Update Provider SDK** integration in
 `@capawesome/capacitor-live-update`. The plugin registers itself with
 `LiveUpdateProviderRegistry` under the provider id `capawesome` so Federated
 Capacitor and Ionic Portals shells can use Capawesome Cloud as a live update
 provider.
 
-This example does **not** embed Federated Capacitor or Portals — it instead
-ships a tiny custom Capacitor plugin (`IonicProviderTest`) that exposes the
-Ionic SDK to JavaScript so you can exercise the integration end-to-end with a
-plain Capacitor app.
+> **This is not an Ionic Portals app.** It is a plain Capacitor app that ships a
+> tiny custom Capacitor plugin (`IonicProviderTest`) to exercise the provider
+> SDK end-to-end **in isolation** — without needing a Portals or Federated
+> Capacitor host. For a full, real Ionic Portals app that delivers live updates
+> to multiple portals via Capawesome Cloud, see
+> [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo).
 
 ## How it's wired up
 

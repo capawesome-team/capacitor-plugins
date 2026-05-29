@@ -1,7 +1,7 @@
 {
-  "name": "example-ionic-portals",
+  "name": "example-ionic-provider",
   "version": "1.0.0",
-  "description": "Example app for testing the Ionic Live Update Provider SDK integration",
+  "description": "Isolated test harness for the Ionic Live Update Provider SDK integration",
   "main": "index.js",
   "keywords": [
     "capacitor",
