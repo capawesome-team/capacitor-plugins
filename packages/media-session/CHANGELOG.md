@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.1
+
+### Patch Changes
+
+- [`074bff47ca544735db1148a8fc16665964adc323`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/074bff47ca544735db1148a8fc16665964adc323) ([#445](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/445)): fix(android): prevent `ForegroundServiceDidNotStartInTimeException` crash when triggered from native media controls
+
 ## 8.3.0
 
 ### Minor Changes

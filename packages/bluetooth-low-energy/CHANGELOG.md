@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`528b7babaf862b2b66665f0df1c357e3e33eb127`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/528b7babaf862b2b66665f0df1c357e3e33eb127) ([#465](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/465)): feat(ios): support `showPowerAlert` option on `initialize`
+
+- [`2ebcdbb02a4f6729f61c72cd4a43a5d8495a899e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2ebcdbb02a4f6729f61c72cd4a43a5d8495a899e) ([#430](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/430)): feat(android): support device name option for advertising
+
+### Patch Changes
+
+- [`2ebcdbb02a4f6729f61c72cd4a43a5d8495a899e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2ebcdbb02a4f6729f61c72cd4a43a5d8495a899e) ([#430](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/430)): fix(ios): use the device name as default when no `name` is provided for advertising
+
 ## 8.0.6
 
 ### Patch Changes

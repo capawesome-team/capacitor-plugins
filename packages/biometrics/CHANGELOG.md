@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.4
+
+### Patch Changes
+
+- [`692812b983ce8840ab7fda3450c2d6bdca7543d0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/692812b983ce8840ab7fda3450c2d6bdca7543d0) ([#466](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/466)): feat: add `isLockedOut()`, `isAllowed()`, and `getBiometricTypes()` methods
+
 ## 0.5.3
 
 ### Patch Changes
