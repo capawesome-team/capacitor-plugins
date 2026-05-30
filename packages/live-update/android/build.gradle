@@ -5,6 +5,8 @@ ext {
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
     okhttp3Version = project.hasProperty('okhttp3Version') ? rootProject.ext.okhttp3Version : '5.3.2'
     zip4jVersion = project.hasProperty('zip4jVersion') ? rootProject.ext.zip4jVersion : '2.11.5'
+    capawesomeCapacitorLiveUpdateIncludeIonicProvider = project.hasProperty('capawesomeCapacitorLiveUpdateIncludeIonicProvider') ? rootProject.ext.capawesomeCapacitorLiveUpdateIncludeIonicProvider : false
+    ionicLiveUpdateProviderVersion = project.hasProperty('ionicLiveUpdateProviderVersion') ? rootProject.ext.ionicLiveUpdateProviderVersion : '0.1.0-alpha.2'
 }
 
 buildscript {
@@ -56,6 +58,11 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "net.lingala.zip4j:zip4j:$zip4jVersion"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
+    if (capawesomeCapacitorLiveUpdateIncludeIonicProvider) {
+        implementation "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
+    } else {
+        compileOnly "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
+    }
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

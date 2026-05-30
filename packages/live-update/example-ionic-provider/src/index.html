@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ionic Live Update Provider Test</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Ionic Live Update Provider Test</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Provider config</ion-label>
+          </ion-list-header>
+          <ion-item>
+            <ion-input
+              id="manager-key-input"
+              label="managerKey"
+              label-placement="stacked"
+              value="example-shell"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="app-id-input"
+              label="appId"
+              label-placement="stacked"
+              placeholder="(optional, falls back to capacitor.config.ts)"
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="channel-input"
+              label="channel"
+              label-placement="stacked"
+              placeholder="(optional, falls back to defaultChannel)"
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+
+        <ion-button
+          id="is-provider-registered-button"
+          expand="block"
+          color="medium"
+          >Is Provider Registered?</ion-button
+        >
+        <ion-button
+          id="get-latest-app-directory-button"
+          expand="block"
+          color="medium"
+          >Get Latest App Directory</ion-button
+        >
+        <ion-button id="sync-manager-button" expand="block" color="primary"
+          >Sync Manager</ion-button
+        >
+        <ion-button
+          id="clear-log-button"
+          expand="block"
+          color="light"
+          fill="outline"
+          >Clear Log</ion-button
+        >
+
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Log</ion-label>
+          </ion-list-header>
+        </ion-list>
+        <pre id="log-output"></pre>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

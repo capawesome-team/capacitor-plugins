@@ -1,5 +1,8 @@
 import Foundation
 import Capacitor
+#if CAPAWESOME_INCLUDE_IONIC_PROVIDER
+import LiveUpdateProvider
+#endif
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -55,6 +58,22 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
         // Notify implementation about load
         implementation?.handleLoad()
+
+        // Register the Ionic Live Update Provider when the optional SDK is linked.
+        #if CAPAWESOME_INCLUDE_IONIC_PROVIDER
+        if let implementation = implementation {
+            do {
+                if LiveUpdateProviderRegistry.shared.resolve(LiveUpdateIonicProvider.id) == nil {
+                    try LiveUpdateProviderRegistry.shared.register(
+                        LiveUpdateIonicProvider(liveUpdate: implementation)
+                    )
+                    CAPLog.print("[", LiveUpdatePlugin.tag, "] Registered Ionic provider '\(LiveUpdateIonicProvider.id)'.")
+                }
+            } catch {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] Failed to register Ionic provider: ", error.localizedDescription)
+            }
+        }
+        #endif
 
         // Register for app resume notifications
         NotificationCenter.default.addObserver(
