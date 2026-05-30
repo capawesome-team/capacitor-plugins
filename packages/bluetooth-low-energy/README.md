@@ -1355,9 +1355,10 @@ Remove all listeners for this plugin.
 
 #### InitializeOptions
 
-| Prop       | Type                                   | Description                                                         | Default                | Since |
-| ---------- | -------------------------------------- | ------------------------------------------------------------------- | ---------------------- | ----- |
-| **`mode`** | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS. | <code>'central'</code> | 7.2.0 |
+| Prop                 | Type                                   | Description                                                                                                                                                                                                                                         | Default                | Since |
+| -------------------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
+| **`mode`**           | <code>'central' \| 'peripheral'</code> | The mode of the Bluetooth Low Energy plugin. Only available on iOS.                                                                                                                                                                                 | <code>'central'</code> | 7.2.0 |
+| **`showPowerAlert`** | <code>boolean</code>                   | Whether the system should display a warning dialog to the user if Bluetooth is powered off when the plugin is initialized. If not specified, the default value is `true` in `central` mode and `false` in `peripheral` mode. Only available on iOS. |                        | 8.1.0 |
 
 
 #### IsAvailableResult

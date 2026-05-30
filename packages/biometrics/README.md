@@ -176,9 +176,12 @@ const isEnrolled = async () => {
 * [`getAuthenticationType()`](#getauthenticationtype)
 * [`getBiometricStrengthLevel()`](#getbiometricstrengthlevel)
 * [`getBiometricType()`](#getbiometrictype)
+* [`getBiometricTypes()`](#getbiometrictypes)
 * [`hasDeviceCredential()`](#hasdevicecredential)
+* [`isAllowed()`](#isallowed)
 * [`isAvailable()`](#isavailable)
 * [`isEnrolled()`](#isenrolled)
+* [`isLockedOut()`](#islockedout)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -304,6 +307,28 @@ Only available on Android and iOS.
 --------------------
 
 
+### getBiometricTypes()
+
+```typescript
+getBiometricTypes() => Promise<GetBiometricTypesResult>
+```
+
+Returns all biometric authentication types available on the device.
+
+On **iOS**, this returns at most a single-element array because the
+platform exposes only one biometric type per device.
+
+If no biometric authentication is available, an empty array is returned.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getbiometrictypesresult">GetBiometricTypesResult</a>&gt;</code>
+
+**Since:** 0.5.4
+
+--------------------
+
+
 ### hasDeviceCredential()
 
 ```typescript
@@ -318,6 +343,32 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#hasdevicecredentialresult">HasDeviceCredentialResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### isAllowed()
+
+```typescript
+isAllowed() => Promise<IsAllowedResult>
+```
+
+Check whether the user has granted permission to use biometric
+authentication.
+
+On **Android**, biometrics have no OS-level permission gate, so this
+always resolves to `true`.
+
+On **iOS**, this returns `false` only after the user has explicitly
+denied the Face ID permission prompt. Before the first `authenticate()`
+call it returns `true`, since iOS provides no API to distinguish the
+pre-prompt state from a granted state.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#isallowedresult">IsAllowedResult</a>&gt;</code>
+
+**Since:** 0.5.4
 
 --------------------
 
@@ -353,6 +404,29 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#isenrolledresult">IsEnrolledResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### isLockedOut()
+
+```typescript
+isLockedOut() => Promise<IsLockedOutResult>
+```
+
+Check whether biometric authentication is currently locked out due
+to too many failed attempts.
+
+On **Android**, the platform exposes no queryable lockout status.
+This returns `true` only if the most recent `authenticate()` call
+in the current process failed with a lockout error; the state is
+cleared on the next successful authentication or process restart.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#islockedoutresult">IsLockedOutResult</a>&gt;</code>
+
+**Since:** 0.5.4
 
 --------------------
 
@@ -393,11 +467,25 @@ Only available on Android and iOS.
 | **`biometricType`** | <code><a href="#biometrictype">BiometricType</a></code> | The type of biometric authentication available on the device. | 0.5.1 |
 
 
+#### GetBiometricTypesResult
+
+| Prop        | Type                         | Description                                                                                                    | Since |
+| ----------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
+| **`types`** | <code>BiometricType[]</code> | The biometric authentication types available on the device. Empty if no biometric authentication is available. | 0.5.4 |
+
+
 #### HasDeviceCredentialResult
 
 | Prop                      | Type                 | Description                                                                                                     | Since |
 | ------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
 | **`hasDeviceCredential`** | <code>boolean</code> | Whether or not the device's credential (e.g., PIN, password) has been set up by the current user of the device. | 0.1.0 |
+
+
+#### IsAllowedResult
+
+| Prop            | Type                 | Description                                                                     | Since |
+| --------------- | -------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`isAllowed`** | <code>boolean</code> | Whether or not the user has granted permission to use biometric authentication. | 0.5.4 |
 
 
 #### IsAvailableResult
@@ -412,6 +500,13 @@ Only available on Android and iOS.
 | Prop             | Type                 | Description                                                                                                     | Since |
 | ---------------- | -------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
 | **`isEnrolled`** | <code>boolean</code> | Whether or not biometrics is supported by the device and has been configured by the current user of the device. | 0.1.0 |
+
+
+#### IsLockedOutResult
+
+| Prop              | Type                 | Description                                                                                      | Since |
+| ----------------- | -------------------- | ------------------------------------------------------------------------------------------------ | ----- |
+| **`isLockedOut`** | <code>boolean</code> | Whether or not biometric authentication is currently locked out due to too many failed attempts. | 0.5.4 |
 
 
 ### Enums
