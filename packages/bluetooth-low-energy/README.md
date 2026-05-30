@@ -1476,11 +1476,11 @@ Remove all listeners for this plugin.
 
 #### StartAdvertisingOptions
 
-| Prop                   | Type                                      | Description                                                             | Default                | Since |
-| ---------------------- | ----------------------------------------- | ----------------------------------------------------------------------- | ---------------------- | ----- |
-| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android. |                        | 7.5.0 |
-| **`name`**             | <code>string</code>                       | The name of the local device to advertise. Only available on iOS.       | <code>"Unknown"</code> | 7.2.0 |
-| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                              |                        | 7.2.0 |
+| Prop                   | Type                                      | Description                                                                                                                                                                                                                                                                                                | Since |
+| ---------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android.                                                                                                                                                                                                                                    | 7.5.0 |
+| **`name`**             | <code>string</code>                       | The name of the local device to advertise. On **Android**, for apps targeting `Build.VERSION_CODES.R` or lower, this requires the `BLUETOOTH_ADMIN` permission. For apps targeting `Build.VERSION_CODES.S` or higher, this requires the `BLUETOOTH_CONNECT` permission. Only available on Android and iOS. | 7.2.0 |
+| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                                                                                                                                                                                                                                                                 | 7.2.0 |
 
 
 #### StartCharacteristicNotificationsOptions
