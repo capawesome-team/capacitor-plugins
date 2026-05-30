@@ -4,21 +4,26 @@ This plugin can register itself as a provider for the [Ionic Live Update Provide
 
 The Ionic SDK is an **optional** native dependency — you only pay the install footprint when you opt in. The registered provider id is `capawesome`.
 
-> **Real-world example:** [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) is a complete Ionic Portals app that delivers live updates to multiple portals via Capawesome Cloud. The iOS snippets in this guide are taken from it.
+> **Real-world example:** [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) is a complete Ionic Portals app that delivers live updates to multiple portals via Capawesome Cloud. The iOS and Android snippets in this guide are taken from it.
 
 ## Contents
 
 - [Installation](#installation)
 - [Provider configuration](#provider-configuration)
 - [Federated Capacitor usage](#federated-capacitor-usage)
-- [Ionic Portals usage (iOS)](#ionic-portals-usage-ios)
+- [Ionic Portals usage](#ionic-portals-usage)
 - [Verifying updates](#verifying-updates)
 
 ## Installation
 
 ### Android
 
-Set the `capawesomeCapacitorLiveUpdateIncludeIonicProvider` variable to `true` in your app's `variables.gradle`:
+As on iOS, the setup depends on the host:
+
+- **A Capacitor app** — the Capacitor CLI manages the Gradle build and `npx cap sync` already wires the plugin's module. You only opt into the Ionic provider.
+- **A native Android app** — an Ionic Portals host, not a Capacitor project (no `npx cap sync`). You reference the plugin's Gradle module from a local `node_modules`, the same idea as the native iOS host. **This is the setup used by the [demo app](https://github.com/capawesome-team/ionic-portals-ecommerce-demo).**
+
+In **both** cases, opt into the Ionic provider by setting this variable to `true` in your app's root `variables.gradle` (so the plugin subproject inherits it):
 
 ```diff
 ext {
@@ -28,7 +33,55 @@ ext {
 
 This pulls in `io.ionic:liveupdateprovider` and registers the `capawesome` provider with `LiveUpdateProviderRegistry` automatically when the plugin loads.
 
-> The Ionic Live Update Provider SDK requires `minSdkVersion` **24** or higher. Bump `minSdkVersion` in your `variables.gradle` if your app targets a lower minimum.
+> The Ionic Live Update Provider SDK requires `minSdkVersion` **24** or higher.
+
+#### Native Android host (Ionic Portals)
+
+A native Portals host isn't a Capacitor project, so there's no `npx cap sync` to generate the plugin's Gradle module include — wire it from a local `node_modules` instead. The plugin's module depends on the local `:capacitor-android` module, while Portals pulls Capacitor in via Maven, so you reconcile the two to a **single** Capacitor core.
+
+1. **Provide the module sources.** Add a `package.json` next to your Gradle project and `npm install`. This only fetches the Gradle module sources into `node_modules`; it does **not** make the app a Capacitor project (no web build, no `npx cap sync`):
+
+   ```json
+   {
+     "name": "android-app",
+     "private": true,
+     "dependencies": {
+       "@capacitor/android": "8.2.0",
+       "@capawesome/capacitor-live-update": "^8.2.1"
+     }
+   }
+   ```
+
+2. **Include the modules** in `settings.gradle`:
+
+   ```groovy
+   include ':capacitor-android'
+   project(':capacitor-android').projectDir = new File('node_modules/@capacitor/android/capacitor')
+
+   include ':capawesome-capacitor-live-update'
+   project(':capawesome-capacitor-live-update').projectDir = new File('node_modules/@capawesome/capacitor-live-update/android')
+   ```
+
+3. **Wire the dependencies** in your app's `build.gradle`. Because the plugin module requires the local `:capacitor-android`, exclude the transitive Maven `com.capacitorjs:core` from Portals (and from any other Maven-published Capacitor plugin you use, e.g. Camera) so there is only one Capacitor core on the classpath:
+
+   ```groovy
+   dependencies {
+       implementation('io.ionic:portals:0.14.0-rc.0') {
+           exclude group: 'com.capacitorjs', module: 'core'
+       }
+       implementation project(':capacitor-android')
+       implementation project(':capawesome-capacitor-live-update')
+   }
+   ```
+
+   Portals `0.14.0-rc.0` brings `io.ionic:liveupdateprovider` transitively, so no separate dependency is needed for the provider SDK.
+
+4. **Apply `variables.gradle`** from your root `build.gradle` so the opt-in flag above is a root `ext` property the plugin subproject can read:
+
+   ```groovy
+   // build.gradle (root)
+   apply from: "variables.gradle"
+   ```
 
 ### iOS
 
@@ -192,20 +245,22 @@ liveUpdateConfig: {
 }
 ```
 
-## Ionic Portals usage (iOS)
+## Ionic Portals usage
 
-> The Live Update Provider SDK defines an Android Portals manager contract that this plugin implements, but the Ionic Portals **Android** SDK does not yet expose a documented API to attach it to a Portal (its Live Updates docs still target Appflow), and Ionic's reference app wires the provider on iOS only. The Portals integration below is therefore iOS-only. On Android the `capawesome` provider is still registered (see [Android](#android)) and works today with Federated Capacitor.
+Supported on **iOS and Android** as of Portals `0.14.0-rc.0`, which ships the provider consumer API on both platforms (`liveUpdateProvider` / `setLiveUpdateProviderManager` plus `syncProvider()`).
 
 ### How registration works (read this first)
 
-The `capawesome` provider is registered with `LiveUpdateProviderRegistry` inside the plugin's `load()` lifecycle method — which runs **only when a Portal's Capacitor bridge loads**. Two consequences follow, and getting either wrong produces `LiveUpdateProviderError.providerNotRegistered("capawesome")`:
+The `capawesome` provider is registered with `LiveUpdateProviderRegistry` inside the plugin's `load()` lifecycle method — which runs **only when a Portal's Capacitor bridge loads**. Two consequences follow, and getting either wrong produces a _provider not registered_ error (`LiveUpdateProviderError.providerNotRegistered` on iOS, `LiveUpdateProviderError.ProviderNotRegistered` on Android):
 
 1. **Each Portal must include `LiveUpdatePlugin` in its `plugins`.** That is what registers the provider. A Portal without it will never trigger registration.
 2. **The provider is not in the registry until at least one such Portal has loaded.** So you cannot resolve it while constructing your `Portal` definitions, and an eager `syncProvider()` at app launch — before any Portal has appeared — will fail. Wrap the provider in a *deferred adapter* (resolves lazily at sync time) and sync with a short retry, or sync once a Portal is on screen.
 
-This also means a Portal must be able to load its web content. Bundle **seed content** at each Portal's `startDir` so the first Portal can render (and bootstrap registration) on a fresh, offline launch; Live Updates refresh it afterward. See the demo's [seed build phase](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) for one way to do this.
+This also means a Portal must be able to load its web content. Bundle **seed content** at each Portal's `startDir` so the first Portal can render (and bootstrap registration) on a fresh, offline launch; Live Updates refresh it afterward. (In the [demo](https://github.com/capawesome-team/ionic-portals-ecommerce-demo), iOS generates the seed at build time, while Android commits it under `src/main/assets`.)
 
 ### 1. Deferred adapter
+
+**iOS (Swift)** — implement `LiveUpdateManaging`:
 
 ```swift
 import CapawesomeCapacitorLiveUpdate
@@ -232,9 +287,48 @@ final class DeferredCapawesomeLiveUpdateManager: LiveUpdateManaging {
 }
 ```
 
+**Android (Kotlin)** — implement `LiveUpdateProviderManager`:
+
+```kotlin
+import android.content.Context
+import io.ionic.liveupdateprovider.LiveUpdateProviderError
+import io.ionic.liveupdateprovider.LiveUpdateProviderManager
+import io.ionic.liveupdateprovider.LiveUpdateProviderRegistry
+import io.ionic.liveupdateprovider.LiveUpdateProviderSyncCallback
+import java.io.File
+
+class DeferredCapawesomeLiveUpdateManager(
+    private val context: Context,
+    private val config: Map<String, Any>,
+) : LiveUpdateProviderManager {
+
+    private var currentManager: LiveUpdateProviderManager? = null
+
+    override val latestAppDirectory: File?
+        get() = currentManager?.latestAppDirectory
+
+    override fun sync(callback: LiveUpdateProviderSyncCallback?) {
+        val provider = LiveUpdateProviderRegistry.resolve("capawesome")
+        if (provider == null) {
+            callback?.onFailure(LiveUpdateProviderError.SyncFailed("Provider 'capawesome' is not registered."))
+            return
+        }
+        try {
+            val manager = currentManager
+                ?: provider.createManager(context.applicationContext, config).also { currentManager = it }
+            manager.sync(callback)
+        } catch (exception: Exception) {
+            callback?.onFailure(LiveUpdateProviderError.SyncFailed(exception.message ?: "Sync failed", exception))
+        }
+    }
+}
+```
+
 ### 2. Define your Portals
 
-Include `LiveUpdatePlugin` in `plugins` (required — see above), attach the adapter via `liveUpdateProvider`, and give each Portal a distinct `managerKey` and the Capawesome Cloud `appId` that hosts its bundle:
+Include `LiveUpdatePlugin` in each Portal's plugins (required — see above), attach the adapter, and give each Portal a distinct `managerKey` and the Capawesome Cloud `appId` that hosts its bundle.
+
+**iOS (Swift)** — via the `Portal` initializer's `liveUpdateProvider`:
 
 ```swift
 import IonicPortals
@@ -273,11 +367,37 @@ extension Portal {
 }
 ```
 
-> `liveUpdateProvider` and `Portal.syncProvider()` require a Portals version that ships the Live Update Provider integration. The reference app pins `pod 'IonicPortals', '0.14.0-rc.0'`; check the [Portals documentation](https://ionic.io/docs/portals) for the minimum version.
+**Android (Kotlin)** — via `PortalManager.newPortal(...)`, typically in your `Application`:
+
+```kotlin
+import android.content.Context
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdatePlugin
+import io.ionic.portals.PortalManager
+
+private const val WEB_APP_ID = "0ca581ce-f6cc-4e2c-a5f8-47a8169371c4"
+private const val CHANNEL = "production"
+
+private fun Context.liveUpdateManager(managerKey: String) =
+    DeferredCapawesomeLiveUpdateManager(
+        this,
+        mapOf("managerKey" to managerKey, "appId" to WEB_APP_ID, "channel" to CHANNEL),
+    )
+
+// In Application.onCreate():
+PortalManager.newPortal("checkout")
+    .setStartDir("webapp")
+    .setPlugins(listOf(LiveUpdatePlugin::class.java))
+    .setLiveUpdateProviderManager(liveUpdateManager("portal-checkout"))
+    .create()
+```
+
+> `liveUpdateProvider` / `setLiveUpdateProviderManager` and `syncProvider()` require Portals `0.14.0-rc.0`+ (`pod 'IonicPortals', '0.14.0-rc.0'` on iOS, `io.ionic:portals:0.14.0-rc.0` on Android). Check the [Portals documentation](https://ionic.io/docs/portals) for the minimum version.
 
 ### 3. Sync
 
-`syncProvider()` downloads the latest bundle, updates the manager's `latestAppDirectory`, and the Portal serves the new content on its next load. Because the provider may not be registered the instant the app launches, sync with a short retry until it succeeds (or sync lazily once a Portal is shown):
+`syncProvider()` downloads the latest bundle, updates the manager's `latestAppDirectory`, and the Portal serves the new content on its next load. Because the provider may not be registered the instant the app launches, sync with a short retry until it succeeds (or sync lazily once a Portal is shown).
+
+**iOS (Swift):**
 
 ```swift
 func application(
@@ -306,6 +426,33 @@ private func syncProviderPortals(attempt: Int, maxAttempts: Int = 20) {
         }
     }
 }
+```
+
+**Android (Kotlin):**
+
+```kotlin
+import android.os.Handler
+import android.os.Looper
+import io.ionic.liveupdateprovider.LiveUpdateProviderError
+import io.ionic.liveupdateprovider.LiveUpdateProviderSyncCallback
+import io.ionic.liveupdateprovider.LiveUpdateProviderSyncResult
+import io.ionic.portals.PortalManager
+
+private fun scheduleProviderSync(portalName: String, attempt: Int, maxAttempts: Int = 20) {
+    Handler(Looper.getMainLooper()).postDelayed({
+        val portal = PortalManager.getPortal(portalName) ?: return@postDelayed
+        portal.syncProvider(object : LiveUpdateProviderSyncCallback {
+            override fun onSuccess(result: LiveUpdateProviderSyncResult) {}
+            override fun onFailure(error: LiveUpdateProviderError.SyncFailed) {
+                // Provider not registered yet (no Portal loaded) — retry.
+                if (attempt < maxAttempts) scheduleProviderSync(portalName, attempt + 1, maxAttempts)
+            }
+        })
+    }, 1000)
+}
+
+// In Application.onCreate(), after creating the portals:
+listOf("checkout", "help", "profile").forEach { scheduleProviderSync(it, attempt = 1) }
 ```
 
 ## Verifying updates
