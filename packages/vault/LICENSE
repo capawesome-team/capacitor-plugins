@@ -1,0 +1,87 @@
+# End User License Agreement (EULA)
+
+## 1. Introduction
+
+1.1. This End User License Agreement (**"EULA"**) of Genz IT Solutions GmbH (**"Provider"**) governs the rights of use in proprietary software artifacts that the Provider makes available to the Customer for local use.
+
+1.2. This EULA supplements the General Terms and Conditions (GTC). In the event of a conflict, the GTC shall prevail unless an individual Order provides otherwise.
+
+1.3. **Distinction from cloud usage**: This EULA does not apply to the use of the Capawesome cloud services. Those are governed exclusively by the GTC, SLA, and Data Processing Agreement.
+
+1.4. **Distinction from open source**: Open-source components of the Provider are governed exclusively by their respective open-source licences (e.g. MIT, Apache 2.0). This EULA does not apply to them.
+
+## 2. Scope and Definitions
+
+2.1. This EULA applies to all proprietary software artifacts that the Provider provides to the Customer under a paid relationship, including SDKs, libraries, tools, and binaries (collectively the **"Software"**).
+
+2.2. **"Order"** means the order, subscription, or product activation from which scope, term, fees, and product-specific terms are derived.
+
+## 3. License Grant
+
+3.1. The Provider grants the Customer a non-exclusive, non-transferable right to use the Software. Scope, term, and authorised user base are determined by the applicable Order.
+
+3.2. **Patent licence**: The Provider additionally grants the Customer a non-exclusive, non-transferable, worldwide, royalty-free patent licence under those patent claims of the Provider that are necessary for the contractual use of the Software.
+
+3.3. **Defensive Termination**: If the Customer or an affiliated entity asserts by litigation that the Software infringes a patent, the Provider may terminate the patent licence granted in Section 3.2 for cause upon written notice.
+
+## 4. Redistribution
+
+4.1. The Customer may embed the Software as part of compiled Customer applications and distribute those applications to its end users.
+
+4.2. Standalone redistribution of the Software, sublicensing to third parties, or distribution as a separate library is not permitted.
+
+## 5. Use Restrictions
+
+5.1. The Customer shall not decompile, disassemble, or otherwise reverse-engineer the Software beyond the extent permitted by the mandatory exceptions under Sections 69d, 69e UrhG (German Copyright Act).
+
+5.2. The Customer shall not remove or alter copyright notices, trademarks, or other proprietary rights notices in the Software.
+
+5.3. The Customer shall not circumvent or tamper with licence validation mechanisms of the Software.
+
+## 6. Updates and Versions
+
+6.1. Access to new versions of the Software is determined by the applicable Order.
+
+6.2. Use of previously obtained versions shall remain permitted within the period defined in the Order.
+
+## 7. Post-Termination Effects
+
+7.1. Unless the Order provides otherwise, copies of the Software already embedded in distributed end-user applications may continue to be used after termination of the contract (**"Field Use"**).
+
+7.2. After termination of the contract, the Customer shall not be entitled to:
+
+- obtain new updates or versions of the Software,
+- embed the Software in new applications,
+- access the Capawesome distribution sources (e.g. package registry).
+
+## 8. Delivery and Incorporation
+
+8.1. The applicable EULA is delivered as a `LICENSE` file with each proprietary software package.
+
+8.2. The current version is also available at [https://capawesome.io/legal/eula](https://capawesome.io/legal/eula).
+
+8.3. The version delivered with the respective package shall govern the use of that specific software version. Subsequent online updates to this EULA shall take effect from the next package update.
+
+8.4. **Grandfathering**: Software copies obtained before this EULA came into effect shall continue to be governed by the licence terms delivered at the time of download.
+
+## 9. Ownership of Capawesome Artifacts
+
+9.1. All rights in the Software, including copyrights, patents, and trademark rights, remain with the Provider. This EULA does not effect a transfer of ownership.
+
+## 10. Data Processing
+
+10.1. Where a specific Software variant processes personal data on behalf of the Customer, the Data Processing Agreement (DPA) shall additionally apply.
+
+10.2. The current Insiders SDKs do not process personal data on behalf of the Customer at runtime. They are delivered via the Capawesome package registry and, once downloaded, run entirely locally on the Customer's device.
+
+## 11. Liability and Warranty
+
+11.1. Liability and warranty shall be governed by the provisions of the GTC.
+
+## 12. Governing Law and Jurisdiction
+
+12.1. This EULA shall be governed by the laws of the Federal Republic of Germany.
+
+12.2. The exclusive place of jurisdiction for all disputes arising out of or in connection with this EULA shall be Konstanz.
+
+12.3. The authoritative language version of this EULA is the English version. The German version is for informational purposes only.
