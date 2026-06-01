@@ -53,6 +53,10 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 - [Alternatives to Ionic Enterprise Plugins](https://capawesome.io/blog/alternatives-to-ionic-enterprise-plugins/)
 - [Alternative to the Ionic Identity Vault Plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/)
 
+## Videos
+
+- [How to Secure Sensitive Data Using Capacitor Vault Plugin](https://youtu.be/wCNMqVBnQqs?si=mePC0ADiRHy_rFQz)
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).
