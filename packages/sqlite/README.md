@@ -952,6 +952,26 @@ end
 
 **Attention**: Both `CapawesomeTeamCapacitorSqlite` and `CapawesomeTeamCapacitorSqlite/Plain` or `CapawesomeTeamCapacitorSqlite/SQLCipher` must be included in the `Podfile`. The first one is required for the plugin to work, while the second one is required for the specific implementation (Plain or SQLCipher).
 
+## FAQ
+
+### When should I use SQLite instead of Vault or Secure Preferences?
+
+All three plugins protect data on the device, but they target different problems:
+
+- **SQLite** (this plugin) is a full relational database with optional SQLCipher encryption. Use it when the shape of your data calls for queries, joins, indexes, or large record sets — for example, an offline-first app that syncs structured records, or anything you would otherwise model with a server-side database.
+
+- **[Secure Preferences](https://capawesome.io/docs/plugins/secure-preferences/)** is a transparent key/value store. Values are encrypted at rest using the Android Keystore and iOS Keychain, but the app can read them at any time without prompting the user. Reach for it when you need to keep small bits of sensitive data around that the app itself accesses in the background — typical examples are OAuth refresh tokens, server-issued API keys, or preference flags that contain personal information.
+
+- **[Vault](https://capawesome.io/docs/plugins/vault/)** is a key/value store with an active lock state and biometric or device-passcode gating. The user has to unlock it before any read or write, and it locks again on demand or after a configurable background timeout. Reach for it when access to the data should require an explicit user action — a password manager's entries, an authenticator app's TOTP secrets, or the credentials sitting behind an "app lock" screen.
+
+A quick decision tree:
+
+- Need queries, relations, or large datasets? → **SQLite**.
+- Need encrypted key/value storage the app can read freely in the background? → **Secure Preferences**.
+- Need encrypted key/value storage the user must actively unlock with biometrics or a passcode? → **Vault**.
+
+The three plugins are designed to coexist. A real-world app might use Secure Preferences for app-managed tokens, SQLite for synced records, and Vault for the master password that protects everything else.
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/sqlite/CHANGELOG.md).

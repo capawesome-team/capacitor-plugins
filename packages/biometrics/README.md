@@ -17,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔑 **Device Credential**: Optionally allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - ✨ **Customizable**: Customize the authentication prompt with a title, subtitle, and button text.
-- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/docs/plugins/secure-preferences/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/docs/plugins/secure-preferences/) and [Vault](https://capawesome.io/docs/plugins/vault/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -106,6 +106,10 @@ Add the `NSFaceIDUsageDescription` key to the `ios/App/App/Info.plist` file, whi
 <key>NSFaceIDUsageDescription</key>
 <string>This app uses Face ID for authentication.</string>
 ```
+
+## Configuration
+
+No configuration required for this plugin.
 
 ## Usage
 

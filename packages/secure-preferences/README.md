@@ -15,7 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Native secure storage on Android and iOS, with a `localStorage`-backed web implementation for development.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
 - 🔍 **Detailed Error Messages**: Get actionable error messages with specific failure reasons and error codes on iOS, making debugging keychain issues straightforward.
-- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/plugins/biometrics/) and [SQLite](https://capawesome.io/docs/plugins/sqlite/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/plugins/biometrics/), [SQLite](https://capawesome.io/docs/plugins/sqlite/), and [Vault](https://capawesome.io/docs/plugins/vault/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -74,53 +74,6 @@ npx cap sync
 ```
 
 ### Android
-
-#### Backup rules
-
-To prevent the preferences file from being backed up to the cloud, you need to add backup rules to your Android project.
-You can read more about this in the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles).
-
-##### Android 11 and lower
-
-Add the `android:fullBackupContent` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
-
-```xml
-<application
-  android:fullBackupContent="@xml/full_backup_content">
-</application>
-```
-
-Create a new file `res/xml/full_backup_content.xml` with the following content:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-  <include domain="sharedpref" path="."/>
-  <exclude domain="sharedpref" path="CAPAWESOME_SECURE_PREFERENCES.xml"/>
-</full-backup-content>
-```
-
-##### Android 12 and higher
-
-Add the `android:dataExtractionRules` attribute to the `<application>` tag in your `AndroidManifest.xml` file:
-
-```xml
-<application
-  android:dataExtractionRules="@xml/data_extraction_rules">
-</application>
-```
-
-Create a new file `res/xml/data_extraction_rules.xml` with the following content:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<data-extraction-rules>
- <cloud-backup [disableIfNoEncryptionCapabilities="true|false"]>
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="CAPAWESOME_SECURE_PREFERENCES.xml"/>
- </cloud-backup>
-</data-extraction-rules>
-```
 
 #### Proguard
 
@@ -312,6 +265,32 @@ This is for development purposes only and should NOT be used in production.
 | **`value`** | <code>string</code> | The value to store.                       | 7.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Where is the data stored?
+
+On Android, the encryption key is stored in the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and the encrypted values are stored in a `SharedPreferences` file (`CAPAWESOME_SECURE_PREFERENCES.xml`). On iOS, the encrypted values are stored as [Keychain](https://developer.apple.com/documentation/security/keychain-services) items.
+
+On Android, the encryption key in the Keystore is never backed up. The encrypted values in `SharedPreferences` are part of [Android Auto Backup](https://developer.android.com/identity/data/autobackup) by default, but the backed-up ciphertext is unusable on another device without the Keystore key; to exclude the preferences file (`CAPAWESOME_SECURE_PREFERENCES.xml`) from backup, see the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles). On iOS, the Keychain items are not synced to iCloud, but they may be included in encrypted local device backups and restored on a new device.
+
+### When should I use Secure Preferences instead of Vault or SQLite?
+
+All three plugins protect data on the device, but they target different problems:
+
+- **Secure Preferences** (this plugin) is a transparent key/value store. Values are encrypted at rest using the Android Keystore and iOS Keychain, but the app can read them at any time without prompting the user. Reach for it when you need to keep small bits of sensitive data around that the app itself accesses in the background — typical examples are OAuth refresh tokens, server-issued API keys, or preference flags that contain personal information.
+
+- **[Vault](https://capawesome.io/docs/plugins/vault/)** is a key/value store with an active lock state and biometric or device-passcode gating. The user has to unlock it before any read or write, and it locks again on demand or after a configurable background timeout. Reach for it when access to the data should require an explicit user action — a password manager's entries, an authenticator app's TOTP secrets, or the credentials sitting behind an "app lock" screen.
+
+- **[SQLite](https://capawesome.io/docs/plugins/sqlite/)** is a full relational database with optional SQLCipher encryption. Use it when the shape of your data calls for queries, joins, indexes, or large record sets — for example, an offline-first app that syncs structured records, or anything you would otherwise model with a server-side database.
+
+A quick decision tree:
+
+- Need encrypted key/value storage the app can read freely in the background? → **Secure Preferences**.
+- Need encrypted key/value storage the user must actively unlock with biometrics or a passcode? → **Vault**.
+- Need queries, relations, or large datasets? → **SQLite**.
+
+The three plugins are designed to coexist. A real-world app might use Secure Preferences for app-managed tokens, SQLite for synced records, and Vault for the master password that protects everything else.
 
 ## Changelog
 
