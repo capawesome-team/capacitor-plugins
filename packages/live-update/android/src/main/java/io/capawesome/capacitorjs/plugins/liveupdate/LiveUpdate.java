@@ -606,8 +606,11 @@ public class LiveUpdate {
 
     private void deleteFileRecursively(@NonNull File file) {
         if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                deleteFileRecursively(child);
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteFileRecursively(child);
+                }
             }
         }
         file.delete();
