@@ -65,11 +65,11 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@capacitor/android": "7.0.0",
-    "@capacitor/cli": "7.0.0",
-    "@capacitor/core": "7.0.0",
+    "@capacitor/android": "7.6.5",
+    "@capacitor/cli": "7.6.5",
+    "@capacitor/core": "7.6.5",
     "@capacitor/docgen": "0.3.0",
-    "@capacitor/ios": "7.0.0",
+    "@capacitor/ios": "7.6.5",
     "@ionic/eslint-config": "0.4.0",
     "@ionic/swiftlint-config": "2.0.0",
     "eslint": "8.57.0",
