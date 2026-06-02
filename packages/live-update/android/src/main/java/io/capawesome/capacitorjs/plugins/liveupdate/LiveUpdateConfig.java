@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.security.Key;
 
@@ -8,7 +9,12 @@ public class LiveUpdateConfig {
     @Nullable
     private String appId = null;
 
+    private boolean autoBlockRolledBackBundles = false;
+
     private boolean autoDeleteBundles = false;
+
+    @NonNull
+    private String autoUpdateStrategy = "none";
 
     @Nullable
     private String defaultChannel = null;
@@ -25,13 +31,25 @@ public class LiveUpdateConfig {
     private int readyTimeout = 10000;
     private boolean resetOnUpdate = true;
 
+    @NonNull
+    private String serverDomain = "api.cloud.capawesome.io";
+
     @Nullable
     public String getAppId() {
         return appId;
     }
 
+    public boolean getAutoBlockRolledBackBundles() {
+        return autoBlockRolledBackBundles;
+    }
+
     public boolean getAutoDeleteBundles() {
         return autoDeleteBundles;
+    }
+
+    @NonNull
+    public String getAutoUpdateStrategy() {
+        return autoUpdateStrategy;
     }
 
     @Nullable
@@ -65,12 +83,25 @@ public class LiveUpdateConfig {
         return resetOnUpdate;
     }
 
+    @NonNull
+    public String getServerDomain() {
+        return serverDomain;
+    }
+
     public void setAppId(@Nullable String appId) {
         this.appId = appId;
     }
 
+    public void setAutoBlockRolledBackBundles(boolean autoBlockRolledBackBundles) {
+        this.autoBlockRolledBackBundles = autoBlockRolledBackBundles;
+    }
+
     public void setAutoDeleteBundles(boolean autoDeleteBundles) {
         this.autoDeleteBundles = autoDeleteBundles;
+    }
+
+    public void setAutoUpdateStrategy(@NonNull String autoUpdateStrategy) {
+        this.autoUpdateStrategy = autoUpdateStrategy;
     }
 
     public void setDefaultChannel(@Nullable String defaultChannel) {
@@ -99,5 +130,9 @@ public class LiveUpdateConfig {
 
     public void setResetOnUpdate(boolean resetOnUpdate) {
         this.resetOnUpdate = resetOnUpdate;
+    }
+
+    public void setServerDomain(@NonNull String serverDomain) {
+        this.serverDomain = serverDomain;
     }
 }

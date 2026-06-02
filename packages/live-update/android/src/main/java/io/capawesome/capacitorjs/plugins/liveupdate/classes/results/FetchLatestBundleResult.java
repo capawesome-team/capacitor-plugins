@@ -19,6 +19,9 @@ public class FetchLatestBundleResult implements Result {
     private final String checksum;
 
     @Nullable
+    private final JSONObject customProperties;
+
+    @Nullable
     private final String downloadUrl;
 
     @Nullable
@@ -28,12 +31,14 @@ public class FetchLatestBundleResult implements Result {
         @Nullable ArtifactType artifactType,
         @Nullable String bundleId,
         @Nullable String checksum,
+        @Nullable JSONObject customProperties,
         @Nullable String downloadUrl,
         @Nullable String signature
     ) {
         this.artifactType = artifactType;
         this.bundleId = bundleId;
         this.checksum = checksum;
+        this.customProperties = customProperties;
         this.downloadUrl = downloadUrl;
         this.signature = signature;
     }
@@ -49,6 +54,9 @@ public class FetchLatestBundleResult implements Result {
         result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
         if (checksum != null) {
             result.put("checksum", checksum);
+        }
+        if (customProperties != null) {
+            result.put("customProperties", customProperties);
         }
         if (downloadUrl != null) {
             result.put("downloadUrl", downloadUrl);
