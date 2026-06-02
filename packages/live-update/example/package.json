@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/android": "7.6.5",
-    "@capacitor/core": "7.6.5",
-    "@capacitor/ios": "7.6.5",
+    "@capacitor/android": "7.4.4",
+    "@capacitor/core": "7.4.4",
+    "@capacitor/ios": "7.4.4",
     "@capawesome/capacitor-live-update": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "7.6.5",
+    "@capacitor/cli": "7.4.4",
     "@capawesome/cli": "4.11.0",
     "vite": "7.2.2"
   }
