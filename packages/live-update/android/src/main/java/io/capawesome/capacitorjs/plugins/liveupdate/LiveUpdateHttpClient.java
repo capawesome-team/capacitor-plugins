@@ -57,13 +57,12 @@ public class LiveUpdateHttpClient {
         okhttp3.Dispatcher dispatcher = new okhttp3.Dispatcher();
         dispatcher.setMaxRequestsPerHost(30);
 
-        this.okHttpClient =
-            new OkHttpClient.Builder()
-                .dispatcher(dispatcher)
-                .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
-                .build();
+        this.okHttpClient = new OkHttpClient.Builder()
+            .dispatcher(dispatcher)
+            .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .writeTimeout(httpTimeout, TimeUnit.MILLISECONDS)
+            .build();
     }
 
     public void setDeviceId(@NonNull String deviceId) {
