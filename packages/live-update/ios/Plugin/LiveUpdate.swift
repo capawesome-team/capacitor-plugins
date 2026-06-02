@@ -1,18 +1,22 @@
 import Foundation
 import CryptoKit
+#if canImport(ZipArchive)
+import ZipArchive
+#else
 import SSZipArchive
+#endif
 import Capacitor
 import Alamofire
 import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let host: String
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -20,41 +24,53 @@ import CommonCrypto
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
+    private var rollbackPerformed = false
+    private var lastAutoUpdateCheckTimestamp: Int64 = 0
+    private var syncInProgress = false
 
     init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
         self.config = config
-        if (config.location != nil) && config.location == "eu" {
-            self.host = "api.cloud.capawesome.eu"
-        } else {
-            self.host = "api.cloud.capawesome.io"
-        }
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
         self.preferences = LiveUpdatePreferences()
         super.init()
 
+        // Set the device ID on the HTTP client
+        httpClient.setDeviceId(getDeviceId())
+
         if config.enabled {
-            if wasUpdated() && config.resetOnUpdate {
+            let wasUpdated = wasUpdated()
+            if wasUpdated {
+                // Reset the runtime configuration if the app was updated to a new version
+                resetConfig()
+            }
+            if wasUpdated && config.resetOnUpdate {
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App was updated. Resetting to default bundle.")
                 reset()
             } else {
+                // Start the rollback timer to rollback to the default bundle
+                // if the app is not ready after a certain time
                 startRollbackTimer()
             }
-            saveCurrentBundleShortVersionStringAndBundleVersion()
+            saveCurrentVersionCode()
         }
+    }
+
+    @objc public func clearBlockedBundles() {
+        preferences.setBlockedBundleIds(nil)
     }
 
     @objc public func deleteBundle(_ options: DeleteBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
-        if !hasBundle(bundleId: bundleId) {
+        if !hasBundleById(bundleId) {
             let error = CustomError.bundleNotFound
             completion(error)
             return
         }
 
         do {
-            try deleteBundle(bundleId: bundleId)
+            try deleteBundleById(bundleId)
             completion(nil)
         } catch {
             completion(error)
@@ -69,7 +85,7 @@ import CommonCrypto
         let url = options.getUrl()
 
         // Check if the bundle already exists
-        if hasBundle(bundleId: bundleId) {
+        if hasBundleById(bundleId) {
             throw CustomError.bundleAlreadyExists
         }
 
@@ -77,27 +93,69 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: bundleId, url: url)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: bundleId, url: url, checksum: checksum, signature: signature)
+            try await downloadBundleOfTypeZip(bundleId: bundleId, checksum: checksum, signature: signature, url: url)
         }
+    }
+
+    @objc public func fetchChannels(_ options: FetchChannelsOptions) async throws -> FetchChannelsResult {
+        var parameters = [String: String]()
+        if let limit = options.getLimit() {
+            parameters["limit"] = String(limit)
+        }
+        if let offset = options.getOffset() {
+            parameters["offset"] = String(offset)
+        }
+        if let query = options.getQuery() {
+            parameters["query"] = query
+        }
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/channels")!
+        if !parameters.isEmpty {
+            urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        }
+        let url = try urlComponents.asURL()
+        let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
+        if let error = response.error {
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
+                }
+            }
+            throw error
+        }
+        let items = response.value ?? []
+        let channels = items.map { ChannelResult(id: $0.id, name: $0.name) }
+        return FetchChannelsResult(channels: channels)
     }
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
-        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, downloadUrl: response?.url, signature: response?.signature)
+        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
+    }
+
+    @objc public func getBlockedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        var bundleIds: [String] = []
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            bundleIds = blockedIds.split(separator: ",").map(String.init)
+        }
+        let result = GetBlockedBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
     }
 
     @objc public func getBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
+        let bundleId = getCurrentBundleId()
         let result = GetBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
 
     @objc public func getBundles(completion: @escaping (Result?, Error?) -> Void) {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let result = GetBundlesResult(bundleIds: bundleIds)
+        completion(result, nil)
+    }
+
+    @objc public func getDownloadedBundles(completion: @escaping (Result?, Error?) -> Void) {
+        let bundleIds = getDownloadedBundleIds()
+        let result = GetDownloadedBundlesResult(bundleIds: bundleIds)
         completion(result, nil)
     }
 
@@ -107,11 +165,15 @@ import CommonCrypto
         completion(result, nil)
     }
 
+    @objc public func getConfig(completion: @escaping (Result?, Error?) -> Void) {
+        let appId = getAppId()
+        let autoUpdateStrategy = config.autoUpdateStrategy
+        let result = GetConfigResult(appId: appId, autoUpdateStrategy: autoUpdateStrategy)
+        completion(result, nil)
+    }
+
     @objc public func getCurrentBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId = getCurrentBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
+        let bundleId = getCurrentBundleId()
         let result = GetCurrentBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -130,10 +192,7 @@ import CommonCrypto
     }
 
     @objc public func getNextBundle(completion: @escaping (Result?, Error?) -> Void) {
-        var bundleId: String? = getNextBundleId()
-        if bundleId == defaultWebAssetDir {
-            bundleId = nil
-        }
+        let bundleId: String? = getNextBundleId()
         let result = GetNextBundleResult(bundleId: bundleId)
         completion(result, nil)
     }
@@ -150,12 +209,48 @@ import CommonCrypto
         completion(result, nil)
     }
 
-    @objc public func ready() {
+    @objc public func isSyncing(completion: @escaping (Result?, Error?) -> Void) {
+        let result = IsSyncingResult(syncing: syncInProgress)
+        completion(result, nil)
+    }
+
+    @objc public func handleLoad() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
+        }
+    }
+
+    @objc public func handleAppWillEnterForeground() {
+        if config.autoUpdateStrategy == "background" {
+            performAutoUpdate()
+        }
+    }
+
+    @objc public func ready(completion: @escaping (Result?, Error?) -> Void) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is ready.")
+        if config.readyTimeout <= 0 {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Ready timeout is set to 0. Automatic rollback is disabled.")
+        }
+        // Stop the rollback timer
         stopRollbackTimer()
+        // Delete unused bundles
         if config.autoDeleteBundles {
             deleteUnusedBundles()
         }
+        // Get the current and previous bundle IDs
+        let currentBundleId = getCurrentBundleId()
+        let previousBundleId = getPreviousBundleId()
+        // Block the rolled back bundle if enabled
+        if config.autoBlockRolledBackBundles && rollbackPerformed, let previousBundleId = previousBundleId {
+            addBlockedBundleId(previousBundleId)
+        }
+        // Return the result
+        let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
+        completion(result, nil)
+        // Set the new previous bundle ID
+        setPreviousBundleId(bundleId: currentBundleId)
+        // Reset the rollback flag
+        rollbackPerformed = false
     }
 
     @objc public func reload() {
@@ -165,21 +260,11 @@ import CommonCrypto
     }
 
     @objc public func reset() {
-        self.setNextCapacitorServerPathToDefaultWebAssetDir()
+        self.setNextBundleById(nil)
     }
 
-    @objc public func setBundle(_ options: SetBundleOptions, completion: @escaping (Error?) -> Void) {
-        let bundleId = options.getBundleId()
-
-        // Check if the bundle already exists
-        if !hasBundle(bundleId: bundleId) {
-            let error = CustomError.bundleNotFound
-            completion(error)
-            return
-        }
-
-        setNextBundle(bundleId: bundleId)
-        completion(nil)
+    @objc public func resetConfig() {
+        preferences.setAppId(nil)
     }
 
     @objc public func setChannel(_ options: SetChannelOptions, completion: @escaping (Error?) -> Void) {
@@ -189,6 +274,11 @@ import CommonCrypto
         completion(nil)
     }
 
+    @objc public func setConfig(_ options: SetConfigOptions) {
+        let appId = options.getAppId()
+        preferences.setAppId(appId)
+    }
+
     @objc public func setCustomId(_ options: SetCustomIdOptions, completion: @escaping (Error?) -> Void) {
         let customId = options.getCustomId()
 
@@ -196,12 +286,25 @@ import CommonCrypto
         completion(nil)
     }
 
+    @objc public func setBundle(_ options: SetBundleOptions, completion: @escaping (Error?) -> Void) {
+        let bundleId = options.getBundleId()
+
+        if hasBundleById(bundleId) {
+            setNextBundleById(bundleId)
+        } else {
+            completion(CustomError.bundleNotFound)
+            return
+        }
+
+        completion(nil)
+    }
+
     @objc public func setNextBundle(_ options: SetNextBundleOptions, completion: @escaping (Error?) -> Void) {
         let bundleId = options.getBundleId()
 
         if let bundleId = bundleId {
-            if hasBundle(bundleId: bundleId) {
-                setNextBundle(bundleId: bundleId)
+            if hasBundleById(bundleId) {
+                setNextBundleById(bundleId)
             } else {
                 let error = CustomError.bundleNotFound
                 completion(error)
@@ -215,6 +318,14 @@ import CommonCrypto
     }
 
     @objc public func sync(_ options: SyncOptions) async throws -> SyncResult {
+        if syncInProgress {
+            throw CustomError.syncInProgress
+        }
+        syncInProgress = true
+        defer {
+            syncInProgress = false
+        }
+
         let channel = options.getChannel()
         // Fetch the latest bundle
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
@@ -227,13 +338,18 @@ import CommonCrypto
         let checksum = response.checksum
         let signature = response.signature
         let downloadUrl = response.url
+        // Check if the bundle is blocked
+        if isBlockedBundleId(latestBundleId) {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
+            return SyncResult(nextBundleId: nil)
+        }
         // Check if bundle already exists
-        if hasBundle(bundleId: latestBundleId) {
+        if hasBundleById(latestBundleId) {
             var nextBundleId: String?
             let currentBundleId = self.getCurrentBundleId()
             if latestBundleId != currentBundleId {
                 // Set the next bundle
-                setNextBundle(bundleId: latestBundleId)
+                setNextBundleById(latestBundleId)
                 nextBundleId = latestBundleId
             }
             return SyncResult(nextBundleId: nextBundleId)
@@ -242,10 +358,10 @@ import CommonCrypto
         if artifactType == .manifest {
             try await downloadBundleOfTypeManifest(bundleId: latestBundleId, url: downloadUrl)
         } else {
-            try await downloadBundleOfTypeZip(bundleId: latestBundleId, url: downloadUrl, checksum: checksum, signature: signature)
+            try await downloadBundleOfTypeZip(bundleId: latestBundleId, checksum: checksum, signature: signature, url: downloadUrl)
         }
         // Set the next bundle
-        setNextBundle(bundleId: latestBundleId)
+        setNextBundleById(latestBundleId)
         return SyncResult(nextBundleId: latestBundleId)
     }
 
@@ -274,12 +390,12 @@ import CommonCrypto
         try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
 
-    private func buildCapacitorServerPathFor(bundleId: String) -> String {
+    private func buildCapacitorServerPathFor(bundleId: String?) -> String {
         let path: String
-        if bundleId == "public" {
-            path = Bundle.main.bundleURL.appendingPathComponent(bundleId).path
-        } else {
+        if let bundleId = bundleId {
             path = buildBundlePathFor(bundleId: bundleId)
+        } else {
+            path = Bundle.main.bundleURL.appendingPathComponent(defaultWebAssetDir).path
         }
         return path
     }
@@ -293,32 +409,41 @@ import CommonCrypto
         return url
     }
 
-    private func copyCurrentBundleFile(href: String, toDirectory: URL) throws {
-        guard let currentBundleId = getCurrentBundleId() else {
-            return
-        }
-
-        let destination = toDirectory.appendingPathComponent(href)
+    private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
+        let currentBundleId = getCurrentBundleId()
+        let destination = toDirectory.appendingPathComponent(fileToCopy.href)
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
-        if currentBundleId == defaultWebAssetDir {
-            guard let file = Bundle.main.url(forResource: href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
-                return
+        if let currentBundleId = currentBundleId {
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(fileToCopy.href)
+        } else {
+            guard let file = Bundle.main.url(forResource: fileToCopy.href, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+                // If the file does not exist in the current bundle, throw an error
+                // We can use CustomError.unknown here since this error will not be handled by the user
+                throw CustomError.unknown
             }
             sourceURL = file
-        } else {
-            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(href)
         }
 
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
-    private func copyCurrentBundleFiles(hrefs: [String], toDirectory: URL) throws {
-        for href in hrefs {
-            try copyCurrentBundleFile(href: href, toDirectory: toDirectory)
+    private func copyCurrentBundleFilesAndReturnFailures(
+        filesToCopy: [ManifestItem],
+        toDirectory: URL
+    ) -> [ManifestItem] {
+        var missingItems = [ManifestItem]()
+        for fileToCopy in filesToCopy {
+            let success = tryCopyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
+            if !success {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(fileToCopy.href)")
+                // If the file could not be copied, add it to the list of missing items
+                missingItems.append(fileToCopy)
+            }
         }
+        return missingItems
     }
 
     private func createBundlesDirectory() {
@@ -339,26 +464,26 @@ import CommonCrypto
         return temporaryDirectory
     }
 
-    private func deleteBundle(bundleId: String) throws {
+    private func deleteBundleById(_ bundleId: String) throws {
         // Delete the bundle directory
         let path = buildBundlePathFor(bundleId: bundleId)
         try FileManager.default.removeItem(atPath: path)
         // Reset the next bundle if it is the deleted bundle
         let nextBundleId = getNextBundleId()
         if bundleId == nextBundleId {
-            setNextCapacitorServerPathToDefaultWebAssetDir()
+            setNextBundleById(nil)
         }
     }
 
     private func deleteUnusedBundles() {
-        let bundleIds = getBundleIds()
+        let bundleIds = getDownloadedBundleIds()
         let currentBundleId = getCurrentBundleId()
         let nextBundleId = getNextBundleId()
 
         for bundleId in bundleIds {
             if bundleId != currentBundleId && bundleId != nextBundleId {
                 do {
-                    try deleteBundle(bundleId: bundleId)
+                    try deleteBundleById(bundleId)
                 } catch {
                     CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
                 }
@@ -366,12 +491,12 @@ import CommonCrypto
         }
     }
 
-    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?, signature: String?) async throws {
+    private func downloadAndVerifyFile(url: String, file: URL, checksum: String?, signature: String?, callback: ((Progress) -> Void)?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
             return (file, [.createIntermediateDirectories])
         }
         let urlComponents = URLComponents(string: url)!
-        let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination)
+        let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
             if let urlError = error.underlyingError as? URLError {
@@ -389,26 +514,54 @@ import CommonCrypto
         try verifyFile(url: file, checksum: checksum, signature: signature)
     }
 
-    private func downloadBundleFile(baseUrl: String, href: String, directory: URL) async throws -> URL {
+    private func downloadBundleFile(baseUrl: String, href: String, directory: URL, callback: ((Progress) -> Void)?) async throws -> URL {
         let fileURL = directory.appendingPathComponent(href)
         var parameters = [String: String]()
         parameters["href"] = href
         var urlComponents = URLComponents(string: baseUrl)!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = urlComponents.string!
-        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil, signature: nil)
+        try await self.downloadAndVerifyFile(url: url, file: fileURL, checksum: nil, signature: nil, callback: callback)
         return fileURL
     }
 
-    private func downloadBundleFiles(url: String, hrefs: [String], directory: URL) async throws {
+    private func downloadBundleFiles(url: String, filesToDownload: [ManifestItem], directory: URL, callback: ((Progress) -> Void)?) async throws {
+        let totalBytesToDownload = Int64(filesToDownload.map { $0.sizeInBytes }.reduce(0, +))
+        actor TotalBytesDownloaded {
+            var value: Int64 = 0
+            func add(_ amount: Int64) {
+                value += amount
+            }
+        }
+        let totalBytesDownloaded = TotalBytesDownloaded()
         try await withThrowingTaskGroup(of: Void.self) { group in
-            for href in hrefs {
+            for fileToDownload in filesToDownload {
                 group.addTask {
-                    _ = try await self.downloadBundleFile(baseUrl: url, href: href, directory: directory)
+                    _ = try await self.downloadBundleFile(baseUrl: url, href: fileToDownload.href, directory: directory, callback: { progress in
+                        Task {
+                            // Progress is only reported if the file is downloaded in chunks
+                            if let callback = callback {
+                                let totalBytesDownloaded = await totalBytesDownloaded.value
+                                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: progress.completedUnitCount + totalBytesDownloaded)
+                                callback(totalProgress)
+                            }
+                        }
+                    })
+                    // Emit the current progress in case the file was not downloaded in chunks
+                    if let callback = callback {
+                        await totalBytesDownloaded.add(Int64(fileToDownload.sizeInBytes))
+                        let totalBytesDownloaded = await totalBytesDownloaded.value
+                        let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesDownloaded)
+                        callback(totalProgress)
+                    }
                 }
             }
-
             try await group.waitForAll()
+            // Call the callback one last time to make sure the progress is at 100%
+            if let callback = callback {
+                let totalProgress = Progress(totalUnitCount: totalBytesToDownload, completedUnitCount: totalBytesToDownload)
+                callback(totalProgress)
+            }
         }
     }
 
@@ -416,7 +569,7 @@ import CommonCrypto
         // Create a temporary directory
         let temporaryDirectory = try createTemporaryDirectory()
         // Download the latest manifest
-        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory)
+        let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory, callback: nil)
         let latestManifest = try loadManifest(file: latestManifestFile)
         // Load the current manifest
         let currentManifest = try loadCurrentManifest()
@@ -430,18 +583,28 @@ import CommonCrypto
             itemsToDownload.append(contentsOf: latestManifest.items)
         }
         // Copy the files
-        try self.copyCurrentBundleFiles(hrefs: itemsToCopy.map { $0.href }, toDirectory: temporaryDirectory)
+        let missingItems = copyCurrentBundleFilesAndReturnFailures(filesToCopy: itemsToCopy, toDirectory: temporaryDirectory)
+        // If items could not be copied, add them to the list of items to download
+        if !missingItems.isEmpty {
+            itemsToDownload.append(contentsOf: missingItems)
+        }
         // Download the files
-        try await self.downloadBundleFiles(url: url, hrefs: itemsToDownload.map { $0.href }, directory: temporaryDirectory)
+        try await self.downloadBundleFiles(url: url, filesToDownload: itemsToDownload, directory: temporaryDirectory, callback: { progress in
+            let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
+            self.notifyDownloadBundleProgressListeners(event)
+        })
         // Add the bundle
         try await addBundleOfTypeManifest(bundleId: bundleId, directory: temporaryDirectory)
     }
 
-    private func downloadBundleOfTypeZip(bundleId: String, url: String, checksum: String?, signature: String?) async throws {
+    private func downloadBundleOfTypeZip(bundleId: String, checksum: String?, signature: String?, url: String) async throws {
         let timestamp = String(Int(Date().timeIntervalSince1970))
         let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
         // Download the bundle
-        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum, signature: signature)
+        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum, signature: signature, callback: { progress in
+            let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
+            self.notifyDownloadBundleProgressListeners(event)
+        })
         // Add the bundle
         try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
     }
@@ -458,7 +621,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(host)/v1/apps/\(config.appId ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
@@ -481,7 +644,7 @@ import CommonCrypto
         }
     }
 
-    private func getBundleIds() -> [String] {
+    private func getDownloadedBundleIds() -> [String] {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory)
         do {
             let pathExists = FileManager.default.fileExists(atPath: url.path)
@@ -495,8 +658,18 @@ import CommonCrypto
         }
     }
 
+    private func getAppId() -> String? {
+        if let appId = preferences.getAppId() {
+            return appId
+        }
+        return config.appId
+    }
+
     private func getChannel() -> String? {
         var channel: String?
+        if let nativeChannel = getNativeChannel() {
+            channel = nativeChannel
+        }
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
         }
@@ -504,6 +677,10 @@ import CommonCrypto
             channel = preferences.getChannel()
         }
         return channel
+    }
+
+    private func getNativeChannel() -> String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CapawesomeLiveUpdateDefaultChannel") as? String
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
@@ -520,12 +697,16 @@ import CommonCrypto
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
 
-    /// - Returns: The current bundle ID (`public` for the built-in bundle) or `nil` if no view controller was found.
+    /// - Returns: The current bundle ID or `nil` if no view controller was found (should never happen) or the default bundle is in use.
     private func getCurrentBundleId() -> String? {
         guard let path = getCurrentCapacitorServerPath() else {
             return nil
         }
-        return URL(fileURLWithPath: path).lastPathComponent
+        let bundleId = URL(fileURLWithPath: path).lastPathComponent
+        if bundleId == defaultWebAssetDir {
+            return nil
+        }
+        return bundleId
     }
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
@@ -541,19 +722,28 @@ import CommonCrypto
         return deviceId.lowercased()
     }
 
-    /// - Returns: The next bundle ID (`public` for the built-in bundle).
-    private func getNextBundleId() -> String {
+    /// - Returns: The next bundle ID or `nil` if the default bundle will be used.
+    private func getNextBundleId() -> String? {
         let path = getNextCapacitorServerPath()
-        return URL(fileURLWithPath: path).lastPathComponent
+        let bundleId = URL(fileURLWithPath: path).lastPathComponent
+        if bundleId == defaultWebAssetDir {
+            return nil
+        }
+        return bundleId
     }
 
     /// - Returns: The absolute path to the next bundle directory.
     private func getNextCapacitorServerPath() -> String {
-        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
+        let defaultCapacitorServerPath = buildCapacitorServerPathFor(bundleId: nil)
         if let path = KeyValueStore.standard[self.defaultServerPathKey, as: String.self] {
             return path.isEmpty ? defaultCapacitorServerPath : path
         }
         return defaultCapacitorServerPath
+    }
+
+    /// - Returns: The previous bundle ID or `nil` if the default bundle was used.
+    private func getPreviousBundleId() -> String? {
+        return preferences.getPreviousBundleId()
     }
 
     private func getVersionCode() -> String {
@@ -570,27 +760,24 @@ import CommonCrypto
         return appVersionName
     }
 
-    private func hasBundle(bundleId: String) -> Bool {
+    private func hasBundleById(_ bundleId: String) -> Bool {
         let path = buildBundlePathFor(bundleId: bundleId)
         return FileManager.default.fileExists(atPath: path)
     }
 
     private func loadCurrentManifest() throws -> Manifest? {
-        guard let currentBundleId = getCurrentBundleId() else {
-            return nil
-        }
-        if currentBundleId == defaultWebAssetDir {
-            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
-            let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
-            if let manifestFileUrl = manifestFileUrl {
+        if let currentBundleId = getCurrentBundleId() {
+            let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
+            let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
+            if manifestFileExists {
                 return try loadManifest(file: manifestFileUrl)
             } else {
                 return nil
             }
         } else {
-            let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
-            let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
-            if manifestFileExists {
+            let files = Bundle.main.urls(forResourcesWithExtension: nil, subdirectory: defaultWebAssetDir) ?? []
+            let manifestFileUrl = files.first { $0.lastPathComponent == manifestFileName }
+            if let manifestFileUrl = manifestFileUrl {
                 return try loadManifest(file: manifestFileUrl)
             } else {
                 return nil
@@ -605,21 +792,48 @@ import CommonCrypto
         return Manifest(items: items)
     }
 
-    private func rollback() {
-        if getCurrentBundleId() == defaultWebAssetDir {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
-            return
-        }
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
-        setNextCapacitorServerPathToDefaultWebAssetDir()
-        setCurrentCapacitorServerPathToDefaultWebAssetDir()
+    private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
+        plugin.notifyDownloadBundleProgressListeners(event)
     }
 
-    private func saveCurrentBundleShortVersionStringAndBundleVersion() {
-        let currentBundleShortVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        preferences.setLastBundleShortVersionString(currentBundleShortVersionString)
-        let currentBundleVersion = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
-        preferences.setLastBundleVersion(currentBundleVersion)
+    private func performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        let now = Int64(Date().timeIntervalSince1970 * 1000)
+        if lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update skipped. Last check was less than 15 minutes ago.")
+            return
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now
+
+        // Run sync in background task
+        Task {
+            do {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update started.")
+                let options = SyncOptions(channel: nil)
+                _ = try await sync(options)
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update completed successfully.")
+            } catch {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
+            }
+        }
+    }
+
+    private func rollback() {
+        // Set the rollback flag
+        rollbackPerformed = true
+        // Set the new previous bundle ID
+        let currentBundleId = getCurrentBundleId()
+        setPreviousBundleId(bundleId: currentBundleId)
+        // Perform the rollback
+        if let _ = currentBundleId {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
+            setNextBundleById(nil)
+            setCurrentBundleById(nil)
+        } else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
+        }
     }
 
     private func searchIndexHtmlFile(url: URL) -> URL? {
@@ -649,21 +863,74 @@ import CommonCrypto
         return nil
     }
 
+    /// - Parameter bundleId: The bundle ID to set as the current bundle. If `nil`, the default bundle will be used.
+    private func setCurrentBundleById(_ bundleId: String?) {
+        let path = buildCapacitorServerPathFor(bundleId: bundleId)
+        setCurrentCapacitorServerPath(path: path)
+    }
+
     private func setCurrentCapacitorServerPath(path: String) {
         guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
             return
         }
         viewController.setServerBasePath(path: path)
+        // Notify listeners
+        notifyReloadedListeners()
     }
 
-    private func setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
-        setCurrentCapacitorServerPath(path: path)
-    }
-
-    private func setNextBundle(bundleId: String) {
+    /// - Parameter bundleId: The bundle ID to set as the next bundle. If `nil`, the default bundle will be used.
+    private func setNextBundleById(_ bundleId: String?) {
         let path = buildCapacitorServerPathFor(bundleId: bundleId)
         setNextCapacitorServerPath(path: path)
+
+        // Notify listeners
+        notifyNextBundleSetListeners(bundleId)
+    }
+
+    private func notifyNextBundleSetListeners(_ bundleId: String?) {
+        let event = NextBundleSetEvent(bundleId: bundleId)
+        plugin.notifyNextBundleSetListeners(event)
+    }
+
+    private func notifyReloadedListeners() {
+        plugin.notifyReloadedListeners()
+    }
+
+    private func addBlockedBundleId(_ bundleId: String) {
+        var blockedList: [String] = []
+
+        // Parse existing blocked IDs
+        if let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty {
+            blockedList = blockedIds.split(separator: ",").map(String.init)
+        }
+
+        // Skip if already blocked
+        if blockedList.contains(bundleId) {
+            return
+        }
+
+        // Remove oldest if limit reached
+        if blockedList.count >= 100 {
+            blockedList.removeFirst()
+        }
+
+        // Add new bundle
+        blockedList.append(bundleId)
+
+        // Save back to preferences
+        let newBlockedIds = blockedList.joined(separator: ",")
+        preferences.setBlockedBundleIds(newBlockedIds)
+
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle blocked: ", bundleId)
+    }
+
+    private func isBlockedBundleId(_ bundleId: String) -> Bool {
+        guard let blockedIds = preferences.getBlockedBundleIds(), !blockedIds.isEmpty else {
+            return false
+        }
+
+        let blockedList = blockedIds.split(separator: ",").map(String.init)
+        return blockedList.contains(bundleId)
     }
 
     private func setNextCapacitorServerPath(path: String) {
@@ -676,12 +943,28 @@ import CommonCrypto
         }
     }
 
-    private func setNextCapacitorServerPathToDefaultWebAssetDir() {
-        let path = buildCapacitorServerPathFor(bundleId: defaultWebAssetDir)
-        setNextCapacitorServerPath(path: path)
+    private func wasUpdated() -> Bool {
+        let currentVersionCode = getVersionCode()
+        let currentVersionName = getVersionName()
+        let lastVersionCode = preferences.getLastVersionCode()
+        let lastVersionName = preferences.getLastVersionName()
+        return lastVersionCode == nil || lastVersionName == nil || lastVersionCode != currentVersionCode || lastVersionName != currentVersionName
+    }
+
+    private func saveCurrentVersionCode() {
+        preferences.setLastVersionCode(getVersionCode())
+        preferences.setLastVersionName(getVersionName())
+    }
+
+    /// - Parameter bundleId: The bundle ID to save as the previous bundle ID. If `nil`, the value will be removed.
+    private func setPreviousBundleId(bundleId: String?) {
+        preferences.setPreviousBundleId(bundleId)
     }
 
     private func startRollbackTimer() {
+        guard config.readyTimeout > 0 else {
+            return
+        }
         stopRollbackTimer()
         rollbackDispatchWorkItem = DispatchWorkItem { [weak self] in
             self?.rollback()
@@ -691,6 +974,18 @@ import CommonCrypto
 
     private func stopRollbackTimer() {
         rollbackDispatchWorkItem?.cancel()
+    }
+
+    private func tryCopyCurrentBundleFile(
+        fileToCopy: ManifestItem,
+        toDirectory: URL
+    ) -> Bool {
+        do {
+            try copyCurrentBundleFile(fileToCopy: fileToCopy, toDirectory: toDirectory)
+            return true
+        } catch {
+            return false
+        }
     }
 
     private func unzipFile(zipFile: URL) -> URL {
@@ -788,27 +1083,6 @@ import CommonCrypto
         }
         return verificationResult
     }
-
-    private func wasUpdated() -> Bool {
-        guard let lastBundleShortVersionString = preferences.getLastBundleShortVersionString() else {
-            // If the last bundle short version is not set, the app may have been updated
-            return true
-        }
-        guard let lastBundleVersionString = preferences.getLastBundleVersion() else {
-            // If the last bundle version is not set, the app may have been updated
-            return true
-        }
-        guard let currentBundleShortVersionString = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-            // If the current bundle short version is not set, return true for safety reasons
-            return true
-        }
-        guard let currentBundleVersionString = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
-            // If the current bundle version is not set, return true for safety reasons
-            return true
-        }
-        // `CFBundleVersion` is not unique across different versions of the app
-        return lastBundleShortVersionString + "_" + lastBundleVersionString != currentBundleShortVersionString + "_" + currentBundleVersionString
-    }
 }
 
 extension DispatchQueue {
@@ -821,5 +1095,12 @@ extension DispatchQueue {
                 }
             }
         }
+    }
+}
+
+extension Progress {
+    convenience init(totalUnitCount: Int64, completedUnitCount: Int64) {
+        self.init(totalUnitCount: totalUnitCount)
+        self.completedUnitCount = completedUnitCount
     }
 }

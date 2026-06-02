@@ -8,6 +8,10 @@ import Capacitor
         self.channel = call.getString("channel")
     }
 
+    init(channel: String?) {
+        self.channel = channel
+    }
+
     func getChannel() -> String? {
         return channel
     }
