@@ -413,7 +413,7 @@ export interface LiveUpdatePlugin {
    */
   addListener(
     eventName: 'downloadBundleProgress',
-    listenerFunc: DownloadBundleProgressListener,
+    listenerFunc: DownloadBundleProgressListener
   ): Promise<PluginListenerHandle>;
   /**
    * Listen for when a bundle is set as the next bundle.
@@ -425,10 +425,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.9.0
    */
-  addListener(
-    eventName: 'nextBundleSet',
-    listenerFunc: NextBundleSetListener,
-  ): Promise<PluginListenerHandle>;
+  addListener(eventName: 'nextBundleSet', listenerFunc: NextBundleSetListener): Promise<PluginListenerHandle>;
   /**
    * Listen for when the app is reloaded.
    *
@@ -443,10 +440,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 6.9.0
    */
-  addListener(
-    eventName: 'reloaded',
-    listenerFunc: ReloadedListener,
-  ): Promise<PluginListenerHandle>;
+  addListener(eventName: 'reloaded', listenerFunc: ReloadedListener): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
    *
@@ -965,9 +959,7 @@ export interface SyncResult {
  *
  * @since 6.9.0
  */
-export type DownloadBundleProgressListener = (
-  event: DownloadBundleProgressEvent,
-) => void;
+export type DownloadBundleProgressListener = (event: DownloadBundleProgressEvent) => void;
 
 /**
  * Event that is triggered when the download progress of a bundle changes.
