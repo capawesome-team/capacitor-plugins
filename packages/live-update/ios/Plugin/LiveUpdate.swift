@@ -608,6 +608,9 @@ import CommonCrypto
 
     private func getChannel() -> String? {
         var channel: String?
+        if let nativeChannel = getNativeChannel() {
+            channel = nativeChannel
+        }
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
         }
@@ -615,6 +618,10 @@ import CommonCrypto
             channel = preferences.getChannel()
         }
         return channel
+    }
+
+    private func getNativeChannel() -> String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CapawesomeLiveUpdateDefaultChannel") as? String
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
