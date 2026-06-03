@@ -5,13 +5,15 @@ import Capacitor
     private let artifactType: ArtifactType?
     private let bundleId: String?
     private let checksum: String?
+    private let customProperties: [String: Any]?
     private let downloadUrl: String?
     private let signature: String?
 
-    init(artifactType: ArtifactType?, bundleId: String?, checksum: String?, downloadUrl: String?, signature: String?) {
+    init(artifactType: ArtifactType?, bundleId: String?, checksum: String?, customProperties: [String: Any]?, downloadUrl: String?, signature: String?) {
         self.artifactType = artifactType
         self.bundleId = bundleId
         self.checksum = checksum
+        self.customProperties = customProperties
         self.downloadUrl = downloadUrl
         self.signature = signature
     }
@@ -26,6 +28,9 @@ import Capacitor
         result["bundleId"] = bundleId == nil ? NSNull() : bundleId
         if let checksum = checksum {
             result["checksum"] = checksum
+        }
+        if let customProperties = JSTypes.coerceDictionaryToJSObject(customProperties) {
+            result["customProperties"] = customProperties
         }
         if let downloadUrl = downloadUrl {
             result["downloadUrl"] = downloadUrl

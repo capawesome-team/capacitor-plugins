@@ -13,6 +13,10 @@ public class SyncOptions {
         this.channel = call.getString("channel", null);
     }
 
+    public SyncOptions(@Nullable String channel) {
+        this.channel = channel;
+    }
+
     @Nullable
     public String getChannel() {
         return channel;

@@ -1,5 +1,7 @@
 /// <reference types="@capacitor/cli" />
 
+import type { PluginListenerHandle } from '@capacitor/core';
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     LiveUpdate?: {
@@ -14,6 +16,21 @@ declare module '@capacitor/cli' {
        */
       appId?: string;
       /**
+       * Whether or not to automatically block bundles that have been rolled back.
+       *
+       * When enabled, the plugin will automatically block bundles that caused a rollback
+       * (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked.
+       * Blocked bundles will be skipped in future sync operations.
+       *
+       * **Attention**: This option has no effect if `readyTimeout` is set to `0`.
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 6.9.0
+       * @default false
+       */
+      autoBlockRolledBackBundles?: boolean;
+      /**
        * Whether or not to automatically delete unused bundles.
        *
        * When enabled, the plugin will automatically delete unused bundles after calling `ready()`.
@@ -23,7 +40,27 @@ declare module '@capacitor/cli' {
        */
       autoDeleteBundles?: boolean;
       /**
+       * The auto-update strategy for live updates.
+       *
+       * - `none`: Live updates will not be applied automatically.
+       * - `background`: Live updates will be automatically downloaded
+       * and applied in the background at app startup and when the app resumes
+       * (if the last check was more than 15 minutes ago).
+       *
+       * Only available on Android and iOS.
+       *
+       * @since 6.9.0
+       * @default 'none'
+       * @example 'background'
+       */
+      autoUpdateStrategy?: 'none' | 'background';
+      /**
        * The default channel of the app.
+       *
+       * This can be overridden by `setChannel()`, the `channel` parameter of `sync()`,
+       * or the native channel configuration
+       * (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel`
+       * in `strings.xml` on Android).
        *
        * @since 6.3.0
        * @example 'production'
@@ -75,11 +112,32 @@ declare module '@capacitor/cli' {
        * @default true
        */
       resetOnUpdate?: boolean;
+      /**
+       * The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.
+       *
+       * This option takes precedence over the `location` configuration option.
+       *
+       * @since 6.9.0
+       * @default 'api.cloud.capawesome.io'
+       * @example 'api.cloud.capawesome.eu'
+       */
+      serverDomain?: string;
     };
   }
 }
 
 export interface LiveUpdatePlugin {
+  /**
+   * Clear all blocked bundles from the blocked list.
+   *
+   * This removes all bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  clearBlockedBundles(): Promise<void>;
   /**
    * Delete a bundle from the app.
    *
@@ -97,6 +155,22 @@ export interface LiveUpdatePlugin {
    */
   downloadBundle(options: DownloadBundleOptions): Promise<void>;
   /**
+   * Fetch channels from [Capawesome Cloud](https://capawesome.io/cloud/).
+   *
+   * This is primarily intended for development and QA purposes.
+   * It allows you to retrieve a list of available channels so you can
+   * dynamically switch between them using `setChannel(...)`.
+   *
+   * **Attention**: Only works for apps with public channels enabled.
+   * If channels are private, they can still be set using `setChannel(...)`
+   * but won't be returned by this method.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  fetchChannels(options?: FetchChannelsOptions): Promise<FetchChannelsResult>;
+  /**
    * Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
    * Only available on Android and iOS.
@@ -104,6 +178,17 @@ export interface LiveUpdatePlugin {
    * @since 6.6.0
    */
   fetchLatestBundle(options?: FetchLatestBundleOptions): Promise<FetchLatestBundleResult>;
+  /**
+   * Get all blocked bundle identifiers.
+   *
+   * Returns the list of bundle identifiers that were automatically blocked
+   * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  getBlockedBundles(): Promise<GetBlockedBundlesResult>;
   /**
    * Get the active bundle identifier.
    *
@@ -119,16 +204,37 @@ export interface LiveUpdatePlugin {
    * Only available on Android and iOS.
    *
    * @since 5.0.0
+   * @deprecated Use `getDownloadedBundles()` instead.
    */
   getBundles(): Promise<GetBundlesResult>;
   /**
    * Get the channel that is used for the update.
+   *
+   * The channel is resolved in the following order (highest priority first):
+   * 1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
+   * 2. Capacitor config `defaultChannel`
+   * 3. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
+   *    `capawesome_live_update_default_channel` in `strings.xml` on Android)
+   *
+   * **Note**: The `channel` parameter of `sync()` takes the highest priority
+   * but is not persisted and therefore not returned by this method.
    *
    * Only available on Android and iOS.
    *
    * @since 5.0.0
    */
   getChannel(): Promise<GetChannelResult>;
+  /**
+   * Get the runtime configuration.
+   *
+   * Returns the current plugin configuration including any runtime
+   * overrides set via `setConfig()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  getConfig(): Promise<GetConfigResult>;
   /**
    * Get the bundle identifier of the current bundle.
    * The current bundle is the bundle that is currently used by the app.
@@ -154,6 +260,14 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   getDeviceId(): Promise<GetDeviceIdResult>;
+  /**
+   * Get all identifiers of bundles that have been downloaded.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  getDownloadedBundles(): Promise<GetDownloadedBundlesResult>;
   /**
    * Get the bundle identifier of the next bundle.
    * The next bundle is the bundle that will be used after calling `reload()`
@@ -181,6 +295,14 @@ export interface LiveUpdatePlugin {
    */
   getVersionName(): Promise<GetVersionNameResult>;
   /**
+   * Check whether a sync operation is currently in progress.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  isSyncing(): Promise<IsSyncingResult>;
+  /**
    * Notify the plugin that the app is ready to use and no rollback is needed.
    *
    * **Attention**: This method should be called as soon as the app is ready to use
@@ -190,7 +312,7 @@ export interface LiveUpdatePlugin {
    *
    * @since 5.0.0
    */
-  ready(): Promise<void>;
+  ready(): Promise<ReadyResult>;
   /**
    * Reload the app to apply the new bundle.
    *
@@ -210,6 +332,17 @@ export interface LiveUpdatePlugin {
    */
   reset(): Promise<void>;
   /**
+   * Reset the runtime configuration to the values from the Capacitor config file.
+   *
+   * This clears any runtime configuration set via `setConfig()`.
+   * The changes take effect immediately.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  resetConfig(): Promise<void>;
+  /**
    * Set the next bundle to use for the app.
    *
    * Call `reload()` or restart the app to apply the changes.
@@ -228,6 +361,21 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   setChannel(options: SetChannelOptions): Promise<void>;
+  /**
+   * Set the runtime configuration.
+   *
+   * This allows updating plugin configuration options at runtime.
+   * The changes are persisted across app restarts and take effect immediately.
+   *
+   * **Important:** Runtime configuration is automatically reset to default values
+   * whenever the native app is updated to a new version. This ensures that
+   * configuration from previous versions doesn't persist after an app update.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  setConfig(options: SetConfigOptions): Promise<void>;
   /**
    * Set the custom identifier of the device.
    *
@@ -256,6 +404,49 @@ export interface LiveUpdatePlugin {
    * @since 5.0.0
    */
   sync(options?: SyncOptions): Promise<SyncResult>;
+  /**
+   * Listen for the download progress of a bundle.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  addListener(
+    eventName: 'downloadBundleProgress',
+    listenerFunc: DownloadBundleProgressListener
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Listen for when a bundle is set as the next bundle.
+   *
+   * This event is triggered whenever a bundle is set to be used on the next app restart,
+   * either through automatic updates or manual calls to `setNextBundle()`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  addListener(eventName: 'nextBundleSet', listenerFunc: NextBundleSetListener): Promise<PluginListenerHandle>;
+  /**
+   * Listen for when the app is reloaded.
+   *
+   * This event is triggered after the `reload()` method is called
+   * and the app has been reloaded.
+   *
+   * **Note:** To verify whether an update was successfully applied after a reload,
+   * use the `ready()` method instead. The `ready()` method provides detailed information
+   * about the current bundle, previous bundle, and whether a rollback occurred.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 6.9.0
+   */
+  addListener(eventName: 'reloaded', listenerFunc: ReloadedListener): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 6.9.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**
@@ -327,6 +518,62 @@ export interface DownloadBundleOptions {
 }
 
 /**
+ * @since 6.9.0
+ */
+export interface FetchChannelsOptions {
+  /**
+   * The maximum number of channels to return.
+   *
+   * @since 6.9.0
+   * @default 50
+   */
+  limit?: number;
+  /**
+   * The number of channels to skip.
+   *
+   * @since 6.9.0
+   * @default 0
+   */
+  offset?: number;
+  /**
+   * The query to filter channels by name.
+   *
+   * @since 6.9.0
+   */
+  query?: string;
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface FetchChannelsResult {
+  /**
+   * The list of channels.
+   *
+   * @since 6.9.0
+   */
+  channels: Channel[];
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface Channel {
+  /**
+   * The unique identifier of the channel.
+   *
+   * @since 6.9.0
+   */
+  id: string;
+  /**
+   * The name of the channel.
+   *
+   * @since 6.9.0
+   */
+  name: string;
+}
+
+/**
  * @since 6.7.0
  */
 export interface FetchLatestBundleOptions {
@@ -366,6 +613,13 @@ export interface FetchLatestBundleResult {
    */
   checksum?: string;
   /**
+   * Custom properties that are associated with the latest bundle.
+   *
+   * @since 6.9.0
+   * @example { "key": "value" }
+   */
+  customProperties?: { [key: string]: string };
+  /**
    * The URL of the latest bundle to download.
    * Pass this URL to the `downloadBundle(...)` method to download the bundle.
    *
@@ -381,6 +635,18 @@ export interface FetchLatestBundleResult {
    * @since 6.8.0
    */
   signature?: string;
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface GetBlockedBundlesResult {
+  /**
+   * An array of unique identifiers of all blocked bundles.
+   *
+   * @since 6.9.0
+   */
+  bundleIds: string[];
 }
 
 /**
@@ -411,6 +677,18 @@ export interface GetBundlesResult {
 }
 
 /**
+ * @since 6.9.0
+ */
+export interface GetDownloadedBundlesResult {
+  /**
+   * An array of unique identifiers of all downloaded bundles.
+   *
+   * @since 6.9.0
+   */
+  bundleIds: string[];
+}
+
+/**
  * @since 5.0.0
  */
 export interface GetChannelResult {
@@ -423,6 +701,28 @@ export interface GetChannelResult {
    * @example 'production'
    */
   channel: string | null;
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface GetConfigResult {
+  /**
+   * The app ID used to identify the app.
+   *
+   * If `null`, no app ID is configured.
+   *
+   * @since 6.9.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId: string | null;
+  /**
+   * The auto-update strategy for live updates.
+   *
+   * @since 6.9.0
+   * @example 'background'
+   */
+  autoUpdateStrategy: 'none' | 'background';
 }
 
 /**
@@ -454,6 +754,18 @@ export interface GetDeviceIdResult {
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
    */
   deviceId: string;
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface IsSyncingResult {
+  /**
+   * Whether a sync operation is currently in progress.
+   *
+   * @since 6.9.0
+   */
+  syncing: boolean;
 }
 
 /**
@@ -518,6 +830,34 @@ export interface GetCustomIdResult {
 }
 
 /**
+ * @since 6.9.0
+ */
+export interface ReadyResult {
+  /**
+   * The identifier of the previous bundle used.
+   *
+   * If `null`, the default bundle was used.
+   *
+   * @since 6.9.0
+   */
+  previousBundleId: string | null;
+  /**
+   * The identifier of the current bundle used.
+   *
+   * If `null`, the default bundle is being used.
+   *
+   * @since 6.9.0
+   */
+  currentBundleId: string | null;
+  /**
+   * Whether or not the app was reset to the default bundle.
+   *
+   * @since 6.9.0
+   */
+  rollback: boolean;
+}
+
+/**
  * @since 5.0.0
  */
 export interface SetBundleOptions {
@@ -542,6 +882,21 @@ export interface SetChannelOptions {
    * @since 5.0.0
    */
   channel: string | null;
+}
+
+/**
+ * @since 6.9.0
+ */
+export interface SetConfigOptions {
+  /**
+   * The app ID used to identify the app.
+   *
+   * Set `null` to reset to the value from the Capacitor config file.
+   *
+   * @since 6.9.0
+   * @example '6e351b4f-69a7-415e-a057-4567df7ffe94'
+   */
+  appId?: string | null;
 }
 
 /**
@@ -598,3 +953,74 @@ export interface SyncResult {
    */
   nextBundleId: string | null;
 }
+
+/**
+ * Listener for the download progress of a bundle.
+ *
+ * @since 6.9.0
+ */
+export type DownloadBundleProgressListener = (event: DownloadBundleProgressEvent) => void;
+
+/**
+ * Event that is triggered when the download progress of a bundle changes.
+ *
+ * @since 6.9.0
+ */
+export interface DownloadBundleProgressEvent {
+  /**
+   * The unique identifier of the bundle that is being downloaded.
+   *
+   * @since 6.9.0
+   */
+  bundleId: string;
+  /**
+   * The number of bytes that have been downloaded.
+   *
+   * @since 6.9.0
+   */
+  downloadedBytes: number;
+  /**
+   * The progress of the download in percent as a value between `0` and `1`.
+   *
+   * @since 6.9.0
+   * @example 0.5
+   */
+  progress: number;
+  /**
+   * The total number of bytes to download.
+   *
+   * @since 6.9.0
+   */
+  totalBytes: number;
+}
+
+/**
+ * Listener for when a bundle is set as the next bundle.
+ *
+ * @since 6.9.0
+ */
+export type NextBundleSetListener = (event: NextBundleSetEvent) => void;
+
+/**
+ * Event that is triggered when a bundle is set as the next bundle.
+ *
+ * @since 6.9.0
+ */
+export interface NextBundleSetEvent {
+  /**
+   * The unique identifier of the bundle that is set as the next bundle.
+   *
+   * If `null`, the default bundle will be used.
+   *
+   * @since 6.9.0
+   * @example '1.0.0'
+   */
+  bundleId: string | null;
+}
+
+/**
+ * Listener for when the app is reloaded.
+ *
+ * @since 6.9.0
+ */
+export type ReloadedListener = () => void;

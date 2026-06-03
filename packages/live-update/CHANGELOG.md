@@ -1,5 +1,33 @@
 # Changelog
 
+## 6.9.0
+
+This release backports the Capacitor-6-compatible features and improvements from the 7.x and 8.x release lines. All changes are additive — the existing v6 API (including `enabled`, `location`, `resetOnUpdate`, `getBundle()`, `setBundle()`, and the default `readyTimeout`) is preserved.
+
+### Minor Changes
+
+- [#242](https://github.com/capawesome-team/capacitor-plugins/pull/242): feat: `ready()` now returns a `ReadyResult` with rollback information
+- [#383](https://github.com/capawesome-team/capacitor-plugins/pull/383): feat: add `customProperties` property to `FetchLatestBundleResult`
+- [#399](https://github.com/capawesome-team/capacitor-plugins/pull/399): feat: add `downloadBundleProgress` event
+- [#680](https://github.com/capawesome-team/capacitor-plugins/pull/680): feat: add `autoUpdateStrategy` configuration option
+- [#685](https://github.com/capawesome-team/capacitor-plugins/pull/685): feat: add `autoBlockRolledBackBundles` configuration option
+- [#686](https://github.com/capawesome-team/capacitor-plugins/pull/686): feat: add `reloaded` event
+- [#688](https://github.com/capawesome-team/capacitor-plugins/pull/688): feat: add `isSyncing()` method
+- [#689](https://github.com/capawesome-team/capacitor-plugins/pull/689): feat: add `getDownloadedBundles()` method
+- [#690](https://github.com/capawesome-team/capacitor-plugins/pull/690): feat: add `clearBlockedBundles()` and `getBlockedBundles()` methods
+- [#691](https://github.com/capawesome-team/capacitor-plugins/pull/691): feat: add `setConfig(...)`, `getConfig()`, and `resetConfig()` methods
+- feat: add `serverDomain` configuration option (in addition to the deprecated `location` option)
+- feat: add `nextBundleSet` event and `removeAllListeners()` method
+- [#783](https://github.com/capawesome-team/capacitor-plugins/pull/783): feat: add native channel configuration support
+- [#785](https://github.com/capawesome-team/capacitor-plugins/pull/785): feat: track device ID on bundle download
+- [#787](https://github.com/capawesome-team/capacitor-plugins/pull/787): feat: add `fetchChannels(...)` method
+
+### Patch Changes
+
+- [#695](https://github.com/capawesome-team/capacitor-plugins/pull/695): fix(android): make http requests asynchronous
+- [#792](https://github.com/capawesome-team/capacitor-plugins/pull/792): fix(android): clear zip file attributes before extraction to prevent EACCES errors
+- [#855](https://github.com/capawesome-team/capacitor-plugins/pull/855): fix(android): prevent crash during bundle cleanup when a directory is unreadable
+
 ## 6.8.0
 
 - [#451](https://github.com/capawesome-team/capacitor-plugins/pull/451): feat: support code signing for self-hosted bundles

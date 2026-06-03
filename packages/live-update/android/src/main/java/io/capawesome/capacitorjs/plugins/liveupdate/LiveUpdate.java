@@ -10,31 +10,45 @@ import android.os.Handler;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetChannelsResponseItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchChannelsOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchChannelsResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetConfigResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCurrentBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetCustomIdResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDeviceIdResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetDownloadedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetNextBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionCodeResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetVersionNameResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
@@ -52,8 +66,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
+import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -65,13 +83,12 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
+    private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
+
     @NonNull
     private final LiveUpdateConfig config;
 
-    private final String defaultWebAssetDir;
-
-    @NonNull
-    private final String host;
+    private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
     private final LiveUpdateHttpClient httpClient;
@@ -89,44 +106,57 @@ public class LiveUpdate {
     private final Handler rollbackHandler = new Handler();
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
+    private boolean initialPageLoaded = false;
+    private long lastAutoUpdateCheckTimestamp = 0;
+    private boolean rollbackPerformed = false;
+    private boolean syncInProgress = false;
+
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
         this.config = config;
-        this.defaultWebAssetDir = plugin.getBridge().DEFAULT_WEB_ASSET_DIR;
-        if (config.getLocation() != null && config.getLocation().equals("eu")) {
-            this.host = "api.cloud.capawesome.eu";
-        } else {
-            this.host = "api.cloud.capawesome.io";
-        }
         this.httpClient = new LiveUpdateHttpClient(config);
         this.plugin = plugin;
         this.preferences = new LiveUpdatePreferences(plugin.getContext());
         this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
+        // Set the device ID on the HTTP client
+        this.httpClient.setDeviceId(getDeviceId());
+
         if (config.getEnabled()) {
-            if (wasUpdated() && config.getResetOnUpdate()) {
+            boolean wasUpdated = wasUpdated();
+            if (wasUpdated) {
+                // Reset the runtime configuration if the app was updated to a new version
+                resetConfig();
+            }
+            if (wasUpdated && config.getResetOnUpdate()) {
                 Logger.debug(LiveUpdatePlugin.TAG, "App was updated. Resetting to default bundle.");
                 reset();
             } else {
+                // Start the rollback timer to rollback to the default bundle
+                // if the app is not ready after a certain time
                 startRollbackTimer();
             }
             saveCurrentVersionCode();
         }
     }
 
+    public void clearBlockedBundles() {
+        preferences.setBlockedBundleIds(null);
+    }
+
     public void deleteBundle(@NonNull DeleteBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
-        if (!hasBundle(bundleId)) {
+        if (!hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
             callback.error(exception);
             return;
         }
-        deleteBundle(bundleId);
+        deleteBundleById(bundleId);
 
         callback.success();
     }
 
-    public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) throws Exception {
+    public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) {
         ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
         String checksum = options.getChecksum();
@@ -134,7 +164,7 @@ public class LiveUpdate {
         String url = options.getUrl();
 
         // Check if the bundle already exists
-        if (hasBundle(bundleId)) {
+        if (hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_EXISTS);
             callback.error(exception);
             return;
@@ -142,36 +172,125 @@ public class LiveUpdate {
 
         // Download the bundle
         if (artifactType == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(bundleId, url);
+            downloadBundleOfTypeManifest(bundleId, url, callback);
         } else {
-            downloadBundleOfTypeZip(bundleId, url, checksum, signature);
+            downloadBundleOfTypeZip(bundleId, checksum, signature, url, callback);
         }
-        callback.success();
     }
 
-    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback callback) throws Exception {
-        GetLatestBundleResponse response = fetchLatestBundle(options);
-        ArtifactType artifactType = response == null ? null : response.getArtifactType();
-        String bundleId = response == null ? null : response.getBundleId();
-        String checksum = response == null ? null : response.getChecksum();
-        String downloadUrl = response == null ? null : response.getUrl();
-        String signature = response == null ? null : response.getSignature();
-        FetchLatestBundleResult result = new FetchLatestBundleResult(artifactType, bundleId, checksum, downloadUrl, signature);
+    public void fetchChannels(@NonNull FetchChannelsOptions options, @NonNull NonEmptyCallback<FetchChannelsResult> callback) {
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(config.getServerDomain())
+                .addPathSegment("v1")
+                .addPathSegment("apps")
+                .addPathSegment(getAppId())
+                .addPathSegment("channels");
+            if (options.getLimit() != null) {
+                urlBuilder.addQueryParameter("limit", String.valueOf(options.getLimit()));
+            }
+            if (options.getOffset() != null) {
+                urlBuilder.addQueryParameter("offset", String.valueOf(options.getOffset()));
+            }
+            if (options.getQuery() != null) {
+                urlBuilder.addQueryParameter("query", options.getQuery());
+            }
+            String url = urlBuilder.build().toString();
+
+            httpClient.enqueue(
+                url,
+                new NonEmptyCallback<Response>() {
+                    @Override
+                    public void success(@NonNull Response response) {
+                        try {
+                            String responseBodyString = response.body().string();
+                            if (response.isSuccessful()) {
+                                JSONArray responseJsonArray = new JSONArray(responseBodyString);
+                                ChannelResult[] channels = new ChannelResult[responseJsonArray.length()];
+                                for (int i = 0; i < responseJsonArray.length(); i++) {
+                                    GetChannelsResponseItem item = new GetChannelsResponseItem(responseJsonArray.getJSONObject(i));
+                                    channels[i] = new ChannelResult(item.getId(), item.getName());
+                                }
+                                FetchChannelsResult result = new FetchChannelsResult(channels);
+                                callback.success(result);
+                            } else {
+                                callback.error(new Exception(responseBodyString));
+                            }
+                        } catch (Exception e) {
+                            callback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        callback.error(exception);
+                    }
+                }
+            );
+        } catch (Exception e) {
+            callback.error(e);
+        }
+    }
+
+    public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<FetchLatestBundleResult> callback) {
+        fetchLatestBundleInternal(
+            options,
+            new NonEmptyCallback<GetLatestBundleResponse>() {
+                @Override
+                public void success(@Nullable GetLatestBundleResponse response) {
+                    ArtifactType artifactType = response == null ? null : response.getArtifactType();
+                    String bundleId = response == null ? null : response.getBundleId();
+                    String checksum = response == null ? null : response.getChecksum();
+                    JSONObject customProperties = response == null ? null : response.getCustomProperties();
+                    String downloadUrl = response == null ? null : response.getUrl();
+                    String signature = response == null ? null : response.getSignature();
+                    FetchLatestBundleResult result = new FetchLatestBundleResult(
+                        artifactType,
+                        bundleId,
+                        checksum,
+                        customProperties,
+                        downloadUrl,
+                        signature
+                    );
+                    callback.success(result);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    callback.error(exception);
+                }
+            }
+        );
+    }
+
+    public void getBlockedBundles(@NonNull NonEmptyCallback<GetBlockedBundlesResult> callback) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        String[] bundleIds;
+        if (blockedIds == null || blockedIds.isEmpty()) {
+            bundleIds = new String[0];
+        } else {
+            bundleIds = blockedIds.split(",");
+        }
+        GetBlockedBundlesResult result = new GetBlockedBundlesResult(bundleIds);
         callback.success(result);
     }
 
-    public void getBundle(@NonNull NonEmptyCallback callback) {
+    public void getBundle(@NonNull NonEmptyCallback<GetBundleResult> callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            bundleId = null;
-        }
         GetBundleResult result = new GetBundleResult(bundleId);
         callback.success(result);
     }
 
     public void getBundles(@NonNull NonEmptyCallback callback) {
-        String[] bundleIds = getBundleIds();
+        String[] bundleIds = getDownloadedBundleIds();
         GetBundlesResult result = new GetBundlesResult(bundleIds);
+        callback.success(result);
+    }
+
+    public void getDownloadedBundles(@NonNull NonEmptyCallback<GetDownloadedBundlesResult> callback) {
+        String[] bundleIds = getDownloadedBundleIds();
+        GetDownloadedBundlesResult result = new GetDownloadedBundlesResult(bundleIds);
         callback.success(result);
     }
 
@@ -181,11 +300,15 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    public void getConfig(@NonNull NonEmptyCallback<GetConfigResult> callback) {
+        String appId = getAppId();
+        String autoUpdateStrategy = config.getAutoUpdateStrategy();
+        GetConfigResult result = new GetConfigResult(appId, autoUpdateStrategy);
+        callback.success(result);
+    }
+
     public void getCurrentBundle(@NonNull NonEmptyCallback<GetCurrentBundleResult> callback) {
         String bundleId = getCurrentBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            bundleId = null;
-        }
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
         callback.success(result);
     }
@@ -204,15 +327,12 @@ public class LiveUpdate {
 
     public void getNextBundle(@NonNull NonEmptyCallback<GetNextBundleResult> callback) {
         String bundleId = getNextBundleId();
-        if (bundleId.equals(defaultWebAssetDir)) {
-            bundleId = null;
-        }
         GetNextBundleResult result = new GetNextBundleResult(bundleId);
         callback.success(result);
     }
 
     public void getVersionCode(@NonNull NonEmptyCallback callback) throws PackageManager.NameNotFoundException {
-        String versionCode = getVersionCode();
+        String versionCode = getVersionCodeAsString();
         GetVersionCodeResult result = new GetVersionCodeResult(versionCode);
         callback.success(result);
     }
@@ -223,14 +343,51 @@ public class LiveUpdate {
         callback.success(result);
     }
 
-    public void ready() {
+    public void isSyncing(@NonNull NonEmptyCallback<IsSyncingResult> callback) {
+        IsSyncingResult result = new IsSyncingResult(syncInProgress);
+        callback.success(result);
+    }
+
+    public void handleOnPageLoaded() {
+        // Wait for initial page load to perform auto update to make sure the WebViewLocalServer is initialized.
+        // Otherwise, a NullPointerException may occur for `com.getcapacitor.WebViewLocalServer.getBasePath()`.
+        if ("background".equals(config.getAutoUpdateStrategy()) && !initialPageLoaded) {
+            initialPageLoaded = true;
+            performAutoUpdate();
+        }
+    }
+
+    public void handleOnResume() {
+        if ("background".equals(config.getAutoUpdateStrategy()) && initialPageLoaded) {
+            performAutoUpdate();
+        }
+    }
+
+    public void ready(@NonNull NonEmptyCallback callback) {
         Logger.debug(LiveUpdatePlugin.TAG, "App is ready.");
+        if (config.getReadyTimeout() <= 0) {
+            Logger.warn(LiveUpdatePlugin.TAG, "Ready timeout is set to 0. Automatic rollback is disabled.");
+        }
         // Stop the rollback timer
         stopRollbackTimer();
         // Delete unused bundles
         if (config.getAutoDeleteBundles()) {
             deleteUnusedBundles();
         }
+        // Get the current and previous bundle IDs
+        String currentBundleId = getCurrentBundleId();
+        String previousBundleId = getPreviousBundleId();
+        // Block the rolled back bundle if enabled
+        if (config.getAutoBlockRolledBackBundles() && rollbackPerformed && previousBundleId != null) {
+            addBlockedBundleId(previousBundleId);
+        }
+        // Return the result
+        ReadyResult result = new ReadyResult(currentBundleId, previousBundleId, rollbackPerformed);
+        callback.success(result);
+        // Set the new previous bundle ID
+        setPreviousBundleId(currentBundleId);
+        // Reset the rollback flag
+        rollbackPerformed = false;
     }
 
     public void reload() {
@@ -240,19 +397,23 @@ public class LiveUpdate {
     }
 
     public void reset() {
-        setNextCapacitorServerPathToDefaultWebAssetDir();
+        setNextBundleById(null);
+    }
+
+    public void resetConfig() {
+        preferences.setAppId(null);
     }
 
     public void setBundle(@NonNull SetBundleOptions options, @NonNull EmptyCallback callback) {
         String bundleId = options.getBundleId();
 
-        if (!hasBundle(bundleId)) {
+        if (!hasBundleById(bundleId)) {
             Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
             callback.error(exception);
             return;
         }
 
-        setNextBundle(bundleId);
+        setNextBundleById(bundleId);
         callback.success();
     }
 
@@ -261,6 +422,11 @@ public class LiveUpdate {
 
         preferences.setChannel(channel);
         callback.success();
+    }
+
+    public void setConfig(@NonNull SetConfigOptions options) {
+        String appId = options.getAppId();
+        preferences.setAppId(appId);
     }
 
     public void setCustomId(@NonNull SetCustomIdOptions options, @NonNull EmptyCallback callback) {
@@ -276,8 +442,8 @@ public class LiveUpdate {
         if (bundleId == null) {
             reset();
         } else {
-            if (hasBundle(bundleId)) {
-                setNextBundle(bundleId);
+            if (hasBundleById(bundleId)) {
+                setNextBundleById(bundleId);
             } else {
                 Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
                 callback.error(exception);
@@ -287,45 +453,99 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) throws Exception {
+    public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) {
+        if (syncInProgress) {
+            Exception exception = new Exception(LiveUpdatePlugin.ERROR_SYNC_IN_PROGRESS);
+            callback.error(exception);
+            return;
+        }
+        syncInProgress = true;
+
         String channel = options.getChannel();
         // Fetch the latest bundle
         FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(channel);
-        GetLatestBundleResponse response = fetchLatestBundle(fetchLatestBundleOptions);
-        if (response == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
-            SyncResult syncResult = new SyncResult(null);
-            callback.success(syncResult);
-            return;
-        }
-        ArtifactType artifactType = response.getArtifactType();
-        String checksum = response.getChecksum();
-        String signature = response.getSignature();
-        String latestBundleId = response.getBundleId();
-        String url = response.getUrl();
-        // Check if the bundle already exists
-        if (hasBundle(latestBundleId)) {
-            String nextBundleId = null;
-            String currentBundleId = getCurrentBundleId();
-            if (!latestBundleId.equals(currentBundleId)) {
-                // Set the next bundle
-                setNextBundle(latestBundleId);
-                nextBundleId = latestBundleId;
+        fetchLatestBundleInternal(
+            fetchLatestBundleOptions,
+            new NonEmptyCallback<GetLatestBundleResponse>() {
+                @Override
+                public void success(@Nullable GetLatestBundleResponse response) {
+                    try {
+                        if (response == null) {
+                            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+                            syncInProgress = false;
+                            SyncResult syncResult = new SyncResult(null);
+                            callback.success(syncResult);
+                            return;
+                        }
+                        ArtifactType artifactType = response.getArtifactType();
+                        String latestBundleId = response.getBundleId();
+                        String checksum = response.getChecksum();
+                        String signature = response.getSignature();
+                        String url = response.getUrl();
+                        // Check if the bundle is blocked
+                        if (isBlockedBundleId(latestBundleId)) {
+                            Logger.warn(LiveUpdatePlugin.TAG, "Bundle is blocked and will not be downloaded.");
+                            syncInProgress = false;
+                            SyncResult syncResult = new SyncResult(null);
+                            callback.success(syncResult);
+                            return;
+                        }
+                        // Check if the bundle already exists
+                        if (hasBundleById(latestBundleId)) {
+                            String nextBundleId = null;
+                            String currentBundleId = getCurrentBundleId();
+                            if (!latestBundleId.equals(currentBundleId)) {
+                                // Set the next bundle
+                                setNextBundleById(latestBundleId);
+                                nextBundleId = latestBundleId;
+                            }
+                            syncInProgress = false;
+                            SyncResult syncResult = new SyncResult(nextBundleId);
+                            callback.success(syncResult);
+                            return;
+                        }
+
+                        // Download the bundle
+                        EmptyCallback downloadCallback = new EmptyCallback() {
+                            @Override
+                            public void success() {
+                                try {
+                                    // Set the next bundle
+                                    setNextBundleById(latestBundleId);
+                                    syncInProgress = false;
+                                    SyncResult syncResult = new SyncResult(latestBundleId);
+                                    callback.success(syncResult);
+                                } catch (Exception e) {
+                                    syncInProgress = false;
+                                    callback.error(e);
+                                }
+                            }
+
+                            @Override
+                            public void error(@NonNull Exception exception) {
+                                syncInProgress = false;
+                                callback.error(exception);
+                            }
+                        };
+
+                        if (artifactType == ArtifactType.MANIFEST) {
+                            downloadBundleOfTypeManifest(latestBundleId, url, downloadCallback);
+                        } else {
+                            downloadBundleOfTypeZip(latestBundleId, checksum, signature, url, downloadCallback);
+                        }
+                    } catch (Exception e) {
+                        syncInProgress = false;
+                        callback.error(e);
+                    }
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    syncInProgress = false;
+                    callback.error(exception);
+                }
             }
-            SyncResult syncResult = new SyncResult(nextBundleId);
-            callback.success(syncResult);
-            return;
-        }
-        // Download the bundle
-        if (artifactType == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(latestBundleId, url);
-        } else {
-            downloadBundleOfTypeZip(latestBundleId, url, checksum, signature);
-        }
-        // Set the next bundle
-        setNextBundle(latestBundleId);
-        SyncResult syncResult = new SyncResult(latestBundleId);
-        callback.success(syncResult);
+        );
     }
 
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
@@ -372,9 +592,10 @@ public class LiveUpdate {
         return new File(plugin.getContext().getCacheDir(), fileName);
     }
 
-    private void copyCurrentBundleFile(@NonNull String href, @NonNull File destinationDirectory) throws IOException {
+    private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
+        String href = fileToCopy.getHref();
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId == null) {
             // Create the source input stream
             AssetManager assets = plugin.getContext().getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
@@ -396,10 +617,20 @@ public class LiveUpdate {
         }
     }
 
-    private void copyCurrentBundleFiles(@NonNull List<String> hrefs, @NonNull File destinationDirectory) throws IOException {
-        for (String href : hrefs) {
-            copyCurrentBundleFile(href, destinationDirectory);
+    private List<ManifestItem> copyCurrentBundleFilesAndReturnFailures(
+        @NonNull List<ManifestItem> filesToCopy,
+        @NonNull File destinationDirectory
+    ) {
+        List<ManifestItem> missingItems = new ArrayList<>();
+        for (ManifestItem fileToCopy : filesToCopy) {
+            boolean success = tryCopyCurrentBundleFile(fileToCopy, destinationDirectory);
+            if (!success) {
+                Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + fileToCopy.getHref());
+                // If the file could not be copied, add it to the list of missing items
+                missingItems.add(fileToCopy);
+            }
         }
+        return missingItems;
     }
 
     private void copyFile(File input, File output) throws IOException {
@@ -451,191 +682,381 @@ public class LiveUpdate {
         return file;
     }
 
-    private void deleteBundle(@NonNull String bundleId) {
+    private void deleteBundleById(@NonNull String bundleId) {
         // Delete the bundle directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         deleteFileRecursively(bundleDirectory);
         // Reset the next bundle if it is the deleted bundle
         String nextBundleId = getNextBundleId();
         if (bundleId.equals(nextBundleId)) {
-            setNextCapacitorServerPathToDefaultWebAssetDir();
+            setNextBundleById(null);
         }
     }
 
     private void deleteFileRecursively(@NonNull File file) {
         if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                deleteFileRecursively(child);
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteFileRecursively(child);
+                }
             }
         }
         file.delete();
     }
 
     private void deleteUnusedBundles() {
-        String[] bundleIds = getBundleIds();
+        String[] bundleIds = getDownloadedBundleIds();
         for (String bundleId : bundleIds) {
             if (!isBundleInUse(bundleId)) {
-                deleteBundle(bundleId);
+                deleteBundleById(bundleId);
             }
         }
     }
 
-    private void downloadAndVerifyFile(@NonNull String url, @NonNull File file, @Nullable String checksum, @Nullable String signature)
-        throws Exception {
-        Response response = httpClient.execute(url);
-        ResponseBody responseBody = response.body();
-        if (response.isSuccessful()) {
-            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file);
-            // Verify the file
-            checksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
-            signature = signature == null ? LiveUpdateHttpClient.getSignatureFromResponse(response) : signature;
-            verifyFile(file, checksum, signature);
-        } else {
-            Exception exception = new Exception(responseBody.string());
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
-        }
+    private Call downloadAndVerifyFile(
+        @NonNull String url,
+        @NonNull File file,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @Nullable DownloadProgressCallback progressCallback,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        return httpClient.enqueue(
+            url,
+            new NonEmptyCallback<Response>() {
+                @Override
+                public void success(@NonNull Response response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            ResponseBody responseBody = response.body();
+                            LiveUpdateHttpClient.writeResponseBodyToFile(responseBody, file, progressCallback);
+
+                            // Extract checksum/signature from headers
+                            String finalChecksum = checksum == null ? LiveUpdateHttpClient.getChecksumFromResponse(response) : checksum;
+                            String finalSignature = signature == null ? LiveUpdateHttpClient.getSignatureFromResponse(response) : signature;
+
+                            // Verify file
+                            verifyFile(file, finalChecksum, finalSignature);
+                            completionCallback.success();
+                        } else {
+                            String errorMessage = response.body().string();
+                            Exception exception = new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
+                            Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
+                            completionCallback.error(exception);
+                        }
+                    } catch (Exception e) {
+                        completionCallback.error(e);
+                    }
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    completionCallback.error(exception);
+                }
+            }
+        );
     }
 
-    private File downloadBundleFile(@NonNull String baseUrl, @NonNull String href, @NonNull File destinationDirectory) throws Exception {
+    private Call downloadBundleFile(
+        @NonNull String baseUrl,
+        @NonNull String href,
+        @NonNull File destinationDirectory,
+        @Nullable DownloadProgressCallback progressCallback,
+        @NonNull EmptyCallback completionCallback
+    ) {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
         urlBuilder.addQueryParameter("href", href);
         String url = urlBuilder.build().toString();
 
         File destinationFile = new File(destinationDirectory, href);
         destinationFile.getParentFile().mkdirs();
-        downloadAndVerifyFile(url, destinationFile, null, null);
-        return destinationFile;
+        return downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
     }
 
-    private void downloadBundleFiles(@NonNull String baseUrl, @NonNull List<String> hrefs, @NonNull File destinationDirectory)
-        throws Exception {
-        // Limit the number of threads to twice the number of processors
-        int maxThreads = Runtime.getRuntime().availableProcessors() * 2;
-        List<Thread> threads = new ArrayList<>();
-        AtomicReference<Exception> exceptionReference = new AtomicReference<>();
-        for (String href : hrefs) {
-            // Wait until a thread is available
-            while (threads.size() >= maxThreads) {
-                for (Thread thread : threads) {
-                    if (!thread.isAlive()) {
-                        threads.remove(thread);
-                        break;
+    private void downloadBundleFiles(
+        @NonNull String baseUrl,
+        @NonNull List<ManifestItem> filesToDownload,
+        @NonNull File destinationDirectory,
+        @Nullable DownloadProgressCallback progressCallback,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        if (filesToDownload.isEmpty()) {
+            if (progressCallback != null) {
+                progressCallback.onProgress(0, 0);
+            }
+            completionCallback.success();
+            return;
+        }
+
+        // Thread-safe progress tracking
+        AtomicLong totalBytesDownloaded = new AtomicLong(0);
+        long totalBytesToDownload = 0;
+        for (ManifestItem item : filesToDownload) {
+            totalBytesToDownload += item.getSizeInBytes();
+        }
+        final long finalTotalBytesToDownload = totalBytesToDownload;
+
+        // Coordination primitives
+        CountDownLatch latch = new CountDownLatch(filesToDownload.size());
+        AtomicReference<Exception> firstError = new AtomicReference<>();
+        AtomicBoolean completionHandled = new AtomicBoolean(false);
+        List<Call> activeCalls = new ArrayList<>();
+
+        // Start all downloads asynchronously (OkHttp's dispatcher handles parallelization)
+        for (ManifestItem item : filesToDownload) {
+            Call call = downloadBundleFile(
+                baseUrl,
+                item.getHref(),
+                destinationDirectory,
+                (downloadedBytes, totalBytes) -> {
+                    // Per-file progress
+                    if (progressCallback != null) {
+                        long totalProgress = totalBytesDownloaded.get() + downloadedBytes;
+                        progressCallback.onProgress(totalProgress, finalTotalBytesToDownload);
+                    }
+                },
+                new EmptyCallback() {
+                    @Override
+                    public void success() {
+                        // Update total progress
+                        totalBytesDownloaded.addAndGet(item.getSizeInBytes());
+                        if (progressCallback != null) {
+                            progressCallback.onProgress(totalBytesDownloaded.get(), finalTotalBytesToDownload);
+                        }
+                        latch.countDown();
+
+                        // Check if this was the last download to complete
+                        if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
+                            Exception error = firstError.get();
+                            if (error != null) {
+                                completionCallback.error(error);
+                            } else {
+                                // Final progress update
+                                if (progressCallback != null) {
+                                    progressCallback.onProgress(finalTotalBytesToDownload, finalTotalBytesToDownload);
+                                }
+                                completionCallback.success();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception e) {
+                        // Capture first error and cancel all remaining downloads
+                        if (firstError.compareAndSet(null, e)) {
+                            Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + item.getHref(), e);
+                            // Cancel all in-flight downloads (fail-fast)
+                            synchronized (activeCalls) {
+                                for (Call activeCall : activeCalls) {
+                                    if (!activeCall.isCanceled() && !activeCall.isExecuted()) {
+                                        activeCall.cancel();
+                                    }
+                                }
+                            }
+                        }
+                        latch.countDown();
+
+                        // Check if this was the last download to complete
+                        if (latch.getCount() == 0 && completionHandled.compareAndSet(false, true)) {
+                            completionCallback.error(firstError.get());
+                        }
                     }
                 }
-                // Wait a bit before checking again
-                Thread.sleep(10);
+            );
+            synchronized (activeCalls) {
+                activeCalls.add(call);
             }
-            // Stop if an exception occurred
-            if (exceptionReference.get() != null) {
-                break;
-            }
-            // Start a new thread
-            Thread thread = new Thread(() -> {
-                try {
-                    downloadBundleFile(baseUrl, href, destinationDirectory);
-                } catch (Exception exception) {
-                    exceptionReference.set(exception);
-                    Logger.error(LiveUpdatePlugin.TAG, "Failed to download file: " + href, exception);
-                }
-            });
-            threads.add(thread);
-            thread.start();
-        }
-        // Wait for all threads to finish
-        for (Thread thread : threads) {
-            thread.join();
-        }
-        // Throw the exception if one occurred
-        Exception exception = exceptionReference.get();
-        if (exception != null) {
-            throw exception;
         }
     }
 
-    private void downloadBundleOfTypeManifest(@NonNull String bundleId, @NonNull String downloadUrl) throws Exception {
-        // Create a temporary directory
-        File temporaryDirectory = createTemporaryDirectory();
-        // Download the latest manifest
-        File latestManifestFile = downloadBundleFile(downloadUrl, manifestFileName, temporaryDirectory);
-        Manifest latestManifest = loadManifest(latestManifestFile);
-        // Load the current manifest
-        Manifest currentManifest = loadCurrentManifest();
-        // Compare the manifests
-        List<ManifestItem> itemsToCopy = new ArrayList<>();
-        List<ManifestItem> itemsToDownload = new ArrayList<>();
-        if (currentManifest == null) {
-            itemsToDownload.addAll(latestManifest.getItems());
-        } else {
-            itemsToCopy.addAll(Manifest.findDuplicateItems(latestManifest, currentManifest));
-            itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
+    private void downloadBundleOfTypeManifest(
+        @NonNull String bundleId,
+        @NonNull String downloadUrl,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        try {
+            // Create a temporary directory
+            File temporaryDirectory = createTemporaryDirectory();
+
+            // Download the latest manifest
+            downloadBundleFile(
+                downloadUrl,
+                manifestFileName,
+                temporaryDirectory,
+                null,
+                new EmptyCallback() {
+                    @Override
+                    public void success() {
+                        try {
+                            File latestManifestFile = new File(temporaryDirectory, manifestFileName);
+                            Manifest latestManifest = loadManifest(latestManifestFile);
+                            // Load the current manifest
+                            Manifest currentManifest = loadCurrentManifest();
+                            // Compare the manifests
+                            List<ManifestItem> itemsToCopy = new ArrayList<>();
+                            List<ManifestItem> itemsToDownload = new ArrayList<>();
+                            if (currentManifest == null) {
+                                itemsToDownload.addAll(latestManifest.getItems());
+                            } else {
+                                itemsToCopy.addAll(Manifest.findDuplicateItems(latestManifest, currentManifest));
+                                itemsToDownload.addAll(Manifest.findMissingItems(latestManifest, currentManifest));
+                            }
+                            // Copy the files
+                            List<ManifestItem> missingItems = copyCurrentBundleFilesAndReturnFailures(itemsToCopy, temporaryDirectory);
+                            // If items could not be copied, add them to the list of items to download
+                            if (!missingItems.isEmpty()) {
+                                itemsToDownload.addAll(missingItems);
+                            }
+
+                            // Download the files
+                            downloadBundleFiles(
+                                downloadUrl,
+                                itemsToDownload,
+                                temporaryDirectory,
+                                (downloadedBytes, totalBytes) -> {
+                                    DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(
+                                        bundleId,
+                                        downloadedBytes,
+                                        totalBytes
+                                    );
+                                    notifyDownloadBundleProgressListeners(event);
+                                },
+                                new EmptyCallback() {
+                                    @Override
+                                    public void success() {
+                                        try {
+                                            // Add the bundle
+                                            addBundleOfTypeManifest(bundleId, temporaryDirectory);
+                                            completionCallback.success();
+                                        } catch (Exception e) {
+                                            completionCallback.error(e);
+                                        }
+                                    }
+
+                                    @Override
+                                    public void error(@NonNull Exception exception) {
+                                        completionCallback.error(exception);
+                                    }
+                                }
+                            );
+                        } catch (Exception e) {
+                            completionCallback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        completionCallback.error(exception);
+                    }
+                }
+            );
+        } catch (Exception e) {
+            completionCallback.error(e);
         }
-        // Copy the files
-        List<String> hrefsToCopy = new ArrayList<>();
-        for (ManifestItem item : itemsToCopy) {
-            hrefsToCopy.add(item.getHref());
-        }
-        copyCurrentBundleFiles(hrefsToCopy, temporaryDirectory);
-        // Download the files
-        List<String> hrefsToDownload = new ArrayList<>();
-        for (ManifestItem item : itemsToDownload) {
-            hrefsToDownload.add(item.getHref());
-        }
-        downloadBundleFiles(downloadUrl, hrefsToDownload, temporaryDirectory);
-        // Add the bundle
-        addBundleOfTypeManifest(bundleId, temporaryDirectory);
     }
 
     private void downloadBundleOfTypeZip(
         @NonNull String bundleId,
-        @NonNull String downloadUrl,
         @Nullable String checksum,
-        @Nullable String signature
-    ) throws Exception {
+        @Nullable String signature,
+        @NonNull String downloadUrl,
+        @NonNull EmptyCallback completionCallback
+    ) {
         File file = buildTemporaryZipFile();
         // Download the bundle
-        downloadAndVerifyFile(downloadUrl, file, checksum, signature);
-        // Add the bundle
-        addBundleOfTypeZip(bundleId, file);
-        // Delete the temporary file
-        file.delete();
+        downloadAndVerifyFile(
+            downloadUrl,
+            file,
+            checksum,
+            signature,
+            (downloadedBytes, totalBytes) -> {
+                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+                notifyDownloadBundleProgressListeners(event);
+            },
+            new EmptyCallback() {
+                @Override
+                public void success() {
+                    try {
+                        // Add the bundle
+                        addBundleOfTypeZip(bundleId, file);
+                        // Delete the temporary file
+                        file.delete();
+                        completionCallback.success();
+                    } catch (Exception e) {
+                        completionCallback.error(e);
+                    }
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    // Delete the temporary file on error
+                    file.delete();
+                    completionCallback.error(exception);
+                }
+            }
+        );
     }
 
-    @Nullable
-    private GetLatestBundleResponse fetchLatestBundle(@NonNull FetchLatestBundleOptions options) throws Exception {
-        String channel = options.getChannel() == null ? getChannel() : options.getChannel();
-        String url = new HttpUrl.Builder()
-            .scheme("https")
-            .host(host)
-            .addPathSegment("v1")
-            .addPathSegment("apps")
-            .addPathSegment(config.getAppId())
-            .addPathSegment("bundles")
-            .addPathSegment("latest")
-            .addQueryParameter("appVersionCode", getVersionCode())
-            .addQueryParameter("appVersionName", getVersionName())
-            .addQueryParameter("bundleId", getCurrentBundleId())
-            .addQueryParameter("channelName", channel)
-            .addQueryParameter("customId", preferences.getCustomId())
-            .addQueryParameter("deviceId", getDeviceId())
-            .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))
-            .addQueryParameter("platform", "0")
-            .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
-            .build()
-            .toString();
-        Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
-        Response response = httpClient.execute(url);
-        String responseBodyString = response.body().string();
-        Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
-        if (response.isSuccessful()) {
-            JSONObject responseJson = new JSONObject(responseBodyString);
-            return new GetLatestBundleResponse(responseJson);
-        } else {
-            return null;
+    private void fetchLatestBundleInternal(
+        @NonNull FetchLatestBundleOptions options,
+        @NonNull NonEmptyCallback<GetLatestBundleResponse> callback
+    ) {
+        try {
+            String channel = options.getChannel() == null ? getChannel() : options.getChannel();
+            String url = new HttpUrl.Builder()
+                .scheme("https")
+                .host(config.getServerDomain())
+                .addPathSegment("v1")
+                .addPathSegment("apps")
+                .addPathSegment(getAppId())
+                .addPathSegment("bundles")
+                .addPathSegment("latest")
+                .addQueryParameter("appVersionCode", getVersionCodeAsString())
+                .addQueryParameter("appVersionName", getVersionName())
+                .addQueryParameter("bundleId", getCurrentBundleId())
+                .addQueryParameter("channelName", channel)
+                .addQueryParameter("customId", preferences.getCustomId())
+                .addQueryParameter("deviceId", getDeviceId())
+                .addQueryParameter("osVersion", String.valueOf(Build.VERSION.SDK_INT))
+                .addQueryParameter("platform", "0")
+                .addQueryParameter("pluginVersion", LiveUpdatePlugin.VERSION)
+                .build()
+                .toString();
+            Logger.debug(LiveUpdatePlugin.TAG, "Fetching latest bundle: " + url);
+
+            httpClient.enqueue(
+                url,
+                new NonEmptyCallback<Response>() {
+                    @Override
+                    public void success(@NonNull Response response) {
+                        try {
+                            String responseBodyString = response.body().string();
+                            Logger.debug(LiveUpdatePlugin.TAG, "Latest bundle response: " + responseBodyString);
+                            if (response.isSuccessful()) {
+                                JSONObject responseJson = new JSONObject(responseBodyString);
+                                GetLatestBundleResponse result = new GetLatestBundleResponse(responseJson);
+                                callback.success(result);
+                            } else {
+                                callback.success(null);
+                            }
+                        } catch (Exception e) {
+                            callback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        callback.error(exception);
+                    }
+                }
+            );
+        } catch (Exception e) {
+            callback.error(e);
         }
     }
 
-    private String[] getBundleIds() {
+    private String[] getDownloadedBundleIds() {
         File bundlesDirectory = buildBundlesDirectory();
         File[] bundles = bundlesDirectory.listFiles();
         if (bundles == null) {
@@ -676,8 +1097,21 @@ public class LiveUpdate {
     }
 
     @Nullable
+    private String getAppId() {
+        String appId = preferences.getAppId();
+        if (appId != null) {
+            return appId;
+        }
+        return config.getAppId();
+    }
+
+    @Nullable
     private String getChannel() {
         String channel = null;
+        String nativeChannel = getNativeChannel();
+        if (nativeChannel != null) {
+            channel = nativeChannel;
+        }
         if (config.getDefaultChannel() != null) {
             channel = config.getDefaultChannel();
         }
@@ -687,13 +1121,26 @@ public class LiveUpdate {
         return channel;
     }
 
+    @Nullable
+    private String getNativeChannel() {
+        int resId = plugin
+            .getContext()
+            .getResources()
+            .getIdentifier("capawesome_live_update_default_channel", "string", plugin.getContext().getPackageName());
+        if (resId == 0) {
+            return null;
+        }
+        return plugin.getContext().getResources().getString(resId);
+    }
+
     /**
-     * @return The current bundle ID (`public` for the built-in bundle).
+     * @return The current bundle ID or `null` if the default bundle is in use.
      */
+    @Nullable
     private String getCurrentBundleId() {
         String currentPath = getCurrentCapacitorServerPath();
         if (currentPath.equals(defaultWebAssetDir)) {
-            return defaultWebAssetDir;
+            return null;
         }
         return new File(currentPath).getName();
     }
@@ -707,22 +1154,22 @@ public class LiveUpdate {
 
     @NonNull
     private String getDeviceId() {
-        String deviceId = preferences.getDeviceIdForApp(config.getAppId());
+        String deviceId = preferences.getDeviceIdForApp(getAppId());
         if (deviceId == null) {
             deviceId = UUID.randomUUID().toString().toLowerCase();
-            preferences.setDeviceIdForApp(config.getAppId(), deviceId);
+            preferences.setDeviceIdForApp(getAppId(), deviceId);
         }
         return deviceId;
     }
 
     /**
-     * @return The next bundle ID (`public` for the built-in bundle).
+     * @return The next bundle ID or `null` if the default bundle will be used.
      */
-    @NonNull
+    @Nullable
     private String getNextBundleId() {
         String nextPath = getNextCapacitorServerPath();
         if (nextPath.equals(defaultWebAssetDir)) {
-            return defaultWebAssetDir;
+            return null;
         }
         return new File(nextPath).getName();
     }
@@ -732,31 +1179,54 @@ public class LiveUpdate {
      */
     @NonNull
     private String getNextCapacitorServerPath() {
-        return plugin
+        String path = plugin
             .getContext()
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
+        // Empty path means default path
+        if (path.isEmpty()) {
+            path = defaultWebAssetDir;
+        }
+        return path;
     }
 
-    private String getVersionCode() throws PackageManager.NameNotFoundException {
-        return String.valueOf(getPackageInfo().versionCode);
+    /**
+     * @return The previous bundle ID or `null` if the default bundle was used.
+     */
+    @Nullable
+    private String getPreviousBundleId() {
+        return preferences.getPreviousBundleId();
+    }
+
+    private int getVersionCodeAsInt() throws PackageManager.NameNotFoundException {
+        return getPackageInfo().versionCode;
+    }
+
+    private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
+        return String.valueOf(getVersionCodeAsInt());
     }
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
     }
 
-    private boolean hasBundle(@NonNull String bundleId) {
+    private boolean hasBundleById(@NonNull String bundleId) {
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         return bundleDirectory.exists();
+    }
+
+    private boolean isBundleInUse(@NonNull String bundleId) {
+        String currentBundleId = getCurrentBundleId();
+        String nextBundleId = getNextBundleId();
+        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
     }
 
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
-        if (currentBundleId.equals(defaultWebAssetDir)) {
+        if (currentBundleId == null) {
             AssetManager assets = plugin.getContext().getAssets();
-            Boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+            boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
                 InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
                 BufferedSource source = Okio.buffer(Okio.source(inputStream));
@@ -786,25 +1256,53 @@ public class LiveUpdate {
         return loadManifest(source);
     }
 
-    private boolean isBundleInUse(@NonNull String bundleId) {
-        String currentBundleId = getCurrentBundleId();
-        String nextBundleId = getNextBundleId();
-        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
+    private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+        plugin.notifyDownloadBundleProgressListeners(event);
+    }
+
+    private void performAutoUpdate() {
+        // Check if enough time has passed since the last check
+        long now = System.currentTimeMillis();
+        if (lastAutoUpdateCheckTimestamp > 0 && (now - lastAutoUpdateCheckTimestamp) < autoUpdateIntervalMs) {
+            Logger.debug(LiveUpdatePlugin.TAG, "Auto-update skipped. Last check was less than 15 minutes ago.");
+            return;
+        }
+
+        // Update the timestamp
+        lastAutoUpdateCheckTimestamp = now;
+
+        // Run sync
+        Logger.debug(LiveUpdatePlugin.TAG, "Auto-update started.");
+        SyncOptions options = new SyncOptions((String) null);
+        NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
+            @Override
+            public void success(@NonNull Result result) {
+                Logger.debug(LiveUpdatePlugin.TAG, "Auto-update completed successfully.");
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                Logger.error(LiveUpdatePlugin.TAG, "Auto-update failed: " + exception.getMessage(), exception);
+            }
+        };
+        sync(options, callback);
     }
 
     private void rollback() {
-        if (getCurrentBundleId() == defaultWebAssetDir) {
+        // Set the rollback flag
+        rollbackPerformed = true;
+        // Set the new previous bundle ID
+        String currentBundleId = getCurrentBundleId();
+        setPreviousBundleId(currentBundleId);
+        // Log the rollback result
+        if (currentBundleId == null) {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
-            return;
+        } else {
+            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
+            // Rollback to the default bundle
+            setNextBundleById(null);
+            setCurrentBundleById(null);
         }
-        Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
-        setNextCapacitorServerPathToDefaultWebAssetDir();
-        setCurrentCapacitorServerPathToDefaultWebAssetDir();
-    }
-
-    private void saveCurrentVersionCode() throws PackageManager.NameNotFoundException {
-        int currentVersionCode = getPackageInfo().versionCode;
-        preferences.setLastVersionCode(currentVersionCode);
     }
 
     @Nullable
@@ -832,6 +1330,18 @@ public class LiveUpdate {
         return null;
     }
 
+    /**
+     * @param bundleId The bundle ID to set as the current bundle. If `null`, the default bundle will be used.
+     */
+    private void setCurrentBundleById(@Nullable String bundleId) {
+        if (bundleId == null) {
+            setCurrentCapacitorServerPath(defaultWebAssetDir);
+        } else {
+            File bundleDirectory = buildBundleDirectoryFor(bundleId);
+            setCurrentCapacitorServerPath(bundleDirectory.getPath());
+        }
+    }
+
     private void setCurrentCapacitorServerPath(@NonNull String path) {
         if (path.equals(defaultWebAssetDir)) {
             this.plugin.getBridge().setServerAssetPath(path);
@@ -839,15 +1349,72 @@ public class LiveUpdate {
             this.plugin.getBridge().setServerBasePath(path);
         }
         this.plugin.getBridge().reload();
+        // Notify listeners
+        notifyReloadedListeners();
     }
 
-    private void setCurrentCapacitorServerPathToDefaultWebAssetDir() {
-        setCurrentCapacitorServerPath(defaultWebAssetDir);
+    /**
+     * @param bundleId The bundle ID to set as the next bundle. If `null`, the default bundle will be used.
+     */
+    private void setNextBundleById(@Nullable String bundleId) {
+        if (bundleId == null) {
+            setNextCapacitorServerPath(defaultWebAssetDir);
+        } else {
+            File bundleDirectory = buildBundleDirectoryFor(bundleId);
+            setNextCapacitorServerPath(bundleDirectory.getPath());
+        }
+
+        // Notify listeners
+        notifyNextBundleSetListeners(bundleId);
     }
 
-    private void setNextBundle(@NonNull String bundleId) {
-        File bundleDirectory = buildBundleDirectoryFor(bundleId);
-        setNextCapacitorServerPath(bundleDirectory.getPath());
+    private void notifyNextBundleSetListeners(@Nullable String bundleId) {
+        NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
+        plugin.notifyNextBundleSetListeners(event);
+    }
+
+    private void notifyReloadedListeners() {
+        plugin.notifyReloadedListeners();
+    }
+
+    private void addBlockedBundleId(@NonNull String bundleId) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        List<String> blockedList = new ArrayList<>();
+
+        // Parse existing blocked IDs
+        if (blockedIds != null && !blockedIds.isEmpty()) {
+            String[] ids = blockedIds.split(",");
+            blockedList.addAll(Arrays.asList(ids));
+        }
+
+        // Skip if already blocked
+        if (blockedList.contains(bundleId)) {
+            return;
+        }
+
+        // Remove oldest if limit reached
+        if (blockedList.size() >= 100) {
+            blockedList.remove(0);
+        }
+
+        // Add new bundle
+        blockedList.add(bundleId);
+
+        // Save back to preferences
+        String newBlockedIds = String.join(",", blockedList);
+        preferences.setBlockedBundleIds(newBlockedIds);
+
+        Logger.debug(LiveUpdatePlugin.TAG, "Bundle blocked: " + bundleId);
+    }
+
+    private boolean isBlockedBundleId(@NonNull String bundleId) {
+        String blockedIds = preferences.getBlockedBundleIds();
+        if (blockedIds == null || blockedIds.isEmpty()) {
+            return false;
+        }
+
+        String[] ids = blockedIds.split(",");
+        return Arrays.asList(ids).contains(bundleId);
     }
 
     private void setNextCapacitorServerPath(@NonNull String path) {
@@ -855,11 +1422,25 @@ public class LiveUpdate {
         this.webViewSettingsEditor.commit();
     }
 
-    private void setNextCapacitorServerPathToDefaultWebAssetDir() {
-        setNextCapacitorServerPath(defaultWebAssetDir);
+    private boolean wasUpdated() throws PackageManager.NameNotFoundException {
+        int lastVersionCode = preferences.getLastVersionCode();
+        int currentVersionCode = getVersionCodeAsInt();
+        return lastVersionCode != currentVersionCode;
+    }
+
+    private void saveCurrentVersionCode() throws PackageManager.NameNotFoundException {
+        int currentVersionCode = getVersionCodeAsInt();
+        preferences.setLastVersionCode(currentVersionCode);
+    }
+
+    private void setPreviousBundleId(@Nullable String bundleId) {
+        preferences.setPreviousBundleId(bundleId);
     }
 
     private void startRollbackTimer() {
+        if (config.getReadyTimeout() <= 0) {
+            return;
+        }
         stopRollbackTimer();
         rollbackHandler.postDelayed(() -> rollback(), config.getReadyTimeout());
     }
@@ -868,10 +1449,25 @@ public class LiveUpdate {
         rollbackHandler.removeCallbacksAndMessages(null);
     }
 
+    private boolean tryCopyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) {
+        try {
+            copyCurrentBundleFile(fileToCopy, destinationDirectory);
+            return true;
+        } catch (IOException exception) {
+            return false;
+        }
+    }
+
     private File unzipFile(@NonNull File zipFile) throws IOException {
         File destination = buildTemporaryDirectory();
         String destinationPath = destination.getPath();
-        new ZipFile(zipFile).extractAll(destinationPath);
+        ZipFile zip = new ZipFile(zipFile);
+        // Clear stored Unix permissions to prevent EACCES errors on newer Android versions
+        // where restrictive directory permissions from the zip block file creation.
+        for (net.lingala.zip4j.model.FileHeader fileHeader : zip.getFileHeaders()) {
+            fileHeader.setExternalFileAttributes(null);
+        }
+        zip.extractAll(destinationPath);
         return destination;
     }
 
@@ -924,12 +1520,6 @@ public class LiveUpdate {
             Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
         }
-    }
-
-    private boolean wasUpdated() throws PackageManager.NameNotFoundException {
-        int lastVersionCode = preferences.getLastVersionCode();
-        int currentVersionCode = getPackageInfo().versionCode;
-        return lastVersionCode != currentVersionCode;
     }
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {

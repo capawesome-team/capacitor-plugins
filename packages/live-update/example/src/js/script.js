@@ -1,6 +1,33 @@
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
+const showToast = async (message) => {
+  const toast = document.createElement('ion-toast');
+  toast.message = message;
+  toast.duration = 5000;
+  document.body.appendChild(toast);
+  await toast.present();
+};
+
+const originalNativePromise = window.Capacitor.nativePromise;
+window.Capacitor.nativePromise = (pluginName, methodName, options) =>
+  originalNativePromise(pluginName, methodName, options).catch((error) => {
+    void showToast(error?.message ?? String(error));
+    throw error;
+  });
+
 document.addEventListener('DOMContentLoaded', () => {
+  const addListeners = async () => {
+    await LiveUpdate.removeAllListeners().then(() => {
+      void LiveUpdate.addListener('downloadBundleProgress', (event) => {
+        console.log('downloadBundleProgress', event);
+      });
+      void LiveUpdate.addListener('reloaded', () => {
+        console.log('reloaded');
+      });
+    });
+  };
+  void addListeners();
+
   document.querySelector('#present-select-bundle-alert-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getBundles();
     const alertInputs = [];
@@ -37,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#bundle-id-input').value = bundleId;
     });
   });
+  document.querySelector('#clear-blocked-bundles-button').addEventListener('click', async () => {
+    await LiveUpdate.clearBlockedBundles();
+  });
   document.querySelector('#delete-bundle-button').addEventListener('click', async () => {
     const bundleId = document.querySelector('#bundle-id-input').value;
     if (!bundleId) {
@@ -61,8 +91,12 @@ document.addEventListener('DOMContentLoaded', () => {
       url: downloadUrl,
     });
   });
+  document.querySelector('#fetch-channels-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.fetchChannels();
+    console.log(result);
+  });
   document.querySelector('#fetch-latest-bundle-button').addEventListener('click', async () => {
-    const channel = document.querySelector('#channel-input').value;
+    const channel = document.querySelector('#channel-input').value || undefined;
     const result = await LiveUpdate.fetchLatestBundle({
       channel,
     });
@@ -72,13 +106,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#signature-input').value = result.signature;
     document.querySelector('#download-url-input').value = result.downloadUrl || '';
   });
+  document.querySelector('#get-blocked-bundles-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getBlockedBundles();
+    console.log(result);
+  });
   document.querySelector('#get-bundles-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getBundles();
+    console.log(result);
+  });
+  document.querySelector('#get-downloaded-bundles-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getDownloadedBundles();
     console.log(result);
   });
   document.querySelector('#get-channel-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getChannel();
     console.log(result);
+  });
+  document.querySelector('#get-config-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.getConfig();
+    console.log(result);
+    document.querySelector('#app-id-input').value = result.appId || '';
   });
   document.querySelector('#get-current-bundle-button').addEventListener('click', async () => {
     const result = await LiveUpdate.getCurrentBundle();
@@ -104,6 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = await LiveUpdate.getVersionName();
     console.log(result);
   });
+  document.querySelector('#is-syncing-button').addEventListener('click', async () => {
+    const result = await LiveUpdate.isSyncing();
+    console.log(result);
+  });
   document.querySelector('#ready-button').addEventListener('click', async () => {
     await LiveUpdate.ready();
   });
@@ -113,9 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('#reset-button').addEventListener('click', async () => {
     await LiveUpdate.reset();
   });
+  document.querySelector('#reset-config-button').addEventListener('click', async () => {
+    await LiveUpdate.resetConfig();
+  });
   document.querySelector('#set-channel-button').addEventListener('click', async () => {
     const channel = document.querySelector('#channel-input').value || null;
     await LiveUpdate.setChannel({ channel });
+  });
+  document.querySelector('#set-config-button').addEventListener('click', async () => {
+    const appId = document.querySelector('#app-id-input').value || null;
+    await LiveUpdate.setConfig({ appId });
   });
   document.querySelector('#set-custom-id-button').addEventListener('click', async () => {
     const customId = document.querySelector('#custom-id-input').value || null;
