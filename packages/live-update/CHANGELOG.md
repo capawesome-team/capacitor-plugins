@@ -1,5 +1,21 @@
 # Changelog
 
+## 7.5.0
+
+### Minor Changes
+
+- [`780fdcebabdac14a8bc93ad4b4d7863a1fbd03de`](https://github.com/capawesome-team/capacitor-plugins/commit/780fdcebabdac14a8bc93ad4b4d7863a1fbd03de) ([#783](https://github.com/capawesome-team/capacitor-plugins/pull/783)): feat: add native channel configuration support
+
+- [`fd6711d63359f77cc00f752b9b6396f9bc6b8541`](https://github.com/capawesome-team/capacitor-plugins/commit/fd6711d63359f77cc00f752b9b6396f9bc6b8541) ([#787](https://github.com/capawesome-team/capacitor-plugins/pull/787)): feat: add `fetchChannels(...)` method
+
+- [`b4181e9af6fe7dd0c8c9c0cbc6d0359a887d50a2`](https://github.com/capawesome-team/capacitor-plugins/commit/b4181e9af6fe7dd0c8c9c0cbc6d0359a887d50a2) ([#785](https://github.com/capawesome-team/capacitor-plugins/pull/785)): feat: track device ID on bundle download
+
+### Patch Changes
+
+- [`04e530df241e3c2dd82dd12b406b6b885f973a4a`](https://github.com/capawesome-team/capacitor-plugins/commit/04e530df241e3c2dd82dd12b406b6b885f973a4a) ([#792](https://github.com/capawesome-team/capacitor-plugins/pull/792)): fix(android): clear zip file attributes before extraction to prevent EACCES errors
+
+- [`f745456d73d53e850edca6434c7c54e191be2bf1`](https://github.com/capawesome-team/capacitor-plugins/commit/f745456d73d53e850edca6434c7c54e191be2bf1) ([#855](https://github.com/capawesome-team/capacitor-plugins/pull/855)): fix(android): prevent crash during bundle cleanup when a directory is unreadable
+
 ## 7.4.0
 
 ### Minor Changes

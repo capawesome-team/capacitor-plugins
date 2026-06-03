@@ -15,17 +15,21 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetChannelsResponseItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetLatestBundleResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchChannelsOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetChannelOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetConfigOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetCustomIdOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SetNextBundleOptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.SyncOptions;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ChannelResult;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchChannelsResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBlockedBundlesResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.GetBundlesResult;
@@ -65,6 +69,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.model.FileHeader;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
@@ -115,6 +120,9 @@ public class LiveUpdate {
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
 
+        // Set the device ID on the HTTP client (after any potential config reset)
+        this.httpClient.setDeviceId(getDeviceId());
+
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
         startRollbackTimer();
@@ -156,6 +164,61 @@ public class LiveUpdate {
             downloadBundleOfTypeManifest(bundleId, url, callback);
         } else {
             downloadBundleOfTypeZip(bundleId, checksum, signature, url, callback);
+        }
+    }
+
+    public void fetchChannels(@NonNull FetchChannelsOptions options, @NonNull NonEmptyCallback<FetchChannelsResult> callback) {
+        try {
+            HttpUrl.Builder urlBuilder = new HttpUrl.Builder()
+                .scheme("https")
+                .host(config.getServerDomain())
+                .addPathSegment("v1")
+                .addPathSegment("apps")
+                .addPathSegment(getAppId())
+                .addPathSegment("channels");
+            if (options.getLimit() != null) {
+                urlBuilder.addQueryParameter("limit", String.valueOf(options.getLimit()));
+            }
+            if (options.getOffset() != null) {
+                urlBuilder.addQueryParameter("offset", String.valueOf(options.getOffset()));
+            }
+            if (options.getQuery() != null) {
+                urlBuilder.addQueryParameter("query", options.getQuery());
+            }
+            String url = urlBuilder.build().toString();
+
+            httpClient.enqueue(
+                url,
+                new NonEmptyCallback<Response>() {
+                    @Override
+                    public void success(@NonNull Response response) {
+                        try {
+                            String responseBodyString = response.body().string();
+                            if (response.isSuccessful()) {
+                                JSONArray responseJsonArray = new JSONArray(responseBodyString);
+                                ChannelResult[] channels = new ChannelResult[responseJsonArray.length()];
+                                for (int i = 0; i < responseJsonArray.length(); i++) {
+                                    GetChannelsResponseItem item = new GetChannelsResponseItem(responseJsonArray.getJSONObject(i));
+                                    channels[i] = new ChannelResult(item.getId(), item.getName());
+                                }
+                                FetchChannelsResult result = new FetchChannelsResult(channels);
+                                callback.success(result);
+                            } else {
+                                callback.error(new Exception(responseBodyString));
+                            }
+                        } catch (Exception e) {
+                            callback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        callback.error(exception);
+                    }
+                }
+            );
+        } catch (Exception e) {
+            callback.error(e);
         }
     }
 
@@ -602,8 +665,11 @@ public class LiveUpdate {
 
     private void deleteFileRecursively(@NonNull File file) {
         if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                deleteFileRecursively(child);
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteFileRecursively(child);
+                }
             }
         }
         file.delete();
@@ -1012,6 +1078,10 @@ public class LiveUpdate {
     @Nullable
     private String getChannel() {
         String channel = null;
+        String nativeChannel = getNativeChannel();
+        if (nativeChannel != null) {
+            channel = nativeChannel;
+        }
         if (config.getDefaultChannel() != null) {
             channel = config.getDefaultChannel();
         }
@@ -1019,6 +1089,18 @@ public class LiveUpdate {
             channel = preferences.getChannel();
         }
         return channel;
+    }
+
+    @Nullable
+    private String getNativeChannel() {
+        int resId = plugin
+            .getContext()
+            .getResources()
+            .getIdentifier("capawesome_live_update_default_channel", "string", plugin.getContext().getPackageName());
+        if (resId == 0) {
+            return null;
+        }
+        return plugin.getContext().getResources().getString(resId);
     }
 
     /**
@@ -1352,7 +1434,13 @@ public class LiveUpdate {
     private File unzipFile(@NonNull File zipFile) throws IOException {
         File destination = buildTemporaryDirectory();
         String destinationPath = destination.getPath();
-        new ZipFile(zipFile).extractAll(destinationPath);
+        ZipFile zip = new ZipFile(zipFile);
+        // Clear stored Unix permissions to prevent EACCES errors on newer Android versions
+        // where restrictive directory permissions from the zip block file creation.
+        for (FileHeader fileHeader : zip.getFileHeaders()) {
+            fileHeader.setExternalFileAttributes(null);
+        }
+        zip.extractAll(destinationPath);
         return destination;
     }
 

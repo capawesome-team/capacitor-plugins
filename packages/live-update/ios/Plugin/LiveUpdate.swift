@@ -1,10 +1,6 @@
 import Foundation
 import CryptoKit
-#if canImport(ZipArchive)
-import ZipArchive
-#else
-import SSZipArchive
-#endif
+import ZIPFoundation
 import Capacitor
 import Alamofire
 import CommonCrypto
@@ -37,6 +33,9 @@ import CommonCrypto
 
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged()
+
+        // Set the device ID on the HTTP client (after any potential config reset)
+        self.httpClient.setDeviceId(getDeviceId())
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -82,6 +81,36 @@ import CommonCrypto
         } else {
             try await downloadBundleOfTypeZip(bundleId: bundleId, checksum: checksum, signature: signature, url: url)
         }
+    }
+
+    @objc public func fetchChannels(_ options: FetchChannelsOptions) async throws -> FetchChannelsResult {
+        var parameters = [String: String]()
+        if let limit = options.getLimit() {
+            parameters["limit"] = String(limit)
+        }
+        if let offset = options.getOffset() {
+            parameters["offset"] = String(offset)
+        }
+        if let query = options.getQuery() {
+            parameters["query"] = query
+        }
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/channels")!
+        if !parameters.isEmpty {
+            urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
+        }
+        let url = try urlComponents.asURL()
+        let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
+        if let error = response.error {
+            if let urlError = error.underlyingError as? URLError {
+                if urlError.code == .timedOut {
+                    throw urlError
+                }
+            }
+            throw error
+        }
+        let items = response.value ?? []
+        let channels = items.map { ChannelResult(id: $0.id, name: $0.name) }
+        return FetchChannelsResult(channels: channels)
     }
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
@@ -323,7 +352,7 @@ import CommonCrypto
 
     private func addBundleOfTypeZip(bundleId: String, zipFile: URL) async throws {
         // Unzip the bundle
-        let unzippedDirectory = self.unzipFile(zipFile: zipFile)
+        let unzippedDirectory = try self.unzipFile(zipFile: zipFile)
         // Add the bundle
         try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
@@ -605,6 +634,9 @@ import CommonCrypto
 
     private func getChannel() -> String? {
         var channel: String?
+        if let nativeChannel = getNativeChannel() {
+            channel = nativeChannel
+        }
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
         }
@@ -612,6 +644,10 @@ import CommonCrypto
             channel = preferences.getChannel()
         }
         return channel
+    }
+
+    private func getNativeChannel() -> String? {
+        return Bundle.main.object(forInfoDictionaryKey: "CapawesomeLiveUpdateDefaultChannel") as? String
     }
 
     /// - Returns: The sha256 checksum of the file at the given URL.
@@ -923,9 +959,10 @@ import CommonCrypto
         }
     }
 
-    private func unzipFile(zipFile: URL) -> URL {
+    private func unzipFile(zipFile: URL) throws -> URL {
         let destinationDirectory = zipFile.deletingPathExtension()
-        SSZipArchive.unzipFile(atPath: zipFile.path, toDestination: destinationDirectory.path)
+        try FileManager.default.createDirectory(at: destinationDirectory, withIntermediateDirectories: true, attributes: nil)
+        try FileManager.default.unzipItem(at: zipFile, to: destinationDirectory)
         return destinationDirectory
     }
 

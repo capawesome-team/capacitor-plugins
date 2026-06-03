@@ -1,5 +1,20 @@
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
+const showToast = async message => {
+  const toast = document.createElement('ion-toast');
+  toast.message = message;
+  toast.duration = 5000;
+  document.body.appendChild(toast);
+  await toast.present();
+};
+
+const originalNativePromise = window.Capacitor.nativePromise;
+window.Capacitor.nativePromise = (pluginName, methodName, options) =>
+  originalNativePromise(pluginName, methodName, options).catch(error => {
+    void showToast(error?.message ?? String(error));
+    throw error;
+  });
+
 document.addEventListener('DOMContentLoaded', () => {
   const addListeners = async () => {
     await LiveUpdate.removeAllListeners().then(() => {
@@ -85,6 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
         signature,
         url: downloadUrl,
       });
+    });
+  document
+    .querySelector('#fetch-channels-button')
+    .addEventListener('click', async () => {
+      const result = await LiveUpdate.fetchChannels();
+      console.log(result);
     });
   document
     .querySelector('#fetch-latest-bundle-button')

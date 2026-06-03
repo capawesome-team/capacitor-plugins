@@ -7,9 +7,9 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   plugins: {
     LiveUpdate: {
-      appId: '62d8e181-726f-45ab-aadc-15cd39bbd298',
+      appId: '5fc57c46-4b64-4209-b924-14fa960ccc88',
       // publicKey:
-      //   '-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoMb8yazAm5rY2ys6nQDgsKdGlQiLStdd7VBYjKKaRT2xwKXCPtsmeBtjvVUH//ae3IHbz7w79CoawKPDqKAPtqILWc3VyAR2hQ6ftoGVxYq5NyuV4UdZozEn9v45Se91gvi7Jc+NakZaPYBAG695X1d9iCdktWINqexQjZWZUEnQjdLoKSdlbtyU0GYiDTkPDUruVBx1YF7W7qOIEr5uhbPF2HKtU6VvsoKOHePfIZQa12rn0Q5s69jb0++ro1zHMZSV6eJox6RJg/7uHOKo5Ri8FRhHHZQxxbP/Pp4FTHvpfQyav2yOuq0l9mAAgzi9txWMfB1AXwZbbUceuE7UjwIDAQAB-----END PUBLIC KEY-----',
+      //   '-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtGTM5t++b2W9u8P7H4x1SGZPfeHyrhkxAIItxizIN9MSlRAdrnAreQVVj76GDdmWe/oKPnDUB/PR0yj2mzK8TqZhUxgh3SMhkxxLRWuicKiiOn9vNL5lHQdQotuh4REsoIwdIdVHQ5km73853NDk33xGb3qrQ7AJXCl3s0YRVfCqJd5Q2HWB9FEWm6Ojmryqwibz3S6lF2sjPqpif0XI2YBlDpjR/BTNKn351DgnxzXwAAW8uJV823DlOlcamGd3yNlv5wf3HMwZCkXPeYmAXs0F+QtrAOtUToURvXHnWX13s9/nx6wAwRPTzpWvPTo+rk8qqwuXJPbkN3F8J8j2twIDAQAB-----END PUBLIC KEY-----',
       // readyTimeout: 10000,
     },
   },
