@@ -206,6 +206,14 @@ export default config;
 
 </docgen-config>
 
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-live-update-demo](https://github.com/capawesome-team/capacitor-live-update-demo)
+
+| Android                                                                                                                                              | iOS                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-ios.png" width="324" alt="iOS Demo" /> |
+
 ## Usage
 
 ```typescript
