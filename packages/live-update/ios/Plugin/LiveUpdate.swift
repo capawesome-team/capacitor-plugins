@@ -118,7 +118,7 @@ import CommonCrypto
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
         let response: GetLatestBundleResponse? = try await self.fetchLatestBundle(options)
-        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
+        return FetchLatestBundleResult(artifactType: response?.artifactType, bundleId: response?.bundleId, channel: response?.channelName, checksum: response?.checksum, customProperties: response?.customProperties, downloadUrl: response?.url, signature: response?.signature)
     }
 
     @objc public func getBlockedBundles(completion: @escaping (Result?, Error?) -> Void) {
