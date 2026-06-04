@@ -415,6 +415,15 @@ const vacuum = async () => {
   const { databaseId } = await Sqlite.open();
   await Sqlite.vacuum({ databaseId });
 };
+
+const handleErrors = async () => {
+  try {
+    await Sqlite.open({ path: '/invalid/path/to.db' });
+  } catch (error) {
+    // `error.data.sqliteCode` contains the SQLite result code (e.g. `14` for `SQLITE_CANTOPEN`)
+    console.error(error.message, error.data?.sqliteCode);
+  }
+};
 ```
 
 ## API
@@ -886,6 +895,22 @@ const createDataSource = async () => {
 ```
 
 Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
+
+## Error Handling
+
+Every method rejects with an `Error` whose `message` describes what went wrong. Errors that originate from SQLite additionally expose the primary [SQLite result code](https://www.sqlite.org/rescode.html) as a number in the `data.sqliteCode` property. This lets you handle specific failures programmatically instead of parsing the error message.
+
+Only available on Android and iOS.
+
+```typescript
+try {
+  await Sqlite.open({ path: '/invalid/path/to.db' });
+} catch (error) {
+  if (error.data?.sqliteCode === 14) {
+    // SQLITE_CANTOPEN: unable to open the database file
+  }
+}
+```
 
 ## Limitations
 
