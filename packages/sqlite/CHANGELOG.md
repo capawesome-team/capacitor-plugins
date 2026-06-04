@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.8
+
+### Patch Changes
+
+- [`1a96a56955888a22a42b1f2194989cb431d2304d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1a96a56955888a22a42b1f2194989cb431d2304d) ([#472](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/472)): fix: include the SQLite result code in `error.data.sqliteCode`
+
 ## 0.3.7
 
 ### Patch Changes
