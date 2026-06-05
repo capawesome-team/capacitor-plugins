@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-pixlive': minor
+'@capawesome/capacitor-pixlive': patch
 ---
 
-While annotations are being presented, hide the status bar because it may interfere with images and gesture zones on the screen.
+feat: hide the status bar while annotations are being presented
