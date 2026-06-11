@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.3
+
+### Patch Changes
+
+- [`a928b095cd5732d4dc4257b89ffe02139b9c1bcc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a928b095cd5732d4dc4257b89ffe02139b9c1bcc) ([#474](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/474)): fix(ios): reject `resumeRecording(...)` if iOS `record()` returns `false`
+
 ## 8.2.2
 
 ### Patch Changes
