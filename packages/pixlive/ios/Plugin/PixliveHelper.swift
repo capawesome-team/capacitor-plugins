@@ -41,7 +41,8 @@ public class PixliveHelper {
         obj["imageHiResURL"] = context.imageHiResURL?.absoluteString ?? NSNull()
         obj["notificationTitle"] = context.notificationTitle != nil ? context.notificationTitle : NSNull()
         obj["notificationMessage"] = context.notificationMessage != nil ? context.notificationMessage : NSNull()
-        obj["tags"] = JSArray()
+        obj["tags"] = context.tags ?? []
+        obj["languages"] = context.languages ?? []        
         return obj
     }
 
