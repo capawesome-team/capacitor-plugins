@@ -38,8 +38,8 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 
 A working example can be found [here](https://github.com/capawesome-team/capacitor-share-target-demo).
 
-| Android                                                                                                                  | iOS                                                                                                              | Web                                                                                                              |
-| ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Android                                                                                                                       | iOS                                                                                                                   | Web                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-android.gif" width="240" alt="Android Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-ios.gif" width="240" alt="iOS Demo" /> | <img src="https://capawesome.io/docs/assets/images/gifs/capacitor-share-target-web.gif" width="240" alt="Web Demo" /> |
 
 ## Installation
@@ -613,10 +613,10 @@ extension UIImage {
 Finally, you need to modify the `AppDelegate.swift` file of your main app target to handle the URLs opened by the share extension. Add the missing import and the following code to the `application(_:open:options:)` method:
 
 ```diff
-// If you are using CocoaPods, add the following import:
-+ import CapawesomeTeamCapacitorShareTarget
-// Or if you are using Swift Package Manager, add the following import:
-// import ShareTargetPlugin
+// If you are using Swift Package Manager, add the following import:
++ import ShareTargetPlugin
+// Or if you are using CocoaPods, add the following import:
+// import CapawesomeTeamCapacitorShareTarget
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 +    // Handle share target URLs
@@ -628,7 +628,7 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 }
 ```
 
-**Attention**: If you are using **Swift Package Manager** instead of CocoaPods, replace `import CapawesomeTeamCapacitorShareTarget` with `import ShareTargetPlugin`.
+**Attention**: If you are using **CocoaPods** instead of Swift Package Manager, replace `import ShareTargetPlugin` with `import CapawesomeTeamCapacitorShareTarget`.
 
 #### Capabilities
 
