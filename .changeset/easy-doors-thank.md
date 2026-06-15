@@ -1,5 +1,5 @@
 ---
-'@capawesome/capacitor-pixlive': minor
+'@capawesome/capacitor-pixlive': patch
 ---
 
-Tags and Languages are mapped from VDARContext to the JSObject
+feat: expose tags and languages from VDARContext
