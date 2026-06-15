@@ -58,7 +58,8 @@ public class PixliveHelper {
         obj.put("imageHiResURL", context.getImageHiResURL() != null ? context.getImageHiResURL() : JSONObject.NULL);
         obj.put("notificationTitle", context.getNotificationTitle() != null ? context.getNotificationTitle() : JSONObject.NULL);
         obj.put("notificationMessage", context.getNotificationMessage() != null ? context.getNotificationMessage() : JSONObject.NULL);
-        obj.put("tags", new JSArray());
+        obj.put("tags", context.tags != null ? context.getTags() : new JSArray());
+        obj.put("languages", context.languages != null ? context.getLanguages() : new JSArray());
         return obj;
     }
 
