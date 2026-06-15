@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`d374ae0f958276c7d3e89a90cce4f6d0d090c7b0`](https://github.com/capawesome-team/capacitor-plugins/commit/d374ae0f958276c7d3e89a90cce4f6d0d090c7b0) ([#880](https://github.com/capawesome-team/capacitor-plugins/pull/880)): fix(android): show the picker dialog on the UI thread to prevent crashes (`CalledFromWrongThreadException`/`WindowLeaked`) on configuration changes
+
 ## 8.1.0
 
 ### Minor Changes
