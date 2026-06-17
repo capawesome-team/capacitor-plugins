@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia;
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -45,9 +49,25 @@ public class FilePickerPlugin extends Plugin {
     public static final String TAG = "FilePickerPlugin";
 
     private FilePicker implementation;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickVisualMediaLauncher;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMultipleVisualMediaLauncher;
+    private String pendingPickMediaCallId;
 
     public void load() {
         implementation = new FilePicker(this);
+
+        pickVisualMediaLauncher = bridge.registerForActivityResult(
+            new PickVisualMedia(),
+            uri -> {
+                List<Uri> uris = (uri != null) ? List.of(uri) : null;
+                handlePickVisualMediaResult(uris);
+            }
+        );
+
+        pickMultipleVisualMediaLauncher = bridge.registerForActivityResult(
+            new PickMultipleVisualMedia(),
+            uris -> handlePickVisualMediaResult(uris)
+        );
     }
 
     @Override
@@ -147,17 +167,39 @@ public class FilePickerPlugin extends Plugin {
         try {
             int limit = call.getInt("limit", 0);
 
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            intent.setType("*/*");
-            intent.putExtra("multi-pick", limit == 0);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*", "video/*" });
+            if (!PickVisualMedia.isPhotoPickerAvailable(getContext())) {
+                // Fallback for devices without Photo Picker support (Android 8–10 without GMS)
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
+                intent.setType("*/*");
+                intent.putExtra("multi-pick", limit == 0);
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*", "video/*" });
+                startActivityForResult(call, intent, "pickFilesResult");
+                return;
+            }
 
-            startActivityForResult(call, intent, "pickFilesResult");
+            bridge.saveCall(call);
+            pendingPickMediaCallId = call.getCallbackId();
+
+            PickVisualMediaRequest request = new PickVisualMediaRequest.Builder()
+                .setMediaType(PickVisualMedia.ImageAndVideo.INSTANCE)
+                .build();
+
+            if (limit == 1) {
+                pickVisualMediaLauncher.launch(request);
+            } else {
+                pickMultipleVisualMediaLauncher.launch(request);
+            }
         } catch (Exception ex) {
             String message = ex.getMessage();
             Log.e(TAG, message);
-            call.reject(message);
+            if (pendingPickMediaCallId != null) {
+                pendingPickMediaCallId = null;
+                call.reject(message);
+                bridge.releaseCall(call);
+            } else {
+                call.reject(message);
+            }
         }
     }
 
@@ -177,6 +219,27 @@ public class FilePickerPlugin extends Plugin {
             String message = ex.getMessage();
             Log.e(TAG, message);
             call.reject(message);
+        }
+    }
+
+    private void handlePickVisualMediaResult(List<Uri> uris) {
+        PluginCall call = bridge.getSavedCall(pendingPickMediaCallId);
+        pendingPickMediaCallId = null;
+        if (call == null) return;
+        try {
+            if (uris == null || uris.isEmpty()) {
+                call.reject(ERROR_PICK_FILE_CANCELED);
+                return;
+            }
+            boolean readData = call.getBoolean("readData", false);
+            JSObject result = createPickFilesResultFromUris(uris, readData);
+            call.resolve(result);
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        } finally {
+            bridge.releaseCall(call);
         }
     }
 
@@ -315,6 +378,39 @@ public class FilePickerPlugin extends Plugin {
                 fileResult.put("width", resolution.width);
             }
             fileResult.put("mimeType", implementation.getMimeTypeFromUri(uri));
+            Long modifiedAt = implementation.getModifiedAtFromUri(uri);
+            if (modifiedAt != null) {
+                fileResult.put("modifiedAt", modifiedAt);
+            }
+            fileResult.put("name", implementation.getNameFromUri(uri));
+            fileResult.put("path", implementation.getPathFromUri(uri));
+            fileResult.put("size", implementation.getSizeFromUri(uri));
+            filesResultList.add(fileResult);
+        }
+        callResult.put("files", JSArray.from(filesResultList.toArray()));
+        return callResult;
+    }
+
+    private JSObject createPickFilesResultFromUris(List<Uri> uris, boolean readData) {
+        JSObject callResult = new JSObject();
+        List<JSObject> filesResultList = new ArrayList<>();
+        for (Uri uri : uris) {
+            if (uri == null) continue;
+            JSObject fileResult = new JSObject();
+            if (readData) {
+                fileResult.put("data", implementation.getDataFromUri(uri));
+            }
+            Long duration = implementation.getDurationFromUri(uri);
+            if (duration != null) {
+                fileResult.put("duration", duration);
+            }
+            FileResolution resolution = implementation.getHeightAndWidthFromUri(uri);
+            if (resolution != null) {
+                fileResult.put("height", resolution.height);
+                fileResult.put("width", resolution.width);
+            }
+            String mimeType = implementation.getMimeTypeFromUri(uri);
+            fileResult.put("mimeType", mimeType != null ? mimeType : "");
             Long modifiedAt = implementation.getModifiedAtFromUri(uri);
             if (modifiedAt != null) {
                 fileResult.put("modifiedAt", modifiedAt);
