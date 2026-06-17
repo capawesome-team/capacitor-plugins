@@ -58,6 +58,13 @@ declare module '@capacitor/cli' {
        * @default true
        */
       captureApplicationLifecycleEvents?: boolean;
+      /**
+       * Whether to automatically capture exceptions.
+       *
+       * @since 8.5.0
+       * @default false
+       */
+      autoCaptureExceptions?: boolean;
     };
   }
 }
@@ -75,6 +82,12 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
+  /**
+   * Capture an exception.
+   *
+   * @since 8.5.0
+   */
+  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -226,6 +239,37 @@ export interface CaptureOptions {
    * The properties to send with the event.
    *
    * @since 6.0.0
+   */
+  properties?: Record<string, any>;
+}
+
+/**
+ * @since 8.5.0
+ */
+export interface CaptureExceptionOptions {
+  /**
+   * The exception message.
+   *
+   * @since 8.5.0
+   */
+  message: string;
+  /**
+   * The exception name.
+   *
+   * @since 8.5.0
+   * @example 'TypeError'
+   */
+  name?: string;
+  /**
+   * The exception stack trace.
+   *
+   * @since 8.5.0
+   */
+  stack?: string;
+  /**
+   * The properties to send with the exception.
+   *
+   * @since 8.5.0
    */
   properties?: Record<string, any>;
 }
@@ -485,6 +529,13 @@ export interface SetupOptions {
    * @default true
    */
   captureApplicationLifecycleEvents?: boolean;
+  /**
+   * Whether to automatically capture exceptions.
+   *
+   * @since 8.5.0
+   * @default false
+   */
+  autoCaptureExceptions?: boolean;
 }
 
 /**

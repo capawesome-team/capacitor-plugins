@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
-        .package(url: "https://github.com/PostHog/posthog-ios.git", .upToNextMajor(from: "3.19.1"))
+        .package(url: "https://github.com/PostHog/posthog-ios.git", .upToNextMajor(from: "3.56.0"))
     ],
     targets: [
         .target(

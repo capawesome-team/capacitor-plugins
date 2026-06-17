@@ -6,6 +6,7 @@ import Foundation
     private var enableSessionReplay: Bool
     private var optOut: Bool
     private var captureApplicationLifecycleEvents: Bool
+    private var autoCaptureExceptions: Bool
     private var sessionReplayConfig: SessionReplayOptions?
 
     init(
@@ -14,6 +15,7 @@ import Foundation
         enableSessionReplay: Bool,
         optOut: Bool,
         captureApplicationLifecycleEvents: Bool,
+        autoCaptureExceptions: Bool,
         sessionReplayConfig: [String: Any]?
     ) {
         self.apiKey = apiKey
@@ -21,6 +23,7 @@ import Foundation
         self.enableSessionReplay = enableSessionReplay
         self.optOut = optOut
         self.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
+        self.autoCaptureExceptions = autoCaptureExceptions
 
         if let config = sessionReplayConfig {
             self.sessionReplayConfig = SessionReplayOptions(
@@ -52,6 +55,10 @@ import Foundation
 
     func getCaptureApplicationLifecycleEvents() -> Bool {
         return captureApplicationLifecycleEvents
+    }
+
+    func getAutoCaptureExceptions() -> Bool {
+        return autoCaptureExceptions
     }
 
     func getSessionReplayConfig() -> SessionReplayOptions? {

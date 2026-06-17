@@ -48,7 +48,7 @@ npx cap sync
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$androidxCoreKtxVersion` version of `androidx.core:core-ktx` (default: `1.13.1`)
-- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.27.2`)
+- `$posthogVersion` version of `com.posthog:posthog-android` (default: `3.32.0`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
@@ -66,6 +66,7 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 | **`enableSessionReplay`**               | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                        | <code>false</code>                      | 7.3.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                  |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events.                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture exceptions.                                              | <code>false</code>                      | 8.5.0 |
 
 ### Examples
 
@@ -81,7 +82,8 @@ In `capacitor.config.json`:
       "uiHost": 'https://eu.posthog.com',
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined,
-      "captureApplicationLifecycleEvents": undefined
+      "captureApplicationLifecycleEvents": undefined,
+      "autoCaptureExceptions": undefined
     }
   }
 }
@@ -104,6 +106,7 @@ const config: CapacitorConfig = {
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
       captureApplicationLifecycleEvents: undefined,
+      autoCaptureExceptions: undefined,
     },
   },
 };
@@ -200,6 +203,7 @@ const unregister = async () => {
 
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
+* [`captureException(...)`](#captureexception)
 * [`flush()`](#flush)
 * [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
@@ -256,6 +260,23 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### captureException(...)
+
+```typescript
+captureException(options: CaptureExceptionOptions) => Promise<void>
+```
+
+Capture an exception.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
+
+**Since:** 8.5.0
 
 --------------------
 
@@ -569,6 +590,16 @@ Remove a super property.
 | **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### CaptureExceptionOptions
+
+| Prop             | Type                                   | Description                                | Since |
+| ---------------- | -------------------------------------- | ------------------------------------------ | ----- |
+| **`message`**    | <code>string</code>                    | The exception message.                     | 8.5.0 |
+| **`name`**       | <code>string</code>                    | The exception name.                        | 8.5.0 |
+| **`stack`**      | <code>string</code>                    | The exception stack trace.                 | 8.5.0 |
+| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the exception. | 8.5.0 |
+
+
 #### GetDistinctIdResult
 
 | Prop             | Type                | Description              | Since |
@@ -671,6 +702,7 @@ Remove a super property.
 | **`optOut`**                            | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events. Only available on iOS and Android.                                                                                                                                                                                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture exceptions.                                                                                                                                                                                                                                                 | <code>false</code>                      | 8.5.0 |
 
 
 #### SessionReplayOptions

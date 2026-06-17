@@ -4,6 +4,7 @@ import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
+  CaptureExceptionOptions,
   CaptureOptions,
   GetDistinctIdResult,
   GetFeatureFlagOptions,
@@ -31,6 +32,17 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     posthog.capture(options.event, options.properties);
   }
 
+  async captureException(options: CaptureExceptionOptions): Promise<void> {
+    const error = new Error(options.message);
+    if (options.name) {
+      error.name = options.name;
+    }
+    if (options.stack) {
+      error.stack = options.stack;
+    }
+    posthog.captureException(error, options.properties);
+  }
+
   async flush(): Promise<void> {
     this.throwUnimplementedError();
   }
@@ -49,7 +61,8 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   async getFeatureFlagPayload(
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult> {
-    return { value: posthog.getFeatureFlagPayload(options.key) };
+    const value = posthog.getFeatureFlagPayload(options.key) ?? null;
+    return { value: value as GetFeatureFlagPayloadResult['value'] };
   }
 
   async group(options: GroupOptions): Promise<void> {
@@ -115,6 +128,9 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     }
     if (options.cookielessMode) {
       config.cookieless_mode = options.cookielessMode;
+    }
+    if (options.autoCaptureExceptions) {
+      config.capture_exceptions = true;
     }
 
     // Configure session recording if enabled
