@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.9
+
+### Patch Changes
+
+- [`e0a90dbc893359430a106d2f4cee9af97b3dfcf5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e0a90dbc893359430a106d2f4cee9af97b3dfcf5): feat: support loading custom SQLite extensions on Android via the `androidExtensions` option on the `open(...)` method
+
 ## 0.4.0
 
 ### Minor Changes
