@@ -15,6 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
 - 📦 **Bundled SQLite**: Opt-in bundling of the latest SQLite version.
+- 🧩 **Custom Extensions**: Load app-bundled SQLite extensions on Android.
 - 📖 **Read-only mode**: Open databases in read-only mode to prevent modifications.
 - 📂 **File-based**: Open existing databases or create new ones with a file path.
 - 💾 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
