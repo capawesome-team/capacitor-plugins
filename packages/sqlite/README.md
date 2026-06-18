@@ -215,6 +215,29 @@ Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
 
 **Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
 
+#### Custom Extensions
+
+If you want to use custom SQLite extensions, you must **statically link** them into your app and register them at startup, after which they are automatically available in every database opened by the plugin. This is required because iOS does not support loading extensions at runtime.
+
+First, add the extension's C source file to your app target in Xcode and set the per-file compiler flag `-DSQLITE_CORE` (in **Build Phases › Compile Sources**). Then declare its entry point in your bridging header:
+
+```c
+#include <sqlite3.h>
+
+int sqlite3_myextension_init(sqlite3 *db, char **pzErrMsg, const sqlite3_api_routines *pApi);
+```
+
+Finally, register the extension before any database is opened, e.g. in your `AppDelegate`:
+
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+  sqlite3_auto_extension(unsafeBitCast(sqlite3_myextension_init, to: (@convention(c) () -> Void).self))
+  return true
+}
+```
+
+The entry point name must follow the SQLite naming convention `sqlite3_<name>_init` and the extension must be compiled with `-DSQLITE_CORE` so that it links against the host SQLite. See [Run-Time Loadable Extensions](https://www.sqlite.org/loadext.html#statically_linking_a_run_time_loadable_extension) for details.
+
 ### Web
 
 This plugin uses the [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) package to provide SQLite support on the web platform. It will automatically load the SQLite WASM module when needed.
