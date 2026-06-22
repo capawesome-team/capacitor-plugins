@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`7398209273d39ba008543aa497e66ea44ce1f5dd`](https://github.com/capawesome-team/capacitor-plugins/commit/7398209273d39ba008543aa497e66ea44ce1f5dd) ([#882](https://github.com/capawesome-team/capacitor-plugins/pull/882)): feat: expose tags and languages from VDARContext
+
 ## 0.1.1
 
 ### Patch Changes

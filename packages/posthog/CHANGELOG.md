@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.0
+
+### Minor Changes
+
+- [`a34394c79d35caadd06910a2efdefb88010b8d33`](https://github.com/capawesome-team/capacitor-plugins/commit/a34394c79d35caadd06910a2efdefb88010b8d33) ([#892](https://github.com/capawesome-team/capacitor-plugins/pull/892)): feat: add error tracking with `captureException(...)` method and `autoCaptureExceptions` configuration option
+
 ## 8.4.2
 
 ### Patch Changes
