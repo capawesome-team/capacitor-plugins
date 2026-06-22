@@ -66,6 +66,7 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 | **`enableSessionReplay`**               | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                        | <code>false</code>                      | 7.3.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                  |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events.                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture unhandled exceptions.                                    | <code>false</code>                      | 8.5.0 |
 
 ### Examples
 
@@ -81,7 +82,8 @@ In `capacitor.config.json`:
       "uiHost": 'https://eu.posthog.com',
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined,
-      "captureApplicationLifecycleEvents": undefined
+      "captureApplicationLifecycleEvents": undefined,
+      "autoCaptureExceptions": undefined
     }
   }
 }
@@ -104,6 +106,7 @@ const config: CapacitorConfig = {
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
       captureApplicationLifecycleEvents: undefined,
+      autoCaptureExceptions: undefined,
     },
   },
 };
@@ -200,6 +203,7 @@ const unregister = async () => {
 
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
+* [`captureException(...)`](#captureexception)
 * [`flush()`](#flush)
 * [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
@@ -256,6 +260,23 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### captureException(...)
+
+```typescript
+captureException(options: CaptureExceptionOptions) => Promise<void>
+```
+
+Capture an exception.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
+
+**Since:** 8.5.0
 
 --------------------
 
@@ -569,6 +590,26 @@ Remove a super property.
 | **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### CaptureExceptionOptions
+
+| Prop             | Type                                   | Description                                                                                                                | Default              | Since |
+| ---------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`message`**    | <code>string</code>                    | The message of the exception.                                                                                              |                      | 8.5.0 |
+| **`name`**       | <code>string</code>                    | The name of the exception. Used as the exception type for grouping.                                                        | <code>'Error'</code> | 8.5.0 |
+| **`stacktrace`** | <code>StackFrame[]</code>              | The stack trace of the exception. Can be generated from an `Error` using [`stacktrace.js`](https://www.stacktracejs.com/). |                      | 8.5.0 |
+| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the exception.                                                                                 |                      | 8.5.0 |
+
+
+#### StackFrame
+
+| Prop               | Type                | Description                        | Since |
+| ------------------ | ------------------- | ---------------------------------- | ----- |
+| **`functionName`** | <code>string</code> | The name of the function.          | 8.5.0 |
+| **`fileName`**     | <code>string</code> | The name of the file.              | 8.5.0 |
+| **`lineNumber`**   | <code>number</code> | The line number within the file.   | 8.5.0 |
+| **`columnNumber`** | <code>number</code> | The column number within the file. | 8.5.0 |
+
+
 #### GetDistinctIdResult
 
 | Prop             | Type                | Description              | Since |
@@ -671,6 +712,7 @@ Remove a super property.
 | **`optOut`**                            | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events. Only available on iOS and Android.                                                                                                                                                                                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture unhandled exceptions.                                                                                                                                                                                                                                       | <code>false</code>                      | 8.5.0 |
 
 
 #### SessionReplayOptions

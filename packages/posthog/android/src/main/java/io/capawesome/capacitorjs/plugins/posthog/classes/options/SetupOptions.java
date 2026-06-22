@@ -21,6 +21,9 @@ public class SetupOptions {
     private Boolean captureApplicationLifecycleEvents;
 
     @Nullable
+    private Boolean autoCaptureExceptions;
+
+    @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
     public SetupOptions(@NonNull String apiKey, @NonNull String apiHost) {
@@ -60,6 +63,14 @@ public class SetupOptions {
 
     public void setCaptureApplicationLifecycleEvents(boolean captureApplicationLifecycleEvents) {
         this.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents;
+    }
+
+    public boolean getAutoCaptureExceptions() {
+        return autoCaptureExceptions != null ? autoCaptureExceptions : false;
+    }
+
+    public void setAutoCaptureExceptions(boolean autoCaptureExceptions) {
+        this.autoCaptureExceptions = autoCaptureExceptions;
     }
 
     @Nullable
