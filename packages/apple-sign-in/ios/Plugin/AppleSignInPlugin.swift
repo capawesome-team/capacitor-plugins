@@ -43,6 +43,8 @@ public class AppleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
         var code: String?
         if let customError = error as? CustomError {
             code = customError.code
+        } else if let authorizationError = error as? ASAuthorizationError {
+            code = String(authorizationError.code.rawValue)
         }
         call.reject(error.localizedDescription, code)
     }
