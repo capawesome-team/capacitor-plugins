@@ -90,7 +90,7 @@ import PostHog
         }
         // PostHog stores frames bottom-up (oldest call first), while the JavaScript
         // stack trace is top-down (most recent call first), so reverse them.
-        return frames.reversed()
+        return Array(frames.reversed())
     }
 
     @objc public func flush() {
