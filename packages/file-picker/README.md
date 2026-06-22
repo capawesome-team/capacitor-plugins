@@ -60,6 +60,12 @@ npx cap sync
 
 ### Android
 
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidxActivity` version of `androidx.activity:activity` (default: `1.13.0`)
+
 #### Permissions
 
 This API requires the following permissions be added to your `AndroidManifest.xml` before or after the `application` tag:
