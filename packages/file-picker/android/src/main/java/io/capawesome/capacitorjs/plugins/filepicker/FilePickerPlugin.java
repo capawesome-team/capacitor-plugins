@@ -186,10 +186,10 @@ public class FilePickerPlugin extends Plugin {
 
             PickVisualMediaRequest request = new PickVisualMediaRequest.Builder().setMediaType(mediaType).build();
             Intent intent;
-            if (limit == 1) {
-                intent = new ActivityResultContracts.PickVisualMedia().createIntent(getContext(), request);
-            } else {
+            if (limit == 0) {
                 intent = new ActivityResultContracts.PickMultipleVisualMedia().createIntent(getContext(), request);
+            } else {
+                intent = new ActivityResultContracts.PickVisualMedia().createIntent(getContext(), request);
             }
 
             startActivityForResult(call, intent, "pickFilesResult");
