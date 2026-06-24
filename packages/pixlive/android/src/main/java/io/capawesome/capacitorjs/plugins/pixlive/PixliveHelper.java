@@ -58,8 +58,10 @@ public class PixliveHelper {
         obj.put("imageHiResURL", context.getImageHiResURL() != null ? context.getImageHiResURL() : JSONObject.NULL);
         obj.put("notificationTitle", context.getNotificationTitle() != null ? context.getNotificationTitle() : JSONObject.NULL);
         obj.put("notificationMessage", context.getNotificationMessage() != null ? context.getNotificationMessage() : JSONObject.NULL);
-        obj.put("tags", context.getTags() != null ? context.getTags() : new JSArray());
-        obj.put("languages", context.getLanguages() != null ? context.getLanguages() : new JSArray());
+        JSArray tagsArray = arrayListToJSArray(context.getTags());
+        JSArray languagesArray = arrayListToJSArray(context.getLanguages());
+        obj.put("tags", tagsArray);
+        obj.put("languages", languagesArray);
         return obj;
     }
 
@@ -109,5 +111,16 @@ public class PixliveHelper {
             default:
                 return "unknown";
         }
+    }
+
+    @NonNull
+    private static JSArray arrayListToJSArray(@Nullable ArrayList<String> list) {
+        JSArray result = new JSArray();
+        if (list != null) {
+            for (String item : list) {
+                result.put(item);
+            }
+        }
+        return result;
     }
 }
