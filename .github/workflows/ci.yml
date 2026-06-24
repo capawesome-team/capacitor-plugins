@@ -242,7 +242,12 @@ jobs:
       - name: Boot iOS simulator
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: |
-          UDID=$(xcrun simctl list devices available | grep "iPhone 16 Pro " | head -1 | grep -oE '[0-9A-F-]{36}')
+          UDID=$(xcrun simctl list devices available | grep -m1 -E 'iPhone .*\([0-9A-Fa-f-]{36}\)' | grep -oE '[0-9A-Fa-f-]{36}' || true)
+          if [ -z "$UDID" ]; then
+            echo "No available iPhone simulator found."
+            xcrun simctl list devices available
+            exit 1
+          fi
           echo "SIM_UDID=$UDID" >> $GITHUB_ENV
           xcrun simctl boot "$UDID"
           xcrun simctl bootstatus "$UDID" -b
