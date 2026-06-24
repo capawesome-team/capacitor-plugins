@@ -60,7 +60,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: latest-stable
       - name: Install Node.js dependencies
         run: npm ci
       - name: Install CocoaPods dependencies of packages affected by changes
@@ -222,7 +222,7 @@ jobs:
       - name: Setup Xcode
         uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-version: '16.4'
+          xcode-version: latest-stable
       - name: Install Node.js dependencies
         run: npm ci
       - name: Discover packages with e2e:ios
