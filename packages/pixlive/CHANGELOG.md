@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`c61abd4ad1bbbc55c97aee1c4ee431e6fb4e9450`](https://github.com/capawesome-team/capacitor-plugins/commit/c61abd4ad1bbbc55c97aee1c4ee431e6fb4e9450) ([#900](https://github.com/capawesome-team/capacitor-plugins/pull/900)): fix(android): convert ArrayList to JSArray
+
 ## 0.1.3
 
 ### Patch Changes
