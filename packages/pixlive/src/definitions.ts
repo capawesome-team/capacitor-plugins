@@ -750,6 +750,12 @@ export interface Context {
    * @since 8.0.0
    */
   tags: string[];
+  /**
+   * The languages provided for this context.
+   *
+   * @since 8.0.3
+   */
+  languages: string[];
 }
 
 /**
