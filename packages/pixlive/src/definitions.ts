@@ -1,7 +1,7 @@
 import type { PermissionState, PluginListenerHandle } from '@capacitor/core';
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export type PixlivePermissionType =
   | 'bluetooth'
@@ -12,7 +12,7 @@ export type PixlivePermissionType =
   | 'notifications';
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface PixlivePlugin {
   /**
@@ -22,19 +22,19 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   initialize(): Promise<void>;
   /**
    * Check the status of permissions.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   checkPermissions(): Promise<PermissionStatus>;
   /**
    * Request permissions.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   requestPermissions(
     options?: PixlivePluginPermission,
@@ -44,7 +44,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   synchronize(options: SynchronizeOptions): Promise<void>;
   /**
@@ -52,7 +52,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   synchronizeWithToursAndContexts(
     options: SynchronizeWithToursAndContextsOptions,
@@ -62,7 +62,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   updateTagMapping(options: UpdateTagMappingOptions): Promise<void>;
   /**
@@ -70,7 +70,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   enableContextsWithTags(options: EnableContextsWithTagsOptions): Promise<void>;
   /**
@@ -78,7 +78,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getContexts(): Promise<GetContextsResult>;
   /**
@@ -86,7 +86,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getContext(options: GetContextOptions): Promise<GetContextResult>;
   /**
@@ -94,7 +94,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   activateContext(options: ActivateContextOptions): Promise<void>;
   /**
@@ -102,7 +102,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   stopContext(): Promise<void>;
   /**
@@ -110,7 +110,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getNearbyGPSPoints(
     options: GetNearbyGPSPointsOptions,
@@ -120,7 +120,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getGPSPointsInBoundingBox(
     options: GetGPSPointsInBoundingBoxOptions,
@@ -130,7 +130,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getNearbyBeacons(): Promise<GetNearbyBeaconsResult>;
   /**
@@ -138,7 +138,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   startNearbyGPSDetection(): Promise<void>;
   /**
@@ -146,7 +146,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   stopNearbyGPSDetection(): Promise<void>;
   /**
@@ -154,7 +154,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   startGPSNotifications(): Promise<void>;
   /**
@@ -162,7 +162,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   stopGPSNotifications(): Promise<void>;
   /**
@@ -170,7 +170,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   setNotificationsSupport(
     options: SetNotificationsSupportOptions,
@@ -180,7 +180,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   setInterfaceLanguage(options: SetInterfaceLanguageOptions): Promise<void>;
   /**
@@ -188,7 +188,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   createARView(options: CreateARViewOptions): Promise<void>;
   /**
@@ -196,7 +196,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   destroyARView(): Promise<void>;
   /**
@@ -204,7 +204,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   resizeARView(options: ResizeARViewOptions): Promise<void>;
   /**
@@ -212,7 +212,7 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   setARViewTouchEnabled(options: SetARViewTouchEnabledOptions): Promise<void>;
   /**
@@ -220,19 +220,19 @@ export interface PixlivePlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   setARViewTouchHole(options: SetARViewTouchHoleOptions): Promise<void>;
   /**
    * Get the version of the sdk.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   getVersion(): Promise<GetVersionResult>;
   /**
    * Called when a QR code or barcode is scanned by the AR camera.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'codeRecognize',
@@ -241,7 +241,7 @@ export interface PixlivePlugin {
   /**
    * Called when an AR context is detected/entered.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'enterContext',
@@ -250,7 +250,7 @@ export interface PixlivePlugin {
   /**
    * Called when an AR context is lost/exited.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'exitContext',
@@ -259,7 +259,7 @@ export interface PixlivePlugin {
   /**
    * Called when AR content/annotations become visible on screen.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'presentAnnotations',
@@ -268,7 +268,7 @@ export interface PixlivePlugin {
   /**
    * Called when AR content/annotations are hidden.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'hideAnnotations',
@@ -277,7 +277,7 @@ export interface PixlivePlugin {
   /**
    * Called when AR content dispatches a custom event.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'eventFromContent',
@@ -286,7 +286,7 @@ export interface PixlivePlugin {
   /**
    * Called during synchronization with progress updates.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'syncProgress',
@@ -295,7 +295,7 @@ export interface PixlivePlugin {
   /**
    * Called when the SDK requires synchronization with specific tags.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   addListener(
     eventName: 'requireSync',
@@ -304,286 +304,286 @@ export interface PixlivePlugin {
   /**
    * Remove all listeners for this plugin.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   removeAllListeners(): Promise<void>;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SynchronizeOptions {
   /**
    * The tags to filter content by.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[][];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SynchronizeWithToursAndContextsOptions {
   /**
    * The tags to filter content by.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[][];
   /**
    * The tour IDs to sync.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tourIds: number[];
   /**
    * The context IDs to sync.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contextIds: string[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface UpdateTagMappingOptions {
   /**
    * The tags to map.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface EnableContextsWithTagsOptions {
   /**
    * The tags to enable contexts for.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetContextOptions {
   /**
    * The ID of the context to retrieve.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    * @example "12345"
    */
   contextId: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface ActivateContextOptions {
   /**
    * The ID of the context to activate.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    * @example "12345"
    */
   contextId: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetNearbyGPSPointsOptions {
   /**
    * The latitude of the reference location.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   latitude: number;
   /**
    * The longitude of the reference location.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   longitude: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetGPSPointsInBoundingBoxOptions {
   /**
    * The minimum latitude of the bounding box.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   minLatitude: number;
   /**
    * The minimum longitude of the bounding box.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   minLongitude: number;
   /**
    * The maximum latitude of the bounding box.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   maxLatitude: number;
   /**
    * The maximum longitude of the bounding box.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   maxLongitude: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SetNotificationsSupportOptions {
   /**
    * Whether notifications support should be enabled.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   enabled: boolean;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SetInterfaceLanguageOptions {
   /**
    * The language code to set.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    * @example "en"
    */
   language: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface CreateARViewOptions {
   /**
    * The x position of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   x: number;
   /**
    * The y position of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   y: number;
   /**
    * The width of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   width: number;
   /**
    * The height of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   height: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface ResizeARViewOptions {
   /**
    * The new x position of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   x: number;
   /**
    * The new y position of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   y: number;
   /**
    * The new width of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   width: number;
   /**
    * The new height of the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   height: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SetARViewTouchEnabledOptions {
   /**
    * Whether touch events should be intercepted by the AR view.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   enabled: boolean;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SetARViewTouchHoleOptions {
   /**
    * The top coordinate of the touch hole region.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   top: number;
   /**
    * The bottom coordinate of the touch hole region.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   bottom: number;
   /**
    * The left coordinate of the touch hole region.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   left: number;
   /**
    * The right coordinate of the touch hole region.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   right: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface PixlivePluginPermission {
   /**
    * The permissions to request.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   permissions: PixlivePermissionType[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface PermissionStatus {
   /**
@@ -591,7 +591,7 @@ export interface PermissionStatus {
    *
    * Only available on iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   bluetooth?: PermissionState;
   /**
@@ -599,7 +599,7 @@ export interface PermissionStatus {
    *
    * Only available on Android.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   bluetoothConnect?: PermissionState;
   /**
@@ -607,13 +607,13 @@ export interface PermissionStatus {
    *
    * Only available on Android.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   bluetoothScan?: PermissionState;
   /**
    * Permission state of the Camera permission.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   camera: PermissionState;
   /**
@@ -621,283 +621,283 @@ export interface PermissionStatus {
    *
    * Only available on Android and iOS.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   location?: PermissionState;
   /**
    * Permission state of the Notifications permission.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   notifications?: PermissionState;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetContextsResult {
   /**
    * The list of synchronized contexts.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contexts: Context[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetContextResult {
   /**
    * The context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   context: Context;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetNearbyBeaconsResult {
   /**
    * The contexts associated with nearby beacons.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contexts: Context[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetNearbyGPSPointsResult {
   /**
    * The nearby GPS points sorted by distance.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   points: GPSPoint[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetGPSPointsInBoundingBoxResult {
   /**
    * The GPS points within the bounding box.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   points: GPSPoint[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface Context {
   /**
    * The unique identifier of the context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contextId: string;
   /**
    * The name of the context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   name: string;
   /**
    * The description of the context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   description: string | null;
   /**
    * The last update timestamp.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   lastUpdate: string;
   /**
    * The URL of the thumbnail image.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   imageThumbnailURL: string | null;
   /**
    * The URL of the high-resolution image.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   imageHiResURL: string | null;
   /**
    * The notification title.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   notificationTitle: string | null;
   /**
    * The notification message.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   notificationMessage: string | null;
   /**
    * The tags associated with the context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[];
   /**
    * The languages provided for this context.
    *
-   * @since 8.0.3
+   * @since 0.1.3
    */
   languages: string[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GPSPoint {
   /**
    * The ID of the associated context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contextId: string;
   /**
    * The category of the GPS point.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   category: string;
   /**
    * The label of the GPS point.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   label: string;
   /**
    * The latitude of the GPS point.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   latitude: number;
   /**
    * The longitude of the GPS point.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   longitude: number;
   /**
    * The detection radius in meters.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   detectionRadius: number | null;
   /**
    * The distance from the current position in meters.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   distanceFromCurrentPosition: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface CodeRecognizeEvent {
   /**
    * The scanned code value.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   code: string;
   /**
    * The type of the scanned code.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   type: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface EnterContextEvent {
   /**
    * The ID of the entered context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contextId: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface ExitContextEvent {
   /**
    * The ID of the exited context.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   contextId: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface EventFromContentEvent {
   /**
    * The name of the custom event.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   name: string;
   /**
    * The parameters of the custom event.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   params: string;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface SyncProgressEvent {
   /**
    * The sync progress value between 0.0 and 1.0.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   progress: number;
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface RequireSyncEvent {
   /**
    * The tags that require synchronization.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   tags: string[];
 }
 
 /**
- * @since 8.0.0
+ * @since 0.0.1
  */
 export interface GetVersionResult {
   /**
    * The version of the sdk.
    *
-   * @since 8.0.0
+   * @since 0.0.1
    */
   version: string;
 }
