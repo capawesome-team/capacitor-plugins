@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-bluetooth-low-energy
 
-Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.
+Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.[^1][^2]
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -1665,3 +1665,6 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/LICENSE).
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Bluetooth SIG, Inc. or any of their affiliates or subsidiaries.
+[^2]: `Bluetooth` is a registered trademark of Bluetooth SIG, Inc.

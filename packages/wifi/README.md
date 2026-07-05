@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-wifi
 
-Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks. Supports both Android and iOS.
+Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks. Supports both Android and iOS.[^1][^2]
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -625,3 +625,6 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/wifi/LICENSE).
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Wi-Fi Alliance or any of their affiliates or subsidiaries.
+[^2]: `Wi-Fi` is a registered trademark of Wi-Fi Alliance.

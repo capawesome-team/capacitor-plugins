@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-oauth
 
-Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.
+Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.[^1][^2]
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -528,3 +528,6 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/oauth/LICENSE).
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by the OpenID Foundation or any of their affiliates or subsidiaries.
+[^2]: `OpenID` is a registered trademark of the OpenID Foundation.

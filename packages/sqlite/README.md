@@ -1,6 +1,6 @@
 # @capawesome-team/capacitor-sqlite
 
-Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.
+Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.[^1][^2][^3]
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -1058,3 +1058,7 @@ or product documentation linked from the application. This plugin does not
 include a SQLCipher commercial license; the BSD attribution applies. See
 the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the
 full text.
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Hipp, Wyrick & Company, Inc., Zetetic, LLC, or any of their affiliates or subsidiaries.
+[^2]: `SQLite` is a registered trademark of Hipp, Wyrick & Company, Inc.
+[^3]: `SQLCipher` is a registered trademark of Zetetic, LLC.
