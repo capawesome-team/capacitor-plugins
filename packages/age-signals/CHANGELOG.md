@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- [`8c44f7b82b7c0de3b007a0a415ddefaebe91afcc`](https://github.com/capawesome-team/capacitor-plugins/commit/8c44f7b82b7c0de3b007a0a415ddefaebe91afcc) ([#905](https://github.com/capawesome-team/capacitor-plugins/pull/905)): fix(ios): resolve compile error when building with Xcode 26.4 or older
+
 ## 0.4.0
 
 ### Minor Changes
