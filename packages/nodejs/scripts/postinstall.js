@@ -51,6 +51,7 @@ function download(downloadUrl, targetFile, redirectCount = 0) {
           return;
         }
         if (response.statusCode !== 200) {
+          response.resume();
           reject(
             new Error(
               `Download failed with status code ${response.statusCode}.`,

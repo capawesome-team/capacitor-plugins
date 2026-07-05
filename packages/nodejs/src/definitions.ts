@@ -187,9 +187,17 @@ export interface MessageEvent {
 /**
  * A single argument of a message that is exchanged with the Node.js runtime.
  *
+ * The value must be JSON-serializable.
+ *
  * @since 0.0.1
  */
-export type MessageArg = string | number | boolean;
+export type MessageArg =
+  | string
+  | number
+  | boolean
+  | null
+  | MessageArg[]
+  | { [key: string]: MessageArg };
 
 /**
  * @since 0.0.1

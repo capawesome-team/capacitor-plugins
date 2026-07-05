@@ -94,8 +94,8 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "Nodejs": {
-      "nodeDir": "custom-nodejs",
-      "startMode": "manual"
+      "nodeDir": 'custom-nodejs',
+      "startMode": 'manual'
     }
   }
 }
@@ -218,14 +218,14 @@ To use npm packages, run `npm install --omit=dev` inside the Node.js project dir
 
 <docgen-index>
 
-- [`isReady()`](#isready)
-- [`send(...)`](#send)
-- [`start(...)`](#start)
-- [`addListener('message', ...)`](#addlistenermessage-)
-- [`addListener('ready', ...)`](#addlistenerready-)
-- [`removeAllListeners()`](#removealllisteners)
-- [Interfaces](#interfaces)
-- [Type Aliases](#type-aliases)
+* [`isReady()`](#isready)
+* [`send(...)`](#send)
+* [`start(...)`](#start)
+* [`addListener('message', ...)`](#addlistenermessage-)
+* [`addListener('ready', ...)`](#addlistenerready-)
+* [`removeAllListeners()`](#removealllisteners)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -249,7 +249,8 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### send(...)
 
@@ -271,7 +272,8 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### start(...)
 
@@ -295,7 +297,8 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### addListener('message', ...)
 
@@ -316,7 +319,8 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### addListener('ready', ...)
 
@@ -337,7 +341,8 @@ Only available on Android and iOS.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### removeAllListeners()
 
@@ -349,9 +354,11 @@ Remove all listeners for this plugin.
 
 **Since:** 0.0.1
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### IsReadyResult
 
@@ -359,12 +366,14 @@ Remove all listeners for this plugin.
 | ----------- | -------------------- | ---------------------------------------------------------------- | ----- |
 | **`ready`** | <code>boolean</code> | Whether or not the Node.js runtime is ready to receive messages. | 0.0.1 |
 
+
 #### SendOptions
 
 | Prop            | Type                      | Description                                           | Since |
 | --------------- | ------------------------- | ----------------------------------------------------- | ----- |
 | **`args`**      | <code>MessageArg[]</code> | The arguments to send to the Node.js runtime.         | 0.0.1 |
 | **`eventName`** | <code>string</code>       | The name of the event to send to the Node.js runtime. | 0.0.1 |
+
 
 #### StartOptions
 
@@ -374,11 +383,13 @@ Remove all listeners for this plugin.
 | **`env`**    | <code>{ [key: string]: string; }</code> | The environment variables to set for the Node.js process.                      |                                                                                  | 0.0.1 |
 | **`script`** | <code>string</code>                     | The path of the script file to run, relative to the Node.js project directory. | <code>The `main` field of the `package.json` file of the Node.js project.</code> | 0.0.1 |
 
+
 #### PluginListenerHandle
 
 | Prop         | Type                                      |
 | ------------ | ----------------------------------------- |
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
 
 #### MessageEvent
 
@@ -387,13 +398,17 @@ Remove all listeners for this plugin.
 | **`args`**      | <code>MessageArg[]</code> | The arguments received from the Node.js runtime.         | 0.0.1 |
 | **`eventName`** | <code>string</code>       | The name of the event received from the Node.js runtime. | 0.0.1 |
 
+
 ### Type Aliases
+
 
 #### MessageArg
 
 A single argument of a message that is exchanged with the Node.js runtime.
 
-<code>string | number | boolean</code>
+The value must be JSON-serializable.
+
+<code>string | number | boolean | null | MessageArg[] | { [key: string]: <a href="#messagearg">MessageArg</a> }</code>
 
 </docgen-api>
 

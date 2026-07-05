@@ -188,5 +188,9 @@ Java_io_capawesome_capacitorjs_plugins_nodejs_Nodejs_startNodeWithArguments(
 
     // Start Node.js, with argc and argv. This call blocks until the
     // Node.js event loop exits.
-    return jint(node::Start(argument_count, argv));
+    int exit_code = node::Start(argument_count, argv);
+
+    free(args_buffer);
+
+    return jint(exit_code);
 }

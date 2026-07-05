@@ -216,6 +216,8 @@ static void rcv_message(const char *channelName, const char *msg) {
     // Start Node.js, with argc and argv. This call blocks until the
     // Node.js event loop exits.
     node_start(argument_count, argv);
+
+    free(args_buffer);
 }
 
 @end
