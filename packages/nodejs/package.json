@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-nodejs",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for running Node.js in mobile apps.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
