@@ -99,7 +99,7 @@ export interface GetVolumeOptions {
    *
    * @since 0.1.0
    * @default VolumeStream.Music
-   * @example 'music'
+   * @example 'MUSIC'
    */
   stream?: VolumeStream;
 }
@@ -128,7 +128,7 @@ export interface SetVolumeOptions {
    *
    * @since 0.1.0
    * @default VolumeStream.Music
-   * @example 'music'
+   * @example 'MUSIC'
    */
   stream?: VolumeStream;
   /**
@@ -223,37 +223,37 @@ export enum VolumeStream {
    *
    * @since 0.1.0
    */
-  Alarm = 'alarm',
+  Alarm = 'ALARM',
   /**
    * The audio stream for music and media playback.
    *
    * @since 0.1.0
    */
-  Music = 'music',
+  Music = 'MUSIC',
   /**
    * The audio stream for notifications.
    *
    * @since 0.1.0
    */
-  Notification = 'notification',
+  Notification = 'NOTIFICATION',
   /**
    * The audio stream for the phone ring.
    *
    * @since 0.1.0
    */
-  Ring = 'ring',
+  Ring = 'RING',
   /**
    * The audio stream for system sounds.
    *
    * @since 0.1.0
    */
-  System = 'system',
+  System = 'SYSTEM',
   /**
    * The audio stream for phone calls.
    *
    * @since 0.1.0
    */
-  VoiceCall = 'voiceCall',
+  VoiceCall = 'VOICE_CALL',
 }
 
 /**

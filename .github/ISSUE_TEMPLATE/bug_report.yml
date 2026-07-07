@@ -11,7 +11,9 @@ body:
       options:
         - label: Accelerometer
         - label: Accessibility Preferences
+        - label: Action Sheet
         - label: Age Signals
+        - label: Alarm
         - label: Android Battery Optimization
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
@@ -20,6 +22,7 @@ body:
         - label: App Icon
         - label: App Integrity
         - label: App Language
+        - label: App Launcher
         - label: App Review
         - label: App Shortcuts
         - label: App Tracking Transparency
@@ -35,10 +38,13 @@ body:
         - label: Battery
         - label: Biometrics
         - label: Bluetooth Low Energy
+        - label: Clipboard
         - label: Cloudinary
         - label: Compass
         - label: Contacts
         - label: Datetime Picker
+        - label: Device Info
+        - label: Dialog
         - label: Facebook Sign-In
         - label: File Compressor
         - label: File Opener
@@ -48,6 +54,7 @@ body:
         - label: Google Sign-In
         - label: Grafana Faro
         - label: Gyroscope
+        - label: Haptics
         - label: In-App Browser
         - label: Install Referrer
         - label: Keep Awake
@@ -59,12 +66,16 @@ body:
         - label: Maps Launcher
         - label: Media Session
         - label: Navigation Bar
+        - label: Network
         - label: NFC
         - label: Node.js
         - label: OAuth
         - label: Passkeys
         - label: Password Autofill
+        - label: PDF Generator
+        - label: PDF Viewer
         - label: Pedometer
+        - label: Phone Dialer
         - label: Photo Editor
         - label: PixLive
         - label: Posthog
@@ -74,9 +85,11 @@ body:
         - label: RealtimeKit
         - label: Root Detection
         - label: Screen Brightness
+        - label: Screen Reader
         - label: Secure Preferences
         - label: Screen Orientation
         - label: Screenshot
+        - label: Settings Launcher
         - label: Shake
         - label: Silent Mode
         - label: SIM
@@ -87,7 +100,9 @@ body:
         - label: Square Mobile Payments
         - label: SQLite
         - label: Superwall
+        - label: Text Zoom
         - label: Thermal State
+        - label: Toast
         - label: Torch
         - label: Vault
         - label: Volume

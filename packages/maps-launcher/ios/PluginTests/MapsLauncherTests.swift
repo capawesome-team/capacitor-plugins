@@ -7,8 +7,8 @@ class MapsLauncherTests: XCTestCase {
         // This is an example of a functional test case for a plugin.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
 
-        let result = GetAvailableAppsResult(apps: ["appleMaps"])
+        let result = GetAvailableAppsResult(apps: ["APPLE_MAPS"])
 
-        XCTAssertEqual(["appleMaps"], result.apps)
+        XCTAssertEqual(["APPLE_MAPS"], result.apps)
     }
 }

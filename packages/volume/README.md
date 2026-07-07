@@ -373,12 +373,12 @@ The direction of a hardware volume button.
 
 | Members            | Value                       | Description                                    | Since |
 | ------------------ | --------------------------- | ---------------------------------------------- | ----- |
-| **`Alarm`**        | <code>'alarm'</code>        | The audio stream for alarms.                   | 0.1.0 |
-| **`Music`**        | <code>'music'</code>        | The audio stream for music and media playback. | 0.1.0 |
-| **`Notification`** | <code>'notification'</code> | The audio stream for notifications.            | 0.1.0 |
-| **`Ring`**         | <code>'ring'</code>         | The audio stream for the phone ring.           | 0.1.0 |
-| **`System`**       | <code>'system'</code>       | The audio stream for system sounds.            | 0.1.0 |
-| **`VoiceCall`**    | <code>'voiceCall'</code>    | The audio stream for phone calls.              | 0.1.0 |
+| **`Alarm`**        | <code>'ALARM'</code>        | The audio stream for alarms.                   | 0.1.0 |
+| **`Music`**        | <code>'MUSIC'</code>        | The audio stream for music and media playback. | 0.1.0 |
+| **`Notification`** | <code>'NOTIFICATION'</code> | The audio stream for notifications.            | 0.1.0 |
+| **`Ring`**         | <code>'RING'</code>         | The audio stream for the phone ring.           | 0.1.0 |
+| **`System`**       | <code>'SYSTEM'</code>       | The audio stream for system sounds.            | 0.1.0 |
+| **`VoiceCall`**    | <code>'VOICE_CALL'</code>   | The audio stream for phone calls.              | 0.1.0 |
 
 </docgen-api>
 

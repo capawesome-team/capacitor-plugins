@@ -156,19 +156,19 @@ export enum NavigationApp {
    *
    * @since 0.1.0
    */
-  AppleMaps = 'appleMaps',
+  AppleMaps = 'APPLE_MAPS',
   /**
    * Google Maps.
    *
    * @since 0.1.0
    */
-  GoogleMaps = 'googleMaps',
+  GoogleMaps = 'GOOGLE_MAPS',
   /**
    * Waze.
    *
    * @since 0.1.0
    */
-  Waze = 'waze',
+  Waze = 'WAZE',
 }
 
 /**
