@@ -10,26 +10,36 @@ body:
       description: Select the plugins that this bug affects.
       options:
         - label: Accelerometer
+        - label: Accessibility Preferences
         - label: Age Signals
         - label: Android Battery Optimization
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
         - label: Android Foreground Service
+        - label: Android SMS Retriever
+        - label: App Icon
+        - label: App Integrity
+        - label: App Language
         - label: App Review
         - label: App Shortcuts
+        - label: App Tracking Transparency
         - label: App Update
         - label: Apple Sign-In
         - label: Asset Manager
         - label: Audio Player
         - label: Audio Recorder
+        - label: Audio Session
         - label: Background Task
         - label: Badge
         - label: Barometer
+        - label: Battery
         - label: Biometrics
         - label: Bluetooth Low Energy
         - label: Cloudinary
+        - label: Compass
         - label: Contacts
         - label: Datetime Picker
+        - label: Facebook Sign-In
         - label: File Compressor
         - label: File Opener
         - label: File Picker
@@ -37,32 +47,51 @@ body:
         - label: Geocoder
         - label: Google Sign-In
         - label: Grafana Faro
+        - label: Gyroscope
+        - label: In-App Browser
+        - label: Install Referrer
+        - label: Keep Awake
         - label: libSQL
         - label: Live Update
+        - label: Localization
+        - label: Mail Composer
         - label: Managed Configurations
+        - label: Maps Launcher
         - label: Media Session
         - label: Navigation Bar
         - label: NFC
         - label: Node.js
         - label: OAuth
+        - label: Passkeys
+        - label: Password Autofill
         - label: Pedometer
         - label: Photo Editor
         - label: PixLive
         - label: Posthog
+        - label: Privacy Screen
         - label: Purchases
         - label: Printer
         - label: RealtimeKit
+        - label: Root Detection
+        - label: Screen Brightness
         - label: Secure Preferences
         - label: Screen Orientation
         - label: Screenshot
+        - label: Shake
+        - label: Silent Mode
+        - label: SIM
+        - label: SMS Composer
         - label: Speech Recognition
         - label: Speech Synthesis
         - label: Share Target
         - label: Square Mobile Payments
         - label: SQLite
         - label: Superwall
+        - label: Thermal State
         - label: Torch
         - label: Vault
+        - label: Volume
+        - label: Wallet
         - label: Wifi
         - label: Zip
   - type: input

@@ -97,9 +97,9 @@ const getAdvertisingIdentifier = async () => {
 
 <docgen-index>
 
+* [`getAdvertisingIdentifier()`](#getadvertisingidentifier)
 * [`getStatus()`](#getstatus)
 * [`requestPermission()`](#requestpermission)
-* [`getAdvertisingIdentifier()`](#getadvertisingidentifier)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -107,6 +107,29 @@ const getAdvertisingIdentifier = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### getAdvertisingIdentifier()
+
+```typescript
+getAdvertisingIdentifier() => Promise<GetAdvertisingIdentifierResult>
+```
+
+Get the advertising identifier (IDFA) of the device.
+
+The advertising identifier is only available if the tracking authorization
+status is `authorized`. Otherwise, `null` is returned.
+
+**Note**: The iOS Simulator always returns `null`, even if the tracking
+authorization status is `authorized`. Use a real device to test this method.
+
+Only available on iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getadvertisingidentifierresult">GetAdvertisingIdentifierResult</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
 
 ### getStatus()
 
@@ -148,30 +171,14 @@ Only available on iOS.
 --------------------
 
 
-### getAdvertisingIdentifier()
-
-```typescript
-getAdvertisingIdentifier() => Promise<GetAdvertisingIdentifierResult>
-```
-
-Get the advertising identifier (IDFA) of the device.
-
-The advertising identifier is only available if the tracking authorization
-status is `authorized`. Otherwise, `null` is returned.
-
-**Note**: The iOS Simulator always returns `null`, even if the tracking
-authorization status is `authorized`. Use a real device to test this method.
-
-Only available on iOS.
-
-**Returns:** <code>Promise&lt;<a href="#getadvertisingidentifierresult">GetAdvertisingIdentifierResult</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
-
 ### Interfaces
+
+
+#### GetAdvertisingIdentifierResult
+
+| Prop                        | Type                        | Description                                                                                                                                                                                                           | Since |
+| --------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`advertisingIdentifier`** | <code>string \| null</code> | The advertising identifier (IDFA) of the device. Returns `null` if the tracking authorization status is not `authorized` or if no advertising identifier is available, which is always the case on the iOS Simulator. | 0.1.0 |
 
 
 #### GetStatusResult
@@ -186,13 +193,6 @@ Only available on iOS.
 | Prop         | Type                                                      | Description                                          | Since |
 | ------------ | --------------------------------------------------------- | ---------------------------------------------------- | ----- |
 | **`status`** | <code><a href="#trackingstatus">TrackingStatus</a></code> | The tracking authorization status after the request. | 0.1.0 |
-
-
-#### GetAdvertisingIdentifierResult
-
-| Prop                        | Type                        | Description                                                                                                                                                                                                           | Since |
-| --------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`advertisingIdentifier`** | <code>string \| null</code> | The advertising identifier (IDFA) of the device. Returns `null` if the tracking authorization status is not `authorized` or if no advertising identifier is available, which is always the case on the iOS Simulator. | 0.1.0 |
 
 
 ### Type Aliases

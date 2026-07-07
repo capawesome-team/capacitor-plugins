@@ -1,0 +1,206 @@
+# @capawesome/capacitor-android-sms-retriever
+
+Capacitor plugin for OTP autofill on Android via the SMS User Consent and Phone Number Hint APIs.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+- 💬 **SMS User Consent**: Read an incoming verification SMS after a one-tap system consent dialog.
+- 📞 **Phone Number Hint**: Prefill the user's phone number via the system bottom sheet.
+- 🔒 **No SMS permissions**: Uses Play-policy-safe APIs that require no SMS permissions.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.x.x          | >=8.x.x           | Active support |
+
+## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills --skill capacitor-plugins
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-android-sms-retriever` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
+```bash
+npm install @capawesome/capacitor-android-sms-retriever
+npx cap sync
+```
+
+This plugin is only available on **Android**. On iOS and Web, all methods reject as unimplemented (see [iOS](#ios) below).
+
+### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app's `variables.gradle` file):
+
+- `$playServicesAuthVersion` version of `com.google.android.gms:play-services-auth` (default: `21.5.0`)
+- `$playServicesAuthApiPhoneVersion` version of `com.google.android.gms:play-services-auth-api-phone` (default: `18.3.0`)
+
+### iOS
+
+This plugin has **no iOS implementation** and you don't need one. iOS already autofills one-time codes from incoming SMS messages in `WKWebView` when the input field uses `autocomplete="one-time-code"`:
+
+```html
+<input autocomplete="one-time-code" />
+```
+
+All methods reject as unimplemented on iOS.
+
+## Configuration
+
+No configuration required for this plugin.
+
+## Usage
+
+```typescript
+import { AndroidSmsRetriever } from '@capawesome/capacitor-android-sms-retriever';
+
+const requestPhoneNumber = async () => {
+  const { phoneNumber } = await AndroidSmsRetriever.requestPhoneNumber();
+  return phoneNumber;
+};
+
+const retrieveSms = async () => {
+  const { message } = await AndroidSmsRetriever.retrieveSms();
+  // Extract the one-time code from the message.
+  const code = message.match(/\d{6}/)?.[0];
+  return code;
+};
+```
+
+## API
+
+<docgen-index>
+
+* [`requestPhoneNumber()`](#requestphonenumber)
+* [`retrieveSms(...)`](#retrievesms)
+* [Interfaces](#interfaces)
+
+</docgen-index>
+
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### requestPhoneNumber()
+
+```typescript
+requestPhoneNumber() => Promise<RequestPhoneNumberResult>
+```
+
+Request the user's phone number via the Phone Number Hint API.
+
+A system bottom sheet is displayed that lets the user pick one of the
+phone numbers associated with the device. The selected phone number is
+returned so it can be used to prefill a phone number input field.
+
+Only available on Android.
+
+**Returns:** <code>Promise&lt;<a href="#requestphonenumberresult">RequestPhoneNumberResult</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### retrieveSms(...)
+
+```typescript
+retrieveSms(options?: RetrieveSmsOptions | undefined) => Promise<RetrieveSmsResult>
+```
+
+Retrieve an incoming verification SMS via the SMS User Consent API.
+
+A system consent dialog is displayed when a matching SMS is received.
+The promise resolves with the full message text once the user consents,
+so the app can extract the one-time code itself.
+
+The underlying broadcast waits up to 5 minutes for a matching SMS. If no
+SMS is received within this time, the promise rejects with the error
+code `TIMEOUT`.
+
+Only available on Android.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#retrievesmsoptions">RetrieveSmsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#retrievesmsresult">RetrieveSmsResult</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### Interfaces
+
+
+#### RequestPhoneNumberResult
+
+| Prop              | Type                | Description                            | Since |
+| ----------------- | ------------------- | -------------------------------------- | ----- |
+| **`phoneNumber`** | <code>string</code> | The phone number selected by the user. | 0.1.0 |
+
+
+#### RetrieveSmsResult
+
+| Prop          | Type                | Description                                                                                                           | Since |
+| ------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`message`** | <code>string</code> | The full text of the retrieved SMS message. The app is responsible for extracting the one-time code from the message. | 0.1.0 |
+
+
+#### RetrieveSmsOptions
+
+| Prop                    | Type                | Description                                                                                                           | Since |
+| ----------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`senderPhoneNumber`** | <code>string</code> | The phone number of the sender to filter incoming messages by. If not provided, the SMS from any sender is retrieved. | 0.1.0 |
+
+</docgen-api>
+
+## Extracting the One-Time Code
+
+The `retrieveSms(...)` method resolves with the full text of the incoming SMS message. Your app is responsible for extracting the one-time code from the message, for example with a regular expression:
+
+```typescript
+const { message } = await AndroidSmsRetriever.retrieveSms();
+const code = message.match(/\d{6}/)?.[0];
+```
+
+For the SMS User Consent API to detect a message, the SMS must:
+
+- contain a one-time code that the user sends back to your server to complete the verification,
+- be no longer than 140 bytes,
+- not originate from a phone number in the user's contacts.
+
+The underlying broadcast waits up to 5 minutes for a matching SMS. If no message is received within this time, the promise rejects with the error code `TIMEOUT`.
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-sms-retriever/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/android-sms-retriever/LICENSE).

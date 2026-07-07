@@ -1,5 +1,19 @@
 export interface AppTrackingTransparencyPlugin {
   /**
+   * Get the advertising identifier (IDFA) of the device.
+   *
+   * The advertising identifier is only available if the tracking authorization
+   * status is `authorized`. Otherwise, `null` is returned.
+   *
+   * **Note**: The iOS Simulator always returns `null`, even if the tracking
+   * authorization status is `authorized`. Use a real device to test this method.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.0
+   */
+  getAdvertisingIdentifier(): Promise<GetAdvertisingIdentifierResult>;
+  /**
    * Get the current tracking authorization status.
    *
    * Only available on iOS.
@@ -21,20 +35,6 @@ export interface AppTrackingTransparencyPlugin {
    * @since 0.1.0
    */
   requestPermission(): Promise<RequestPermissionResult>;
-  /**
-   * Get the advertising identifier (IDFA) of the device.
-   *
-   * The advertising identifier is only available if the tracking authorization
-   * status is `authorized`. Otherwise, `null` is returned.
-   *
-   * **Note**: The iOS Simulator always returns `null`, even if the tracking
-   * authorization status is `authorized`. Use a real device to test this method.
-   *
-   * Only available on iOS.
-   *
-   * @since 0.1.0
-   */
-  getAdvertisingIdentifier(): Promise<GetAdvertisingIdentifierResult>;
 }
 
 /**
