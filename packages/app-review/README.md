@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-review
+# Capacitor App Review Plugin
 
 Capacitor plugin that allows users to submit app store reviews and ratings.
 

@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-geocoder
+# Capacitor Geocoder Plugin
 
 Capacitor plugin for handling geocoding and reverse geocoding.
 

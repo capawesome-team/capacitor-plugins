@@ -1,4 +1,4 @@
-# @capawesome/capacitor-in-app-browser
+# Capacitor In-App Browser Plugin
 
 Capacitor plugin to open URLs in the external browser, the system browser or an embedded web view.
 

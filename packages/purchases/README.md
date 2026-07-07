@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-purchases
+# Capacitor Purchases Plugin
 
 Capacitor plugin to support in-app purchases.
 

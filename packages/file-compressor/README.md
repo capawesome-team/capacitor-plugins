@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-file-compressor
+# Capacitor File Compressor Plugin
 
 Capacitor plugin for efficient file compression with support for image formats like PNG, JPEG, and WebP.
 

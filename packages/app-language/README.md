@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-language
+# Capacitor App Language Plugin
 
 Capacitor plugin to manage the app's own language override, independent of the device language.
 

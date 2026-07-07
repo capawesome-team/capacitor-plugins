@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-contacts
+# Capacitor Contacts Plugin
 
 Capacitor plugin to read, write, or select device contacts. Supports Android, iOS and Web with advanced features like contact groups, pagination, and native modals.
 

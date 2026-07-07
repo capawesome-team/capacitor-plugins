@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-sqlite
+# Capacitor SQLite Plugin
 
 Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.[^1][^2][^3]
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-volume
+# Capacitor Volume Plugin
 
 Capacitor plugin to control the volume and observe hardware volume button presses.
 

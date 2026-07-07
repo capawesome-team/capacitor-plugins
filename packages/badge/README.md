@@ -1,4 +1,4 @@
-# @capawesome/capacitor-badge
+# Capacitor Badge Plugin
 
 Capacitor plugin to access and update the badge number of the app icon.
 

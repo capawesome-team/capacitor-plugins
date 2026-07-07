@@ -1,4 +1,4 @@
-# @capawesome/capacitor-silent-mode
+# Capacitor Silent Mode Plugin
 
 Capacitor plugin to detect whether the device is in silent mode.
 

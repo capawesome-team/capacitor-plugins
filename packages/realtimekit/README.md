@@ -1,4 +1,4 @@
-# @capawesome/capacitor-realtimekit
+# Capacitor RealtimeKit Plugin
 
 Unofficial Capacitor plugin for using the [RealtimeKit SDK](https://docs.realtime.cloudflare.com/).[^1]
 

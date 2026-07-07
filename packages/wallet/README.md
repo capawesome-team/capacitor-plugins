@@ -1,4 +1,4 @@
-# @capawesome/capacitor-wallet
+# Capacitor Wallet Plugin
 
 Capacitor plugin for adding passes to [Apple Wallet](https://developer.apple.com/documentation/passkit) and [Google Wallet](https://developers.google.com/wallet).
 

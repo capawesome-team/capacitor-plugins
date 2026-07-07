@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-accelerometer
+# Capacitor Accelerometer Plugin
 
 Capacitor plugin to capture the acceleration force along the x, y, and z axes.
 

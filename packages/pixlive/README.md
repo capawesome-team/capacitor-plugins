@@ -1,4 +1,4 @@
-# @capawesome/capacitor-pixlive
+# Capacitor PixLive Plugin
 
 Unofficial Capacitor plugin for [PixLive SDK](https://www.vidinoti.com/) by Vidinoti.
 

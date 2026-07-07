@@ -1,4 +1,4 @@
-# @capawesome/capacitor-age-signals
+# Capacitor Age Signals Plugin
 
 Capacitor plugin to use the [Play Age Signals API](https://developer.android.com/google/play/age-signals/overview) (Android) and [DeclaredAgeRange](https://developer.apple.com/documentation/declaredagerange/) (iOS) to request age signals about the user.
 

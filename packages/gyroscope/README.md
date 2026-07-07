@@ -1,4 +1,4 @@
-# @capawesome/capacitor-gyroscope
+# Capacitor Gyroscope Plugin
 
 Capacitor plugin to read the device's gyroscope sensor.
 

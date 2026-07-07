@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-audio-player
+# Capacitor Audio Player Plugin
 
 Capacitor plugin to play audio with background support.
 

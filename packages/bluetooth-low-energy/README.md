@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-bluetooth-low-energy
+# Capacitor Bluetooth Low Energy Plugin
 
 Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and peripheral role with advanced features like headless tasks, foreground services, and more.[^1][^2]
 

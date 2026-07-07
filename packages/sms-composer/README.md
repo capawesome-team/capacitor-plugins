@@ -1,4 +1,4 @@
-# @capawesome/capacitor-sms-composer
+# Capacitor SMS Composer Plugin
 
 Capacitor plugin to open the native SMS composer prefilled with recipients and a message body.
 

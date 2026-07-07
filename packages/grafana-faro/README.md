@@ -1,4 +1,4 @@
-# @capawesome/capacitor-grafana-faro
+# Capacitor Grafana Faro Plugin
 
 Unofficial Capacitor plugin for [Grafana Faro](https://grafana.com/oss/faro/).[^1]
 

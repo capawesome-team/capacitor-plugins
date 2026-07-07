@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-nfc
+# Capacitor NFC Plugin
 
 Capacitor plugin for NFC tag reading, writing, and emulation. Supports Android, iOS, and Web with advanced features like HCE and raw command handling.
 

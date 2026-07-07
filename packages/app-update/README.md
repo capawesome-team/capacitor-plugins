@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-update
+# Capacitor App Update Plugin
 
 Capacitor plugin that assists with native app updates.
 It supports retrieving app update information on **Android** and **iOS** and supports [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) on **Android**.

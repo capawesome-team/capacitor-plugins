@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-audio-recorder
+# Capacitor Audio Recorder Plugin
 
 Capacitor plugin for seamless audio recording using the device's microphone. Supports Android, iOS, and Web with advanced features and high performance.
 

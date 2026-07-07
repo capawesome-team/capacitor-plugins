@@ -1,4 +1,4 @@
-# @capawesome/capacitor-facebook-sign-in
+# Capacitor Facebook Sign-In Plugin
 
 Unofficial Capacitor plugin to sign-in with Facebook.[^1]
 

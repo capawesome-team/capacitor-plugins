@@ -1,4 +1,4 @@
-# @capawesome/capacitor-formbricks
+# Capacitor Formbricks Plugin
 
 Unofficial Capacitor plugin for [Formbricks](https://formbricks.com/).[^1]
 

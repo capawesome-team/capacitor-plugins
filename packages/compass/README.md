@@ -1,4 +1,4 @@
-# @capawesome/capacitor-compass
+# Capacitor Compass Plugin
 
 Capacitor plugin for reading the device compass heading.
 

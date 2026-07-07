@@ -1,4 +1,4 @@
-# @capawesome/capacitor-nodejs
+# Capacitor Node.js Plugin
 
 Capacitor plugin for running [Node.js](https://nodejs.org/) in mobile apps.[^1][^2]
 

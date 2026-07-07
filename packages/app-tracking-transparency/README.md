@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-tracking-transparency
+# Capacitor App Tracking Transparency Plugin
 
 Capacitor plugin for the [App Tracking Transparency](https://developer.apple.com/documentation/apptrackingtransparency) framework.
 

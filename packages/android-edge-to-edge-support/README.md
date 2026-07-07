@@ -1,4 +1,4 @@
-# @capawesome/capacitor-android-edge-to-edge-support
+# Capacitor Android Edge-to-Edge Support Plugin
 
 Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) display on Android with advanced features like setting the background color of the status bar and navigation bar.
 

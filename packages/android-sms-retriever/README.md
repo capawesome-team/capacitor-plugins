@@ -1,4 +1,4 @@
-# @capawesome/capacitor-android-sms-retriever
+# Capacitor Android SMS Retriever Plugin
 
 Capacitor plugin for OTP autofill on Android via the SMS User Consent and Phone Number Hint APIs.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-libsql
+# Capacitor libSQL Plugin
 
 Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
 

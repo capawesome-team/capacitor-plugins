@@ -1,4 +1,4 @@
-# @capawesome/capacitor-screen-brightness
+# Capacitor Screen Brightness Plugin
 
 Capacitor plugin for reading and controlling the screen brightness.
 

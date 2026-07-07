@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-vault
+# Capacitor Vault Plugin
 
 Capacitor plugin to securely store key/value pairs in lockable, biometric-protected vaults.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-mail-composer
+# Capacitor Mail Composer Plugin
 
 Capacitor plugin to open the native email composer.
 

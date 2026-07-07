@@ -1,4 +1,4 @@
-# @capawesome/capacitor-posthog
+# Capacitor PostHog Plugin
 
 Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 

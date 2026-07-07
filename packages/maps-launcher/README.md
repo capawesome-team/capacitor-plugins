@@ -1,4 +1,4 @@
-# @capawesome/capacitor-maps-launcher
+# Capacitor Maps Launcher Plugin
 
 Capacitor plugin to launch navigation apps with turn-by-turn directions.
 

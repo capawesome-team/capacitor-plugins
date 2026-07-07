@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-icon
+# Capacitor App Icon Plugin
 
 Capacitor plugin to change the app icon at runtime.
 

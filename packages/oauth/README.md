@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-oauth
+# Capacitor OAuth Plugin
 
 Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.[^1][^2]
 

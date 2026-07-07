@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-android-foreground-service
+# Capacitor Android Foreground Service Plugin
 
 Capacitor plugin to run a foreground service on Android.
 

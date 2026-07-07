@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-shortcuts
+# Capacitor App Shortcuts Plugin
 
 Capacitor plugin to manage app shortcuts and quick actions.
 
