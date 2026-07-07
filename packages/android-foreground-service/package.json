@@ -30,7 +30,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/android-foreground-service/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/android-foreground-service/",
   "keywords": [
     "capacitor",
     "plugin",

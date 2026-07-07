@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
-  "homepage": "https://capawesome.io/docs/plugins/nodejs/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/nodejs/",
   "funding": [
     {
       "type": "github",

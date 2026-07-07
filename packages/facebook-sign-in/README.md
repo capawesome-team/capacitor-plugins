@@ -20,7 +20,7 @@ We are proud to offer a comprehensive Capacitor plugin for Facebook Sign-In. Her
 - 🛡️ **Nonce Support**: Prevent replay attacks with a custom nonce on iOS.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
-- 🤝 **Compatibility**: Works alongside the [Apple Sign-In](https://capawesome.io/plugins/apple-sign-in/) and [Google Sign-In](https://capawesome.io/plugins/google-sign-in/) plugins.
+- 🤝 **Compatibility**: Works alongside the [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/) and [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

@@ -17,7 +17,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🌐 **WebAuthn standard**: Uses the WebAuthn JSON serialization so any WebAuthn server library works unchanged.
 - 📱 **Availability check**: Check if passkeys are available on the device.
 - 🖥️ **Web support**: Full web support via the native WebAuthn browser API.
-- 🔗 **Compatibility**: Works alongside the [Biometrics](https://capawesome.io/plugins/biometrics/) and [OAuth](https://capawesome.io/plugins/oauth/) plugins.
+- 🤝 **Compatibility**: Works alongside the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/) and [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

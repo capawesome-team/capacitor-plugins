@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/in-app-browser/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/in-app-browser/",
   "keywords": [
     "capacitor",
     "plugin",

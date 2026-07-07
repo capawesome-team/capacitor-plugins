@@ -18,7 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔒 **Permission handling**: Built-in permission management for sensor access.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🔗 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/plugins/accelerometer/), [Barometer](https://capawesome.io/plugins/barometer/) and [Pedometer](https://capawesome.io/plugins/pedometer/) plugins.
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 

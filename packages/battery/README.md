@@ -18,7 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 👂 **Change events**: Listen for changes to the battery level, state and low power mode.
 - 🌐 **Web support**: Read the battery level and state on supported browsers.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
-- 🔗 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/plugins/android-battery-optimization/) plugin.
+- 🤝 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/) plugin.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!

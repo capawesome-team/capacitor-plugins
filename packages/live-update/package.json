@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
-  "homepage": "https://capawesome.io/docs/plugins/live-update/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/live-update/",
   "funding": [
     {
       "type": "github",

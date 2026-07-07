@@ -13,7 +13,7 @@ Capacitor plugin to verify app and device integrity using the Play Integrity API
 - 🤖 **Play Integrity**: Request standard and classic integrity tokens from the Play Integrity API on Android.
 - 🍏 **App Attest**: Generate hardware-backed keys, attest them and generate assertions with App Attest on iOS.
 - 🛡️ **Server-verifiable**: Tokens and assertions are verified on your backend via Google and Apple, so they cannot be spoofed on the device.
-- 🔗 **Compatibility**: Works alongside the [Root Detection](https://capawesome.io/plugins/root-detection/) plugin for additional client-side checks.
+- 🤝 **Compatibility**: Works alongside the [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/) plugin for additional client-side checks.
 - 📦 **SPM**: Supports Swift Package Manager and CocoaPods for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

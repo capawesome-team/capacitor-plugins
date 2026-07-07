@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/audio-session/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/audio-session/",
   "keywords": [
     "capacitor",
     "plugin",

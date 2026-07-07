@@ -18,7 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📧 **Scope support**: Request email and full name on all platforms.
 - 🔐 **Nonce & state**: Supports nonce for replay protection and state for CSRF protection.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
-- 🤝 **Compatibility**: Compatible with the [Google Sign-In](https://capawesome.io/docs/plugins/google-sign-in/) and [OAuth](https://capawesome.io/docs/plugins/oauth/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/) and [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

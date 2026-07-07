@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/cloudinary/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/cloudinary/",
   "keywords": [
     "capacitor",
     "plugin",
