@@ -41,9 +41,9 @@ export class GyroscopeWeb extends WebPlugin implements GyroscopePlugin {
   }
 
   async isAvailable(): Promise<IsAvailableResult> {
-    let isAvailable = false;
+    let available = false;
     if (!this._isAvailable) {
-      return { isAvailable };
+      return { available };
     }
     // According to an article on Chrome Developers (https://developer.chrome.com/docs/capabilities/web-apis/generic-sensor#feature-detection)
     // we also need to connect to the sensor for an actual meaningful feature detection
@@ -52,12 +52,12 @@ export class GyroscopeWeb extends WebPlugin implements GyroscopePlugin {
       await new Promise<void>(resolve => {
         gyroscope.onerror = (event: any) => {
           console.error(event);
-          isAvailable = false;
+          available = false;
           gyroscope.stop();
           resolve();
         };
         gyroscope.onreading = () => {
-          isAvailable = true;
+          available = true;
           gyroscope.stop();
           resolve();
         };
@@ -65,9 +65,9 @@ export class GyroscopeWeb extends WebPlugin implements GyroscopePlugin {
       });
     } catch (error: any) {
       console.error(error);
-      isAvailable = false;
+      available = false;
     }
-    return { isAvailable };
+    return { available };
   }
 
   async removeAllListeners(): Promise<void> {

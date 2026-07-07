@@ -45,7 +45,7 @@ import CoreMotion
     }
 
     @objc func isAvailable(completion: @escaping (IsAvailableResult?, Error?) -> Void) {
-        completion(IsAvailableResult(isAvailable: motionManager.isGyroAvailable), nil)
+        completion(IsAvailableResult(available: motionManager.isGyroAvailable), nil)
     }
 
     @objc public func startMeasurementUpdates(completion: @escaping (Error?) -> Void) {

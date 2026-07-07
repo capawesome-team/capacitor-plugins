@@ -7,9 +7,9 @@ class GyroscopeTests: XCTestCase {
         // This is an example of a functional test case for a plugin.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
 
-        let result = IsAvailableResult(isAvailable: true)
+        let result = IsAvailableResult(available: true)
         let jsObject = result.toJSObject() as? [String: Any]
 
-        XCTAssertEqual(true, jsObject?["isAvailable"] as? Bool)
+        XCTAssertEqual(true, jsObject?["available"] as? Bool)
     }
 }

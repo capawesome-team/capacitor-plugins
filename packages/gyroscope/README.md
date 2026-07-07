@@ -93,7 +93,7 @@ const getMeasurement = async () => {
 
 const isAvailable = async () => {
   const result = await Gyroscope.isAvailable();
-  return result.isAvailable;
+  return result.available;
 };
 
 const startMeasurementUpdates = async () => {
@@ -295,9 +295,9 @@ Stop emitting `measurement` events.
 
 #### IsAvailableResult
 
-| Prop              | Type                 | Description                                              | Since |
-| ----------------- | -------------------- | -------------------------------------------------------- | ----- |
-| **`isAvailable`** | <code>boolean</code> | Whether the gyroscope sensor is available on the device. | 0.1.0 |
+| Prop            | Type                 | Description                                              | Since |
+| --------------- | -------------------- | -------------------------------------------------------- | ----- |
+| **`available`** | <code>boolean</code> | Whether the gyroscope sensor is available on the device. | 0.1.0 |
 
 
 ### Type Aliases

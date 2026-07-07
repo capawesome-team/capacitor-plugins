@@ -18,6 +18,7 @@ body:
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
         - label: Android Foreground Service
+        - label: Android Intent Launcher
         - label: Android SMS Retriever
         - label: App Icon
         - label: App Integrity
@@ -45,6 +46,7 @@ body:
         - label: Datetime Picker
         - label: Device Info
         - label: Dialog
+        - label: Exif
         - label: Facebook Sign-In
         - label: File Compressor
         - label: File Opener
@@ -55,10 +57,12 @@ body:
         - label: Grafana Faro
         - label: Gyroscope
         - label: Haptics
+        - label: Home Indicator
         - label: In-App Browser
         - label: Install Referrer
         - label: Keep Awake
         - label: libSQL
+        - label: Light Sensor
         - label: Live Update
         - label: Localization
         - label: Mail Composer
@@ -75,11 +79,14 @@ body:
         - label: PDF Generator
         - label: PDF Viewer
         - label: Pedometer
+        - label: Permissions
         - label: Phone Dialer
         - label: Photo Editor
+        - label: Photo Manipulator
         - label: PixLive
         - label: Posthog
         - label: Privacy Screen
+        - label: Proximity Sensor
         - label: Purchases
         - label: Printer
         - label: RealtimeKit
@@ -100,6 +107,8 @@ body:
         - label: Square Mobile Payments
         - label: SQLite
         - label: Superwall
+        - label: System WebView
+        - label: Text Interaction
         - label: Text Zoom
         - label: Thermal State
         - label: Toast
