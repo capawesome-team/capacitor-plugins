@@ -159,14 +159,17 @@ const addListeners = async () => {
   await InAppBrowser.addListener('browserClosed', () => {
     console.log('Browser closed');
   });
+  await InAppBrowser.addListener('browserMessageReceived', event => {
+    console.log('Message received', event.data);
+  });
+  await InAppBrowser.addListener('browserNavigationCompleted', event => {
+    console.log('Navigation completed', event.url);
+  });
   await InAppBrowser.addListener('browserPageLoaded', () => {
     console.log('Browser page loaded');
   });
-  await InAppBrowser.addListener('browserPageNavigationCompleted', event => {
-    console.log('Navigation completed', event.url);
-  });
-  await InAppBrowser.addListener('messageReceived', event => {
-    console.log('Message received', event.data);
+  await InAppBrowser.addListener('browserUrlChanged', event => {
+    console.log('URL changed', event.url);
   });
 };
 ```
@@ -718,7 +721,7 @@ The web page can post a message to the app using the injected `window.CapacitorI
 window.CapacitorInAppBrowser.postMessage({ name: 'Capawesome' });
 ```
 
-The app receives the message via the `messageReceived` event.
+The app receives the message via the `browserMessageReceived` event.
 
 ### From the app to the web page
 
@@ -734,7 +737,7 @@ window.addEventListener('capacitorInAppBrowserMessage', event => {
 
 The three browser modes behave differently on each platform. Keep the following differences in mind:
 
-- **System browser**: Tracking the visited URLs is not possible by design. If you need the `browserPageNavigationCompleted` event, use the `openInWebView(...)` method instead. On Android, the `browserPageLoaded` event is not emitted for the system browser and the `browserClosed` event is emitted when the user returns to the app.
+- **System browser**: Tracking the visited URLs is not possible by design. If you need the `browserNavigationCompleted` or `browserUrlChanged` event, use the `openInWebView(...)` method instead. On Android, the `browserPageLoaded` event is not emitted for the system browser and the `browserClosed` event is emitted when the user returns to the app.
 - **Embedded web view**: The web view always uses the app-global (`shared`) data store on Android. The `dataStore` option is only supported on iOS. On iOS, hiding the toolbar removes the close button, so the browser can then only be closed using the `close(...)` method.
 - **External browser**: The browser is opened in a separate app. For this reason, no events are emitted and the `close(...)` method has no effect.
 
