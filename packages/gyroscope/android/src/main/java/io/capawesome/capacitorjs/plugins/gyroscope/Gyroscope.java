@@ -53,8 +53,8 @@ public class Gyroscope {
     public void isAvailable(@NonNull NonEmptyResultCallback<IsAvailableResult> callback) {
         SensorManager sensorManager = (SensorManager) plugin.getContext().getSystemService(Context.SENSOR_SERVICE);
         Sensor gyroscopeSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        boolean isAvailable = gyroscopeSensor != null;
-        callback.success(new IsAvailableResult(isAvailable));
+        boolean available = gyroscopeSensor != null;
+        callback.success(new IsAvailableResult(available));
     }
 
     public void startMeasurementUpdates(@NonNull EmptyCallback callback) {

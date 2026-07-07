@@ -74,7 +74,7 @@ export interface IsAvailableResult {
    *
    * @since 0.1.0
    */
-  isAvailable: boolean;
+  available: boolean;
 }
 
 /**

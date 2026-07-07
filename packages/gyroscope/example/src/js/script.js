@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('measurement:', measurement);
     });
   document.querySelector('#isAvailable').addEventListener('click', async () => {
-    const { isAvailable } = await Gyroscope.isAvailable();
-    console.log('isAvailable:', isAvailable);
+    const { available } = await Gyroscope.isAvailable();
+    console.log('available:', available);
   });
   document
     .querySelector('#startMeasurementUpdates')
