@@ -62,7 +62,7 @@ This plugin is only available on **Android** and **iOS**. On Web, all methods re
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$androidxCredentials` version of `androidx.credentials:credentials` and `androidx.credentials:credentials-play-services-auth` (default: `1.5.0`)
+- `$androidxCredentialsVersion` version of `androidx.credentials:credentials` and `androidx.credentials:credentials-play-services-auth` (default: `1.5.0`)
 
 No further setup is required. On Android, saving a credential presents the system "Save password?" prompt provided by the active credential provider (e.g. Google Password Manager).
 
