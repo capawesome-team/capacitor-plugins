@@ -135,11 +135,14 @@ import WebKit
                 webViewController.onMessageReceived = { [weak self] data in
                     self?.handleMessageReceived(data)
                 }
+                webViewController.onNavigationCompleted = { [weak self] url in
+                    self?.plugin.notifyBrowserNavigationCompletedListeners(BrowserNavigationCompletedEvent(url: url))
+                }
                 webViewController.onPageLoaded = { [weak self] in
                     self?.plugin.notifyBrowserPageLoadedListeners()
                 }
-                webViewController.onPageNavigationCompleted = { [weak self] url in
-                    self?.plugin.notifyBrowserPageNavigationCompletedListeners(BrowserPageNavigationCompletedEvent(url: url))
+                webViewController.onUrlChanged = { [weak self] url in
+                    self?.plugin.notifyBrowserUrlChangedListeners(BrowserUrlChangedEvent(url: url))
                 }
                 let navigationController = UINavigationController(rootViewController: webViewController)
                 navigationController.modalPresentationStyle = .fullScreen
@@ -227,6 +230,6 @@ import WebKit
         if let jsonData = data.data(using: .utf8), let parsedValue = try? JSONSerialization.jsonObject(with: jsonData, options: [.fragmentsAllowed]) {
             value = parsedValue
         }
-        plugin.notifyMessageReceivedListeners(MessageReceivedEvent(data: value))
+        plugin.notifyBrowserMessageReceivedListeners(BrowserMessageReceivedEvent(data: value))
     }
 }

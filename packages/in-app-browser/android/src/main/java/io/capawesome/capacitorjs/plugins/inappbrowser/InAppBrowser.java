@@ -11,8 +11,9 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.WebViewDialog;
-import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserPageNavigationCompletedEvent;
-import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.MessageReceivedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserMessageReceivedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserNavigationCompletedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserUrlChangedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ExecuteScriptOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.GetCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.OpenInExternalBrowserOptions;
@@ -200,13 +201,18 @@ public class InAppBrowser {
                         }
 
                         @Override
+                        public void onNavigationCompleted(@NonNull String url) {
+                            plugin.notifyBrowserNavigationCompletedListeners(new BrowserNavigationCompletedEvent(url));
+                        }
+
+                        @Override
                         public void onPageLoaded() {
                             plugin.notifyBrowserPageLoadedListeners();
                         }
 
                         @Override
-                        public void onPageNavigationCompleted(@NonNull String url) {
-                            plugin.notifyBrowserPageNavigationCompletedListeners(new BrowserPageNavigationCompletedEvent(url));
+                        public void onUrlChanged(@NonNull String url) {
+                            plugin.notifyBrowserUrlChangedListeners(new BrowserUrlChangedEvent(url));
                         }
                     }
                 );
@@ -251,6 +257,6 @@ public class InAppBrowser {
         } catch (JSONException exception) {
             value = data;
         }
-        plugin.notifyMessageReceivedListeners(new MessageReceivedEvent(value));
+        plugin.notifyBrowserMessageReceivedListeners(new BrowserMessageReceivedEvent(value));
     }
 }

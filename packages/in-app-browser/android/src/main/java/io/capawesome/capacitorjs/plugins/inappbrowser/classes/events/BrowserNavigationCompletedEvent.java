@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 import com.getcapacitor.JSObject;
 import io.capawesome.capacitorjs.plugins.inappbrowser.interfaces.Result;
 
-public class BrowserPageNavigationCompletedEvent implements Result {
+public class BrowserNavigationCompletedEvent implements Result {
 
     @NonNull
     private final String url;
 
-    public BrowserPageNavigationCompletedEvent(@NonNull String url) {
+    public BrowserNavigationCompletedEvent(@NonNull String url) {
         this.url = url;
     }
 

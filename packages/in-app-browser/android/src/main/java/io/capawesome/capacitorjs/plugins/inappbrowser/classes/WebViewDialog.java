@@ -38,8 +38,9 @@ public class WebViewDialog extends Dialog {
     public interface Listener {
         void onClosed(@NonNull WebViewDialog dialog);
         void onMessageReceived(@NonNull String data);
+        void onNavigationCompleted(@NonNull String url);
         void onPageLoaded();
-        void onPageNavigationCompleted(@NonNull String url);
+        void onUrlChanged(@NonNull String url);
     }
 
     private static final String BRIDGE_JAVASCRIPT =
@@ -54,6 +55,9 @@ public class WebViewDialog extends Dialog {
     private TextView forwardButton;
 
     private boolean initialLoadNotified = false;
+
+    @Nullable
+    private String lastNotifiedUrl;
 
     @NonNull
     private final Listener listener;
@@ -238,6 +242,7 @@ public class WebViewDialog extends Dialog {
                 @Override
                 public void onPageStarted(WebView view, String url, Bitmap favicon) {
                     injectBridgeJavaScript();
+                    handleUrlChanged(url);
                 }
 
                 @Override
@@ -250,7 +255,7 @@ public class WebViewDialog extends Dialog {
                         listener.onPageLoaded();
                     }
                     if (url != null) {
-                        listener.onPageNavigationCompleted(url);
+                        listener.onNavigationCompleted(url);
                     }
                 }
 
@@ -258,6 +263,7 @@ public class WebViewDialog extends Dialog {
                 public void doUpdateVisitedHistory(WebView view, String url, boolean isReload) {
                     updateNavigationButtons();
                     updateTitle();
+                    handleUrlChanged(url);
                 }
             }
         );
@@ -306,6 +312,14 @@ public class WebViewDialog extends Dialog {
         } else {
             request.grant(grantedResources.toArray(new String[0]));
         }
+    }
+
+    private void handleUrlChanged(@Nullable String url) {
+        if (url == null || url.equals(lastNotifiedUrl)) {
+            return;
+        }
+        lastNotifiedUrl = url;
+        listener.onUrlChanged(url);
     }
 
     private boolean hasPermission(@NonNull String permission) {

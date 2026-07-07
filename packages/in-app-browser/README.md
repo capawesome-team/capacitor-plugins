@@ -159,14 +159,17 @@ const addListeners = async () => {
   await InAppBrowser.addListener('browserClosed', () => {
     console.log('Browser closed');
   });
+  await InAppBrowser.addListener('browserMessageReceived', event => {
+    console.log('Message received', event.data);
+  });
+  await InAppBrowser.addListener('browserNavigationCompleted', event => {
+    console.log('Navigation completed', event.url);
+  });
   await InAppBrowser.addListener('browserPageLoaded', () => {
     console.log('Browser page loaded');
   });
-  await InAppBrowser.addListener('browserPageNavigationCompleted', event => {
-    console.log('Navigation completed', event.url);
-  });
-  await InAppBrowser.addListener('messageReceived', event => {
-    console.log('Message received', event.data);
+  await InAppBrowser.addListener('browserUrlChanged', event => {
+    console.log('URL changed', event.url);
   });
 };
 ```
@@ -186,9 +189,10 @@ const addListeners = async () => {
 * [`postMessage(...)`](#postmessage)
 * [`show()`](#show)
 * [`addListener('browserClosed', ...)`](#addlistenerbrowserclosed-)
+* [`addListener('browserMessageReceived', ...)`](#addlistenerbrowsermessagereceived-)
+* [`addListener('browserNavigationCompleted', ...)`](#addlistenerbrowsernavigationcompleted-)
 * [`addListener('browserPageLoaded', ...)`](#addlistenerbrowserpageloaded-)
-* [`addListener('browserPageNavigationCompleted', ...)`](#addlistenerbrowserpagenavigationcompleted-)
-* [`addListener('messageReceived', ...)`](#addlistenermessagereceived-)
+* [`addListener('browserUrlChanged', ...)`](#addlistenerbrowserurlchanged-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -416,6 +420,55 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('browserMessageReceived', ...)
+
+```typescript
+addListener(eventName: 'browserMessageReceived', listenerFunc: (event: BrowserMessageReceivedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the web page posts a message to the app using the injected
+`window.CapacitorInAppBrowser.postMessage(...)` function.
+
+This event is only emitted for browsers opened with `openInWebView(...)`.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'browserMessageReceived'</code>                                                                   |
+| **`listenerFunc`** | <code>(event: <a href="#browsermessagereceivedevent">BrowserMessageReceivedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### addListener('browserNavigationCompleted', ...)
+
+```typescript
+addListener(eventName: 'browserNavigationCompleted', listenerFunc: (event: BrowserNavigationCompletedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a page navigation has been completed in the web view.
+
+This event is only emitted for browsers opened with `openInWebView(...)`.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                                                            |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'browserNavigationCompleted'</code>                                                                       |
+| **`listenerFunc`** | <code>(event: <a href="#browsernavigationcompletedevent">BrowserNavigationCompletedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### addListener('browserPageLoaded', ...)
 
 ```typescript
@@ -441,47 +494,27 @@ Only available on Android and iOS.
 --------------------
 
 
-### addListener('browserPageNavigationCompleted', ...)
+### addListener('browserUrlChanged', ...)
 
 ```typescript
-addListener(eventName: 'browserPageNavigationCompleted', listenerFunc: (event: BrowserPageNavigationCompletedEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'browserUrlChanged', listenerFunc: (event: BrowserUrlChangedEvent) => void) => Promise<PluginListenerHandle>
 ```
 
-Called when a page navigation has been completed in the web view.
+Called when the current URL of the web view changes, e.g. when the user
+navigates to a new page, a server redirect occurs, or a single-page
+application updates the browser history.
+
+This event is also emitted for the initial URL and fires earlier than
+`browserNavigationCompleted`.
 
 This event is only emitted for browsers opened with `openInWebView(...)`.
 
 Only available on Android and iOS.
 
-| Param              | Type                                                                                                                    |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'browserPageNavigationCompleted'</code>                                                                           |
-| **`listenerFunc`** | <code>(event: <a href="#browserpagenavigationcompletedevent">BrowserPageNavigationCompletedEvent</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
-
-### addListener('messageReceived', ...)
-
-```typescript
-addListener(eventName: 'messageReceived', listenerFunc: (event: MessageReceivedEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when the web page posts a message to the app using the injected
-`window.CapacitorInAppBrowser.postMessage(...)` function.
-
-This event is only emitted for browsers opened with `openInWebView(...)`.
-
-Only available on Android and iOS.
-
-| Param              | Type                                                                                      |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'messageReceived'</code>                                                            |
-| **`listenerFunc`** | <code>(event: <a href="#messagereceivedevent">MessageReceivedEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                                          |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'browserUrlChanged'</code>                                                              |
+| **`listenerFunc`** | <code>(event: <a href="#browserurlchangedevent">BrowserUrlChangedEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
@@ -628,18 +661,25 @@ Remove all listeners for this plugin.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
-#### BrowserPageNavigationCompletedEvent
+#### BrowserMessageReceivedEvent
+
+| Prop       | Type                 | Description                              | Since |
+| ---------- | -------------------- | ---------------------------------------- | ----- |
+| **`data`** | <code>unknown</code> | The message data posted by the web page. | 0.1.0 |
+
+
+#### BrowserNavigationCompletedEvent
 
 | Prop      | Type                | Description                                | Since |
 | --------- | ------------------- | ------------------------------------------ | ----- |
 | **`url`** | <code>string</code> | The URL of the page that was navigated to. | 0.1.0 |
 
 
-#### MessageReceivedEvent
+#### BrowserUrlChangedEvent
 
-| Prop       | Type                 | Description                              | Since |
-| ---------- | -------------------- | ---------------------------------------- | ----- |
-| **`data`** | <code>unknown</code> | The message data posted by the web page. | 0.1.0 |
+| Prop      | Type                | Description                  | Since |
+| --------- | ------------------- | ---------------------------- | ----- |
+| **`url`** | <code>string</code> | The new URL of the web view. | 0.1.0 |
 
 
 ### Type Aliases
@@ -681,7 +721,7 @@ The web page can post a message to the app using the injected `window.CapacitorI
 window.CapacitorInAppBrowser.postMessage({ name: 'Capawesome' });
 ```
 
-The app receives the message via the `messageReceived` event.
+The app receives the message via the `browserMessageReceived` event.
 
 ### From the app to the web page
 
@@ -697,7 +737,7 @@ window.addEventListener('capacitorInAppBrowserMessage', event => {
 
 The three browser modes behave differently on each platform. Keep the following differences in mind:
 
-- **System browser**: Tracking the visited URLs is not possible by design. If you need the `browserPageNavigationCompleted` event, use the `openInWebView(...)` method instead. On Android, the `browserPageLoaded` event is not emitted for the system browser and the `browserClosed` event is emitted when the user returns to the app.
+- **System browser**: Tracking the visited URLs is not possible by design. If you need the `browserNavigationCompleted` or `browserUrlChanged` event, use the `openInWebView(...)` method instead. On Android, the `browserPageLoaded` event is not emitted for the system browser and the `browserClosed` event is emitted when the user returns to the app.
 - **Embedded web view**: The web view always uses the app-global (`shared`) data store on Android. The `dataStore` option is only supported on iOS. On iOS, hiding the toolbar removes the close button, so the browser can then only be closed using the `close(...)` method.
 - **External browser**: The browser is opened in a separate app. For this reason, no events are emitted and the `close(...)` method has no effect.
 

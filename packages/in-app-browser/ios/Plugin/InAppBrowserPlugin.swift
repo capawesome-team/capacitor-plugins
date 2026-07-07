@@ -19,9 +19,10 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
 
     public static let eventBrowserClosed = "browserClosed"
+    public static let eventBrowserMessageReceived = "browserMessageReceived"
+    public static let eventBrowserNavigationCompleted = "browserNavigationCompleted"
     public static let eventBrowserPageLoaded = "browserPageLoaded"
-    public static let eventBrowserPageNavigationCompleted = "browserPageNavigationCompleted"
-    public static let eventMessageReceived = "messageReceived"
+    public static let eventBrowserUrlChanged = "browserUrlChanged"
     public static let tag = "InAppBrowserPlugin"
 
     private var implementation: InAppBrowser?
@@ -96,16 +97,20 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
         self.notifyListeners(Self.eventBrowserClosed, data: [:])
     }
 
+    @objc public func notifyBrowserMessageReceivedListeners(_ event: BrowserMessageReceivedEvent) {
+        self.notifyListeners(Self.eventBrowserMessageReceived, data: event.toJSObject() as? [String: Any])
+    }
+
+    @objc public func notifyBrowserNavigationCompletedListeners(_ event: BrowserNavigationCompletedEvent) {
+        self.notifyListeners(Self.eventBrowserNavigationCompleted, data: event.toJSObject() as? [String: Any])
+    }
+
     @objc public func notifyBrowserPageLoadedListeners() {
         self.notifyListeners(Self.eventBrowserPageLoaded, data: [:])
     }
 
-    @objc public func notifyBrowserPageNavigationCompletedListeners(_ event: BrowserPageNavigationCompletedEvent) {
-        self.notifyListeners(Self.eventBrowserPageNavigationCompleted, data: event.toJSObject() as? [String: Any])
-    }
-
-    @objc public func notifyMessageReceivedListeners(_ event: MessageReceivedEvent) {
-        self.notifyListeners(Self.eventMessageReceived, data: event.toJSObject() as? [String: Any])
+    @objc public func notifyBrowserUrlChangedListeners(_ event: BrowserUrlChangedEvent) {
+        self.notifyListeners(Self.eventBrowserUrlChanged, data: event.toJSObject() as? [String: Any])
     }
 
     @objc func openInExternalBrowser(_ call: CAPPluginCall) {
