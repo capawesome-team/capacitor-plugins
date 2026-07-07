@@ -8,17 +8,17 @@ public class VolumeHelper {
 
     public static int mapStreamToStreamType(@NonNull String stream) throws Exception {
         switch (stream) {
-            case "alarm":
+            case "ALARM":
                 return AudioManager.STREAM_ALARM;
-            case "music":
+            case "MUSIC":
                 return AudioManager.STREAM_MUSIC;
-            case "notification":
+            case "NOTIFICATION":
                 return AudioManager.STREAM_NOTIFICATION;
-            case "ring":
+            case "RING":
                 return AudioManager.STREAM_RING;
-            case "system":
+            case "SYSTEM":
                 return AudioManager.STREAM_SYSTEM;
-            case "voiceCall":
+            case "VOICE_CALL":
                 return AudioManager.STREAM_VOICE_CALL;
             default:
                 throw CustomExceptions.STREAM_INVALID;

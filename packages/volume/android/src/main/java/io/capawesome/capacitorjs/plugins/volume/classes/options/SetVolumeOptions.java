@@ -24,7 +24,7 @@ public class SetVolumeOptions {
     }
 
     private static int getStreamTypeFromCall(@NonNull PluginCall call) throws Exception {
-        String stream = call.getString("stream", "music");
+        String stream = call.getString("stream", "MUSIC");
         return VolumeHelper.mapStreamToStreamType(stream);
     }
 

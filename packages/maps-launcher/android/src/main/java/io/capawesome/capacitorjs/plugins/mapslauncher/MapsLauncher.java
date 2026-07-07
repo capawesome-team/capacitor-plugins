@@ -20,8 +20,8 @@ import java.util.List;
 
 public class MapsLauncher {
 
-    public static final String APP_GOOGLE_MAPS = "googleMaps";
-    public static final String APP_WAZE = "waze";
+    public static final String APP_GOOGLE_MAPS = "GOOGLE_MAPS";
+    public static final String APP_WAZE = "WAZE";
     public static final String PACKAGE_GOOGLE_MAPS = "com.google.android.apps.maps";
     public static final String PACKAGE_WAZE = "com.waze";
 

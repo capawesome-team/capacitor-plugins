@@ -5,9 +5,9 @@ import MapKit
 import UIKit
 
 @objc public class MapsLauncher: NSObject {
-    static let appAppleMaps = "appleMaps"
-    static let appGoogleMaps = "googleMaps"
-    static let appWaze = "waze"
+    static let appAppleMaps = "APPLE_MAPS"
+    static let appGoogleMaps = "GOOGLE_MAPS"
+    static let appWaze = "WAZE"
     static let schemeGoogleMaps = "comgooglemaps"
     static let schemeWaze = "waze"
 

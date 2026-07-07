@@ -251,11 +251,11 @@ The travel mode to use for the directions.
 
 #### NavigationApp
 
-| Members          | Value                     | Description                        | Since |
-| ---------------- | ------------------------- | ---------------------------------- | ----- |
-| **`AppleMaps`**  | <code>'appleMaps'</code>  | Apple Maps. Only available on iOS. | 0.1.0 |
-| **`GoogleMaps`** | <code>'googleMaps'</code> | Google Maps.                       | 0.1.0 |
-| **`Waze`**       | <code>'waze'</code>       | Waze.                              | 0.1.0 |
+| Members          | Value                      | Description                        | Since |
+| ---------------- | -------------------------- | ---------------------------------- | ----- |
+| **`AppleMaps`**  | <code>'APPLE_MAPS'</code>  | Apple Maps. Only available on iOS. | 0.1.0 |
+| **`GoogleMaps`** | <code>'GOOGLE_MAPS'</code> | Google Maps.                       | 0.1.0 |
+| **`Waze`**       | <code>'WAZE'</code>        | Waze.                              | 0.1.0 |
 
 </docgen-api>
 
