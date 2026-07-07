@@ -1,0 +1,333 @@
+# @capawesome/capacitor-gyroscope
+
+Capacitor plugin to read the device's gyroscope sensor.
+
+<div class="capawesome-z29o10a">
+  <a href="https://cloud.capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  </a>
+</div>
+
+## Features
+
+We are proud to offer one of the most complete and feature-rich Capacitor plugins for gyroscope measurements. Here are some of the key features:
+
+- 🖥️ **Cross-platform**: Supports Android and iOS.
+- ⚡ **Real-time measurements**: Continuous gyroscope data with event listeners.
+- 📊 **Rotation rate**: Accurate x, y, and z-axis rotation rate in rad/s.
+- 🔒 **Permission handling**: Built-in permission management for sensor access.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
+- 🔗 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/plugins/accelerometer/), [Barometer](https://capawesome.io/plugins/barometer/) and [Pedometer](https://capawesome.io/plugins/pedometer/) plugins.
+
+Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
+## Compatibility
+
+| Plugin Version | Capacitor Version | Status         |
+| -------------- | ----------------- | -------------- |
+| 0.x.x          | >=8.x.x           | Active support |
+
+## Installation
+
+You can use our **AI-Assisted Setup** to install the plugin.
+Add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool using the following command:
+
+```bash
+npx skills add capawesome-team/skills --skill capacitor-plugins
+```
+
+Then use the following prompt:
+
+```
+ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `@capawesome/capacitor-gyroscope` plugin in my project.
+```
+
+If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
+
+```bash
+npm install @capawesome/capacitor-gyroscope
+npx cap sync
+```
+
+### Android
+
+#### Proguard
+
+If you are using Proguard, you need to add the following rules to your `proguard-rules.pro` file:
+
+```
+-keep class io.capawesome.capacitorjs.plugins.** { *; }
+```
+
+### iOS
+
+#### Privacy Descriptions
+
+Add the `NSMotionUsageDescription` key to the `ios/App/App/Info.plist` file, which tells the user why your app needs access to the device's motion data:
+
+```xml
+<key>NSMotionUsageDescription</key>
+<string>The app needs to access the motion activity.</string>
+```
+
+## Configuration
+
+No configuration required for this plugin.
+
+## Usage
+
+```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
+const getMeasurement = async () => {
+  const measurement = await Gyroscope.getMeasurement();
+  console.log('X: ', measurement.x);
+  console.log('Y: ', measurement.y);
+  console.log('Z: ', measurement.z);
+};
+
+const isAvailable = async () => {
+  const result = await Gyroscope.isAvailable();
+  return result.isAvailable;
+};
+
+const startMeasurementUpdates = async () => {
+  await Gyroscope.addListener('measurement', measurement => {
+    console.log('X: ', measurement.x);
+    console.log('Y: ', measurement.y);
+    console.log('Z: ', measurement.z);
+  });
+  await Gyroscope.startMeasurementUpdates();
+};
+
+const stopMeasurementUpdates = async () => {
+  await Gyroscope.stopMeasurementUpdates();
+};
+
+const checkPermissions = async () => {
+  const result = await Gyroscope.checkPermissions();
+  return result;
+};
+
+const requestPermissions = async () => {
+  const result = await Gyroscope.requestPermissions();
+  return result;
+};
+
+const removeAllListeners = async () => {
+  await Gyroscope.removeAllListeners();
+};
+```
+
+## API
+
+<docgen-index>
+
+* [`addListener('measurement', ...)`](#addlistenermeasurement-)
+* [`checkPermissions()`](#checkpermissions)
+* [`getMeasurement()`](#getmeasurement)
+* [`isAvailable()`](#isavailable)
+* [`removeAllListeners()`](#removealllisteners)
+* [`requestPermissions()`](#requestpermissions)
+* [`startMeasurementUpdates()`](#startmeasurementupdates)
+* [`stopMeasurementUpdates()`](#stopmeasurementupdates)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
+
+</docgen-index>
+
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### addListener('measurement', ...)
+
+```typescript
+addListener(eventName: 'measurement', listenerFunc: (event: MeasurementEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a new measurement is available.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'measurement'</code>                                              |
+| **`listenerFunc`** | <code>(event: <a href="#measurement">Measurement</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### checkPermissions()
+
+```typescript
+checkPermissions() => Promise<PermissionStatus>
+```
+
+Check if the app has permission to access the gyroscope sensor.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### getMeasurement()
+
+```typescript
+getMeasurement() => Promise<GetMeasurementResult>
+```
+
+Get the latest measurement.
+
+This method returns the most recent measurement from the gyroscope sensor.
+
+**Returns:** <code>Promise&lt;<a href="#measurement">Measurement</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### isAvailable()
+
+```typescript
+isAvailable() => Promise<IsAvailableResult>
+```
+
+Check if the gyroscope sensor is available on the device.
+
+**Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### requestPermissions()
+
+```typescript
+requestPermissions() => Promise<PermissionStatus>
+```
+
+Request permission to access the gyroscope sensor.
+
+**Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### startMeasurementUpdates()
+
+```typescript
+startMeasurementUpdates() => Promise<void>
+```
+
+Start emitting `measurement` events.
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### stopMeasurementUpdates()
+
+```typescript
+stopMeasurementUpdates() => Promise<void>
+```
+
+Stop emitting `measurement` events.
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### Interfaces
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### Measurement
+
+| Prop    | Type                | Description                                                        | Since |
+| ------- | ------------------- | ------------------------------------------------------------------ | ----- |
+| **`x`** | <code>number</code> | The rotation rate around the x-axis in radians per second (rad/s). | 0.1.0 |
+| **`y`** | <code>number</code> | The rotation rate around the y-axis in radians per second (rad/s). | 0.1.0 |
+| **`z`** | <code>number</code> | The rotation rate around the z-axis in radians per second (rad/s). | 0.1.0 |
+
+
+#### PermissionStatus
+
+| Prop            | Type                                                                          | Description                                    | Since |
+| --------------- | ----------------------------------------------------------------------------- | ---------------------------------------------- | ----- |
+| **`gyroscope`** | <code><a href="#gyroscopepermissionstate">GyroscopePermissionState</a></code> | The permission status of the gyroscope sensor. | 0.1.0 |
+
+
+#### IsAvailableResult
+
+| Prop              | Type                 | Description                                              | Since |
+| ----------------- | -------------------- | -------------------------------------------------------- | ----- |
+| **`isAvailable`** | <code>boolean</code> | Whether the gyroscope sensor is available on the device. | 0.1.0 |
+
+
+### Type Aliases
+
+
+#### MeasurementEvent
+
+<code><a href="#measurement">Measurement</a></code>
+
+
+#### GyroscopePermissionState
+
+<code><a href="#permissionstate">PermissionState</a> | 'limited'</code>
+
+
+#### PermissionState
+
+<code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### GetMeasurementResult
+
+<code><a href="#measurement">Measurement</a></code>
+
+</docgen-api>
+
+## Changelog
+
+See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/gyroscope/CHANGELOG.md).
+
+## License
+
+See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/gyroscope/LICENSE).
