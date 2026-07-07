@@ -252,6 +252,27 @@ public class InAppBrowserPlugin extends Plugin {
         }
     }
 
+    @PluginMethod
+    public void show(PluginCall call) {
+        try {
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            implementation.show(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
     @Override
     protected void handleOnPause() {
         implementation.handleOnPause();

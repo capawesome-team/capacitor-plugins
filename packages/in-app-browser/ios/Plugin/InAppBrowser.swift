@@ -9,6 +9,7 @@ import WebKit
 
     private var safariViewController: SFSafariViewController?
     private var webViewController: WebViewController?
+    private var webViewNavigationController: UINavigationController?
 
     init(plugin: InAppBrowserPlugin) {
         self.plugin = plugin
@@ -35,6 +36,11 @@ import WebKit
     @objc public func close(completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
             if let webViewController = self.webViewController {
+                if self.webViewNavigationController?.presentingViewController == nil {
+                    webViewController.handleCloseWithoutPresentation()
+                    completion(nil)
+                    return
+                }
                 webViewController.dismiss(animated: true) {
                     completion(nil)
                 }
@@ -122,6 +128,7 @@ import WebKit
                     }
                     if self.webViewController === viewController {
                         self.webViewController = nil
+                        self.webViewNavigationController = nil
                     }
                     self.plugin.notifyBrowserClosedListeners()
                 }
@@ -138,7 +145,13 @@ import WebKit
                 navigationController.modalPresentationStyle = .fullScreen
                 navigationController.setNavigationBarHidden(!options.toolbar.visible, animated: false)
                 self.webViewController = webViewController
-                bridgeViewController.present(navigationController, animated: true) {
+                self.webViewNavigationController = navigationController
+                if options.visible {
+                    bridgeViewController.present(navigationController, animated: true) {
+                        completion(nil)
+                    }
+                } else {
+                    webViewController.loadViewIfNeeded()
                     completion(nil)
                 }
             }
@@ -168,8 +181,33 @@ import WebKit
         plugin.notifyBrowserClosedListeners()
     }
 
+    @objc public func show(completion: @escaping (_ error: Error?) -> Void) {
+        DispatchQueue.main.async {
+            guard let navigationController = self.webViewNavigationController else {
+                completion(CustomError.noBrowserOpen)
+                return
+            }
+            if navigationController.presentingViewController != nil {
+                completion(nil)
+                return
+            }
+            guard let bridgeViewController = self.plugin.bridge?.viewController else {
+                completion(CustomError.noBrowserOpen)
+                return
+            }
+            bridgeViewController.present(navigationController, animated: true) {
+                completion(nil)
+            }
+        }
+    }
+
     private func dismissActiveBrowser(_ completion: @escaping () -> Void) {
         if let webViewController = self.webViewController {
+            if self.webViewNavigationController?.presentingViewController == nil {
+                webViewController.handleCloseWithoutPresentation()
+                completion()
+                return
+            }
             webViewController.dismiss(animated: false) {
                 completion()
             }

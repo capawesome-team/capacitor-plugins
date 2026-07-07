@@ -43,6 +43,11 @@ import WebKit
         }
     }
 
+    public func handleCloseWithoutPresentation() {
+        cleanup()
+        onClosed?(self)
+    }
+
     public func postMessage(_ data: String) {
         webView?.evaluateJavaScript(
             "window.dispatchEvent(new CustomEvent('capacitorInAppBrowserMessage', { detail: \(data) }));",

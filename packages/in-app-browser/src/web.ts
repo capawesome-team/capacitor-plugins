@@ -50,4 +50,8 @@ export class InAppBrowserWeb extends WebPlugin implements InAppBrowserPlugin {
   async postMessage(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
+
+  async show(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 }

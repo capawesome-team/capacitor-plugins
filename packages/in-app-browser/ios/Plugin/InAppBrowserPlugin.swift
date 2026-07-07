@@ -14,7 +14,8 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "openInExternalBrowser", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openInSystemBrowser", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "openInWebView", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "postMessage", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "postMessage", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise)
     ]
 
     public static let eventBrowserClosed = "browserClosed"
@@ -169,6 +170,16 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
         } catch {
             rejectCall(call, error)
         }
+    }
+
+    @objc func show(_ call: CAPPluginCall) {
+        implementation?.show(completion: { error in
+            if let error = error {
+                self.rejectCall(call, error)
+                return
+            }
+            self.resolveCall(call)
+        })
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

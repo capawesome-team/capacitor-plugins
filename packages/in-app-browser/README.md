@@ -184,6 +184,7 @@ const addListeners = async () => {
 * [`openInSystemBrowser(...)`](#openinsystembrowser)
 * [`openInWebView(...)`](#openinwebview)
 * [`postMessage(...)`](#postmessage)
+* [`show()`](#show)
 * [`addListener('browserClosed', ...)`](#addlistenerbrowserclosed-)
 * [`addListener('browserPageLoaded', ...)`](#addlistenerbrowserpageloaded-)
 * [`addListener('browserPageNavigationCompleted', ...)`](#addlistenerbrowserpagenavigationcompleted-)
@@ -375,6 +376,24 @@ Only available on Android and iOS.
 --------------------
 
 
+### show()
+
+```typescript
+show() => Promise<void>
+```
+
+Show the web view if it was opened with `visible: false`.
+
+This method is only available for browsers opened with
+`openInWebView(...)`.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### addListener('browserClosed', ...)
 
 ```typescript
@@ -552,16 +571,17 @@ Remove all listeners for this plugin.
 
 #### OpenInWebViewOptions
 
-| Prop                                  | Type                                                                                | Description                                                                                                                                                       | Default               | Since |
-| ------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----- |
-| **`android`**                         | <code><a href="#openinwebviewandroidoptions">OpenInWebViewAndroidOptions</a></code> | Options that are only applied on Android. Only available on Android.                                                                                              |                       | 0.1.0 |
-| **`dataStore`**                       | <code><a href="#webviewdatastore">WebViewDataStore</a></code>                       | The data store to use for the web view. On Android, this option is ignored. The web view always uses the app-global (`shared`) data store. Only available on iOS. | <code>'shared'</code> | 0.1.0 |
-| **`headers`**                         | <code>{ [key: string]: string; }</code>                                             | Additional HTTP headers to send with the initial request.                                                                                                         |                       | 0.1.0 |
-| **`ios`**                             | <code><a href="#openinwebviewiosoptions">OpenInWebViewIosOptions</a></code>         | Options that are only applied on iOS. Only available on iOS.                                                                                                      |                       | 0.1.0 |
-| **`mediaPlaybackRequiresUserAction`** | <code>boolean</code>                                                                | Whether or not media playback requires user action.                                                                                                               | <code>false</code>    | 0.1.0 |
-| **`toolbar`**                         | <code><a href="#webviewtoolbaroptions">WebViewToolbarOptions</a></code>             | Options for the toolbar of the web view.                                                                                                                          |                       | 0.1.0 |
-| **`url`**                             | <code>string</code>                                                                 | The URL to open in the web view.                                                                                                                                  |                       | 0.1.0 |
-| **`userAgent`**                       | <code>string</code>                                                                 | The custom user agent to use for the web view.                                                                                                                    |                       | 0.1.0 |
+| Prop                                  | Type                                                                                | Description                                                                                                                                                                                                                                                        | Default               | Since |
+| ------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ----- |
+| **`android`**                         | <code><a href="#openinwebviewandroidoptions">OpenInWebViewAndroidOptions</a></code> | Options that are only applied on Android. Only available on Android.                                                                                                                                                                                               |                       | 0.1.0 |
+| **`dataStore`**                       | <code><a href="#webviewdatastore">WebViewDataStore</a></code>                       | The data store to use for the web view. On Android, this option is ignored. The web view always uses the app-global (`shared`) data store. Only available on iOS.                                                                                                  | <code>'shared'</code> | 0.1.0 |
+| **`headers`**                         | <code>{ [key: string]: string; }</code>                                             | Additional HTTP headers to send with the initial request.                                                                                                                                                                                                          |                       | 0.1.0 |
+| **`ios`**                             | <code><a href="#openinwebviewiosoptions">OpenInWebViewIosOptions</a></code>         | Options that are only applied on iOS. Only available on iOS.                                                                                                                                                                                                       |                       | 0.1.0 |
+| **`mediaPlaybackRequiresUserAction`** | <code>boolean</code>                                                                | Whether or not media playback requires user action.                                                                                                                                                                                                                | <code>false</code>    | 0.1.0 |
+| **`toolbar`**                         | <code><a href="#webviewtoolbaroptions">WebViewToolbarOptions</a></code>             | Options for the toolbar of the web view.                                                                                                                                                                                                                           |                       | 0.1.0 |
+| **`url`**                             | <code>string</code>                                                                 | The URL to open in the web view.                                                                                                                                                                                                                                   |                       | 0.1.0 |
+| **`userAgent`**                       | <code>string</code>                                                                 | The custom user agent to use for the web view.                                                                                                                                                                                                                     |                       | 0.1.0 |
+| **`visible`**                         | <code>boolean</code>                                                                | Whether or not the web view is presented when opened. If `false`, the web view loads the URL in the background and stays hidden until `show()` is called. The `browserPageLoaded` event is still emitted and `close()` can be called while the web view is hidden. | <code>true</code>     | 0.1.0 |
 
 
 #### OpenInWebViewAndroidOptions

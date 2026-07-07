@@ -12,7 +12,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -111,6 +114,15 @@ public class WebViewDialog extends Dialog {
         }
     }
 
+    public void showWebView() {
+        Window window = getWindow();
+        if (window == null) {
+            return;
+        }
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.getDecorView().setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +130,9 @@ public class WebViewDialog extends Dialog {
         this.webView = webView;
         setContentView(createContentView(webView));
         setOnDismissListener(dialog -> handleDismiss());
+        if (!options.getVisible()) {
+            hideWebView();
+        }
         webView.loadUrl(options.getUri().toString(), options.getHeaders());
     }
 
@@ -295,6 +310,15 @@ public class WebViewDialog extends Dialog {
 
     private boolean hasPermission(@NonNull String permission) {
         return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void hideWebView() {
+        Window window = getWindow();
+        if (window == null) {
+            return;
+        }
+        window.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        window.getDecorView().setVisibility(View.INVISIBLE);
     }
 
     private void injectBridgeJavaScript() {
