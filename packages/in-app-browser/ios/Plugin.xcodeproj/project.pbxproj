@@ -17,8 +17,8 @@
 		A71100000000000000000002 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000001 /* Result.swift */; };
 		A71100000000000000000004 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000003 /* CustomError.swift */; };
 		A71100000000000000000006 /* ExecuteScriptResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000005 /* ExecuteScriptResult.swift */; };
-		A71100000000000000000008 /* BrowserPageNavigationCompletedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000007 /* BrowserPageNavigationCompletedEvent.swift */; };
-		A7110000000000000000000A /* MessageReceivedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000009 /* MessageReceivedEvent.swift */; };
+		A71100000000000000000008 /* BrowserNavigationCompletedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000007 /* BrowserNavigationCompletedEvent.swift */; };
+		A7110000000000000000000A /* BrowserMessageReceivedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000009 /* BrowserMessageReceivedEvent.swift */; };
 		A7110000000000000000000C /* ExecuteScriptOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7110000000000000000000B /* ExecuteScriptOptions.swift */; };
 		A7110000000000000000000E /* OpenInExternalBrowserOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7110000000000000000000D /* OpenInExternalBrowserOptions.swift */; };
 		A71100000000000000000010 /* OpenInSystemBrowserOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7110000000000000000000F /* OpenInSystemBrowserOptions.swift */; };
@@ -29,6 +29,7 @@
 		A7110000000000000000001A /* InAppBrowserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000019 /* InAppBrowserHelper.swift */; };
 		A7110000000000000000001C /* GetCookiesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7110000000000000000001B /* GetCookiesResult.swift */; };
 		A7110000000000000000001E /* GetCookiesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7110000000000000000001D /* GetCookiesOptions.swift */; };
+		A71100000000000000000027 /* BrowserUrlChangedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71100000000000000000026 /* BrowserUrlChangedEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,8 +55,8 @@
 		A71100000000000000000001 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		A71100000000000000000003 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		A71100000000000000000005 /* ExecuteScriptResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteScriptResult.swift; sourceTree = "<group>"; };
-		A71100000000000000000007 /* BrowserPageNavigationCompletedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserPageNavigationCompletedEvent.swift; sourceTree = "<group>"; };
-		A71100000000000000000009 /* MessageReceivedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReceivedEvent.swift; sourceTree = "<group>"; };
+		A71100000000000000000007 /* BrowserNavigationCompletedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationCompletedEvent.swift; sourceTree = "<group>"; };
+		A71100000000000000000009 /* BrowserMessageReceivedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserMessageReceivedEvent.swift; sourceTree = "<group>"; };
 		A7110000000000000000000B /* ExecuteScriptOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExecuteScriptOptions.swift; sourceTree = "<group>"; };
 		A7110000000000000000000D /* OpenInExternalBrowserOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInExternalBrowserOptions.swift; sourceTree = "<group>"; };
 		A7110000000000000000000F /* OpenInSystemBrowserOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenInSystemBrowserOptions.swift; sourceTree = "<group>"; };
@@ -66,6 +67,7 @@
 		A71100000000000000000019 /* InAppBrowserHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppBrowserHelper.swift; sourceTree = "<group>"; };
 		A7110000000000000000001B /* GetCookiesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCookiesResult.swift; sourceTree = "<group>"; };
 		A7110000000000000000001D /* GetCookiesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCookiesOptions.swift; sourceTree = "<group>"; };
+		A71100000000000000000026 /* BrowserUrlChangedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserUrlChangedEvent.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -168,8 +170,9 @@
 		A71100000000000000000024 /* Events */ = {
 			isa = PBXGroup;
 			children = (
-				A71100000000000000000007 /* BrowserPageNavigationCompletedEvent.swift */,
-				A71100000000000000000009 /* MessageReceivedEvent.swift */,
+				A71100000000000000000009 /* BrowserMessageReceivedEvent.swift */,
+				A71100000000000000000007 /* BrowserNavigationCompletedEvent.swift */,
+				A71100000000000000000026 /* BrowserUrlChangedEvent.swift */,
 			);
 			path = Events;
 			sourceTree = "<group>";
@@ -397,8 +400,9 @@
 				A71100000000000000000002 /* Result.swift in Sources */,
 				A71100000000000000000004 /* CustomError.swift in Sources */,
 				A71100000000000000000006 /* ExecuteScriptResult.swift in Sources */,
-				A71100000000000000000008 /* BrowserPageNavigationCompletedEvent.swift in Sources */,
-				A7110000000000000000000A /* MessageReceivedEvent.swift in Sources */,
+				A71100000000000000000008 /* BrowserNavigationCompletedEvent.swift in Sources */,
+				A7110000000000000000000A /* BrowserMessageReceivedEvent.swift in Sources */,
+				A71100000000000000000027 /* BrowserUrlChangedEvent.swift in Sources */,
 				A7110000000000000000000C /* ExecuteScriptOptions.swift in Sources */,
 				A7110000000000000000000E /* OpenInExternalBrowserOptions.swift in Sources */,
 				A71100000000000000000010 /* OpenInSystemBrowserOptions.swift in Sources */,

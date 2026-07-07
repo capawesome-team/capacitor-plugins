@@ -9,8 +9,9 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.CustomException;
-import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserPageNavigationCompletedEvent;
-import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.MessageReceivedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserMessageReceivedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserNavigationCompletedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserUrlChangedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ExecuteScriptOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.GetCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.OpenInExternalBrowserOptions;
@@ -27,9 +28,10 @@ import io.capawesome.capacitorjs.plugins.inappbrowser.interfaces.Result;
 public class InAppBrowserPlugin extends Plugin {
 
     public static final String EVENT_BROWSER_CLOSED = "browserClosed";
+    public static final String EVENT_BROWSER_MESSAGE_RECEIVED = "browserMessageReceived";
+    public static final String EVENT_BROWSER_NAVIGATION_COMPLETED = "browserNavigationCompleted";
     public static final String EVENT_BROWSER_PAGE_LOADED = "browserPageLoaded";
-    public static final String EVENT_BROWSER_PAGE_NAVIGATION_COMPLETED = "browserPageNavigationCompleted";
-    public static final String EVENT_MESSAGE_RECEIVED = "messageReceived";
+    public static final String EVENT_BROWSER_URL_CHANGED = "browserUrlChanged";
     public static final String TAG = "InAppBrowserPlugin";
 
     private static final String ERROR_UNKNOWN_ERROR = "An unknown error occurred.";
@@ -152,16 +154,20 @@ public class InAppBrowserPlugin extends Plugin {
         notifyListeners(EVENT_BROWSER_CLOSED, new JSObject());
     }
 
+    public void notifyBrowserMessageReceivedListeners(@NonNull BrowserMessageReceivedEvent event) {
+        notifyListeners(EVENT_BROWSER_MESSAGE_RECEIVED, event.toJSObject());
+    }
+
+    public void notifyBrowserNavigationCompletedListeners(@NonNull BrowserNavigationCompletedEvent event) {
+        notifyListeners(EVENT_BROWSER_NAVIGATION_COMPLETED, event.toJSObject());
+    }
+
     public void notifyBrowserPageLoadedListeners() {
         notifyListeners(EVENT_BROWSER_PAGE_LOADED, new JSObject());
     }
 
-    public void notifyBrowserPageNavigationCompletedListeners(@NonNull BrowserPageNavigationCompletedEvent event) {
-        notifyListeners(EVENT_BROWSER_PAGE_NAVIGATION_COMPLETED, event.toJSObject());
-    }
-
-    public void notifyMessageReceivedListeners(@NonNull MessageReceivedEvent event) {
-        notifyListeners(EVENT_MESSAGE_RECEIVED, event.toJSObject());
+    public void notifyBrowserUrlChangedListeners(@NonNull BrowserUrlChangedEvent event) {
+        notifyListeners(EVENT_BROWSER_URL_CHANGED, event.toJSObject());
     }
 
     @PluginMethod

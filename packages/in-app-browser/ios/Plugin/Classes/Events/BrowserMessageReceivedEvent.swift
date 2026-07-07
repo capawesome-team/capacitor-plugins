@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 
-@objc public class MessageReceivedEvent: NSObject, Result {
+@objc public class BrowserMessageReceivedEvent: NSObject, Result {
     let data: Any
 
     init(data: Any) {

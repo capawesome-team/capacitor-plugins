@@ -5,8 +5,9 @@ import WebKit
 @objc public class WebViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler, WKUIDelegate {
     var onClosed: ((WebViewController) -> Void)?
     var onMessageReceived: ((String) -> Void)?
+    var onNavigationCompleted: ((String) -> Void)?
     var onPageLoaded: (() -> Void)?
-    var onPageNavigationCompleted: ((String) -> Void)?
+    var onUrlChanged: ((String) -> Void)?
 
     private static let bridgeJavaScript =
         "window.CapacitorInAppBrowser = window.CapacitorInAppBrowser || { postMessage: function (data) "
@@ -20,6 +21,7 @@ import WebKit
     private var canGoForwardObservation: NSKeyValueObservation?
     private var forwardButtonItem: UIBarButtonItem?
     private var initialLoadNotified = false
+    private var lastNotifiedUrl: String?
     private var titleObservation: NSKeyValueObservation?
     private var urlObservation: NSKeyValueObservation?
     private var webView: WKWebView?
@@ -100,7 +102,7 @@ import WebKit
             onPageLoaded?()
         }
         if let url = webView.url?.absoluteString {
-            onPageNavigationCompleted?(url)
+            onNavigationCompleted?(url)
         }
     }
 
@@ -183,6 +185,7 @@ import WebKit
             self?.updateTitle()
         }
         urlObservation = webView.observe(\.url, options: [.new]) { [weak self] _, _ in
+            self?.handleUrlChanged()
             self?.updateTitle()
         }
         return webView
@@ -202,6 +205,14 @@ import WebKit
         if webView?.canGoForward == true {
             webView?.goForward()
         }
+    }
+
+    private func handleUrlChanged() {
+        guard let url = webView?.url?.absoluteString, url != lastNotifiedUrl else {
+            return
+        }
+        lastNotifiedUrl = url
+        onUrlChanged?(url)
     }
 
     private func loadUrl() {

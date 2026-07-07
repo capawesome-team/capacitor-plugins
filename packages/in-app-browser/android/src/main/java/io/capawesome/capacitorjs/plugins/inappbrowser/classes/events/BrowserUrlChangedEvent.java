@@ -4,20 +4,20 @@ import androidx.annotation.NonNull;
 import com.getcapacitor.JSObject;
 import io.capawesome.capacitorjs.plugins.inappbrowser.interfaces.Result;
 
-public class MessageReceivedEvent implements Result {
+public class BrowserUrlChangedEvent implements Result {
 
     @NonNull
-    private final Object data;
+    private final String url;
 
-    public MessageReceivedEvent(@NonNull Object data) {
-        this.data = data;
+    public BrowserUrlChangedEvent(@NonNull String url) {
+        this.url = url;
     }
 
     @Override
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("data", data);
+        result.put("url", url);
         return result;
     }
 }

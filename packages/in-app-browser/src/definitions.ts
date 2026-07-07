@@ -111,6 +111,33 @@ export interface InAppBrowserPlugin {
     listenerFunc: () => void,
   ): Promise<PluginListenerHandle>;
   /**
+   * Called when the web page posts a message to the app using the injected
+   * `window.CapacitorInAppBrowser.postMessage(...)` function.
+   *
+   * This event is only emitted for browsers opened with `openInWebView(...)`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'browserMessageReceived',
+    listenerFunc: (event: BrowserMessageReceivedEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Called when a page navigation has been completed in the web view.
+   *
+   * This event is only emitted for browsers opened with `openInWebView(...)`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'browserNavigationCompleted',
+    listenerFunc: (event: BrowserNavigationCompletedEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
    * Called when the initial page of the browser has finished loading.
    *
    * On Android, this event is only emitted for browsers opened with
@@ -125,7 +152,12 @@ export interface InAppBrowserPlugin {
     listenerFunc: () => void,
   ): Promise<PluginListenerHandle>;
   /**
-   * Called when a page navigation has been completed in the web view.
+   * Called when the current URL of the web view changes, e.g. when the user
+   * navigates to a new page, a server redirect occurs, or a single-page
+   * application updates the browser history.
+   *
+   * This event is also emitted for the initial URL and fires earlier than
+   * `browserNavigationCompleted`.
    *
    * This event is only emitted for browsers opened with `openInWebView(...)`.
    *
@@ -134,22 +166,8 @@ export interface InAppBrowserPlugin {
    * @since 0.1.0
    */
   addListener(
-    eventName: 'browserPageNavigationCompleted',
-    listenerFunc: (event: BrowserPageNavigationCompletedEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
-   * Called when the web page posts a message to the app using the injected
-   * `window.CapacitorInAppBrowser.postMessage(...)` function.
-   *
-   * This event is only emitted for browsers opened with `openInWebView(...)`.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'messageReceived',
-    listenerFunc: (event: MessageReceivedEvent) => void,
+    eventName: 'browserUrlChanged',
+    listenerFunc: (event: BrowserUrlChangedEvent) => void,
   ): Promise<PluginListenerHandle>;
   /**
    * Remove all listeners for this plugin.
@@ -524,7 +542,19 @@ export interface GetCookiesResult {
 /**
  * @since 0.1.0
  */
-export interface BrowserPageNavigationCompletedEvent {
+export interface BrowserMessageReceivedEvent {
+  /**
+   * The message data posted by the web page.
+   *
+   * @since 0.1.0
+   */
+  data: unknown;
+}
+
+/**
+ * @since 0.1.0
+ */
+export interface BrowserNavigationCompletedEvent {
   /**
    * The URL of the page that was navigated to.
    *
@@ -537,13 +567,14 @@ export interface BrowserPageNavigationCompletedEvent {
 /**
  * @since 0.1.0
  */
-export interface MessageReceivedEvent {
+export interface BrowserUrlChangedEvent {
   /**
-   * The message data posted by the web page.
+   * The new URL of the web view.
    *
+   * @example 'https://capawesome.io'
    * @since 0.1.0
    */
-  data: unknown;
+  url: string;
 }
 
 /**

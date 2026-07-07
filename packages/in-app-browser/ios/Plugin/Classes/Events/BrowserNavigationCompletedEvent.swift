@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 
-@objc public class BrowserPageNavigationCompletedEvent: NSObject, Result {
+@objc public class BrowserNavigationCompletedEvent: NSObject, Result {
     let url: String
 
     init(url: String) {
