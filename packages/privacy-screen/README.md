@@ -13,7 +13,7 @@ Capacitor plugin to hide sensitive app content in the app switcher, block screen
 - 🖼️ **App switcher**: Hide sensitive app content in the app switcher.
 - 📸 **Screenshot prevention**: Block screenshots and screen recordings.
 - 🔔 **Screenshot detection**: Get notified when the user takes a screenshot.
-- 🔒 **Security lineup**: Works alongside the [Biometrics](https://capawesome.io/plugins/biometrics/) and [Secure Storage](https://capawesome.io/plugins/secure-storage/) plugins.
+- 🤝 **Compatibility**: Works alongside the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/) and [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

@@ -22,7 +22,7 @@
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
-  "homepage": "https://capawesome.io/docs/plugins/realtimekit/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/realtimekit/",
   "funding": [
     {
       "type": "github",

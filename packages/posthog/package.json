@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
-  "homepage": "https://capawesome.io/docs/plugins/posthog/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/posthog/",
   "funding": [
     {
       "type": "github",

@@ -15,7 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📁 **File Compression**: Zip and unzip single or multiple files.
 - 🔑 **Encryption**: Encrypt and decrypt files.
-- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/docs/plugins/file-compressor/) plugin.
+- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.

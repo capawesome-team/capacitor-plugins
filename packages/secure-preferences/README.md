@@ -15,7 +15,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🖥️ **Cross-platform**: Native secure storage on Android and iOS, with a `localStorage`-backed web implementation for development.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
 - 🔍 **Detailed Error Messages**: Get actionable error messages with specific failure reasons and error codes on iOS, making debugging keychain issues straightforward.
-- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/plugins/biometrics/), [SQLite](https://capawesome.io/docs/plugins/sqlite/), and [Vault](https://capawesome.io/docs/plugins/vault/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/), [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/), and [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -280,9 +280,9 @@ All three plugins protect data on the device, but they target different problems
 
 - **Secure Preferences** (this plugin) is a transparent key/value store. Values are encrypted at rest using the Android Keystore and iOS Keychain, but the app can read them at any time without prompting the user. Reach for it when you need to keep small bits of sensitive data around that the app itself accesses in the background — typical examples are OAuth refresh tokens, server-issued API keys, or preference flags that contain personal information.
 
-- **[Vault](https://capawesome.io/docs/plugins/vault/)** is a key/value store with an active lock state and biometric or device-passcode gating. The user has to unlock it before any read or write, and it locks again on demand or after a configurable background timeout. Reach for it when access to the data should require an explicit user action — a password manager's entries, an authenticator app's TOTP secrets, or the credentials sitting behind an "app lock" screen.
+- **[Vault](https://capawesome.io/docs/sdks/capacitor/vault/)** is a key/value store with an active lock state and biometric or device-passcode gating. The user has to unlock it before any read or write, and it locks again on demand or after a configurable background timeout. Reach for it when access to the data should require an explicit user action — a password manager's entries, an authenticator app's TOTP secrets, or the credentials sitting behind an "app lock" screen.
 
-- **[SQLite](https://capawesome.io/docs/plugins/sqlite/)** is a full relational database with optional SQLCipher encryption. Use it when the shape of your data calls for queries, joins, indexes, or large record sets — for example, an offline-first app that syncs structured records, or anything you would otherwise model with a server-side database.
+- **[SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/)** is a full relational database with optional SQLCipher encryption. Use it when the shape of your data calls for queries, joins, indexes, or large record sets — for example, an offline-first app that syncs structured records, or anything you would otherwise model with a server-side database.
 
 A quick decision tree:
 

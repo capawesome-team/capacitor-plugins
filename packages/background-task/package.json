@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/background-task/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/background-task/",
   "keywords": [
     "capacitor",
     "plugin",

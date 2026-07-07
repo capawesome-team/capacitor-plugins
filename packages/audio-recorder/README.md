@@ -18,7 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
 - 🌙 **Background Mode**: Record audio even when the app is in the background.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/plugins/audio-player/), [Speech Recognition](https://capawesome.io/docs/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/plugins/speech-synthesis/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.

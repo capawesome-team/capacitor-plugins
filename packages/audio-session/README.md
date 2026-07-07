@@ -16,7 +16,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔌 **Activation**: Activate and deactivate the audio session.
 - 🔊 **Output routing**: Read the current audio outputs and override the output port.
 - 📡 **Events**: Observe interruption and route change events.
-- 🔗 **Compatibility**: Works alongside the [Audio Player](https://capawesome.io/plugins/audio-player/) and [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) plugins.
+- 🤝 **Compatibility**: Works alongside the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) and [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -376,7 +376,7 @@ The audio output port to route playback to.
 
 ## Session Ownership
 
-The audio session returned by [`AVAudioSession.sharedInstance()`](https://developer.apple.com/documentation/avfaudio/avaudiosession) is a **single, app-wide** object. This plugin gives you **manual** control over it, but so do other audio-related plugins (such as the [Audio Player](https://capawesome.io/plugins/audio-player/), [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) and Speech Recognition plugins) and the underlying platform APIs they use.
+The audio session returned by [`AVAudioSession.sharedInstance()`](https://developer.apple.com/documentation/avfaudio/avaudiosession) is a **single, app-wide** object. This plugin gives you **manual** control over it, but so do other audio-related plugins (such as the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and Speech Recognition plugins) and the underlying platform APIs they use.
 
 Because the session is shared, the **last write wins**: calling `configure(...)` may override the category, mode or options that another plugin has set, and vice versa. This plugin cannot prevent that. If you combine this plugin with other audio plugins, make sure to reconfigure the session whenever you switch between playback, recording and other audio scenarios.
 

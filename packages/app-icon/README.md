@@ -232,8 +232,8 @@ setIcon(options: SetIconOptions) => Promise<void>
 Change the app icon to the alternate icon with the given name.
 
 The icon must be declared by the app beforehand. See the setup instructions
-for [Android](https://capawesome.io/docs/plugins/app-icon/#android) and
-[iOS](https://capawesome.io/docs/plugins/app-icon/#ios) for more information.
+for [Android](https://capawesome.io/docs/sdks/capacitor/app-icon/#android) and
+[iOS](https://capawesome.io/docs/sdks/capacitor/app-icon/#ios) for more information.
 
 Only available on Android and iOS.
 

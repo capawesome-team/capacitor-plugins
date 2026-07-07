@@ -13,7 +13,7 @@ Capacitor plugin for detecting rooted and jailbroken devices.
 - 🔒 **Root detection**: Detect rooted (Android) and jailbroken (iOS) devices.
 - 🤖 **Emulator detection**: Detect whether the app is running on an emulator or simulator.
 - 🛠️ **Developer mode**: Detect whether developer mode is enabled (Android).
-- 🔗 **Compatibility**: Works alongside the [App Integrity](https://capawesome.io/plugins/app-integrity/) plugin for server-verifiable device attestation.
+- 🤝 **Compatibility**: Works alongside the [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) plugin for server-verifiable device attestation.
 - 📦 **SPM**: Supports Swift Package Manager and CocoaPods for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -194,7 +194,7 @@ required.
 
 The checks provided by this plugin are performed entirely on the device and are **best-effort**. A determined attacker with full control over a rooted or jailbroken device can bypass or spoof any client-side detection. Therefore, you should **never** rely on this plugin as the sole security measure for protecting sensitive functionality.
 
-For **server-verifiable** device and app integrity, use the [App Integrity](https://capawesome.io/plugins/app-integrity/) plugin, which leverages the Play Integrity API (Android) and App Attest (iOS) to produce attestations that can be validated on your backend.
+For **server-verifiable** device and app integrity, use the [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) plugin, which leverages the Play Integrity API (Android) and App Attest (iOS) to produce attestations that can be validated on your backend.
 
 ## Changelog
 

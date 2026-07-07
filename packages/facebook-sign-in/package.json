@@ -16,7 +16,7 @@
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
   "license": "MIT",
-  "homepage": "https://capawesome.io/docs/plugins/facebook-sign-in/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/capawesome-team/capacitor-plugins.git"

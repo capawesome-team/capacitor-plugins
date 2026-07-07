@@ -32,7 +32,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/libsql/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/libsql/",
   "keywords": [
     "capacitor",
     "plugin",

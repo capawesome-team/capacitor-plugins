@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/docs/plugins/sms-composer/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/sms-composer/",
   "keywords": [
     "capacitor",
     "plugin",
