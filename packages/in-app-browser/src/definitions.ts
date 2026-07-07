@@ -89,6 +89,17 @@ export interface InAppBrowserPlugin {
    */
   postMessage(options: PostMessageOptions): Promise<void>;
   /**
+   * Show the web view if it was opened with `visible: false`.
+   *
+   * This method is only available for browsers opened with
+   * `openInWebView(...)`.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  show(): Promise<void>;
+  /**
    * Called when the browser is closed.
    *
    * Only available on Android and iOS.
@@ -317,6 +328,18 @@ export interface OpenInWebViewOptions {
    * @since 0.1.0
    */
   userAgent?: string;
+  /**
+   * Whether or not the web view is presented when opened.
+   *
+   * If `false`, the web view loads the URL in the background and stays
+   * hidden until `show()` is called. The `browserPageLoaded` event is
+   * still emitted and `close()` can be called while the web view is
+   * hidden.
+   *
+   * @default true
+   * @since 0.1.0
+   */
+  visible?: boolean;
 }
 
 /**

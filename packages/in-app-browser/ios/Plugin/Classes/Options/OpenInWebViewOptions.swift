@@ -10,6 +10,7 @@ import Capacitor
     let toolbar: WebViewToolbarOptions
     let url: URL
     let userAgent: String?
+    let visible: Bool
 
     init(_ call: CAPPluginCall) throws {
         let iosOptions = call.getObject("ios")
@@ -21,6 +22,7 @@ import Capacitor
         self.toolbar = try WebViewToolbarOptions(call.getObject("toolbar"))
         self.url = try OpenInWebViewOptions.getUrlFromCall(call)
         self.userAgent = call.getString("userAgent")
+        self.visible = call.getBool("visible", true)
     }
 
     private static func getHeadersFromCall(_ call: CAPPluginCall) -> [String: String] {

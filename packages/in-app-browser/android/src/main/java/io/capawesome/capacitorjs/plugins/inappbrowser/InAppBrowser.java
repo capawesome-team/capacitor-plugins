@@ -230,6 +230,20 @@ public class InAppBrowser {
             });
     }
 
+    public void show(@NonNull EmptyCallback callback) {
+        plugin
+            .getActivity()
+            .runOnUiThread(() -> {
+                WebViewDialog webViewDialog = this.webViewDialog;
+                if (webViewDialog == null) {
+                    callback.error(CustomExceptions.NO_BROWSER_OPEN);
+                    return;
+                }
+                webViewDialog.showWebView();
+                callback.success();
+            });
+    }
+
     private void handleMessageReceived(@NonNull String data) {
         Object value;
         try {

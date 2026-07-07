@@ -35,6 +35,22 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
     });
+  document
+    .querySelector('#openInWebViewHidden')
+    .addEventListener('click', async () => {
+      await InAppBrowser.openInWebView({
+        url,
+        toolbar: {
+          backgroundColor: '#008080',
+          color: '#FFFFFF',
+          showNavigationButtons: true,
+        },
+        visible: false,
+      });
+    });
+  document.querySelector('#show').addEventListener('click', async () => {
+    await InAppBrowser.show();
+  });
   document.querySelector('#close').addEventListener('click', async () => {
     await InAppBrowser.close();
   });

@@ -30,6 +30,8 @@ public class OpenInWebViewOptions {
     @Nullable
     private final String userAgent;
 
+    private final boolean visible;
+
     public OpenInWebViewOptions(@NonNull PluginCall call) throws Exception {
         JSObject androidOptions = call.getObject("android");
         this.allowZoom = androidOptions != null && androidOptions.optBoolean("allowZoom", false);
@@ -40,6 +42,7 @@ public class OpenInWebViewOptions {
         this.toolbar = new WebViewToolbarOptions(call.getObject("toolbar"));
         this.uri = OpenInWebViewOptions.getUriFromCall(call);
         this.userAgent = call.getString("userAgent");
+        this.visible = call.getBoolean("visible", true);
     }
 
     public boolean getAllowZoom() {
@@ -76,6 +79,10 @@ public class OpenInWebViewOptions {
     @Nullable
     public String getUserAgent() {
         return userAgent;
+    }
+
+    public boolean getVisible() {
+        return visible;
     }
 
     @NonNull
