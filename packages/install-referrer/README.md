@@ -1,4 +1,4 @@
-# @capawesome/capacitor-install-referrer
+# Capacitor Install Referrer Plugin
 
 Capacitor plugin for reading install attribution data from the [Play Install Referrer](https://developer.android.com/google/play/installreferrer) and [Apple Ad Services](https://developer.apple.com/documentation/adservices).
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-privacy-screen
+# Capacitor Privacy Screen Plugin
 
 Capacitor plugin to hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
 

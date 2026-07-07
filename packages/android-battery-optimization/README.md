@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-android-battery-optimization
+# Capacitor Android Battery Optimization Plugin
 
 Capacitor plugin for Android to manage battery optimization settings, request exemptions, and enhance app performance under Doze and App Standby modes.
 

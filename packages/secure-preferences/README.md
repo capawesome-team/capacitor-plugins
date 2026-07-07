@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-secure-preferences
+# Capacitor Secure Preferences Plugin
 
 Capacitor plugin to securely store key/value pairs such as passwords, tokens or other sensitive information.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-password-autofill
+# Capacitor Password Autofill Plugin
 
 Capacitor plugin for saving passwords to the platform credential store.
 

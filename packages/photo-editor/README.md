@@ -1,4 +1,4 @@
-# @capawesome/capacitor-photo-editor
+# Capacitor Photo Editor Plugin
 
 Capacitor plugin that allows the user to edit a photo.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-thermal-state
+# Capacitor Thermal State Plugin
 
 Capacitor plugin to read the device thermal state and react before the operating system throttles your app.
 

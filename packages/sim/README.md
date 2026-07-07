@@ -1,4 +1,4 @@
-# @capawesome/capacitor-sim
+# Capacitor SIM Plugin
 
 Capacitor plugin for reading SIM card and carrier information.
 

@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-pedometer
+# Capacitor Pedometer Plugin
 
 Capacitor plugin to retrieve motion data, such as the number of steps and other information about the distance traveled.
 

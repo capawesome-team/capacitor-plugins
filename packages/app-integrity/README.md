@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-integrity
+# Capacitor App Integrity Plugin
 
 Capacitor plugin to verify app and device integrity using the Play Integrity API (Android) and App Attest (iOS).
 

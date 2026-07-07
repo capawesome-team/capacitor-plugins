@@ -1,4 +1,4 @@
-# @capawesome/capacitor-passkeys
+# Capacitor Passkeys Plugin
 
 Capacitor plugin to create and authenticate with [passkeys](https://fidoalliance.org/passkeys/) based on the [WebAuthn](https://www.w3.org/TR/webauthn-2/) standard.
 

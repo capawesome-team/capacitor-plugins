@@ -1,4 +1,4 @@
-# @capawesome/capacitor-keep-awake
+# Capacitor Keep Awake Plugin
 
 Capacitor plugin to keep the screen awake.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-screenshot
+# Capacitor Screenshot Plugin
 
 Capacitor plugin for taking screenshots.
 

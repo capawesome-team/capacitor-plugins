@@ -1,4 +1,4 @@
-# @capawesome/capacitor-torch
+# Capacitor Torch Plugin
 
 Capacitor plugin for switching the flashlight on and off.
 

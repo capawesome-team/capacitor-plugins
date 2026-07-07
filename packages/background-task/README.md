@@ -1,4 +1,4 @@
-# @capawesome/capacitor-background-task
+# Capacitor Background Task Plugin
 
 Capacitor plugin for running background tasks.
 

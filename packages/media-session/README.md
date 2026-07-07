@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-media-session
+# Capacitor Media Session Plugin
 
 Capacitor plugin to interact with media controllers, volume keys and media buttons.
 

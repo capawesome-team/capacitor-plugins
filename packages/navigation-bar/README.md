@@ -1,4 +1,4 @@
-# @capawesome/capacitor-navigation-bar
+# Capacitor Navigation Bar Plugin
 
 Capacitor plugin to set the background color and button style of the navigation bar.
 

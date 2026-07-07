@@ -1,4 +1,4 @@
-# @capawesome/capacitor-audio-session
+# Capacitor Audio Session Plugin
 
 Capacitor plugin to configure and observe the iOS [audio session](https://developer.apple.com/documentation/avfaudio/avaudiosession).
 

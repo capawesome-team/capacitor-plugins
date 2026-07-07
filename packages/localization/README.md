@@ -1,4 +1,4 @@
-# @capawesome/capacitor-localization
+# Capacitor Localization Plugin
 
 Capacitor plugin to read the user's localization preferences, such as preferred locales, time zone, and regional formatting settings.
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-file-picker
+# Capacitor File Picker Plugin
 
 Capacitor plugin that allows the user to select a file, directory, image, or video from the device's file system or gallery.
 

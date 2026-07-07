@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-biometrics
+# Capacitor Biometrics Plugin
 
 Capacitor plugin to request biometric authentication, such as using face recognition or fingerprint recognition.
 

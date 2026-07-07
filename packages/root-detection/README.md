@@ -1,4 +1,4 @@
-# @capawesome/capacitor-root-detection
+# Capacitor Root Detection Plugin
 
 Capacitor plugin for detecting rooted and jailbroken devices.
 

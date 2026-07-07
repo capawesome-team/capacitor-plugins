@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-share-target
+# Capacitor Share Target Plugin
 
 Capacitor plugin to receive content such as text, links, and files from other apps.
 

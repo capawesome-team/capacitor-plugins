@@ -1,4 +1,4 @@
-# @capawesome/capacitor-superwall
+# Capacitor Superwall Plugin
 
 Unofficial Capacitor plugin for [Superwall SDK](https://superwall.com/).[^1]
 

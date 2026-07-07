@@ -1,4 +1,4 @@
-# @capawesome/capacitor-shake
+# Capacitor Shake Plugin
 
 Capacitor plugin to detect shake gestures.
 

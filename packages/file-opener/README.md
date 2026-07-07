@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-file-opener
+# Capacitor File Opener Plugin
 
 Capacitor plugin to open a file with the default application.
 

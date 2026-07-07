@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-barometer
+# Capacitor Barometer Plugin
 
 Capacitor plugin to obtain the static air pressure, which is measured in hectopascals (hPa).
 

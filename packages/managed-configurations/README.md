@@ -1,4 +1,4 @@
-# @capawesome/capacitor-managed-configurations
+# Capacitor Managed Configurations Plugin
 
 Capacitor plugin to access managed configuration settings.
 

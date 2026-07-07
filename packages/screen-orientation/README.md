@@ -1,4 +1,4 @@
-# @capawesome/capacitor-screen-orientation
+# Capacitor Screen Orientation Plugin
 
 Capacitor plugin to lock/unlock the screen orientation.
 

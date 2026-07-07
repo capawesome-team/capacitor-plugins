@@ -1,4 +1,4 @@
-# @capawesome/capacitor-accessibility-preferences
+# Capacitor Accessibility Preferences Plugin
 
 Capacitor plugin for reading the user's system accessibility preferences.
 

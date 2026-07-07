@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-zip
+# Capacitor Zip Plugin
 
 Capacitor plugin to zip and unzip files and directories with support for encryption.
 

@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-datetime-picker
+# Capacitor Datetime Picker Plugin
 
 Capacitor plugin for seamless date and time selection with advanced features like localization, theming, and more. Available for Android and iOS.
 

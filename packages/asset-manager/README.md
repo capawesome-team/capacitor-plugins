@@ -1,4 +1,4 @@
-# @capawesome/capacitor-asset-manager
+# Capacitor Asset Manager Plugin
 
 Capacitor plugin to access native asset files.
 

@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-wifi
+# Capacitor Wifi Plugin
 
 Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks. Supports both Android and iOS.[^1][^2]
 

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-google-sign-in
+# Capacitor Google Sign-In Plugin
 
 Unofficial Capacitor plugin to sign-in with Google.[^1]
 

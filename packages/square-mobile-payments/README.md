@@ -1,4 +1,4 @@
-# @capawesome/capacitor-square-mobile-payments
+# Capacitor Square Mobile Payments Plugin
 
 Unofficial Capacitor plugin for [Square Mobile Payments SDK](https://developer.squareup.com/docs/mobile-payments-sdk).[^1]
 

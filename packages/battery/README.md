@@ -1,4 +1,4 @@
-# @capawesome/capacitor-battery
+# Capacitor Battery Plugin
 
 Capacitor plugin to access battery information.
 
