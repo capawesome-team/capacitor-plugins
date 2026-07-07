@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-in-app-browser",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Capacitor plugin to open URLs in the external browser, the system browser or an embedded web view.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
