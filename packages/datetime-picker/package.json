@@ -1,7 +1,7 @@
 {
   "name": "@capawesome-team/capacitor-datetime-picker",
   "version": "8.1.1",
-  "description": "Capacitor plugin that let the user easily enter both a date and a time on Android and iOS.",
+  "description": "Capacitor plugin that lets the user easily enter both a date and a time on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

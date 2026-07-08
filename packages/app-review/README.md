@@ -68,7 +68,7 @@ import { AppReview } from '@capawesome/capacitor-app-review';
 
 ### Request an in-app review
 
-Show the native in-app review dialog so the user can rate your app without leaving it. Note that on iOS, review requests are limited to 3 requests per year. Only available on Android and iOS (14+):
+Show the native in-app review dialog so the user can rate your app without leaving it. Note that on iOS, review requests are limited to 3 requests per year. Only available on Android, and on iOS 14 and later:
 
 ```typescript
 const requestReview = async () => {
