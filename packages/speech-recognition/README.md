@@ -10,7 +10,7 @@ Capacitor plugin to transcribe speech into text (also known as speech-to-text) w
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for speech recognition. Here are some of the key features:
+The Capacitor Speech Recognition plugin is one of the most complete speech-to-text solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
@@ -30,9 +30,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Speech Recognition plugin is typically used whenever an app needs to turn spoken words into text, for example:
+
+- **Voice dictation**: Let users dictate messages, notes, or form inputs instead of typing, with live feedback via the `partialResult` event.
+- **Voice commands**: Trigger actions in your app by recognizing spoken phrases, using contextual strings to reliably detect custom terms that are not in the system vocabulary.
+- **Voice search**: Let users search your app hands-free by speaking their query instead of typing it.
+- **Privacy-sensitive transcription**: Force on-device speech recognition so that no audio is sent to external servers.
+- **Accessibility**: Offer users with limited mobility an alternative way to enter text.
 
 ## Compatibility
 
@@ -108,6 +114,43 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check availability and permissions, start and stop listening, query the recognizer state and available languages, and handle recognition events.
+
+### Check if speech recognition is available
+
+Check whether the speech recognizer is available on the device before offering the feature to the user:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
+
+const isAvailable = async () => {
+  const { isAvailable } = await SpeechRecognition.isAvailable();
+  return isAvailable;
+};
+```
+
+### Check and request permissions
+
+Speech recognition requires permission to record audio and, on iOS, to use speech recognition. Check and request the permissions before you start listening:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
+
+const checkPermissions = async () => {
+  const { audioRecording, speechRecognition } = await SpeechRecognition.checkPermissions();
+};
+
+const requestPermissions = async () => {
+  const { audioRecording, speechRecognition } = await SpeechRecognition.requestPermissions({
+    permissions: ['audioRecording', 'speechRecognition'],
+  });
+};
+```
+
+### Start and stop listening
+
+Start listening for speech in a specific language. The `silenceThreshold` option automatically stops the recognition after the given number of milliseconds of silence. You can also stop listening manually:
+
 ```typescript
 import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
@@ -121,31 +164,40 @@ const startListening = async () => {
 const stopListening = async () => {
   await SpeechRecognition.stopListening();
 };
+```
 
-const checkPermissions = async () => {
-  const { audioRecording, speechRecognition } = await SpeechRecognition.checkPermissions();
-};
+### Check if the recognizer is listening
 
-const requestPermissions = async () => {
-  const { audioRecording, speechRecognition } = await SpeechRecognition.requestPermissions({
-    permissions: ['audioRecording', 'speechRecognition'],
-  });
-};
+Query whether the speech recognizer is currently listening:
 
-const isAvailable = async () => {
-  const { isAvailable } = await SpeechRecognition.isAvailable();
-  return isAvailable;
-};
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const isListening = async () => {
   const { isListening } = await SpeechRecognition.isListening();
   return isListening;
 };
+```
+
+### Get the available languages
+
+Retrieve the supported languages for speech recognition as BCP-47 language tags. Only available on Android and iOS:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const getLanguages = async () => {
   const { languages } = await SpeechRecognition.getLanguages();
   return languages;
 };
+```
+
+### Listen for recognition events
+
+React to the different stages of the recognition, for example to display partial results while the user is still speaking:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const addListeners = () => {
   SpeechRecognition.addListener('start', () => {
@@ -173,6 +225,14 @@ const addListeners = () => {
     console.log('User stopped speaking');
   });
 };
+```
+
+### Remove all listeners
+
+Remove all listeners for this plugin when they are no longer needed:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const removeAllListeners = async () => {
   await SpeechRecognition.removeAllListeners();
@@ -734,6 +794,42 @@ Remove all listeners for this plugin.
 | **`Unspecified`**  | <code>'UNSPECIFIED'</code>  | 7.5.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Why does `getLanguages` never resolve on some Android devices?
+
+The `getLanguages()` method is unfortunately not supported by all Android devices. If the method is not supported, the promise will never resolve. It's therefore recommended to set a timeout for the promise and fall back to a predefined list of languages if the timeout is reached.
+
+### Can I use this plugin for continuous speech recognition?
+
+No, continuous listening is not supported. The `silenceThreshold` option controls how many milliseconds of silence end the recognition, but it depends on the underlying speech recognition service and setting an extremely high value will not keep the recognizer listening indefinitely. This is a limitation of the platforms and not of the plugin itself.
+
+### How can I avoid the "Speech data will be sent to Apple" permission dialog?
+
+Set the `useSpeechTranscriber` option of the `startListening(...)` method to `true`. This uses Apple's modern `SpeechTranscriber` API with fully on-device processing, so only the microphone permission is required and no speech recognition permission dialog is shown. This option is only available on iOS 26+.
+
+### What is the difference between the `partialResult` and `result` events?
+
+The `partialResult` event is emitted while the user is still speaking and delivers intermediate transcriptions, which is useful for displaying live feedback. The `result` event is emitted when the final results of the speech recognition are available.
+
+### What permissions does this plugin require?
+
+The plugin requires permission to record audio and, on iOS, permission to use speech recognition. On iOS, you must add the `NSSpeechRecognitionUsageDescription` and `NSMicrophoneUsageDescription` keys to your `Info.plist` file as described in the [Installation](#installation) section. You can check and request the permissions at runtime using the `checkPermissions()` and `requestPermissions(...)` methods.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text (also known as text-to-speech).
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -10,7 +10,7 @@ Capacitor plugin for Bluetooth Low Energy (BLE) communication in the central and
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for Bluetooth Low Energy communication. Here are some of the key features:
+The Capacitor Bluetooth Low Energy plugin is one of the most complete BLE communication solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
@@ -29,15 +29,21 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
+## Use Cases
+
+The Bluetooth Low Energy plugin is typically used to communicate with nearby BLE hardware, for example:
+
+- **Connected hardware and IoT devices**: Connect to BLE peripherals such as sensors or wearables and exchange data by reading and writing characteristics.
+- **Health and fitness apps**: Receive live measurements from devices like heart rate monitors via characteristic notifications.
+- **Background data collection**: Keep the connection alive while the app is in the background using a foreground service on Android.
+- **Device-to-device communication**: Act as a BLE peripheral and advertise your own services to other central devices.
+- **Multi-device setups**: Connect to and communicate with multiple BLE devices at the same time.
+
 ## Testimonials
 
 > We migrated PadelBand, a sports tech app, from the Capacitor Community BLE plugin to this one and the difference is remarkable. The reliable background support and the ability to run custom native code with headless tasks made all the difference for our use case. Highly recommended!
 
 -- [PadelBand](https://padel-band.com) Development Team
-
-## Newsletter
-
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Compatibility
 
@@ -224,34 +230,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize the plugin, manage permissions, scan for and connect to devices, discover services, read and write characteristics and descriptors, act as a peripheral, and listen for Bluetooth Low Energy events.
+
+### Initialize the plugin
+
+Initialize the plugin in the central or peripheral role and check whether Bluetooth Low Energy is available and enabled on the device:
+
 ```typescript
-import { BluetoothLowEnergy, BluetoothLowEnergyUtils, ConnectionPriority } from '@capawesome-team/capacitor-bluetooth-low-energy';
-
-const connect = async () => {
-  await BluetoothLowEnergy.connect({ deviceId: '00:00:00:00:00:00' });
-};
-
-const createBond = async () => {
-  await BluetoothLowEnergy.createBond({ deviceId: '00:00:00:00:00:00' });
-};
-
-const disconnect = async () => {
-  await BluetoothLowEnergy.disconnect({ deviceId: '00:00:00:00:00:00' });
-};
-
-const discoverServices = async () => {
-  await BluetoothLowEnergy.discoverServices({ deviceId: '00:00:00:00:00:00' });
-};
-
-const getConnectedDevices = async () => {
-  const result = await BluetoothLowEnergy.getConnectedDevices();
-  return result.devices;
-};
-
-const getServices = async () => {
-  const result = await BluetoothLowEnergy.getServices({ deviceId: '00:00:00:00:00:00' });
-  return result.services;
-};
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const initialize = async () => {
   await BluetoothLowEnergy.initialize({ mode: 'central' });
@@ -262,27 +248,107 @@ const isAvailable = async () => {
   return result.isAvailable;
 };
 
-const isBonded = async () => {
-  const result = await BluetoothLowEnergy.isBonded({ deviceId: '00:00:00:00:00:00' });
-  return result.bonded;
-};
-
 const isEnabled = async () => {
   const result = await BluetoothLowEnergy.isEnabled();
   return result.enabled;
 };
+```
 
-const openAppSettings = async () => {
-  await BluetoothLowEnergy.openAppSettings();
+### Check and request permissions
+
+Check and request the required Bluetooth permissions. Only available on Android:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const checkPermissions = async () => {
+  const result = await BluetoothLowEnergy.checkPermissions();
+  return result;
 };
 
-const openBluetoothSettings = async () => {
-  await BluetoothLowEnergy.openBluetoothSettings();
+const requestPermissions = async () => {
+  const result = await BluetoothLowEnergy.requestPermissions();
+  return result;
+};
+```
+
+### Scan for devices
+
+Start and stop scanning for nearby BLE devices. Scanned devices are delivered via the `deviceScanned` event (see [Listen for events](#listen-for-events)):
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const startScan = async () => {
+  await BluetoothLowEnergy.startScan();
 };
 
-const openLocationSettings = async () => {
-  await BluetoothLowEnergy.openLocationSettings();
+const stopScan = async () => {
+  await BluetoothLowEnergy.stopScan();
 };
+```
+
+### Connect to a device
+
+Connect to a BLE device by its ID, disconnect from it, and retrieve the currently connected devices:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const connect = async () => {
+  await BluetoothLowEnergy.connect({ deviceId: '00:00:00:00:00:00' });
+};
+
+const disconnect = async () => {
+  await BluetoothLowEnergy.disconnect({ deviceId: '00:00:00:00:00:00' });
+};
+
+const getConnectedDevices = async () => {
+  const result = await BluetoothLowEnergy.getConnectedDevices();
+  return result.devices;
+};
+```
+
+### Bond with a device
+
+Create a bond with a BLE device and check whether a device is already bonded. Only available on Android:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const createBond = async () => {
+  await BluetoothLowEnergy.createBond({ deviceId: '00:00:00:00:00:00' });
+};
+
+const isBonded = async () => {
+  const result = await BluetoothLowEnergy.isBonded({ deviceId: '00:00:00:00:00:00' });
+  return result.bonded;
+};
+```
+
+### Discover services
+
+Discover the services of a connected device and retrieve them along with their characteristics and descriptors:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const discoverServices = async () => {
+  await BluetoothLowEnergy.discoverServices({ deviceId: '00:00:00:00:00:00' });
+};
+
+const getServices = async () => {
+  const result = await BluetoothLowEnergy.getServices({ deviceId: '00:00:00:00:00:00' });
+  return result.services;
+};
+```
+
+### Read and write characteristics
+
+Read the value of a characteristic or write a new value to it:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const readCharacteristic = async () => {
   const result = await BluetoothLowEnergy.readCharacteristic({
@@ -293,6 +359,23 @@ const readCharacteristic = async () => {
   return result.value;
 };
 
+const writeCharacteristic = async () => {
+  await BluetoothLowEnergy.writeCharacteristic({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [1, 2, 3],
+  });
+};
+```
+
+### Read and write descriptors
+
+Read the value of a descriptor or write a new value to it:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
 const readDescriptor = async () => {
   const result = await BluetoothLowEnergy.readDescriptor({
     characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
@@ -302,6 +385,48 @@ const readDescriptor = async () => {
   });
   return result.value;
 };
+
+const writeDescriptor = async () => {
+  await BluetoothLowEnergy.writeDescriptor({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    descriptorId: '00002902-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [1, 2, 3],
+  });
+};
+```
+
+### Receive characteristic notifications
+
+Start and stop notifications for a characteristic to get notified when its value changes. The new values are delivered via the `characteristicChanged` event (see [Listen for events](#listen-for-events)):
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const startCharacteristicNotifications = async () => {
+  await BluetoothLowEnergy.startCharacteristicNotifications({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+};
+
+const stopCharacteristicNotifications = async () => {
+  await BluetoothLowEnergy.stopCharacteristicNotifications({
+    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
+    deviceId: '00:00:00:00:00:00',
+    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+  });
+};
+```
+
+### Tune the connection
+
+Read the signal strength (RSSI) of a connected device. On Android, you can also request a higher connection priority or a larger MTU for faster data transfers (`requestConnectionPriority(...)` and `requestMtu(...)` are only available on Android):
+
+```typescript
+import { BluetoothLowEnergy, ConnectionPriority } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const readRssi = async () => {
   const result = await BluetoothLowEnergy.readRssi({ deviceId: '00:00:00:00:00:00' });
@@ -321,14 +446,14 @@ const requestMtu = async () => {
     mtu: 512,
   });
 };
+```
 
-const setCharacteristicValue = async () => {
-  await BluetoothLowEnergy.setCharacteristicValue({
-    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
-    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-    value: [1, 2, 3],
-  });
-};
+### Act as a peripheral
+
+Advertise your own services to nearby central devices in the peripheral role. Use `setCharacteristicValue(...)` to update the value of a characteristic (only available on Android):
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const startAdvertising = async () => {
   await BluetoothLowEnergy.startAdvertising({
@@ -360,13 +485,25 @@ const startAdvertising = async () => {
   });
 };
 
-const startCharacteristicNotifications = async () => {
-  await BluetoothLowEnergy.startCharacteristicNotifications({
+const setCharacteristicValue = async () => {
+  await BluetoothLowEnergy.setCharacteristicValue({
     characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
-    deviceId: '00:00:00:00:00:00',
     serviceId: '00001800-0000-1000-8000-00805f9b34fb',
+    value: [1, 2, 3],
   });
 };
+
+const stopAdvertising = async () => {
+  await BluetoothLowEnergy.stopAdvertising();
+};
+```
+
+### Keep the connection alive in the background
+
+Start a foreground service to keep the connection alive while the app is in the background. Only available on Android (see [Installation](#installation) for the required service declaration and permissions):
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const startForegroundService = async () => {
   await BluetoothLowEnergy.startForegroundService({
@@ -377,58 +514,37 @@ const startForegroundService = async () => {
   });
 };
 
-const startScan = async () => {
-  await BluetoothLowEnergy.startScan();
-};
-
-const stopAdvertising = async () => {
-  await BluetoothLowEnergy.stopAdvertising();
-};
-
-const stopCharacteristicNotifications = async () => {
-  await BluetoothLowEnergy.stopCharacteristicNotifications({
-    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
-    deviceId: '00:00:00:00:00:00',
-    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-  });
-};
-
 const stopForegroundService = async () => {
   await BluetoothLowEnergy.stopForegroundService();
 };
+```
 
-const stopScan = async () => {
-  await BluetoothLowEnergy.stopScan();
+### Open system settings
+
+Open the app settings, Bluetooth settings, or location settings so the user can grant permissions or enable Bluetooth. `openBluetoothSettings()` and `openLocationSettings()` are only available on Android:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
+
+const openAppSettings = async () => {
+  await BluetoothLowEnergy.openAppSettings();
 };
 
-const writeCharacteristic = async () => {
-  await BluetoothLowEnergy.writeCharacteristic({
-    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
-    deviceId: '00:00:00:00:00:00',
-    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-    value: [1, 2, 3],
-  });
+const openBluetoothSettings = async () => {
+  await BluetoothLowEnergy.openBluetoothSettings();
 };
 
-const writeDescriptor = async () => {
-  await BluetoothLowEnergy.writeDescriptor({
-    characteristicId: '00002a00-0000-1000-8000-00805f9b34fb',
-    descriptorId: '00002902-0000-1000-8000-00805f9b34fb',
-    deviceId: '00:00:00:00:00:00',
-    serviceId: '00001800-0000-1000-8000-00805f9b34fb',
-    value: [1, 2, 3],
-  });
+const openLocationSettings = async () => {
+  await BluetoothLowEnergy.openLocationSettings();
 };
+```
 
-const checkPermissions = async () => {
-  const result = await BluetoothLowEnergy.checkPermissions();
-  return result;
-};
+### Listen for events
 
-const requestPermissions = async () => {
-  const result = await BluetoothLowEnergy.requestPermissions();
-  return result;
-};
+Listen for plugin events such as scanned, connected, and disconnected devices or changed characteristic values, and remove the listeners when they are no longer needed:
+
+```typescript
+import { BluetoothLowEnergy } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const addListener = () => {
   BluetoothLowEnergy.addListener('characteristicChanged', (event) => {
@@ -455,6 +571,14 @@ const addListener = () => {
 const removeAllListeners = () => {
   BluetoothLowEnergy.removeAllListeners();
 };
+```
+
+### Convert byte arrays
+
+Use the `BluetoothLowEnergyUtils` class to convert byte arrays to hexadecimal strings (see [Utils](#utils) for more information):
+
+```typescript
+import { BluetoothLowEnergyUtils } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const convertBytesToHex = (bytes: number[]) => {
   return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });
@@ -1653,6 +1777,43 @@ const convertBytesToHex = (bytes: number[]) => {
 ```
 
 See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
+
+## FAQ
+
+### Does the plugin work on the Web?
+
+No, the plugin supports Android and iOS. Web browsers do not provide the required APIs for the full feature set of this plugin, such as the peripheral role or foreground services.
+
+### Which permissions do I need on Android?
+
+The required permissions depend on the features you use: `BLUETOOTH_SCAN` and `ACCESS_FINE_LOCATION` for scanning, `BLUETOOTH_CONNECT` for connecting to paired devices, `BLUETOOTH_ADVERTISE` for advertising as a peripheral, and the foreground service permissions if you want to start a foreground service. On Android 11 and below, the legacy `BLUETOOTH` and `BLUETOOTH_ADMIN` permissions are required instead. See [Installation](#installation) for the complete list and use `checkPermissions()` and `requestPermissions()` at runtime.
+
+### How do I keep the BLE connection alive while the app is in the background?
+
+On Android, start a foreground service using the `startForegroundService(...)` method, which requires the service declaration and foreground service permissions described in the [Installation](#installation) section. On iOS, enable the `Background Modes` capability with `bluetooth-central` in your Xcode project.
+
+### Can my app act as a BLE peripheral?
+
+Yes, the plugin supports the peripheral role in addition to the central role. Use `startAdvertising(...)` to advertise your own services to nearby central devices. Note that `setCharacteristicValue(...)` and the `characteristicWriteRequest` event are only available on Android.
+
+### Can I connect to multiple devices at the same time?
+
+Yes, the plugin supports connections to multiple devices at the same time. Each method that operates on a device takes a `deviceId` parameter, and you can retrieve all currently connected devices using the `getConnectedDevices()` method.
+
+### What is a headless task and when do I need one?
+
+A headless task lets you run your own native code when a specific Bluetooth Low Energy event occurs, for example when a characteristic value changes. For this, you create a Java class named `BluetoothLowEnergyHeadlessTask` in the same package as your `MainActivity` on Android, as described in the [Installation](#installation) section. This is useful if you need to react to events even when the web view is not running.
+
+## Related Plugins
+
+- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
+- [Wi-Fi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
+- [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions to keep background work running reliably.
+- [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

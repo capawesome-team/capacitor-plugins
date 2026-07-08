@@ -4,7 +4,7 @@ Capacitor plugin to support in-app purchases.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for in-app purchases. Here are some of the key features:
+The Capacitor Purchases plugin is one of the most complete in-app purchase solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🛍️ **Product Types**: Supports subscriptions, consumables, and non-consumable in-app products.
@@ -24,9 +24,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Purchases plugin is typically used whenever an app wants to monetize with in-app purchases, for example:
+
+- **Premium subscriptions**: Sell auto-renewable subscriptions and check whether an introductory offer is available for a product.
+- **One-time unlocks**: Sell consumable and non-consumable in-app products, such as feature unlocks or in-app currency.
+- **Server-side validation**: Pass the verification tokens (JWS on iOS, purchase tokens on Android) to your backend to validate purchases.
+- **Purchase restoration**: Sync and restore purchases so users keep their content across devices.
+- **Reliable transaction handling**: Track current, unfinished, and historical transactions to make sure every purchase is delivered.
 
 ## Compatibility
 
@@ -98,6 +104,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to purchase a product and restore previous purchases.
+
+### Purchase a product
+
+Purchase a product by its ID and finish the transaction after the content has been delivered or the service has been enabled. On Android, this is the product ID configured in the Google Play Console. On iOS, this is the product ID configured in App Store Connect. Only available on Android, and on iOS 15.0 and later:
+
 ```typescript
 import { Purchases } from '@capawesome-team/capacitor-purchases';
 
@@ -108,6 +120,14 @@ const purchaseProduct = async (productId: string) => {
   // Finish the transaction
   await Purchases.finishTransaction({ transactionId: transaction.id });
 };
+```
+
+### Restore previous purchases
+
+Sync the transactions with the store and retrieve the currently owned items to restore purchases across devices. On iOS, `syncTransactions()` displays a system dialog asking the user to authenticate, so call it only in response to an explicit user action. Only available on Android, and on iOS 15.0 and later:
+
+```typescript
+import { Purchases } from '@capawesome-team/capacitor-purchases';
 
 const restorePurchases = async () => {
   await Purchases.syncTransactions();
@@ -593,6 +613,42 @@ To test in-app purchases on iOS, you can use:
 Sandbox accounts can be created in App Store Connect under **Users and Access** → **Sandbox**.
 
 See [Testing In-App Purchases](https://developer.apple.com/documentation/storekit/in-app_purchase/testing_in-app_purchases) for more details.
+
+## FAQ
+
+### Do I need a third-party service to use this plugin?
+
+No, the plugin uses the native store APIs directly, namely StoreKit 2 on iOS and the Google Play Billing Library on Android. For server-side validation, the plugin provides verification tokens (JWS on iOS, purchase tokens on Android) that you can pass to your own backend, and it includes transaction properties for third-party validation services if you prefer to use one.
+
+### Why do I need to call `finishTransaction` after a purchase?
+
+Calling `finishTransaction(...)` indicates to the store that your app has delivered the purchased content or enabled the service. Make sure to call it after every purchase, and check for unfinished transactions with `getUnfinishedTransactions()` at least once every app launch to ensure that all transactions are processed correctly.
+
+### How do I validate purchases on my server?
+
+Every transaction contains properties that you can pass to your server for validation. On iOS, use the `verificationResult` property, which contains the JWS representation of the transaction verification result. On Android, use the `token`, `originalJson`, and `signature` properties.
+
+### Why does `syncTransactions` show a system dialog on iOS?
+
+On iOS, calling `syncTransactions()` displays a system dialog asking the user to authenticate with their App Store credentials. You should therefore call this method only in response to an explicit user action, for example a "Restore Purchases" button. On Android, this method silently queries and refreshes purchases from Google Play without user interaction.
+
+### Which iOS versions are supported?
+
+Most methods require iOS 15.0 or later because the plugin uses StoreKit 2. Billing plan features, such as monthly-with-12-month-commitment subscriptions, require iOS 26.4 or later. Additionally, Xcode 26.5 or later is required to build the plugin, as mentioned in the [Prerequisites](#prerequisites) section.
+
+### How do I test in-app purchases?
+
+On Android, upload your app to the Google Play Console, add test accounts under License Testing, and install the app from Google Play. On iOS, use sandbox test accounts created in App Store Connect or a StoreKit configuration file in Xcode. See the [Testing](#testing) section for detailed instructions.
+
+## Related Plugins
+
+- [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/): Unofficial Capacitor plugin for the Superwall SDK to present remotely configured paywalls.
+- [Square Mobile Payments](https://capawesome.io/docs/sdks/capacitor/square-mobile-payments/): Unofficial Capacitor plugin for the Square Mobile Payments SDK.
+- [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Allow users to submit app store reviews and ratings.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

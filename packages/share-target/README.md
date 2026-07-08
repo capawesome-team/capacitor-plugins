@@ -10,7 +10,7 @@ Capacitor plugin to receive content such as text, links, and files from other ap
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for receiving content from other apps. Here are some of the key features:
+The Capacitor Share Target plugin is one of the most complete solutions for receiving shared content in Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📝 **Multi-content types**: Handle text, URLs, images, videos, and files.
@@ -23,9 +23,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Share Target plugin is typically used whenever an app wants to appear in the share sheet of the operating system, for example:
+
+- **Media imports**: Receive images and videos shared from the gallery or other apps.
+- **Save-for-later apps**: Receive links and text shared from browsers or social media apps, for example in a bookmarking or note-taking app.
+- **File handling**: Receive documents such as PDFs shared from other apps for further processing.
+- **PWA share target**: Let your Progressive Web App receive shared content via the Web Share Target API.
 
 ## Compatibility
 
@@ -804,9 +809,15 @@ if ('serviceWorker' in navigator) {
 
 ## Usage
 
+The following example shows how to listen for content shared to your app and load the shared files.
+
+### Listen for shared content
+
+Add a listener for the `shareReceived` event to handle content shared to your app. The event contains the title, text content, and files that were shared. On Android and iOS, load shared files using `Capacitor.convertFileSrc(...)` and the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch); on the web, the file URIs are cached file URLs that can be fetched directly:
+
 ```typescript
-import { Capacitor } from '@capacitor/core';
 import { ShareTarget } from '@capawesome-team/capacitor-share-target';
+import { Capacitor } from '@capacitor/core';
 
 const addListener = async () => {
     await ShareTarget.addListener('shareReceived', (event) => {
@@ -911,6 +922,42 @@ Unable to find compatibility version string for object version 70
 ```
 
 This error is typically caused by an updated `objectVersion` value in the `project.pbxproj` file of your Xcode project. To resolve this issue, you need to manually revert the `objectVersion` value to a previous version that is compatible with your Xcode version.
+
+## FAQ
+
+### What types of content can my app receive?
+
+The plugin can handle text, URLs, images, videos, and other files. Which content types your app actually receives depends on your configuration: the intent filters in your `AndroidManifest.xml` on Android, the `NSExtensionActivationRule` of your share extension on iOS, and the `share_target` configuration in your web manifest for Progressive Web Apps. See the [Installation](#installation) section for details.
+
+### Why do I need a share extension on iOS?
+
+On iOS, it's not possible to receive shared content directly in the main app. Instead, a share extension handles the shared content and communicates it back to your main app via a URL scheme. The [Installation](#installation) section walks you through creating the share extension, setting up the URL scheme, and handling the URLs in your `AppDelegate.swift`.
+
+### How do I read the files that were shared?
+
+Each shared file contains a `uri` property. On Android and iOS, this contains the file path or a base64 encoded data URL of the shared file, which you can load using `Capacitor.convertFileSrc(...)` and the Fetch API. On the web, the `uri` contains a cached file URL that can be fetched directly. See the [usage example](#listen-for-shared-content) above.
+
+### Why does my app not appear in the share sheet on Android?
+
+Make sure you have added the appropriate intent filters inside the `<activity>` tag of your main activity in `AndroidManifest.xml` for the MIME types you want to receive. Also, the activity must have the `android:exported="true"` attribute set so that other apps can send intents to it, as described in the [Installation](#installation) section.
+
+### Does the plugin work in a Progressive Web App?
+
+Yes, the plugin leverages the Web Share Target API. You need to add a `share_target` configuration to your web manifest and register a service worker that handles the share target requests, as described in the [Web](#web) section.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a received file with the default application.
+- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents, for example to share content with other apps.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

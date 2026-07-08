@@ -10,7 +10,7 @@ Capacitor plugin to manage Wi-Fi connectivity, including adding, connecting, and
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for Wi-Fi connectivity. Here are some of the key features:
+The Capacitor Wifi plugin is one of the most complete Wi-Fi management solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🌐 **Network Management**: Add, connect and disconnect networks.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Wifi plugin is typically used whenever an app needs to interact with Wi-Fi networks, for example:
+
+- **IoT device onboarding**: Connect to the access point of a smart home device, camera, or other IoT hardware to configure it.
+- **Guest Wi-Fi access**: Add a Wi-Fi network to the device's list of known networks via a system dialog, for example in hotel or event apps.
+- **Network diagnostics**: Display the SSID, IP address, and signal strength (RSSI) of the current network.
+- **Network discovery**: Scan for nearby Wi-Fi networks and present them to the user, for example in a setup wizard.
 
 ## Compatibility
 
@@ -154,6 +159,12 @@ export default config;
 
 ## Usage
 
+The following examples show how to connect to and disconnect from a Wi-Fi network, scan for available networks, read information about the current network, and check whether Wi-Fi is enabled.
+
+### Connect to a Wi-Fi network
+
+Connect to a network by providing its SSID and password. On Android, the network will not be added to the device's list of known networks and no traffic will be routed through it; use `addNetwork(...)` instead if you want that. On iOS, `connect(...)` behaves the same as `addNetwork(...)`. Only available on Android and iOS:
+
 ```typescript
 import { Wifi } from '@capawesome-team/capacitor-wifi';
 
@@ -164,14 +175,47 @@ const connect = async () => {
         isHiddenSsid: false
     });
 }
+```
+
+### Disconnect from a Wi-Fi network
+
+On iOS, you can only disconnect from networks that you connected to using the plugin. This also removes the network from the list of known networks. Only available on Android and iOS:
+
+```typescript
+import { Wifi } from '@capawesome-team/capacitor-wifi';
 
 const disconnect = async () => {
     await Wifi.disconnect();
+}
+```
+
+### Scan for available Wi-Fi networks
+
+Start a scan with `startScan()` and retrieve the results with `getAvailableNetworks()`. You can also listen for the `networksScanned` event to be notified when the scan results are available. Note that scan requests may be throttled if you scan too often. Only available on Android:
+
+```typescript
+import { Wifi } from '@capawesome-team/capacitor-wifi';
+
+const startScan = async () => {
+    await Wifi.startScan();
 }
 
 const getAvailableNetworks = async () => {
     const result = await Wifi.getAvailableNetworks();
     return result.networks;
+}
+```
+
+### Get information about the current network
+
+Retrieve the SSID and IP address of the current network on Android and iOS. The signal strength (RSSI) is only available on Android:
+
+```typescript
+import { Wifi } from '@capawesome-team/capacitor-wifi';
+
+const getSsid = async () => {
+    const result = await Wifi.getSsid();
+    return result.ssid;
 }
 
 const getIpAddress = async () => {
@@ -183,19 +227,18 @@ const getRssi = async () => {
     const result = await Wifi.getRssi();
     return result.rssi;
 }
+```
 
-const getSsid = async () => {
-    const result = await Wifi.getSsid();
-    return result.ssid;
-}
+### Check if Wi-Fi is enabled
+
+Check whether Wi-Fi is turned on. Only available on Android:
+
+```typescript
+import { Wifi } from '@capawesome-team/capacitor-wifi';
 
 const isEnabled = async () => {
     const result = await Wifi.isEnabled();
     return result.enabled;
-}
-
-const startScan = async () => {
-    await Wifi.startScan();
 }
 ```
 
@@ -613,6 +656,43 @@ Remove all listeners for this plugin.
 | **`DPP`**                         | <code>13</code> | Easy Connect (DPP) network.                                                                | 6.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Why is the SSID not returned on iOS?
+
+On iOS 14 and later, the SSID can only be retrieved if the network was connected to using the plugin or if the app has permission to access precise location. Make sure the `Access Wi-Fi Information` capability and the location privacy descriptions are set up as described in the [Installation](#installation) section, and request the location permission at runtime using `requestPermissions(...)`.
+
+### What is the difference between `connect` and `addNetwork`?
+
+On Android, `connect(...)` establishes a connection without adding the network to the device's list of known networks and without routing traffic through it. `addNetwork(...)` shows a system dialog and, if the user accepts, adds the network to the list of known networks and routes traffic through it. On iOS, both methods behave identically. Note that `addNetwork(...)` requires Android SDK 30 or later.
+
+### Why does `startScan` fail on Android?
+
+The call may fail because scan requests are throttled after too many scans in a short time, because the device is idle and scanning is disabled, or because the Wi-Fi hardware reports a scan failure. In that case, you can still call `getAvailableNetworks()` to get the most recently updated results from a previous scan.
+
+### What permissions does this plugin require?
+
+On Android, the `ACCESS_FINE_LOCATION` permission is required if you want to retrieve information about nearby Wi-Fi networks. On iOS, the `Access Wi-Fi Information` and `Hotspot` capabilities must be enabled and the location privacy descriptions must be added to your `Info.plist` file. You can check and request the location permission at runtime using `checkPermissions()` and `requestPermissions(...)`. See [Installation](#installation) for details.
+
+### Does this plugin work on the Web?
+
+No, the plugin only supports Android and iOS, since web browsers do not expose APIs for managing Wi-Fi connectivity. The supported platforms for each method are documented in the [API](#api) section.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as the connection type and status.
+- [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy devices in the central and peripheral role.
+- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags.
+- [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

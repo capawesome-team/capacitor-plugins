@@ -10,7 +10,7 @@ Capacitor plugin for handling geocoding and reverse geocoding.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for geocoding and reverse geocoding. Here are some of the key features:
+The Capacitor Geocoder plugin is one of the most complete geocoding solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📍 **Geocoding**: Convert addresses into geographic coordinates.
@@ -26,9 +26,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Geocoder plugin is typically used whenever an app needs to translate between addresses and coordinates, for example:
+
+- **Address search**: Convert a user-entered address into geographic coordinates to display the location on a map.
+- **Location labeling**: Show a human-readable address for given coordinates, for example the user's current position.
+- **Address forms**: Prefill address fields such as postal code, country, or administrative area based on coordinates.
+- **Localized results**: Return addresses in the user's preferred language using the `locale` option.
 
 ## Compatibility
 
@@ -78,6 +83,12 @@ npx cap sync
 
 ## Usage
 
+The following examples show how to convert an address into coordinates and how to convert coordinates back into an address.
+
+### Convert an address into coordinates
+
+Use the `geocode(...)` method to translate a human-readable address into geographic coordinates, for example to display the location on a map:
+
 ```typescript
 import { Geocoder } from '@capawesome-team/capacitor-geocoder';
 
@@ -87,6 +98,14 @@ const geocode = async () => {
   });
   console.log('Geocode result:', result);
 };
+```
+
+### Convert coordinates into an address
+
+Use the `geodecode(...)` method to translate geographic coordinates into one or more human-readable addresses. The number of returned addresses can be limited with the `limit` option:
+
+```typescript
+import { Geocoder } from '@capawesome-team/capacitor-geocoder';
 
 const geodecode = async () => {
   const result = await Geocoder.geodecode({
@@ -207,6 +226,41 @@ Only available on Android and iOS.
 | **`webUserAgent`** | <code>string</code>                           | The User-Agent identifying your application. Only needed if `webProvider` is set to `openstreetmaps` which uses the Nominatim service (see https://operations.osmfoundation.org/policies/nominatim/). The goal is to be able to limit the number of requests per application. Only available on the web. |                               | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### What is the difference between geocoding and reverse geocoding?
+
+Geocoding translates a human-readable address into geographic coordinates, which is what the `geocode` method does. Reverse geocoding is the opposite: the `geodecode` method translates a latitude and longitude into one or more human-readable addresses.
+
+### Which geocoding services does the plugin use?
+
+On Android and iOS, the plugin uses the platform-native geocoding services for reliable and accurate results. On the Web, you can choose between Google Maps and OpenStreetMap using the `webProvider` option, with OpenStreetMap being the default.
+
+### Do I need an API key to use this plugin?
+
+No API key is required on Android and iOS since the plugin uses the platform-native geocoding services. On the Web, you can provide an API key for the geocoding service using the `webApiKey` option. When using the default OpenStreetMap provider, you should also set the `webUserAgent` option to identify your application, as required by the [Nominatim usage policy](https://operations.osmfoundation.org/policies/nominatim/).
+
+### How can I limit the number of addresses returned by a reverse geocoding request?
+
+Use the `limit` option of the `geodecode` method. By default, a maximum of 5 addresses is returned for the given coordinates.
+
+### Can I get results in a specific language?
+
+Yes, both methods accept a `locale` option that takes a BCP 47 language tag. If no locale is provided, the device's locale is used.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
+- [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device compass heading.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -10,7 +10,7 @@ Capacitor plugin for seamless printing on Android and iOS. Supports base64, file
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for printing. Here are some of the key features:
+The Capacitor Printer plugin is one of the most complete printing solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🖨️ **Base64 Printer**: Print base64 encoded files.
@@ -26,9 +26,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Printer plugin is typically used whenever an app needs to send content to a printer, for example:
+
+- **Receipts and invoices**: Print HTML-formatted receipts or invoices directly from your app.
+- **Documents**: Print PDF documents or other files stored on the device.
+- **Server-generated content**: Print documents received from an API as base64 encoded data.
+- **Reports and summaries**: Print the current web view content, customized with a print style sheet.
 
 ## Compatibility
 
@@ -108,6 +113,27 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to print a file from the device, a base64 encoded file, custom HTML content, a PDF document, and the web view content.
+
+### Print a file from the device
+
+Present the printing user interface to print a file stored on the device, for example a file the user previously downloaded. Only available on Android and iOS:
+
+```typescript
+import { Printer } from '@capawesome-team/capacitor-printer';
+
+const printFile = async () => {
+  await Printer.printFile({
+    mimeType: 'application/pdf',
+    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
+  });
+};
+```
+
+### Print a base64 encoded file
+
+Print a file that is only available as a base64 encoded string, for example a document received from an API. Note that large files can lead to app crashes, so it's recommended to use the `printFile(...)` method instead whenever possible. Only available on Android and iOS:
+
 ```typescript
 import { Printer } from '@capawesome-team/capacitor-printer';
 
@@ -116,14 +142,15 @@ const printBase64 = async () => {
     name: 'My Document',
     data: 'JVBERi0...',
   });
-}
-
-const printFile = async () => {
-  await Printer.printFile({
-    mimeType: 'application/pdf',
-    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
-  });
 };
+```
+
+### Print custom HTML content
+
+Print custom HTML content, for example a receipt or invoice rendered by your app. Only available on Android and iOS:
+
+```typescript
+import { Printer } from '@capawesome-team/capacitor-printer';
 
 const printHtml = async () => {
   await Printer.printHtml({
@@ -131,6 +158,14 @@ const printHtml = async () => {
     html: '<h1>Hello World</h1>',
   });
 };
+```
+
+### Print a PDF document
+
+Print a PDF document stored on the device. Only available on Android and iOS:
+
+```typescript
+import { Printer } from '@capawesome-team/capacitor-printer';
 
 const printPdf = async () => {
   await Printer.printPdf({
@@ -138,6 +173,14 @@ const printPdf = async () => {
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000485',
   });
 };
+```
+
+### Print the web view content
+
+Print the current content of the web view. You can use a [print style sheet](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing) to customize the print output:
+
+```typescript
+import { Printer } from '@capawesome-team/capacitor-printer';
 
 const printWebView = async () => {
   await Printer.printWebView({
@@ -309,6 +352,38 @@ output (see https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/P
 <code><a href="#printoptions">PrintOptions</a></code>
 
 </docgen-api>
+
+## FAQ
+
+### Can I print on the web?
+
+On the web, only the `printWebView(...)` method is available, which prints the current web view content. The `printBase64(...)`, `printFile(...)`, `printHtml(...)` and `printPdf(...)` methods are only available on Android and iOS.
+
+### Why does my app crash when printing large base64 files?
+
+The `printBase64(...)` method loads the entire file into memory, which can lead to app crashes for large files. It's therefore recommended to use the `printFile(...)` method instead, which prints the file directly from its path on the device.
+
+### Which file types can I print?
+
+The `printBase64(...)` method supports the mime types `application/pdf`, `image/gif`, `image/heic`, `image/heif`, `image/jpeg`, and `image/png`. In addition, you can print arbitrary files from the device with `printFile(...)`, PDF documents with `printPdf(...)`, custom HTML content with `printHtml(...)`, and the current web view content with `printWebView(...)`.
+
+### How can I customize the print output of the web view?
+
+You can use a print style sheet to customize how the web view content is printed, for example to hide navigation elements or adjust the layout. Check out the [MDN documentation on printing](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing) for more information.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/): Generate paginated PDF files from HTML content or URLs.
+- [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/): Display PDF documents in a fullscreen native viewer.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file to print from the device's file system.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

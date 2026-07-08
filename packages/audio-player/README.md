@@ -10,7 +10,7 @@ Capacitor plugin to play audio with background support.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio playback. Here are some of the key features:
+The Capacitor Audio Player plugin is one of the most complete audio playback solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌙 **Background Mode**: Play audio even when the app is in the background.
@@ -28,9 +28,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Audio Player plugin is typically used whenever an app needs to play audio, for example:
+
+- **Music and podcast playback**: Play remote audio files and keep them playing while the app is in the background.
+- **Voice message playback**: Play voice messages recorded with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) plugin in chat or support apps.
+- **Sound effects**: Play short sounds from your web assets with precise volume control and looping.
+- **Audiobooks and learning apps**: Let users adjust the playback speed and seek to specific positions.
 
 ## Compatibility
 
@@ -81,10 +86,14 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 ## Usage
 
+The following examples show how to play audio from web assets, remote URLs, the file system, or a blob, and how to control, seek, adjust the volume of, and inspect the playback.
+
+### Play an audio file from your web assets or a remote URL
+
+Use the `src` option to play a web asset or a remote URL. Both are supported on all platforms:
+
 ```typescript
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
-import { Capacitor } from '@capacitor/core';
-import { Filesystem } from '@capacitor/filesystem';
 
 const playFromWebAsset = async () => {
   await AudioPlayer.play({ 
@@ -94,6 +103,15 @@ const playFromWebAsset = async () => {
     position: 0 
   });
 };
+```
+
+### Play an audio file from the file system
+
+Use the `uri` option to play a file from the device's file system, for example one retrieved with the Capacitor Filesystem plugin. This option is only available on Android and iOS:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+import { Filesystem, FilesystemDirectory } from '@capacitor/filesystem';
 
 const playFromNativeFile = async () => {
   const { uri } = await Filesystem.getUri({
@@ -102,6 +120,14 @@ const playFromNativeFile = async () => {
   });
   await AudioPlayer.play({ uri, loop: false, volume: 100, position: 0 });
 };
+```
+
+### Play an audio file from a blob
+
+Use the `blob` option to play a `Blob` instance, for example one fetched from a server. This option is only available on Web:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const playFromBlob = async () => {
   const assetUrl = 'https://www.example.com/audio.mp3';
@@ -109,6 +135,14 @@ const playFromBlob = async () => {
   const blob = await response.blob();
   await AudioPlayer.play({ blob, loop: false, volume: 100, position: 0 });
 };
+```
+
+### Pause, resume and stop the playback
+
+Pause the playback and resume it later, or stop it entirely:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const pause = async () => {
   await AudioPlayer.pause();
@@ -121,14 +155,38 @@ const resume = async () => {
 const stop = async () => {
   await AudioPlayer.stop();
 };
+```
+
+### Seek to a specific position
+
+Jump to a specific position in the audio playback, given in milliseconds:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const seekTo = async () => {
   await AudioPlayer.seekTo({ position: 30_000 }); // Seek to 30 seconds
 };
+```
+
+### Adjust the volume
+
+Set the volume level of the current playback session to a value between 0 and 100:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const setVolume = async () => {
   await AudioPlayer.setVolume({ volume: 50 }); // Set volume to 50%
 };
+```
+
+### Get the current playback state
+
+Retrieve the current position and duration of the playback in milliseconds, and check whether the audio is currently playing:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const getCurrentPosition = async () => {
   const { position } = await AudioPlayer.getCurrentPosition();
@@ -432,6 +490,43 @@ When `stop()` is called, the audio session is deactivated by default. If `play()
 ```typescript
 await AudioPlayer.stop({ deactivateAudioSession: false });
 ```
+
+## FAQ
+
+### Can I play audio while the app is in the background?
+
+Yes, the plugin supports background playback. On iOS, you need to enable the `Background Modes` capability with `Audio, AirPlay, and Picture in Picture` in your Xcode project, as described in the [Installation](#installation) section.
+
+### Which audio sources can I play?
+
+You can play web assets and remote URLs via the `src` option on all platforms. On Android and iOS, you can also play files from the device's file system via the `uri` option. On Web, you can play `Blob` instances via the `blob` option. See the [Usage](#usage) section for examples.
+
+### How can I change the playback speed?
+
+Use the `rate` option of the `play(...)` method or call `setRate(...)` during playback. Values between 0.5 and 2.0 are recommended, as other values may not be supported on all devices. The playback rate is adjusted with pitch preservation and is available on Android (SDK 23+), iOS and Web.
+
+### Why does playback fail with a CoreMediaErrorDomain -16042 error on iOS?
+
+This can happen when `play()` is called shortly after `stop()`, because the audio session is deactivated by default when stopping. Set the `deactivateAudioSession` option of the `stop(...)` method to `false` if you intend to play audio again shortly after stopping. See the [Troubleshooting](#troubleshooting) section for more details.
+
+### Can I use this plugin together with other audio plugins?
+
+Yes, the plugin is compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins. For example, you can play back a recording created with the Audio Recorder plugin.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
+- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
+- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text with voice selection, pitch, and rate control.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

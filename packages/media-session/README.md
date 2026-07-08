@@ -10,7 +10,7 @@ Capacitor plugin to interact with media controllers, volume keys and media butto
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for media sessions. Here are some of the key features:
+The Capacitor Media Session plugin is one of the most complete media playback integration solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🎮 **Media Controls**: Handle hardware media keys, lock screen controls, and notification controls.
@@ -27,9 +27,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Media Session plugin is typically used in apps that play media and want to integrate with the operating system's media controls, for example:
+
+- **Music streaming apps**: Display the current track's title, artist, album, and artwork on the lock screen and respond to play, pause, and track change actions.
+- **Podcast and audiobook players**: Let users seek forward and backward with configurable seek offsets and display the current playback position and duration.
+- **Video call apps**: Handle the microphone toggle, camera toggle, and hang up actions on the Web.
+- **Presentation apps**: Respond to the previous and next slide actions on the Web.
 
 ## Compatibility
 
@@ -146,13 +151,14 @@ To use a custom notification icon on Android:
 
 ## Usage
 
+The following examples show how to display track metadata, register handlers for media actions, update the playback and position state, listen for media session actions, and unregister handlers and remove listeners, using the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin for the actual audio playback.
+
+### Display metadata about the current track
+
+Set the title, artist, album, and artwork that the operating system displays on the lock screen and in notifications. Note that the `artwork` option is only available on iOS and Web:
+
 ```typescript
-import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
-import {
-  MediaSession,
-  MediaSessionAction,
-  MediaSessionPlaybackState
-} from '@capawesome-team/capacitor-media-session';
+import { MediaSession } from '@capawesome-team/capacitor-media-session';
 
 const setMetadata = async () => {
   await MediaSession.setMetadata({
@@ -173,6 +179,14 @@ const setMetadata = async () => {
     ],
   });
 };
+```
+
+### Register handlers for media actions
+
+Register a handler for each media session action you want to support. The media session only responds to an action if a handler is registered for it:
+
+```typescript
+import { MediaSession, MediaSessionAction } from '@capawesome-team/capacitor-media-session';
 
 const registerActions = async () => {
   await MediaSession.registerActionHandler({
@@ -194,12 +208,28 @@ const registerActions = async () => {
     action: MediaSessionAction.Stop
   });
 };
+```
+
+### Update the playback state
+
+Tell the operating system whether media is currently playing, paused, or stopped so that the media controls reflect the correct state:
+
+```typescript
+import { MediaSession, MediaSessionPlaybackState } from '@capawesome-team/capacitor-media-session';
 
 const setPlaybackState = async () => {
   await MediaSession.setPlaybackState({
     playbackState: MediaSessionPlaybackState.Playing,
   });
 };
+```
+
+### Update the position state
+
+Report the duration, playback rate, and current position of the media in seconds so that the operating system can display a progress bar:
+
+```typescript
+import { MediaSession } from '@capawesome-team/capacitor-media-session';
 
 const setPositionState = async () => {
   await MediaSession.setPositionState({
@@ -208,6 +238,15 @@ const setPositionState = async () => {
     position: 30,
   });
 };
+```
+
+### Listen for media session actions
+
+Add an `action` event listener to react to the registered actions, for example when the user presses a hardware media key or a button on the lock screen:
+
+```typescript
+import { MediaSession, MediaSessionAction, MediaSessionPlaybackState } from '@capawesome-team/capacitor-media-session';
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const addActionListener = () => {
   MediaSession.addListener('action', async (event) => {
@@ -255,6 +294,14 @@ const addActionListener = () => {
     }
   });
 };
+```
+
+### Unregister action handlers and remove listeners
+
+Make sure to unregister action handlers when they are no longer needed and remove your event listeners:
+
+```typescript
+import { MediaSession, MediaSessionAction } from '@capawesome-team/capacitor-media-session';
 
 const removeActionListener = async () => {
   await MediaSession.unregisterActionHandler({
@@ -603,6 +650,42 @@ Remove all listeners for this plugin.
 | **`Playing`** | <code>'PLAYING'</code> | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### How do I show playback controls on the lock screen?
+
+Set the metadata for the current track using `setMetadata`, register handlers for the actions you want to support using `registerActionHandler`, and update the playback state using `setPlaybackState`. The plugin uses the MediaSession API on Android and MPNowPlayingInfoCenter on iOS, so the operating system takes care of displaying the controls on the lock screen and in notifications. See the [usage examples](#usage) above for details.
+
+### Why is the artwork not displayed on Android?
+
+The `artwork` option of the `setMetadata` method is only available on iOS and Web. On Android, you can configure the notification icon instead using the `smallIcon` configuration option.
+
+### Can I customize the notification icon on Android?
+
+Yes, use the `smallIcon` configuration option to set the name of a drawable resource from your app's `res/drawable` directory. The icon should be single-color white with a transparent background for the best display. If the resource is not found, the default icon is used. See the [Configuration](#configuration) section for details.
+
+### Can I use this plugin together with the Audio Player plugin?
+
+Yes, the plugin is compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin. A common setup is to play audio with the Audio Player plugin and use the Media Session plugin to display metadata and respond to media actions, as shown in the [usage examples](#usage) above.
+
+### Why does the media session not respond to certain actions?
+
+The media session only responds to an action if a handler was registered for it using `registerActionHandler`. Also note that some actions such as `SkipAd`, `ToggleMicrophone`, `ToggleCamera`, `ToggleScreenShare`, `HangUp`, `PreviousSlide`, `NextSlide`, `EnterPictureInPicture` and `VoiceActivity` are only available on the Web.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
+- [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

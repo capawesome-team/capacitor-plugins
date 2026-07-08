@@ -10,7 +10,7 @@ Capacitor plugin to securely store key/value pairs in lockable, biometric-protec
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for secure, lockable storage. Here are some of the key features:
+The Capacitor Vault plugin is one of the most complete secure storage solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Native secure vault on Android and iOS, with a `localStorage`-backed web implementation for development.
 - 🔒 **Secure**: Hardware-backed encryption via the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
@@ -29,9 +29,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
+The Vault plugin is typically used whenever access to stored data should require an explicit user authentication, for example:
+
+- **App lock**: Protect sensitive parts of your app behind a biometric or device-passcode prompt.
+- **Password managers**: Store user credentials that are only readable after the user unlocks the vault.
+- **Authenticator apps**: Keep TOTP secrets locked until the user authenticates.
+- **Master key storage**: Protect the master password or encryption key that guards other data, such as an encrypted database.
+- **Session protection**: Automatically lock stored data when the app has been backgrounded for a configurable duration.
 
 ## Compatibility
 
@@ -134,12 +140,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize a vault, check whether one exists, unlock and lock it, store and retrieve values, clear or destroy it, and listen for lock and unlock events.
+
+### Initialize the vault
+
+Initialize the vault with the desired configuration once per session before calling any other method. The `lockAfterBackgrounded` option automatically locks the vault after the app has been backgrounded for the given duration in milliseconds:
+
 ```typescript
-import {
-  Vault,
-  VaultType,
-  ErrorCode,
-} from '@capawesome-team/capacitor-vault';
+import { Vault, VaultType } from '@capawesome-team/capacitor-vault';
 
 // Call once per session before any other method.
 const initialize = async () => {
@@ -151,12 +159,28 @@ const initialize = async () => {
     lockAfterBackgrounded: 30000,
   });
 };
+```
+
+### Check whether a vault exists
+
+Check whether a vault was created in a previous session, for example to decide between a fresh setup and an unlock flow:
+
+```typescript
+import { Vault } from '@capawesome-team/capacitor-vault';
 
 // Check whether a vault was created in a previous session.
 const exists = async () => {
   const { exists } = await Vault.exists();
   return exists;
 };
+```
+
+### Unlock and lock the vault
+
+Unlocking prompts the user for biometric authentication or the device credential, depending on the vault's type. Once unlocked, you can perform many read and write operations until the vault is locked again:
+
+```typescript
+import { Vault, ErrorCode } from '@capawesome-team/capacitor-vault';
 
 // Prompt the user for biometric authentication.
 const unlock = async () => {
@@ -179,6 +203,19 @@ const isLocked = async () => {
   return isLocked;
 };
 
+// Lock the vault manually.
+const lock = async () => {
+  await Vault.lock();
+};
+```
+
+### Store and retrieve values
+
+Store, retrieve, and remove key/value pairs. The vault must be unlocked before calling these methods:
+
+```typescript
+import { Vault } from '@capawesome-team/capacitor-vault';
+
 // Store a value.
 const setValue = async () => {
   await Vault.setValue({ key: 'token', value: 'abc123' });
@@ -200,16 +237,32 @@ const getKeys = async () => {
   const { keys } = await Vault.getKeys();
   return keys;
 };
+```
+
+### Clear or destroy the vault
+
+Remove all values while preserving the vault's configuration, or destroy the vault entirely so that it must be reinitialized before use:
+
+```typescript
+import { Vault } from '@capawesome-team/capacitor-vault';
 
 // Remove all values without destroying the vault.
 const clear = async () => {
   await Vault.clear();
 };
 
-// Lock the vault manually.
-const lock = async () => {
-  await Vault.lock();
+// Permanently destroy the vault.
+const destroy = async () => {
+  await Vault.destroy();
 };
+```
+
+### Listen for lock and unlock events
+
+React to the vault being locked or unlocked, for example to navigate to a lock screen when the vault locks:
+
+```typescript
+import { Vault } from '@capawesome-team/capacitor-vault';
 
 // React to lock and unlock events.
 const addListeners = async () => {
@@ -219,11 +272,6 @@ const addListeners = async () => {
   await Vault.addListener('unlock', ({ vaultId }) => {
     console.log(`Vault ${vaultId} unlocked.`);
   });
-};
-
-// Permanently destroy the vault.
-const destroy = async () => {
-  await Vault.destroy();
 };
 ```
 
@@ -848,58 +896,27 @@ Yes. This plugin was built as an alternative to [Ionic Identity Vault](https://i
 
 ### How do I migrate from Ionic Identity Vault?
 
-For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool:
+For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool and use the `ionic-enterprise-sdk-migration` skill to migrate your project to `@capawesome-team/capacitor-vault`. Alternatively, you can follow the manual instructions and the complete runtime migration example in the blog post [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/).
 
-```bash
-npx skills add capawesome-team/skills --skill ionic-enterprise-sdk-migration
-```
+The stored data needs to be migrated at runtime while **both** plugins are still installed: Identity Vault exposes `exportVault()`, which returns a plain key/value map after the user unlocks the vault, and that map has the exact shape expected by this plugin's [`importData(...)`](#importdata) method, so the two can be bridged directly. Note that the user has to authenticate once during the migration to unlock the old vault — this is unavoidable, since the data is protected by the device's biometric or passcode authentication by design. Once all users have migrated (for example, after a release cycle in which everyone has opened the app at least once), you can remove the Identity Vault dependency in a follow-up release.
 
-Then use the following prompt:
+### What happens when the user enrolls a new fingerprint or face?
 
-```
-Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Identity Vault to `@capawesome-team/capacitor-vault`.
-```
+If the vault was created with the `invalidateOnBiometricEnrollment` option set to `true`, the encryption key is invalidated when the device's biometric set changes, and the next `unlock()` call rejects with the `KEY_INVALIDATED` error code. The app must then call `destroy()` and reinitialize the vault. On Android, the entire encryption key is invalidated, while on iOS only the biometric branch is invalidated, so users of `BIOMETRIC_OR_DEVICE_PASSCODE` vaults can still unlock with the device passcode. Note that this option is baked into the encryption key at vault creation time and cannot be changed afterwards.
 
-Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/).
+### Can I use this plugin on the Web?
 
-The stored data needs to be migrated at runtime while **both** plugins are still installed. Identity Vault exposes `exportVault()`, which returns a plain key/value map after the user unlocks the vault. That map has the exact shape expected by this plugin's [`importData(...)`](#importdata) method, so the two can be bridged directly:
+The web implementation stores values unencrypted in `localStorage` to make cross-platform development easier. It is intended for development and testing purposes only and should NOT be used in production. The secure, hardware-backed vault is only available on Android and iOS.
 
-```typescript
-import { Vault, VaultType } from '@capawesome-team/capacitor-vault';
-// Your existing Identity Vault instance.
-import { vault as identityVault } from './identity-vault';
+### Can I use this plugin with Ionic, React, Vue or Angular?
 
-const MIGRATION_KEY = 'capacitor-vault-migrated';
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
 
-const migrateFromIdentityVault = async () => {
-  // Skip if the migration has already been performed.
-  if (localStorage.getItem(MIGRATION_KEY)) {
-    return;
-  }
-  // Nothing to migrate if the old vault is empty.
-  if (await identityVault.isEmpty()) {
-    localStorage.setItem(MIGRATION_KEY, 'true');
-    return;
-  }
+## Related Plugins
 
-  // Unlocking prompts the user to authenticate (e.g. via biometrics).
-  await identityVault.unlock();
-  const data = await identityVault.exportVault();
-
-  // Initialize the new vault and import the data.
-  await Vault.initialize({ type: VaultType.Biometric });
-  await Vault.unlock();
-  await Vault.importData({ data });
-
-  // Clear the old vault and mark the migration as complete.
-  await identityVault.clear();
-  localStorage.setItem(MIGRATION_KEY, 'true');
-};
-```
-
-Once all users have migrated (for example, after a release cycle in which everyone has opened the app at least once), you can remove the Identity Vault dependency in a follow-up release.
-
-**Note**: The user has to authenticate once during the migration to unlock the old vault. This is unavoidable, since the data is protected by the device's biometric or passcode authentication by design.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
 
 ## Next steps
 
@@ -908,6 +925,10 @@ Here are a few resources to help you continue:
 - Read [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/) if you are migrating from Ionic Identity Vault.
 - Need simple secure key/value storage without vault locking? Check out the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
 - Check out [Getting Started with Insiders](https://capawesome.io/docs/insiders/getting-started/) to learn how to install the plugin.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Changelog
 

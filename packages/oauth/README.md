@@ -10,7 +10,7 @@ Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.[
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for OAuth. Here are some of the key features:
+The Capacitor OAuth plugin is one of the most complete authentication solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Providers**: Works with any OAuth 2.0 / OpenID Connect provider, including Auth0, Azure AD, Amazon Cognito, Okta and OneLogin.
@@ -27,9 +27,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
+The OAuth plugin is typically used whenever an app needs to authenticate users against an OAuth 2.0 or OpenID Connect provider, for example:
+
+- **Enterprise sign-in**: Authenticate users against identity providers such as Auth0, Azure AD, Amazon Cognito, Okta or OneLogin using the Authorization Code flow with PKCE.
+- **Social login**: Sign in users with providers like Google that support OpenID Connect discovery.
+- **Session management**: Keep users signed in by refreshing access tokens with a refresh token and checking token expiration.
+- **User profiles**: Decode the JWT ID token to access the user's claims.
+- **Auth Connect migration**: Replace the discontinued Ionic Auth Connect plugin with an actively maintained alternative.
 
 ## Compatibility
 
@@ -118,10 +124,15 @@ If you are using Proguard, you need to add the following rules to your `proguard
 
 ## Usage
 
+The following examples show how to sign in a user, handle the redirect callback on the Web, refresh the access token, sign out a user, and decode an ID token, using the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the tokens.
+
+### Sign in a user
+
+Start an OAuth 2.0 authorization code flow with PKCE using the `login(...)` method. When you provide the `issuerUrl`, the plugin automatically fetches the authorization and token endpoints via OpenID Connect discovery:
+
 ```typescript
 import { Oauth } from '@capawesome-team/capacitor-oauth';
 import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
-import { Capacitor } from '@capacitor/core';
 
 const login = async () => {
   // Sign in the user
@@ -140,6 +151,15 @@ const login = async () => {
     value: JSON.stringify(result),
   });
 };
+```
+
+### Handle the redirect callback on the Web
+
+On the Web, call the `handleRedirectCallback()` method on page load when the URL contains authorization response parameters. This method is only available on Web:
+
+```typescript
+import { Oauth } from '@capawesome-team/capacitor-oauth';
+import { Capacitor } from '@capacitor/core';
 
 const handleRedirectCallback = async () => {
   if (Capacitor.getPlatform() !== 'web') {
@@ -149,6 +169,14 @@ const handleRedirectCallback = async () => {
   const result = await Oauth.handleRedirectCallback();
   console.log('Access token:', result.accessToken);
 };
+```
+
+### Refresh the access token
+
+Use the `refreshToken(...)` method to obtain a new access token using the refresh token from the login:
+
+```typescript
+import { Oauth } from '@capawesome-team/capacitor-oauth';
 
 const refreshToken = async () => {
   const result = await Oauth.refreshToken({
@@ -158,6 +186,14 @@ const refreshToken = async () => {
   });
   console.log('New access token:', result.accessToken);
 };
+```
+
+### Sign out a user
+
+End the OAuth session by calling the provider's end-session endpoint using the `logout(...)` method:
+
+```typescript
+import { Oauth } from '@capawesome-team/capacitor-oauth';
 
 const logout = async () => {
   await Oauth.logout({
@@ -166,6 +202,14 @@ const logout = async () => {
     postLogoutRedirectUrl: 'com.example.app://oauth/logout',
   });
 };
+```
+
+### Decode an ID token
+
+Use the `decodeIdToken(...)` method to decode a JWT ID token without verification and access its claims:
+
+```typescript
+import { Oauth } from '@capawesome-team/capacitor-oauth';
 
 const decodeIdToken = async () => {
   const result = await Oauth.decodeIdToken({
@@ -532,19 +576,25 @@ Yes. This plugin was built as an actively maintained alternative to [Ionic Auth 
 
 ### How do I migrate from Ionic Auth Connect?
 
-For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool:
+For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool and instruct it to use the `ionic-enterprise-sdk-migration` skill to migrate your project from Ionic Auth Connect to `@capawesome-team/capacitor-oauth`. Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Auth Connect plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/).
 
-```bash
-npx skills add capawesome-team/skills --skill ionic-enterprise-sdk-migration
-```
+### Why does `login(...)` never resolve on iOS?
 
-Then use the following prompt:
+This usually happens when the redirect URI returned by your provider does not exactly match the `redirectUrl` you passed, for example because of a trailing slash added by the provider. The plugin compares scheme, host and path and silently ignores any mismatch. See the [Troubleshooting](#troubleshooting) section for details on how to diagnose and fix this.
 
-```
-Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Auth Connect to `@capawesome-team/capacitor-oauth`.
-```
+### Where should I store the tokens?
 
-Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Auth Connect plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/).
+Tokens are sensitive data and should not be stored in plain text. The plugin is compatible with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin, which securely stores key/value pairs such as tokens, as shown in the [usage examples](#usage) above.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 
 ## Next steps
 
@@ -553,6 +603,10 @@ Here are a few resources to help you continue:
 - Read [Alternative to the Ionic Auth Connect plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/) if you are migrating from Ionic Auth Connect.
 - Store tokens and other sensitive data with the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
 - Check out [Getting Started with Insiders](https://capawesome.io/docs/insiders/getting-started/) to learn how to install the plugin.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Changelog
 

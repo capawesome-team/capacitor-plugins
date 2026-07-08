@@ -10,7 +10,7 @@ Capacitor plugin to securely store key/value pairs such as passwords, tokens or 
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for secure storage. Here are some of the key features:
+The Capacitor Secure Preferences plugin is one of the most complete secure storage solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Native secure storage on Android and iOS, with a `localStorage`-backed web implementation for development.
 - 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
@@ -23,9 +23,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
+The Secure Preferences plugin is typically used whenever an app needs to keep small pieces of sensitive data on the device, for example:
+
+- **Authentication tokens**: Store OAuth refresh tokens or session tokens that the app reads in the background.
+- **API keys**: Keep server-issued API keys encrypted at rest instead of in plain text.
+- **Credentials**: Securely store passwords using the Android Keystore and iOS Keychain.
+- **Sensitive settings**: Persist preference flags that contain personal information.
 
 ## Compatibility
 
@@ -94,12 +99,29 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to store a value, retrieve a value, list all stored keys, remove a value, and clear all stored values.
+
+### Store a value
+
+Store a value securely under a key. On Android and iOS, the value is encrypted at rest. On the web, the value is stored unencrypted in `localStorage` for development purposes only:
+
 ```typescript
 import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
 
-const clear = async () => {
-  await SecurePreferences.clear();
+const set = async () => {
+  await SecurePreferences.set({
+    key: 'password',
+    value: '123456',
+  });
 };
+```
+
+### Retrieve a value
+
+Get the value associated with a key:
+
+```typescript
+import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
 
 const get = async () => {
   const { value } = await SecurePreferences.get({
@@ -107,23 +129,44 @@ const get = async () => {
   });
   console.log(value);
 };
+```
+
+### List all stored keys
+
+Get a list of all keys that currently have a stored value:
+
+```typescript
+import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
 
 const keys = async () => {
   const { keys } = await SecurePreferences.keys();
   console.log(keys);
 };
+```
+
+### Remove a value
+
+Remove a single value given its key:
+
+```typescript
+import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
 
 const remove = async () => {
   await SecurePreferences.remove({
     key: 'password',
   });
 };
+```
 
-const set = async () => {
-  await SecurePreferences.set({
-    key: 'password',
-    value: '123456',
-  });
+### Clear all stored values
+
+Remove all stored keys and values at once:
+
+```typescript
+import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
+
+const clear = async () => {
+  await SecurePreferences.clear();
 };
 ```
 
@@ -299,19 +342,21 @@ Yes, for key/value data. This plugin was built as an actively maintained alterna
 
 ### How do I migrate from Ionic Secure Storage?
 
-For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool:
+For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool and instruct it to use the `ionic-enterprise-sdk-migration` skill to migrate your project from Ionic Secure Storage to `@capawesome-team/capacitor-secure-preferences`. Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/).
 
-```bash
-npx skills add capawesome-team/skills --skill ionic-enterprise-sdk-migration
-```
+### Can I use the plugin on the web?
 
-Then use the following prompt:
+Yes, but only for development and testing purposes. The web implementation stores values unencrypted in `localStorage` to make cross-platform development easier and should NOT be used in production. The secure, encrypted storage backed by the Android Keystore and iOS Keychain is only available on Android and iOS.
 
-```
-Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Secure Storage to `@capawesome-team/capacitor-secure-preferences`.
-```
+### Can I use this plugin with Ionic, React, Vue or Angular?
 
-Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/).
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
+- [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
+- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
 
 ## Next steps
 
@@ -320,6 +365,10 @@ Here are a few resources to help you continue:
 - Read [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/) if you are migrating from Ionic Secure Storage.
 - Need biometric-protected, lockable storage? Check out the [Capacitor Vault plugin](https://capawesome.io/docs/sdks/capacitor/vault/).
 - Need encrypted relational storage? Check out the [Capacitor SQLite plugin](https://capawesome.io/docs/sdks/capacitor/sqlite/).
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Changelog
 

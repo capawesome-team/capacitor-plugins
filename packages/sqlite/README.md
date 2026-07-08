@@ -10,7 +10,7 @@ Capacitor plugin to access SQLite databases with support for encryption, transac
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins to access SQLite databases. Here are some of the key features:
+The Capacitor SQLite plugin is one of the most complete local database solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
@@ -37,9 +37,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
+The SQLite plugin is typically used whenever an app needs a robust local database, for example:
+
+- **Offline-first apps**: Store structured records locally so the app remains fully functional without a network connection.
+- **Encrypted data storage**: Protect sensitive records with 256 bit AES encryption using a custom encryption key.
+- **Complex queries**: Filter, join, and aggregate large datasets with SQL instead of loading everything into memory.
+- **Full text search**: Search large amounts of text quickly using the FTS5 extension.
+- **Settings and session data**: Persist small key/value data with the built-in key-value store without writing any SQL.
 
 ## Compatibility
 
@@ -357,9 +363,13 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to open and close a database, execute statements, query data, run transactions, change the encryption key, read the SQLite version, reclaim space, and handle errors.
+
+### Open or create a database
+
+Open an existing database or create a new one at the given path. You can optionally provide an encryption key (only available on Android and iOS) and schema migrations that are applied automatically when the database is opened:
+
 ```typescript
-import { Capacitor } from '@capacitor/core';
-import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const open = async () => {
@@ -382,6 +392,14 @@ const open = async () => {
     version: 2,
   });
 };
+```
+
+### Execute a statement
+
+Execute a single SQL statement such as `INSERT`, `UPDATE`, `DELETE`, or `CREATE TABLE`. Use placeholders to bind values and prevent SQL injection attacks:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const execute = async () => {
   const { databaseId } = await Sqlite.open();
@@ -391,6 +409,14 @@ const execute = async () => {
     values: ['Alice', 30],
   });
 };
+```
+
+### Query data
+
+Execute a `SELECT` statement and retrieve the result set:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const query = async () => {
   const { databaseId } = await Sqlite.open();
@@ -402,6 +428,14 @@ const query = async () => {
   console.log(result.columns); // The column names in the result set
   console.log(result.rows); // The rows returned by the query
 };
+```
+
+### Perform a transaction
+
+Group multiple statements into a transaction so that they are either all committed or all rolled back:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const performTransaction = async () => {
   const { databaseId } = await Sqlite.open();
@@ -418,11 +452,27 @@ const performTransaction = async () => {
   });
   await Sqlite.commitTransaction({ databaseId });
 };
+```
+
+### Close the database
+
+Close the database when it is no longer needed:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const close = async () => {
   const { databaseId } = await Sqlite.open();
   await Sqlite.close({ databaseId });
 };
+```
+
+### Change the encryption key
+
+Change the encryption key of an encrypted database. The database must first be opened with the current encryption key. Only available on Android and iOS:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const changeEncryptionKey = async () => {
   // Open the database with the old encryption key
@@ -435,16 +485,40 @@ const changeEncryptionKey = async () => {
     encryptionKey: 'new-secret',
   });
 };
+```
+
+### Get the SQLite version
+
+Get the version of the SQLite library used by the plugin:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const getVersion = async () => {
   const result = await Sqlite.getVersion();
   console.log(result.version); // The version of the SQLite library used by the plugin
 };
+```
+
+### Reclaim unused space
+
+Run the `VACUUM` command to rebuild the database file and optimize its size:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const vacuum = async () => {
   const { databaseId } = await Sqlite.open();
   await Sqlite.vacuum({ databaseId });
 };
+```
+
+### Handle errors
+
+Errors that originate from SQLite expose the SQLite result code in the `data.sqliteCode` property (see [Error Handling](#error-handling)):
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const handleErrors = async () => {
   try {
@@ -1044,6 +1118,24 @@ Yes. [Ionic Secure Storage](https://ionic.io/products/secure-storage), which sun
 
 Yes. Check out the blog post [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) for a detailed comparison of `@capacitor-community/sqlite` and this plugin, including a migration guide.
 
+### Is database encryption supported on all platforms?
+
+No, encryption is only available on Android and iOS, where the plugin provides 256 bit AES encryption via SQLCipher. On both platforms, SQLCipher is opt-in and requires additional setup, as described in the [Installation](#installation) section. On Electron, database encryption is not supported.
+
+### Can I execute multiple SQL statements in a single call?
+
+On Android and Electron, only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement, optionally wrapped in a transaction.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects. It also works with popular ORMs like Drizzle, Kysely and TypeORM, as described in the [ORMs](#orms) section.
+
+## Related Plugins
+
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
+- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
+
 ## Next steps
 
 Here are a few resources to help you continue:
@@ -1051,6 +1143,10 @@ Here are a few resources to help you continue:
 - Read [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/) if you are migrating from Ionic Secure Storage.
 - Read [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) to see how this plugin compares.
 - Store small pieces of sensitive data like tokens with the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Changelog
 

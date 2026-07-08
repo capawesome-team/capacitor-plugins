@@ -10,7 +10,7 @@ Capacitor plugin to read, write, or select device contacts. Supports Android, iO
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for contacts. Here are some of the key features:
+The Capacitor Contacts plugin is one of the most complete contact management solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📇 **Contacts**: Create, update, delete and retrieve device contacts.
@@ -29,9 +29,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Contacts plugin is typically used whenever an app needs to work with the device's address book, for example:
+
+- **Contact selection**: Let users pick one or more contacts from the device, for example to invite friends or share content.
+- **CRM and business apps**: Create, update, and delete contacts directly from your app, including photos, email addresses, phone numbers, and postal addresses.
+- **Contact syncing**: Read device contacts with pagination and keep them in sync with your backend.
+- **Contact organization**: Manage contact groups on iOS or add contacts to specific accounts on Android.
+- **Native contact forms**: Display, create, and update contacts in native modals without building your own UI.
 
 ## Compatibility
 
@@ -123,13 +129,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to create, update, delete, pick, retrieve, and display contacts, manage contact groups and accounts, and check availability and permissions.
+
+### Create a contact
+
+Create a new contact on the device with properties such as name, birthday, email addresses, phone numbers, and postal addresses. Only available on Android and iOS:
+
 ```typescript
-import { 
-  Contacts,
-  EmailAddressType,
-  PhoneNumberType,
-  PostalAddressType
-} from '@capawesome-team/capacitor-contacts';
+import { Contacts, EmailAddressType, PhoneNumberType, PostalAddressType } from '@capawesome-team/capacitor-contacts';
 
 const createContact = async () => {
   return Contacts.createContact({
@@ -169,6 +176,14 @@ const createContact = async () => {
     }
   });
 };
+```
+
+### Update or delete a contact
+
+Update only specific fields of an existing contact without affecting others: missing properties are preserved, `null` values delete a field. You can also delete a contact by its ID. Only available on Android and iOS:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const updateContactById = async (id: string) => {
   await Contacts.updateContactById({
@@ -185,6 +200,14 @@ const updateContactById = async (id: string) => {
 const deleteContactById = async (id: string) => {
   await Contacts.deleteContactById({ id });
 };
+```
+
+### Pick contacts
+
+Open the native contact picker and let the user select one or more contacts. Use the `fields` option to specify which contact properties should be returned:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const pickContacts = async () => {
   const { contacts } = await Contacts.pickContacts({
@@ -200,6 +223,14 @@ const pickContacts = async () => {
   });
   return contacts;
 };
+```
+
+### Retrieve contacts
+
+Fetch a single contact by its ID or retrieve a list of contacts. Use the `limit` and `offset` options to paginate through large address books and `countContacts()` to get the total number of contacts. Only available on Android and iOS:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const getContactById = async (id: string) => {
   const { contact } = await Contacts.getContactById({ id });
@@ -222,6 +253,19 @@ const getContacts = async () => {
   return contacts;
 };
 
+const countContacts = async () => {
+  const { total } = await Contacts.countContacts();
+  return total;
+};
+```
+
+### Display contacts in native modals
+
+Show or edit a contact in the native contact modal instead of building your own UI. Only available on Android and iOS:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
+
 const displayContactById = async (id: string) => {
   await Contacts.displayContactById({ id });
 };
@@ -229,11 +273,14 @@ const displayContactById = async (id: string) => {
 const displayUpdateContactById = async (id: string) => {
   await Contacts.displayUpdateContactById({ id });
 };
+```
 
-const countContacts = async () => {
-  const { total } = await Contacts.countContacts();
-  return total;
-};
+### Manage contact groups
+
+Create, retrieve, and delete contact groups. Only available on iOS:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const createGroup = async () => {
   return Contacts.createGroup({
@@ -247,11 +294,6 @@ const deleteGroupById = async (id: string) => {
   await Contacts.deleteGroupById({ id });
 };
 
-const getAccounts = async () => {
-  const { accounts } = await Contacts.getAccounts();
-  return accounts;
-};
-
 const getGroupById = async (id: string) => {
   const { group } = await Contacts.getGroupById({ id });
   return group;
@@ -261,6 +303,27 @@ const getGroups = async () => {
   const { groups } = await Contacts.getGroups();
   return groups;
 };
+```
+
+### Retrieve accounts
+
+Retrieve the accounts that contacts can be added to. Only available on Android:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
+
+const getAccounts = async () => {
+  const { accounts } = await Contacts.getAccounts();
+  return accounts;
+};
+```
+
+### Check availability
+
+Check whether the contacts API is supported and available on the current device before using it:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const isAvailable = async () => {
   const { isAvailable } = await Contacts.isAvailable();
@@ -271,6 +334,14 @@ const isSupported = async () => {
   const { isSupported } = await Contacts.isSupported();
   return isSupported;
 };
+```
+
+### Check and request permissions
+
+Check and request permissions to access the device contacts. Only available on Android and iOS:
+
+```typescript
+import { Contacts } from '@capawesome-team/capacitor-contacts';
 
 const checkPermissions = async () => {
   return Contacts.checkPermissions();
@@ -1106,6 +1177,43 @@ Makes all properties of T nullable.
 | **`Work`**     | <code>'WORK'</code>     |                            | 7.5.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Do I need any permissions to access contacts?
+
+Yes. On Android, you need to add the `READ_CONTACTS` and/or `WRITE_CONTACTS` permissions to your `AndroidManifest.xml` file (see [Installation](#installation)). On iOS, you must add the `NSContactsUsageDescription` key to your `Info.plist` file. At runtime, use `checkPermissions()` and `requestPermissions()` to manage the permission state, and `openSettings()` to send the user to the native app settings if the permission was denied.
+
+### How do I update only specific fields of a contact?
+
+The `updateContactById(...)` method supports partial updates. Properties that are missing from the contact object are preserved, while properties explicitly set to `null` are deleted from the contact. See the [usage example](#update-or-delete-a-contact) above.
+
+### Are contact groups and accounts available on all platforms?
+
+No. Contact groups (`createGroup(...)`, `getGroups()`, `getGroupById(...)`, and `deleteGroupById(...)`) are only available on iOS. Accounts (`getAccounts()`) are only available on Android, where you can add contacts to a specific account.
+
+### How do I handle large address books without performance issues?
+
+Use the `limit` and `offset` options of `getContacts(...)` to paginate through the contacts instead of loading all of them at once. Additionally, only request the contact properties you actually need via the `fields` option, and use `countContacts()` to determine the total number of contacts.
+
+### How is this plugin different from the Capacitor Community Contacts plugin?
+
+This plugin offers advanced features such as partial updates, contact groups on iOS, accounts on Android, pagination, native modals, and contact photos, and comes with priority support from the Capawesome Team. You can find a detailed comparison in the guide [Alternative to the Capacitor Community Contacts plugin](https://capawesome.io/blog/alternative-to-capacitor-community-contacts-plugin/).
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
+- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 
