@@ -67,17 +67,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { DeviceInfo } from '@capawesome/capacitor-device-info';
-```
+The following examples show how to read the device identifier, read device information, and read the device uptime.
 
 ### Read the device identifier
 
 Get a unique per-install identifier for the device, for example to register the device on your backend. See the [API documentation](#getid) for when the identifier is reset on each platform:
 
 ```typescript
+import { DeviceInfo } from '@capawesome/capacitor-device-info';
+
 const getId = async () => {
   const { identifier } = await DeviceInfo.getId();
   return identifier;
@@ -89,6 +87,8 @@ const getId = async () => {
 Get information about the device, such as the model, manufacturer, operating system, device type, and memory. Fields that a platform cannot determine are `null` (see [Platform Support](#platform-support)):
 
 ```typescript
+import { DeviceInfo } from '@capawesome/capacitor-device-info';
+
 const getInfo = async () => {
   const info = await DeviceInfo.getInfo();
   return info;
@@ -100,6 +100,8 @@ const getInfo = async () => {
 Get the time the device has been running since its last boot, in milliseconds. Only available on Android and iOS:
 
 ```typescript
+import { DeviceInfo } from '@capawesome/capacitor-device-info';
+
 const getUptime = async () => {
   const { uptime } = await DeviceInfo.getUptime();
   return uptime;

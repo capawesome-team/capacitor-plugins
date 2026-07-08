@@ -93,17 +93,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Superwall } from '@capawesome/capacitor-superwall';
-```
+The following examples show how to configure the SDK, present paywalls, identify users, manage subscription status, handle deep links, and listen for events.
 
 ### Configure the SDK
 
 Configure the Superwall SDK with the API key from your dashboard. This must be called once before all other methods:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const configureSuperwall = async () => {
   await Superwall.configure({
     apiKey: 'pk_your_api_key_here',
@@ -126,6 +124,8 @@ const configureSuperwall = async () => {
 Register a placement with `register(...)` to present a paywall if the user doesn't have an active subscription. This is the primary method for feature gating and paywall presentation:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const showPaywall = async () => {
   const result = await Superwall.register({
     placement: 'premium_feature',
@@ -144,6 +144,8 @@ const showPaywall = async () => {
 Use `getPresentationResult(...)` to check if a paywall would be presented for a placement without actually presenting it:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const checkPaywall = async () => {
   const result = await Superwall.getPresentationResult({
     placement: 'premium_feature',
@@ -162,6 +164,8 @@ const checkPaywall = async () => {
 Identify the current user with a unique ID to link it to their anonymous alias for analytics and paywall assignments:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const identifyUser = async (userId: string) => {
   await Superwall.identify({
     userId: userId,
@@ -177,6 +181,8 @@ const identifyUser = async (userId: string) => {
 Set custom user attributes for personalization and audience filtering on the Superwall dashboard. Keys starting with `$` are reserved for Superwall use:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const setAttributes = async () => {
   await Superwall.setUserAttributes({
     attributes: {
@@ -193,6 +199,8 @@ const setAttributes = async () => {
 Read the current subscription status of the user:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const checkSubscription = async () => {
   const result = await Superwall.getSubscriptionStatus();
   console.log('Subscription status:', result.status); // 'ACTIVE', 'INACTIVE', or 'UNKNOWN'
@@ -204,6 +212,8 @@ const checkSubscription = async () => {
 Listen for analytics events, subscription status changes, paywall lifecycle events and custom paywall actions:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const addListeners = async () => {
   // Forward analytics events to your platform
   await Superwall.addListener('superwallEvent', (event) => {
@@ -238,6 +248,8 @@ const addListeners = async () => {
 Process deep links associated with Superwall campaigns configured on the dashboard:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const handleCampaignDeepLink = async (url: string) => {
   await Superwall.handleDeepLink({ url });
 };
@@ -248,6 +260,8 @@ const handleCampaignDeepLink = async (url: string) => {
 Reset the user identity when the user explicitly logs out:
 
 ```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
+
 const logout = async () => {
   await Superwall.reset();
 };

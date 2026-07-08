@@ -72,17 +72,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Toast, ToastDuration, ToastPosition } from '@capawesome/capacitor-toast';
-```
+The following example shows how to show a toast.
 
 ### Show a toast
 
 Show a short, non-blocking text notification. Use the `duration` option to choose between a short (about 2000 ms) and a long (about 3500 ms) display duration, and the `position` option to show the toast at the top, center or bottom of the screen:
 
 ```typescript
+import { Toast, ToastDuration, ToastPosition } from '@capawesome/capacitor-toast';
+
 const show = async () => {
   await Toast.show({
     text: 'Hello World!',

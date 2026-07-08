@@ -153,17 +153,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Badge } from '@capawesome/capacitor-badge';
-```
+The following examples show how to get, set, increase, decrease, and clear the badge count, check whether badges are supported, and check and request permissions.
 
 ### Get the current badge count
 
 Read the current badge count. The count won't be lost after a reboot or app restart:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const get = async () => {
   const result = await Badge.get();
   return result.count;
@@ -175,6 +173,8 @@ const get = async () => {
 Set the badge count to a specific value. On iOS, setting the count to `0` will remove the badge and also clear all notifications:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const set = async (count: number) => {
   await Badge.set({ count });
 };
@@ -185,6 +185,8 @@ const set = async (count: number) => {
 Increment or decrement the badge count by one, for example when a new message arrives or is read:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const increase = async () => {
   await Badge.increase();
 };
@@ -199,6 +201,8 @@ const decrease = async () => {
 Remove the badge from the app icon. On iOS, this will also clear all notifications:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const clear = async () => {
   await Badge.clear();
 };
@@ -209,6 +213,8 @@ const clear = async () => {
 Check whether the badge count is supported on the current device, for example since not every Android launcher supports badges:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const isSupported = async () => {
   const result = await Badge.isSupported();
   return result.isSupported;
@@ -220,6 +226,8 @@ const isSupported = async () => {
 Check and request the permission to display the badge:
 
 ```typescript
+import { Badge } from '@capawesome/capacitor-badge';
+
 const checkPermissions = async () => {
   const result = await Badge.checkPermissions();
 };

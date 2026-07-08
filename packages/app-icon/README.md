@@ -137,17 +137,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppIcon } from '@capawesome/capacitor-app-icon';
-```
+The following examples show how to check for alternate icon support, read the current icon, set an alternate icon, and reset to the default icon.
 
 ### Check if changing the app icon is supported
 
 Use `isAvailable()` to check whether the current device supports alternate icons. On Android, this always resolves to `true`; on iOS, it resolves to the value of `supportsAlternateIcons`. Only available on Android and iOS:
 
 ```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
+
 const isAvailable = async () => {
   const { available } = await AppIcon.isAvailable();
   return available;
@@ -159,6 +157,8 @@ const isAvailable = async () => {
 Read the name of the icon that is currently in use, for example to highlight it in an icon picker. Returns `null` if the default icon is in use. Only available on Android and iOS:
 
 ```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
+
 const getCurrentIcon = async () => {
   const { icon } = await AppIcon.getCurrentIcon();
   return icon;
@@ -170,6 +170,8 @@ const getCurrentIcon = async () => {
 Change the app icon to an alternate icon that your app has declared beforehand (see [Installation](#installation)). Only available on Android and iOS:
 
 ```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
+
 const setIcon = async () => {
   await AppIcon.setIcon({ icon: 'AppIconChristmas' });
 };
@@ -180,6 +182,8 @@ const setIcon = async () => {
 Restore the default app icon at any time. Only available on Android and iOS:
 
 ```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
+
 const resetIcon = async () => {
   await AppIcon.resetIcon();
 };

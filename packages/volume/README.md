@@ -65,17 +65,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Volume, VolumeStream } from '@capawesome/capacitor-volume';
-```
+The following examples show how to get and set the current volume, watch the hardware volume buttons, listen for volume button presses and volume changes, and remove all listeners.
 
 ### Get the current volume
 
 Read the current volume level as a value between `0` and `1`. On Android, you can select the audio stream (for example the ring stream) with the `stream` option. On iOS, this always returns the media volume:
 
 ```typescript
+import { Volume, VolumeStream } from '@capawesome/capacitor-volume';
+
 const getVolume = async () => {
   const { volume } = await Volume.getVolume();
   return volume;
@@ -92,6 +90,8 @@ const getRingVolume = async () => {
 Set the volume level as a value between `0` and `1`. On Android, you can select the audio stream with the `stream` option. On iOS, this always sets the media volume:
 
 ```typescript
+import { Volume } from '@capawesome/capacitor-volume';
+
 const setVolume = async () => {
   await Volume.setVolume({ volume: 0.5 });
 };
@@ -102,6 +102,8 @@ const setVolume = async () => {
 Start watching the hardware volume buttons to receive the `volumeButtonPressed` and `volumeChange` events. With the `suppressVolumeChange` option enabled, the volume level is kept unchanged and the system volume indicator is hidden while watching:
 
 ```typescript
+import { Volume } from '@capawesome/capacitor-volume';
+
 const startWatching = async () => {
   await Volume.startWatching({ suppressVolumeChange: true });
 };
@@ -121,6 +123,8 @@ const isWatching = async () => {
 Get notified when a hardware volume button is pressed. The event is only emitted while watching (see above):
 
 ```typescript
+import { Volume } from '@capawesome/capacitor-volume';
+
 const addVolumeButtonPressedListener = async () => {
   await Volume.addListener('volumeButtonPressed', event => {
     console.log('Volume button pressed:', event.direction);
@@ -133,6 +137,8 @@ const addVolumeButtonPressedListener = async () => {
 Get notified when the volume level changes. The event is only emitted while watching (see above):
 
 ```typescript
+import { Volume } from '@capawesome/capacitor-volume';
+
 const addVolumeChangeListener = async () => {
   await Volume.addListener('volumeChange', event => {
     console.log('Volume changed:', event.volume);
@@ -145,6 +151,8 @@ const addVolumeChangeListener = async () => {
 Remove all listeners for this plugin when they are no longer needed:
 
 ```typescript
+import { Volume } from '@capawesome/capacitor-volume';
+
 const removeAllListeners = async () => {
   await Volume.removeAllListeners();
 };

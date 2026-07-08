@@ -71,17 +71,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Dialog } from '@capawesome/capacitor-dialog';
-```
+The following examples show how to display an alert dialog, ask the user for confirmation, and request text input from the user.
 
 ### Display an alert dialog
 
 Show a message with a single button, for example to inform the user about the result of an action:
 
 ```typescript
+import { Dialog } from '@capawesome/capacitor-dialog';
+
 const alert = async () => {
   await Dialog.alert({
     title: 'Success',
@@ -95,6 +93,8 @@ const alert = async () => {
 Show a confirmation dialog with two buttons. The result tells you whether the user confirmed the dialog:
 
 ```typescript
+import { Dialog } from '@capawesome/capacitor-dialog';
+
 const confirm = async () => {
   const { value } = await Dialog.confirm({
     title: 'Confirm',
@@ -109,6 +109,8 @@ const confirm = async () => {
 Show a prompt dialog with a text input, a confirm and a cancel button. The result contains the entered value and whether the user canceled the dialog:
 
 ```typescript
+import { Dialog } from '@capawesome/capacitor-dialog';
+
 const prompt = async () => {
   const { value, canceled } = await Dialog.prompt({
     title: 'Name',

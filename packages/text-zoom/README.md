@@ -64,17 +64,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { TextZoom } from '@capawesome/capacitor-text-zoom';
-```
+The following examples show how to read the current text zoom, read the device's preferred text zoom, and set the text zoom of the WebView.
 
 ### Read the current text zoom
 
 Get the current text zoom of the WebView, where `1.0` equals `100%` (no zoom). Only available on Android and iOS:
 
 ```typescript
+import { TextZoom } from '@capawesome/capacitor-text-zoom';
+
 const getZoom = async () => {
   const { zoom } = await TextZoom.getZoom();
   return zoom;
@@ -86,6 +84,8 @@ const getZoom = async () => {
 Get the preferred text zoom based on the operating system's font size settings, for example to use it as an input for `setZoom(...)`. Only available on Android and iOS:
 
 ```typescript
+import { TextZoom } from '@capawesome/capacitor-text-zoom';
+
 const getPreferredZoom = async () => {
   const { zoom } = await TextZoom.getPreferredZoom();
   return zoom;
@@ -97,6 +97,8 @@ const getPreferredZoom = async () => {
 Set the text zoom of the WebView. The value must be greater than `0` and is not persisted across app restarts. Only available on Android and iOS:
 
 ```typescript
+import { TextZoom } from '@capawesome/capacitor-text-zoom';
+
 const setZoom = async () => {
   await TextZoom.setZoom({ zoom: 1.5 });
 };

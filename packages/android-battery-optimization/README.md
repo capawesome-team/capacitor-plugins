@@ -69,18 +69,16 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Capacitor } from '@capacitor/core';
-import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
-```
+The following examples show how to check whether battery optimization is enabled, open the battery optimization settings, and request an exemption from battery optimization.
 
 ### Check if battery optimization is enabled
 
 Find out whether battery optimization is enabled for the device, for example to inform the user that background work may be deferred. All methods of this plugin are only available on Android, so guard your calls with a platform check:
 
 ```typescript
+import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
+
 const isBatteryOptimizationEnabled = async () => {
   if (Capacitor.getPlatform() !== 'android') {
     return false;
@@ -95,6 +93,9 @@ const isBatteryOptimizationEnabled = async () => {
 Open the battery optimization settings page so the user can manually exclude your app from battery optimization:
 
 ```typescript
+import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
+
 const openBatteryOptimizationSettings = async () => {
   if (Capacitor.getPlatform() !== 'android') {
     return;
@@ -108,6 +109,9 @@ const openBatteryOptimizationSettings = async () => {
 Request the battery optimization ignore permission directly. This method requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` manifest permission (see [Installation](#installation)) and should only be used if your app meets an acceptable use case according to the Google Play policy:
 
 ```typescript
+import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
+
 const requestIgnoreBatteryOptimization = async () => {
   if (Capacitor.getPlatform() !== 'android') {
     return;

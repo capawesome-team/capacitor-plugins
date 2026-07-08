@@ -127,17 +127,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Passkeys } from '@capawesome/capacitor-passkeys';
-```
+The following examples show how to create a new passkey, authenticate with an existing passkey, and check whether passkeys are available on the device.
 
 ### Create a new passkey
 
 Register a new passkey for a user account. In a real app, the options must be provided by your WebAuthn server, and the result must be passed back to it for verification:
 
 ```typescript
+import { Passkeys } from '@capawesome/capacitor-passkeys';
+
 const createPasskey = async () => {
   // In a real app, the options must be provided by your WebAuthn server,
   // e.g. via `generateRegistrationOptions()` from SimpleWebAuthn.
@@ -170,6 +168,8 @@ const createPasskey = async () => {
 Sign a user in with a passkey that was previously created for your relying party. Again, the options come from your WebAuthn server and the result is verified by it:
 
 ```typescript
+import { Passkeys } from '@capawesome/capacitor-passkeys';
+
 const getPasskey = async () => {
   // In a real app, the options must be provided by your WebAuthn server,
   // e.g. via `generateAuthenticationOptions()` from SimpleWebAuthn.
@@ -189,6 +189,8 @@ const getPasskey = async () => {
 Check whether passkeys are available on the device before offering them in your login UI. On Android, this returns `true` if the device runs Android 9 (API level 28) or higher. On iOS, this always returns `true`. On Web, this returns `true` if the browser supports WebAuthn and a user-verifying platform authenticator is available:
 
 ```typescript
+import { Passkeys } from '@capawesome/capacitor-passkeys';
+
 const isAvailable = async () => {
   const { available } = await Passkeys.isAvailable();
   return available;

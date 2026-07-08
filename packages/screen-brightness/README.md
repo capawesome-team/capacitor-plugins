@@ -63,17 +63,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ScreenBrightness } from '@capawesome/capacitor-screen-brightness';
-```
+The following examples show how to get, set, and reset the screen brightness.
 
 ### Get the current screen brightness
 
 Read the current screen brightness as a value between `0.0` (darkest) and `1.0` (brightest):
 
 ```typescript
+import { ScreenBrightness } from '@capawesome/capacitor-screen-brightness';
+
 const getBrightness = async () => {
   const { brightness } = await ScreenBrightness.getBrightness();
   return brightness;
@@ -85,6 +83,8 @@ const getBrightness = async () => {
 Set the screen brightness to a value between `0.0` (darkest) and `1.0` (brightest). On Android, only the brightness of the current app window is changed and the change is reverted automatically as soon as the app is closed. On iOS, this changes the system brightness and the change persists after the app is closed:
 
 ```typescript
+import { ScreenBrightness } from '@capawesome/capacitor-screen-brightness';
+
 const setBrightness = async () => {
   await ScreenBrightness.setBrightness({ brightness: 1 });
 };
@@ -95,6 +95,8 @@ const setBrightness = async () => {
 Hand the brightness control back to the operating system. Only available on Android:
 
 ```typescript
+import { ScreenBrightness } from '@capawesome/capacitor-screen-brightness';
+
 const resetBrightness = async () => {
   await ScreenBrightness.resetBrightness();
 };

@@ -86,17 +86,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Gyroscope } from '@capawesome/capacitor-gyroscope';
-```
+The following examples show how to check if the gyroscope is available, get a single measurement, receive continuous measurement updates, check and request permissions, and remove all listeners.
 
 ### Check if the gyroscope is available
 
 Check whether the device has a gyroscope sensor before using the other methods:
 
 ```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
 const isAvailable = async () => {
   const result = await Gyroscope.isAvailable();
   return result.available;
@@ -108,6 +106,8 @@ const isAvailable = async () => {
 Get the most recent measurement from the gyroscope sensor. The rotation rate around the x, y, and z axes is reported in radians per second (rad/s):
 
 ```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
 const getMeasurement = async () => {
   const measurement = await Gyroscope.getMeasurement();
   console.log('X: ', measurement.x);
@@ -121,6 +121,8 @@ const getMeasurement = async () => {
 Add a listener for the `measurement` event and start the measurement updates to receive the rotation rate in real time. The `measurement` event is only available on Android and iOS:
 
 ```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
 const startMeasurementUpdates = async () => {
   await Gyroscope.addListener('measurement', measurement => {
     console.log('X: ', measurement.x);
@@ -140,6 +142,8 @@ const stopMeasurementUpdates = async () => {
 Check and request the permission to access the gyroscope sensor:
 
 ```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
 const checkPermissions = async () => {
   const result = await Gyroscope.checkPermissions();
   return result;
@@ -156,6 +160,8 @@ const requestPermissions = async () => {
 Remove all listeners when you no longer need them:
 
 ```typescript
+import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+
 const removeAllListeners = async () => {
   await Gyroscope.removeAllListeners();
 };

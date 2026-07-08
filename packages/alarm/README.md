@@ -78,17 +78,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Alarm, Weekday } from '@capawesome/capacitor-alarm';
-```
+The following examples show how to check availability, check and request permissions, create alarms and timers, list and cancel alarms, and open the system clock app.
 
 ### Check if alarms are available
 
 Before creating an alarm, check if alarms are available on the device. On Android, this checks whether an app that can handle alarms is installed. On iOS, this returns `true` if the device runs iOS 26 or later:
 
 ```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
 const isAvailable = async () => {
   const { available } = await Alarm.isAvailable();
   return available;
@@ -100,6 +98,8 @@ const isAvailable = async () => {
 Check and request the permission to schedule alarms. On Android, both methods always return `granted` since alarms are created via the system clock app:
 
 ```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
 const checkPermissions = async () => {
   const { alarms } = await Alarm.checkPermissions();
   return alarms;
@@ -116,6 +116,8 @@ const requestPermissions = async () => {
 Create a one-time or repeating alarm by providing the hour, the minute, and optionally a label and the weekdays on which the alarm repeats. On Android, the alarm is created in the system clock app and the returned `id` is `null`. On iOS, the alarm is owned by your app and can be listed and canceled later:
 
 ```typescript
+import { Alarm, Weekday } from '@capawesome/capacitor-alarm';
+
 const createAlarm = async () => {
   const { id } = await Alarm.createAlarm({
     hour: 6,
@@ -132,6 +134,8 @@ const createAlarm = async () => {
 Create a countdown timer in the system clock app by providing the duration in seconds. Only available on Android:
 
 ```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
 const createTimer = async () => {
   await Alarm.createTimer({
     duration: 300,
@@ -145,6 +149,8 @@ const createTimer = async () => {
 Get all alarms that were created by your app and cancel them by their identifier. Only available on iOS:
 
 ```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
 const getAlarms = async () => {
   const { alarms } = await Alarm.getAlarms();
   return alarms;
@@ -160,6 +166,8 @@ const cancelAlarm = async (id: string) => {
 Open the list of alarms in the system clock app, for example so the user can review or edit an alarm. Only available on Android:
 
 ```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
 const openAlarms = async () => {
   await Alarm.openAlarms();
 };

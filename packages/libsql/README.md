@@ -58,17 +58,15 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Libsql } from '@capawesome/capacitor-libsql';
-```
+The following examples show how to connect to local and remote databases, query data, execute insert, update, and delete statements, run statements inside a transaction, and synchronize with a remote server.
 
 ### Connect to a local database
 
 Connect to a local database file on the device. If no file exists at the specified path, a new file is created. If neither a path nor a URL is provided, the plugin creates a new in-memory database. This method must be called before any other methods that interact with the database:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const connectToLocalDatabase = async () => {
   const { connectionId } = await Libsql.connect({
     path: 'database.db',
@@ -82,6 +80,8 @@ const connectToLocalDatabase = async () => {
 Connect to a remote libSQL database using its URL and an authentication token:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const connectToRemoteDatabase = async () => {
   const { connectionId } = await Libsql.connect({
     url: 'libsql://your-database-url.turso.io',
@@ -96,6 +96,8 @@ const connectToRemoteDatabase = async () => {
 Execute a `SELECT` statement and retrieve the result set:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const query = async () => {
   const result = await Libsql.query({
     connectionId: 'my-connection-id',
@@ -110,6 +112,8 @@ const query = async () => {
 Execute any SQL statement, including `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`, optionally with bound values:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const execute = async () => {
   await Libsql.execute({
     connectionId: 'my-connection-id',
@@ -125,6 +129,8 @@ const execute = async () => {
 Begin a transaction, execute statements as part of it, and either commit or roll back all changes. Transactions are only available on Android:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const performTransaction = async () => {
   const { transactionId } = await Libsql.beginTransaction({
     connectionId: 'my-connection-id',
@@ -156,6 +162,8 @@ const performTransaction = async () => {
 Synchronize the database with the remote server:
 
 ```typescript
+import { Libsql } from '@capawesome/capacitor-libsql';
+
 const sync = async () => {
   await Libsql.sync({
     connectionId: 'my-connection-id',

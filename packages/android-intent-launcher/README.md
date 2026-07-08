@@ -74,17 +74,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AndroidIntentLauncher } from '@capawesome/capacitor-android-intent-launcher';
-```
+The following examples show how to start an activity for an intent and check whether an intent can be resolved.
 
 ### Start an activity
 
 Launch an activity for the given intent. The intent is started via the `startActivityForResult(...)` API, so the result code and result data of the launched activity are returned once it finishes. Only available on Android:
 
 ```typescript
+import { AndroidIntentLauncher } from '@capawesome/capacitor-android-intent-launcher';
+
 const startActivity = async () => {
   const { resultCode } = await AndroidIntentLauncher.startActivity({
     action: 'android.intent.action.VIEW',
@@ -99,6 +97,8 @@ const startActivity = async () => {
 Check whether an activity exists that can handle the given intent before launching it. On Android 11 (API level 30) and higher, the result is affected by [package visibility](#package-visibility). Only available on Android:
 
 ```typescript
+import { AndroidIntentLauncher } from '@capawesome/capacitor-android-intent-launcher';
+
 const canResolveActivity = async () => {
   const { canResolve } = await AndroidIntentLauncher.canResolveActivity({
     action: 'android.intent.action.VIEW',

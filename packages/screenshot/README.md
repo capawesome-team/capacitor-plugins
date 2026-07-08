@@ -64,17 +64,15 @@ npm i html2canvas
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```ts
-import { Screenshot } from '@capawesome/capacitor-screenshot';
-```
+The following example shows how to take a screenshot of the current screen.
 
 ### Take a screenshot
 
 Take a screenshot of the current screen. The result contains the file path of the screenshot on Android and iOS, or a data URI on the Web:
 
 ```ts
+import { Screenshot } from '@capawesome/capacitor-screenshot';
+
 const take = async () => {
   const { uri } = await Screenshot.take();
   console.log('Screenshot saved at:', uri);

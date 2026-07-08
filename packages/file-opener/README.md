@@ -101,17 +101,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { FileOpener } from '@capawesome-team/capacitor-file-opener';
-```
+The following example shows how to open a file with the default application.
 
 ### Open a file with the default application
 
 On Android and iOS, pass the path of the file. On Android, both file paths and content URIs are supported. The mime type is determined automatically, but you can also specify it with the `mimeType` option. On Web, pass a `Blob` instance instead:
 
 ```typescript
+import { FileOpener } from '@capawesome-team/capacitor-file-opener';
+
 const open = async () => {
   await FileOpener.openFile({
     path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',

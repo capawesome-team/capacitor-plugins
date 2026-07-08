@@ -76,17 +76,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Compass } from '@capawesome/capacitor-compass';
-```
+The following examples show how to check if the compass sensor is available, read the current heading, and listen for heading changes.
 
 ### Check if the compass sensor is available
 
 Before reading the heading, you can check whether the device has a compass sensor. Only available on Android and iOS:
 
 ```typescript
+import { Compass } from '@capawesome/capacitor-compass';
+
 const isAvailable = async () => {
   const { available } = await Compass.isAvailable();
   return available;
@@ -98,6 +96,8 @@ const isAvailable = async () => {
 Get the most recent heading reading from the device's compass sensor. The result contains the magnetic heading, the true (geographic) heading if available, and the accuracy. Only available on Android and iOS:
 
 ```typescript
+import { Compass } from '@capawesome/capacitor-compass';
+
 const getHeading = async () => {
   const heading = await Compass.getHeading();
   return heading;
@@ -109,6 +109,8 @@ const getHeading = async () => {
 Call `startHeadingUpdates()` to start emitting `headingChange` events and add a listener to receive continuous heading updates, for example to rotate a compass UI. Stop the updates when you no longer need them. Only available on Android and iOS:
 
 ```typescript
+import { Compass } from '@capawesome/capacitor-compass';
+
 const startHeadingUpdates = async () => {
   await Compass.startHeadingUpdates();
 };

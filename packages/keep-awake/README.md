@@ -64,17 +64,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { KeepAwake } from '@capawesome/capacitor-keep-awake';
-```
+The following examples show how to keep the screen awake, allow it to sleep again, check whether it is currently kept awake, and check whether the feature is available.
 
 ### Keep the screen awake
 
 Prevent the screen from dimming or turning off. The screen is kept awake until `allowSleep(...)` is called or the app is restarted. This only affects your app and is not a system-wide setting:
 
 ```typescript
+import { KeepAwake } from '@capawesome/capacitor-keep-awake';
+
 const keepAwake = async () => {
   await KeepAwake.keepAwake();
 };
@@ -85,6 +83,8 @@ const keepAwake = async () => {
 Restore the default screen sleep behavior at any time:
 
 ```typescript
+import { KeepAwake } from '@capawesome/capacitor-keep-awake';
+
 const allowSleep = async () => {
   await KeepAwake.allowSleep();
 };
@@ -95,6 +95,8 @@ const allowSleep = async () => {
 Read whether the screen is currently kept awake:
 
 ```typescript
+import { KeepAwake } from '@capawesome/capacitor-keep-awake';
+
 const isKeptAwake = async () => {
   const { keptAwake } = await KeepAwake.isKeptAwake();
   return keptAwake;
@@ -106,6 +108,8 @@ const isKeptAwake = async () => {
 On the Web, keeping the screen awake depends on whether the browser supports the [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API). On Android and iOS, this always returns `true`:
 
 ```typescript
+import { KeepAwake } from '@capawesome/capacitor-keep-awake';
+
 const isAvailable = async () => {
   const { available } = await KeepAwake.isAvailable();
   return available;

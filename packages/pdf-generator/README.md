@@ -78,19 +78,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to generate a PDF file from HTML content and from a URL.
+
 The generated PDF file is written to the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin. You can also hand the path to the [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/), [Printer](https://capawesome.io/docs/sdks/capacitor/printer/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) or [Share](https://capacitorjs.com/docs/apis/share) plugin.
-
-Import the plugin and call its methods:
-
-```typescript
-import { PdfGenerator, Orientation, PageSize } from '@capawesome/capacitor-pdf-generator';
-```
 
 ### Generate a PDF file from HTML content
 
 Generate a paginated PDF file from an HTML string, with a custom file name, page size and orientation. Only available on Android and iOS:
 
 ```typescript
+import { PdfGenerator, Orientation, PageSize } from '@capawesome/capacitor-pdf-generator';
+
 const generateFromHtml = async () => {
   const { path } = await PdfGenerator.generateFromHtml({
     html: '<h1>Invoice</h1><p>Thank you for your purchase!</p>',
@@ -107,6 +105,8 @@ const generateFromHtml = async () => {
 Generate a paginated PDF file from a web page. Use the `timeout` option to control how long the plugin waits for the page before the call is rejected with the `TIMEOUT` error code. Only available on Android and iOS:
 
 ```typescript
+import { PdfGenerator, Orientation, PageSize } from '@capawesome/capacitor-pdf-generator';
+
 const generateFromUrl = async () => {
   const { path } = await PdfGenerator.generateFromUrl({
     url: 'https://capawesome.io/',

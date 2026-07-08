@@ -76,17 +76,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { MailComposer } from '@capawesome/capacitor-mail-composer';
-```
+The following examples show how to check whether the device can send emails and how to open the native email composer.
 
 ### Check whether the device can send emails
 
 Before opening the composer, check whether the device is able to compose and send emails. On iOS, this returns `true` only if a mail account is configured. On Android, it returns `true` if a mail app is installed. On the web, it always returns `true`:
 
 ```typescript
+import { MailComposer } from '@capawesome/capacitor-mail-composer';
+
 const canComposeMail = async () => {
   const { canCompose } = await MailComposer.canComposeMail();
   return canCompose;
@@ -98,6 +96,8 @@ const canComposeMail = async () => {
 Open the native email composer prefilled with recipients, subject, and body. The user reviews the email and decides whether to send it. Note that on Android, the returned `status` is always `unknown`:
 
 ```typescript
+import { MailComposer } from '@capawesome/capacitor-mail-composer';
+
 const composeMail = async () => {
   const { status } = await MailComposer.composeMail({
     to: ['jane@example.com'],

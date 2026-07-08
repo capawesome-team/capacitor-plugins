@@ -86,17 +86,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Torch } from '@capawesome/capacitor-torch';
-```
+The following examples show how to check if the torch is available, turn the torch on and off, toggle the torch, and check if the torch is enabled.
 
 ### Check if the torch is available
 
 Not every device has a torch, so check the availability before showing a flashlight control in your UI:
 
 ```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
 const isAvailable = async () => {
     const result = await Torch.isAvailable();
     return result.available;
@@ -108,6 +106,8 @@ const isAvailable = async () => {
 Enable or disable the torch. On Android, these methods require SDK 23 or newer. On the Web, you can optionally pass your own `MediaStream` with a video track via the `stream` option:
 
 ```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
 const enable = async () => {
   await Torch.enable();
 };
@@ -122,6 +122,8 @@ const disable = async () => {
 Switch the torch to the opposite state with a single call:
 
 ```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
 const toggle = async () => {
   await Torch.toggle();
 };
@@ -132,6 +134,8 @@ const toggle = async () => {
 Read the current state of the torch, for example to display the state in your UI:
 
 ```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
 const isEnabled = async () => {
     const result = await Torch.isEnabled();
     return result.enabled;

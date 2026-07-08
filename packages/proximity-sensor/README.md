@@ -73,17 +73,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ProximitySensor } from '@capawesome/capacitor-proximity-sensor';
-```
+The following examples show how to check whether the proximity sensor is available, get a single measurement, and start and stop continuous measurement updates.
 
 ### Check whether the sensor is available
 
 Not every device has a proximity sensor, so check its availability first. Only available on Android and iOS:
 
 ```typescript
+import { ProximitySensor } from '@capawesome/capacitor-proximity-sensor';
+
 const isAvailable = async () => {
   const result = await ProximitySensor.isAvailable();
   return result.available;
@@ -95,6 +93,8 @@ const isAvailable = async () => {
 Read the most recent measurement from the proximity sensor. Note that on iOS, reading the measurement enables proximity monitoring, which turns off the screen while an object is close to the sensor (see [Screen Dimming (iOS)](#screen-dimming-ios)):
 
 ```typescript
+import { ProximitySensor } from '@capawesome/capacitor-proximity-sensor';
+
 const getMeasurement = async () => {
   const measurement = await ProximitySensor.getMeasurement();
   console.log('Near: ', measurement.near);
@@ -107,6 +107,8 @@ const getMeasurement = async () => {
 Listen for continuous `measurement` events. On iOS, proximity monitoring stays enabled until `stopMeasurementUpdates()` (or `removeAllListeners()`) is called:
 
 ```typescript
+import { ProximitySensor } from '@capawesome/capacitor-proximity-sensor';
+
 const startMeasurementUpdates = async () => {
   await ProximitySensor.addListener('measurement', measurement => {
     console.log('Near: ', measurement.near);

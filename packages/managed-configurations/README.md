@@ -61,17 +61,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ManagedConfigurations } from '@capawesome/capacitor-managed-configurations';
-```
+The following example shows how to read managed configuration values as strings, numbers, and booleans.
 
 ### Read managed configuration values
 
 Fetch the value associated with a given key as a string, number, or boolean. The result contains `null` if no mapping exists for the given key. These methods are only available on Android and iOS:
 
 ```typescript
+import { ManagedConfigurations } from '@capawesome/capacitor-managed-configurations';
+
 const getString = async () => {
   const result = await ManagedConfigurations.getString({ key: 'server_url' });
   return result.value;

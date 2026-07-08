@@ -71,17 +71,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Wallet } from '@capawesome/capacitor-wallet';
-```
+The following examples show how to check whether passes can be added, add passes to Apple Wallet, and save a pass to Google Wallet.
 
 ### Check whether passes can be added
 
 On some devices (e.g. certain iPads) or when adding passes is restricted, passes cannot be added to Apple Wallet. Use this method to gate the UI that triggers `addPasses(...)`. Only available on iOS:
 
 ```typescript
+import { Wallet } from '@capawesome/capacitor-wallet';
+
 const canAddPasses = async () => {
   const { canAdd } = await Wallet.canAddPasses();
   return canAdd;
@@ -93,6 +91,8 @@ const canAddPasses = async () => {
 Present the system add-pass sheet with one or more passes. Each pass must be a base64-encoded `.pkpass` file that was created and signed on your server (see [Creating Passes](#creating-passes)). Only available on iOS:
 
 ```typescript
+import { Wallet } from '@capawesome/capacitor-wallet';
+
 const addPasses = async (passes: string[]) => {
   // `passes` are base64-encoded `.pkpass` files that were signed on your server.
   await Wallet.addPasses({ passes });
@@ -104,6 +104,8 @@ const addPasses = async (passes: string[]) => {
 Open the Google Wallet "Save to Wallet" flow with a signed JWT that was created on your server (see [Creating Passes](#creating-passes)). Only available on Android:
 
 ```typescript
+import { Wallet } from '@capawesome/capacitor-wallet';
+
 const saveToGoogleWallet = async (jwt: string) => {
   // `jwt` is a signed Google Wallet JWT that was created on your server.
   await Wallet.saveToGoogleWallet({ jwt });

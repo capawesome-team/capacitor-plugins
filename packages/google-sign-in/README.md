@@ -108,18 +108,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
-import { Capacitor } from '@capacitor/core';
-```
+The following examples show how to initialize the plugin, sign in and sign out a user, and complete the sign-in flow on the Web.
 
 ### Initialize the plugin
 
 Call `initialize(...)` once before all other methods. The `clientId` must be a **web client ID** from the Google Cloud Console on all platforms, even on Android and iOS. Optionally provide `scopes` to also request authorization, which enables the access token and server auth code in the sign-in result:
 
 ```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+
 const initialize = async () => {
   await GoogleSignIn.initialize({
     clientId: '123456789-abc.apps.googleusercontent.com',
@@ -133,6 +130,8 @@ const initialize = async () => {
 Start the Google Sign-In flow and retrieve the ID token (JWT) and the user's profile. Note that on Web, this redirects to the Google OAuth authorization page and the promise never resolves:
 
 ```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+
 const signIn = async () => {
   const result = await GoogleSignIn.signIn();
   console.log(result.idToken);
@@ -149,6 +148,9 @@ const signIn = async () => {
 On Web, the app is redirected back to the `redirectUrl` after the user signs in. Call `handleRedirectCallback()` there to exchange the authorization code for tokens and complete the sign-in flow. Only available on Web:
 
 ```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+import { Capacitor } from '@capacitor/core';
+
 const handleRedirectCallback = async () => {
   if (Capacitor.getPlatform() !== 'web') {
     return;
@@ -168,6 +170,8 @@ const handleRedirectCallback = async () => {
 Sign out the current user:
 
 ```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+
 const signOut = async () => {
   await GoogleSignIn.signOut();
 };

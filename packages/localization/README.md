@@ -67,17 +67,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Localization } from '@capawesome/capacitor-localization';
-```
+The following examples show how to read the user's preferred locales and their regional formatting settings.
 
 ### Get the user's preferred locales
 
 Read the user's preferred locales, ordered by preference. The first entry is the most preferred locale. Each locale contains the language tag, region code, currency, number separators, text direction, and measurement system:
 
 ```typescript
+import { Localization } from '@capawesome/capacitor-localization';
+
 const getLocales = async () => {
   const { locales } = await Localization.getLocales();
   return locales;
@@ -89,6 +87,8 @@ const getLocales = async () => {
 Read the user's regional formatting settings, such as the time zone, whether a 24-hour clock is preferred, and the first day of the week:
 
 ```typescript
+import { Localization } from '@capawesome/capacitor-localization';
+
 const getSettings = async () => {
   const settings = await Localization.getSettings();
   return settings;

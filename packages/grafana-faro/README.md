@@ -158,17 +158,15 @@ export default config;
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
-```
+The following examples show how to initialize the Faro SDK, send log messages, track custom events, capture errors, record measurements, and attach user and view metadata.
 
 ### Initialize the Faro SDK
 
 Call `initialize(...)` before any other method to connect the plugin to your Faro collector endpoint. Alternatively, provide the `url` and `appName` options in the [Configuration](#configuration) so that the native plugin auto-initializes during app startup:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const initialize = async () => {
   await GrafanaFaro.initialize({
     app: {
@@ -195,6 +193,8 @@ const initialize = async () => {
 Capture log messages with a severity level and an optional structured context:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const pushLog = async () => {
   await GrafanaFaro.pushLog({
     level: 'info',
@@ -208,6 +208,8 @@ const pushLog = async () => {
 Track user interactions or business events with custom attributes:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const pushEvent = async () => {
   await GrafanaFaro.pushEvent({
     attributes: { provider: 'google' },
@@ -221,6 +223,8 @@ const pushEvent = async () => {
 Push errors with an optional pre-parsed stack trace. Use a library like `stacktrace-js` to parse the stack into structured frames:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const pushError = async (error: Error) => {
   await GrafanaFaro.pushError({
     type: error.name,
@@ -251,6 +255,8 @@ const pushErrorWithStacktrace = async (error: Error) => {
 Record numeric metrics, for example performance timings or business KPIs:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const pushMeasurement = async () => {
   await GrafanaFaro.pushMeasurement({
     type: 'sign_in_duration',
@@ -264,6 +270,8 @@ const pushMeasurement = async () => {
 Attach user and view information to every signal:
 
 ```typescript
+import { GrafanaFaro } from '@capawesome/capacitor-grafana-faro';
+
 const setUser = async () => {
   await GrafanaFaro.setUser({
     email: 'jane@example.com',

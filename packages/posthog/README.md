@@ -128,17 +128,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Posthog } from '@capawesome/capacitor-posthog';
-```
+The following examples show how to set up the SDK, capture events, track screen views, identify users, associate users with a group, manage super properties, reset the user, and flush queued events.
 
 ### Set up the SDK
 
 Call `setup(...)` before any other method. Alternatively, on Android and iOS, you can configure the plugin in your Capacitor configuration file (see [Configuration](#configuration)); in that case, you must not call this method:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const setup = async () => {
   await Posthog.setup({
     apiKey: 'YOUR_API_KEY',
@@ -152,6 +150,8 @@ const setup = async () => {
 Capture a custom event with optional properties:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const capture = async () => {
   await Posthog.capture({
     event: 'event',
@@ -167,6 +167,8 @@ const capture = async () => {
 Send a screen event with the title of the screen. Only available on Android and iOS:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const screen = async () => {
   await Posthog.screen({
     screenTitle: 'screen',
@@ -182,6 +184,8 @@ const screen = async () => {
 Identify the current user with a distinct ID and set person properties. You can also assign another distinct ID to the current user using `alias(...)`:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const identify = async () => {
   await Posthog.identify({
     distinctId: 'distinct-id',
@@ -203,6 +207,8 @@ const alias = async () => {
 Associate the events of the current user with a group, for example a company or a team:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const group = async () => {
   await Posthog.group({
     type: 'group',
@@ -219,6 +225,8 @@ const group = async () => {
 Register a super property that is sent with every event, and unregister it when it is no longer needed:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const register = async () => {
   await Posthog.register({
     key: 'super-property',
@@ -238,6 +246,8 @@ const unregister = async () => {
 Reset the current user's ID and anonymous ID, for example after a logout:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const reset = async () => {
   await Posthog.reset();
 };
@@ -248,6 +258,8 @@ const reset = async () => {
 Manually flush all events in the queue. Only available on Android and iOS:
 
 ```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const flush = async () => {
   await Posthog.flush();
 };

@@ -84,17 +84,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ForegroundService, Importance } from '@capawesome-team/capacitor-android-foreground-service';
-```
+The following examples show how to start, update, and stop a foreground service and how to create and delete notification channels.
 
 ### Start a foreground service
 
 Start the foreground service with a persistent notification. You can optionally add buttons to the notification, which trigger the `buttonClicked` event when tapped. Only available on Android:
 
 ```typescript
+import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
+
 const startForegroundService = async () => {
   await ForegroundService.startForegroundService({
     id: 1,
@@ -122,6 +120,8 @@ const startForegroundService = async () => {
 Update the notification details of the running foreground service, for example to show the progress of a task. Only available on Android:
 
 ```typescript
+import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
+
 const updateForegroundService = async () => {
   await ForegroundService.updateForegroundService({
     id: 1,
@@ -137,6 +137,8 @@ const updateForegroundService = async () => {
 Stop the running foreground service when the background work is done. Only available on Android:
 
 ```typescript
+import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
+
 const stopForegroundService = async () => {
   await ForegroundService.stopForegroundService();
 };
@@ -147,6 +149,8 @@ const stopForegroundService = async () => {
 Create a notification channel for the foreground service notification. If not invoked, the plugin creates a channel with name and description set to "Default". Only available on Android (SDK 26+):
 
 ```typescript
+import { ForegroundService, Importance } from '@capawesome-team/capacitor-android-foreground-service';
+
 const createNotificationChannel = async () => {
   await ForegroundService.createNotificationChannel({
     id: 'default',

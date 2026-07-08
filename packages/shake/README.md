@@ -65,17 +65,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Shake } from '@capawesome/capacitor-shake';
-```
+The following examples show how to detect shake gestures and stop detecting them.
 
 ### Detect shake gestures
 
 Attach a `shake` listener and start watching for shake gestures. Use the `sensitivity` option to control how strong a shake must be to trigger an event (see [Sensitivity Levels](#sensitivity-levels)). Only available on Android and iOS:
 
 ```typescript
+import { Shake } from '@capawesome/capacitor-shake';
+
 const startWatching = async () => {
   await Shake.addListener('shake', () => {
     console.log('Shake detected!');
@@ -89,6 +87,8 @@ const startWatching = async () => {
 Stop watching and remove all listeners when you no longer need shake detection, for example when the user leaves the corresponding screen. The sensor is only active while you are watching, so this keeps the plugin battery-friendly:
 
 ```typescript
+import { Shake } from '@capawesome/capacitor-shake';
+
 const stopWatching = async () => {
   await Shake.stopWatching();
   await Shake.removeAllListeners();

@@ -179,17 +179,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { SquareMobilePayments, CardInputMethod } from '@capawesome/capacitor-square-mobile-payments';
-```
+The following examples show how to initialize and authorize the SDK, pair and list readers, start a payment, read the available card input methods, and listen for payment and reader events.
 
 ### Initialize and authorize the SDK
 
 Initialize the SDK with your Square location ID and authorize it with a Square access token. The `initialize(...)` method must be called before any other method:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const initializeSDK = async () => {
   await SquareMobilePayments.initialize({
     locationId: 'YOUR_LOCATION_ID',
@@ -206,6 +204,8 @@ const initializeSDK = async () => {
 Check whether the SDK is currently authorized, for example on app start:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const checkAuthorization = async () => {
   const { authorized } = await SquareMobilePayments.isAuthorized();
   console.log('Authorized:', authorized);
@@ -217,6 +217,8 @@ const checkAuthorization = async () => {
 Start the pairing process. The SDK searches for nearby readers and pairs with the first one found:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const pairReader = async () => {
   await SquareMobilePayments.startPairing();
 };
@@ -227,6 +229,8 @@ const pairReader = async () => {
 Get all paired readers with their serial number, model, and status:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const getReaders = async () => {
   const { readers } = await SquareMobilePayments.getReaders();
   for (const reader of readers) {
@@ -240,6 +244,8 @@ const getReaders = async () => {
 Present the payment UI and process a payment with the specified parameters. Only one payment can be active at a time:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const processPayment = async () => {
   await SquareMobilePayments.startPayment({
     paymentParameters: {
@@ -262,6 +268,8 @@ const processPayment = async () => {
 Listen for successful, failed, and cancelled payments to react to the result of a payment flow:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const listenToPaymentEvents = () => {
   SquareMobilePayments.addListener('paymentDidFinish', (event) => {
     console.log('Payment completed:', event.payment.id);
@@ -284,6 +292,8 @@ const listenToPaymentEvents = () => {
 Listen for reader status changes and changes to the available card input methods:
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const listenToReaderEvents = () => {
   SquareMobilePayments.addListener('readerWasAdded', (event) => {
     console.log('Reader added:', event.reader.serialNumber);
@@ -304,6 +314,8 @@ const listenToReaderEvents = () => {
 Read the card entry methods that are currently available based on the connected readers (e.g. tap, dip, swipe, or keyed entry):
 
 ```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
+
 const getAvailableMethods = async () => {
   const { cardInputMethods } = await SquareMobilePayments.getAvailableCardInputMethods();
   console.log('Available card input methods:', cardInputMethods);

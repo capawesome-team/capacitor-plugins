@@ -63,17 +63,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { SilentMode } from '@capawesome/capacitor-silent-mode';
-```
+The following examples show how to check whether the device is in silent mode, read the exact ringer mode, and listen for silent mode changes.
 
 ### Check whether the device is in silent mode
 
 Get the current silent mode state of the device. On Android, the device is considered silent if the ringer mode is not set to normal (that is, either vibrate or silent). On iOS, the state is determined using a heuristic (see [Silent Mode Detection](#silent-mode-detection)). Only available on Android and iOS:
 
 ```typescript
+import { SilentMode } from '@capawesome/capacitor-silent-mode';
+
 const isSilent = async () => {
   const { silent } = await SilentMode.isSilent();
   return silent;
@@ -85,6 +83,8 @@ const isSilent = async () => {
 Read the current ringer mode (`normal`, `vibrate` or `silent`), for example to distinguish between the vibrate and silent modes. Only available on Android:
 
 ```typescript
+import { SilentMode } from '@capawesome/capacitor-silent-mode';
+
 const getRingerMode = async () => {
   const { mode } = await SilentMode.getRingerMode();
   return mode;
@@ -96,6 +96,8 @@ const getRingerMode = async () => {
 Attach a listener to be notified when the silent mode state changes. The device is only observed while at least one listener is attached. On iOS, the state is polled on a timer while the app is in the foreground:
 
 ```typescript
+import { SilentMode } from '@capawesome/capacitor-silent-mode';
+
 const addSilentModeChangeListener = async () => {
   await SilentMode.addListener('silentModeChange', event => {
     console.log('Silent mode changed:', event.silent);
@@ -108,6 +110,8 @@ const addSilentModeChangeListener = async () => {
 Remove all listeners when you no longer need to observe the silent mode state:
 
 ```typescript
+import { SilentMode } from '@capawesome/capacitor-silent-mode';
+
 const removeAllListeners = async () => {
   await SilentMode.removeAllListeners();
 };

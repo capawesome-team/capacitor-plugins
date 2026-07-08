@@ -78,17 +78,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { PhotoEditor } from '@capawesome/capacitor-photo-editor';
-```
+The following example shows how to open a photo in an installed photo editing app.
 
 ### Edit a photo
 
 Open a photo at a given path in an installed photo editing app (e.g. Google Photos). The user should overwrite the image when saving so that the path to the image is not lost. Only available on Android:
 
 ```typescript
+import { PhotoEditor } from '@capawesome/capacitor-photo-editor';
+
 const editPhoto = async () => {
   await PhotoEditor.editPhoto({ path: 'data/image.png' });
 };

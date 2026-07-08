@@ -66,17 +66,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AccessibilityPreferences } from '@capawesome/capacitor-accessibility-preferences';
-```
+The following example shows how to read the user's system accessibility preferences.
 
 ### Read the user's accessibility preferences
 
 Call `getPreferences()` to read all system accessibility preferences at once, such as the font scale, reduce motion, bold text, and contrast settings. Fields that the current platform cannot provide are set to `null` (see [Platform Availability](#platform-availability)):
 
 ```typescript
+import { AccessibilityPreferences } from '@capawesome/capacitor-accessibility-preferences';
+
 const getPreferences = async () => {
   const preferences = await AccessibilityPreferences.getPreferences();
   return preferences;

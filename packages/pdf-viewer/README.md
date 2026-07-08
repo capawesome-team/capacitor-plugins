@@ -83,19 +83,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to open a PDF document, unlock a password-protected file, close the viewer, and listen for page changes and the viewer being closed.
+
 The plugin only supports local files. Remote URLs must be downloaded first, for example with the `downloadFile(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
-
-Import the plugin and call its methods:
-
-```typescript
-import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
-```
 
 ### Open a PDF document
 
 Open a local PDF file in a fullscreen native viewer. You can set a custom toolbar title and the page to display initially. Only available on Android and iOS:
 
 ```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
+
 const open = async () => {
   await PdfViewer.open({
     path: 'file:///path/to/document.pdf',
@@ -110,6 +108,8 @@ const open = async () => {
 Use the `password` option to unlock a password-protected PDF file:
 
 ```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
+
 const openWithPassword = async () => {
   await PdfViewer.open({
     path: 'file:///path/to/document.pdf',
@@ -123,6 +123,8 @@ const openWithPassword = async () => {
 Close the currently open viewer from code. If no viewer is open, this method does nothing:
 
 ```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
+
 const close = async () => {
   await PdfViewer.close();
 };
@@ -133,6 +135,8 @@ const close = async () => {
 Use the `pageChange` and `closed` events to react to the user scrolling through the document or closing the viewer:
 
 ```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
+
 const addListeners = async () => {
   await PdfViewer.addListener('closed', () => {
     console.log('Viewer closed');

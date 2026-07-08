@@ -68,17 +68,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Network } from '@capawesome/capacitor-network';
-```
+The following examples show how to get the current network status, check whether airplane mode is enabled, and listen for changes to the network status.
 
 ### Get the current network status
 
 Read whether the device is currently connected, the type of the connection (e.g. Wi-Fi or cellular) and, on Android, whether the connection has verified access to the internet:
 
 ```typescript
+import { Network } from '@capawesome/capacitor-network';
+
 const getStatus = async () => {
   const status = await Network.getStatus();
   return status;
@@ -90,6 +88,8 @@ const getStatus = async () => {
 Read whether the airplane mode is currently enabled. Only available on Android:
 
 ```typescript
+import { Network } from '@capawesome/capacitor-network';
+
 const isAirplaneModeEnabled = async () => {
   const { enabled } = await Network.isAirplaneModeEnabled();
   return enabled;
@@ -101,6 +101,8 @@ const isAirplaneModeEnabled = async () => {
 Get notified whenever the network status of the device changes. The device is only observed while at least one listener is attached:
 
 ```typescript
+import { Network } from '@capawesome/capacitor-network';
+
 const addNetworkStatusChangeListener = async () => {
   await Network.addListener('networkStatusChange', status => {
     console.log('Network status changed:', status);
@@ -111,6 +113,8 @@ const addNetworkStatusChangeListener = async () => {
 When you no longer need updates, remove all listeners:
 
 ```typescript
+import { Network } from '@capawesome/capacitor-network';
+
 const removeAllListeners = async () => {
   await Network.removeAllListeners();
 };

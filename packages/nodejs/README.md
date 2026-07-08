@@ -133,11 +133,7 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Nodejs } from '@capawesome/capacitor-nodejs';
-```
+The following examples show how to set up the Node.js project, communicate between Node.js and the Capacitor app, start the runtime manually, wait for it to be ready, and exchange messages with it.
 
 ### Set up the Node.js project
 
@@ -193,6 +189,8 @@ app.on('resume', () => {});
 By default, the Node.js runtime starts automatically when the app is launched. If the `startMode` configuration option is set to `manual`, start it yourself with custom arguments, environment variables and script:
 
 ```typescript
+import { Nodejs } from '@capawesome/capacitor-nodejs';
+
 const start = async () => {
   // Only available if the `startMode` configuration option is set to `manual`.
   await Nodejs.start({
@@ -208,6 +206,8 @@ const start = async () => {
 The Node.js runtime is considered ready as soon as the Node.js project has required the `bridge` module. Check the current state with `isReady()` or listen for the `ready` event:
 
 ```typescript
+import { Nodejs } from '@capawesome/capacitor-nodejs';
+
 const isReady = async () => {
   const { ready } = await Nodejs.isReady();
   return ready;
@@ -225,6 +225,8 @@ const addReadyListener = async () => {
 Once the Node.js runtime is ready, send messages to it and listen for messages received from it:
 
 ```typescript
+import { Nodejs } from '@capawesome/capacitor-nodejs';
+
 const send = async () => {
   await Nodejs.send({
     eventName: 'my-event',

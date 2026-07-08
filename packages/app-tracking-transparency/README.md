@@ -78,17 +78,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppTrackingTransparency } from '@capawesome/capacitor-app-tracking-transparency';
-```
+The following examples show how to check the tracking authorization status, request tracking permission, and read the advertising identifier.
 
 ### Check the tracking authorization status
 
 Read the current tracking authorization status, for example to decide whether tracking-related features should be enabled. Only available on iOS:
 
 ```typescript
+import { AppTrackingTransparency } from '@capawesome/capacitor-app-tracking-transparency';
+
 const getStatus = async () => {
   const { status } = await AppTrackingTransparency.getStatus();
   return status;
@@ -100,6 +98,8 @@ const getStatus = async () => {
 Present the system tracking authorization prompt. The prompt is only shown once per install while the status is `notDetermined`; afterwards, the method resolves with the existing status. Only available on iOS:
 
 ```typescript
+import { AppTrackingTransparency } from '@capawesome/capacitor-app-tracking-transparency';
+
 const requestPermission = async () => {
   const { status } = await AppTrackingTransparency.requestPermission();
   return status;
@@ -111,6 +111,8 @@ const requestPermission = async () => {
 Read the advertising identifier (IDFA) of the device. It is only available if the tracking authorization status is `authorized`; otherwise, `null` is returned. Only available on iOS:
 
 ```typescript
+import { AppTrackingTransparency } from '@capawesome/capacitor-app-tracking-transparency';
+
 const getAdvertisingIdentifier = async () => {
   const { advertisingIdentifier } =
     await AppTrackingTransparency.getAdvertisingIdentifier();

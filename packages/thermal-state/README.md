@@ -75,17 +75,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ThermalState } from '@capawesome/capacitor-thermal-state';
-```
+The following examples show how to get the current thermal state, listen for thermal state changes, and remove all listeners.
 
 ### Get the current thermal state
 
 Read the current thermal state of the device, for example to decide how much work your app should perform. Only available on Android (API level 29+) and iOS:
 
 ```typescript
+import { ThermalState } from '@capawesome/capacitor-thermal-state';
+
 const getThermalState = async () => {
   const { state } = await ThermalState.getThermalState();
   return state;
@@ -97,6 +95,8 @@ const getThermalState = async () => {
 Get notified whenever the thermal state of the device changes. The device is only observed while at least one listener is attached. Only available on Android (API level 29+) and iOS:
 
 ```typescript
+import { ThermalState } from '@capawesome/capacitor-thermal-state';
+
 const addThermalStateChangeListener = async () => {
   await ThermalState.addListener('thermalStateChange', event => {
     console.log(event.state);
@@ -109,6 +109,8 @@ const addThermalStateChangeListener = async () => {
 Remove all listeners for this plugin when you no longer need to observe the thermal state:
 
 ```typescript
+import { ThermalState } from '@capawesome/capacitor-thermal-state';
+
 const removeAllListeners = async () => {
   await ThermalState.removeAllListeners();
 };

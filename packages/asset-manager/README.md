@@ -66,18 +66,16 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Directory, Filesystem } from '@capacitor/filesystem';
-import { AssetManager, Encoding } from '@capawesome/capacitor-asset-manager';
-```
+The following examples show how to copy an asset to the data directory, list asset files, and read an asset file.
 
 ### Copy an asset to the data directory
 
 Copy a file or directory from the app bundle to the app's data directory. You can generate the destination path using the `getUri(...)` method of the Capacitor Filesystem plugin. Only available on Android and iOS:
 
 ```typescript
+import { AssetManager } from '@capawesome/capacitor-asset-manager';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+
 const copy = async () => {
   const { uri } = await Filesystem.getUri({
     directory: Directory.Cache,
@@ -95,6 +93,8 @@ const copy = async () => {
 List the files in an asset directory. If no path is specified, the root path is used. Only available on Android and iOS:
 
 ```typescript
+import { AssetManager } from '@capawesome/capacitor-asset-manager';
+
 const list = async () => {
   await AssetManager.list({
     path: 'public'
@@ -107,6 +107,8 @@ const list = async () => {
 Read a file from the app bundle using Base64 (default) or UTF-8 encoding. Avoid reading large files this way, as it can cause out of memory issues; instead, copy them to the app's data directory using the `copy(...)` method and read them from there using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch). Only available on Android and iOS:
 
 ```typescript
+import { AssetManager, Encoding } from '@capawesome/capacitor-asset-manager';
+
 const read = async () => {
   const { data } = await AssetManager.read({
     encoding: Encoding.Utf8,

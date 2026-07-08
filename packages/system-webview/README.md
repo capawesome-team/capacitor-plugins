@@ -77,17 +77,14 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { SystemWebView } from '@capawesome/capacitor-system-webview';
-```
+The following examples show how to prompt the user to update the WebView and read information about the WebView provider.
 
 ### Prompt the user to update the WebView
 
 The recommended pattern is to check whether an update is required on app start, prompt the user with the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin, and then open the Play Store. Only available on Android:
 
 ```typescript
+import { SystemWebView } from '@capawesome/capacitor-system-webview';
 import { Dialog } from '@capacitor/dialog';
 
 const promptForUpdateIfRequired = async () => {
@@ -117,6 +114,8 @@ const promptForUpdateIfRequired = async () => {
 Get the package name, version name and Chromium major version of the active WebView provider, for example to attach it to your support diagnostics. Only available on Android:
 
 ```typescript
+import { SystemWebView } from '@capawesome/capacitor-system-webview';
+
 const getInfo = async () => {
   const info = await SystemWebView.getInfo();
   return info;

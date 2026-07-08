@@ -75,22 +75,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import {
-  AndroidHapticType,
-  Haptics,
-  ImpactStyle,
-  NotificationType,
-} from '@capawesome/capacitor-haptics';
-```
+The following examples show how to check if haptic feedback is available, trigger impact and notification feedback, give selection feedback, play a custom haptic pattern, perform an Android haptic effect, and vibrate the device.
 
 ### Check if haptic feedback is available
 
 Check whether the device supports haptic feedback before using the other methods:
 
 ```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
+
 const isAvailable = async () => {
   const { available } = await Haptics.isAvailable();
   return available;
@@ -102,6 +95,8 @@ const isAvailable = async () => {
 Simulate a physical impact, for example when user interface elements collide or a drag operation snaps into place. Five different styles are available, including the modern `Rigid` and `Soft` styles:
 
 ```typescript
+import { Haptics, ImpactStyle } from '@capawesome/capacitor-haptics';
+
 const impact = async () => {
   await Haptics.impact({ style: ImpactStyle.Medium });
 };
@@ -112,6 +107,8 @@ const impact = async () => {
 Communicate that a task or action has succeeded, failed, or produced a warning:
 
 ```typescript
+import { Haptics, NotificationType } from '@capawesome/capacitor-haptics';
+
 const notification = async () => {
   await Haptics.notification({ type: NotificationType.Success });
 };
@@ -122,6 +119,8 @@ const notification = async () => {
 Give subtle feedback during picker-style interactions. Call `selectionStart()` when the interaction begins, `selectionChanged()` whenever the selection changes, and `selectionEnd()` when the interaction finishes:
 
 ```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
+
 const selection = async () => {
   await Haptics.selectionStart();
   await Haptics.selectionChanged();
@@ -134,6 +133,8 @@ const selection = async () => {
 Play a custom pattern composed of individual haptic events with per-event intensity and sharpness. On iOS, the pattern is played using Core Haptics; on Android, it is approximated using vibration effects:
 
 ```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
+
 const playPattern = async () => {
   await Haptics.playPattern({
     events: [
@@ -150,6 +151,8 @@ const playPattern = async () => {
 Perform a semantic Android haptic feedback effect that respects the user's haptic feedback settings. Only available on Android:
 
 ```typescript
+import { AndroidHapticType, Haptics } from '@capawesome/capacitor-haptics';
+
 const performAndroidHaptic = async () => {
   await Haptics.performAndroidHaptic({ type: AndroidHapticType.Confirm });
 };
@@ -160,6 +163,8 @@ const performAndroidHaptic = async () => {
 Vibrate the device. The `duration` option is only available on Android and Web:
 
 ```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
+
 const vibrate = async () => {
   await Haptics.vibrate({ duration: 500 });
 };

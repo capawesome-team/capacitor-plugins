@@ -98,17 +98,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppLauncher } from '@capawesome/capacitor-app-launcher';
-```
+The following examples show how to check whether an app can be opened and open another app.
 
 ### Check if an app can be opened
 
 Check whether an app can be opened before trying to open it. On iOS, the URL must be a URL scheme (e.g. `mailto:`); on Android, it can be a URL scheme or a package name (e.g. `com.google.android.gm`). Remember to declare every scheme and package name you check (see [Installation](#installation)), otherwise this method always resolves with `value: false`:
 
 ```typescript
+import { AppLauncher } from '@capawesome/capacitor-app-launcher';
+
 const canOpenUrl = async () => {
   const { value } = await AppLauncher.canOpenUrl({ url: 'mailto:' });
   return value;
@@ -120,6 +118,8 @@ const canOpenUrl = async () => {
 Open another app with the given URL. On Android, the URL can also be a package name. The result tells you whether the app was opened successfully:
 
 ```typescript
+import { AppLauncher } from '@capawesome/capacitor-app-launcher';
+
 const openUrl = async () => {
   const { completed } = await AppLauncher.openUrl({ url: 'mailto:' });
   return completed;

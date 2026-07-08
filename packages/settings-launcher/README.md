@@ -71,17 +71,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { SettingsLauncher, AndroidSettingsPage } from '@capawesome/capacitor-settings-launcher';
-```
+The following examples show how to open your app's settings screen, open your app's notification settings, and open an Android system settings screen.
 
 ### Open the settings screen of your app
 
 Open your app's settings screen, for example to guide users to grant a previously denied permission. Only available on Android and iOS:
 
 ```typescript
+import { SettingsLauncher } from '@capawesome/capacitor-settings-launcher';
+
 const openAppSettings = async () => {
   await SettingsLauncher.openAppSettings();
 };
@@ -92,6 +90,8 @@ const openAppSettings = async () => {
 Open your app's notification settings screen, for example when the user has disabled notifications. On iOS, this method requires iOS 16 or later and rejects on older versions. Only available on Android and iOS:
 
 ```typescript
+import { SettingsLauncher } from '@capawesome/capacitor-settings-launcher';
+
 const openNotificationSettings = async () => {
   await SettingsLauncher.openNotificationSettings();
 };
@@ -102,6 +102,8 @@ const openNotificationSettings = async () => {
 Use the `AndroidSettingsPage` enum to open one of the many supported Android system settings screens, such as Wi-Fi, Bluetooth, or location. Only available on Android:
 
 ```typescript
+import { SettingsLauncher, AndroidSettingsPage } from '@capawesome/capacitor-settings-launcher';
+
 const openAndroidSettings = async () => {
   await SettingsLauncher.openAndroidSettings({
     page: AndroidSettingsPage.Wifi,

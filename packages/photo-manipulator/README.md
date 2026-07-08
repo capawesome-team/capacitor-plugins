@@ -84,19 +84,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to convert an image to another format, create a thumbnail, and read the dimensions and format of an image.
+
 The transformed image is written to a new file in the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
-
-Import the plugin and call its methods:
-
-```typescript
-import { PhotoManipulator, ImageFormat } from '@capawesome/capacitor-photo-manipulator';
-```
 
 ### Convert a HEIC image to JPEG
 
 Use the `format` option of the `transform(...)` method to convert an image to another format, for example a HEIC photo taken on an iPhone to JPEG. The `quality` option controls the compression of the output file:
 
 ```typescript
+import { PhotoManipulator, ImageFormat } from '@capawesome/capacitor-photo-manipulator';
+
 const convertHeicToJpeg = async () => {
   // Convert an HEIC photo (e.g. taken on an iPhone) to JPEG
   const { path } = await PhotoManipulator.transform({
@@ -113,6 +111,8 @@ const convertHeicToJpeg = async () => {
 Combine the `crop`, `resize`, `rotate` and flip options in a single call. The operations are always applied in the fixed order crop → resize → rotate → flip:
 
 ```typescript
+import { PhotoManipulator } from '@capawesome/capacitor-photo-manipulator';
+
 const createThumbnail = async () => {
   // Crop, resize, rotate and flip in one call
   const { path, width, height } = await PhotoManipulator.transform({
@@ -131,6 +131,8 @@ const createThumbnail = async () => {
 Use the `getInfo(...)` method to read the dimensions and format of an image without decoding the pixel data where possible:
 
 ```typescript
+import { PhotoManipulator } from '@capawesome/capacitor-photo-manipulator';
+
 const getInfo = async () => {
   const { width, height, format } = await PhotoManipulator.getInfo({
     path: 'file:///var/mobile/.../photo.heic',

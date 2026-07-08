@@ -90,17 +90,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Formbricks } from '@capawesome/capacitor-formbricks';
-```
+The following examples show how to set up the SDK, identify the user, set user attributes, set the survey language, track an action, and log out the user.
 
 ### Set up the SDK
 
 Set up the Formbricks SDK with the URL of your Formbricks instance and the environment ID of your Formbricks project. This method must be called before any other method:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const setup = async () => {
   await Formbricks.setup({
     appUrl: 'https://app.formbricks.com',
@@ -114,6 +112,8 @@ const setup = async () => {
 Set the user ID of the current user to connect survey responses to that user:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const setUserId = async () => {
   await Formbricks.setUserId({
     userId: 'user-123',
@@ -126,6 +126,8 @@ const setUserId = async () => {
 Set a single attribute with `setAttribute(...)` or multiple attributes at once with `setAttributes(...)`, for example to target surveys to specific user segments:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const setAttribute = async () => {
   await Formbricks.setAttribute({
     key: 'plan',
@@ -148,6 +150,8 @@ const setAttributes = async () => {
 Set the language in which surveys are displayed:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const setLanguage = async () => {
   await Formbricks.setLanguage({
     language: 'de',
@@ -160,6 +164,8 @@ const setLanguage = async () => {
 Track an action that may trigger a survey:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const track = async () => {
   await Formbricks.track({
     action: 'button_pressed',
@@ -172,6 +178,8 @@ const track = async () => {
 Log out the current user and clear all attributes:
 
 ```typescript
+import { Formbricks } from '@capawesome/capacitor-formbricks';
+
 const logout = async () => {
   await Formbricks.logout();
 };

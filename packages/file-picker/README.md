@@ -105,17 +105,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { FilePicker } from '@capawesome/capacitor-file-picker';
-```
+The following examples show how to pick files, images, videos, and directories, and how to process the selected files.
 
 ### Pick one or more files
 
 Open the system file picker and let the user select one or more files of any type. The result contains the metadata (name, size, mime type, last modified timestamp) and, on Android and iOS, the path of each selected file:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const pickFiles = async () => {
   const result = await FilePicker.pickFiles();
   const file = result.files[0];
@@ -127,6 +125,8 @@ const pickFiles = async () => {
 Use the `types` option to only accept certain [IANA media types](https://www.iana.org/assignments/media-types/media-types.xhtml), for example PDF documents:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const pickPdfFiles = async () => {
   const result = await FilePicker.pickFiles({
     types: ['application/pdf'],
@@ -139,6 +139,8 @@ const pickPdfFiles = async () => {
 Use `pickImages(...)`, `pickVideos(...)` or `pickMedia(...)` to open the photo gallery instead of the file picker. These methods are only available on Android and iOS:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const pickImages = async () => {
   const result = await FilePicker.pickImages();
 };
@@ -158,6 +160,8 @@ const pickMedia = async () => {
 Let the user select a directory, for example to import all files it contains. Only available on Android and iOS:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const pickDirectory = async () => {
   const { path } = await FilePicker.pickDirectory();
 };
@@ -168,6 +172,7 @@ const pickDirectory = async () => {
 On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's path. You can then append the blob to a `FormData` object and upload it:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { Capacitor } from '@capacitor/core';
 
 const uploadFile = async () => {
@@ -200,6 +205,8 @@ const uploadFile = async () => {
 On iOS, photos are often stored in the HEIC format, which many servers and browsers cannot display. Use `convertHeicToJpeg(...)` to convert them. Only available on iOS:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const convertHeicToJpeg = async () => {
   const { path } = await FilePicker.convertHeicToJpeg({
     path: 'path/to/image.heic',
@@ -212,6 +219,8 @@ const convertHeicToJpeg = async () => {
 Picking files does not require any permissions since the operating system presents the picker. However, if you need the `ACCESS_MEDIA_LOCATION` or `READ_EXTERNAL_STORAGE` permission on Android (see [Installation](#installation)), you can check and request them:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const checkPermissions = async () => {
   const result = await FilePicker.checkPermissions();
 };
@@ -226,6 +235,8 @@ const requestPermissions = async () => {
 On iOS, you can be notified when the user closes the picker without selecting anything:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const addPickerDismissedListener = async () => {
   await FilePicker.addListener('pickerDismissed', () => {
     console.log('Picker was dismissed');
@@ -238,6 +249,8 @@ const addPickerDismissedListener = async () => {
 Copy a picked file to a new location, for example into your app's data directory:
 
 ```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
 const copyFile = async () => {
   await FilePicker.copyFile({
     from: 'path/to/file',

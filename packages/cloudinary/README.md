@@ -93,17 +93,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Cloudinary, ResourceType } from '@capawesome/capacitor-cloudinary';
-```
+The following examples show how to initialize the plugin, upload a file to Cloudinary, and download a file from Cloudinary.
 
 ### Initialize the plugin
 
 Initialize the plugin with the cloud name of your app, which you can find in the Cloudinary Management Console. This method must be called once before all other methods:
 
 ```typescript
+import { Cloudinary } from '@capawesome/capacitor-cloudinary';
+
 const initialize = async () => {
   await Cloudinary.initialize({ cloudName: 'my_cloud_name' });
 };
@@ -114,6 +112,8 @@ const initialize = async () => {
 Upload an image, video, or raw file to Cloudinary. On Android and iOS, pass the path of the file to upload; on the Web, pass a `Blob` instead. Note that currently only unsigned uploads are supported, so you need an upload preset:
 
 ```typescript
+import { Cloudinary, ResourceType } from '@capawesome/capacitor-cloudinary';
+
 const uploadResource = async () => {
   await Cloudinary.uploadResource({
     path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Images/test.png',
@@ -129,6 +129,8 @@ const uploadResource = async () => {
 Download a resource by its URL. On Android and iOS, the result contains the path where the file was stored on the device; on the Web, it contains a `Blob`:
 
 ```typescript
+import { Cloudinary } from '@capawesome/capacitor-cloudinary';
+
 const downloadResource = async () => {
   const { path } = await Cloudinary.downloadResource({
     url: 'https://res.cloudinary.com/myCloudName/image/upload/v123/123.png',

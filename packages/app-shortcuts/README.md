@@ -122,17 +122,15 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```ts
-import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
-```
+The following examples show how to create, get, and remove app shortcuts and listen for shortcut clicks.
 
 ### Create or update app shortcuts
 
 Use the `set(...)` method to create or update the app shortcuts. Each shortcut needs a unique identifier and a title. Only available on Android and iOS:
 
 ```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
 const set = async () => {
   await AppShortcuts.set({
     shortcuts: [
@@ -156,6 +154,8 @@ const set = async () => {
 Retrieve the list of app shortcuts that are currently set. Only available on Android and iOS:
 
 ```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
 const get = async () => {
   const result = await AppShortcuts.get();
   return result.shortcuts;
@@ -167,6 +167,8 @@ const get = async () => {
 Clear all app shortcuts, for example when the user signs out. Only available on Android and iOS:
 
 ```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
 const clear = async () => {
   await AppShortcuts.clear();
 };
@@ -177,6 +179,8 @@ const clear = async () => {
 Add a listener for the `click` event to react when the user taps an app shortcut, for example to navigate to the corresponding screen. On iOS, this requires the changes to your `AppDelegate.swift` described in the [iOS configuration](#ios) instructions:
 
 ```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
 const addListener = async () => {
   AppShortcuts.addListener('click', (event) => {
     console.log('Shortcut clicked:', event.id);

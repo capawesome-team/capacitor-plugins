@@ -78,17 +78,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { LightSensor } from '@capawesome/capacitor-light-sensor';
-```
+The following examples show how to check whether an ambient light sensor is available, read the current light level, and receive or stop continuous measurement updates.
 
 ### Check if the light sensor is available
 
 Check whether the device has an ambient light sensor before using the other methods. Only available on Android:
 
 ```typescript
+import { LightSensor } from '@capawesome/capacitor-light-sensor';
+
 const isAvailable = async () => {
   const result = await LightSensor.isAvailable();
   return result.available;
@@ -100,6 +98,8 @@ const isAvailable = async () => {
 Get the most recent measurement from the ambient light sensor in lux. Only available on Android:
 
 ```typescript
+import { LightSensor } from '@capawesome/capacitor-light-sensor';
+
 const getMeasurement = async () => {
   const measurement = await LightSensor.getMeasurement();
   console.log('Illuminance: ', measurement.illuminance);
@@ -111,6 +111,8 @@ const getMeasurement = async () => {
 Add a listener for the `measurement` event and start the measurement updates to receive real-time light data. Only available on Android:
 
 ```typescript
+import { LightSensor } from '@capawesome/capacitor-light-sensor';
+
 const startMeasurementUpdates = async () => {
   await LightSensor.addListener('measurement', measurement => {
     console.log('Illuminance: ', measurement.illuminance);
@@ -124,6 +126,8 @@ const startMeasurementUpdates = async () => {
 Stop the measurement updates and remove the listeners when you no longer need them:
 
 ```typescript
+import { LightSensor } from '@capawesome/capacitor-light-sensor';
+
 const stopMeasurementUpdates = async () => {
   await LightSensor.stopMeasurementUpdates();
 };

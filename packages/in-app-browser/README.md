@@ -102,17 +102,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
-```
+The following examples show how to open URLs in the external, system, and in-app browsers, control the embedded web view, exchange messages with the loaded page, clear browsing data, and listen for browser events.
 
 ### Open a URL in the external browser
 
 Open a URL in the default browser app of the device. Since the browser is opened in a separate app, no events are emitted in this mode:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const openInExternalBrowser = async () => {
   await InAppBrowser.openInExternalBrowser({
     url: 'https://capawesome.io',
@@ -125,6 +123,8 @@ const openInExternalBrowser = async () => {
 Open a URL in the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS) and customize the toolbar with platform-specific options. Only available on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const openInSystemBrowser = async () => {
   await InAppBrowser.openInSystemBrowser({
     url: 'https://capawesome.io',
@@ -145,6 +145,8 @@ const openInSystemBrowser = async () => {
 Open a URL in an embedded web view with a native toolbar whose color, title, and buttons can be customized. Only available on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const openInWebView = async () => {
   await InAppBrowser.openInWebView({
     url: 'https://capawesome.io',
@@ -162,6 +164,8 @@ const openInWebView = async () => {
 Close the currently open browser. This closes browsers opened with `openInWebView(...)` or `openInSystemBrowser(...)`. Only available on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const close = async () => {
   await InAppBrowser.close();
 };
@@ -172,6 +176,8 @@ const close = async () => {
 Execute any JavaScript code in the currently open web view. This method is only available for browsers opened with `openInWebView(...)` on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const executeScript = async () => {
   const { result } = await InAppBrowser.executeScript({
     script: 'document.title',
@@ -185,6 +191,8 @@ const executeScript = async () => {
 Post a message to the currently open web view. The web page receives the message by listening for the `capacitorInAppBrowserMessage` window event, see [Messaging](#messaging). This method is only available for browsers opened with `openInWebView(...)` on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const postMessage = async () => {
   await InAppBrowser.postMessage({
     data: { name: 'Capawesome' },
@@ -197,6 +205,8 @@ const postMessage = async () => {
 Clear the cache or the session data (cookies and web storage) of the web view. Only available on Android and iOS:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const clearCache = async () => {
   await InAppBrowser.clearCache();
 };
@@ -211,6 +221,8 @@ const clearSessionData = async () => {
 Get notified when the browser is closed, a message is received, a navigation has been completed, a page has been loaded, or the URL has changed:
 
 ```typescript
+import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+
 const addListeners = async () => {
   await InAppBrowser.addListener('browserClosed', () => {
     console.log('Browser closed');

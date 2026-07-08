@@ -107,17 +107,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
-```
+The following examples show how to lock, unlock, and read the current screen orientation.
 
 ### Lock the screen orientation
 
 Lock the device to a specific orientation, for example landscape. Besides `LANDSCAPE` and `PORTRAIT`, you can also lock to a primary or secondary mode such as `LANDSCAPE_PRIMARY` for fine-grained control:
 
 ```typescript
+import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
+
 const lock = async () => {
   await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
 };
@@ -128,6 +126,8 @@ const lock = async () => {
 Remove the orientation lock and restore automatic rotation:
 
 ```typescript
+import { ScreenOrientation } from '@capawesome/capacitor-screen-orientation';
+
 const unlock = async () => {
   await ScreenOrientation.unlock();
 };
@@ -138,6 +138,8 @@ const unlock = async () => {
 Read the current orientation type of the device:
 
 ```typescript
+import { ScreenOrientation } from '@capawesome/capacitor-screen-orientation';
+
 const getCurrentOrientation = async () => {
   const result = await ScreenOrientation.getCurrentOrientation();
   return result.type;

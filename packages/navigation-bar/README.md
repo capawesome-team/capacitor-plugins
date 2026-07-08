@@ -111,17 +111,15 @@ export default config;
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { NavigationBar, Style } from '@capawesome/capacitor-navigation-bar';
-```
+The following examples show how to set the navigation bar color and button style, read the current color and style, and hide and show the navigation bar.
 
 ### Set the navigation bar color
 
 Set the background color of the navigation bar to any hexadecimal color, or pass `'transparent'` to make it fully transparent. Only available on Android:
 
 ```typescript
+import { NavigationBar } from '@capawesome/capacitor-navigation-bar';
+
 const setColor = async () => {
   await NavigationBar.setColor({ color: '#ffffff' });
 };
@@ -132,6 +130,8 @@ const setColor = async () => {
 Choose dark or light navigation bar buttons, or use `Style.Default` to follow the current device appearance. Only available on Android:
 
 ```typescript
+import { NavigationBar, Style } from '@capawesome/capacitor-navigation-bar';
+
 const setStyle = async () => {
   await NavigationBar.setStyle({ style: Style.Light });
 };
@@ -142,6 +142,8 @@ const setStyle = async () => {
 Get the current background color and button style of the navigation bar. Only available on Android:
 
 ```typescript
+import { NavigationBar } from '@capawesome/capacitor-navigation-bar';
+
 const getColor = async () => {
   const { color } = await NavigationBar.getColor();
   return color;
@@ -158,6 +160,8 @@ const getStyle = async () => {
 Hide the navigation bar on demand, for example for fullscreen content, and show it again afterwards. Only available on Android:
 
 ```typescript
+import { NavigationBar } from '@capawesome/capacitor-navigation-bar';
+
 const hide = async () => {
   await NavigationBar.hide();
 };

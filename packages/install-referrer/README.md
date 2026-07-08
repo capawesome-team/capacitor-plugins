@@ -70,17 +70,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { InstallReferrer } from '@capawesome/capacitor-install-referrer';
-```
+The following examples show how to read the Play Store install referrer on Android and the Apple Ad Services attribution token on iOS.
 
 ### Read the Play Store install referrer
 
 Get the Play Store install referrer information, including the referrer URL and the click and install timestamps. Fetch it once shortly after the first launch and persist it, since Google only guarantees its availability for a limited window after the install. Only available on Android:
 
 ```typescript
+import { InstallReferrer } from '@capawesome/capacitor-install-referrer';
+
 const getInstallReferrer = async () => {
   const result = await InstallReferrer.getInstallReferrer();
   return result;
@@ -92,6 +90,8 @@ const getInstallReferrer = async () => {
 Get the Apple Ad Services attribution token. The token is opaque and must be exchanged server-side with Apple's attribution API (see [Attribution Token Exchange](#attribution-token-exchange-ios)). Only available on iOS:
 
 ```typescript
+import { InstallReferrer } from '@capawesome/capacitor-install-referrer';
+
 const getAttributionToken = async () => {
   const { token } = await InstallReferrer.getAttributionToken();
   return token;

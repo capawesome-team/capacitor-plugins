@@ -79,17 +79,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { PhoneDialer } from '@capawesome/capacitor-phone-dialer';
-```
+The following examples show how to check whether the device can open the phone dialer and how to open it with a prefilled number.
 
 ### Check whether the device can open the phone dialer
 
 Use the `canDial()` method to check whether the device is able to open the phone dialer, for example to hide or disable call buttons. On devices without telephony capability (e.g. Wi-Fi-only tablets or iPod touch), it resolves with `false`. Only available on Android and iOS:
 
 ```typescript
+import { PhoneDialer } from '@capawesome/capacitor-phone-dialer';
+
 const canDial = async () => {
   const { canDial } = await PhoneDialer.canDial();
   return canDial;
@@ -101,6 +99,8 @@ const canDial = async () => {
 Use the `dial(...)` method to open the native phone dialer prefilled with the given number. The user reviews the number and decides whether to place the call. Only available on Android and iOS:
 
 ```typescript
+import { PhoneDialer } from '@capawesome/capacitor-phone-dialer';
+
 const dial = async () => {
   await PhoneDialer.dial({ number: '+41791234567' });
 };

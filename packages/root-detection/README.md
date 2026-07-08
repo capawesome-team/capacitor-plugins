@@ -85,17 +85,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { RootDetection } from '@capawesome/capacitor-root-detection';
-```
+The following examples show how to check whether the device is rooted or jailbroken, running on an emulator, or has developer mode enabled.
 
 ### Check whether the device is rooted or jailbroken
 
 Check whether the device is rooted (Android) or jailbroken (iOS). Keep in mind that this is a best-effort, client-side check that can be bypassed by a determined attacker (see [Security Considerations](#security-considerations)):
 
 ```typescript
+import { RootDetection } from '@capawesome/capacitor-root-detection';
+
 const isRooted = async () => {
   const { rooted } = await RootDetection.isRooted();
   return rooted;
@@ -107,6 +105,8 @@ const isRooted = async () => {
 Check whether the app is running on an emulator (Android) or simulator (iOS):
 
 ```typescript
+import { RootDetection } from '@capawesome/capacitor-root-detection';
+
 const isEmulator = async () => {
   const { emulator } = await RootDetection.isEmulator();
   return emulator;
@@ -118,6 +118,8 @@ const isEmulator = async () => {
 Check whether developer mode is enabled on the device. Only available on Android:
 
 ```typescript
+import { RootDetection } from '@capawesome/capacitor-root-detection';
+
 const isDeveloperModeEnabled = async () => {
   const { enabled } = await RootDetection.isDeveloperModeEnabled();
   return enabled;

@@ -76,17 +76,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ActionSheet, ActionSheetButtonStyle } from '@capawesome/capacitor-action-sheet';
-```
+The following example shows how to present a native action sheet and read the selected button.
 
 ### Show an action sheet
 
 Present a native action sheet with a title, a message, and a list of buttons. Use `ActionSheetButtonStyle.Destructive` to highlight irreversible actions and `ActionSheetButtonStyle.Cancel` to pin a cancel button. The result contains the zero-based index of the selected button and whether the sheet was canceled. Only available on Android and iOS:
 
 ```typescript
+import { ActionSheet, ActionSheetButtonStyle } from '@capawesome/capacitor-action-sheet';
+
 const showActions = async () => {
   const { index, canceled } = await ActionSheet.showActions({
     title: 'Photo Options',

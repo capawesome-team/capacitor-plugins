@@ -78,17 +78,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Exif } from '@capawesome/capacitor-exif';
-```
+The following examples show how to read the EXIF metadata of an image, write EXIF tags to an image, and remove the EXIF metadata from an image.
 
 ### Read the EXIF metadata of an image
 
 Read typed EXIF tags such as the GPS position, camera model, and capture date from an image file. Only available on Android and iOS:
 
 ```typescript
+import { Exif } from '@capawesome/capacitor-exif';
+
 const readExif = async () => {
   const { tags } = await Exif.readExif({
     path: 'file:///path/to/photo.jpg',
@@ -102,6 +100,8 @@ const readExif = async () => {
 Update EXIF tags in place. Only the provided tags are updated and the pixel data is never re-encoded. Only available on Android and iOS:
 
 ```typescript
+import { Exif } from '@capawesome/capacitor-exif';
+
 const writeExif = async () => {
   await Exif.writeExif({
     path: 'file:///path/to/photo.jpg',
@@ -119,6 +119,8 @@ const writeExif = async () => {
 Strip all EXIF metadata from an image file in place, for example to protect the privacy of your users before an upload. By default, the orientation tag is kept so that the image is not suddenly displayed rotated. Only available on Android and iOS:
 
 ```typescript
+import { Exif } from '@capawesome/capacitor-exif';
+
 const removeExif = async () => {
   await Exif.removeExif({
     path: 'file:///path/to/photo.jpg',

@@ -83,17 +83,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { MapsLauncher, NavigationApp } from '@capawesome/capacitor-maps-launcher';
-```
+The following examples show how to get the available and default navigation apps and how to navigate to coordinates or an address.
 
 ### Get the available navigation apps
 
 Check which navigation apps are installed and can be launched. On iOS, Apple Maps is always included, while Google Maps and Waze are only included if the corresponding URL schemes are declared in your `Info.plist` file (see [Installation](#installation)). Only available on Android and iOS:
 
 ```typescript
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
+
 const getAvailableApps = async () => {
   const { apps } = await MapsLauncher.getAvailableApps();
   return apps;
@@ -105,6 +103,8 @@ const getAvailableApps = async () => {
 Find out which navigation app is configured as the default handler for navigation intents. Returns `null` if the default app is not part of the curated list of supported apps or if no default app is set. Only available on Android:
 
 ```typescript
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
+
 const getDefaultApp = async () => {
   const { app } = await MapsLauncher.getDefaultApp();
   return app;
@@ -116,6 +116,8 @@ const getDefaultApp = async () => {
 Launch a navigation app with turn-by-turn directions to a destination defined by its latitude and longitude. You can optionally specify the app to launch and the travel mode:
 
 ```typescript
+import { MapsLauncher, NavigationApp } from '@capawesome/capacitor-maps-launcher';
+
 const navigate = async () => {
   await MapsLauncher.navigate({
     destination: {
@@ -133,6 +135,8 @@ const navigate = async () => {
 Instead of coordinates, you can also pass a plain address as the destination. If no `app` is provided, the system default behavior is used (a chooser on Android, Apple Maps on iOS):
 
 ```typescript
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
+
 const navigateToAddress = async () => {
   await MapsLauncher.navigate({
     destination: {

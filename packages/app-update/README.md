@@ -85,18 +85,16 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Capacitor } from '@capacitor/core';
-import { AppUpdate } from '@capawesome/capacitor-app-update';
-```
+The following examples show how to get app update information, open the app store entry, and perform immediate and flexible in-app updates.
 
 ### Get app update information
 
 Use `getAppUpdateInfo()` to retrieve the current and available app versions. On Android, versions are identified by the version code; on iOS, by the version name. Only available on Android and iOS:
 
 ```typescript
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+import { Capacitor } from '@capacitor/core';
+
 const getCurrentAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (Capacitor.getPlatform() === 'android') {
@@ -121,6 +119,8 @@ const getAvailableAppVersion = async () => {
 Open the app's page in the Play Store (Android) or App Store (iOS) so the user can update the app manually. Only available on Android and iOS:
 
 ```typescript
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+
 const openAppStore = async () => {
   await AppUpdate.openAppStore();
 };
@@ -131,6 +131,8 @@ const openAppStore = async () => {
 Perform an immediate in-app update if an update is available and an immediate update is allowed. Only available on Android:
 
 ```typescript
+import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
+
 const performImmediateUpdate = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE) {
@@ -147,6 +149,8 @@ const performImmediateUpdate = async () => {
 Start a flexible in-app update if an update is available and a flexible update is allowed. You can monitor the download progress with the `onFlexibleUpdateStateChange` listener. Only available on Android:
 
 ```typescript
+import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
+
 const startFlexibleUpdate = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE) {
@@ -163,6 +167,8 @@ const startFlexibleUpdate = async () => {
 Complete a flexible in-app update by restarting the app. Only available on Android:
 
 ```typescript
+import { AppUpdate } from '@capawesome/capacitor-app-update';
+
 const completeFlexibleUpdate = async () => {
   await AppUpdate.completeFlexibleUpdate();
 };

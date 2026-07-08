@@ -56,17 +56,15 @@ const config: CapacitorConfig = {
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Pixlive } from '@capawesome/capacitor-pixlive';
-```
+The following examples show how to synchronize content from PixLive Maker and display the AR view.
 
 ### Synchronize content from PixLive Maker
 
 Sync AR content from PixLive Maker filtered by tags so that it is available on the device. Only available on Android and iOS:
 
 ```typescript
+import { Pixlive } from '@capawesome/capacitor-pixlive';
+
 const synchronize = async () => {
   await Pixlive.synchronize({ tags: [['my-tag']] });
 };
@@ -77,6 +75,8 @@ const synchronize = async () => {
 Create the native AR camera view at the specified screen coordinates. Only available on Android and iOS:
 
 ```typescript
+import { Pixlive } from '@capawesome/capacitor-pixlive';
+
 const createARView = async () => {
   await Pixlive.createARView({ x: 0, y: 0, width: 300, height: 400 });
 };

@@ -71,17 +71,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Battery } from '@capawesome/capacitor-battery';
-```
+The following examples show how to get the current battery level and state, check if low power mode is enabled, listen for battery changes, and remove all listeners.
 
 ### Get the current battery level
 
 Read the current battery level of the device as a value between `0.0` and `1.0`:
 
 ```typescript
+import { Battery } from '@capawesome/capacitor-battery';
+
 const getBatteryLevel = async () => {
   const { level } = await Battery.getBatteryLevel();
   return level;
@@ -93,6 +91,8 @@ const getBatteryLevel = async () => {
 Check whether the device is charging, full or unplugged:
 
 ```typescript
+import { Battery } from '@capawesome/capacitor-battery';
+
 const getBatteryState = async () => {
   const { state } = await Battery.getBatteryState();
   return state;
@@ -104,6 +104,8 @@ const getBatteryState = async () => {
 Read whether the low power mode (power saver mode on Android, Low Power Mode on iOS) is currently enabled. Only available on Android and iOS:
 
 ```typescript
+import { Battery } from '@capawesome/capacitor-battery';
+
 const isLowPowerModeEnabled = async () => {
   const { enabled } = await Battery.isLowPowerModeEnabled();
   return enabled;
@@ -115,6 +117,8 @@ const isLowPowerModeEnabled = async () => {
 Get notified when the battery level, battery state or low power mode changes. The device is only observed while at least one listener is attached. The `lowPowerModeChange` event is only available on Android and iOS:
 
 ```typescript
+import { Battery } from '@capawesome/capacitor-battery';
+
 const addBatteryLevelChangeListener = async () => {
   await Battery.addListener('batteryLevelChange', event => {
     console.log('Battery level changed:', event.level);
@@ -139,6 +143,8 @@ const addLowPowerModeChangeListener = async () => {
 Remove all listeners that were registered for this plugin:
 
 ```typescript
+import { Battery } from '@capawesome/capacitor-battery';
+
 const removeAllListeners = async () => {
   await Battery.removeAllListeners();
 };

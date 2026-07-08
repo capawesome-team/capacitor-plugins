@@ -67,17 +67,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { SmsComposer } from '@capawesome/capacitor-sms-composer';
-```
+The following examples show how to check whether the device can send SMS messages and open the native SMS composer.
 
 ### Check whether the device can send SMS messages
 
 Check whether the device is able to compose and send SMS messages, for example to hide SMS-related features on devices without SMS capability such as Wi-Fi-only tablets or iPads. Only available on Android and iOS:
 
 ```typescript
+import { SmsComposer } from '@capawesome/capacitor-sms-composer';
+
 const canComposeSms = async () => {
   const { canCompose } = await SmsComposer.canComposeSms();
   return canCompose;
@@ -89,6 +87,8 @@ const canComposeSms = async () => {
 Open the native SMS composer prefilled with recipients and a message body. The user reviews the message and decides whether to send it; the plugin never sends the message itself. The call resolves with a `status` once the composer is dismissed (see [Result Status](#result-status)). Only available on Android and iOS:
 
 ```typescript
+import { SmsComposer } from '@capawesome/capacitor-sms-composer';
+
 const composeSms = async () => {
   const { status } = await SmsComposer.composeSms({
     recipients: ['+41791234567'],

@@ -92,17 +92,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AgeSignals } from '@capawesome/capacitor-age-signals';
-```
+The following examples show how to request the user's age signals and check eligibility for age-gated features.
 
 ### Request the user's age signals
 
 Call `checkAgeSignals(...)` to request the user's age signals. The result contains the user's verification status and, for supervised users, the lower and upper bounds of their age range:
 
 ```typescript
+import { AgeSignals } from '@capawesome/capacitor-age-signals';
+
 const checkAgeSignals = async () => {
   const result = await AgeSignals.checkAgeSignals();
   console.log('User Status:', result.userStatus);
@@ -116,6 +114,8 @@ const checkAgeSignals = async () => {
 Check whether the user is in an applicable region that requires additional age-related obligations. Only available on iOS:
 
 ```typescript
+import { AgeSignals } from '@capawesome/capacitor-age-signals';
+
 const checkEligibility = async () => {
   const result = await AgeSignals.checkEligibility();
   console.log('Is Eligible:', result.isEligible);

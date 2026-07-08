@@ -77,17 +77,15 @@ Add the following keys to the `ios/App/App/Info.plist` file:
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { RealtimeKit } from '@capawesome/capacitor-realtimekit';
-```
+The following examples show how to initialize the plugin and start a meeting.
 
 ### Initialize the plugin
 
 Call `initialize()` before using any other method of the plugin:
 
 ```typescript
+import { RealtimeKit } from '@capawesome/capacitor-realtimekit';
+
 const initialize = async () => {
   await RealtimeKit.initialize();
 };
@@ -98,6 +96,8 @@ const initialize = async () => {
 Start a meeting using the built-in UI. The options let you pass the participant's authentication token and control whether the participant joins with audio and video enabled. Only available on Android and iOS:
 
 ```typescript
+import { RealtimeKit, StartMeetingOptions } from '@capawesome/capacitor-realtimekit';
+
 const startMeeting = async (options: StartMeetingOptions) => {
   await RealtimeKit.startMeeting(options);
 };

@@ -78,17 +78,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { DatetimePicker } from '@capawesome-team/capacitor-datetime-picker';
-```
+The following examples show how to present a date, time, or datetime picker, and how to let the user pick a month and year only.
 
 ### Present a date, time, or datetime picker
 
 Open the native picker with the `present(...)` method. Use the `mode` option to choose between a date, time, or datetime picker, and customize the theme, locale, and button texts as needed. Only available on Android and iOS:
 
 ```typescript
+import { DatetimePicker } from '@capawesome-team/capacitor-datetime-picker';
+
 const present = async () => {
   const date = new Date('1995-12-24T02:23:00');
 
@@ -110,6 +108,8 @@ const present = async () => {
 Use the `month` mode to let the user pick a month and year without a day or time, for example to filter a monthly report. The returned value is the first day of the selected month:
 
 ```typescript
+import { DatetimePicker } from '@capawesome-team/capacitor-datetime-picker';
+
 const presentMonth = async () => {
   const { value } = await DatetimePicker.present({
     cancelButtonText: 'Cancel',

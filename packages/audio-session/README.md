@@ -68,17 +68,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AudioSession } from '@capawesome/capacitor-audio-session';
-```
+The following examples show how to configure the audio session, activate or deactivate it, read the current audio outputs, route playback to the built-in speaker, listen for interruptions and route changes, and remove all listeners.
 
 ### Configure the audio session
 
 Set the audio session category, mode and options, for example for movie playback that interrupts audio from other apps. All methods of this plugin are only available on iOS:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const configure = async () => {
   await AudioSession.configure({
     category: 'playback',
@@ -95,6 +93,8 @@ const configure = async () => {
 Activate the audio session before playing or recording audio, and deactivate it when you are done so that other apps can resume their playback:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const setActive = async () => {
   await AudioSession.setActive({ active: true });
 };
@@ -105,6 +105,8 @@ const setActive = async () => {
 Get the audio outputs of the current audio route, for example to check whether headphones are connected:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const getCurrentOutputs = async () => {
   const { outputs } = await AudioSession.getCurrentOutputs();
   return outputs;
@@ -116,6 +118,8 @@ const getCurrentOutputs = async () => {
 Override the audio output port that is used for playback, for example to switch from the receiver to the loudspeaker during a call:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const overrideOutput = async () => {
   await AudioSession.overrideOutput({ type: 'speaker' });
 };
@@ -126,6 +130,8 @@ const overrideOutput = async () => {
 Get notified when the audio session is interrupted, e.g. by an incoming phone call. The `shouldResume` flag tells you whether playback should resume after the interruption ended:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const addInterruptionListener = async () => {
   await AudioSession.addListener('interruption', event => {
     console.log('Interruption:', event.type, event.shouldResume);
@@ -138,6 +144,8 @@ const addInterruptionListener = async () => {
 Get notified when the audio route changes, e.g. when headphones are plugged in or out:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const addRouteChangeListener = async () => {
   await AudioSession.addListener('routeChange', event => {
     console.log('Route change:', event.reason, event.outputs);
@@ -150,6 +158,8 @@ const addRouteChangeListener = async () => {
 Remove all listeners that were registered for this plugin:
 
 ```typescript
+import { AudioSession } from '@capawesome/capacitor-audio-session';
+
 const removeAllListeners = async () => {
   await AudioSession.removeAllListeners();
 };

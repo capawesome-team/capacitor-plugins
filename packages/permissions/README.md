@@ -149,17 +149,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Permission, Permissions } from '@capawesome/capacitor-permissions';
-```
+The following examples show how to check the states of one or more permissions and how to request them from the user.
 
 ### Check the states of one or more permissions
 
 Use the `check(...)` method to read the current states of one or more permissions. This method never displays a permission prompt, so it is safe to call at any time, for example to build an onboarding or settings screen:
 
 ```typescript
+import { Permission, Permissions } from '@capawesome/capacitor-permissions';
+
 const checkPermissions = async () => {
   const { statuses } = await Permissions.check({
     permissions: [Permission.Camera, Permission.Microphone],
@@ -173,6 +171,8 @@ const checkPermissions = async () => {
 Use the `request(...)` method to prompt the user for one or more permissions. Permissions that are already granted or that cannot be requested on the current platform are not requested again; in that case, the current state is returned. On the web, only the `NOTIFICATIONS` permission can be requested:
 
 ```typescript
+import { Permission, Permissions } from '@capawesome/capacitor-permissions';
+
 const requestPermissions = async () => {
   const { statuses } = await Permissions.request({
     permissions: [Permission.Camera, Permission.Microphone],

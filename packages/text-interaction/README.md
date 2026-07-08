@@ -67,17 +67,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { TextInteraction } from '@capawesome/capacitor-text-interaction';
-```
+The following examples show how to disable text interaction, enable it again, and check whether it is currently enabled.
 
 ### Disable text interaction
 
 Turn off the system text-interaction gestures, that is text selection, the selection magnifier and the callout (copy/paste) menu. Only available on iOS:
 
 ```typescript
+import { TextInteraction } from '@capawesome/capacitor-text-interaction';
+
 const disable = async () => {
   await TextInteraction.disable();
 };
@@ -88,6 +86,8 @@ const disable = async () => {
 Re-enable text interaction after it has been disabled. Text interaction is enabled by default. Only available on iOS:
 
 ```typescript
+import { TextInteraction } from '@capawesome/capacitor-text-interaction';
+
 const enable = async () => {
   await TextInteraction.enable();
 };
@@ -98,6 +98,8 @@ const enable = async () => {
 Read the current state, for example to keep a settings toggle in sync. Only available on iOS:
 
 ```typescript
+import { TextInteraction } from '@capawesome/capacitor-text-interaction';
+
 const isEnabled = async () => {
   const { enabled } = await TextInteraction.isEnabled();
   return enabled;

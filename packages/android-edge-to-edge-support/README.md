@@ -137,20 +137,15 @@ export default config;
 
 ## Usage
 
-The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin.
-
-Import the plugin and call its methods:
-
-```typescript
-import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
-import { SystemBars, SystemBarsStyle } from '@capacitor/core';
-```
+The plugin applies insets to the web view automatically once installed; the following examples show how to enable or disable the edge-to-edge mode, read the applied insets, and set the system bar colors for light and dark themes.
 
 ### Enable or disable the edge-to-edge mode
 
 Enable or disable the edge-to-edge mode at runtime. Only available on Android:
 
 ```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+
 const enable = async () => {
   await EdgeToEdge.enable();
 };
@@ -165,6 +160,8 @@ const disable = async () => {
 Read the insets that are currently applied to the web view, for example to fine-tune your own layout. Only available on Android:
 
 ```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+
 const getInsets = async () => {
   const result = await EdgeToEdge.getInsets();
   console.log('Insets:', result);
@@ -176,6 +173,9 @@ const getInsets = async () => {
 Set the background color of the status bar and navigation bar, for example when the user switches between a light and a dark theme. It's recommended to combine this with the `setStyle(...)` method of the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin so the system bar icons remain readable:
 
 ```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+import { SystemBars, SystemBarsStyle } from '@capacitor/core';
+
 const setDarkStyle = async () => {
   await SystemBars.setStyle({ style: SystemBarsStyle.Dark });
   await EdgeToEdge.setBackgroundColor({ color: '#000000' });

@@ -70,17 +70,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
-```
+The following examples show how to enable and disable the privacy screen, check whether it is enabled, and detect screenshots.
 
 ### Enable the privacy screen
 
 Enable the privacy screen to hide the app content in the app switcher. On Android, this also blocks screenshots and screen recordings. On iOS, screenshots are only blocked if the `ios.preventScreenshots` option is enabled:
 
 ```typescript
+import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
+
 const enable = async () => {
   await PrivacyScreen.enable({
     ios: {
@@ -95,6 +93,8 @@ const enable = async () => {
 Disable the privacy screen when it is no longer needed:
 
 ```typescript
+import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
+
 const disable = async () => {
   await PrivacyScreen.disable();
 };
@@ -105,6 +105,8 @@ const disable = async () => {
 Check if the privacy screen is currently enabled:
 
 ```typescript
+import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
+
 const isEnabled = async () => {
   const { enabled } = await PrivacyScreen.isEnabled();
   return enabled;
@@ -116,6 +118,8 @@ const isEnabled = async () => {
 Get notified when the user takes a screenshot of the app. On Android, this event is only emitted on Android 14 (API level 34) and newer:
 
 ```typescript
+import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
+
 const addListener = async () => {
   await PrivacyScreen.addListener('screenshotTaken', () => {
     console.log('The user took a screenshot.');

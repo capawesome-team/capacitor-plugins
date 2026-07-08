@@ -60,17 +60,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppReview } from '@capawesome/capacitor-app-review';
-```
+The following examples show how to request an in-app review and open the app store page.
 
 ### Request an in-app review
 
 Show the native in-app review dialog so the user can rate your app without leaving it. Note that on iOS, review requests are limited to 3 requests per year. Only available on Android, and on iOS 14 and later:
 
 ```typescript
+import { AppReview } from '@capawesome/capacitor-app-review';
+
 const requestReview = async () => {
   await AppReview.requestReview();
 };
@@ -81,6 +79,8 @@ const requestReview = async () => {
 Open the App Store page for the current app and, if possible, open the dialog to leave a review. On iOS, you can pass the Apple ID of your app via the `appId` option. Only available on Android and iOS:
 
 ```typescript
+import { AppReview } from '@capawesome/capacitor-app-review';
+
 const openAppStore = async () => {
   await AppReview.openAppStore();
 };

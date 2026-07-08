@@ -84,17 +84,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppleSignIn, SignInScope } from '@capawesome/capacitor-apple-sign-in';
-```
+The following examples show how to initialize the plugin and sign in with Apple.
 
 ### Initialize the plugin
 
 On Android and Web, you must initialize the plugin with your Apple Service ID before calling `signIn(...)`. This method is only available on Android and Web:
 
 ```typescript
+import { AppleSignIn } from '@capawesome/capacitor-apple-sign-in';
+
 const initialize = async () => {
   await AppleSignIn.initialize({
     clientId: 'com.example.app.signin',
@@ -107,6 +105,8 @@ const initialize = async () => {
 Start the sign-in flow and receive the authorization code and ID token. Use the `scopes` option to request the user's email address and full name, and pass a `nonce` for replay protection. The `redirectUrl` and `state` options are only available on Android and Web:
 
 ```typescript
+import { AppleSignIn, SignInScope } from '@capawesome/capacitor-apple-sign-in';
+
 const signIn = async () => {
   const result = await AppleSignIn.signIn({
     scopes: [SignInScope.Email, SignInScope.FullName],

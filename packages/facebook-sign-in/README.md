@@ -136,17 +136,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
-```
+The following examples show how to initialize the plugin, sign in a user, sign in with Limited Login, get the current access token, and sign out a user.
 
 ### Initialize the plugin
 
 Call `initialize(...)` once before all other methods. On Android and iOS, the App ID is usually read from the native configuration, so the `appId` option is only required on Web:
 
 ```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
+
 const initialize = async () => {
   await FacebookSignIn.initialize({
     appId: '1234567890123456',
@@ -159,6 +157,8 @@ const initialize = async () => {
 Start the Facebook Sign-In flow and retrieve the access token and the user's profile:
 
 ```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
+
 const signIn = async () => {
   const result = await FacebookSignIn.signIn();
   console.log(result.accessToken?.token);
@@ -173,6 +173,8 @@ const signIn = async () => {
 Use Limited Login to sign in users without tracking. Instead of an access token, an authentication token (JWT) is returned that can be verified on your backend. Provide a nonce to prevent replay attacks. Only available on iOS:
 
 ```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
+
 const signInWithLimitedLogin = async () => {
   const result = await FacebookSignIn.signIn({
     limitedLogin: true,
@@ -187,6 +189,8 @@ const signInWithLimitedLogin = async () => {
 Retrieve the current access token, for example to check whether a user is still signed in. The result is `null` if no user is signed in or the access token has expired:
 
 ```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
+
 const getCurrentAccessToken = async () => {
   const { accessToken } = await FacebookSignIn.getCurrentAccessToken();
   console.log(accessToken?.token);
@@ -198,6 +202,8 @@ const getCurrentAccessToken = async () => {
 Sign out the current user:
 
 ```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
+
 const signOut = async () => {
   await FacebookSignIn.signOut();
 };

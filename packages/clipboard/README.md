@@ -72,17 +72,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Clipboard } from '@capawesome/capacitor-clipboard';
-```
+The following examples show how to write text, HTML, images, and URLs to the clipboard, and how to read its current content.
 
 ### Write text to the clipboard
 
 Copy plain text to the system clipboard:
 
 ```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
+
 const writeText = async () => {
   await Clipboard.write({ text: 'Hello World' });
 };
@@ -93,6 +91,8 @@ const writeText = async () => {
 Copy HTML content and combine it with `text` to provide a plain-text fallback for apps that cannot handle HTML content:
 
 ```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
+
 const writeHtml = async () => {
   await Clipboard.write({
     html: '<b>Hello World</b>',
@@ -106,6 +106,8 @@ const writeHtml = async () => {
 Copy a real image (not just a data URL as plain text) by passing a Base64-encoded data URL:
 
 ```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
+
 const writeImage = async () => {
   await Clipboard.write({
     image: 'data:image/png;base64,iVBORw0KGgo...',
@@ -118,6 +120,8 @@ const writeImage = async () => {
 Copy a URL as a native URL clipboard item:
 
 ```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
+
 const writeUrl = async () => {
   await Clipboard.write({ url: 'https://capawesome.io' });
 };
@@ -128,6 +132,8 @@ const writeUrl = async () => {
 Read the current content of the system clipboard. The result contains the content type (text, HTML, image, or URL) and the value. Note that on Android, reading the clipboard is only possible while the app is in the foreground, and on iOS, a system paste notification is displayed:
 
 ```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
+
 const read = async () => {
   const { type, value } = await Clipboard.read();
   console.log('Type:', type, 'Value:', value);

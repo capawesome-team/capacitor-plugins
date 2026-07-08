@@ -73,17 +73,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { ScreenReader } from '@capawesome/capacitor-screen-reader';
-```
+The following examples show how to post an accessibility announcement, check whether a screen reader is enabled, and listen for screen reader state changes.
 
 ### Post an accessibility announcement
 
 Post an announcement that is read out by the active screen reader (VoiceOver/TalkBack). Note that this does not perform text-to-speech; the message is only read out if a screen reader is running:
 
 ```typescript
+import { ScreenReader } from '@capawesome/capacitor-screen-reader';
+
 const announce = async () => {
   await ScreenReader.announce({
     value: 'The item was added to your cart.',
@@ -96,6 +94,8 @@ const announce = async () => {
 Check whether a screen reader is currently enabled. Only available on Android and iOS:
 
 ```typescript
+import { ScreenReader } from '@capawesome/capacitor-screen-reader';
+
 const isEnabled = async () => {
   const { enabled } = await ScreenReader.isEnabled();
   return enabled;
@@ -107,6 +107,8 @@ const isEnabled = async () => {
 Get notified when the screen reader is enabled or disabled. Only available on Android and iOS:
 
 ```typescript
+import { ScreenReader } from '@capawesome/capacitor-screen-reader';
+
 const addStateChangeListener = async () => {
   await ScreenReader.addListener('stateChange', event => {
     console.log('Screen reader enabled:', event.enabled);

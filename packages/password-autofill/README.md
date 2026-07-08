@@ -108,17 +108,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { PasswordAutofill } from '@capawesome/capacitor-password-autofill';
-```
+The following example shows how to save a username and password to the platform credential store.
 
 ### Save a username and password
 
 Call `savePassword(...)` after a successful login to save the credential to the platform credential store. On iOS, the `domain` is required and must match one of the domains in your app's Associated Domains entitlement (see [Installation](#installation)). On Android, the system "Save password?" prompt is presented to the user:
 
 ```typescript
+import { PasswordAutofill } from '@capawesome/capacitor-password-autofill';
+
 const savePassword = async () => {
   await PasswordAutofill.savePassword({
     domain: 'example.com',

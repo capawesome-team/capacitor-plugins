@@ -80,17 +80,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AndroidSmsRetriever } from '@capawesome/capacitor-android-sms-retriever';
-```
+The following examples show how to prefill the user's phone number and retrieve a verification SMS.
 
 ### Prefill the user's phone number
 
 Request the user's phone number via the Phone Number Hint API. A system bottom sheet is displayed that lets the user pick one of the phone numbers associated with the device, for example to prefill a phone number input field. Only available on Android:
 
 ```typescript
+import { AndroidSmsRetriever } from '@capawesome/capacitor-android-sms-retriever';
+
 const requestPhoneNumber = async () => {
   const { phoneNumber } = await AndroidSmsRetriever.requestPhoneNumber();
   return phoneNumber;
@@ -102,6 +100,8 @@ const requestPhoneNumber = async () => {
 Retrieve an incoming verification SMS via the SMS User Consent API. A system consent dialog is displayed when a matching SMS is received, and the promise resolves with the full message text once the user consents, so your app can extract the one-time code itself (see [Extracting the One-Time Code](#extracting-the-one-time-code)). Only available on Android:
 
 ```typescript
+import { AndroidSmsRetriever } from '@capawesome/capacitor-android-sms-retriever';
+
 const retrieveSms = async () => {
   const { message } = await AndroidSmsRetriever.retrieveSms();
   // Extract the one-time code from the message.

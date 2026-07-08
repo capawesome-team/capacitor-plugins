@@ -68,17 +68,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { HomeIndicator } from '@capawesome/capacitor-home-indicator';
-```
+The following examples show how to hide and show the home indicator and check its current state.
 
 ### Hide and show the home indicator
 
 Hide and show the home indicator at runtime. Note that calling `hide()` sets the home indicator to auto-hide: it only fades out while the screen is idle and reappears as soon as the user touches the screen. Only available on iOS:
 
 ```typescript
+import { HomeIndicator } from '@capawesome/capacitor-home-indicator';
+
 const hide = async () => {
   await HomeIndicator.hide();
 };
@@ -93,6 +91,8 @@ const show = async () => {
 Check whether the home indicator is currently set to be hidden. This reflects the plugin-managed state, not the actual visibility on screen. Only available on iOS:
 
 ```typescript
+import { HomeIndicator } from '@capawesome/capacitor-home-indicator';
+
 const isHidden = async () => {
   const { hidden } = await HomeIndicator.isHidden();
   return hidden;

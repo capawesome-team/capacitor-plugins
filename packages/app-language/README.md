@@ -122,17 +122,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppLanguage } from '@capawesome/capacitor-app-language';
-```
+The following examples show how to get, set, and reset the app language override and open the app's settings page.
 
 ### Get the current language override
 
 Read the BCP 47 language tag of the app's current language override. Returns `null` if no override is set and the app follows the device language:
 
 ```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
+
 const getLanguage = async () => {
   const { languageTag } = await AppLanguage.getLanguage();
   return languageTag;
@@ -144,6 +142,8 @@ const getLanguage = async () => {
 Set the app's language override, independent of the device language. Note that this recreates the current activity, which reloads the web view. Only available on Android:
 
 ```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
+
 const setLanguage = async () => {
   await AppLanguage.setLanguage({ languageTag: 'de-DE' });
 };
@@ -154,6 +154,8 @@ const setLanguage = async () => {
 Clear the override so the app follows the device language again. Only available on Android:
 
 ```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
+
 const resetLanguage = async () => {
   await AppLanguage.resetLanguage();
 };
@@ -164,6 +166,8 @@ const resetLanguage = async () => {
 Deep-link the user to the app's page in the system settings. On iOS, this is where the user can change the app language:
 
 ```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
+
 const openSettings = async () => {
   await AppLanguage.openSettings();
 };

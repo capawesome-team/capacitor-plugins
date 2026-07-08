@@ -71,17 +71,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { Sim } from '@capawesome/capacitor-sim';
-```
+The following examples show how to check and request permissions and read the SIM cards installed on the device.
 
 ### Check and request permissions
 
 Reading the SIM cards requires the `READ_PHONE_STATE` runtime permission on Android. Check the current permission state and request the permission before calling `getSimCards(...)`. Only available on Android:
 
 ```typescript
+import { Sim } from '@capawesome/capacitor-sim';
+
 const checkPermissions = async () => {
   const { readSimCards } = await Sim.checkPermissions();
   return readSimCards;
@@ -98,6 +96,8 @@ const requestPermissions = async () => {
 Get information about the SIM cards installed on the device, such as the carrier name, country code, MCC and MNC. On devices with multiple SIM slots, all active SIM cards are returned. Only available on Android:
 
 ```typescript
+import { Sim } from '@capawesome/capacitor-sim';
+
 const getSimCards = async () => {
   const { simCards } = await Sim.getSimCards();
   return simCards;

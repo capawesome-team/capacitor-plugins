@@ -83,18 +83,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-Import the plugin and call its methods:
-
-```typescript
-import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
-import { Capacitor } from '@capacitor/core';
-```
+The following examples show how to check for integrity attestation support, request an integrity token on Android, attest a key on iOS, and generate an assertion on iOS.
 
 ### Check if integrity attestation is available
 
 Use `isAvailable()` before requesting tokens or attestations. On Android, this checks whether Google Play Services is available; on iOS, it checks whether the App Attest service is supported (it is not supported on simulators):
 
 ```typescript
+import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
+
 const isAvailable = async () => {
   const { available } = await AppIntegrity.isAvailable();
   return available;
@@ -106,6 +103,9 @@ const isAvailable = async () => {
 For the recommended standard request flow, prepare the integrity token provider once (for example at app start) with your Google Cloud project number, since the preparation can take several seconds. Then request tokens with a `requestHash`. For infrequent, high-value actions you can use the classic request flow with a `nonce` instead. Only available on Android:
 
 ```typescript
+import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
+import { Capacitor } from '@capacitor/core';
+
 const prepareIntegrityToken = async () => {
   // Only available on Android
   await AppIntegrity.prepareIntegrityToken({
@@ -134,6 +134,9 @@ const requestIntegrityToken = async () => {
 Generate a hardware-backed key pair and attest it with a one-time challenge received from your server. The attestation object must be sent to your server for verification with Apple. Only available on iOS:
 
 ```typescript
+import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
+import { Capacitor } from '@capacitor/core';
+
 const attestKey = async () => {
   // Only available on iOS
   if (Capacitor.getPlatform() === 'ios') {
@@ -154,6 +157,9 @@ const attestKey = async () => {
 Once a key is attested, sign client data (usually a JSON payload that includes a one-time challenge from your server) to prove that a request comes from your genuine app. Only available on iOS:
 
 ```typescript
+import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
+import { Capacitor } from '@capacitor/core';
+
 const generateAssertion = async () => {
   // Only available on iOS
   if (Capacitor.getPlatform() === 'ios') {
