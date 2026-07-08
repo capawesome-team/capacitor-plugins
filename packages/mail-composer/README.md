@@ -19,9 +19,14 @@ Capacitor plugin to open the native email composer.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Mail Composer plugin is typically used whenever an app wants the user to send an email, for example:
+
+- **Support and feedback**: Open a prefilled email to your support address with a subject and body so users can reach out with one tap.
+- **Bug reports**: Attach log files or screenshots to a bug report email using the `attachments` option.
+- **Sharing content**: Let users share content from your app via email with prefilled recipients, subject, and body.
+- **Invitations**: Prefill invitation emails with CC and BCC recipients that the user only needs to review and send.
 
 ## Compatibility
 
@@ -71,14 +76,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { MailComposer } from '@capawesome/capacitor-mail-composer';
+```
 
+### Check whether the device can send emails
+
+Before opening the composer, check whether the device is able to compose and send emails. On iOS, this returns `true` only if a mail account is configured. On Android, it returns `true` if a mail app is installed. On the web, it always returns `true`:
+
+```typescript
 const canComposeMail = async () => {
   const { canCompose } = await MailComposer.canComposeMail();
   return canCompose;
 };
+```
 
+### Compose an email
+
+Open the native email composer prefilled with recipients, subject, and body. The user reviews the email and decides whether to send it. Note that on Android, the returned `status` is always `unknown`:
+
+```typescript
 const composeMail = async () => {
   const { status } = await MailComposer.composeMail({
     to: ['jane@example.com'],
@@ -198,6 +217,42 @@ Keep the following platform-specific behavior in mind:
 - **Status**: On Android, the `status` returned by `composeMail(...)` is always `unknown` because the mail intent does not return a reliable result. On iOS, the real status is returned via the delegate. On the web, the status is always `unknown`.
 - **HTML body**: On Android, the `isHtml` option is best-effort because many mail apps ignore HTML content. On the web, HTML is not supported at all.
 - **No mail account**: On iOS, `composeMail(...)` rejects as unavailable if no mail account is configured. Use `canComposeMail(...)` to check upfront.
+
+## FAQ
+
+### Does the plugin send the email itself?
+
+No, the plugin only opens the native email composer prefilled with the provided data. The user reviews the email and decides whether to send it. The email is always sent through the user's own mail app and account.
+
+### Why is the status always `unknown` on Android?
+
+On Android, the mail intent does not return a reliable result, so the `status` returned by `composeMail` is always `unknown`. On iOS, the real status (`sent`, `saved`, or `canceled`) is returned. On the web, the status is always `unknown` as well.
+
+### Why does `composeMail` reject on iOS?
+
+On iOS, `composeMail` rejects as unavailable if no mail account is configured on the device. Use `canComposeMail` upfront to check whether the device is able to compose and send emails, and only show your email feature if it returns `true`.
+
+### Why does attaching a file fail on Android?
+
+On Android, the plugin shares attachments through the [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider) that Capacitor already registers for your app. If the directory a file is stored in is not covered by the `res/xml/file_paths.xml` resource of your app, `composeMail` rejects with an error. See the [Installation](#installation) section for details.
+
+### Are attachments supported on the web?
+
+No, on the web the plugin builds a `mailto:` URL, which cannot carry attachments, so `composeMail` rejects if attachments are provided. Also keep in mind that HTML bodies are not supported on the web and long bodies may be truncated due to the URL length limit.
+
+### Can I send HTML emails?
+
+Yes, set the `isHtml` option to `true` to have the body interpreted as HTML. On iOS, this is fully supported. On Android, it is best-effort because many mail apps ignore HTML content. On the web, HTML is not supported and the body is always sent as plain text.
+
+## Related Plugins
+
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select files to attach to an email.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

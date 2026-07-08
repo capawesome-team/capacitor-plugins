@@ -28,8 +28,17 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "dark mode",
+    "dark theme",
+    "night mode",
+    "prefers-color-scheme",
+    "color scheme",
+    "theming",
+    "webview dark mode"
   ],
   "scripts": {
     "verify": "npm run verify:android",

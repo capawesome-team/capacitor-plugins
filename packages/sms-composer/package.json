@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-sms-composer",
   "version": "0.0.1",
-  "description": "Capacitor plugin to open the native SMS composer.",
+  "description": "Capacitor plugin to open the native SMS composer on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "sms",
+    "sms composer",
+    "send sms",
+    "compose sms",
+    "text message",
+    "messaging"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

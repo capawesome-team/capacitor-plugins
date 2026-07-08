@@ -19,9 +19,14 @@ Capacitor plugin to hide sensitive app content in the app switcher, block screen
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Privacy Screen plugin is typically used in apps that display sensitive information, for example:
+
+- **Banking and finance apps**: Hide account balances and transactions in the app switcher and block screenshots.
+- **Password managers**: Prevent credentials from appearing in screenshots or screen recordings.
+- **Messaging and health apps**: Protect private conversations and medical data from being captured.
+- **Screenshot auditing**: Get notified via the `screenshotTaken` event when the user takes a screenshot, for example to log the event or warn the user.
 
 ## Compatibility
 
@@ -65,9 +70,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { PrivacyScreen } from '@capawesome/capacitor-privacy-screen';
+```
 
+### Enable the privacy screen
+
+Enable the privacy screen to hide the app content in the app switcher. On Android, this also blocks screenshots and screen recordings. On iOS, screenshots are only blocked if the `ios.preventScreenshots` option is enabled:
+
+```typescript
 const enable = async () => {
   await PrivacyScreen.enable({
     ios: {
@@ -75,16 +88,34 @@ const enable = async () => {
     },
   });
 };
+```
 
+### Disable the privacy screen
+
+Disable the privacy screen when it is no longer needed:
+
+```typescript
 const disable = async () => {
   await PrivacyScreen.disable();
 };
+```
 
+### Check whether the privacy screen is enabled
+
+Check if the privacy screen is currently enabled:
+
+```typescript
 const isEnabled = async () => {
   const { enabled } = await PrivacyScreen.isEnabled();
   return enabled;
 };
+```
 
+### Detect screenshots
+
+Get notified when the user takes a screenshot of the app. On Android, this event is only emitted on Android 14 (API level 34) and newer:
+
+```typescript
 const addListener = async () => {
   await PrivacyScreen.addListener('screenshotTaken', () => {
     console.log('The user took a screenshot.');
@@ -256,6 +287,43 @@ The capabilities of this plugin differ between platforms. The following table gi
 **Android**: The `enable()` method sets the `FLAG_SECURE` window flag, which hides the app content in the app switcher and blocks both screenshots and screen recordings with a single flag. Screenshot detection is only available on Android 14 (API level 34) and newer; on older versions the `screenshotTaken` event is never emitted.
 
 **iOS**: The `enable()` method installs an overlay that hides the app content in the app switcher. There is no official API to block screenshots. When `ios.preventScreenshots` is enabled, the plugin uses an unofficial secure text field technique that may stop working in future iOS versions. Screenshot detection observes `UIApplication.userDidTakeScreenshotNotification`, which only fires **after** the screenshot has been taken and therefore cannot be prevented.
+
+## FAQ
+
+### Can this plugin block screenshots on iOS?
+
+Yes, but only as an opt-in. There is no official iOS API to prevent screenshots, so the plugin uses an unofficial secure text field technique that may stop working in future iOS versions. You can enable it via the `ios.preventScreenshots` option of the `enable(...)` method. On Android, screenshots are blocked reliably via the `FLAG_SECURE` window flag.
+
+### Can I prevent a screenshot instead of just detecting it?
+
+On Android, yes: calling `enable(...)` sets the `FLAG_SECURE` window flag, which blocks both screenshots and screen recordings. On iOS, the `screenshotTaken` event can only be observed after the screenshot has been taken and therefore cannot be prevented; blocking is only possible via the opt-in `ios.preventScreenshots` option.
+
+### Why is the `screenshotTaken` event never emitted on my Android device?
+
+On Android, screenshot detection is only available on Android 14 (API level 34) and newer. On older Android versions, the listener is never called. On iOS, the event is available without version restrictions.
+
+### Does this plugin work on the Web?
+
+No, this plugin is only available on Android and iOS. On the Web, all methods reject as unimplemented since browsers do not provide APIs to control the app switcher or screenshots.
+
+### Do I need to configure any permissions?
+
+No, the plugin declares the `android.permission.DETECT_SCREEN_CAPTURE` install-time permission in its own `AndroidManifest.xml`, which is required to detect screenshots on Android 14 and newer. It is added automatically and requires no further configuration. On iOS, no permissions are required.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+- [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

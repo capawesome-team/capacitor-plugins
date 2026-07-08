@@ -36,8 +36,17 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "intent",
+    "android intent",
+    "intent launcher",
+    "start activity",
+    "explicit intent",
+    "implicit intent",
+    "intent extras"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

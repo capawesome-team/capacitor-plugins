@@ -19,9 +19,14 @@ Capacitor plugin to verify app and device integrity using the Play Integrity API
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Integrity plugin is typically used to protect your backend from requests that do not originate from your genuine, unmodified app, for example:
+
+- **API protection**: Attach integrity tokens or assertions to requests to sensitive endpoints so your server can reject tampered clients.
+- **Fraud prevention**: Verify high-value actions such as payments or account changes with a classic integrity request or an App Attest assertion.
+- **Account security**: Protect login and registration flows against bots and automated abuse.
+- **Gated content**: Grant access to protected resources only after your server has verified the integrity verdict.
 
 ## Compatibility
 
@@ -78,15 +83,29 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AppIntegrity } from '@capawesome/capacitor-app-integrity';
 import { Capacitor } from '@capacitor/core';
+```
 
+### Check if integrity attestation is available
+
+Use `isAvailable()` before requesting tokens or attestations. On Android, this checks whether Google Play Services is available; on iOS, it checks whether the App Attest service is supported (it is not supported on simulators):
+
+```typescript
 const isAvailable = async () => {
   const { available } = await AppIntegrity.isAvailable();
   return available;
 };
+```
 
+### Request an integrity token on Android
+
+For the recommended standard request flow, prepare the integrity token provider once (for example at app start) with your Google Cloud project number, since the preparation can take several seconds. Then request tokens with a `requestHash`. For infrequent, high-value actions you can use the classic request flow with a `nonce` instead. Only available on Android:
+
+```typescript
 const prepareIntegrityToken = async () => {
   // Only available on Android
   await AppIntegrity.prepareIntegrityToken({
@@ -108,7 +127,13 @@ const requestIntegrityToken = async () => {
     // Send the token to your server for verification
   }
 };
+```
 
+### Attest a key on iOS
+
+Generate a hardware-backed key pair and attest it with a one-time challenge received from your server. The attestation object must be sent to your server for verification with Apple. Only available on iOS:
+
+```typescript
 const attestKey = async () => {
   // Only available on iOS
   if (Capacitor.getPlatform() === 'ios') {
@@ -122,7 +147,13 @@ const attestKey = async () => {
     // 3. Send the attestation object to your server for verification
   }
 };
+```
 
+### Generate an assertion on iOS
+
+Once a key is attested, sign client data (usually a JSON payload that includes a one-time challenge from your server) to prove that a request comes from your genuine app. Only available on iOS:
+
+```typescript
 const generateAssertion = async () => {
   // Only available on iOS
   if (Capacitor.getPlatform() === 'ios') {
@@ -375,6 +406,42 @@ The typical flow looks like this:
 5. Your server grants or denies access based on the verification result.
 
 On Android, Google recommends the **standard request** flow (`prepareIntegrityToken(...)` + `requestIntegrityToken({ requestHash })`) for frequent integrity checks. Use the **classic request** flow (`requestIntegrityToken({ nonce })`) only for infrequent, high-value actions.
+
+## FAQ
+
+### Do I need my own server to use this plugin?
+
+Yes. This plugin only provides the client-side part of the attestation flow. The returned tokens, attestation objects, and assertions are opaque to your app and must be decrypted and verified on your own server via Google (Android) or Apple (iOS). Never make security decisions based on the client-side result alone. See the [How Verification Works](#how-verification-works) section for the typical flow.
+
+### What is the difference between a standard and a classic request on Android?
+
+A standard request is the flow recommended by Google for frequent integrity checks: it requires a prior call to `prepareIntegrityToken(...)` and passes a `requestHash` to `requestIntegrityToken(...)`. A classic request passes a `nonce` instead, requires no preparation, and should only be used for infrequent, high-value actions.
+
+### Why does `isAvailable` return `false` on the iOS Simulator?
+
+The App Attest service is not supported on simulators, so you need a real device for testing. On Android, `isAvailable()` checks whether Google Play Services is available.
+
+### What do I need to set up before requesting integrity tokens on Android?
+
+The Play Integrity API must be set up in the Google Play Console by linking a Google Cloud project to your app. You need the Google Cloud project number of the linked project for the standard request flow. See the [Installation](#installation) section for more information.
+
+### How is this plugin different from the Root Detection plugin?
+
+The [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/) plugin performs client-side checks for rooted and jailbroken devices, which can be helpful but can also be bypassed on a compromised device. The App Integrity plugin provides server-verifiable tokens and assertions that are verified via Google and Apple, so they cannot be spoofed on the device. The two plugins work well together as complementary layers.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices with client-side checks.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

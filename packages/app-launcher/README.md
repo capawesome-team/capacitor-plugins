@@ -20,9 +20,14 @@ Capacitor plugin to check if an app can be opened and to open it.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Launcher plugin is typically used to hand the user over to another app, for example:
+
+- **App-to-app navigation**: Open a companion or partner app directly from your app via its URL scheme or package name.
+- **Graceful fallbacks**: Check whether an app can be opened first and show an alternative if it is not installed.
+- **Composing emails**: Open the user's mail app with a `mailto:` URL.
+- **Launching Android apps by package name**: Open a specific app such as Gmail (`com.google.android.gm`) on Android.
 
 ## Compatibility
 
@@ -93,14 +98,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AppLauncher } from '@capawesome/capacitor-app-launcher';
+```
 
+### Check if an app can be opened
+
+Check whether an app can be opened before trying to open it. On iOS, the URL must be a URL scheme (e.g. `mailto:`); on Android, it can be a URL scheme or a package name (e.g. `com.google.android.gm`). Remember to declare every scheme and package name you check (see [Installation](#installation)), otherwise this method always resolves with `value: false`:
+
+```typescript
 const canOpenUrl = async () => {
   const { value } = await AppLauncher.canOpenUrl({ url: 'mailto:' });
   return value;
 };
+```
 
+### Open an app
+
+Open another app with the given URL. On Android, the URL can also be a package name. The result tells you whether the app was opened successfully:
+
+```typescript
 const openUrl = async () => {
   const { completed } = await AppLauncher.openUrl({ url: 'mailto:' });
   return completed;
@@ -208,6 +227,39 @@ This plugin is a drop-in replacement for the official `@capacitor/app-launcher` 
 | `AppLauncher.openUrl({ url })`               | `AppLauncher.openUrl({ url })`               |
 
 On Android, the `url` may be a URL scheme or a package name for both `canOpenUrl(...)` and `openUrl(...)`.
+
+## FAQ
+
+### Why does `canOpenUrl` always return `false`?
+
+This usually means the URL scheme or package name is not declared in your app. On Android 11 (API level 30) and above, every package name and URL scheme must be declared in the `<queries>` element of your `AndroidManifest.xml`. On iOS, every URL scheme must be declared in the `LSApplicationQueriesSchemes` key of your `Info.plist`. See the [Installation](#installation) section for examples.
+
+### Can I open an app by its package name?
+
+Yes, but only on Android, where the `url` option accepts a URL scheme (e.g. `mailto:`) or a package name (e.g. `com.google.android.gm`). On iOS, only URL schemes are supported.
+
+### How can I check if an app is installed?
+
+Use `canOpenUrl(...)` with the app's URL scheme or, on Android, its package name. Make sure the scheme or package name is declared as described in the [Installation](#installation) section. Note that on the Web, this method always resolves with `value: true` because the browser cannot determine whether a URL can be opened.
+
+### How is this plugin different from the official `@capacitor/app-launcher` plugin?
+
+This plugin is a drop-in replacement with an identical API, so you only need to change the import and installation. In addition, on Android the `url` may also be a package name for both `canOpenUrl(...)` and `openUrl(...)`. See the [migration section](#migrating-from-capacitorapp-launcher) for details.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens.
+- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

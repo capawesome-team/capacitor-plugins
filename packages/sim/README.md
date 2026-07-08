@@ -18,9 +18,14 @@ Capacitor plugin for reading SIM card and carrier information.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The SIM plugin is typically used when an app needs to know about the device's SIM cards or carrier, for example:
+
+- **Carrier-specific features**: Enable or disable functionality depending on the carrier name or the MCC and MNC of the SIM card.
+- **Country detection**: Use the SIM card's ISO country code to preselect a country or region in your app.
+- **Multi-SIM handling**: Show which SIM slots are in use on devices with multiple SIM slots.
+- **eSIM detection**: Detect whether a SIM card is an embedded SIM (eSIM).
 
 ## Compatibility
 
@@ -66,9 +71,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Sim } from '@capawesome/capacitor-sim';
+```
 
+### Check and request permissions
+
+Reading the SIM cards requires the `READ_PHONE_STATE` runtime permission on Android. Check the current permission state and request the permission before calling `getSimCards(...)`. Only available on Android:
+
+```typescript
 const checkPermissions = async () => {
   const { readSimCards } = await Sim.checkPermissions();
   return readSimCards;
@@ -78,7 +91,13 @@ const requestPermissions = async () => {
   const { readSimCards } = await Sim.requestPermissions();
   return readSimCards;
 };
+```
 
+### Read the SIM cards
+
+Get information about the SIM cards installed on the device, such as the carrier name, country code, MCC and MNC. On devices with multiple SIM slots, all active SIM cards are returned. Only available on Android:
+
+```typescript
 const getSimCards = async () => {
   const { simCards } = await Sim.getSimCards();
   return simCards;
@@ -192,6 +211,42 @@ Only available on Android.
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
 
 </docgen-api>
+
+## FAQ
+
+### Why is the SIM plugin not available on iOS?
+
+Apple deprecated the `CTCarrier` APIs of the Core Telephony framework with iOS 16, and they return placeholder values (e.g. `"--"` and `65535`) on iOS 16.4 and later. Because there is no reliable system API left for reading SIM card and carrier information, all methods reject as unimplemented on iOS. See the [iOS installation notes](#ios) for details.
+
+### Which permissions are required to read the SIM cards?
+
+The plugin requires the `READ_PHONE_STATE` permission on Android. It is declared in the plugin's `AndroidManifest.xml` and merged into your app automatically, so no manual manifest changes are needed. However, you must request the permission at runtime via the `requestPermissions` method before calling `getSimCards`.
+
+### Why is the phone number `null`?
+
+The `phoneNumber` property is often empty because carriers do not reliably store the phone number on the SIM card. In that case, the plugin returns `null`. Other properties such as `carrierName` or `isoCountryCode` may also be `null` if the information is not available.
+
+### Does the plugin support dual-SIM devices?
+
+Yes, on devices with multiple SIM slots, the `getSimCards` method returns all active SIM cards. Each SIM card includes a `slotIndex` property that indicates the index of the SIM slot on the device.
+
+### Can I detect whether a SIM card is an eSIM?
+
+Yes, each SIM card includes an `isEmbedded` property that indicates whether it is an embedded SIM (eSIM). The property returns `null` if the information is not available.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, and operating system.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

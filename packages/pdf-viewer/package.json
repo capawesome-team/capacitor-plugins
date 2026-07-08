@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-pdf-viewer",
   "version": "0.0.1",
-  "description": "Capacitor plugin to display PDF documents in a fullscreen native viewer.",
+  "description": "Capacitor plugin to display PDF documents in a fullscreen native viewer on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -40,7 +40,14 @@
     "native",
     "pdf",
     "viewer",
-    "document"
+    "document",
+    "capacitor-plugin",
+    "pdf viewer",
+    "pdf reader",
+    "open pdf",
+    "display pdf",
+    "document viewer",
+    "password protected pdf"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

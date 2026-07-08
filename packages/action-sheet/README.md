@@ -21,9 +21,14 @@ Capacitor plugin for native action sheets.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Action Sheet plugin is typically used to let the user choose between several actions in a native way, for example:
+
+- **Contextual item actions**: Show options such as upload, share, or delete when the user taps an item in a list.
+- **Destructive confirmations**: Highlight irreversible actions like deleting a photo using the destructive button style.
+- **Photo source selection**: Ask the user whether to take a new photo or pick an existing one before opening the camera.
+- **Cancelable flows**: Pin a cancel button to the sheet so the user can always back out of an action.
 
 ## Compatibility
 
@@ -71,9 +76,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { ActionSheet, ActionSheetButtonStyle } from '@capawesome/capacitor-action-sheet';
+```
 
+### Show an action sheet
+
+Present a native action sheet with a title, a message, and a list of buttons. Use `ActionSheetButtonStyle.Destructive` to highlight irreversible actions and `ActionSheetButtonStyle.Cancel` to pin a cancel button. The result contains the zero-based index of the selected button and whether the sheet was canceled. Only available on Android and iOS:
+
+```typescript
 const showActions = async () => {
   const { index, canceled } = await ActionSheet.showActions({
     title: 'Photo Options',
@@ -175,6 +188,42 @@ This plugin is API-compatible with the official [`@capacitor/action-sheet`](http
 | `showActions(...) → { index }`                  | `showActions(...) → { index, canceled }`               |
 | `message` and button styles ignored on Android  | `message` and button styles rendered on Android        |
 | `cancelable` not available                      | `cancelable` (default `true`)                          |
+
+## FAQ
+
+### On which platforms can I show an action sheet?
+
+The `showActions(...)` method is only available on Android and iOS, where it presents the native action sheet of the respective platform. On iPad, the action sheet is automatically anchored as a popover.
+
+### How do I know which button the user selected?
+
+The result of `showActions(...)` contains the zero-based `index` of the selected button in the `options` array and a `canceled` flag. If the action sheet was canceled without a cancel button, the index is `-1`.
+
+### Can the user dismiss the action sheet without selecting a button?
+
+Yes. On Android, the action sheet can be dismissed by tapping outside of it or pressing the back button unless you set the `cancelable` option to `false`. On iOS, the action sheet can always be dismissed by tapping outside of it, which is a system behavior.
+
+### How is this plugin different from the official Capacitor Action Sheet plugin?
+
+This plugin is API-compatible with the official `@capacitor/action-sheet` plugin and uses the same `ActionSheetButtonStyle` enum values. In addition, it renders the message and button styles on Android, returns a `canceled` flag, and supports the `cancelable` option. See the [migration section](#migrating-from-capacitoraction-sheet) for a detailed comparison.
+
+### Can I use this plugin together with the Capawesome Dialog plugin?
+
+Yes, the plugin is designed to work alongside the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin. Use an action sheet when the user has to choose between several actions, and a dialog for alerts, confirmations, and text input.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
+- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
+- [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

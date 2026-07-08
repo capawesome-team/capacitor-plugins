@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-square-mobile-payments",
   "version": "0.1.5",
-  "description": "Unofficial Capacitor plugin for Square Mobile Payments SDK.",
+  "description": "Unofficial Capacitor plugin for Square Mobile Payments SDK to accept in-person payments on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,7 +36,16 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "square",
+    "mobile payments",
+    "in-person payments",
+    "card reader",
+    "point of sale",
+    "pos",
+    "tap to pay",
+    "payment processing"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

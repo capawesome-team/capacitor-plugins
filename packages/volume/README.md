@@ -20,9 +20,14 @@ Capacitor plugin to control the volume and observe hardware volume button presse
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Volume plugin is typically used whenever an app needs to control the volume or react to the hardware volume buttons, for example:
+
+- **Media apps**: Read and adjust the media volume from your own player UI.
+- **Camera apps**: Use the hardware volume buttons as a shutter trigger while keeping the volume unchanged.
+- **Remote control apps**: Map the volume buttons to custom actions, for example to control external devices.
+- **Audio guidance**: Warn users when the volume is too low to hear important audio cues.
 
 ## Compatibility
 
@@ -60,9 +65,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Volume, VolumeStream } from '@capawesome/capacitor-volume';
+```
 
+### Get the current volume
+
+Read the current volume level as a value between `0` and `1`. On Android, you can select the audio stream (for example the ring stream) with the `stream` option. On iOS, this always returns the media volume:
+
+```typescript
 const getVolume = async () => {
   const { volume } = await Volume.getVolume();
   return volume;
@@ -72,11 +85,23 @@ const getRingVolume = async () => {
   const { volume } = await Volume.getVolume({ stream: VolumeStream.Ring });
   return volume;
 };
+```
 
+### Set the volume
+
+Set the volume level as a value between `0` and `1`. On Android, you can select the audio stream with the `stream` option. On iOS, this always sets the media volume:
+
+```typescript
 const setVolume = async () => {
   await Volume.setVolume({ volume: 0.5 });
 };
+```
 
+### Watch the hardware volume buttons
+
+Start watching the hardware volume buttons to receive the `volumeButtonPressed` and `volumeChange` events. With the `suppressVolumeChange` option enabled, the volume level is kept unchanged and the system volume indicator is hidden while watching:
+
+```typescript
 const startWatching = async () => {
   await Volume.startWatching({ suppressVolumeChange: true });
 };
@@ -89,19 +114,37 @@ const isWatching = async () => {
   const { watching } = await Volume.isWatching();
   return watching;
 };
+```
 
+### Listen for volume button presses
+
+Get notified when a hardware volume button is pressed. The event is only emitted while watching (see above):
+
+```typescript
 const addVolumeButtonPressedListener = async () => {
   await Volume.addListener('volumeButtonPressed', event => {
     console.log('Volume button pressed:', event.direction);
   });
 };
+```
 
+### Listen for volume changes
+
+Get notified when the volume level changes. The event is only emitted while watching (see above):
+
+```typescript
 const addVolumeChangeListener = async () => {
   await Volume.addListener('volumeChange', event => {
     console.log('Volume changed:', event.volume);
   });
 };
+```
 
+### Remove all listeners
+
+Remove all listeners for this plugin when they are no longer needed:
+
+```typescript
 const removeAllListeners = async () => {
   await Volume.removeAllListeners();
 };
@@ -395,6 +438,42 @@ Keep the following platform differences in mind when watching the hardware volum
 
 - **Android**: The volume key events are intercepted by the web view, so button presses are only detected while the app is in the foreground. With the `suppressVolumeChange` option enabled, the key events are consumed, which keeps the volume unchanged and prevents the system volume panel from appearing.
 - **iOS**: Button presses are derived from changes to the media volume, so button presses are only detected while the app is in the foreground. Without the `suppressVolumeChange` option, presses can not be detected once the volume has reached its minimum or maximum. With the option enabled, the volume is reset immediately after each press (nudged away from the edges if needed), the system volume indicator is hidden, and the original volume is restored when watching stops. Note that volume changes from other sources (for example Control Center) are also reported while watching.
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin is available on Android and iOS. On the Web, all methods reject as unimplemented.
+
+### Why is the `stream` option ignored on iOS?
+
+On iOS, there is no public API to set the system volume directly. The plugin therefore uses a hidden system volume view to change the media volume, which is the only volume that can be read and set on iOS. The `stream` option is only supported on Android, see [Volume Control](#volume-control) for details.
+
+### Why is `setVolume` rejected with the `DO_NOT_DISTURB_ACCESS_REQUIRED` error code?
+
+On Android, changing the volume of the ring, notification or system stream while Do Not Disturb is active requires Do Not Disturb access. You can direct the user to the corresponding settings screen using the `ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS` intent, for example with the App Launcher plugin, see [Volume Control](#volume-control) for details.
+
+### Why are volume button presses not detected?
+
+The `volumeButtonPressed` event is only emitted while watching, so make sure you have called `startWatching(...)` first. On both platforms, button presses are only detected while the app is in the foreground. On iOS, presses can also not be detected once the volume has reached its minimum or maximum unless the `suppressVolumeChange` option is enabled, see [Volume Button Watching](#volume-button-watching) for details.
+
+### What does the `suppressVolumeChange` option do?
+
+With this option enabled, pressing a hardware volume button while watching does not change the volume and the system volume indicator stays hidden. On Android, the volume key events are consumed. On iOS, the volume level is reset immediately after each button press and the original volume level is restored when watching stops.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
+- [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
+- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

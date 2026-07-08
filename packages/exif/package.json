@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-exif",
   "version": "0.0.1",
-  "description": "Capacitor plugin to read, write and remove EXIF metadata from image files.",
+  "description": "Capacitor plugin to read, write and remove EXIF metadata from image files on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -38,12 +38,21 @@
     "capacitor",
     "plugin",
     "native",
+    "capacitor-plugin",
     "exif",
     "metadata",
     "gps",
     "privacy",
     "heic",
-    "jpeg"
+    "jpeg",
+    "exif metadata",
+    "image metadata",
+    "photo metadata",
+    "exif reader",
+    "exif editor",
+    "remove exif",
+    "strip metadata",
+    "geotag"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -36,8 +36,18 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/android-sms-retriever/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "sms retriever",
+    "otp",
+    "otp autofill",
+    "one-time code",
+    "sms verification",
+    "sms user consent",
+    "phone number hint",
+    "phone verification"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

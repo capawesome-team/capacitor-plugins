@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-background-task",
   "version": "8.0.2",
-  "description": "Capacitor plugin for running background tasks.",
+  "description": "Capacitor plugin for running background tasks on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "background task",
+    "background execution",
+    "background mode",
+    "run in background",
+    "app background",
+    "finish task"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -17,9 +17,14 @@ Capacitor Cloudinary allows you to use the native Cloudinary SDKs to upload file
 - ❌ No more out-of-memory issues
 - 📁 Works with the [Capacitor Filesystem](https://capacitorjs.com/docs/apis/filesystem) and [Capacitor File Picker](https://github.com/capawesome-team/capacitor-file-picker)
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Cloudinary plugin is typically used whenever an app needs to exchange media files with Cloudinary, for example:
+
+- **User-generated content**: Upload photos and videos that users select from their device directly to your Cloudinary account.
+- **Large video uploads**: Upload large files in chunks via the native Cloudinary SDKs to avoid out-of-memory crashes in the WebView.
+- **Profile pictures**: Upload an image with a unique public identifier so it can be referenced and replaced later.
+- **Media downloads**: Download images, videos, or raw files from Cloudinary to the device for further processing.
 
 ## Compatibility
 
@@ -88,13 +93,27 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Cloudinary, ResourceType } from '@capawesome/capacitor-cloudinary';
+```
 
+### Initialize the plugin
+
+Initialize the plugin with the cloud name of your app, which you can find in the Cloudinary Management Console. This method must be called once before all other methods:
+
+```typescript
 const initialize = async () => {
   await Cloudinary.initialize({ cloudName: 'my_cloud_name' });
 };
+```
 
+### Upload a file to Cloudinary
+
+Upload an image, video, or raw file to Cloudinary. On Android and iOS, pass the path of the file to upload; on the Web, pass a `Blob` instead. Note that currently only unsigned uploads are supported, so you need an upload preset:
+
+```typescript
 const uploadResource = async () => {
   await Cloudinary.uploadResource({
     path: 'file:///var/mobile/Containers/Data/Application/22A433FD-D82D-4989-8BE6-9FC49DEA20BB/Images/test.png',
@@ -103,7 +122,13 @@ const uploadResource = async () => {
     uploadPreset: 'my_preset',
   });
 };
+```
 
+### Download a file from Cloudinary
+
+Download a resource by its URL. On Android and iOS, the result contains the path where the file was stored on the device; on the Web, it contains a `Blob`:
+
+```typescript
 const downloadResource = async () => {
   const { path } = await Cloudinary.downloadResource({
     url: 'https://res.cloudinary.com/myCloudName/image/upload/v123/123.png',
@@ -262,6 +287,42 @@ further processing after downloading.
 ## Utils
 
 See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/cloudinary/docs/utils/README.md).
+
+## FAQ
+
+### Do I need to call `initialize` before using the plugin?
+
+Yes, the `initialize(...)` method must be called once before all other methods. It only requires the cloud name of your app, which you can find in the Cloudinary Management Console. See the [usage example](#initialize-the-plugin) above.
+
+### Are signed uploads supported?
+
+No, currently only unsigned uploads are supported. This means you need to create an unsigned upload preset in your Cloudinary account and pass its name via the `uploadPreset` option when calling `uploadResource(...)`.
+
+### Where are downloaded files stored?
+
+On Android, the file is downloaded to the `Downloads` directory. On iOS, the file is downloaded to the temporary directory, so it is recommended to copy it to a permanent location for further processing. On the Web, the downloaded resource is returned as a `Blob` instead of a path.
+
+### How do I upload a file on the Web?
+
+On the Web, pass the file as a `Blob` via the `blob` option of `uploadResource(...)`. The `path` option is only available on Android and iOS, where it points to a file on the device's filesystem.
+
+### What do I need to configure on Android?
+
+You need to add the `DOWNLOAD_WITHOUT_NOTIFICATION` permission and the `DownloadBroadcastReceiver` receiver to your `AndroidManifest.xml`, as described in the [Installation](#installation) section. No additional configuration is required on iOS or the Web.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, image, or video to upload to Cloudinary.
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images before uploading them.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a downloaded file with the default application.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

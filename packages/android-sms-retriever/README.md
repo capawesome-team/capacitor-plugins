@@ -17,9 +17,13 @@ Capacitor plugin for OTP autofill on Android via the SMS User Consent and Phone 
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Android SMS Retriever plugin is typically used in phone number verification flows, for example:
+
+- **OTP autofill**: Retrieve an incoming verification SMS after a one-tap system consent dialog and extract the one-time code, so the user doesn't have to type it manually.
+- **Phone number prefill**: Prefill the phone number input field of your sign-up or login form via the system bottom sheet.
+- **Play-policy-safe SMS verification**: Implement SMS-based verification without requesting any SMS permissions, using the SMS User Consent and Phone Number Hint APIs.
 
 ## Compatibility
 
@@ -76,14 +80,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AndroidSmsRetriever } from '@capawesome/capacitor-android-sms-retriever';
+```
 
+### Prefill the user's phone number
+
+Request the user's phone number via the Phone Number Hint API. A system bottom sheet is displayed that lets the user pick one of the phone numbers associated with the device, for example to prefill a phone number input field. Only available on Android:
+
+```typescript
 const requestPhoneNumber = async () => {
   const { phoneNumber } = await AndroidSmsRetriever.requestPhoneNumber();
   return phoneNumber;
 };
+```
 
+### Retrieve a verification SMS
+
+Retrieve an incoming verification SMS via the SMS User Consent API. A system consent dialog is displayed when a matching SMS is received, and the promise resolves with the full message text once the user consents, so your app can extract the one-time code itself (see [Extracting the One-Time Code](#extracting-the-one-time-code)). Only available on Android:
+
+```typescript
 const retrieveSms = async () => {
   const { message } = await AndroidSmsRetriever.retrieveSms();
   // Extract the one-time code from the message.
@@ -196,6 +214,42 @@ For the SMS User Consent API to detect a message, the SMS must:
 - not originate from a phone number in the user's contacts.
 
 The underlying broadcast waits up to 5 minutes for a matching SMS. If no message is received within this time, the promise rejects with the error code `TIMEOUT`.
+
+## FAQ
+
+### Does this plugin require any SMS permissions?
+
+No, the plugin uses the SMS User Consent and Phone Number Hint APIs, which are Play-policy-safe and require no SMS permissions. Instead of reading SMS messages silently, the user explicitly consents via a one-tap system dialog before your app receives the message.
+
+### Does this plugin work on iOS or Web?
+
+No, this plugin only provides an Android implementation and you don't need one on iOS. iOS already autofills one-time codes from incoming SMS messages in `WKWebView` when the input field uses `autocomplete="one-time-code"`. On iOS and Web, all methods reject as unimplemented.
+
+### Why does `retrieveSms` reject with the error code `TIMEOUT`?
+
+The underlying broadcast waits up to 5 minutes for a matching SMS. If no matching message is received within this time, the promise rejects with the error code `TIMEOUT`. Make sure the SMS is sent while the broadcast is active and meets the requirements of the SMS User Consent API.
+
+### Why is my SMS message not detected?
+
+For the SMS User Consent API to detect a message, the SMS must contain a one-time code that the user sends back to your server to complete the verification, be no longer than 140 bytes, and not originate from a phone number in the user's contacts. See [Extracting the One-Time Code](#extracting-the-one-time-code) for more information.
+
+### Can I filter incoming messages by sender?
+
+Yes, you can pass the `senderPhoneNumber` option to the `retrieveSms(...)` method to only retrieve messages from a specific sender. If not provided, the SMS from any sender is retrieved.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
+- [Password Autofill](https://capawesome.io/docs/sdks/capacitor/password-autofill/): Save passwords to the platform credential store.
+- [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-managed-configurations",
   "version": "8.0.1",
-  "description": "Capacitor plugin to access managed configuration settings.",
+  "description": "Capacitor plugin to access managed configuration settings on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,12 +36,19 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/managed-configurations/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "ionic",
     "android",
     "ios",
-    "managed configurations"
+    "managed configurations",
+    "managed app configuration",
+    "app restrictions",
+    "mdm",
+    "emm",
+    "mobile device management",
+    "enterprise"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

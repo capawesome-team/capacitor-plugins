@@ -8,9 +8,13 @@ Capacitor plugin that allows the user to edit a photo.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Photo Editor plugin is typically used whenever an app wants to hand a photo over to an installed photo editing app on Android, for example:
+
+- **Photo touch-ups before upload**: Let users edit a photo (e.g. in Google Photos) before it is uploaded to your server.
+- **Screenshot annotation**: Let users mark up a screenshot before attaching it to a bug report or support ticket.
+- **Profile picture adjustments**: Let users fine-tune a selected photo before it is saved as their profile picture.
 
 ## Compatibility
 
@@ -74,9 +78,17 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { PhotoEditor } from '@capawesome/capacitor-photo-editor';
+```
 
+### Edit a photo
+
+Open a photo at a given path in an installed photo editing app (e.g. Google Photos). The user should overwrite the image when saving so that the path to the image is not lost. Only available on Android:
+
+```typescript
 const editPhoto = async () => {
   await PhotoEditor.editPhoto({ path: 'data/image.png' });
 };
@@ -125,6 +137,38 @@ Only available on Android.
 | **`path`** | <code>string</code> | The path of the file to edit. |
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms are supported?
+
+The `editPhoto(...)` method is only available on Android. On iOS and the Web, there is no comparable way to hand a photo over to an installed editing app. For headless image transforms that work across platforms, take a look at the [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/) plugin.
+
+### Why does nothing happen when I call the `editPhoto` method?
+
+A suitable photo editing app (e.g. Google Photos) must be installed on the device. The plugin hands the photo over to that app instead of providing its own editing user interface.
+
+### Why can I no longer find my photo after editing it?
+
+The user should overwrite the image when saving in the editing app so that the path to the image is not lost. If the editing app saves the result as a new file, the original path no longer points to the edited version.
+
+### Why do I need a `file_paths.xml` file on Android?
+
+The plugin shares the photo with the editing app, so you need to specify the directories that contain the photos you want to edit. Create the file `file_paths.xml` in the `res/xml/` subdirectory of your project as shown in the [Installation](#installation) section and the [Android docs](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData).
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, flip and format conversion, including HEIC to JPEG.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the photo to edit from the gallery or file system.
+- [Exif](https://capawesome.io/docs/sdks/capacitor/exif/): Read, write and remove EXIF metadata from image files.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

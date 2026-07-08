@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-superwall",
   "version": "0.1.1",
-  "description": "Unofficial Capacitor plugin for Superwall SDK.",
+  "description": "Unofficial Capacitor plugin for Superwall SDK to present paywalls on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "superwall",
+    "paywall",
+    "subscriptions",
+    "in-app purchases",
+    "monetization",
+    "feature gating",
+    "a/b testing"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -13,7 +13,7 @@ It supports retrieving app update information on **Android** and **iOS** and sup
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for app updates. Here are some of the key features:
+The Capacitor App Update plugin is one of the most complete native app update solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📱 **App update information**: Retrieves current and available app versions.
@@ -26,9 +26,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Update plugin is typically used to make sure users are running a recent version of your app, for example:
+
+- **Force updates**: Perform an immediate in-app update on Android when a critical new version must be installed before the app can be used.
+- **Optional update prompts**: Start a flexible in-app update on Android that downloads in the background and track its progress with the state change listener.
+- **Version checks**: Compare the current app version with the version available in the Play Store or App Store to decide whether to inform the user.
+- **Store redirects**: Open the app's Play Store or App Store entry so the user can update the app manually, for example on iOS where in-app updates are not available.
 
 ## Compatibility
 
@@ -80,10 +85,18 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Capacitor } from '@capacitor/core';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
+```
 
+### Get app update information
+
+Use `getAppUpdateInfo()` to retrieve the current and available app versions. On Android, versions are identified by the version code; on iOS, by the version name. Only available on Android and iOS:
+
+```typescript
 const getCurrentAppVersion = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (Capacitor.getPlatform() === 'android') {
@@ -101,11 +114,23 @@ const getAvailableAppVersion = async () => {
     return result.availableVersionName;
   }
 };
+```
 
+### Open the app store entry
+
+Open the app's page in the Play Store (Android) or App Store (iOS) so the user can update the app manually. Only available on Android and iOS:
+
+```typescript
 const openAppStore = async () => {
   await AppUpdate.openAppStore();
 };
+```
 
+### Perform an immediate update
+
+Perform an immediate in-app update if an update is available and an immediate update is allowed. Only available on Android:
+
+```typescript
 const performImmediateUpdate = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE) {
@@ -115,7 +140,13 @@ const performImmediateUpdate = async () => {
     await AppUpdate.performImmediateUpdate();
   }
 };
+```
 
+### Start a flexible update
+
+Start a flexible in-app update if an update is available and a flexible update is allowed. You can monitor the download progress with the `onFlexibleUpdateStateChange` listener. Only available on Android:
+
+```typescript
 const startFlexibleUpdate = async () => {
   const result = await AppUpdate.getAppUpdateInfo();
   if (result.updateAvailability !== AppUpdateAvailability.UPDATE_AVAILABLE) {
@@ -125,7 +156,13 @@ const startFlexibleUpdate = async () => {
     await AppUpdate.startFlexibleUpdate();
   }
 };
+```
 
+### Complete a flexible update
+
+Complete a flexible in-app update by restarting the app. Only available on Android:
+
+```typescript
 const completeFlexibleUpdate = async () => {
   await AppUpdate.completeFlexibleUpdate();
 };
@@ -362,6 +399,41 @@ Remove all listeners for this plugin.
 ## Test with internal app-sharing
 
 The Android Developers documentation describes how to test [in-app updates](https://developer.android.com/guide/playcore/in-app-updates) using [internal app sharing](https://developer.android.com/guide/playcore/in-app-updates/test).
+
+## FAQ
+
+### What is the difference between this plugin and the Live Update plugin?
+
+The App Update plugin assists with native app updates that are distributed through the Play Store or App Store, for example by retrieving update information or performing in-app updates on Android. The [Capacitor Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/) plugin, on the other hand, updates your app remotely in real-time without submitting a new version to the app store.
+
+### Are in-app updates available on iOS?
+
+No, in-app updates are a feature of the Google Play Store and are therefore only available on Android. On iOS, you can use `getAppUpdateInfo(...)` to check whether an update is available and then call `openAppStore(...)` to open the app's App Store entry so the user can update manually.
+
+### What is the difference between an immediate and a flexible update?
+
+An immediate update is performed in one step with `performImmediateUpdate()`. A flexible update is started with `startFlexibleUpdate()`, its download progress can be monitored with the `onFlexibleUpdateStateChange` listener, and it is completed by calling `completeFlexibleUpdate()`, which restarts the app. Both update types are only available on Android.
+
+### Why does the update fail with the INFO_MISSING result code?
+
+The `INFO_MISSING` result code means that the app update information is missing. You must call `getAppUpdateInfo(...)` before requesting an update with `performImmediateUpdate()` or `startFlexibleUpdate()`.
+
+### How can I test in-app updates on Android?
+
+The Android Developers documentation describes how to test in-app updates using internal app sharing. See the [Test with internal app-sharing](#test-with-internal-app-sharing) section for the relevant links.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
+- [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

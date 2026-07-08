@@ -10,7 +10,7 @@ Capacitor plugin for the [App Tracking Transparency](https://developer.apple.com
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for App Tracking Transparency. Here are some of the key features:
+The Capacitor App Tracking Transparency plugin is one of the most complete tracking authorization solutions for Capacitor apps. Here are some of the key features:
 
 - 🔒 **Authorization status**: Read the current tracking authorization status.
 - 🙋 **Permission request**: Present the system tracking authorization prompt.
@@ -20,9 +20,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Tracking Transparency plugin is typically used whenever an iOS app collects data for tracking purposes, for example:
+
+- **Personalized ads**: Request tracking permission before serving personalized ads to the user.
+- **Ad attribution**: Read the advertising identifier (IDFA) to attribute app installs to ad campaigns once the user has authorized tracking.
+- **Conditional tracking**: Check the current tracking authorization status and only enable tracking-related features when the status is `authorized`.
+- **App Review compliance**: Present the system tracking authorization prompt as required by Apple for any app that tracks users.
 
 ## Compatibility
 
@@ -73,19 +78,39 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AppTrackingTransparency } from '@capawesome/capacitor-app-tracking-transparency';
+```
 
+### Check the tracking authorization status
+
+Read the current tracking authorization status, for example to decide whether tracking-related features should be enabled. Only available on iOS:
+
+```typescript
 const getStatus = async () => {
   const { status } = await AppTrackingTransparency.getStatus();
   return status;
 };
+```
 
+### Request tracking permission
+
+Present the system tracking authorization prompt. The prompt is only shown once per install while the status is `notDetermined`; afterwards, the method resolves with the existing status. Only available on iOS:
+
+```typescript
 const requestPermission = async () => {
   const { status } = await AppTrackingTransparency.requestPermission();
   return status;
 };
+```
 
+### Read the advertising identifier
+
+Read the advertising identifier (IDFA) of the device. It is only available if the tracking authorization status is `authorized`; otherwise, `null` is returned. Only available on iOS:
+
+```typescript
 const getAdvertisingIdentifier = async () => {
   const { advertisingIdentifier } =
     await AppTrackingTransparency.getAdvertisingIdentifier();
@@ -219,6 +244,37 @@ Apple requires that any app that tracks users requests permission via the App Tr
 - **Purpose string**: The `NSUserTrackingUsageDescription` purpose string must accurately describe how the collected data is used. Vague or misleading descriptions are a common reason for rejection.
 - **Advertising identifier**: The advertising identifier (IDFA) is only available while the status is `authorized`. In all other cases, `getAdvertisingIdentifier(...)` returns `null`.
 - **Simulator**: The iOS Simulator never provides an advertising identifier, so `getAdvertisingIdentifier(...)` always returns `null` there, even if the status is `authorized`. Use a real device to test the advertising identifier.
+
+## FAQ
+
+### Does this plugin work on Android or Web?
+
+No, the App Tracking Transparency framework is an iOS-only concept. The plugin is only available on iOS; on Android and Web, all methods reject as unimplemented.
+
+### Why does the requestPermission method reject with an error?
+
+The most common reason is a missing `NSUserTrackingUsageDescription` key in your app's `Info.plist` file. This key is required for the system tracking authorization prompt and its purpose string must clearly explain why your app is requesting permission to track the user. See the [Installation](#installation) section for details.
+
+### Why is the tracking authorization prompt not shown?
+
+The system prompt is only shown once per install while the tracking authorization status is `notDetermined`. If the user has already responded to the prompt, calling `requestPermission()` again resolves with the existing status without showing the prompt. To test the prompt again, reinstall the app.
+
+### Why does getAdvertisingIdentifier return null?
+
+The advertising identifier (IDFA) is only available if the tracking authorization status is `authorized`; in all other cases, `null` is returned. Additionally, the iOS Simulator never provides an advertising identifier, even if the status is `authorized`, so use a real device to test this method.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Permissions](https://capawesome.io/docs/sdks/capacitor/permissions/): Check and request device permissions with a unified API.
+- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher and block screenshots.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

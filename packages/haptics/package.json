@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-haptics",
   "version": "0.0.1",
-  "description": "Capacitor plugin to provide haptic feedback such as impacts, notifications, vibrations and custom haptic patterns.",
+  "description": "Capacitor plugin to provide haptic feedback such as impacts, notifications, vibrations and custom haptic patterns on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,13 @@
     "haptic feedback",
     "vibration",
     "taptic engine",
-    "vibrate"
+    "vibrate",
+    "capacitor-plugin",
+    "core haptics",
+    "haptic pattern",
+    "impact feedback",
+    "notification feedback",
+    "vibration api"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

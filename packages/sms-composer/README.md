@@ -18,9 +18,14 @@ Capacitor plugin to open the native SMS composer prefilled with recipients and a
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The SMS Composer plugin is typically used whenever an app wants to hand off a prefilled text message to the user, for example:
+
+- **Invite friends**: Prefill an invitation message with a download link that users can send to their contacts.
+- **Share content**: Let users share an article, a product, or a coupon code via text message.
+- **Contact support**: Open the composer prefilled with your support phone number and a message template.
+- **Feature detection**: Hide SMS-related features on devices without SMS capability, such as Wi-Fi-only tablets, using `canComposeSms`.
 
 ## Compatibility
 
@@ -62,14 +67,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { SmsComposer } from '@capawesome/capacitor-sms-composer';
+```
 
+### Check whether the device can send SMS messages
+
+Check whether the device is able to compose and send SMS messages, for example to hide SMS-related features on devices without SMS capability such as Wi-Fi-only tablets or iPads. Only available on Android and iOS:
+
+```typescript
 const canComposeSms = async () => {
   const { canCompose } = await SmsComposer.canComposeSms();
   return canCompose;
 };
+```
 
+### Open the SMS composer
+
+Open the native SMS composer prefilled with recipients and a message body. The user reviews the message and decides whether to send it; the plugin never sends the message itself. The call resolves with a `status` once the composer is dismissed (see [Result Status](#result-status)). Only available on Android and iOS:
+
+```typescript
 const composeSms = async () => {
   const { status } = await SmsComposer.composeSms({
     recipients: ['+41791234567'],
@@ -190,6 +209,43 @@ The `composeSms(...)` method resolves with a `status` once the composer is dismi
 ## Multiple Recipients
 
 Multiple recipients are joined with a semicolon (`;`) in the underlying `smsto:` URI on Android. Some messaging apps expect a comma (`,`) instead, so multi-recipient prefilling may not work reliably across all Android messaging apps.
+
+## FAQ
+
+### Does the plugin send SMS messages automatically?
+
+No, the plugin never sends SMS messages on its own. It opens the native SMS composer prefilled with the recipients and message body you provide, and the user always reviews the message and decides whether to send it. This makes the plugin privacy-friendly and avoids the need for any SMS permissions.
+
+### Why is the status always `unknown` on Android?
+
+On Android, the system does not report whether the message was sent after the composer is dismissed, so the `status` is always `unknown`. On iOS, the status reflects the actual outcome (`sent` or `canceled`). See [Result Status](#result-status) for details.
+
+### How can I detect devices that cannot send SMS messages?
+
+Call the `canComposeSms` method, which resolves with `canCompose` set to `false` on devices without SMS capability, such as Wi-Fi-only tablets or iPads. If you call `composeSms` on such a device anyway, the call rejects as unavailable.
+
+### Why does prefilling multiple recipients not work in some Android messaging apps?
+
+On Android, multiple recipients are joined with a semicolon (`;`) in the underlying `smsto:` URI, but some messaging apps expect a comma (`,`) instead. Multi-recipient prefilling may therefore not work reliably across all Android messaging apps. See [Multiple Recipients](#multiple-recipients) for details.
+
+### Is any additional configuration required on Android?
+
+No, the plugin works out of the box. It declares the necessary `<queries>` element for the `smsto` scheme in its own `AndroidManifest.xml`, so the SMS capability can be detected on Android 11 (API level 30) and higher without manual manifest changes.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [Android SMS Retriever](https://capawesome.io/docs/sdks/capacitor/android-sms-retriever/): OTP autofill on Android via the SMS User Consent and Phone Number Hint APIs.
+- [Contacts](https://capawesome.io/docs/sdks/capacitor/contacts/): Read, write, or select device contacts.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-dialog",
   "version": "0.0.1",
-  "description": "Capacitor plugin for native alert, confirm, and prompt dialogs.",
+  "description": "Capacitor plugin for native alert, confirm, and prompt dialogs on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,14 @@
     "dialog",
     "alert",
     "confirm",
-    "prompt"
+    "prompt",
+    "capacitor-plugin",
+    "alert dialog",
+    "confirm dialog",
+    "prompt dialog",
+    "native dialog",
+    "modal",
+    "popup"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

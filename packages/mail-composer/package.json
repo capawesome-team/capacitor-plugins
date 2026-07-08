@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-mail-composer",
   "version": "0.0.1",
-  "description": "Capacitor plugin to open the native email composer.",
+  "description": "Capacitor plugin to open the native email composer on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,8 +36,15 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/mail-composer/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "mail composer",
+    "email composer",
+    "email",
+    "send email",
+    "mailto",
+    "email attachments"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

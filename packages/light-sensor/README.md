@@ -10,7 +10,7 @@ Capacitor plugin to read the device's ambient light sensor.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for ambient light measurements. Here are some of the key features:
+The Capacitor Light Sensor plugin provides a complete solution for ambient light measurements in Capacitor apps. Here are some of the key features:
 
 - 🌗 **Illuminance**: Read the ambient light level in lux.
 - ⚡ **Real-time measurements**: Continuous light data with event listeners.
@@ -21,9 +21,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Light Sensor plugin is typically used to react to the lighting conditions around the device, for example:
+
+- **Adaptive theming**: Switch between a light and dark theme based on the ambient light level.
+- **Brightness control**: Combine the illuminance readings with the [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) plugin to adjust the screen brightness.
+- **Environment monitoring**: Continuously measure the light level in a room using real-time measurement events.
+- **Reading comfort**: Detect dark environments and suggest a more comfortable display mode to the user.
 
 ## Compatibility
 
@@ -73,26 +78,52 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { LightSensor } from '@capawesome/capacitor-light-sensor';
+```
 
-const getMeasurement = async () => {
-  const measurement = await LightSensor.getMeasurement();
-  console.log('Illuminance: ', measurement.illuminance);
-};
+### Check if the light sensor is available
 
+Check whether the device has an ambient light sensor before using the other methods. Only available on Android:
+
+```typescript
 const isAvailable = async () => {
   const result = await LightSensor.isAvailable();
   return result.available;
 };
+```
 
+### Read the current light level
+
+Get the most recent measurement from the ambient light sensor in lux. Only available on Android:
+
+```typescript
+const getMeasurement = async () => {
+  const measurement = await LightSensor.getMeasurement();
+  console.log('Illuminance: ', measurement.illuminance);
+};
+```
+
+### Receive continuous measurements
+
+Add a listener for the `measurement` event and start the measurement updates to receive real-time light data. Only available on Android:
+
+```typescript
 const startMeasurementUpdates = async () => {
   await LightSensor.addListener('measurement', measurement => {
     console.log('Illuminance: ', measurement.illuminance);
   });
   await LightSensor.startMeasurementUpdates();
 };
+```
 
+### Stop receiving measurements
+
+Stop the measurement updates and remove the listeners when you no longer need them:
+
+```typescript
 const stopMeasurementUpdates = async () => {
   await LightSensor.stopMeasurementUpdates();
 };
@@ -258,6 +289,43 @@ Only available on Android.
 <code><a href="#measurement">Measurement</a></code>
 
 </docgen-api>
+
+## FAQ
+
+### Why is this plugin not available on iOS?
+
+iOS does not provide a public API to read the ambient light sensor, so the plugin is not implemented on this platform. The closest available signal is the screen brightness, which you can read using the [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) plugin.
+
+### What unit are the measurements in?
+
+The `illuminance` property of a measurement contains the ambient light level in lux (lx).
+
+### How do I know if the device has a light sensor?
+
+Call the `isAvailable()` method, which returns whether the ambient light sensor is available on the device. It is recommended to check this before calling the other methods.
+
+### What is the difference between `getMeasurement` and the `measurement` event?
+
+The `getMeasurement()` method returns the most recent measurement from the ambient light sensor as a one-time value. The `measurement` event, in combination with `startMeasurementUpdates()`, delivers continuous real-time measurements until you call `stopMeasurementUpdates()`. See the [usage examples](#usage) above.
+
+### Do I need any permissions or configuration on Android?
+
+No permissions are required. However, if you are using Proguard, you need to add a keep rule for the plugin classes to your `proguard-rules.pro` file, as described in the [Installation](#installation) section.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
+- [Proximity Sensor](https://capawesome.io/docs/sdks/capacitor/proximity-sensor/): Read the device's proximity sensor.
+- [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure in hectopascals (hPa).
+- [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

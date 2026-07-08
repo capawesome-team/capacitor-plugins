@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-age-signals",
   "version": "0.4.1",
-  "description": "Capacitor plugin to use the Play Age Signals API to retrieve age-related signals for users.",
+  "description": "Capacitor plugin to use the Play Age Signals API to retrieve age-related signals for users on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "age signals",
+    "age verification",
+    "age assurance",
+    "age gate",
+    "declared age range",
+    "play age signals",
+    "parental controls"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

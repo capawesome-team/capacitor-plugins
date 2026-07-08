@@ -10,7 +10,7 @@ Capacitor plugin to open URLs in the external browser, the system browser or an 
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for in-app browsing. Here are some of the key features:
+The Capacitor In-App Browser plugin is one of the most complete in-app browsing solutions for Capacitor apps. Here are some of the key features:
 
 - 🌐 **Three browser modes**: Open URLs in the external browser, the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS) or an embedded web view.
 - 🧭 **Navigation events**: Get notified when the browser is closed, a page has been loaded or a navigation has been completed.
@@ -24,9 +24,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The In-App Browser plugin is typically used whenever an app needs to display web content without losing the user, for example:
+
+- **External links**: Open links, terms of service, or documentation in the system browser without leaving the app context.
+- **Login and checkout flows**: Open a web-based flow in the embedded web view and watch for a redirect using the `browserUrlChanged` event.
+- **Hybrid web content**: Embed a web page with a themed native toolbar and exchange messages between the app and the page.
+- **Background loading**: Load a URL in a hidden web view with the `visible` option and present it once the page has loaded.
+- **Session control**: Clear the cache and session data of the web view, or use an isolated data store on iOS.
 
 ## Compatibility
 
@@ -96,15 +102,29 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
+```
 
+### Open a URL in the external browser
+
+Open a URL in the default browser app of the device. Since the browser is opened in a separate app, no events are emitted in this mode:
+
+```typescript
 const openInExternalBrowser = async () => {
   await InAppBrowser.openInExternalBrowser({
     url: 'https://capawesome.io',
   });
 };
+```
 
+### Open a URL in the system browser
+
+Open a URL in the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS) and customize the toolbar with platform-specific options. Only available on Android and iOS:
+
+```typescript
 const openInSystemBrowser = async () => {
   await InAppBrowser.openInSystemBrowser({
     url: 'https://capawesome.io',
@@ -118,7 +138,13 @@ const openInSystemBrowser = async () => {
     },
   });
 };
+```
 
+### Open a URL in an embedded web view
+
+Open a URL in an embedded web view with a native toolbar whose color, title, and buttons can be customized. Only available on Android and iOS:
+
+```typescript
 const openInWebView = async () => {
   await InAppBrowser.openInWebView({
     url: 'https://capawesome.io',
@@ -129,24 +155,48 @@ const openInWebView = async () => {
     },
   });
 };
+```
 
+### Close the browser
+
+Close the currently open browser. This closes browsers opened with `openInWebView(...)` or `openInSystemBrowser(...)`. Only available on Android and iOS:
+
+```typescript
 const close = async () => {
   await InAppBrowser.close();
 };
+```
 
+### Execute JavaScript in the web view
+
+Execute any JavaScript code in the currently open web view. This method is only available for browsers opened with `openInWebView(...)` on Android and iOS:
+
+```typescript
 const executeScript = async () => {
   const { result } = await InAppBrowser.executeScript({
     script: 'document.title',
   });
   return result;
 };
+```
 
+### Post a message to the web page
+
+Post a message to the currently open web view. The web page receives the message by listening for the `capacitorInAppBrowserMessage` window event, see [Messaging](#messaging). This method is only available for browsers opened with `openInWebView(...)` on Android and iOS:
+
+```typescript
 const postMessage = async () => {
   await InAppBrowser.postMessage({
     data: { name: 'Capawesome' },
   });
 };
+```
 
+### Clear the cache and session data
+
+Clear the cache or the session data (cookies and web storage) of the web view. Only available on Android and iOS:
+
+```typescript
 const clearCache = async () => {
   await InAppBrowser.clearCache();
 };
@@ -154,7 +204,13 @@ const clearCache = async () => {
 const clearSessionData = async () => {
   await InAppBrowser.clearSessionData();
 };
+```
 
+### Listen for browser events
+
+Get notified when the browser is closed, a message is received, a navigation has been completed, a page has been loaded, or the URL has changed:
+
+```typescript
 const addListeners = async () => {
   await InAppBrowser.addListener('browserClosed', () => {
     console.log('Browser closed');
@@ -740,6 +796,42 @@ The three browser modes behave differently on each platform. Keep the following 
 - **System browser**: Tracking the visited URLs is not possible by design. If you need the `browserNavigationCompleted` or `browserUrlChanged` event, use the `openInWebView(...)` method instead. On Android, the `browserPageLoaded` event is not emitted for the system browser and the `browserClosed` event is emitted when the user returns to the app.
 - **Embedded web view**: The web view always uses the app-global (`shared`) data store on Android. The `dataStore` option is only supported on iOS. On iOS, hiding the toolbar removes the close button, so the browser can then only be closed using the `close(...)` method.
 - **External browser**: The browser is opened in a separate app. For this reason, no events are emitted and the `close(...)` method has no effect.
+
+## FAQ
+
+### What is the difference between the external browser, the system browser and the embedded web view?
+
+The `openInExternalBrowser(...)` method opens the URL in the default browser app of the device, so no events are emitted and the `close()` method has no effect. The `openInSystemBrowser(...)` method presents the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS) inside your app with a customizable toolbar. The `openInWebView(...)` method opens an embedded web view with a native toolbar and offers the most control, including JavaScript execution, messaging, and navigation events. See [Platform Behavior](#platform-behavior) for the differences between the modes.
+
+### How can I track which URLs the user visits?
+
+Tracking the visited URLs is only possible in the embedded web view. Open the URL with `openInWebView(...)` and listen for the `browserUrlChanged` or `browserNavigationCompleted` event. In the system browser, tracking the visited URLs is not possible by design, and in the external browser no events are emitted at all.
+
+### How can I exchange data between my app and the opened web page?
+
+The embedded web view injects a small message bridge into every web page. The web page can post messages to the app using the injected `window.CapacitorInAppBrowser.postMessage(...)` function, which the app receives via the `browserMessageReceived` event. The app can post messages to the web page using the `postMessage(...)` method, which the web page receives via the `capacitorInAppBrowserMessage` window event. See [Messaging](#messaging) for more details.
+
+### Can web pages access the camera or microphone?
+
+Yes, camera and microphone permission requests from web pages opened in the embedded web view are forwarded to the app. On Android, the corresponding permissions must be declared in your `AndroidManifest.xml` and granted before a web page requests access. On iOS, the `NSCameraUsageDescription` and `NSMicrophoneUsageDescription` keys must be added to your `Info.plist` file. See [Installation](#installation) for details.
+
+### Can I load a URL in the background before showing it?
+
+Yes, open the URL with `openInWebView(...)` and set the `visible` option to `false`. The web view then loads the URL in the background and stays hidden until you call the `show()` method. The `browserPageLoaded` event is still emitted and `close()` can be called while the web view is hidden.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
+- [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/): Detect an outdated Android System WebView and guide users to update it.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

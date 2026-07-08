@@ -10,7 +10,7 @@ Capacitor plugin to configure and observe the iOS [audio session](https://develo
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for the iOS audio session. Here are some of the key features:
+The Capacitor Audio Session plugin is one of the most complete audio session management solutions for Capacitor apps. Here are some of the key features:
 
 - 🎛️ **Configuration**: Set the audio session category, mode and options.
 - 🔌 **Activation**: Activate and deactivate the audio session.
@@ -22,9 +22,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Audio Session plugin is typically used whenever an app needs fine-grained control over how audio behaves on iOS, for example:
+
+- **Media playback apps**: Configure the `playback` category so audio keeps playing while other apps are silenced.
+- **Voice and video chat**: Switch between the receiver and the built-in speaker using the output override.
+- **Mixing with other apps**: Let your audio play alongside (or duck) audio from other apps using the category options.
+- **Handling phone calls**: Pause playback when the session is interrupted and resume it when the interruption ends.
+- **Headphone awareness**: React when headphones or Bluetooth devices are plugged in or out by observing route changes.
 
 ## Compatibility
 
@@ -62,9 +68,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AudioSession } from '@capawesome/capacitor-audio-session';
+```
 
+### Configure the audio session
+
+Set the audio session category, mode and options, for example for movie playback that interrupts audio from other apps. All methods of this plugin are only available on iOS:
+
+```typescript
 const configure = async () => {
   await AudioSession.configure({
     category: 'playback',
@@ -74,32 +88,68 @@ const configure = async () => {
     },
   });
 };
+```
 
+### Activate or deactivate the audio session
+
+Activate the audio session before playing or recording audio, and deactivate it when you are done so that other apps can resume their playback:
+
+```typescript
 const setActive = async () => {
   await AudioSession.setActive({ active: true });
 };
+```
 
+### Read the current audio outputs
+
+Get the audio outputs of the current audio route, for example to check whether headphones are connected:
+
+```typescript
 const getCurrentOutputs = async () => {
   const { outputs } = await AudioSession.getCurrentOutputs();
   return outputs;
 };
+```
 
+### Route playback to the built-in speaker
+
+Override the audio output port that is used for playback, for example to switch from the receiver to the loudspeaker during a call:
+
+```typescript
 const overrideOutput = async () => {
   await AudioSession.overrideOutput({ type: 'speaker' });
 };
+```
 
+### Listen for interruptions
+
+Get notified when the audio session is interrupted, e.g. by an incoming phone call. The `shouldResume` flag tells you whether playback should resume after the interruption ended:
+
+```typescript
 const addInterruptionListener = async () => {
   await AudioSession.addListener('interruption', event => {
     console.log('Interruption:', event.type, event.shouldResume);
   });
 };
+```
 
+### Listen for route changes
+
+Get notified when the audio route changes, e.g. when headphones are plugged in or out:
+
+```typescript
 const addRouteChangeListener = async () => {
   await AudioSession.addListener('routeChange', event => {
     console.log('Route change:', event.reason, event.outputs);
   });
 };
+```
 
+### Remove all listeners
+
+Remove all listeners that were registered for this plugin:
+
+```typescript
 const removeAllListeners = async () => {
   await AudioSession.removeAllListeners();
 };
@@ -379,6 +429,43 @@ The audio output port to route playback to.
 The audio session returned by [`AVAudioSession.sharedInstance()`](https://developer.apple.com/documentation/avfaudio/avaudiosession) is a **single, app-wide** object. This plugin gives you **manual** control over it, but so do other audio-related plugins (such as the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and Speech Recognition plugins) and the underlying platform APIs they use.
 
 Because the session is shared, the **last write wins**: calling `configure(...)` may override the category, mode or options that another plugin has set, and vice versa. This plugin cannot prevent that. If you combine this plugin with other audio plugins, make sure to reconfigure the session whenever you switch between playback, recording and other audio scenarios.
+
+## FAQ
+
+### Is this plugin available on Android or the Web?
+
+No, this plugin is only available on iOS since it controls the iOS-specific [audio session](https://developer.apple.com/documentation/avfaudio/avaudiosession). On Android and Web, all methods reject as unimplemented, so you can safely include the plugin in a cross-platform app.
+
+### Why are my audio session settings overridden by other plugins?
+
+The audio session is a single, app-wide object that is shared with other audio-related plugins (such as the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) and [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) plugins) and the underlying platform APIs they use. The last write wins, so another plugin may override the category, mode or options you have set. Reconfigure the session whenever you switch between playback, recording and other audio scenarios. See the [Session Ownership](#session-ownership) section for more details.
+
+### How can my app play audio without interrupting other apps?
+
+Use the `mixWithOthers` category option when calling `configure(...)` to mix your audio with audio from other active sessions instead of interrupting them. Alternatively, use the `duckOthers` option to reduce the volume of other sessions while your audio plays.
+
+### How do I resume playback after a phone call interrupted my app?
+
+Add a listener for the `interruption` event. When the event's `type` is `ended` and `shouldResume` is `true`, playback should be resumed. See [Listen for interruptions](#listen-for-interruptions) for an example.
+
+### How do I route audio to the loudspeaker?
+
+Call `overrideOutput(...)` with the type `speaker` to route playback to the built-in speaker, and with `default` to restore the default route. If you want audio to be routed to the speaker by default when no other route is connected, use the `defaultToSpeaker` category option when calling `configure(...)`.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
+- [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

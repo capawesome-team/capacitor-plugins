@@ -19,9 +19,14 @@ Capacitor plugin to keep the screen awake.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Keep Awake plugin is typically used whenever the screen must stay visible without user interaction, for example:
+
+- **Media playback**: Keep the screen on while users watch videos or follow along with content.
+- **Navigation and tracking**: Prevent the display from turning off during turn-by-turn navigation or workout tracking.
+- **Hands-free reading**: Keep recipes, sheet music, or step-by-step instructions visible while the user's hands are busy.
+- **Dashboards and kiosks**: Display live data or presentations without the screen dimming or sleeping.
 
 ## Compatibility
 
@@ -59,22 +64,48 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { KeepAwake } from '@capawesome/capacitor-keep-awake';
+```
 
+### Keep the screen awake
+
+Prevent the screen from dimming or turning off. The screen is kept awake until `allowSleep(...)` is called or the app is restarted. This only affects your app and is not a system-wide setting:
+
+```typescript
 const keepAwake = async () => {
   await KeepAwake.keepAwake();
 };
+```
 
+### Allow the screen to sleep again
+
+Restore the default screen sleep behavior at any time:
+
+```typescript
 const allowSleep = async () => {
   await KeepAwake.allowSleep();
 };
+```
 
+### Check if the screen is kept awake
+
+Read whether the screen is currently kept awake:
+
+```typescript
 const isKeptAwake = async () => {
   const { keptAwake } = await KeepAwake.isKeptAwake();
   return keptAwake;
 };
+```
 
+### Check if the feature is available
+
+On the Web, keeping the screen awake depends on whether the browser supports the [Screen Wake Lock API](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API). On Android and iOS, this always returns `true`:
+
+```typescript
 const isAvailable = async () => {
   const { available } = await KeepAwake.isAvailable();
   return available;
@@ -194,6 +225,42 @@ Keep the following in mind when using this plugin:
 - **App scope**: Keeping the screen awake only affects your app and is not a system-wide setting.
 - **State reset**: The screen is only kept awake until `allowSleep(...)` is called or the app is restarted.
 - **Web auto-release**: On the Web, the underlying [Screen Wake Lock](https://developer.mozilla.org/en-US/docs/Web/API/Screen_Wake_Lock_API) is automatically released by the browser whenever the tab becomes hidden (for example, when the user switches tabs or minimizes the window). The plugin automatically re-acquires the wake lock once the tab becomes visible again, as long as `allowSleep(...)` has not been called in the meantime.
+
+## FAQ
+
+### Which platforms does this plugin support?
+
+The plugin supports Android, iOS and Web. On the Web, it relies on the Screen Wake Lock API, so availability depends on the browser. You can check this at runtime with the `isAvailable()` method, which always returns `true` on Android and iOS.
+
+### Does keeping the screen awake affect other apps?
+
+No, keeping the screen awake only affects your app and is not a system-wide setting. As soon as the user leaves your app, the default screen sleep behavior of the device applies again.
+
+### How long is the screen kept awake?
+
+The screen is kept awake until `allowSleep(...)` is called or the app is restarted. The setting is not persisted across app restarts.
+
+### Why does the screen sleep again on the Web after switching tabs?
+
+On the Web, the browser automatically releases the underlying wake lock whenever the tab becomes hidden, for example when the user switches tabs or minimizes the window. The plugin automatically re-acquires the wake lock once the tab becomes visible again, as long as `allowSleep(...)` has not been called in the meantime. See the [Behavior](#behavior) section for details.
+
+### Do I need any permissions or configuration?
+
+No, the plugin does not require any permissions or configuration on any platform. Simply install it and call `keepAwake()`.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
+- [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation.
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

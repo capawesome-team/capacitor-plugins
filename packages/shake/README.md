@@ -18,9 +18,14 @@ Capacitor plugin to detect shake gestures.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Shake plugin is typically used to trigger an action when the user shakes the device, for example:
+
+- **Feedback and bug reporting**: Let users shake the device to open a feedback or bug report dialog.
+- **Debug menus**: Open a hidden developer or debug menu in internal builds when the device is shaken.
+- **Undo actions**: Offer a shake-to-undo interaction, a gesture many users already know from iOS.
+- **Refresh content**: Reload data or shuffle content when a shake gesture is detected.
 
 ## Compatibility
 
@@ -60,16 +65,30 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Shake } from '@capawesome/capacitor-shake';
+```
 
+### Detect shake gestures
+
+Attach a `shake` listener and start watching for shake gestures. Use the `sensitivity` option to control how strong a shake must be to trigger an event (see [Sensitivity Levels](#sensitivity-levels)). Only available on Android and iOS:
+
+```typescript
 const startWatching = async () => {
   await Shake.addListener('shake', () => {
     console.log('Shake detected!');
   });
   await Shake.startWatching({ sensitivity: 'medium' });
 };
+```
 
+### Stop detecting shake gestures
+
+Stop watching and remove all listeners when you no longer need shake detection, for example when the user leaves the corresponding screen. The sensor is only active while you are watching, so this keeps the plugin battery-friendly:
+
+```typescript
 const stopWatching = async () => {
   await Shake.stopWatching();
   await Shake.removeAllListeners();
@@ -194,6 +213,38 @@ The `sensitivity` option controls how strong a shake must be to emit a `shake` e
 - `light`: A gentle shake is enough to trigger an event.
 - `medium`: A moderate shake is required to trigger an event (default).
 - `hard`: Only a strong shake triggers an event.
+
+## FAQ
+
+### Which platforms are supported by the Shake plugin?
+
+The plugin is available on Android and iOS. On the Web, all methods reject as unimplemented, since browsers do not provide a comparable shake detection API.
+
+### Does shake detection drain the battery?
+
+No, the plugin is designed to be battery-friendly. The motion sensor is only active between `startWatching(...)` and `stopWatching()`, so no sensor data is processed while you are not watching for shakes. Remember to call `stopWatching()` and `removeAllListeners()` when you no longer need shake detection.
+
+### How can I control how strong a shake must be?
+
+Pass the `sensitivity` option to `startWatching(...)`. Use `light` to detect gentle shakes, `medium` (the default) for moderate shakes, or `hard` to only detect strong shakes. See [Sensitivity Levels](#sensitivity-levels) for details.
+
+### Do I need any permissions to detect shake gestures?
+
+No, the plugin does not require any additional permissions or privacy descriptions on Android or iOS. You can install it and start watching for shake gestures right away.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
+- [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

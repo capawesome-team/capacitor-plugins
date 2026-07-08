@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-grafana-faro",
   "version": "0.1.0",
-  "description": "Unofficial Capacitor plugin for Grafana Faro.",
+  "description": "Unofficial Capacitor plugin for Grafana Faro on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,15 @@
     "android",
     "ios",
     "grafana",
-    "faro"
+    "faro",
+    "capacitor-plugin",
+    "grafana faro",
+    "real user monitoring",
+    "rum",
+    "observability",
+    "crash reporting",
+    "error tracking",
+    "frontend monitoring"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

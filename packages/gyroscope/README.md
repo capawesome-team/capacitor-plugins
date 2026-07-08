@@ -10,7 +10,7 @@ Capacitor plugin to read the device's gyroscope sensor.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for gyroscope measurements. Here are some of the key features:
+The Capacitor Gyroscope plugin is one of the most complete motion sensing solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - ⚡ **Real-time measurements**: Continuous gyroscope data with event listeners.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Gyroscope plugin is typically used whenever an app needs to react to the rotation of the device, for example:
+
+- **Motion-controlled games**: Use the real-time rotation rate to steer a character or vehicle by tilting the device.
+- **Immersive experiences**: Rotate 360° views or augmented reality scenes based on the device's rotation.
+- **Gesture detection**: Detect rotation gestures such as twisting the device to trigger actions in your app.
+- **Motion analysis**: Record the rotation rate around the x, y, and z axes to analyze movement patterns.
 
 ## Compatibility
 
@@ -81,21 +86,41 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Gyroscope } from '@capawesome/capacitor-gyroscope';
+```
 
+### Check if the gyroscope is available
+
+Check whether the device has a gyroscope sensor before using the other methods:
+
+```typescript
+const isAvailable = async () => {
+  const result = await Gyroscope.isAvailable();
+  return result.available;
+};
+```
+
+### Get a single measurement
+
+Get the most recent measurement from the gyroscope sensor. The rotation rate around the x, y, and z axes is reported in radians per second (rad/s):
+
+```typescript
 const getMeasurement = async () => {
   const measurement = await Gyroscope.getMeasurement();
   console.log('X: ', measurement.x);
   console.log('Y: ', measurement.y);
   console.log('Z: ', measurement.z);
 };
+```
 
-const isAvailable = async () => {
-  const result = await Gyroscope.isAvailable();
-  return result.available;
-};
+### Receive continuous measurement updates
 
+Add a listener for the `measurement` event and start the measurement updates to receive the rotation rate in real time. The `measurement` event is only available on Android and iOS:
+
+```typescript
 const startMeasurementUpdates = async () => {
   await Gyroscope.addListener('measurement', measurement => {
     console.log('X: ', measurement.x);
@@ -108,7 +133,13 @@ const startMeasurementUpdates = async () => {
 const stopMeasurementUpdates = async () => {
   await Gyroscope.stopMeasurementUpdates();
 };
+```
 
+### Check and request permissions
+
+Check and request the permission to access the gyroscope sensor:
+
+```typescript
 const checkPermissions = async () => {
   const result = await Gyroscope.checkPermissions();
   return result;
@@ -118,7 +149,13 @@ const requestPermissions = async () => {
   const result = await Gyroscope.requestPermissions();
   return result;
 };
+```
 
+### Remove all listeners
+
+Remove all listeners when you no longer need them:
+
+```typescript
 const removeAllListeners = async () => {
   await Gyroscope.removeAllListeners();
 };
@@ -323,6 +360,43 @@ Stop emitting `measurement` events.
 <code><a href="#measurement">Measurement</a></code>
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms does the plugin support?
+
+The plugin supports Android and iOS. The continuous `measurement` event is only emitted on Android and iOS, so there is no gyroscope support in the browser.
+
+### What units are the measurements reported in?
+
+Each measurement contains the rotation rate around the x, y, and z axes in radians per second (rad/s).
+
+### What is the difference between `getMeasurement` and the `measurement` event?
+
+The `getMeasurement()` method returns the most recent measurement from the gyroscope sensor once. If you need continuous real-time updates instead, add a listener for the `measurement` event and call `startMeasurementUpdates()`. Call `stopMeasurementUpdates()` when you no longer need updates.
+
+### Do I need any permissions to read the gyroscope?
+
+The plugin provides the `checkPermissions()` and `requestPermissions()` methods to manage access to the gyroscope sensor. On iOS, you also have to add the `NSMotionUsageDescription` key to your `Info.plist` file, which tells the user why your app needs access to the device's motion data (see [Installation](#installation)).
+
+### How do I know if the device has a gyroscope sensor?
+
+Call the `isAvailable()` method. It returns whether the gyroscope sensor is available on the device, so you can hide or disable motion features on devices without a gyroscope.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+- [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure measured in hectopascals (hPa).
+- [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device compass heading.
+- [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/): Retrieve motion data such as the number of steps and the distance traveled.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

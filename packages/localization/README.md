@@ -21,9 +21,15 @@ Capacitor plugin to read the user's localization preferences, such as preferred 
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Localization plugin is typically used to adapt an app to the user's language and regional preferences, for example:
+
+- **Localized formatting**: Format numbers and prices with the correct decimal separator, grouping separator, and currency symbol for the user's locale.
+- **Right-to-left layouts**: Switch the layout direction of your app based on the text direction of the user's preferred language.
+- **Unit display**: Show distances and weights in metric or imperial units depending on the user's measurement system.
+- **Date and time display**: Render times in the user's time zone and clock format, and start calendar views on the correct first day of the week.
+- **Language selection**: Preselect the best matching app language from the user's preferred locales.
 
 ## Compatibility
 
@@ -61,14 +67,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Localization } from '@capawesome/capacitor-localization';
+```
 
+### Get the user's preferred locales
+
+Read the user's preferred locales, ordered by preference. The first entry is the most preferred locale. Each locale contains the language tag, region code, currency, number separators, text direction, and measurement system:
+
+```typescript
 const getLocales = async () => {
   const { locales } = await Localization.getLocales();
   return locales;
 };
+```
 
+### Read the user's regional settings
+
+Read the user's regional formatting settings, such as the time zone, whether a 24-hour clock is preferred, and the first day of the week:
+
+```typescript
 const getSettings = async () => {
   const settings = await Localization.getSettings();
   return settings;
@@ -183,6 +203,38 @@ The writing direction of a language.
 ## Platform Support
 
 The plugin returns `null` for any field that a platform cannot determine. On the **Web** platform, `currencyCode`, `currencySymbol`, and `measurementSystem` are always `null`, because the browser does not expose this information.
+
+## FAQ
+
+### Why are some locale fields `null` on the Web?
+
+The plugin returns `null` for any field that a platform cannot determine. On the Web, `currencyCode`, `currencySymbol`, and `measurementSystem` are always `null` because the browser does not expose this information. On Android and iOS, the plugin has full access to the system's localization settings.
+
+### Do I need any permissions to use this plugin?
+
+No, reading the user's localization preferences does not require any permissions. No additional configuration is required on any platform either, so the plugin works right after [installation](#installation).
+
+### How do I detect right-to-left languages?
+
+Every locale returned by `getLocales()` contains a `textDirection` property that is either `ltr` (left-to-right, e.g. English or German) or `rtl` (right-to-left, e.g. Arabic or Hebrew). You can use this value to switch the layout direction of your app.
+
+### How is this plugin different from the App Language plugin?
+
+The Localization plugin reads the user's system-level preferences, such as preferred locales, time zone, and regional formatting settings. The [App Language](https://capawesome.io/docs/sdks/capacitor/app-language/) plugin, on the other hand, manages the app's own language override, independent of the device language.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Language](https://capawesome.io/docs/sdks/capacitor/app-language/): Manage the app's own language override, independent of the device language.
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, and operating system.
+- [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Native date and time selection with localization and theming support.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

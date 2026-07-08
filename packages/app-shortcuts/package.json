@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-app-shortcuts",
   "version": "8.0.1",
-  "description": "Capacitor plugin to manage app shortcuts and quick actions.",
+  "description": "Capacitor plugin to manage app shortcuts and quick actions on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,13 @@
     "ionic",
     "android",
     "ios",
-    "app shortcuts"
+    "app shortcuts",
+    "capacitor-plugin",
+    "quick actions",
+    "home screen shortcuts",
+    "dynamic shortcuts",
+    "launcher shortcuts",
+    "home screen quick actions"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

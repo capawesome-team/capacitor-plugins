@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-app-launcher",
   "version": "0.0.1",
-  "description": "Capacitor plugin to check if an app can be opened and to open it.",
+  "description": "Capacitor plugin to check if an app can be opened and to open it on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -39,7 +39,14 @@
     "plugin",
     "native",
     "app launcher",
-    "deep link"
+    "deep link",
+    "capacitor-plugin",
+    "open app",
+    "launch app",
+    "url scheme",
+    "package name",
+    "open external app",
+    "can open url"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -8,9 +8,14 @@ Capacitor plugin for [libSQL](https://docs.turso.tech/libsql) databases.[^1]
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The libSQL plugin is typically used whenever an app needs a SQL database, for example:
+
+- **Offline-first apps**: Store data in a local database file on the device and synchronize it with a remote server using the `sync(...)` method.
+- **Remote databases**: Connect directly to a remote libSQL database, such as one hosted on Turso, using a URL and authentication token.
+- **Structured local storage**: Create tables and insert, update, delete, and query data with SQL statements and bound values.
+- **Atomic operations**: Group multiple statements into a transaction that can be committed or rolled back as a whole.
 
 ## Compatibility
 
@@ -53,16 +58,30 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Libsql } from '@capawesome/capacitor-libsql';
+```
 
+### Connect to a local database
+
+Connect to a local database file on the device. If no file exists at the specified path, a new file is created. If neither a path nor a URL is provided, the plugin creates a new in-memory database. This method must be called before any other methods that interact with the database:
+
+```typescript
 const connectToLocalDatabase = async () => {
   const { connectionId } = await Libsql.connect({
     path: 'database.db',
   });
   console.log('Connected to database with ID:', connectionId);
 };
+```
 
+### Connect to a remote database
+
+Connect to a remote libSQL database using its URL and an authentication token:
+
+```typescript
 const connectToRemoteDatabase = async () => {
   const { connectionId } = await Libsql.connect({
     url: 'libsql://your-database-url.turso.io',
@@ -70,7 +89,13 @@ const connectToRemoteDatabase = async () => {
   });
   console.log('Connected to remote database with ID:', connectionId);
 };
+```
 
+### Query data
+
+Execute a `SELECT` statement and retrieve the result set:
+
+```typescript
 const query = async () => {
   const result = await Libsql.query({
     connectionId: 'my-connection-id',
@@ -78,7 +103,13 @@ const query = async () => {
   });
   console.log('Query result:', result.rows);
 };
+```
 
+### Insert, update, and delete data
+
+Execute any SQL statement, including `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`, optionally with bound values:
+
+```typescript
 const execute = async () => {
   await Libsql.execute({
     connectionId: 'my-connection-id',
@@ -87,7 +118,13 @@ const execute = async () => {
   });
   console.log('Insert executed successfully');
 };
+```
 
+### Run multiple statements in a transaction
+
+Begin a transaction, execute statements as part of it, and either commit or roll back all changes. Transactions are only available on Android:
+
+```typescript
 const performTransaction = async () => {
   const { transactionId } = await Libsql.beginTransaction({
     connectionId: 'my-connection-id',
@@ -112,7 +149,13 @@ const performTransaction = async () => {
     console.error('Transaction rolled back due to error:', error);
   }
 };
+```
 
+### Synchronize with a remote server
+
+Synchronize the database with the remote server:
+
+```typescript
 const sync = async () => {
   await Libsql.sync({
     connectionId: 'my-connection-id',
@@ -403,5 +446,40 @@ Available on iOS and Android.
 <code>string | number | null</code>
 
 </docgen-api>
+
+## FAQ
+
+### Can I use this plugin with Turso?
+
+Yes, you can connect to a remote libSQL database hosted on [Turso](https://docs.turso.tech/libsql) by passing the database URL and an authentication token to the `connect(...)` method, as shown in the [usage example](#connect-to-a-remote-database) above.
+
+### Do I need a remote database to use this plugin?
+
+No, the plugin also works with purely local databases. If you pass a `path` to the `connect(...)` method, the plugin uses a database file on the device and creates it if it does not exist. If you provide neither a path nor a URL, the plugin creates a new in-memory database.
+
+### Are transactions supported?
+
+Yes, you can use the `beginTransaction(...)`, `commitTransaction(...)` and `rollbackTransaction(...)` methods to group multiple statements into a transaction. Note that transactions are only available on Android.
+
+### What is the difference between the `query` and `execute` methods?
+
+The `query(...)` method is used to execute `SELECT` statements and retrieve the result set. The `execute(...)` method is used for any other SQL statement, including `INSERT`, `UPDATE`, `DELETE`, and `CREATE TABLE`, and does not return a result set. Both methods support binding values to the statement.
+
+### How do I keep a local database in sync with a remote server?
+
+Call the `sync(...)` method with the ID of the connection you want to synchronize. This synchronizes the database with the remote server and is available on Android and iOS.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords or tokens.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by CHISELSTRIKE INC. or any of their affiliates or subsidiaries.

@@ -19,9 +19,14 @@ Capacitor plugin to show native toast notifications.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Toast plugin is typically used to give users brief, non-blocking feedback, for example:
+
+- **Success confirmations**: Confirm that an action such as saving or sending was completed.
+- **Error notices**: Inform users about a failed action without interrupting their flow.
+- **Clipboard feedback**: Confirm that a value was copied to the clipboard.
+- **Status updates**: Show short status messages such as a lost network connection.
 
 ## Compatibility
 
@@ -67,9 +72,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Toast, ToastDuration, ToastPosition } from '@capawesome/capacitor-toast';
+```
 
+### Show a toast
+
+Show a short, non-blocking text notification. Use the `duration` option to choose between a short (about 2000 ms) and a long (about 3500 ms) display duration, and the `position` option to show the toast at the top, center or bottom of the screen:
+
+```typescript
 const show = async () => {
   await Toast.show({
     text: 'Hello World!',
@@ -149,6 +162,43 @@ This plugin offers an API very similar to the official [`@capacitor/toast`](http
 - Replace the dependency `@capacitor/toast` with `@capawesome/capacitor-toast`.
 - The web implementation is self-contained, so the [`@ionic/pwa-elements`](https://github.com/ionic-team/pwa-elements) package is no longer required for toasts.
 - The `duration` and `position` options are now typed enums with uppercase string values (e.g. `ToastDuration.Short` → `'SHORT'`, `ToastPosition.Bottom` → `'BOTTOM'`) instead of lowercase string literals.
+
+## FAQ
+
+### Why is my toast always shown at the bottom of the screen on Android?
+
+On Android 12 and newer, the operating system ignores the requested position and always shows toasts at the bottom of the screen. This is a system restriction and not a bug of this plugin.
+
+### How long is a toast displayed?
+
+You can choose between two durations with the `duration` option: `ToastDuration.Short` shows the toast for about 2000 ms and `ToastDuration.Long` for about 3500 ms. If you don't set the option, the short duration is used by default.
+
+### How is this plugin different from the official `@capacitor/toast` plugin?
+
+The API is very similar, so migrating is straightforward. The main differences are that the web implementation is self-contained (so the `@ionic/pwa-elements` package is no longer required for toasts) and that the `duration` and `position` options are typed enums with uppercase string values. See [Migrating from `@capacitor/toast`](#migrating-from-capacitortoast) for details.
+
+### Do I need to install `@ionic/pwa-elements` for the web?
+
+No, the plugin ships with a self-contained web implementation that has no additional peer dependencies. Toasts work on the web out of the box after [installing](#installation) the plugin.
+
+### Do I need any permissions or configuration to use this plugin?
+
+No, the plugin does not require any permissions or configuration on Android, iOS, or Web. Simply [install](#installation) it and call the `show(...)` method.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
+- [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
+- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+- [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

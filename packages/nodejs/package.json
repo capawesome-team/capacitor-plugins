@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-nodejs",
   "version": "0.1.0",
-  "description": "Capacitor plugin for running Node.js in mobile apps.",
+  "description": "Capacitor plugin for running Node.js in mobile apps on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -39,7 +39,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "nodejs",
+    "node",
+    "node.js",
+    "nodejs mobile",
+    "node.js runtime",
+    "javascript runtime"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

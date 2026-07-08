@@ -10,7 +10,7 @@ Capacitor plugin for seamless date and time selection with advanced features lik
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for date and time picking. Here are some of the key features:
+The Capacitor Datetime Picker plugin is one of the most feature-rich date and time selection solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📅 **Multiple modes**: Date, time, datetime, and month picker modes.
@@ -24,9 +24,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Datetime Picker plugin is typically used whenever an app needs the user to enter a date or time, for example:
+
+- **Appointment booking**: Let users pick a date and time for a reservation and restrict the selection with minimum and maximum constraints.
+- **Profile forms**: Ask for a date of birth with a native, localized date picker.
+- **Reminders and alarms**: Let users choose a time of day using the native time picker, optionally with a custom minute interval on iOS.
+- **Reports and statements**: Let users select a month and year only, for example to filter a monthly report, using the `month` mode.
 
 ## Compatibility
 
@@ -73,9 +78,17 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { DatetimePicker } from '@capawesome-team/capacitor-datetime-picker';
+```
 
+### Present a date, time, or datetime picker
+
+Open the native picker with the `present(...)` method. Use the `mode` option to choose between a date, time, or datetime picker, and customize the theme, locale, and button texts as needed. Only available on Android and iOS:
+
+```typescript
 const present = async () => {
   const date = new Date('1995-12-24T02:23:00');
 
@@ -90,7 +103,13 @@ const present = async () => {
 
   return value;
 };
+```
 
+### Let the user pick a month and year only
+
+Use the `month` mode to let the user pick a month and year without a day or time, for example to filter a monthly report. The returned value is the first day of the selected month:
+
+```typescript
 const presentMonth = async () => {
   const { value } = await DatetimePicker.present({
     cancelButtonText: 'Cancel',
@@ -187,9 +206,45 @@ Only available on Android and iOS.
 
 </docgen-api>
 
+## FAQ
+
+### What happens when the user cancels the picker?
+
+The `present(...)` method throws an error if the input is canceled or dismissed by the user. Make sure to catch this error in your code, for example to keep the previous value.
+
+### How can I close the picker programmatically?
+
+Use the `cancel()` method to cancel the currently active datetime picker, for example when your app is sent to the background. If there is no active picker, this method does nothing.
+
+### How do I restrict which dates the user can select?
+
+Use the `min` and `max` options of the `present(...)` method to define the earliest and latest date and time to accept. The format of both values must match the value of the `format` parameter.
+
+### How do I let the user pick only a month and year?
+
+Set the `mode` option to `month`. Unlike the other modes, the month picker uses a custom (non-native) UI on both platforms, because neither Android nor iOS provide a native month-only picker. The returned value is the first day of the selected month at 00:00:00 local time. See the [usage example](#let-the-user-pick-a-month-and-year-only) above.
+
+### Can I change the language and theme of the picker?
+
+Yes, use the `locale` option with a BCP 47 language tag to define the language of the UI, and the `theme` option to choose between `auto`, `light`, and `dark`. With `auto`, the system theme is used.
+
+### Does this plugin work on the Web?
+
+No, this plugin is only available on Android and iOS, where it uses platform-specific picker components. The `present(...)` and `cancel()` methods are not available on the Web.
+
+## Related Plugins
+
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
+- [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
+- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's preferred locales to localize the picker.
+
 ## Credits
 
 The iOS implementation of this plugin is based on [RPicker](https://github.com/rheyansh/RPicker) which is licensed under [MIT](https://github.com/rheyansh/RPicker/blob/master/LICENSE).
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

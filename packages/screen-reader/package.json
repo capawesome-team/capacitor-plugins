@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-screen-reader",
   "version": "0.0.1",
-  "description": "Capacitor plugin to interact with screen readers.",
+  "description": "Capacitor plugin to interact with screen readers on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,13 @@
     "screen reader",
     "accessibility",
     "voiceover",
-    "talkback"
+    "talkback",
+    "capacitor-plugin",
+    "a11y",
+    "accessibility announcement",
+    "screen reader detection",
+    "aria-live",
+    "assistive technology"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

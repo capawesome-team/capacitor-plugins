@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-libsql",
   "version": "0.2.2",
-  "description": "Capacitor plugin for libSQL databases.",
+  "description": "Capacitor plugin for libSQL databases on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,7 +36,16 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "libsql",
+    "turso",
+    "sqlite",
+    "sql database",
+    "local database",
+    "remote database",
+    "database sync",
+    "offline-first"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

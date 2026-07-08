@@ -37,7 +37,14 @@
     "native",
     "ionic",
     "android",
-    "battery optimization"
+    "battery optimization",
+    "capacitor-plugin",
+    "doze mode",
+    "app standby",
+    "power management",
+    "battery saver",
+    "ignore battery optimizations",
+    "background execution"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",

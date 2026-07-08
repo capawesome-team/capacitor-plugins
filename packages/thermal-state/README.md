@@ -17,9 +17,14 @@ Capacitor plugin to read the device thermal state and react before the operating
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Thermal State plugin is typically used to adapt an app's workload to the device's thermal condition, for example:
+
+- **Video and streaming apps**: Lower the video quality or frame rate when the thermal state becomes serious.
+- **Games and 3D rendering**: Reduce graphical effects to help the device cool down before the operating system throttles the app.
+- **Machine learning**: Defer on-device ML inference or other background work while the thermal state is elevated.
+- **Data prefetching**: Reduce the prefetching rate or pause background sync when the device gets warm.
 
 ## Compatibility
 
@@ -70,20 +75,40 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { ThermalState } from '@capawesome/capacitor-thermal-state';
+```
 
+### Get the current thermal state
+
+Read the current thermal state of the device, for example to decide how much work your app should perform. Only available on Android (API level 29+) and iOS:
+
+```typescript
 const getThermalState = async () => {
   const { state } = await ThermalState.getThermalState();
   return state;
 };
+```
 
+### Listen for thermal state changes
+
+Get notified whenever the thermal state of the device changes. The device is only observed while at least one listener is attached. Only available on Android (API level 29+) and iOS:
+
+```typescript
 const addThermalStateChangeListener = async () => {
   await ThermalState.addListener('thermalStateChange', event => {
     console.log(event.state);
   });
 };
+```
 
+### Remove all listeners
+
+Remove all listeners for this plugin when you no longer need to observe the thermal state:
+
+```typescript
 const removeAllListeners = async () => {
   await ThermalState.removeAllListeners();
 };
@@ -211,6 +236,41 @@ Use the thermal state to progressively reduce your app's workload before the ope
 | `fair`     | Reduce non-essential work, e.g. lower the prefetching rate.                             |
 | `serious`  | Reduce the frame rate, pause prefetching, and defer background or ML work.              |
 | `critical` | Reduce the workload as much as possible to help the device cool down.                   |
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin is available on Android and iOS. On Android, reading the thermal state requires Android 10 (API level 29) or newer. On the web, all methods reject as unimplemented.
+
+### Why does `getThermalState` reject on my Android device?
+
+Reading the thermal state requires Android 10 (API level 29) or newer. On older Android versions, `getThermalState(...)` rejects as unavailable and the `thermalStateChange` event is never emitted.
+
+### What do the different thermal states mean?
+
+The plugin reports one of four states: `nominal` means the thermal state is within normal limits, `fair` means it is slightly elevated, `serious` means it is high and the workload should be reduced, and `critical` means performance is significantly impacted and the workload should be reduced as much as possible. See [Handling the Thermal State](#handling-the-thermal-state) for suggested reactions to each state.
+
+### Why is the `thermalStateChange` event not emitted?
+
+The device is only observed while at least one listener is attached, so make sure you have added a listener for the `thermalStateChange` event. Also note that the event is never emitted on Android versions older than Android 10 (API level 29).
+
+### Do I need any permissions or configuration to use this plugin?
+
+No, the plugin does not require any permissions or configuration. Simply [install](#installation) it and call its methods.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information such as the model, manufacturer, operating system, and memory.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

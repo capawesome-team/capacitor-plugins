@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-badge",
   "version": "8.0.2",
-  "description": "Capacitor plugin to access and update the badge number of the app icon.",
+  "description": "Capacitor plugin to access and update the badge number of the app icon on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,14 @@
     "android",
     "ios",
     "web",
-    "badge"
+    "badge",
+    "capacitor-plugin",
+    "app icon badge",
+    "badge count",
+    "notification badge",
+    "app badge",
+    "badge number",
+    "unread count"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

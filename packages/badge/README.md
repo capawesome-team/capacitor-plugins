@@ -10,7 +10,7 @@ Capacitor plugin to access and update the badge number of the app icon.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for app icon badge management. Here are some of the key features:
+The Capacitor Badge plugin is one of the most complete app icon badge solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web (PWA).
 - 🔢 **Badge management**: Get, set, increase, decrease, and clear badge counts.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Badge plugin is typically used to show a count on the app icon that reflects pending items, for example:
+
+- **Unread messages**: Show the number of unread chat messages or emails on the app icon.
+- **Pending notifications**: Keep the badge in sync with the notifications the user has not yet seen.
+- **Open tasks**: Display the number of open to-dos, reminders, or items in a shopping cart.
+- **Automatic reset**: Clear the counter automatically when the user resumes the app using the `autoClear` configuration option.
 
 ## Compatibility
 
@@ -148,18 +153,38 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Badge } from '@capawesome/capacitor-badge';
+```
 
+### Get the current badge count
+
+Read the current badge count. The count won't be lost after a reboot or app restart:
+
+```typescript
 const get = async () => {
   const result = await Badge.get();
   return result.count;
 };
+```
 
+### Set the badge count
+
+Set the badge count to a specific value. On iOS, setting the count to `0` will remove the badge and also clear all notifications:
+
+```typescript
 const set = async (count: number) => {
   await Badge.set({ count });
 };
+```
 
+### Increase or decrease the badge count
+
+Increment or decrement the badge count by one, for example when a new message arrives or is read:
+
+```typescript
 const increase = async () => {
   await Badge.increase();
 };
@@ -167,16 +192,34 @@ const increase = async () => {
 const decrease = async () => {
   await Badge.decrease();
 };
+```
 
+### Clear the badge count
+
+Remove the badge from the app icon. On iOS, this will also clear all notifications:
+
+```typescript
 const clear = async () => {
   await Badge.clear();
 };
+```
 
+### Check if badges are supported
+
+Check whether the badge count is supported on the current device, for example since not every Android launcher supports badges:
+
+```typescript
 const isSupported = async () => {
   const result = await Badge.isSupported();
   return result.isSupported;
 };
+```
 
+### Check and request permissions
+
+Check and request the permission to display the badge:
+
+```typescript
 const checkPermissions = async () => {
   const result = await Badge.checkPermissions();
 };
@@ -356,6 +399,42 @@ Request permission to display badge.
 On **Android** not all launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger). All supported launchers are listed [there](https://github.com/leolin310148/ShortcutBadger#supported-launchers).
 
 On **Web**, the app must run as an installed PWA (in the taskbar or dock).
+
+## FAQ
+
+### Why is the badge not showing on my Android device?
+
+Not all Android launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger) under the hood, and only the launchers listed as [supported launchers](https://github.com/leolin310148/ShortcutBadger#supported-launchers) can display the badge. You can use the `isSupported()` method to check whether badges are supported on the current device.
+
+### Does the badge count persist after a reboot or app restart?
+
+Yes, by default the badge count is restored after a reboot or app restart. You can disable this behavior by setting the `persist` configuration option to `false`, see the [Configuration](#configuration) section.
+
+### How can I automatically clear the badge when the app is resumed?
+
+Set the `autoClear` configuration option to `true` to reset the counter after resuming the application. Note that on iOS, this will also clear all notifications. See the [Configuration](#configuration) section for an example.
+
+### Why does clearing the badge also remove my notifications on iOS?
+
+On iOS, calling `clear()` or setting the badge count to `0` removes the badge and also clears all notifications. This is platform behavior and cannot be changed by the plugin.
+
+### Does this plugin work on the Web?
+
+Yes, but the app must run as an installed PWA (in the taskbar or dock). Also make sure to check whether the browser supports badges using the `isSupported()` method.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Icon](https://capawesome.io/docs/sdks/capacitor/app-icon/): Change the app icon at runtime.
+- [App Shortcuts](https://capawesome.io/docs/sdks/capacitor/app-shortcuts/): Manage app shortcuts and quick actions.
+- [Firebase Cloud Messaging](https://capawesome.io/docs/sdks/capacitor/firebase/cloud-messaging/): Receive push notifications via Firebase Cloud Messaging.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

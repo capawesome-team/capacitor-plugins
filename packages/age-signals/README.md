@@ -10,7 +10,7 @@ Capacitor plugin to use the [Play Age Signals API](https://developer.android.com
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for age verification. Here are some of the key features:
+The Capacitor Age Signals plugin is one of the most complete age assurance solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔍 **Age Verification**: Request user age signals using Play Age Signals API (Android) and DeclaredAgeRange (iOS).
@@ -22,9 +22,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Age Signals plugin is typically used to comply with age verification requirements and to tailor the app experience to the user's age, for example:
+
+- **Age-gated content**: Restrict access to mature or sensitive content based on the user's verification status and age range.
+- **Regulatory compliance**: Meet US state age verification requirements by requesting age signals from Google Play and Apple's DeclaredAgeRange API.
+- **Parental supervision**: Detect supervised accounts and react to pending or denied parental approvals.
+- **Regional eligibility checks**: Use `checkEligibility()` on iOS to determine whether the user is in a region with additional age-related obligations.
+- **Automated testing**: Simulate different age verification scenarios in your Android tests using the built-in fake manager.
 
 ## Compatibility
 
@@ -86,16 +92,30 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AgeSignals } from '@capawesome/capacitor-age-signals';
+```
 
+### Request the user's age signals
+
+Call `checkAgeSignals(...)` to request the user's age signals. The result contains the user's verification status and, for supervised users, the lower and upper bounds of their age range:
+
+```typescript
 const checkAgeSignals = async () => {
   const result = await AgeSignals.checkAgeSignals();
   console.log('User Status:', result.userStatus);
   console.log('Age Lower:', result.ageLower);
   console.log('Age Upper:', result.ageUpper);
 };
+```
 
+### Check eligibility for age-gated features
+
+Check whether the user is in an applicable region that requires additional age-related obligations. Only available on iOS:
+
+```typescript
 const checkEligibility = async () => {
   const result = await AgeSignals.checkEligibility();
   console.log('Is Eligible:', result.isEligible);
@@ -407,6 +427,42 @@ Only available on Android.
 | **`SdkVersionOutdated`**          | <code>'SDK_VERSION_OUTDATED'</code>           | The Age Signals SDK version is outdated. Only available on Android.                                                                                              | 0.4.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Which age verification APIs does this plugin use?
+
+On Android, the plugin uses the [Play Age Signals API](https://developer.android.com/google/play/age-signals/overview) to request age signals from Google Play. On iOS, it uses Apple's [DeclaredAgeRange](https://developer.apple.com/documentation/declaredagerange/) framework, which requires the `com.apple.developer.declared-age-range` entitlement (see [Installation](#installation)).
+
+### What do the different user statuses mean?
+
+The `VERIFIED` status means Google verified that the user is over 18 using a method such as a government-issued ID, credit card, or facial age estimation. The `SUPERVISED` statuses indicate a supervised Google Account managed by a parent; use `ageLower` and `ageUpper` to determine the user's age range. The `UNKNOWN` status means the user is in an applicable region but their age could not be determined, and `EMPTY` means the user is either not in an applicable region or does not share their age with apps.
+
+### How can I test different age verification scenarios?
+
+On Android, the plugin integrates the `FakeAgeSignalsManager` API, which lets you simulate age signals without live responses from Google Play. Enable it with `setUseFakeManager(...)` and set the next result or exception with `setNextAgeSignalsResult(...)` and `setNextAgeSignalsException(...)`. See the [Testing](#testing) section for complete examples.
+
+### Why do I get a VerifyError in my Android unit tests?
+
+Due to a known issue in versions 0.0.1 and 0.0.2 of the Age Signals API, calling the builder method of `AgeSignalsResult` in unit tests may throw a `java.lang.VerifyError`. As a workaround, run your tests as Android instrumented tests within the `androidTest` source set.
+
+### Why does the plugin reject with an error like API_NOT_AVAILABLE or APP_NOT_OWNED?
+
+The Play Age Signals API requires an up-to-date Play Store app and Play Services on the device, so errors like `API_NOT_AVAILABLE`, `PLAY_STORE_VERSION_OUTDATED`, or `PLAY_SERVICES_NOT_FOUND` usually indicate outdated or missing Google Play components. The `APP_NOT_OWNED` error means the app was not installed by Google Play. Check the `ErrorCode` enum in the [API](#api) section for the full list of error codes.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request user authorization via Apple's App Tracking Transparency framework.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

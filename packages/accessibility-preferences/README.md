@@ -20,9 +20,15 @@ Capacitor plugin for reading the user's system accessibility preferences.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Accessibility Preferences plugin is typically used to adapt an app's user interface to the user's system accessibility settings, for example:
+
+- **Dynamic typography**: Scale your app's font sizes based on the system font scale so text stays readable for users who prefer larger text.
+- **Reduced animations**: Disable or simplify animations and transitions when the user prefers reduced motion.
+- **High-contrast themes**: Switch to a higher-contrast color scheme when the user has enabled increased contrast.
+- **Bold text support**: Render heavier font weights when the user prefers bold text.
+- **Color-aware rendering**: Adjust images or charts when the user has enabled inverted colors.
 
 ## Compatibility
 
@@ -60,9 +66,17 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { AccessibilityPreferences } from '@capawesome/capacitor-accessibility-preferences';
+```
 
+### Read the user's accessibility preferences
+
+Call `getPreferences()` to read all system accessibility preferences at once, such as the font scale, reduce motion, bold text, and contrast settings. Fields that the current platform cannot provide are set to `null` (see [Platform Availability](#platform-availability)):
+
+```typescript
 const getPreferences = async () => {
   const preferences = await AccessibilityPreferences.getPreferences();
   return preferences;
@@ -149,6 +163,42 @@ On iOS, `fontScale` is derived from the preferred content size category using th
 CSS media queries such as `prefers-reduced-motion` and `prefers-contrast` already cover reduce-motion and contrast inside the WebView. The value of this plugin is the fields CSS cannot see (`fontScale`, bold text, inverted colors) and having a single API for your app logic on all platforms.
 
 The screen reader _state_ (VoiceOver/TalkBack) is intentionally out of scope. Use the official [`@capacitor/screen-reader`](https://capacitorjs.com/docs/apis/screen-reader) plugin for that.
+
+## FAQ
+
+### Which accessibility preferences can be read on which platforms?
+
+Not every preference is exposed on every platform. The font scale, reduce motion, and high contrast settings are available on Android, iOS, and the Web, while bold text (Android 12+ and iOS), inverted colors (Android and iOS), and reduced transparency (iOS only) are more limited. Check the [Platform Availability](#platform-availability) section for the complete matrix.
+
+### Why is the font scale always 1.0 on the Web?
+
+The system font scale is not exposed to web content, so the plugin cannot read it in a browser. On Android, the plugin returns the system font scale factor, and on iOS the value is derived from the preferred content size category.
+
+### Why are some fields null in the result?
+
+Fields that the current platform cannot provide are set to `null` instead of a fabricated value. For example, `isBoldTextEnabled` is `null` on the Web and on Android versions below 12, and `isReduceTransparencyEnabled` is `null` on Android and Web because it is an iOS-only setting.
+
+### Do I still need this plugin if I use CSS media queries like prefers-reduced-motion?
+
+CSS media queries such as `prefers-reduced-motion` and `prefers-contrast` already cover reduce motion and contrast inside the WebView. The value of this plugin lies in the fields CSS cannot see, such as the font scale, bold text, and inverted colors, and in having a single API for your app logic on all platforms.
+
+### Can this plugin detect whether a screen reader like VoiceOver or TalkBack is running?
+
+No, the screen reader state is intentionally out of scope for this plugin. Use the official [`@capacitor/screen-reader`](https://capacitorjs.com/docs/apis/screen-reader) plugin for that.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Screen Reader](https://capawesome.io/docs/sdks/capacitor/screen-reader/): Interact with screen readers such as VoiceOver and TalkBack.
+- [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
+- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's localization preferences, such as preferred locales and time zone.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

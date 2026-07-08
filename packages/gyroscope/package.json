@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-gyroscope",
   "version": "0.0.1",
-  "description": "Capacitor plugin to read the device's gyroscope sensor.",
+  "description": "Capacitor plugin to read the device's gyroscope sensor on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "gyroscope",
+    "gyro",
+    "rotation rate",
+    "motion sensor",
+    "device motion",
+    "angular velocity"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

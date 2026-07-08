@@ -10,7 +10,7 @@ Capacitor plugin to access battery information.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for battery information. Here are some of the key features:
+The Capacitor Battery plugin is one of the most complete battery monitoring solutions for Capacitor apps. Here are some of the key features:
 
 - 🔋 **Battery level**: Read the current battery level of the device.
 - ⚡ **Battery state**: Read whether the device is charging, full or unplugged.
@@ -23,9 +23,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Battery plugin is typically used whenever an app should adapt its behavior to the device's power situation, for example:
+
+- **Energy-aware features**: Reduce background work, animations, or sync frequency when the battery level is low.
+- **Low power mode handling**: Disable power-hungry features when the user has enabled low power mode.
+- **Charging-dependent tasks**: Only start heavy tasks such as large downloads while the device is charging.
+- **Status display**: Show the current battery level and charging state inside your app, for example in a kiosk or fleet app.
+- **Reacting to changes**: Warn the user when the battery level drops by listening for change events.
 
 ## Compatibility
 
@@ -65,24 +71,50 @@ No configuration required for this plugin.
 
 ## Usage
 
+Import the plugin and call its methods:
+
 ```typescript
 import { Battery } from '@capawesome/capacitor-battery';
+```
 
+### Get the current battery level
+
+Read the current battery level of the device as a value between `0.0` and `1.0`:
+
+```typescript
 const getBatteryLevel = async () => {
   const { level } = await Battery.getBatteryLevel();
   return level;
 };
+```
 
+### Get the current battery state
+
+Check whether the device is charging, full or unplugged:
+
+```typescript
 const getBatteryState = async () => {
   const { state } = await Battery.getBatteryState();
   return state;
 };
+```
 
+### Check if low power mode is enabled
+
+Read whether the low power mode (power saver mode on Android, Low Power Mode on iOS) is currently enabled. Only available on Android and iOS:
+
+```typescript
 const isLowPowerModeEnabled = async () => {
   const { enabled } = await Battery.isLowPowerModeEnabled();
   return enabled;
 };
+```
 
+### Listen for battery changes
+
+Get notified when the battery level, battery state or low power mode changes. The device is only observed while at least one listener is attached. The `lowPowerModeChange` event is only available on Android and iOS:
+
+```typescript
 const addBatteryLevelChangeListener = async () => {
   await Battery.addListener('batteryLevelChange', event => {
     console.log('Battery level changed:', event.level);
@@ -100,7 +132,13 @@ const addLowPowerModeChangeListener = async () => {
     console.log('Low power mode changed:', event.enabled);
   });
 };
+```
 
+### Remove all listeners
+
+Remove all listeners that were registered for this plugin:
+
+```typescript
 const removeAllListeners = async () => {
   await Battery.removeAllListeners();
 };
@@ -356,6 +394,42 @@ Keep the following platform differences in mind when accessing battery informati
 - **Android**: The battery level and state are read from the sticky [`ACTION_BATTERY_CHANGED`](https://developer.android.com/reference/android/content/Intent#ACTION_BATTERY_CHANGED) broadcast. The low power mode reflects the [power saver mode](https://developer.android.com/reference/android/os/PowerManager#isPowerSaveMode()) of the device.
 - **iOS**: The battery level is not available on the iOS Simulator, so `getBatteryLevel()` rejects with an error there. Use a real device to test this method. The low power mode reflects the [Low Power Mode](https://support.apple.com/en-us/101604) of the device.
 - **Web**: The battery level and state are only available in browsers that implement the [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) (Chromium-based browsers). The low power mode is not available on the Web.
+
+## FAQ
+
+### Why does `getBatteryLevel` fail on the iOS Simulator?
+
+The battery level is not available on the iOS Simulator, so `getBatteryLevel()` rejects with an error there. Use a real device to test this method.
+
+### Does this plugin work in all browsers?
+
+No, on the Web the battery level and state are only available in browsers that implement the [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API), which are Chromium-based browsers. The low power mode is not available on the Web at all.
+
+### What is the range of the battery level value?
+
+The battery level is returned as a value between `0.0` and `1.0`, where `0.0` means the battery is empty and `1.0` means it is fully charged. Multiply the value by 100 if you want to display it as a percentage.
+
+### What does low power mode mean on Android and iOS?
+
+On Android, it refers to the [power saver mode](https://developer.android.com/reference/android/os/PowerManager#isPowerSaveMode()) of the device. On iOS, it refers to the [Low Power Mode](https://support.apple.com/en-us/101604). The `isLowPowerModeEnabled()` method and the `lowPowerModeChange` event are only available on Android and iOS.
+
+### Does listening for battery changes drain the battery?
+
+The device is only observed while at least one listener is attached. As soon as you remove all listeners, for example with `removeAllListeners()`, the plugin stops observing the device.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions on Android.
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, operating system, and memory.
+- [Thermal State](https://capawesome.io/docs/sdks/capacitor/thermal-state/): Read the device thermal state and react before the operating system throttles your app.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 
