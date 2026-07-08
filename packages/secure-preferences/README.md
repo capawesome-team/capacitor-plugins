@@ -3,8 +3,8 @@
 Capacitor plugin to securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -25,13 +25,14 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Newsletter
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.2.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Deprecated     |
 
 ## Guides
 
@@ -150,7 +151,7 @@ clear() => Promise<void>
 
 Clear all stored keys and values.
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -169,7 +170,7 @@ Get the value associated with a key.
 
 **Returns:** <code>Promise&lt;<a href="#getresult">GetResult</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -184,7 +185,7 @@ Get a list of all stored keys.
 
 **Returns:** <code>Promise&lt;<a href="#keysresult">KeysResult</a>&gt;</code>
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -201,7 +202,7 @@ Remove a value given its key.
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#removeoptions">RemoveOptions</a></code> |
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -221,7 +222,7 @@ This is for development purposes only and should NOT be used in production.
 | ------------- | ------------------------------------------------- |
 | **`options`** | <code><a href="#setoptions">SetOptions</a></code> |
 
-**Since:** 7.0.0
+**Since:** 0.1.0
 
 --------------------
 
@@ -233,36 +234,36 @@ This is for development purposes only and should NOT be used in production.
 
 | Prop        | Type                        | Description          | Since |
 | ----------- | --------------------------- | -------------------- | ----- |
-| **`value`** | <code>string \| null</code> | The retrieved value. | 7.0.0 |
+| **`value`** | <code>string \| null</code> | The retrieved value. | 0.1.0 |
 
 
 #### GetOptions
 
 | Prop      | Type                | Description                               | Since |
 | --------- | ------------------- | ----------------------------------------- | ----- |
-| **`key`** | <code>string</code> | The key associated with the stored value. | 7.0.0 |
+| **`key`** | <code>string</code> | The key associated with the stored value. | 0.1.0 |
 
 
 #### KeysResult
 
 | Prop       | Type                  | Description                | Since |
 | ---------- | --------------------- | -------------------------- | ----- |
-| **`keys`** | <code>string[]</code> | The available stored keys. | 7.0.0 |
+| **`keys`** | <code>string[]</code> | The available stored keys. | 0.1.0 |
 
 
 #### RemoveOptions
 
 | Prop      | Type                | Description        | Since |
 | --------- | ------------------- | ------------------ | ----- |
-| **`key`** | <code>string</code> | The key to remove. | 7.0.0 |
+| **`key`** | <code>string</code> | The key to remove. | 0.1.0 |
 
 
 #### SetOptions
 
 | Prop        | Type                | Description                               | Since |
 | ----------- | ------------------- | ----------------------------------------- | ----- |
-| **`key`**   | <code>string</code> | The key associated with the stored value. | 7.0.0 |
-| **`value`** | <code>string</code> | The value to store.                       | 7.0.0 |
+| **`key`**   | <code>string</code> | The key associated with the stored value. | 0.1.0 |
+| **`value`** | <code>string</code> | The value to store.                       | 0.1.0 |
 
 </docgen-api>
 
@@ -291,6 +292,34 @@ A quick decision tree:
 - Need queries, relations, or large datasets? → **SQLite**.
 
 The three plugins are designed to coexist. A real-world app might use Secure Preferences for app-managed tokens, SQLite for synced records, and Vault for the master password that protects everything else.
+
+### Is this plugin an alternative to Ionic Secure Storage?
+
+Yes, for key/value data. This plugin was built as an actively maintained alternative to [Ionic Secure Storage](https://ionic.io/products/secure-storage), which sunsets on December 31, 2027. Like Ionic Secure Storage's key/value API, it stores sensitive data encrypted at rest, backed by the Android Keystore and iOS Keychain. If you use Ionic Secure Storage's encrypted SQLite database, take a look at the [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/) plugin instead, which provides SQLCipher-based encryption.
+
+### How do I migrate from Ionic Secure Storage?
+
+For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool:
+
+```bash
+npx skills add capawesome-team/skills --skill ionic-enterprise-sdk-migration
+```
+
+Then use the following prompt:
+
+```
+Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Secure Storage to `@capawesome-team/capacitor-secure-preferences`.
+```
+
+Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/).
+
+## Next steps
+
+Here are a few resources to help you continue:
+
+- Read [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/) if you are migrating from Ionic Secure Storage.
+- Need biometric-protected, lockable storage? Check out the [Capacitor Vault plugin](https://capawesome.io/docs/sdks/capacitor/vault/).
+- Need encrypted relational storage? Check out the [Capacitor SQLite plugin](https://capawesome.io/docs/sdks/capacitor/sqlite/).
 
 ## Changelog
 

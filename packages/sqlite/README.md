@@ -3,8 +3,8 @@
 Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.[^1][^2][^3]
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -39,7 +39,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Newsletter
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Compatibility
 
@@ -1035,6 +1035,22 @@ A quick decision tree:
 - Need encrypted key/value storage the user must actively unlock with biometrics or a passcode? → **Vault**.
 
 The three plugins are designed to coexist. A real-world app might use Secure Preferences for app-managed tokens, SQLite for synced records, and Vault for the master password that protects everything else.
+
+### Is this plugin an alternative to Ionic Secure Storage?
+
+Yes. [Ionic Secure Storage](https://ionic.io/products/secure-storage), which sunsets on December 31, 2027, provides an encrypted SQLite database based on SQLCipher — and so does this plugin: it offers 256 bit AES encryption via SQLCipher on Android and iOS (see the [Encryption](#encryption) section). Since both are built on SQLCipher and this plugin applies SQLCipher's default configuration, an existing database created by Ionic Secure Storage can generally be opened with the same encryption key — but verify this with your own database before migrating. For a step-by-step guide, check out the blog post [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/). If you only store key/value data, the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin may be the better fit.
+
+### Is this plugin an alternative to the Capacitor Community SQLite plugin?
+
+Yes. Check out the blog post [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) for a detailed comparison of `@capacitor-community/sqlite` and this plugin, including a migration guide.
+
+## Next steps
+
+Here are a few resources to help you continue:
+
+- Read [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/) if you are migrating from Ionic Secure Storage.
+- Read [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) to see how this plugin compares.
+- Store small pieces of sensitive data like tokens with the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
 
 ## Changelog
 
