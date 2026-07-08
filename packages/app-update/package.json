@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-app-update",
   "version": "8.0.3",
-  "description": "Capacitor plugin that assists with app updates.",
+  "description": "Capacitor plugin that assists with app updates on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,15 @@
     "ionic",
     "android",
     "ios",
-    "app update"
+    "app update",
+    "capacitor-plugin",
+    "in-app updates",
+    "in app update",
+    "play store update",
+    "app store update",
+    "version check",
+    "flexible update",
+    "immediate update"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

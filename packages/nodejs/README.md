@@ -10,7 +10,7 @@ Capacitor plugin for running [Node.js](https://nodejs.org/) in mobile apps.[^1][
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for running Node.js in mobile apps. Here are some of the key features:
+The Capacitor Node.js plugin is one of the most complete solutions for running Node.js in Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🚀 **Node.js runtime**: Embeds a complete Node.js runtime based on [Node.js for Mobile Apps](https://github.com/nodejs-mobile/nodejs-mobile).
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Node.js plugin is typically used whenever an app needs functionality that only the Node.js ecosystem provides, for example:
+
+- **Node.js-only libraries**: Use npm packages that are not browser-compatible because they rely on Node.js core modules.
+- **Code reuse**: Reuse existing Node.js code in your mobile app instead of rewriting it for the browser.
+- **Background processing**: Offload heavy work to the Node.js engine, which runs on a dedicated background thread and does not block the UI.
+- **Local data processing**: Process and persist data on the device using the writable directory provided by the Node.js runtime.
 
 ## Compatibility
 
@@ -128,6 +133,10 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 ## Usage
 
+The following examples show how to set up the Node.js project, communicate between Node.js and the Capacitor app, start the runtime manually, wait for it to be ready, and exchange messages with it.
+
+### Set up the Node.js project
+
 The plugin runs the Node.js project located in the `nodejs` directory (see the `nodeDir` configuration option) inside your Capacitor `webDir`. Make sure your web build outputs the Node.js project to this directory, for example by placing it in the `public` directory of your web project:
 
 ```
@@ -149,6 +158,8 @@ The `package.json` file of the Node.js project defines the script file to run in
   "main": "index.js"
 }
 ```
+
+### Communicate with the Capacitor app from Node.js
 
 Inside the script file (`index.js` in this example), the built-in `bridge` module provides the communication channel to the Capacitor app:
 
@@ -173,22 +184,12 @@ app.on('resume', () => {});
 
 **Attention**: The Node.js project directory may be overwritten during app updates. Store persistent data in the directory returned by `app.datadir()`.
 
-In your Capacitor app, you can then use the plugin to start the Node.js runtime and exchange messages with it:
+### Start the Node.js runtime manually
+
+By default, the Node.js runtime starts automatically when the app is launched. If the `startMode` configuration option is set to `manual`, start it yourself with custom arguments, environment variables and script:
 
 ```typescript
 import { Nodejs } from '@capawesome/capacitor-nodejs';
-
-const isReady = async () => {
-  const { ready } = await Nodejs.isReady();
-  return ready;
-};
-
-const send = async () => {
-  await Nodejs.send({
-    eventName: 'my-event',
-    args: ['Hello from Capacitor!'],
-  });
-};
 
 const start = async () => {
   // Only available if the `startMode` configuration option is set to `manual`.
@@ -198,10 +199,38 @@ const start = async () => {
     script: 'custom-main.js',
   });
 };
+```
+
+### Wait for the Node.js runtime to be ready
+
+The Node.js runtime is considered ready as soon as the Node.js project has required the `bridge` module. Check the current state with `isReady()` or listen for the `ready` event:
+
+```typescript
+import { Nodejs } from '@capawesome/capacitor-nodejs';
+
+const isReady = async () => {
+  const { ready } = await Nodejs.isReady();
+  return ready;
+};
 
 const addReadyListener = async () => {
   await Nodejs.addListener('ready', () => {
     console.log('The Node.js runtime is ready.');
+  });
+};
+```
+
+### Exchange messages with the Node.js runtime
+
+Once the Node.js runtime is ready, send messages to it and listen for messages received from it:
+
+```typescript
+import { Nodejs } from '@capawesome/capacitor-nodejs';
+
+const send = async () => {
+  await Nodejs.send({
+    eventName: 'my-event',
+    args: ['Hello from Capacitor!'],
   });
 };
 
@@ -211,6 +240,8 @@ const addMessageListener = async () => {
   });
 };
 ```
+
+### Use npm packages
 
 To use npm packages, run `npm install --omit=dev` inside the Node.js project directory before building your web project. It's recommended to bundle the Node.js project into a single file (e.g. with [esbuild](https://esbuild.github.io/)) to improve the startup time.
 
@@ -432,6 +463,28 @@ The plugin currently runs Node.js `18.20.4`, the latest version available from [
 ### Why is there no `stop()` method?
 
 The underlying runtime only supports a single Node.js instance per app launch and provides no API to stop or restart it. A `stop()` method would therefore leave the app in a state where Node.js could never be started again until the app is restarted. If you need to stop work in the Node.js runtime, send a message (e.g. a `shutdown` event) and let your Node.js code stop its servers and timers. The idle runtime consumes negligible resources.
+
+### Where should I store persistent data in the Node.js project?
+
+Store persistent data in the directory returned by `app.datadir()` of the built-in `bridge` module. The Node.js project directory itself may be overwritten during app updates, so any files written there can be lost.
+
+### Why is JavaScript execution slower on iOS than on Android?
+
+On iOS, the JavaScript engine runs in interpreter-only mode without JIT compilation, which results in slower JavaScript execution compared to Android. This is a limitation of the underlying Node.js for Mobile Apps runtime. See the [Limitations](#limitations) section for more details.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your Capacitor app.
+- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
+- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

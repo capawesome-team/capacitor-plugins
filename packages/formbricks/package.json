@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-formbricks",
   "version": "0.1.0",
-  "description": "Unofficial Capacitor plugin for Formbricks.",
+  "description": "Unofficial Capacitor plugin for Formbricks on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -38,7 +38,13 @@
     "capacitor",
     "plugin",
     "native",
-    "formbricks"
+    "formbricks",
+    "capacitor-plugin",
+    "survey",
+    "in-app surveys",
+    "user feedback",
+    "feedback",
+    "user research"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

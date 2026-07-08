@@ -10,7 +10,7 @@ Unofficial Capacitor plugin to sign-in with Apple.[^1]
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for Apple Sign-In. Here are some of the key features:
+The Capacitor Apple Sign-In plugin is one of the most complete Apple authentication solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 🍎 **Native Sign-In**: Uses native AuthenticationServices on iOS.
@@ -24,9 +24,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Apple Sign-In plugin is typically used to let users authenticate with their Apple ID, for example:
+
+- **User authentication**: Offer Sign in with Apple as a login option in your app on Android, iOS, and Web.
+- **Account creation**: Request the user's email address and full name during sign-up using the email and full name scopes.
+- **Backend integration**: Send the authorization code and ID token to your backend to verify the sign-in and create a user session.
+- **Secure sign-in flows**: Pass a nonce for replay protection and a state value for CSRF protection.
 
 ## Compatibility
 
@@ -79,14 +84,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize the plugin and sign in with Apple.
+
+### Initialize the plugin
+
+On Android and Web, you must initialize the plugin with your Apple Service ID before calling `signIn(...)`. This method is only available on Android and Web:
+
 ```typescript
-import { AppleSignIn, SignInScope } from '@capawesome/capacitor-apple-sign-in';
+import { AppleSignIn } from '@capawesome/capacitor-apple-sign-in';
 
 const initialize = async () => {
   await AppleSignIn.initialize({
     clientId: 'com.example.app.signin',
   });
 };
+```
+
+### Sign in with Apple
+
+Start the sign-in flow and receive the authorization code and ID token. Use the `scopes` option to request the user's email address and full name, and pass a `nonce` for replay protection. The `redirectUrl` and `state` options are only available on Android and Web:
+
+```typescript
+import { AppleSignIn, SignInScope } from '@capawesome/capacitor-apple-sign-in';
 
 const signIn = async () => {
   const result = await AppleSignIn.signIn({
@@ -227,6 +246,29 @@ This plugin is purpose-built for Apple Sign-In and focuses on providing a clean 
 - **No deprecated APIs**: Uses the latest platform APIs (AuthenticationServices on iOS).
 - **Scope support**: Request email and full name on all platforms.
 - **Error codes**: Provides typed error codes for proper error handling.
+
+### Do I need to call initialize on iOS?
+
+No, the `initialize(...)` method is only available on Android and Web, where it must be called before `signIn(...)` to set the Apple Service ID. On iOS, the plugin uses the native AuthenticationServices framework and no initialization is required.
+
+### Why are the email and name only returned on the first sign-in on iOS?
+
+On iOS, Apple only provides the user's email address, given name, and family name on the first sign-in; on subsequent sign-ins, these values are `null`. Make sure to persist this information, for example on your backend, when you receive it for the first time.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in with Google.
+- [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/): Sign in with Facebook.
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

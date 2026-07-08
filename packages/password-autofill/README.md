@@ -12,7 +12,7 @@ This plugin lets you **save into** the platform autofill system (iCloud Keychain
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for password autofill. Here are some of the key features:
+The Capacitor Password Autofill plugin is one of the most complete credential saving solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔐 **Credential saving**: Save a username and password to the platform credential store.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Password Autofill plugin is typically used whenever an app wants credentials to end up in the platform credential store, for example:
+
+- **Save credentials after login**: Trigger the native "Save password?" prompt after a successful in-app login, which WebView-based apps never trigger on their own.
+- **Single-page app logins**: Save credentials for login flows based on `fetch()` and `preventDefault()`, which the operating system's form heuristics never detect.
+- **Generated passwords**: Save automatically generated passwords, for example during a social signup flow without a login form.
+- **Smoother re-logins**: Credentials saved to iCloud Keychain or Google Password Manager can be offered to the user again on future sign-ins.
 
 ## Compatibility
 
@@ -102,6 +107,12 @@ Replace `TEAMID` with your Apple Developer Team ID and `com.example.app` with yo
 No configuration required for this plugin.
 
 ## Usage
+
+The following example shows how to save a username and password to the platform credential store.
+
+### Save a username and password
+
+Call `savePassword(...)` after a successful login to save the credential to the platform credential store. On iOS, the `domain` is required and must match one of the domains in your app's Associated Domains entitlement (see [Installation](#installation)). On Android, the system "Save password?" prompt is presented to the user:
 
 ```typescript
 import { PasswordAutofill } from '@capawesome/capacitor-password-autofill';
@@ -183,6 +194,42 @@ What this plugin does **not** replace:
 
 - The Associated Domains / `apple-app-site-association` setup is required in both approaches.
 - Autofill (reading credentials back into a form) still benefits from the `autocomplete` attributes described in the official guide.
+
+## FAQ
+
+### Does this plugin fill login forms with saved credentials?
+
+No, this plugin only saves credentials into the platform autofill system (iCloud Keychain on iOS, Google Password Manager on Android). Filling credentials back into a form is handled by the operating system and still benefits from the `autocomplete` attributes described in the [official Capacitor autofill guide](https://capacitorjs.com/docs/guides/autofill-credentials).
+
+### Why is the credential not saved on iOS?
+
+The Shared Web Credentials API requires the Associated Domains capability with a `webcredentials:` entry and a matching `apple-app-site-association` file hosted on your domain. Without this setup, `savePassword(...)` cannot save the credential. Also make sure that the `domain` option matches one of the entries in your entitlement (without the `webcredentials:` prefix). See the [Installation](#installation) section for the details.
+
+### Do I need to pass the `domain` option on Android?
+
+No, the `domain` option is only used on iOS, where it is required and must match one of the domains in your app's Associated Domains entitlement. On Android, the credential is saved via the Credential Manager API without a domain.
+
+### How is this plugin different from the official Capacitor autofill guide?
+
+The [official guide](https://capacitorjs.com/docs/guides/autofill-credentials) relies on the operating system's form heuristics, which requires changing `server.hostname` to your real domain. This changes the WebView origin, wipes existing users' `localStorage`, `IndexedDB`, and cookies, and can break OAuth redirect allowlists. This plugin instead saves credentials deterministically with an explicit `savePassword(...)` call, so your app keeps `localhost` as its origin. See the [comparison section](#when-to-use-this-plugin-vs-the-official-guide) above for more details.
+
+### Is this plugin available on the web?
+
+No, this plugin is only available on Android and iOS. On the web, all methods reject as unimplemented.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

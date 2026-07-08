@@ -24,9 +24,15 @@ Capacitor plugin for headless image transforms like crop, resize, rotate, flip a
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Photo Manipulator plugin is typically used whenever an app needs to process images from code, without any UI, for example:
+
+- **HEIC to JPEG conversion**: Convert photos taken on an iPhone to JPEG before uploading them, so servers and browsers can display them.
+- **Thumbnail generation**: Crop and resize images to small previews with memory-efficient downsampled decoding.
+- **Upload size reduction**: Resize images and re-encode them with a lower `quality` before uploading them to a server.
+- **Privacy-safe sharing**: Share images without metadata, since all metadata (e.g. EXIF, GPS) is stripped from the output by re-encoding.
+- **Orientation fixes**: Produce upright images, since the EXIF orientation is applied during decoding.
 
 ## Compatibility
 
@@ -78,7 +84,13 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to convert an image to another format, create a thumbnail, and read the dimensions and format of an image.
+
 The transformed image is written to a new file in the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
+
+### Convert a HEIC image to JPEG
+
+Use the `format` option of the `transform(...)` method to convert an image to another format, for example a HEIC photo taken on an iPhone to JPEG. The `quality` option controls the compression of the output file:
 
 ```typescript
 import { PhotoManipulator, ImageFormat } from '@capawesome/capacitor-photo-manipulator';
@@ -92,6 +104,14 @@ const convertHeicToJpeg = async () => {
   });
   return path;
 };
+```
+
+### Create a thumbnail
+
+Combine the `crop`, `resize`, `rotate` and flip options in a single call. The operations are always applied in the fixed order crop → resize → rotate → flip:
+
+```typescript
+import { PhotoManipulator } from '@capawesome/capacitor-photo-manipulator';
 
 const createThumbnail = async () => {
   // Crop, resize, rotate and flip in one call
@@ -104,6 +124,14 @@ const createThumbnail = async () => {
   });
   return { path, width, height };
 };
+```
+
+### Read the dimensions and format of an image
+
+Use the `getInfo(...)` method to read the dimensions and format of an image without decoding the pixel data where possible:
+
+```typescript
+import { PhotoManipulator } from '@capawesome/capacitor-photo-manipulator';
 
 const getInfo = async () => {
   const { width, height, format } = await PhotoManipulator.getInfo({
@@ -287,6 +315,43 @@ For the smallest possible memory footprint, always provide a `resize` target if 
 ## Metadata
 
 The EXIF orientation of the source image is applied during decoding so that the output is always upright. All other metadata (e.g. EXIF, GPS) is stripped by re-encoding. Use the [Exif](https://capawesome.io/docs/sdks/capacitor/exif/) plugin if you want to read the metadata of the source image and write it back to the transformed image.
+
+## FAQ
+
+### In which order are the transformations applied?
+
+The operations are always applied in the following fixed order: crop → resize → rotate → flip. If you need a different order, chain multiple `transform(...)` calls, passing the output path of one call as the input path of the next.
+
+### Why does the transformed image disappear after an app restart?
+
+On Android and iOS, the transformed image is written to a new file in the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the official [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
+
+### Does the plugin preserve the EXIF metadata of the source image?
+
+No, the EXIF orientation is applied during decoding so that the output is always upright, and all other metadata (e.g. EXIF, GPS) is stripped from the output by re-encoding. This is privacy-friendly by default. If you want to keep the metadata, use the [Exif](https://capawesome.io/docs/sdks/capacitor/exif/) plugin to read it from the source image and write it back to the transformed image.
+
+### Why does converting to WebP fail on iOS?
+
+On iOS, `ImageFormat.Webp` is not supported as an output format and the call rejects with the `UNSUPPORTED_FORMAT` error code. WebP output is only available on Android and the Web. Use `ImageFormat.Jpeg` or `ImageFormat.Png` as a cross-platform alternative.
+
+### Why can't I convert HEIC or AVIF images on the Web?
+
+The web implementation is based on the Canvas API, and most browsers cannot decode HEIC and AVIF images. This is exactly why the native implementations exist: on Android (9+ for HEIC/HEIF, 12+ for AVIF) and iOS (16+ for AVIF), the plugin uses the native platform decoders. See the [Format Support](#format-support) section for the complete overview.
+
+### How does the plugin handle very large images?
+
+The plugin is designed to keep the memory footprint low. When a `resize` target is provided, the image is decoded downsampled so the full-resolution bitmap is never loaded into memory, transforms are processed one at a time on a background queue, and the result is written to a file instead of being returned as base64 data. For the smallest possible memory footprint, always provide a `resize` target if you don't need the full resolution.
+
+## Related Plugins
+
+- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo in an installed photo editing app.
+- [Exif](https://capawesome.io/docs/sdks/capacitor/exif/): Read, write and remove EXIF metadata from image files.
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress files with support for image formats like PNG, JPEG, and WebP.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the images to transform from the gallery or file system.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

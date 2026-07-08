@@ -23,9 +23,15 @@ Capacitor plugin to provide haptic feedback such as impacts, notifications, vibr
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Haptics plugin is typically used to make an app feel more responsive and tactile, for example:
+
+- **Button and gesture feedback**: Trigger impact feedback when user interface elements collide or a drag operation snaps into place.
+- **Success and error feedback**: Use notification haptics to communicate that a task has succeeded, failed, or produced a warning.
+- **Pickers and selection controls**: Give subtle selection feedback while the user scrolls through a picker.
+- **Games and rich interactions**: Play custom haptic patterns with per-event intensity and sharpness for immersive experiences.
+- **Alerts**: Vibrate the device with a custom duration to get the user's attention.
 
 ## Compatibility
 
@@ -69,30 +75,65 @@ No configuration required for this plugin.
 
 ## Usage
 
-```typescript
-import {
-  AndroidHapticType,
-  Haptics,
-  ImpactStyle,
-  NotificationType,
-} from '@capawesome/capacitor-haptics';
+The following examples show how to check if haptic feedback is available, trigger impact and notification feedback, give selection feedback, play a custom haptic pattern, perform an Android haptic effect, and vibrate the device.
 
-const impact = async () => {
-  await Haptics.impact({ style: ImpactStyle.Medium });
-};
+### Check if haptic feedback is available
+
+Check whether the device supports haptic feedback before using the other methods:
+
+```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
 
 const isAvailable = async () => {
   const { available } = await Haptics.isAvailable();
   return available;
 };
+```
+
+### Trigger impact feedback
+
+Simulate a physical impact, for example when user interface elements collide or a drag operation snaps into place. Five different styles are available, including the modern `Rigid` and `Soft` styles:
+
+```typescript
+import { Haptics, ImpactStyle } from '@capawesome/capacitor-haptics';
+
+const impact = async () => {
+  await Haptics.impact({ style: ImpactStyle.Medium });
+};
+```
+
+### Trigger notification feedback
+
+Communicate that a task or action has succeeded, failed, or produced a warning:
+
+```typescript
+import { Haptics, NotificationType } from '@capawesome/capacitor-haptics';
 
 const notification = async () => {
   await Haptics.notification({ type: NotificationType.Success });
 };
+```
 
-const performAndroidHaptic = async () => {
-  await Haptics.performAndroidHaptic({ type: AndroidHapticType.Confirm });
+### Give selection feedback
+
+Give subtle feedback during picker-style interactions. Call `selectionStart()` when the interaction begins, `selectionChanged()` whenever the selection changes, and `selectionEnd()` when the interaction finishes:
+
+```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
+
+const selection = async () => {
+  await Haptics.selectionStart();
+  await Haptics.selectionChanged();
+  await Haptics.selectionEnd();
 };
+```
+
+### Play a custom haptic pattern
+
+Play a custom pattern composed of individual haptic events with per-event intensity and sharpness. On iOS, the pattern is played using Core Haptics; on Android, it is approximated using vibration effects:
+
+```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
 
 const playPattern = async () => {
   await Haptics.playPattern({
@@ -103,12 +144,26 @@ const playPattern = async () => {
     ],
   });
 };
+```
 
-const selection = async () => {
-  await Haptics.selectionStart();
-  await Haptics.selectionChanged();
-  await Haptics.selectionEnd();
+### Perform an Android haptic effect
+
+Perform a semantic Android haptic feedback effect that respects the user's haptic feedback settings. Only available on Android:
+
+```typescript
+import { AndroidHapticType, Haptics } from '@capawesome/capacitor-haptics';
+
+const performAndroidHaptic = async () => {
+  await Haptics.performAndroidHaptic({ type: AndroidHapticType.Confirm });
 };
+```
+
+### Vibrate the device
+
+Vibrate the device. The `duration` option is only available on Android and Web:
+
+```typescript
+import { Haptics } from '@capawesome/capacitor-haptics';
 
 const vibrate = async () => {
   await Haptics.vibrate({ duration: 500 });
@@ -447,6 +502,42 @@ The haptic capabilities of the platforms differ. This plugin maps every method t
 | `playPattern(...)`       | Vibration effects (composition or waveform) | Core Haptics (intensity and sharpness)     | Vibration API             |
 
 Custom haptic patterns are strongest on iOS, where Core Haptics supports per-event intensity and sharpness. On Android, patterns are approximated using vibration effect primitives (Android 11+ with supported hardware) or amplitude-controlled waveforms. On the web, patterns are approximated using the Vibration API, which only supports on/off timings.
+
+## FAQ
+
+### How is this plugin different from the official Capacitor Haptics plugin?
+
+This plugin is a drop-in replacement for the official `@capacitor/haptics` plugin with additional features: an `isAvailable()` method, semantic Android haptic effects via `performAndroidHaptic(...)`, custom haptic patterns via `playPattern(...)`, and the modern `Rigid` and `Soft` impact styles. Note that the default impact style is `ImpactStyle.Medium` instead of `ImpactStyle.Heavy`, see [Migrating from `@capacitor/haptics`](#migrating-from-capacitorhaptics).
+
+### Do I need to configure any permissions?
+
+No, the plugin already declares the `android.permission.VIBRATE` permission in its own manifest, so no additional configuration is required on Android. On iOS and Web, no configuration is required either.
+
+### Why don't I feel any haptic feedback on my device?
+
+First, use the `isAvailable()` method to check whether haptic feedback is available: on Android it checks whether the device has a vibrator, on iOS whether the device supports haptic event playback, and on the web whether the Vibration API is supported. Also keep in mind that on Android, the intensity of haptic events is only respected on devices with amplitude control, and that `performAndroidHaptic(...)` respects the user's haptic feedback settings.
+
+### Are custom haptic patterns supported on all platforms?
+
+Custom patterns are strongest on iOS, where Core Haptics supports per-event intensity and sharpness; this requires a device with haptic event playback support (for example an iPhone with a Taptic Engine), otherwise the call rejects as unavailable. On Android, patterns are approximated using vibration effect primitives or amplitude-controlled waveforms. On the web, patterns are approximated using the Vibration API, which only supports on/off timings.
+
+### What is the difference between `vibrate` and `playPattern`?
+
+The `vibrate(...)` method triggers a single vibration with a custom duration, whereby the duration is only respected on Android and Web (on iOS, a system vibration with a fixed duration is played). The `playPattern(...)` method plays a sequence of individual haptic events, each with its own time, intensity, sharpness, and duration.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Shake](https://capawesome.io/docs/sdks/capacitor/shake/): Detect shake gestures, for example to respond with haptic feedback.
+- [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
+- [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

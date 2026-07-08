@@ -8,9 +8,15 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The PostHog plugin is typically used to understand how users interact with an app, for example:
+
+- **Product analytics**: Capture custom events and screen views to analyze how users move through your app.
+- **User identification**: Identify users with a distinct ID, assign aliases, and associate their events with groups.
+- **Feature flags**: Roll out features gradually by checking feature flags and their payloads at runtime.
+- **Session replay**: Record user sessions to understand usage patterns and debug issues.
+- **Error tracking**: Capture exceptions manually or automatically to monitor the stability of your app.
 
 ## Compatibility
 
@@ -122,14 +128,29 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to set up the SDK, capture events, track screen views, identify users, associate users with a group, manage super properties, reset the user, and flush queued events.
+
+### Set up the SDK
+
+Call `setup(...)` before any other method. Alternatively, on Android and iOS, you can configure the plugin in your Capacitor configuration file (see [Configuration](#configuration)); in that case, you must not call this method:
+
 ```typescript
 import { Posthog } from '@capawesome/capacitor-posthog';
 
-const alias = async () => {
-  await Posthog.alias({
-    alias: 'new-distinct-id',
+const setup = async () => {
+  await Posthog.setup({
+    apiKey: 'YOUR_API_KEY',
+    apiHost: 'https://eu.i.posthog.com',
   });
 };
+```
+
+### Capture events
+
+Capture a custom event with optional properties:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
 
 const capture = async () => {
   await Posthog.capture({
@@ -139,20 +160,31 @@ const capture = async () => {
     },
   });
 };
+```
 
-const flush = async () => {
-  await Posthog.flush();
-};
+### Track screen views
 
-const group = async () => {
-  await Posthog.group({
-    type: 'group',
-    key: 'key',
-    groupProperties: {
+Send a screen event with the title of the screen. Only available on Android and iOS:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const screen = async () => {
+  await Posthog.screen({
+    screenTitle: 'screen',
+    properties: {
       key: 'value',
     },
   });
 };
+```
+
+### Identify users
+
+Identify the current user with a distinct ID and set person properties. You can also assign another distinct ID to the current user using `alias(...)`:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
 
 const identify = async () => {
   await Posthog.identify({
@@ -163,6 +195,38 @@ const identify = async () => {
   });
 };
 
+const alias = async () => {
+  await Posthog.alias({
+    alias: 'new-distinct-id',
+  });
+};
+```
+
+### Associate users with a group
+
+Associate the events of the current user with a group, for example a company or a team:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const group = async () => {
+  await Posthog.group({
+    type: 'group',
+    key: 'key',
+    groupProperties: {
+      key: 'value',
+    },
+  });
+};
+```
+
+### Manage super properties
+
+Register a super property that is sent with every event, and unregister it when it is no longer needed:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
 const register = async () => {
   await Posthog.register({
     key: 'super-property',
@@ -170,30 +234,34 @@ const register = async () => {
   });
 };
 
-const reset = async () => {
-  await Posthog.reset();
-};
-
-const screen = async () => {
-  await Posthog.screen({
-    screenTitle: 'screen',
-    properties: {
-      key: 'value',
-    },
-  });
-};
-
-const setup = async () => {
-  await Posthog.setup({
-    apiKey: 'YOUR_API_KEY',
-    apiHost: 'https://eu.i.posthog.com',
-  });
-};
-
 const unregister = async () => {
   await Posthog.unregister({
     key: 'super-property',
   });
+};
+```
+
+### Reset the user
+
+Reset the current user's ID and anonymous ID, for example after a logout:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const reset = async () => {
+  await Posthog.reset();
+};
+```
+
+### Flush queued events
+
+Manually flush all events in the queue. Only available on Android and iOS:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const flush = async () => {
+  await Posthog.flush();
 };
 ```
 
@@ -748,6 +816,42 @@ Remove a super property.
 ### Reverse Proxy
 
 For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
+
+## FAQ
+
+### Do I have to call the `setup` method before using the plugin?
+
+Yes, the `setup(...)` method should be called before any other method. Alternatively, on Android and iOS, you can configure the plugin in your Capacitor configuration file (see [Configuration](#configuration)). In that case, you must not call the `setup(...)` method.
+
+### What is the difference between the `apiHost` and `host` options?
+
+The `host` option is a deprecated alias for `apiHost`. Both point to the API host of your PostHog instance or reverse proxy. If both options are provided, `apiHost` takes precedence, so new projects should only use `apiHost`.
+
+### How do I use the plugin with a reverse proxy?
+
+Set the `apiHost` option to your proxy URL and the `uiHost` option to your PostHog app host, such as `https://us.posthog.com` or `https://eu.posthog.com`. Note that `uiHost` is only available on Web. See the [Reverse Proxy](#reverse-proxy) section for more details.
+
+### How do I enable session replay?
+
+Set the `enableSessionReplay` option to `true` in the `setup(...)` method or in your Capacitor configuration file, and fine-tune the recording behavior with the `sessionReplayConfig` option. You can also start and stop recording manually using the `startSessionRecording()` and `stopSessionRecording()` methods.
+
+### How can users opt out of tracking?
+
+Call the `optOut()` method to stop event capturing and the `optIn()` method to re-enable it. You can check the current state with `isOptOut()` or opt users out by default with the `optOut` setup option. On Web with `cookielessMode: 'on_reject'`, opting out switches to cookieless anonymous tracking instead of stopping capturing entirely.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Unofficial Capacitor plugin for Firebase Analytics.
+- [Grafana Faro](https://capawesome.io/docs/sdks/capacitor/grafana-faro/): Unofficial Capacitor plugin for Grafana Faro to monitor your app.
+- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

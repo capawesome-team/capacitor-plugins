@@ -20,9 +20,14 @@ Capacitor plugin for native alert, confirm, and prompt dialogs.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Dialog plugin is typically used whenever an app needs a quick native interaction with the user, for example:
+
+- **Confirmations**: Ask the user to confirm a destructive action, such as deleting an item, before executing it.
+- **Notices**: Inform the user about the result of an action, such as saved changes or an error, with a simple alert.
+- **Quick text input**: Ask the user for a short text value, such as a name, without building a custom form.
+- **Native look and feel**: Replace the browser's `window.alert`, `window.confirm`, and `window.prompt` with native dialogs on Android and iOS.
 
 ## Compatibility
 
@@ -66,6 +71,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to display an alert dialog, ask the user for confirmation, and request text input from the user.
+
+### Display an alert dialog
+
+Show a message with a single button, for example to inform the user about the result of an action:
+
 ```typescript
 import { Dialog } from '@capawesome/capacitor-dialog';
 
@@ -75,6 +86,14 @@ const alert = async () => {
     message: 'Your changes have been saved.',
   });
 };
+```
+
+### Ask the user for confirmation
+
+Show a confirmation dialog with two buttons. The result tells you whether the user confirmed the dialog:
+
+```typescript
+import { Dialog } from '@capawesome/capacitor-dialog';
 
 const confirm = async () => {
   const { value } = await Dialog.confirm({
@@ -83,6 +102,14 @@ const confirm = async () => {
   });
   console.log('Confirmed:', value);
 };
+```
+
+### Request text input from the user
+
+Show a prompt dialog with a text input, a confirm and a cancel button. The result contains the entered value and whether the user canceled the dialog:
+
+```typescript
+import { Dialog } from '@capawesome/capacitor-dialog';
 
 const prompt = async () => {
   const { value, canceled } = await Dialog.prompt({
@@ -222,6 +249,42 @@ This plugin is API-compatible with the official [`@capacitor/dialog`](https://gi
 | `alert({ title, message, buttonTitle })` | `alert({ title, message, buttonTitle })` |
 | `confirm({ ... }) → { value }`     | `confirm({ ... }) → { value }`     |
 | `prompt({ ... }) → { value, cancelled }` | `prompt({ ... }) → { value, canceled }` |
+
+## FAQ
+
+### How is this plugin different from the official `@capacitor/dialog` plugin?
+
+This plugin is API-compatible with the official `@capacitor/dialog` plugin, with a single difference: the `prompt(...)` result uses the property `canceled` (one `l`) instead of `cancelled` (two `l`s). See the [migration table](#migrating-from-capacitordialog) above for the complete method mapping.
+
+### Can I customize the dialog buttons?
+
+Yes, on Android and iOS you can customize the button titles using the `buttonTitle`, `okButtonTitle`, and `cancelButtonTitle` options. On the web, the button titles cannot be customized and are ignored, because the browser's built-in dialogs are used.
+
+### How do I know whether the user canceled a prompt?
+
+The result of the `prompt(...)` method contains a `canceled` property that is `true` if the user canceled the dialog, in addition to the `value` property with the text input. For confirmation dialogs, the `value` property of the `confirm(...)` result tells you whether the user confirmed the dialog.
+
+### Why is the dialog title not displayed on the web?
+
+On the web, the title and button titles cannot be customized and are ignored, because the plugin uses the browser's built-in dialogs. Only the message is displayed. On Android and iOS, the title is fully supported.
+
+### Is this plugin safe to use for App Store submissions?
+
+Yes, the plugin uses only official platform APIs to display the dialogs, so it is safe to use in apps submitted to the Apple App Store and Google Play Store.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
+- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
+- [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Let the user pick a date and time with a native picker.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

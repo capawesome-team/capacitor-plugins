@@ -19,9 +19,14 @@ Capacitor plugin for reading and controlling the WebView text zoom.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Text Zoom plugin is typically used to make the text size of an app adjustable, for example:
+
+- **Custom text-size settings**: Offer an in-app setting that lets users increase or decrease the text size with `setZoom(...)`.
+- **Accessibility**: Read the device's preferred text zoom with `getPreferredZoom()` and apply it to respect the operating system's font size settings.
+- **Reading-focused apps**: Let users of news, book, or documentation apps adjust the text size to their comfort.
+- **Restoring the zoom on app launch**: Read the persisted value from a preferences plugin and re-apply it with `setZoom(...)` on startup.
 
 ## Compatibility
 
@@ -59,6 +64,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to read the current text zoom, read the device's preferred text zoom, and set the text zoom of the WebView.
+
+### Read the current text zoom
+
+Get the current text zoom of the WebView, where `1.0` equals `100%` (no zoom). Only available on Android and iOS:
+
 ```typescript
 import { TextZoom } from '@capawesome/capacitor-text-zoom';
 
@@ -66,11 +77,27 @@ const getZoom = async () => {
   const { zoom } = await TextZoom.getZoom();
   return zoom;
 };
+```
+
+### Read the preferred text zoom of the device
+
+Get the preferred text zoom based on the operating system's font size settings, for example to use it as an input for `setZoom(...)`. Only available on Android and iOS:
+
+```typescript
+import { TextZoom } from '@capawesome/capacitor-text-zoom';
 
 const getPreferredZoom = async () => {
   const { zoom } = await TextZoom.getPreferredZoom();
   return zoom;
 };
+```
+
+### Set the text zoom
+
+Set the text zoom of the WebView. The value must be greater than `0` and is not persisted across app restarts. Only available on Android and iOS:
+
+```typescript
+import { TextZoom } from '@capawesome/capacitor-text-zoom';
 
 const setZoom = async () => {
   await TextZoom.setZoom({ zoom: 1.5 });
@@ -203,6 +230,42 @@ The text zoom is implemented via the `-webkit-text-size-adjust` CSS property, wh
 ### Persistence
 
 The text zoom is **not** persisted across app restarts. Persist the value with a preferences plugin (e.g. [`@capacitor/preferences`](https://www.npmjs.com/package/@capacitor/preferences)) and re-apply it on app launch if needed.
+
+## FAQ
+
+### How is this plugin different from the official `@capacitor/text-zoom` plugin?
+
+This plugin is a drop-in alternative to the official `@capacitor/text-zoom` plugin with a slightly more explicit API: `get()` becomes `getZoom()`, `getPreferred()` becomes `getPreferredZoom()`, and `set({ value })` becomes `setZoom({ zoom })`. See the [migration table](#migration-from-capacitortext-zoom) above for a side-by-side comparison.
+
+### Why does `setZoom` have no effect on iPad?
+
+On iOS, the text zoom is implemented via the `-webkit-text-size-adjust` CSS property, which only takes effect when the WebView runs in mobile content mode. On iPad, the WebView defaults to desktop content mode, so you need to set `preferredContentMode` to `mobile` in the `ios` section of your `capacitor.config` (see [Platform Notes](#platform-notes)).
+
+### Is the text zoom persisted across app restarts?
+
+No, the text zoom is not persisted. Persist the value with a preferences plugin such as `@capacitor/preferences` and re-apply it with `setZoom(...)` on app launch if needed.
+
+### How do I respect the user's system font size?
+
+Call `getPreferredZoom()` to read the preferred text zoom of the device based on the operating system's font size settings, and pass the returned value to `setZoom(...)`. This way, the text size of your app follows the user's system preference.
+
+### Which platforms are supported?
+
+The plugin is available on Android and iOS. On Web, all methods reject as unimplemented.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/): Read the user's system accessibility preferences, such as the font scale.
+- [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/): Enable and disable text interaction (selection, magnifier, callout menu) in the app's WebView.
+- [Screen Reader](https://capawesome.io/docs/sdks/capacitor/screen-reader/): Interact with screen readers.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

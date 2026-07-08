@@ -19,9 +19,14 @@ Capacitor plugin for detecting rooted and jailbroken devices.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Root Detection plugin is typically used in apps that handle sensitive data and need to assess the trustworthiness of the device, for example:
+
+- **Banking and fintech apps**: Warn users or restrict access when the app runs on a rooted or jailbroken device.
+- **Fraud prevention**: Detect emulators and simulators to make automated abuse of your app harder.
+- **Compliance checks**: Detect whether developer mode is enabled on Android to satisfy internal security policies.
+- **Conditional feature gating**: Disable particularly sensitive features on compromised devices while keeping the rest of the app usable.
 
 ## Compatibility
 
@@ -80,6 +85,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check whether the device is rooted or jailbroken, running on an emulator, or has developer mode enabled.
+
+### Check whether the device is rooted or jailbroken
+
+Check whether the device is rooted (Android) or jailbroken (iOS). Keep in mind that this is a best-effort, client-side check that can be bypassed by a determined attacker (see [Security Considerations](#security-considerations)):
+
 ```typescript
 import { RootDetection } from '@capawesome/capacitor-root-detection';
 
@@ -87,11 +98,27 @@ const isRooted = async () => {
   const { rooted } = await RootDetection.isRooted();
   return rooted;
 };
+```
+
+### Check whether the app runs on an emulator
+
+Check whether the app is running on an emulator (Android) or simulator (iOS):
+
+```typescript
+import { RootDetection } from '@capawesome/capacitor-root-detection';
 
 const isEmulator = async () => {
   const { emulator } = await RootDetection.isEmulator();
   return emulator;
 };
+```
+
+### Check whether developer mode is enabled
+
+Check whether developer mode is enabled on the device. Only available on Android:
+
+```typescript
+import { RootDetection } from '@capawesome/capacitor-root-detection';
 
 const isDeveloperModeEnabled = async () => {
   const { enabled } = await RootDetection.isDeveloperModeEnabled();
@@ -195,6 +222,39 @@ required.
 The checks provided by this plugin are performed entirely on the device and are **best-effort**. A determined attacker with full control over a rooted or jailbroken device can bypass or spoof any client-side detection. Therefore, you should **never** rely on this plugin as the sole security measure for protecting sensitive functionality.
 
 For **server-verifiable** device and app integrity, use the [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) plugin, which leverages the Play Integrity API (Android) and App Attest (iOS) to produce attestations that can be validated on your backend.
+
+## FAQ
+
+### Can root detection be bypassed?
+
+Yes. All checks provided by this plugin are performed entirely on the device and are best-effort. A determined attacker with full control over a rooted or jailbroken device can bypass or spoof any client-side detection. You should therefore never rely on this plugin as the sole security measure. See the [Security Considerations](#security-considerations) section for details.
+
+### What is the difference between this plugin and the App Integrity plugin?
+
+The Root Detection plugin performs client-side checks that run entirely on the device, which makes them fast and easy to use but also spoofable. The [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) plugin leverages the Play Integrity API (Android) and App Attest (iOS) to produce attestations that can be validated on your backend, providing server-verifiable trust. The two plugins are designed to work alongside each other.
+
+### Which methods are available on which platforms?
+
+The `isRooted()` and `isEmulator()` methods are available on Android and iOS. The `isDeveloperModeEnabled()` method is only available on Android. There is no Web implementation, since rooting and jailbreaking are concepts of mobile operating systems.
+
+### Do I need any special configuration on iOS?
+
+Optionally, you can add the `cydia` scheme to the `LSApplicationQueriesSchemes` array in your app's `Info.plist` file so that the `isRooted()` method can check whether the `cydia://` URL scheme can be opened as part of its jailbreak heuristics. If the scheme is not added, the method still works but skips the URL scheme check. See the [Installation](#installation) section for details.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API (Android) and App Attest (iOS).
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

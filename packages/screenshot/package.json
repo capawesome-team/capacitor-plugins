@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-screenshot",
   "version": "8.0.1",
-  "description": "Capacitor plugin for taking screenshots.",
+  "description": "Capacitor plugin for taking screenshots on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,13 @@
     "ionic",
     "android",
     "ios",
-    "screenshot"
+    "screenshot",
+    "capacitor-plugin",
+    "screen capture",
+    "take screenshot",
+    "capture screen",
+    "save screenshot",
+    "screenshot api"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -20,9 +20,14 @@ Capacitor plugin to create system alarms and timers.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Alarm plugin is typically used when the user must be reliably interrupted at a specific time, for example:
+
+- **Wake-up alarms**: Create alarms that break through Silent Mode and Focus, for example for morning routines in sleep or fitness apps.
+- **Recurring reminders**: Repeat alarms on specific weekdays, such as a medication reminder every Monday and Friday.
+- **Countdown timers**: Start timers in the system clock app on Android, for example for cooking or workout apps.
+- **Alarm management**: List and cancel the alarms created by your app on iOS to build your own alarm overview.
 
 ## Compatibility
 
@@ -73,17 +78,45 @@ No configuration required for this plugin.
 
 ## Usage
 
-```typescript
-import { Alarm, Weekday } from '@capawesome/capacitor-alarm';
+The following examples show how to check availability, check and request permissions, create alarms and timers, list and cancel alarms, and open the system clock app.
 
-const cancelAlarm = async (id: string) => {
-  await Alarm.cancelAlarm({ id });
+### Check if alarms are available
+
+Before creating an alarm, check if alarms are available on the device. On Android, this checks whether an app that can handle alarms is installed. On iOS, this returns `true` if the device runs iOS 26 or later:
+
+```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
+
+const isAvailable = async () => {
+  const { available } = await Alarm.isAvailable();
+  return available;
 };
+```
+
+### Check and request permissions
+
+Check and request the permission to schedule alarms. On Android, both methods always return `granted` since alarms are created via the system clock app:
+
+```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
 
 const checkPermissions = async () => {
   const { alarms } = await Alarm.checkPermissions();
   return alarms;
 };
+
+const requestPermissions = async () => {
+  const { alarms } = await Alarm.requestPermissions();
+  return alarms;
+};
+```
+
+### Create an alarm
+
+Create a one-time or repeating alarm by providing the hour, the minute, and optionally a label and the weekdays on which the alarm repeats. On Android, the alarm is created in the system clock app and the returned `id` is `null`. On iOS, the alarm is owned by your app and can be listed and canceled later:
+
+```typescript
+import { Alarm, Weekday } from '@capawesome/capacitor-alarm';
 
 const createAlarm = async () => {
   const { id } = await Alarm.createAlarm({
@@ -94,6 +127,14 @@ const createAlarm = async () => {
   });
   return id;
 };
+```
+
+### Create a timer
+
+Create a countdown timer in the system clock app by providing the duration in seconds. Only available on Android:
+
+```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
 
 const createTimer = async () => {
   await Alarm.createTimer({
@@ -101,24 +142,34 @@ const createTimer = async () => {
     label: 'Tea',
   });
 };
+```
+
+### List and cancel alarms
+
+Get all alarms that were created by your app and cancel them by their identifier. Only available on iOS:
+
+```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
 
 const getAlarms = async () => {
   const { alarms } = await Alarm.getAlarms();
   return alarms;
 };
 
-const isAvailable = async () => {
-  const { available } = await Alarm.isAvailable();
-  return available;
+const cancelAlarm = async (id: string) => {
+  await Alarm.cancelAlarm({ id });
 };
+```
+
+### Open the alarms in the system clock app
+
+Open the list of alarms in the system clock app, for example so the user can review or edit an alarm. Only available on Android:
+
+```typescript
+import { Alarm } from '@capawesome/capacitor-alarm';
 
 const openAlarms = async () => {
   await Alarm.openAlarms();
-};
-
-const requestPermissions = async () => {
-  const { alarms } = await Alarm.requestPermissions();
-  return alarms;
 };
 ```
 
@@ -439,6 +490,42 @@ The two platforms have fundamentally different alarm models, which this plugin e
 | `isAvailable()`         | ✅      | ✅        |
 | `openAlarms()`          | ✅      | ❌        |
 | `requestPermissions()`  | ✅      | ✅        |
+
+## FAQ
+
+### Why does the plugin require iOS 26 or later?
+
+The plugin uses Apple's [AlarmKit](https://developer.apple.com/documentation/alarmkit) framework, which was introduced with iOS 26. On older iOS versions, all methods except `isAvailable()` reject as unavailable, so you can use `isAvailable()` to check for support at runtime.
+
+### Why can't I list or cancel alarms on Android?
+
+On Android, alarms are created in the system clock app via the `AlarmClock` intent API, which is fire-and-forget: once created, the alarm belongs to the clock app and the OS offers no API to list or cancel it. That is why `createAlarm(...)` returns `null` as the alarm identifier on Android and `getAlarms()` and `cancelAlarm(...)` reject as unimplemented. See the [Platform Support](#platform-support) section for details.
+
+### What is the difference between an alarm and a local notification?
+
+An alarm breaks through Silent Mode and Focus modes and plays a sound until it is dismissed, while a local notification does not. On the other hand, local notifications support custom content and actions. Use an alarm when the user must be interrupted at a specific time, and a local notification for everything else (see [Alarms vs. Local Notifications](#alarms-vs-local-notifications)).
+
+### Why is creating timers not supported on iOS?
+
+Timers created with AlarmKit require a Live Activity widget extension in the app, which is why `createTimer(...)` is currently not supported on iOS. On Android, timers are created in the system clock app.
+
+### Do I need any permissions to create alarms?
+
+On Android, the plugin already declares the `com.android.alarm.permission.SET_ALARM` permission in its manifest, which is granted automatically. On iOS, you must add the `NSAlarmKitUsageDescription` key to your `Info.plist` file (see [Installation](#installation)) and request the alarm authorization using `requestPermissions()`.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Let the user pick the alarm time with a native date and time picker.
+- [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

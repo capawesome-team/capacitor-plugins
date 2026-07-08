@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-network",
   "version": "0.0.1",
-  "description": "Capacitor plugin to access network information.",
+  "description": "Capacitor plugin to access network information on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "network",
+    "network status",
+    "connection type",
+    "connectivity",
+    "internet connection",
+    "offline detection",
+    "airplane mode"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

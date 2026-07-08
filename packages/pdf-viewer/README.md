@@ -22,9 +22,14 @@ Capacitor plugin to display PDF documents in a fullscreen native viewer.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The PDF Viewer plugin is typically used whenever an app needs to present a PDF document to the user, for example:
+
+- **Invoices and receipts**: Display invoices or receipts that your app has generated or downloaded.
+- **Reports and manuals**: Let users read reports, product manuals, or other multi-page documents with paging and zoom.
+- **Confidential documents**: Open password-protected PDF documents such as payslips or bank statements.
+- **Reading progress**: Use the `pageChange` event to remember the last read page and reopen the document there via the `page` option.
 
 ## Compatibility
 
@@ -78,7 +83,13 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to open a PDF document, unlock a password-protected file, close the viewer, and listen for page changes and the viewer being closed.
+
 The plugin only supports local files. Remote URLs must be downloaded first, for example with the `downloadFile(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
+
+### Open a PDF document
+
+Open a local PDF file in a fullscreen native viewer. You can set a custom toolbar title and the page to display initially. Only available on Android and iOS:
 
 ```typescript
 import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
@@ -90,6 +101,14 @@ const open = async () => {
     page: 1,
   });
 };
+```
+
+### Open a password-protected PDF document
+
+Use the `password` option to unlock a password-protected PDF file:
+
+```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
 
 const openWithPassword = async () => {
   await PdfViewer.open({
@@ -97,10 +116,26 @@ const openWithPassword = async () => {
     password: 'secret',
   });
 };
+```
+
+### Close the viewer
+
+Close the currently open viewer from code. If no viewer is open, this method does nothing:
+
+```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
 
 const close = async () => {
   await PdfViewer.close();
 };
+```
+
+### Listen for page changes and the viewer being closed
+
+Use the `pageChange` and `closed` events to react to the user scrolling through the document or closing the viewer:
+
+```typescript
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
 
 const addListeners = async () => {
   await PdfViewer.addListener('closed', () => {
@@ -251,6 +286,43 @@ Remove all listeners for this plugin.
 | **`page`** | <code>number</code> | The page (1-based) that is currently displayed. | 0.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Can I display a PDF from a remote URL?
+
+No, the plugin only supports local files. Download the file first, for example with the `downloadFile(...)` method of the official [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin, and then pass the local file path to the `open(...)` method.
+
+### Why is the plugin not available on the Web?
+
+Browsers ship with a built-in PDF viewer, so a plugin is not needed there. On the Web, you can simply render a PDF document using an `<iframe>` or `<object>` element.
+
+### How do I open a password-protected PDF document?
+
+Pass the password using the `password` option of the `open(...)` method. The viewer then unlocks and displays the document. See [Open a password-protected PDF document](#open-a-password-protected-pdf-document) for an example.
+
+### How much does the plugin add to my Android app size?
+
+On Android, the plugin uses the [android-pdf-viewer](https://github.com/mhiew/AndroidPdfViewer) library, which bundles the Pdfium native libraries. These add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an Android App Bundle, each device only downloads the native libraries for its own ABI, which significantly reduces the download size.
+
+### Can I select text in the viewer on Android?
+
+No, the viewer does not support text selection on Android. On iOS, the plugin uses the PDFKit framework, which provides the native viewer experience of the platform.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a PDF file from the device's file system.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application instead of an in-app viewer.
+- [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/): Generate paginated PDF files from HTML content or URLs.
+- [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print PDF documents on Android and iOS.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

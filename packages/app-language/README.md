@@ -20,9 +20,14 @@ Capacitor plugin to manage the app's own language override, independent of the d
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Language plugin is typically used whenever an app offers its own language selection, for example:
+
+- **In-app language switcher**: Let users pick the app language from a settings screen instead of changing the device language (Android).
+- **Consistent native dialogs**: Make sure natively rendered strings like permission dialogs and notifications match the language of your web UI.
+- **Settings deep link**: Guide iOS users to the app's system settings page, where they can change the app language.
+- **System default option**: Offer a "system default" entry that clears the override so the app follows the device language again (Android).
 
 ## Compatibility
 
@@ -117,6 +122,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to get, set, and reset the app language override and open the app's settings page.
+
+### Get the current language override
+
+Read the BCP 47 language tag of the app's current language override. Returns `null` if no override is set and the app follows the device language:
+
 ```typescript
 import { AppLanguage } from '@capawesome/capacitor-app-language';
 
@@ -124,14 +135,38 @@ const getLanguage = async () => {
   const { languageTag } = await AppLanguage.getLanguage();
   return languageTag;
 };
+```
+
+### Set the app language
+
+Set the app's language override, independent of the device language. Note that this recreates the current activity, which reloads the web view. Only available on Android:
+
+```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
 
 const setLanguage = async () => {
   await AppLanguage.setLanguage({ languageTag: 'de-DE' });
 };
+```
+
+### Reset the language override
+
+Clear the override so the app follows the device language again. Only available on Android:
+
+```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
 
 const resetLanguage = async () => {
   await AppLanguage.resetLanguage();
 };
+```
+
+### Open the app's settings page
+
+Deep-link the user to the app's page in the system settings. On iOS, this is where the user can change the app language:
+
+```typescript
+import { AppLanguage } from '@capawesome/capacitor-app-language';
 
 const openSettings = async () => {
   await AppLanguage.openSettings();
@@ -259,6 +294,45 @@ Setting the app language programmatically is only supported on Android. On iOS, 
 | `setLanguage(...)` | ✅      | ❌ Unimplemented | ❌ Unimplemented |
 | `resetLanguage()`  | ✅      | ❌ Unimplemented | ❌ Unimplemented |
 | `openSettings()`   | ✅      | ✅               | ❌ Unimplemented |
+
+## FAQ
+
+### Why can't I set the app language programmatically on iOS?
+
+On iOS, the app language can only be changed by the user in the system settings, so the `setLanguage(...)` and `resetLanguage(...)` methods are not available there. Use `openSettings()` to deep-link the user to the app's settings page, where the language can be changed.
+
+### Does this plugin translate my web UI?
+
+No. The language override only affects natively rendered strings, such as permission dialogs, notifications, or plugin-presented sheets. The language of your web UI should be handled by your app's i18n library.
+
+### Why is the language row not shown in the iOS system settings?
+
+The per-app language row only appears if the app bundle provides more than one localization. Declare the supported localizations under the `CFBundleLocalizations` key in your app's `Info.plist`, as described in the [Installation](#installation) section.
+
+### Why does my app reload after calling `setLanguage`?
+
+Setting or resetting the language recreates the current activity on Android, which reloads the web view. This is expected behavior and cannot be avoided.
+
+### How does the selected language persist across app restarts on Android?
+
+On Android 13 and above, the override is integrated with the system settings via a `locales_config.xml` file. On Android 12 and below, you need to add the `AppLocalesMetadataHolderService` service to your `AndroidManifest.xml` to persist the selected language, as described in the [Installation](#installation) section.
+
+### How is this plugin different from the Localization plugin?
+
+The [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin reads the user's localization preferences, such as preferred locales, time zone, and regional formatting settings. The App Language plugin manages the app's own language override, independent of the device language. The two plugins work well together.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's localization preferences, such as preferred locales, time zone, and regional formatting settings.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

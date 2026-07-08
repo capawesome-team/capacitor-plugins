@@ -8,9 +8,15 @@ Capacitor plugin to run a foreground service on Android.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Android Foreground Service plugin is typically used whenever an app needs to keep running a task while it is in the background, for example:
+
+- **Location tracking**: Run long-running use cases that require location access, such as navigation or location sharing, using the `Location` service type.
+- **Audio recording**: Continue microphone capture from the background, such as voice recorders or communication apps, using the `Microphone` service type.
+- **Long-running tasks with user awareness**: Show a persistent notification with a title, body, and icon while your app performs work in the background.
+- **Interactive notifications**: Add buttons to the foreground service notification and react to them via the `buttonClicked` event.
+- **Bringing the app back to the foreground**: Move the app to the foreground programmatically, for example in response to a notification button click.
 
 ## Compatibility
 
@@ -78,8 +84,13 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to start, update, and stop a foreground service and how to create and delete notification channels.
+
+### Start a foreground service
+
+Start the foreground service with a persistent notification. You can optionally add buttons to the notification, which trigger the `buttonClicked` event when tapped. Only available on Android:
+
 ```typescript
-import { Capacitor } from '@capacitor/core';
 import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
 
 const startForegroundService = async () => {
@@ -102,6 +113,14 @@ const startForegroundService = async () => {
     notificationChannelId: 'default',
   });
 };
+```
+
+### Update the foreground service notification
+
+Update the notification details of the running foreground service, for example to show the progress of a task. Only available on Android:
+
+```typescript
+import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
 
 const updateForegroundService = async () => {
   await ForegroundService.updateForegroundService({
@@ -111,10 +130,26 @@ const updateForegroundService = async () => {
     smallIcon: 'ic_stat_icon_config_sample',
   });
 };
+```
+
+### Stop the foreground service
+
+Stop the running foreground service when the background work is done. Only available on Android:
+
+```typescript
+import { ForegroundService } from '@capawesome-team/capacitor-android-foreground-service';
 
 const stopForegroundService = async () => {
   await ForegroundService.stopForegroundService();
 };
+```
+
+### Create and delete notification channels
+
+Create a notification channel for the foreground service notification. If not invoked, the plugin creates a channel with name and description set to "Default". Only available on Android (SDK 26+):
+
+```typescript
+import { ForegroundService, Importance } from '@capawesome-team/capacitor-android-foreground-service';
 
 const createNotificationChannel = async () => {
   await ForegroundService.createNotificationChannel({
@@ -527,6 +562,32 @@ Remove all listeners for this plugin.
 ### Why can the user dismiss the notification?
 
 Android 14 has changed the behavior to allow users to dismiss such notifications, see [Changes to how users experience non-dismissible notifications](https://developer.android.com/about/versions/14/behavior-changes-all#non-dismissable-notifications).
+
+### Which permissions does this plugin require?
+
+You need to add the `FOREGROUND_SERVICE` permission along with the permission for each foreground service type you use (for example `FOREGROUND_SERVICE_LOCATION`) to your `AndroidManifest.xml`, see the [Installation](#installation) section. On Android 13+, you should also use `checkPermissions()` and `requestPermissions()` to request the permission to display notifications.
+
+### Why does `moveToForeground` not work?
+
+On Android SDK 23+, the user must grant the manage overlay permission before the app can be moved to the foreground. Use the `requestManageOverlayPermission()` method to request the permission and the `checkManageOverlayPermission()` method to check whether it has been granted.
+
+### Which foreground service types are supported?
+
+The plugin currently supports the `Location` service type for long-running use cases that require location access and the `Microphone` service type for continued microphone capture from the background. Make sure to declare the matching permission and the `android:foregroundServiceType` attribute in your `AndroidManifest.xml`, see the [Installation](#installation) section.
+
+### Does this plugin work on iOS or Web?
+
+No, this plugin only provides an Android implementation, as the name suggests. Foreground services are an Android concept and all methods are only available on Android.
+
+## Related Plugins
+
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your Capacitor app.
+- [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions on Android.
+- [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake while your app is in use.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

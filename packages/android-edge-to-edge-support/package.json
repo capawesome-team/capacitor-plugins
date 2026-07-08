@@ -34,8 +34,17 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/android-edge-to-edge-support/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "edge-to-edge",
+    "edge to edge",
+    "status bar",
+    "navigation bar",
+    "system bars",
+    "insets",
+    "safe area"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",

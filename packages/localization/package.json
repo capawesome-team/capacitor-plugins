@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-localization",
   "version": "0.0.1",
-  "description": "Capacitor plugin to read the user's localization preferences.",
+  "description": "Capacitor plugin to read the user's localization preferences on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,8 +36,17 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/localization/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "localization",
+    "locale",
+    "i18n",
+    "internationalization",
+    "time zone",
+    "text direction",
+    "regional settings",
+    "measurement system"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

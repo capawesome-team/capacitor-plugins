@@ -10,7 +10,7 @@ Capacitor plugin that allows you to update your app remotely in real-time withou
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for Over-the-Air (OTA) updates. Here are some of the key features:
+The Capacitor Live Update plugin is one of the most feature-rich Over-the-Air (OTA) update solutions for Capacitor apps. Here are some of the key features:
 
 - 🔋 Supports **Android and iOS**
 - ⚡️ **Capacitor 6/7/8** support
@@ -31,9 +31,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Live Update plugin is typically used to ship changes to users without going through the app stores, for example:
+
+- **Instant bug fixes**: Deliver critical fixes to your users in real-time without waiting for app store reviews.
+- **Fast feature delivery**: Ship new web-based features as soon as they are ready by publishing a new bundle.
+- **Staged rollouts**: Gradually roll out new bundles to a subset of devices to gather feedback before a full release.
+- **Testing and QA channels**: Distribute preview versions to testers via dedicated channels before promoting them to production.
+- **Safe releases**: Automatically roll back to the default bundle if a faulty update prevents the app from becoming ready.
 
 ## Compatibility
 
@@ -216,65 +222,29 @@ A working example can be found here: [capawesome-team/capacitor-live-update-demo
 
 ## Usage
 
+All methods are only available on Android and iOS. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
+
+### Sync with Capawesome Cloud
+
+Automatically download and set the latest bundle for the app using [Capawesome Cloud](https://cloud.capawesome.io/). Call `reload()` or restart the app to apply the changes. The `channel` option overrides the channel for this single sync call without persisting it:
+
 ```typescript
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
-const deleteBundle = async () => {
-  await LiveUpdate.deleteBundle({ bundleId: 'my-bundle' });
+const sync = async () => {
+  const result = await LiveUpdate.sync({
+    channel: 'production-5',
+  });
+  return result.nextBundleId;
 };
+```
 
-const downloadBundle = async () => {
-  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
-};
+### Notify the plugin that the app is ready
 
-const fetchChannels = async () => {
-  const result = await LiveUpdate.fetchChannels();
-  return result.channels;
-};
+Call `ready()` as soon as the app is ready to use so that the plugin knows no rollback is needed. If the `readyTimeout` configuration option is set and this method is not called in time, the plugin resets the app to the default bundle:
 
-const fetchLatestBundle = async () => {
-  await LiveUpdate.fetchLatestBundle();
-};
-
-const getBundles = async () => {
-  const result = await LiveUpdate.getBundles();
-  return result.bundleIds;
-};
-
-const getChannel = async () => {
-  const result = await LiveUpdate.getChannel();
-  return result.channel;
-};
-
-const getCurrentBundle = async () => {
-  const result = await LiveUpdate.getCurrentBundle();
-  return result.bundleId;
-};
-
-const getCustomId = async () => {
-  const result = await LiveUpdate.getCustomId();
-  return result.customId;
-};
-
-const getDeviceId = async () => {
-  const result = await LiveUpdate.getDeviceId();
-  return result.deviceId;
-};
-
-const getNextBundle = async () => {
-  const result = await LiveUpdate.getNextBundle();
-  return result.bundleId;
-};
-
-const getVersionCode = async () => {
-  const result = await LiveUpdate.getVersionCode();
-  return result.versionCode;
-};
-
-const getVersionName = async () => {
-  const result = await LiveUpdate.getVersionName();
-  return result.versionName;
-};
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const ready = async () => {
   const result = await LiveUpdate.ready();
@@ -288,32 +258,17 @@ const ready = async () => {
     console.log('The app was reset to the default bundle.');
   }
 };
+```
 
-const reload = async () => {
-  await LiveUpdate.reload();
-};
+### Check if a new bundle is available
 
-const reset = async () => {
-  await LiveUpdate.reset();
-};
+Fetch the latest bundle from Capawesome Cloud and compare it with the bundle that is currently in use:
 
-const setChannel = async () => {
-  await LiveUpdate.setChannel({ channel: 'production-5' });
-};
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
 
-const setCustomId = async () => {
-  await LiveUpdate.setCustomId({ customId: 'my-custom-id' });
-};
-
-const setNextBundle = async () => {
-  await LiveUpdate.setNextBundle({ bundleId: '7f0b9bf2-dff6-4be2-bcac-b068cc5ea756' });
-};
-
-const sync = async () => {
-  const result = await LiveUpdate.sync({
-    channel: 'production-5',
-  });
-  return result.nextBundleId;
+const fetchLatestBundle = async () => {
+  await LiveUpdate.fetchLatestBundle();
 };
 
 const isNewBundleAvailable = async () => {
@@ -326,6 +281,143 @@ const isNewBundleAvailable = async () => {
   } else {
     return false;
   }
+};
+```
+
+### Download a bundle from your own server
+
+Download a self-hosted bundle from any URL, without any Capawesome Cloud dependency:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const downloadBundle = async () => {
+  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+};
+```
+
+### Switch to a downloaded bundle
+
+Set the next bundle to use for the app. Call `reload()` or restart the app to apply the changes:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const setNextBundle = async () => {
+  await LiveUpdate.setNextBundle({ bundleId: '7f0b9bf2-dff6-4be2-bcac-b068cc5ea756' });
+};
+
+const reload = async () => {
+  await LiveUpdate.reload();
+};
+```
+
+### Manage downloaded bundles
+
+Get the identifiers of all bundles that have been downloaded and delete bundles that are no longer needed:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const getBundles = async () => {
+  const result = await LiveUpdate.getBundles();
+  return result.bundleIds;
+};
+
+const deleteBundle = async () => {
+  await LiveUpdate.deleteBundle({ bundleId: 'my-bundle' });
+};
+```
+
+### Work with channels
+
+Set the channel to use for updates, read the currently resolved channel, and fetch the available channels from Capawesome Cloud. The channel set via `setChannel(...)` is persisted across app restarts. Note that `fetchChannels(...)` only works for apps with public channels enabled:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const setChannel = async () => {
+  await LiveUpdate.setChannel({ channel: 'production-5' });
+};
+
+const getChannel = async () => {
+  const result = await LiveUpdate.getChannel();
+  return result.channel;
+};
+
+const fetchChannels = async () => {
+  const result = await LiveUpdate.fetchChannels();
+  return result.channels;
+};
+```
+
+### Inspect the current and next bundle
+
+Get the identifier of the bundle that is currently used by the app and of the bundle that will be used after the next reload or app restart:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const getCurrentBundle = async () => {
+  const result = await LiveUpdate.getCurrentBundle();
+  return result.bundleId;
+};
+
+const getNextBundle = async () => {
+  const result = await LiveUpdate.getNextBundle();
+  return result.bundleId;
+};
+```
+
+### Identify devices
+
+Read the unique device identifier and manage a custom identifier for the device:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const getDeviceId = async () => {
+  const result = await LiveUpdate.getDeviceId();
+  return result.deviceId;
+};
+
+const setCustomId = async () => {
+  await LiveUpdate.setCustomId({ customId: 'my-custom-id' });
+};
+
+const getCustomId = async () => {
+  const result = await LiveUpdate.getCustomId();
+  return result.customId;
+};
+```
+
+### Read the app version
+
+Get the native version code and version name of the app, for example to restrict live updates to compatible native versions:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const getVersionCode = async () => {
+  const result = await LiveUpdate.getVersionCode();
+  return result.versionCode;
+};
+
+const getVersionName = async () => {
+  const result = await LiveUpdate.getVersionName();
+  return result.versionName;
+};
+```
+
+### Reset to the default bundle
+
+Reset the app to the bundle that shipped with the native app binary. Call `reload()` or restart the app to apply the changes:
+
+```typescript
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const reset = async () => {
+  await LiveUpdate.reset();
 };
 ```
 
@@ -1287,6 +1379,27 @@ You then have three options to get back to the default bundle:
 3. **Update**: Increase the native version code of your app so that Capacitor automatically resets to the default bundle.
 
 However, this is only a problem during development. It is not a problem in production, as Capacitor automatically resets to the default bundle after a native update.
+
+### Do I have to use Capawesome Cloud?
+
+No, the plugin also supports self-hosted bundles. You can download a bundle from any URL using the [`downloadBundle(...)`](#downloadbundle) method and apply it with [`setNextBundle(...)`](#setnextbundle), without any Capawesome Cloud dependency. Capawesome Cloud is only required for the convenience features such as [`sync(...)`](#sync), channels, and rollouts.
+
+### What changes can I ship with a live update?
+
+Live updates are only supported for [binary-compatible changes](https://capawesome.io/docs/cloud/live-updates/faq/#what-are-binary-compatible-changes) such as HTML, CSS, and JavaScript. If you change native code, for example by adding a new plugin, you need to resubmit your app to the app stores. You should therefore [restrict live updates to compatible native versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/) of your app, as described in the [Limitations](#limitations) section.
+
+### How does the rollback mechanism work?
+
+If the `readyTimeout` configuration option is set, the plugin waits for the app to call the [`ready()`](#ready) method after a new bundle has been applied. If the method is not called within the configured timeout, the plugin assumes the bundle is faulty and resets the app to the default bundle. It is strongly recommended to configure `readyTimeout` (e.g. `10000` ms). Additionally, with the `autoBlockRolledBackBundles` option enabled, bundles that caused a rollback are automatically blocked and skipped in future sync operations.
+
+## Related Plugins
+
+- [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/): Assist users with native app updates, which are required for changes that are not binary-compatible.
+- [Firebase Remote Config](https://capawesome.io/docs/sdks/capacitor/firebase/remote-config/): Change the behavior and appearance of your app remotely without publishing an update.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

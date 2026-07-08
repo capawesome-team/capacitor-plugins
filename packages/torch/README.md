@@ -10,7 +10,7 @@ Capacitor plugin for switching the flashlight on and off.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for torch/flashlight control. Here are some of the key features:
+The Capacitor Torch plugin is one of the most complete flashlight control solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 🔦 **Torch control**: Enable, disable, and toggle torch/flashlight.
@@ -20,9 +20,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Torch plugin is typically used whenever an app needs to control the device's flashlight, for example:
+
+- **Flashlight features**: Turn the flashlight on and off with a single tap in your app.
+- **Barcode and QR code scanning**: Let users enable the torch to scan codes in low-light environments.
+- **Document capture**: Improve capture quality in dark surroundings by enabling the torch.
+- **Signaling**: Toggle the torch to draw attention, for example as an emergency signal light.
 
 ## Compatibility
 
@@ -81,6 +86,25 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to check if the torch is available, turn the torch on and off, toggle the torch, and check if the torch is enabled.
+
+### Check if the torch is available
+
+Not every device has a torch, so check the availability before showing a flashlight control in your UI:
+
+```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
+const isAvailable = async () => {
+    const result = await Torch.isAvailable();
+    return result.available;
+};
+```
+
+### Turn the torch on and off
+
+Enable or disable the torch. On Android, these methods require SDK 23 or newer. On the Web, you can optionally pass your own `MediaStream` with a video track via the `stream` option:
+
 ```typescript
 import { Torch } from '@capawesome/capacitor-torch';
 
@@ -91,19 +115,30 @@ const enable = async () => {
 const disable = async () => {
   await Torch.disable();
 };
+```
 
-const isAvailable = async () => {
-    const result = await Torch.isAvailable();
-    return result.available;
+### Toggle the torch
+
+Switch the torch to the opposite state with a single call:
+
+```typescript
+import { Torch } from '@capawesome/capacitor-torch';
+
+const toggle = async () => {
+  await Torch.toggle();
 };
+```
+
+### Check if the torch is enabled
+
+Read the current state of the torch, for example to display the state in your UI:
+
+```typescript
+import { Torch } from '@capawesome/capacitor-torch';
 
 const isEnabled = async () => {
     const result = await Torch.isEnabled();
     return result.enabled;
-};
-
-const toggle = async () => {
-  await Torch.toggle();
 };
 ```
 
@@ -263,6 +298,38 @@ Only available on Android (SDK 23+), iOS and Web.
 | **`stream`** | <code>MediaStream</code> | The stream of media to toggle the torch on. **Attention**: The stream must have a video track. The facing mode of the video track must be the one that corresponds to the torch. Only available on Web. | 6.2.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin is available on Android, iOS and Web. On Android, the `enable(...)`, `disable(...)` and `toggle(...)` methods require SDK 23 or newer. On the Web, the plugin uses the MediaStream API to control the torch.
+
+### Why does `isAvailable` return false on my device?
+
+The `isAvailable()` method reports whether the current device provides a torch. It returns `false` on devices without a torch, for example many tablets or desktop browsers. Use this method to hide or disable your flashlight UI on such devices.
+
+### Do I need any permissions to use this plugin?
+
+On Android, you need to add the `FLASHLIGHT` permission to your `AndroidManifest.xml` file, see the [Installation](#installation) section. No permissions are required on iOS.
+
+### How does the torch control work on the web?
+
+The web implementation uses the MediaStream API. You can optionally pass your own `MediaStream` via the `stream` option of `enable(...)`, `disable(...)`, `isEnabled(...)` and `toggle(...)`. The stream must have a video track, and the facing mode of the video track must be the one that corresponds to the torch.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
+- [Light Sensor](https://capawesome.io/docs/sdks/capacitor/light-sensor/): Read the device's ambient light sensor.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

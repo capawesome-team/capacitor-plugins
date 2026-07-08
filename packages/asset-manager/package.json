@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-asset-manager",
   "version": "8.0.1",
-  "description": "Capacitor plugin to access native asset files.",
+  "description": "Capacitor plugin to access native asset files on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "asset manager",
+    "assets",
+    "app bundle",
+    "read file",
+    "copy file",
+    "native resources"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

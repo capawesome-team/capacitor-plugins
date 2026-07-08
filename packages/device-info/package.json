@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-device-info",
   "version": "0.0.1",
-  "description": "Capacitor plugin to read device information.",
+  "description": "Capacitor plugin to read device information on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "device info",
+    "device information",
+    "device model",
+    "device identifier",
+    "operating system version",
+    "device type",
+    "memory usage"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

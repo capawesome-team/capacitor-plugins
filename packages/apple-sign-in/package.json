@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-apple-sign-in",
   "version": "0.1.1",
-  "description": "Capacitor plugin to sign-in with Apple.",
+  "description": "Capacitor plugin to sign-in with Apple on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,7 +36,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "apple sign in",
+    "sign in with apple",
+    "apple login",
+    "apple id",
+    "social login",
+    "authentication",
+    "oauth"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-cloudinary",
   "version": "8.0.1",
-  "description": "Unofficial Capacitor plugin for integrating with Cloudinary.",
+  "description": "Unofficial Capacitor plugin for integrating with Cloudinary on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,15 @@
     "android",
     "ios",
     "web",
-    "cloudinary"
+    "cloudinary",
+    "capacitor-plugin",
+    "cloudinary sdk",
+    "file upload",
+    "image upload",
+    "video upload",
+    "media upload",
+    "chunked upload",
+    "file download"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

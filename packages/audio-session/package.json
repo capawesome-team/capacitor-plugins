@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "audio session",
+    "avaudiosession",
+    "audio category",
+    "audio route",
+    "audio output",
+    "audio interruption",
+    "speaker output"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

@@ -10,7 +10,7 @@ Unofficial Capacitor plugin to sign-in with Facebook.[^1]
 
 ## Features
 
-We are proud to offer a comprehensive Capacitor plugin for Facebook Sign-In. Here are some of the key features:
+The Capacitor Facebook Sign-In plugin is a comprehensive Facebook authentication solution for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 🔐 **Authentication**: Sign in users with their Facebook account.
@@ -26,9 +26,15 @@ We are proud to offer a comprehensive Capacitor plugin for Facebook Sign-In. Her
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Facebook Sign-In plugin is typically used wherever users should sign in with their existing Facebook account, for example:
+
+- **Social login**: Let users sign in to your app with their Facebook account instead of creating a new password.
+- **Backend authentication**: Send the authentication token (JWT) to your backend to verify the user's identity.
+- **Graph API access**: Use the access token to request data from the Facebook Graph API on behalf of the user.
+- **Privacy-friendly sign-in on iOS**: Use Limited Login to sign in users without tracking and without App Tracking Transparency consent.
+- **Profile pre-filling**: Use the user's email, display name, and profile picture to pre-fill their profile in your app.
 
 ## Compatibility
 
@@ -130,6 +136,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize the plugin, sign in a user, sign in with Limited Login, get the current access token, and sign out a user.
+
+### Initialize the plugin
+
+Call `initialize(...)` once before all other methods. On Android and iOS, the App ID is usually read from the native configuration, so the `appId` option is only required on Web:
+
 ```typescript
 import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
 
@@ -138,6 +150,14 @@ const initialize = async () => {
     appId: '1234567890123456',
   });
 };
+```
+
+### Sign in a user
+
+Start the Facebook Sign-In flow and retrieve the access token and the user's profile:
+
+```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
 
 const signIn = async () => {
   const result = await FacebookSignIn.signIn();
@@ -146,6 +166,14 @@ const signIn = async () => {
   console.log(result.profile.name);
   console.log(result.profile.email);
 };
+```
+
+### Sign in with Limited Login
+
+Use Limited Login to sign in users without tracking. Instead of an access token, an authentication token (JWT) is returned that can be verified on your backend. Provide a nonce to prevent replay attacks. Only available on iOS:
+
+```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
 
 const signInWithLimitedLogin = async () => {
   const result = await FacebookSignIn.signIn({
@@ -154,11 +182,27 @@ const signInWithLimitedLogin = async () => {
   });
   console.log(result.authenticationToken);
 };
+```
+
+### Get the current access token
+
+Retrieve the current access token, for example to check whether a user is still signed in. The result is `null` if no user is signed in or the access token has expired:
+
+```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
 
 const getCurrentAccessToken = async () => {
   const { accessToken } = await FacebookSignIn.getCurrentAccessToken();
   console.log(accessToken?.token);
 };
+```
+
+### Sign out a user
+
+Sign out the current user:
+
+```typescript
+import { FacebookSignIn } from '@capawesome/capacitor-facebook-sign-in';
 
 const signOut = async () => {
   await FacebookSignIn.signOut();
@@ -319,6 +363,43 @@ This plugin handles the sign-in flow and returns tokens to your app. To keep you
 
 - **Server-side token verification is required.** The `authenticationToken` (JWT) is **not** verified client-side. Your backend **must** verify the JWT signature using [Facebook's public keys](https://www.facebook.com/.well-known/oauth/openid/jwks/) before trusting any claims. Never use client-side token data for authorization decisions without server-side verification.
 - **Validate the access token on your backend.** If you use the `accessToken`, your backend should validate it with the [Facebook Graph API](https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow#checktoken) before trusting it.
+
+## FAQ
+
+### Do I need a Facebook app to use this plugin?
+
+Yes, this plugin requires a Facebook app. You can create one in the [Meta App Dashboard](https://developers.facebook.com/apps/) and add the **Facebook Login** product to it. The **App ID** and **Client Token** from the app settings are needed for the platform-specific configuration, see the [Installation](#installation) section.
+
+### What is Limited Login and when should I use it?
+
+Limited Login is an alternative sign-in mode of the Facebook SDK on iOS. With Limited Login, no data is shared with Meta that could be used for tracking, so no App Tracking Transparency consent is required. However, no access token for the Facebook Graph API is returned. Instead, an authentication token (JWT) is returned, which can be verified on your backend. Set the `limitedLogin` option to `true` to use it.
+
+### Why is the `accessToken` property `null` after signing in on iOS?
+
+This happens when Limited Login is used. If the user has not granted the App Tracking Transparency permission, the Facebook SDK may fall back to Limited Login even if classic login was requested. In this case, use the `authenticationToken` (JWT) instead and verify it on your backend.
+
+### How do I verify the sign-in on my backend?
+
+Your backend must verify the JWT signature of the `authenticationToken` using [Facebook's public keys](https://www.facebook.com/.well-known/oauth/openid/jwks/) before trusting any claims. If you use the `accessToken`, your backend should validate it with the Facebook Graph API before trusting it. See the [Security](#security) section for more details.
+
+### Can I use this plugin together with other sign-in plugins?
+
+Yes, the plugin works alongside the [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/) and [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/) plugins, so you can offer multiple sign-in options in the same app.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/): Sign in users with their Apple account.
+- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in users with their Google account.
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with any OAuth 2.0 and OpenID Connect provider.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication such as face or fingerprint recognition.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

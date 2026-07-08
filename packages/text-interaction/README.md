@@ -18,9 +18,14 @@ Capacitor plugin to enable and disable text interaction (selection, magnifier, c
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Text Interaction plugin is typically used to make web content feel like a native app, for example:
+
+- **App-like UIs**: Disable text selection, the magnifier and the callout menu so buttons, menus and other controls don't trigger accidental text selection.
+- **Kiosk apps**: Prevent users from selecting and copying content in apps running on public or shared devices.
+- **Reading views**: Re-enable text interaction at runtime in views where users should be able to select and copy text.
+- **Settings toggles**: Read the current state with `isEnabled()` to keep an in-app toggle in sync.
 
 ## Compatibility
 
@@ -62,16 +67,38 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to disable text interaction, enable it again, and check whether it is currently enabled.
+
+### Disable text interaction
+
+Turn off the system text-interaction gestures, that is text selection, the selection magnifier and the callout (copy/paste) menu. Only available on iOS:
+
+```typescript
+import { TextInteraction } from '@capawesome/capacitor-text-interaction';
+
+const disable = async () => {
+  await TextInteraction.disable();
+};
+```
+
+### Enable text interaction
+
+Re-enable text interaction after it has been disabled. Text interaction is enabled by default. Only available on iOS:
+
 ```typescript
 import { TextInteraction } from '@capawesome/capacitor-text-interaction';
 
 const enable = async () => {
   await TextInteraction.enable();
 };
+```
 
-const disable = async () => {
-  await TextInteraction.disable();
-};
+### Check whether text interaction is enabled
+
+Read the current state, for example to keep a settings toggle in sync. Only available on iOS:
+
+```typescript
+import { TextInteraction } from '@capawesome/capacitor-text-interaction';
 
 const isEnabled = async () => {
   const { enabled } = await TextInteraction.isEnabled();
@@ -163,6 +190,38 @@ Text interaction covers the system gestures that let a user work with text in th
 - **Beyond CSS**: The CSS `user-select: none` property prevents text selection for specific elements and covers most cases. This plugin disables the system text-interaction gestures as a whole, which is useful for app-like UIs where accidental text selection breaks the experience.
 - **Default state**: Text interaction is enabled by default.
 - **Runtime toggling**: Changes apply to the WebView's configuration. If a change does not take effect immediately on already-rendered content, reload the WebView content to apply it.
+
+## FAQ
+
+### Why is this plugin only available on iOS?
+
+The plugin controls the system text-interaction gestures of the iOS WebView. On Android and Web, all methods reject as unimplemented. On Web, you can use the CSS `user-select` property to prevent text selection instead.
+
+### What is the difference between this plugin and the CSS `user-select` property?
+
+The CSS `user-select: none` property prevents text selection for specific elements and covers most cases. This plugin disables the system text-interaction gestures as a whole, including text selection, the selection magnifier and the callout (copy/paste) menu, which is useful for app-like UIs where accidental text selection breaks the experience. See [Text Interaction Behavior](#text-interaction-behavior) for more details.
+
+### Is text interaction enabled by default?
+
+Yes, text interaction is enabled by default. Call `disable()` to turn it off and `enable()` to restore the default behavior. You can read the current state at any time with `isEnabled()`.
+
+### Why does a change not take effect immediately?
+
+Changes apply to the WebView's configuration. If a change does not take effect immediately on already-rendered content, reload the WebView content to apply it.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
+- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher and block screenshots.
+- [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/): Detect an outdated Android System WebView and guide users to update it.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

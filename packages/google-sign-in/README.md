@@ -10,7 +10,7 @@ Unofficial Capacitor plugin to sign-in with Google.[^1]
 
 ## Features
 
-We are proud to offer a comprehensive Capacitor plugin for Google Sign-In. Here are some of the key features:
+The Capacitor Google Sign-In plugin is one of the most complete Google authentication solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 🔐 **Authentication**: Sign in users with their Google account and receive an ID token (JWT).
@@ -25,9 +25,15 @@ We are proud to offer a comprehensive Capacitor plugin for Google Sign-In. Here 
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Google Sign-In plugin is typically used wherever users should sign in with their existing Google account, for example:
+
+- **Social login**: Let users sign in to your app with their Google account instead of creating a new password.
+- **Backend authentication**: Send the ID token (JWT) to your backend to verify the user's identity.
+- **Google API access**: Request OAuth scopes to receive an access token for accessing Google APIs on behalf of the user.
+- **Server-side API access**: Exchange the server auth code on your backend for access and refresh tokens.
+- **Profile pre-filling**: Use the user's email, display name, and profile picture to pre-fill their profile in your app.
 
 ## Compatibility
 
@@ -102,9 +108,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize the plugin, sign in and sign out a user, and complete the sign-in flow on the Web.
+
+### Initialize the plugin
+
+Call `initialize(...)` once before all other methods. The `clientId` must be a **web client ID** from the Google Cloud Console on all platforms, even on Android and iOS. Optionally provide `scopes` to also request authorization, which enables the access token and server auth code in the sign-in result:
+
 ```typescript
 import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
-import { Capacitor } from '@capacitor/core';
 
 const initialize = async () => {
   await GoogleSignIn.initialize({
@@ -112,6 +123,14 @@ const initialize = async () => {
     scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
   });
 };
+```
+
+### Sign in a user
+
+Start the Google Sign-In flow and retrieve the ID token (JWT) and the user's profile. Note that on Web, this redirects to the Google OAuth authorization page and the promise never resolves:
+
+```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
 
 const signIn = async () => {
   const result = await GoogleSignIn.signIn();
@@ -122,6 +141,15 @@ const signIn = async () => {
   console.log(result.accessToken);
   console.log(result.serverAuthCode);
 };
+```
+
+### Complete the sign-in flow on the Web
+
+On Web, the app is redirected back to the `redirectUrl` after the user signs in. Call `handleRedirectCallback()` there to exchange the authorization code for tokens and complete the sign-in flow. Only available on Web:
+
+```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+import { Capacitor } from '@capacitor/core';
 
 const handleRedirectCallback = async () => {
   if (Capacitor.getPlatform() !== 'web') {
@@ -135,6 +163,14 @@ const handleRedirectCallback = async () => {
   console.log(result.accessToken);
   console.log(result.serverAuthCode);
 };
+```
+
+### Sign out a user
+
+Sign out the current user:
+
+```typescript
+import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
 
 const signOut = async () => {
   await GoogleSignIn.signOut();
@@ -290,6 +326,29 @@ This plugin is purpose-built for Google Sign-In and focuses on providing a clean
 - **Authentication + Authorization**: Supports both authentication (ID tokens) and authorization (access tokens, server auth codes) in a single flow.
 - **Error codes**: Provides typed error codes for proper error handling.
 - **Redirect flow on Web**: Uses a redirect-based OAuth flow instead of popups, resulting in a more reliable and user-friendly experience.
+
+### Why do I need a web client ID on Android and iOS?
+
+The `clientId` option must be a web client ID from the Google Cloud Console on all platforms. On Android, it is passed as the server client ID to the Credential Manager API and the AuthorizationClient API. On iOS, it is used as the server client ID for the Google Sign-In SDK. On iOS, you additionally configure your iOS client ID via the `GIDClientID` key in the `Info.plist` file, see the [Installation](#installation) section.
+
+### Why does the `signIn` promise never resolve on the Web?
+
+On Web, the plugin uses a redirect-based OAuth flow. The `signIn(...)` method redirects to the Google OAuth authorization page, so the promise never resolves. After the user signs in, the app is redirected back to the `redirectUrl` and you must call `handleRedirectCallback()` to complete the sign-in flow, see the [usage example](#complete-the-sign-in-flow-on-the-web) above.
+
+### How do I get an access token for Google APIs?
+
+Configure the `scopes` option in the `initialize(...)` method. The plugin then requests authorization in addition to authentication, which enables the `accessToken` and `serverAuthCode` properties in the sign-in result. If you need access and refresh tokens on your backend, exchange the `serverAuthCode` there, never client-side, as described in the [Security](#security) section.
+
+## Related Plugins
+
+- [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/): Sign in users with their Apple account.
+- [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/): Sign in users with their Facebook account.
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with any OAuth 2.0 and OpenID Connect provider.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

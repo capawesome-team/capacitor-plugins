@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-navigation-bar",
   "version": "8.0.0",
-  "description": "Capacitor plugin to set the background color and button style of the navigation bar.",
+  "description": "Capacitor plugin to set the background color and button style of the navigation bar on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,12 +36,18 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/navigation-bar/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "ionic",
     "android",
     "ios",
-    "navigation bar"
+    "navigation bar",
+    "android navigation bar",
+    "navigation bar color",
+    "hide navigation bar",
+    "system bars",
+    "system ui"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

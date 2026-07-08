@@ -23,9 +23,14 @@ Capacitor plugin to read, write and remove EXIF metadata from image files.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Exif plugin is typically used whenever an app needs to work with photo metadata, for example:
+
+- **Privacy protection**: Strip GPS positions and other sensitive metadata from photos before uploading them to a server.
+- **Photo organization**: Read the capture date and GPS position to sort and group photos.
+- **Metadata correction**: Fix a wrong capture date or add a missing GPS position without re-encoding the image.
+- **Camera details**: Display camera and lens information such as ISO, aperture, and exposure time in a photo detail view.
 
 ## Compatibility
 
@@ -73,6 +78,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to read the EXIF metadata of an image, write EXIF tags to an image, and remove the EXIF metadata from an image.
+
+### Read the EXIF metadata of an image
+
+Read typed EXIF tags such as the GPS position, camera model, and capture date from an image file. Only available on Android and iOS:
+
 ```typescript
 import { Exif } from '@capawesome/capacitor-exif';
 
@@ -82,6 +93,14 @@ const readExif = async () => {
   });
   console.log('GPS position:', tags.gpsLatitude, tags.gpsLongitude);
 };
+```
+
+### Write EXIF tags to an image
+
+Update EXIF tags in place. Only the provided tags are updated and the pixel data is never re-encoded. Only available on Android and iOS:
+
+```typescript
+import { Exif } from '@capawesome/capacitor-exif';
 
 const writeExif = async () => {
   await Exif.writeExif({
@@ -93,6 +112,14 @@ const writeExif = async () => {
     },
   });
 };
+```
+
+### Remove the EXIF metadata from an image
+
+Strip all EXIF metadata from an image file in place, for example to protect the privacy of your users before an upload. By default, the orientation tag is kept so that the image is not suddenly displayed rotated. Only available on Android and iOS:
+
+```typescript
+import { Exif } from '@capawesome/capacitor-exif';
 
 const removeExif = async () => {
   await Exif.removeExif({
@@ -312,6 +339,43 @@ const prepareUpload = async (path: string) => {
 
 - HEIC files store the orientation at the container level, so the `orientation` tag can not be changed and is always kept, even with `keepOrientation` set to `false`.
 - HEIC files may keep the `software` and `dateTimeOriginal` tags after `removeExif(...)`. GPS data and device identity tags (`make`, `model`, `lensModel`) are always removed.
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin supports Android and iOS. All methods (`readExif`, `writeExif` and `removeExif`) are only available on these two platforms, since the files are processed natively and never loaded into the WebView memory.
+
+### Does writing or removing EXIF metadata affect the image quality?
+
+No. Writing and removing EXIF metadata is a lossless in-place operation. The pixel data is never decoded or re-encoded, so the image quality is not affected. See [Lossless Metadata Writes](#lossless-metadata-writes) for details on how this is implemented on each platform.
+
+### Which image formats are supported?
+
+Reading EXIF metadata works with any image format that the platform supports, including JPEG, PNG, WebP, HEIC/HEIF, and DNG/RAW. Writing and removing metadata is only supported for certain formats, which differ between Android and iOS (see [Format Support](#format-support)). Calling `writeExif(...)` or `removeExif(...)` with an unsupported format rejects with the `UNSUPPORTED_FORMAT` error code.
+
+### Why is the orientation tag still present after calling `removeExif`?
+
+The `keepOrientation` option is enabled by default so that images are not suddenly displayed rotated after the metadata has been removed. You can set it to `false` to also remove the orientation tag. Note that HEIC files on iOS store the orientation at the container level, so it is always kept there.
+
+### How do I remove the GPS position from a photo before uploading it?
+
+Call `removeExif(...)` with the path to the image file. This strips the GPS position along with all other EXIF metadata in place, without affecting the image quality. See [Privacy: Strip Metadata Before Upload](#privacy-strip-metadata-before-upload) for an example.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Pick the image files whose metadata you want to read or edit.
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images in formats like PNG, JPEG, and WebP.
+- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo.
+- [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, and format conversion.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

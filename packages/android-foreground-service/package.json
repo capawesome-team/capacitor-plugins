@@ -33,11 +33,19 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/android-foreground-service/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "ionic",
     "android",
-    "foreground service"
+    "foreground service",
+    "background service",
+    "background execution",
+    "android service",
+    "persistent notification",
+    "notification channel",
+    "location tracking",
+    "background location"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",

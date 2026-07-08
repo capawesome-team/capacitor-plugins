@@ -22,9 +22,14 @@ Capacitor plugin to check and request device permissions with a unified API.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Permissions plugin is typically used whenever an app needs to manage several device permissions in one place, for example:
+
+- **Onboarding screens**: Check the states of all permissions your app uses with the prompt-free `check(...)` method and present them in a single overview.
+- **Contextual permission requests**: Request the camera or microphone permission right before the user starts a video call or recording.
+- **Background location upgrades**: Request the `LOCATION` permission first and upgrade to `LOCATION_ALWAYS` afterwards, as recommended by the platforms.
+- **Recovering from denied permissions**: Detect the `denied` state and guide the user to the app settings to re-enable the permission.
 
 ## Compatibility
 
@@ -144,6 +149,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check the states of one or more permissions and how to request them from the user.
+
+### Check the states of one or more permissions
+
+Use the `check(...)` method to read the current states of one or more permissions. This method never displays a permission prompt, so it is safe to call at any time, for example to build an onboarding or settings screen:
+
 ```typescript
 import { Permission, Permissions } from '@capawesome/capacitor-permissions';
 
@@ -153,6 +164,14 @@ const checkPermissions = async () => {
   });
   return statuses;
 };
+```
+
+### Request one or more permissions
+
+Use the `request(...)` method to prompt the user for one or more permissions. Permissions that are already granted or that cannot be requested on the current platform are not requested again; in that case, the current state is returned. On the web, only the `NOTIFICATIONS` permission can be requested:
+
+```typescript
+import { Permission, Permissions } from '@capawesome/capacitor-permissions';
 
 const requestPermissions = async () => {
   const { statuses } = await Permissions.request({
@@ -344,6 +363,41 @@ const openAppSettings = async () => {
 ## App Tracking Transparency
 
 The App Tracking Transparency permission is deliberately not part of this plugin. Use the [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/) plugin instead.
+
+## FAQ
+
+### Does the `check` method trigger a permission prompt?
+
+No, the `check(...)` method never displays a permission prompt. It only reads the current states of the given permissions, so you can safely call it at any time, for example to build an onboarding or settings screen.
+
+### Why does the `request` method reject with an error?
+
+On Android, the corresponding permissions must be declared in the `AndroidManifest.xml` file of your app. On iOS, the corresponding usage description keys must be provided in the `Info.plist` file of your app. If a declaration is missing, the `request(...)` method rejects with a clear error message. See the [Installation](#installation) section for the required entries per permission.
+
+### Do I need to declare all supported permissions in my app?
+
+No, the plugin itself does not declare any permissions and does not require any Info.plist keys. Your app only declares exactly the permissions it actually uses. This way, your app does not request permissions it does not need.
+
+### How do I request background location access?
+
+Request the `LOCATION` permission first and, once it has been granted, request the `LOCATION_ALWAYS` permission. On Android 11 and later, the system does not display a prompt for background location; instead, the user is taken to the system settings to select the "Allow all the time" option. On iOS, the system only displays the upgrade prompt from when-in-use to always access once.
+
+### What can I do if a permission is denied?
+
+If a permission is in the `denied` state, it can no longer be requested from within the app. In this case, you can guide the user to the app settings using the [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) plugin so they can grant the permission manually.
+
+### Which permissions are supported on the web?
+
+On the web, only the `NOTIFICATIONS` permission can be checked and requested. The `CAMERA`, `LOCATION` and `MICROPHONE` permissions support checking, while requesting returns the current state since browsers display the permission prompt when the corresponding web API is used for the first time. All other permissions are reported as `unavailable`. See the [Platform behavior](#platform-behavior) section for details.
+
+## Related Plugins
+
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens, for example to recover from denied permissions.
+- [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request the App Tracking Transparency permission on iOS.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

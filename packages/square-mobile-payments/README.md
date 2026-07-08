@@ -25,9 +25,15 @@ This plugin provides a comprehensive integration with Square's Mobile Payments S
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Square Mobile Payments plugin is typically used to accept in-person payments in a Capacitor app, for example:
+
+- **Point of sale**: Turn your app into a POS system that accepts tap, dip, swipe, and manually entered card payments with Square card readers.
+- **Tap to Pay on iPhone**: Accept contactless payments directly on an iPhone without additional hardware by linking a Square seller account with an Apple ID.
+- **Mobile and pop-up sales**: Pair, monitor, and manage Square readers for markets, food trucks, or events, and process payments offline with automatic sync when connectivity is limited.
+- **Compliant receipts**: Access card details, authorization codes, and EMV data of completed payments to generate compliant receipts.
+- **Testing without hardware**: Use the mock reader in debug builds to test the whole payment flow without a physical reader.
 
 ## Compatibility
 
@@ -173,8 +179,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to initialize and authorize the SDK, pair and list readers, start a payment, read the available card input methods, and listen for payment and reader events.
+
+### Initialize and authorize the SDK
+
+Initialize the SDK with your Square location ID and authorize it with a Square access token. The `initialize(...)` method must be called before any other method:
+
 ```typescript
-import { SquareMobilePayments, CardInputMethod } from '@capawesome/capacitor-square-mobile-payments';
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const initializeSDK = async () => {
   await SquareMobilePayments.initialize({
@@ -185,15 +197,39 @@ const initializeSDK = async () => {
     accessToken: 'YOUR_ACCESS_TOKEN',
   });
 };
+```
+
+### Check the authorization state
+
+Check whether the SDK is currently authorized, for example on app start:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const checkAuthorization = async () => {
   const { authorized } = await SquareMobilePayments.isAuthorized();
   console.log('Authorized:', authorized);
 };
+```
+
+### Pair a Square reader
+
+Start the pairing process. The SDK searches for nearby readers and pairs with the first one found:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const pairReader = async () => {
   await SquareMobilePayments.startPairing();
 };
+```
+
+### List the paired readers
+
+Get all paired readers with their serial number, model, and status:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const getReaders = async () => {
   const { readers } = await SquareMobilePayments.getReaders();
@@ -201,6 +237,14 @@ const getReaders = async () => {
     console.log('Reader:', reader.serialNumber, reader.model, reader.status);
   }
 };
+```
+
+### Start a payment
+
+Present the payment UI and process a payment with the specified parameters. Only one payment can be active at a time:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const processPayment = async () => {
   await SquareMobilePayments.startPayment({
@@ -217,6 +261,14 @@ const processPayment = async () => {
     },
   });
 };
+```
+
+### Listen for payment events
+
+Listen for successful, failed, and cancelled payments to react to the result of a payment flow:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const listenToPaymentEvents = () => {
   SquareMobilePayments.addListener('paymentDidFinish', (event) => {
@@ -233,6 +285,14 @@ const listenToPaymentEvents = () => {
     console.log('Payment cancelled');
   });
 };
+```
+
+### Listen for reader events
+
+Listen for reader status changes and changes to the available card input methods:
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const listenToReaderEvents = () => {
   SquareMobilePayments.addListener('readerWasAdded', (event) => {
@@ -247,6 +307,14 @@ const listenToReaderEvents = () => {
     console.log('Available methods:', event.cardInputMethods);
   });
 };
+```
+
+### Get the available card input methods
+
+Read the card entry methods that are currently available based on the connected readers (e.g. tap, dip, swipe, or keyed entry):
+
+```typescript
+import { SquareMobilePayments } from '@capawesome/capacitor-square-mobile-payments';
 
 const getAvailableMethods = async () => {
   const { cardInputMethods } = await SquareMobilePayments.getAvailableCardInputMethods();
@@ -1426,6 +1494,46 @@ Callback to receive payment cancellation notifications.
 | **`Other`**           | <code>'OTHER'</code>            | Other or unknown card brand. | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin supports Android and iOS. There is no Web implementation, since the Square Mobile Payments SDK requires native hardware access to card readers.
+
+### How can I test payments without a physical card reader?
+
+Use the `showMockReader()` method to display a mock reader interface for testing payment flows without physical hardware. It is only intended for development and testing purposes and is therefore only available in debug builds. You can hide it again with `hideMockReader()`.
+
+### What permissions does the plugin require?
+
+The plugin requires location access to confirm that payments are occurring in a supported Square location, Bluetooth access to connect to Square card readers, and, on iOS, microphone access to receive data from magstripe readers. You can check and request the required permissions with `checkPermissions()` and `requestPermissions()`, and the corresponding privacy descriptions must be added to your `Info.plist` on iOS (see [Installation](#installation)).
+
+### Does the plugin support Tap to Pay on iPhone?
+
+Yes, on iOS you can link a Square seller account with an Apple ID using `linkAppleAccount()`, which presents an Apple sheet with the Tap to Pay on iPhone terms and conditions. Use `isDeviceCapable()` to check whether the device supports Tap to Pay on iPhone, and `relinkAppleAccount()` to switch to a different Apple ID.
+
+### Why do the plugin methods fail before I call any of them?
+
+The Square Mobile Payments SDK must be initialized natively with your Square Application ID before the plugin can be used: in a custom `Application` class on Android and in the `AppDelegate` on iOS (see [Installation](#installation)). Additionally, `initialize(...)` must be called before any other plugin method, followed by `authorize(...)` with a Square access token.
+
+### Can I process payments without an internet connection?
+
+Yes, the plugin supports processing payments online or offline with automatic sync. Note that for offline payments, the payment `id` may be `null` until the payment has been synced.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
+- [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/): Present remotely-configured paywalls to drive subscriptions.
+- [Wallet](https://capawesome.io/docs/sdks/capacitor/wallet/): Add passes to Apple Wallet and Google Wallet.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

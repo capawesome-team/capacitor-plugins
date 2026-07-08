@@ -10,7 +10,7 @@ Unofficial Capacitor plugin for [Superwall SDK](https://superwall.com/).[^1]
 
 ## Features
 
-We are proud to offer a comprehensive Capacitor plugin for Superwall SDK integration. Here are some of the key features:
+The Capacitor Superwall plugin brings remotely-configured paywalls and paywall experiments to Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 💰 **Paywall Presentation**: Show beautiful, remotely-configured paywalls to drive subscriptions.
@@ -24,9 +24,15 @@ We are proud to offer a comprehensive Capacitor plugin for Superwall SDK integra
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Superwall plugin is typically used to monetize an app with subscriptions, for example:
+
+- **Feature gating**: Register a placement with `register(...)` when the user taps a premium feature and present a paywall if they don't have an active subscription.
+- **Paywall experiments**: Run A/B tests and holdout groups for your paywalls, configured remotely on the Superwall dashboard without app updates.
+- **Personalized paywalls**: Identify users and set custom attributes to target paywalls with audience filters.
+- **Analytics forwarding**: Listen for Superwall events and forward them to your analytics platform.
+- **Campaign deep links**: Handle deep links for paywall campaigns configured on the dashboard.
 
 ## Compatibility
 
@@ -87,6 +93,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to configure the SDK, present paywalls, identify users, manage subscription status, handle deep links, and listen for events.
+
+### Configure the SDK
+
+Configure the Superwall SDK with the API key from your dashboard. This must be called once before all other methods:
+
 ```typescript
 import { Superwall } from '@capawesome/capacitor-superwall';
 
@@ -105,6 +117,14 @@ const configureSuperwall = async () => {
     },
   });
 };
+```
+
+### Present a paywall
+
+Register a placement with `register(...)` to present a paywall if the user doesn't have an active subscription. This is the primary method for feature gating and paywall presentation:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const showPaywall = async () => {
   const result = await Superwall.register({
@@ -117,6 +137,14 @@ const showPaywall = async () => {
 
   console.log('Paywall result:', result.result); // 'PURCHASED', 'CANCELLED', or 'RESTORED'
 };
+```
+
+### Check whether a paywall would be presented
+
+Use `getPresentationResult(...)` to check if a paywall would be presented for a placement without actually presenting it:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const checkPaywall = async () => {
   const result = await Superwall.getPresentationResult({
@@ -129,6 +157,14 @@ const checkPaywall = async () => {
     console.log('User does not match audience, no paywall');
   }
 };
+```
+
+### Identify the user
+
+Identify the current user with a unique ID to link it to their anonymous alias for analytics and paywall assignments:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const identifyUser = async (userId: string) => {
   await Superwall.identify({
@@ -138,6 +174,14 @@ const identifyUser = async (userId: string) => {
     },
   });
 };
+```
+
+### Set user attributes
+
+Set custom user attributes for personalization and audience filtering on the Superwall dashboard. Keys starting with `$` are reserved for Superwall use:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const setAttributes = async () => {
   await Superwall.setUserAttributes({
@@ -148,11 +192,27 @@ const setAttributes = async () => {
     },
   });
 };
+```
+
+### Check the subscription status
+
+Read the current subscription status of the user:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const checkSubscription = async () => {
   const result = await Superwall.getSubscriptionStatus();
   console.log('Subscription status:', result.status); // 'ACTIVE', 'INACTIVE', or 'UNKNOWN'
 };
+```
+
+### Listen for events
+
+Listen for analytics events, subscription status changes, paywall lifecycle events and custom paywall actions:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const addListeners = async () => {
   // Forward analytics events to your platform
@@ -181,10 +241,26 @@ const addListeners = async () => {
     // Handle custom actions like 'help', 'contact', etc.
   });
 };
+```
+
+### Handle a campaign deep link
+
+Process deep links associated with Superwall campaigns configured on the dashboard:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const handleCampaignDeepLink = async (url: string) => {
   await Superwall.handleDeepLink({ url });
 };
+```
+
+### Reset the user identity on logout
+
+Reset the user identity when the user explicitly logs out:
+
+```typescript
+import { Superwall } from '@capawesome/capacitor-superwall';
 
 const logout = async () => {
   await Superwall.reset();
@@ -855,6 +931,46 @@ Remove all listeners for this plugin.
 | **`SubscriptionStatusDidChange`** | <code>'SUBSCRIPTION_STATUS_DID_CHANGE'</code> | Subscription status changed. | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+The plugin supports Android and iOS. There is no Web implementation, since the Superwall SDK targets native mobile apps.
+
+### Do I need to call `configure` before using other methods?
+
+Yes, `configure(...)` must be called once with the Superwall API key from your dashboard before all other methods. You can optionally pass configuration options for paywall behavior, logging, and the network environment.
+
+### What is the difference between `register` and `getPresentationResult`?
+
+The `register(...)` method registers a placement and actually presents a paywall if the user doesn't have an active subscription. The `getPresentationResult(...)` method only checks whether a paywall would be presented for a placement without presenting it, which is useful for deciding whether to show a feature or a paywall before the user interacts.
+
+### When should I call `reset`?
+
+Call `reset()` only on explicit logout. It rotates the anonymous user ID, clears local paywall assignments, and requires the SDK to re-download its configuration. To identify a new user afterwards, use `identify(...)`.
+
+### How do I forward Superwall events to my analytics platform?
+
+Add a listener for the `superwallEvent` event. It emits Superwall analytics events such as paywall opens, transactions, and subscription starts, together with additional event data that you can pass to your analytics platform. See [Listen for events](#listen-for-events) above for an example.
+
+### Is this an official Superwall plugin?
+
+No, this is an unofficial Capacitor plugin for the Superwall SDK maintained by Capawesome. It is not affiliated with, endorsed by, or sponsored by the makers of Superwall.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Track events and analyze user behavior with PostHog.
+- [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

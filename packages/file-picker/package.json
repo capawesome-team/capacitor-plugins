@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-file-picker",
   "version": "8.0.3",
-  "description": "Capacitor plugin that allows the user to select a file.",
+  "description": "Capacitor plugin that allows the user to select a file, directory, image, or video on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,13 +36,21 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/file-picker/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "ionic",
     "android",
     "ios",
     "web",
-    "file picker"
+    "file picker",
+    "document picker",
+    "image picker",
+    "video picker",
+    "media picker",
+    "directory picker",
+    "file upload",
+    "file selection"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

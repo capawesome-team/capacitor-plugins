@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-pdf-generator",
   "version": "0.0.1",
-  "description": "Capacitor plugin to generate paginated PDF files from HTML content or URLs.",
+  "description": "Capacitor plugin to generate paginated PDF files from HTML content or URLs on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -40,7 +40,13 @@
     "native",
     "pdf",
     "pdf generator",
-    "html to pdf"
+    "html to pdf",
+    "capacitor-plugin",
+    "url to pdf",
+    "generate pdf",
+    "pdf export",
+    "pdf creation",
+    "invoice pdf"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

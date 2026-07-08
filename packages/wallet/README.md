@@ -18,9 +18,14 @@ Capacitor plugin for adding passes to [Apple Wallet](https://developer.apple.com
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Wallet plugin is typically used to hand digital passes to the user's wallet app, for example:
+
+- **Boarding passes**: Add flight or train boarding passes so travelers have them ready at the gate.
+- **Event tickets**: Add tickets for concerts, sports events, or the cinema.
+- **Loyalty cards**: Let customers store membership and loyalty cards in their wallet.
+- **Coupons**: Distribute coupons and vouchers that users can redeem in store.
 
 ## Compatibility
 
@@ -66,6 +71,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check whether passes can be added, add passes to Apple Wallet, and save a pass to Google Wallet.
+
+### Check whether passes can be added
+
+On some devices (e.g. certain iPads) or when adding passes is restricted, passes cannot be added to Apple Wallet. Use this method to gate the UI that triggers `addPasses(...)`. Only available on iOS:
+
 ```typescript
 import { Wallet } from '@capawesome/capacitor-wallet';
 
@@ -73,11 +84,27 @@ const canAddPasses = async () => {
   const { canAdd } = await Wallet.canAddPasses();
   return canAdd;
 };
+```
+
+### Add passes to Apple Wallet
+
+Present the system add-pass sheet with one or more passes. Each pass must be a base64-encoded `.pkpass` file that was created and signed on your server (see [Creating Passes](#creating-passes)). Only available on iOS:
+
+```typescript
+import { Wallet } from '@capawesome/capacitor-wallet';
 
 const addPasses = async (passes: string[]) => {
   // `passes` are base64-encoded `.pkpass` files that were signed on your server.
   await Wallet.addPasses({ passes });
 };
+```
+
+### Save a pass to Google Wallet
+
+Open the Google Wallet "Save to Wallet" flow with a signed JWT that was created on your server (see [Creating Passes](#creating-passes)). Only available on Android:
+
+```typescript
+import { Wallet } from '@capawesome/capacitor-wallet';
 
 const saveToGoogleWallet = async (jwt: string) => {
   // `jwt` is a signed Google Wallet JWT that was created on your server.
@@ -205,6 +232,41 @@ A pass is a signed `.pkpass` bundle. Build and sign it on your server using your
 A pass is represented by a signed JWT. Create and sign the JWT on your server using your Google Wallet service account, then send it to your app and pass it to `saveToGoogleWallet(...)`. See Google's [Wallet API documentation](https://developers.google.com/wallet) for details on creating passes and JWTs.
 
 **Note**: With the URL-based "Save to Wallet" flow used by this plugin, there is no completion signal, so `saveToGoogleWallet(...)` resolves as soon as the flow is launched, not when the pass is actually saved.
+
+## FAQ
+
+### Can this plugin create passes for me?
+
+No, this plugin only presents passes to the user. Creating and signing passes must happen on your server, because it requires private keys and certificates that must never be shipped inside your app. See [Creating Passes](#creating-passes) for details and links to the official Apple and Google documentation.
+
+### Which methods are available on which platform?
+
+The `addPasses(...)` and `canAddPasses()` methods are only available on iOS, where they interact with Apple Wallet. The `saveToGoogleWallet(...)` method is only available on Android, where it opens the Google Wallet "Save to Wallet" flow.
+
+### Why does `saveToGoogleWallet` resolve before the pass is saved?
+
+The plugin uses the URL-based "Save to Wallet" flow, which does not provide a completion signal. The promise therefore resolves as soon as the flow is launched, not when the pass is actually saved.
+
+### Do I need a special entitlement to add passes on iOS?
+
+No, adding passes via the system add-pass sheet does not require any special entitlement. The `com.apple.developer.pass-type-identifiers` entitlement is only needed if you want to read or manage passes that your app owns, which is out of scope for this plugin.
+
+### Why does `canAddPasses` return false?
+
+The `canAddPasses()` method may return `false` on some devices (e.g. certain iPads) or when adding passes is restricted. Use it to hide or disable the UI that triggers `addPasses(...)` in these cases.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
+- [Square Mobile Payments](https://capawesome.io/docs/sdks/capacitor/square-mobile-payments/): Accept payments with the Square Mobile Payments SDK.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

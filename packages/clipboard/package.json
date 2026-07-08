@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-clipboard",
   "version": "0.0.1",
-  "description": "Capacitor plugin to read from and write to the system clipboard.",
+  "description": "Capacitor plugin to read from and write to the system clipboard on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -40,7 +40,14 @@
     "native",
     "clipboard",
     "copy",
-    "paste"
+    "paste",
+    "capacitor-plugin",
+    "copy to clipboard",
+    "clipboard image",
+    "clipboard html",
+    "rich text",
+    "pasteboard",
+    "copy paste"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

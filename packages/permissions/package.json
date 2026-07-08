@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-permissions",
   "version": "0.0.1",
-  "description": "Capacitor plugin to check and request device permissions with a unified API.",
+  "description": "Capacitor plugin to check and request device permissions with a unified API on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,15 @@
     "permission",
     "runtime permissions",
     "authorization",
-    "request permission"
+    "request permission",
+    "capacitor-plugin",
+    "check permission",
+    "permission status",
+    "camera permission",
+    "location permission",
+    "notification permission",
+    "microphone permission",
+    "background location"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

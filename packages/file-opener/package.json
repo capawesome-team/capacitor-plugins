@@ -1,7 +1,7 @@
 {
   "name": "@capawesome-team/capacitor-file-opener",
   "version": "8.0.1",
-  "description": "Capacitor plugin to open a file with the default application.",
+  "description": "Capacitor plugin to open a file with the default application on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -42,7 +42,14 @@
     "android",
     "ios",
     "web",
-    "file opener"
+    "file opener",
+    "capacitor-plugin",
+    "open file",
+    "file viewer",
+    "document viewer",
+    "open pdf",
+    "default application",
+    "mime type"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

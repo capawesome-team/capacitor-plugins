@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "app integrity",
+    "play integrity",
+    "app attest",
+    "device integrity",
+    "attestation",
+    "integrity token",
+    "anti-tampering"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

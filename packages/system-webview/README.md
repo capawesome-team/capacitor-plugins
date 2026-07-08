@@ -18,9 +18,14 @@ Capacitor plugin to detect an outdated Android System WebView and guide users to
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The System WebView plugin is typically used to protect an app against outdated Android System WebViews, for example:
+
+- **Update checks on app start**: Check with `isUpdateRequired(...)` whether the installed WebView meets the minimum Chromium version your app's bundle requires.
+- **Guided update flows**: Prompt the user with a dialog and send them straight to the Play Store entry of their active WebView provider with `openAppStore()`.
+- **Support diagnostics**: Read the package name and version of the active WebView provider with `getInfo()` and attach it to bug reports to explain hard-to-diagnose rendering issues.
+- **Feature gating**: Only enable web features like CSS `:has()` or container queries when the installed WebView is recent enough to support them.
 
 ## Compatibility
 
@@ -72,11 +77,15 @@ No configuration required for this plugin.
 
 ## Usage
 
-The recommended pattern is to check whether an update is required on app start, prompt the user with the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin, and then open the Play Store:
+The following examples show how to prompt the user to update the WebView and read information about the WebView provider.
+
+### Prompt the user to update the WebView
+
+The recommended pattern is to check whether an update is required on app start, prompt the user with the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin, and then open the Play Store. Only available on Android:
 
 ```typescript
-import { Dialog } from '@capacitor/dialog';
 import { SystemWebView } from '@capawesome/capacitor-system-webview';
+import { Dialog } from '@capacitor/dialog';
 
 const promptForUpdateIfRequired = async () => {
   const { required } = await SystemWebView.isUpdateRequired({
@@ -95,15 +104,23 @@ const promptForUpdateIfRequired = async () => {
     await SystemWebView.openAppStore();
   }
 };
+```
+
+> [!NOTE]
+> A WebView update only takes effect the next time the app process is started. The currently running app keeps using the old WebView until it is restarted.
+
+### Read information about the WebView provider
+
+Get the package name, version name and Chromium major version of the active WebView provider, for example to attach it to your support diagnostics. Only available on Android:
+
+```typescript
+import { SystemWebView } from '@capawesome/capacitor-system-webview';
 
 const getInfo = async () => {
   const info = await SystemWebView.getInfo();
   return info;
 };
 ```
-
-> [!NOTE]
-> A WebView update only takes effect the next time the app process is started. The currently running app keeps using the old WebView until it is restarted.
 
 ## API
 
@@ -217,6 +234,38 @@ The following table gives a rough idea of when some popular web features became 
 | 114+           | CSS `text-wrap: balance`                      |
 
 Pick the minimum version based on the features your app uses and pass it as `minMajorVersion`.
+
+## FAQ
+
+### Why is this plugin not available on iOS?
+
+On iOS, the `WKWebView` is part of the operating system and is updated together with iOS itself. It cannot be updated separately, so there is nothing for an app to detect or fix. All methods therefore reject as unimplemented on iOS and Web.
+
+### Which minimum Chromium version should I require?
+
+There is no universal threshold, because "outdated" depends on which web features your app's bundle actually needs. Pick the minimum Chromium major version based on the features your app uses (for example, CSS `:has()` and container queries require Chromium 105 or newer) and pass it as `minMajorVersion` to `isUpdateRequired(...)`. See [Why Outdated System WebViews Matter](#why-outdated-system-webviews-matter) for a rough feature baseline table.
+
+### Why is `majorVersion` sometimes `null`?
+
+The `majorVersion` is derived from the integer before the first dot of the WebView provider's `versionName`. If the `versionName` is not a Chromium-style version, which can happen with OEM WebView forks, the `majorVersion` is `null`. In that case, you can still inspect the raw `packageName` and `versionName` returned by `getInfo()`.
+
+### Why does my app still use the old WebView after the user updated it?
+
+A WebView update only takes effect the next time the app process is started. The currently running app keeps using the old WebView until it is restarted.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/): Assist with native app updates.
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, and operating system.
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -19,9 +19,14 @@ Capacitor plugin to launch arbitrary Android intents.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Android Intent Launcher plugin is typically used whenever an app needs to interact with system screens or other apps that no dedicated plugin covers, for example:
+
+- **Opening system screens**: Open Android system screens such as the app settings screen via the `android.settings.APPLICATION_DETAILS_SETTINGS` action.
+- **Integrating with other apps**: Launch a specific activity of another app via an explicit intent and read its result code and result data once it finishes.
+- **Sharing and composing**: Share plain text via the `android.intent.action.SEND` action or compose an email via the `android.intent.action.SENDTO` action.
+- **Feature detection**: Check whether an activity exists that can handle an intent before launching it, for example to conditionally show a button in your UI.
 
 ## Compatibility
 
@@ -69,6 +74,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to start an activity for an intent and check whether an intent can be resolved.
+
+### Start an activity
+
+Launch an activity for the given intent. The intent is started via the `startActivityForResult(...)` API, so the result code and result data of the launched activity are returned once it finishes. Only available on Android:
+
 ```typescript
 import { AndroidIntentLauncher } from '@capawesome/capacitor-android-intent-launcher';
 
@@ -79,6 +90,14 @@ const startActivity = async () => {
   });
   return resultCode;
 };
+```
+
+### Check whether an intent can be resolved
+
+Check whether an activity exists that can handle the given intent before launching it. On Android 11 (API level 30) and higher, the result is affected by [package visibility](#package-visibility). Only available on Android:
+
+```typescript
+import { AndroidIntentLauncher } from '@capawesome/capacitor-android-intent-launcher';
 
 const canResolveActivity = async () => {
   const { canResolve } = await AndroidIntentLauncher.canResolveActivity({
@@ -232,6 +251,42 @@ If you launch or resolve intents that target other apps, declare the intents you
   </queries>
 </manifest>
 ```
+
+## FAQ
+
+### Why does `startActivity` reject with the error code `ACTIVITY_NOT_FOUND`?
+
+This happens when no activity exists that can handle the given intent. On Android 11 (API level 30) and higher, this can also be caused by [package visibility](#package-visibility), which limits which other apps your app can see. In that case, declare the intents you query in your app's `AndroidManifest.xml` using `<queries>` entries.
+
+### Does this plugin work on iOS or Web?
+
+No, intents are an Android-only concept, so this plugin has no iOS or Web implementation. On iOS and Web, all methods reject as unimplemented.
+
+### When should I use this plugin instead of a dedicated plugin?
+
+This plugin is intended as a last resort for system screens and app integrations that no dedicated plugin covers. Prefer a typed plugin where one exists, for example [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) for system settings screens or [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/) for opening URLs and other apps.
+
+### Can I pass complex data as intent extras?
+
+No, only primitive values (string, number and boolean) are supported as intent extras. Intent flags can be attached as well and multiple flags can be combined using the bitwise OR operator.
+
+### How do I know whether the launched activity was successful?
+
+The `startActivity(...)` method resolves with the result code returned by the launched activity once it finishes. The value is `-1` if the activity finished successfully (`RESULT_OK`), `0` if it was canceled (`RESULT_CANCELED`), or any other custom result code set by the launched activity.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens with a typed API.
+- [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

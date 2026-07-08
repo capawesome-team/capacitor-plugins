@@ -21,9 +21,14 @@ Capacitor plugin to read from and write to the system clipboard.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Clipboard plugin is typically used whenever an app lets users copy or paste content, for example:
+
+- **Copy to clipboard buttons**: Let users copy coupon codes, invite links, or wallet addresses with one tap.
+- **Paste support**: Read text, URLs, or images from the clipboard into your app, for example into a form or editor.
+- **Sharing images**: Copy a generated image (such as a QR code or chart) so users can paste it into other apps.
+- **Rich text workflows**: Copy formatted HTML content with a plain-text fallback for apps that cannot handle HTML.
 
 ## Compatibility
 
@@ -67,12 +72,26 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to write text, HTML, images, and URLs to the clipboard, and how to read its current content.
+
+### Write text to the clipboard
+
+Copy plain text to the system clipboard:
+
 ```typescript
 import { Clipboard } from '@capawesome/capacitor-clipboard';
 
 const writeText = async () => {
   await Clipboard.write({ text: 'Hello World' });
 };
+```
+
+### Write HTML with a plain-text fallback
+
+Copy HTML content and combine it with `text` to provide a plain-text fallback for apps that cannot handle HTML content:
+
+```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
 
 const writeHtml = async () => {
   await Clipboard.write({
@@ -80,16 +99,40 @@ const writeHtml = async () => {
     text: 'Hello World',
   });
 };
+```
+
+### Write an image to the clipboard
+
+Copy a real image (not just a data URL as plain text) by passing a Base64-encoded data URL:
+
+```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
 
 const writeImage = async () => {
   await Clipboard.write({
     image: 'data:image/png;base64,iVBORw0KGgo...',
   });
 };
+```
+
+### Write a URL to the clipboard
+
+Copy a URL as a native URL clipboard item:
+
+```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
 
 const writeUrl = async () => {
   await Clipboard.write({ url: 'https://capawesome.io' });
 };
+```
+
+### Read the clipboard content
+
+Read the current content of the system clipboard. The result contains the content type (text, HTML, image, or URL) and the value. Note that on Android, reading the clipboard is only possible while the app is in the foreground, and on iOS, a system paste notification is displayed:
+
+```typescript
+import { Clipboard } from '@capawesome/capacitor-clipboard';
 
 const read = async () => {
   const { type, value } = await Clipboard.read();
@@ -210,6 +253,41 @@ This plugin is a drop-in alternative to the official [`@capacitor/clipboard`](ht
 | `write({ image: dataUrl })` (text-only on Android) | `write({ image: dataUrl })` (real image on all platforms) |
 | —                                          | `write({ html: '<b>Hello</b>', text: 'Hello' })`       |
 | `read() → { value, type: 'text/plain' }`   | `read() → { value, type: 'TEXT' }`                     |
+
+## FAQ
+
+### Why is a notification shown when my app reads the clipboard?
+
+On iOS 14 and later, the system shows a paste notification banner every time the clipboard is read. On Android 12 (API level 31) and later, the system shows a toast message when an app reads clipboard content that was written by another app. Both are expected platform behavior and cannot be suppressed.
+
+### Why does reading the clipboard fail on Android?
+
+On Android 10 (API level 29) and later, apps can only read the clipboard while they are in the foreground and have input focus. The `read()` method rejects otherwise, so make sure to only call it in response to a user interaction while the app is visible.
+
+### Can I write multiple content types at once?
+
+No, exactly one of `text`, `html`, `image` or `url` must be provided when calling `write(...)`. The only exception is that `html` may additionally be combined with `text` to provide a plain-text fallback for apps that cannot handle HTML content.
+
+### How are images handled by this plugin?
+
+Images are written to the clipboard as real images, not just data URLs as plain text, by passing a Base64-encoded data URL to `write(...)`. When reading, images are also returned as a Base64-encoded data URL. See the [usage examples](#write-an-image-to-the-clipboard) above.
+
+### How is this plugin different from the official `@capacitor/clipboard` plugin?
+
+This plugin is a drop-in alternative to the official `@capacitor/clipboard` plugin with real image support on Android and HTML support on all platforms. Only a few method options differ, see the [migration table](#migrating-from-capacitorclipboard) above.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive content such as text, links, and files from other apps.
+- [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/): Enable and disable text interaction (selection, magnifier, callout menu) in the app's WebView.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

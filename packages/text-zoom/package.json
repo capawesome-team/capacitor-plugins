@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-text-zoom",
   "version": "0.0.1",
-  "description": "Capacitor plugin for reading and controlling the WebView text zoom.",
+  "description": "Capacitor plugin for reading and controlling the WebView text zoom on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "text zoom",
+    "text size",
+    "font size",
+    "font scale",
+    "text scaling",
+    "accessibility",
+    "webview"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

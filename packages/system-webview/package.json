@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "android system webview",
+    "webview version",
+    "webview update",
+    "outdated webview",
+    "chromium version",
+    "webview",
+    "android"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

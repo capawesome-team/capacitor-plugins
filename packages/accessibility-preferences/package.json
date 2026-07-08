@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-accessibility-preferences",
   "version": "0.0.1",
-  "description": "Capacitor plugin for reading the user's system accessibility preferences.",
+  "description": "Capacitor plugin for reading the user's system accessibility preferences on Android, iOS, and the Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,16 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "accessibility",
+    "a11y",
+    "accessibility preferences",
+    "font scale",
+    "reduce motion",
+    "bold text",
+    "high contrast",
+    "invert colors"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

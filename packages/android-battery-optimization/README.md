@@ -8,9 +8,14 @@ Capacitor plugin for Android to manage battery optimization settings, request ex
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Android Battery Optimization plugin is typically used by apps whose core function is affected by Doze and App Standby, for example:
+
+- **Background reliability checks**: Detect whether battery optimization is enabled and inform the user that background work may be deferred.
+- **Guided settings flow**: Open the battery optimization settings page so the user can manually exclude your app from battery optimization.
+- **Direct exemption requests**: Request the battery optimization ignore permission when the core function of your app is adversely affected by Power Management features.
+- **Troubleshooting support**: Help users understand why they receive delayed updates from your app by checking the battery optimization status.
 
 ## Compatibility
 
@@ -64,9 +69,15 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to check whether battery optimization is enabled, open the battery optimization settings, and request an exemption from battery optimization.
+
+### Check if battery optimization is enabled
+
+Find out whether battery optimization is enabled for the device, for example to inform the user that background work may be deferred. All methods of this plugin are only available on Android, so guard your calls with a platform check:
+
 ```typescript
-import { Capacitor } from '@capacitor/core';
 import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
 
 const isBatteryOptimizationEnabled = async () => {
   if (Capacitor.getPlatform() !== 'android') {
@@ -75,6 +86,15 @@ const isBatteryOptimizationEnabled = async () => {
   const { enabled } = await BatteryOptimization.isBatteryOptimizationEnabled();
   return enabled;
 };
+```
+
+### Open the battery optimization settings
+
+Open the battery optimization settings page so the user can manually exclude your app from battery optimization:
+
+```typescript
+import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
 
 const openBatteryOptimizationSettings = async () => {
   if (Capacitor.getPlatform() !== 'android') {
@@ -82,6 +102,15 @@ const openBatteryOptimizationSettings = async () => {
   }
   await BatteryOptimization.openBatteryOptimizationSettings();
 };
+```
+
+### Request an exemption from battery optimization
+
+Request the battery optimization ignore permission directly. This method requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` manifest permission (see [Installation](#installation)) and should only be used if your app meets an acceptable use case according to the Google Play policy:
+
+```typescript
+import { BatteryOptimization } from '@capawesome-team/capacitor-android-battery-optimization';
+import { Capacitor } from '@capacitor/core';
 
 const requestIgnoreBatteryOptimization = async () => {
   if (Capacitor.getPlatform() !== 'android') {
@@ -164,6 +193,42 @@ Only available on Android.
 | **`enabled`** | <code>boolean</code> | Whether or not battery optimization is enabled. | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### Does this plugin work on iOS or the Web?
+
+No, all methods of this plugin are only available on Android, since battery optimization with Doze and App Standby is an Android concept. On other platforms, guard your calls with a platform check using `Capacitor.getPlatform()` as shown in the [usage examples](#usage).
+
+### What is the difference between opening the settings and requesting an exemption?
+
+The `openBatteryOptimizationSettings()` method opens the battery optimization settings page, where the user has to find and exclude your app manually. The `requestIgnoreBatteryOptimization()` method asks the user directly to exempt your app, but requires the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` manifest permission and is subject to Google Play policy restrictions.
+
+### Do I need to add any permissions to my app?
+
+Only if you want to use `requestIgnoreBatteryOptimization()`. In that case, add the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission to your `AndroidManifest.xml` as described in the [Installation](#installation) section. Checking the battery optimization status and opening the settings page do not require any permissions.
+
+### Can requesting an exemption get my app rejected from Google Play?
+
+Google Play policies prohibit apps from requesting direct exemption from Power Management features in Android 6.0+ (Doze and App Standby) unless the core function of the app is adversely affected. Use `requestIgnoreBatteryOptimization()` only if your app meets an acceptable use case, or open the battery optimization settings with `openBatteryOptimizationSettings()` instead. See the [Android documentation](https://developer.android.com/training/monitoring-device-state/doze-standby.html#support_for_other_use_cases) for more information.
+
+### Why is background work in my app delayed on Android?
+
+When battery optimization is enabled, Android defers background work under Doze and App Standby, which can delay tasks your app performs in the background. You can use `isBatteryOptimizationEnabled()` to detect this and guide the user to exclude your app from battery optimization.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android.
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

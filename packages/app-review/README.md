@@ -8,9 +8,13 @@ Capacitor plugin that allows users to submit app store reviews and ratings.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Review plugin is typically used to collect more app store ratings and reviews, for example:
+
+- **In-app review prompts**: Ask for a rating at a positive moment, such as after a completed task, without the user leaving the app.
+- **Rate this app button**: Open the app store page directly from a button in your settings or about screen.
+- **Feedback flows**: Route satisfied users from your own feedback dialog to the native review dialog or the app store review page.
 
 ## Compatibility
 
@@ -56,15 +60,29 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to request an in-app review and open the app store page.
+
+### Request an in-app review
+
+Show the native in-app review dialog so the user can rate your app without leaving it. Note that on iOS, review requests are limited to 3 requests per year. Only available on Android, and on iOS 14 and later:
+
+```typescript
+import { AppReview } from '@capawesome/capacitor-app-review';
+
+const requestReview = async () => {
+  await AppReview.requestReview();
+};
+```
+
+### Open the app store page
+
+Open the App Store page for the current app and, if possible, open the dialog to leave a review. On iOS, you can pass the Apple ID of your app via the `appId` option. Only available on Android and iOS:
+
 ```typescript
 import { AppReview } from '@capawesome/capacitor-app-review';
 
 const openAppStore = async () => {
   await AppReview.openAppStore();
-};
-
-const requestReview = async () => {
-  await AppReview.requestReview();
 };
 ```
 
@@ -134,6 +152,42 @@ In order to test the In-App Review functionality, you need to follow the instruc
 
 - [Android](https://developer.android.com/guide/playcore/in-app-review/test)
 - [iOS](https://developer.apple.com/documentation/storekit/skstorereviewcontroller/3566727-requestreview#4278434)
+
+## FAQ
+
+### Why is the in-app review dialog not showing up?
+
+The operating system decides whether the review dialog is actually displayed. On iOS, review requests are limited to 3 requests per year, so the dialog may not appear every time you call `requestReview()`. Both platforms also have special requirements for testing, see the [Testing](#testing) section for the official instructions.
+
+### What is the difference between `requestReview` and `openAppStore`?
+
+The `requestReview()` method shows the native in-app review dialog, so the user can rate your app without leaving it. The `openAppStore(...)` method opens the App Store page for the current app and, if possible, opens the dialog to leave a review there. Use `requestReview()` for gentle prompts and `openAppStore(...)` for an explicit "Rate this app" button.
+
+### Do I need to provide an `appId`?
+
+Only on iOS, where the `appId` option of `openAppStore(...)` is the Apple ID of your app (e.g. `123456789`). You can find the ID in the URL of your app store entry (e.g. `https://apps.apple.com/app/id123456789`).
+
+### How can I test the in-app review functionality?
+
+You need to follow the instructions provided by the respective platform, since in-app reviews behave differently in development and production environments. The official testing guides for Android and iOS are linked in the [Testing](#testing) section.
+
+### Which platforms are supported?
+
+The plugin supports Android and iOS. The `requestReview()` method requires iOS 14 or later, and the `openAppStore(...)` method is available on Android and iOS.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/): Assist your users with native app updates.
+- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+- [Install Referrer](https://capawesome.io/docs/sdks/capacitor/install-referrer/): Read install attribution data from the Play Install Referrer and Apple Ad Services.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -23,9 +23,14 @@ Capacitor plugin to generate paginated PDF files from HTML content or URLs.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The PDF Generator plugin is typically used whenever an app needs to produce a document on the device, for example:
+
+- **Invoices and receipts**: Generate an invoice or receipt as a paginated PDF file from an HTML template.
+- **Reports**: Export app data as a paginated report with real page breaks and selectable page sizes.
+- **Tickets and confirmations**: Turn a booking confirmation or ticket into a PDF file that can be printed or shared.
+- **Web page snapshots**: Save a web page as a PDF file by passing its URL to `generateFromUrl(...)`.
 
 ## Compatibility
 
@@ -73,7 +78,13 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to generate a PDF file from HTML content and from a URL.
+
 The generated PDF file is written to the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin. You can also hand the path to the [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/), [Printer](https://capawesome.io/docs/sdks/capacitor/printer/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) or [Share](https://capacitorjs.com/docs/apis/share) plugin.
+
+### Generate a PDF file from HTML content
+
+Generate a paginated PDF file from an HTML string, with a custom file name, page size and orientation. Only available on Android and iOS:
 
 ```typescript
 import { PdfGenerator, Orientation, PageSize } from '@capawesome/capacitor-pdf-generator';
@@ -87,6 +98,14 @@ const generateFromHtml = async () => {
   });
   return path;
 };
+```
+
+### Generate a PDF file from a URL
+
+Generate a paginated PDF file from a web page. Use the `timeout` option to control how long the plugin waits for the page before the call is rejected with the `TIMEOUT` error code. Only available on Android and iOS:
+
+```typescript
+import { PdfGenerator, Orientation, PageSize } from '@capawesome/capacitor-pdf-generator';
 
 const generateFromUrl = async () => {
   const { path } = await PdfGenerator.generateFromUrl({
@@ -209,6 +228,42 @@ Only available on Android and iOS.
 | **`Letter`** | <code>'LETTER'</code> | US Letter (8.5 x 11 in). | 0.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Where is the generated PDF file stored?
+
+The generated PDF file is written to the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.
+
+### How can I display, print or share the generated PDF file?
+
+The plugin returns the path of the generated file, which you can hand to other plugins: display it with the [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/) plugin, print it with the [Printer](https://capawesome.io/docs/sdks/capacitor/printer/) plugin, open it with the [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) plugin, or share it with the [Share](https://capacitorjs.com/docs/apis/share) plugin.
+
+### Is this plugin available on the web?
+
+No, this plugin is only available on Android and iOS. On the web, use `window.print()` with [print CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries/Printing) to let the user save a web page as a PDF file.
+
+### Why does the call reject with the `TIMEOUT` error code?
+
+The PDF generation did not complete within the configured timeout, for example because the web page did not finish loading. By default, the plugin waits 30000 milliseconds. Increase the `timeout` option if your content needs more time to load.
+
+### Which page sizes and orientations are supported?
+
+The plugin supports the page sizes A3, A4, A5 and US Letter in portrait or landscape orientation. The page size defaults to A4 and the orientation defaults to portrait.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/): Display PDF documents in a fullscreen native viewer.
+- [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print HTML, PDFs, files and more on Android and iOS.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

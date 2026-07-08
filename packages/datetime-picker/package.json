@@ -1,7 +1,7 @@
 {
   "name": "@capawesome-team/capacitor-datetime-picker",
   "version": "8.1.1",
-  "description": "Capacitor plugin that let the user easily enter both a date and a time.",
+  "description": "Capacitor plugin that lets the user easily enter both a date and a time on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -41,7 +41,14 @@
     "ionic",
     "android",
     "ios",
-    "datetime picker"
+    "datetime picker",
+    "capacitor-plugin",
+    "date picker",
+    "time picker",
+    "month picker",
+    "date and time",
+    "native picker",
+    "calendar picker"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

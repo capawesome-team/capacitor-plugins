@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-live-update",
   "version": "8.3.0",
-  "description": "Capacitor plugin to update your app remotely in real-time.",
+  "description": "Capacitor plugin to update your app remotely in real-time on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -44,7 +44,14 @@
     "live update",
     "remote update",
     "ota",
-    "capgo"
+    "capgo",
+    "capacitor-plugin",
+    "live updates",
+    "ota update",
+    "over-the-air updates",
+    "code push",
+    "hot update",
+    "bundle management"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

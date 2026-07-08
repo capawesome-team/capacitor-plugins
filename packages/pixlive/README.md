@@ -2,6 +2,15 @@
 
 Unofficial Capacitor plugin for [PixLive SDK](https://www.vidinoti.com/) by Vidinoti.
 
+## Use Cases
+
+The PixLive plugin is typically used to build augmented reality experiences with content managed in PixLive Maker, for example:
+
+- **Interactive print media**: Bring magazines, flyers, or posters to life with AR content that appears when a context is recognized by the AR camera.
+- **Guided tours**: Synchronize tours and contexts to guide visitors through museums, exhibitions, or cities.
+- **Location-based experiences**: Trigger content or local notifications when the user approaches GPS points or beacons.
+- **QR code interactions**: React to QR codes and barcodes scanned by the AR camera via the `codeRecognize` event.
+
 ## Installation
 
 ```bash
@@ -47,12 +56,26 @@ const config: CapacitorConfig = {
 
 ## Usage
 
+The following examples show how to synchronize content from PixLive Maker and display the AR view.
+
+### Synchronize content from PixLive Maker
+
+Sync AR content from PixLive Maker filtered by tags so that it is available on the device. Only available on Android and iOS:
+
 ```typescript
 import { Pixlive } from '@capawesome/capacitor-pixlive';
 
 const synchronize = async () => {
   await Pixlive.synchronize({ tags: [['my-tag']] });
 };
+```
+
+### Display the AR view
+
+Create the native AR camera view at the specified screen coordinates. Only available on Android and iOS:
+
+```typescript
+import { Pixlive } from '@capawesome/capacitor-pixlive';
 
 const createARView = async () => {
   await Pixlive.createARView({ x: 0, y: 0, width: 300, height: 400 });
@@ -1011,3 +1034,35 @@ Remove all listeners for this plugin.
 <code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'camera' | 'location' | 'notifications'</code>
 
 </docgen-api>
+
+## FAQ
+
+### Which method do I have to call first?
+
+The `initialize()` method must be called before any other method of the plugin. It initializes the PixLive SDK using the license key from your Capacitor configuration file (see [Configuration](#configuration)).
+
+### How do I set up the PixLive SDK in my project?
+
+The PixLive SDK itself is not bundled with the plugin. On Android, copy the `vdarsdk-release.aar` file into your app's `android/app/libs/` directory. On iOS, copy `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project. See the [Installation](#installation) section for details.
+
+### Does this plugin support Swift Package Manager?
+
+No, this plugin only supports CocoaPods as the iOS dependency manager. Swift Package Manager is not supported.
+
+### Does this plugin work on the Web?
+
+No, the plugin methods are only available on Android and iOS since they rely on the native PixLive SDK.
+
+### Which permissions does the plugin handle?
+
+The plugin can check and request the camera, location, notifications, and Bluetooth permissions via the `checkPermissions()` and `requestPermissions(...)` methods. The Bluetooth permission is exposed as `bluetooth` on iOS and as `bluetoothConnect` and `bluetoothScan` on Android.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit.
+- [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy devices such as beacons.
+- [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/): Handle geocoding and reverse geocoding.

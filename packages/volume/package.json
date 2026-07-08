@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-volume",
   "version": "0.0.1",
-  "description": "Capacitor plugin to control the volume and observe hardware volume button presses.",
+  "description": "Capacitor plugin to control the volume and observe hardware volume button presses on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "volume",
+    "volume control",
+    "volume buttons",
+    "hardware buttons",
+    "audio stream",
+    "media volume"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

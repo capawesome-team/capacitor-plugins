@@ -10,7 +10,7 @@ Capacitor plugin for taking screenshots.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for capturing screenshots. Here are some of the key features:
+The Capacitor Screenshot plugin is one of the most capable screen capture solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 📸 **Easy screenshots**: Simple one-method API for taking screenshots.
@@ -20,9 +20,13 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Screenshot plugin is typically used whenever an app needs to capture its own screen, for example:
+
+- **Bug reporting and feedback**: Attach a screenshot of the current screen to bug reports or feedback forms.
+- **Sharing app content**: Capture achievements, results, or other screens so users can share them.
+- **Support tickets**: Capture the current state of the app to help your support team reproduce issues.
 
 ## Compatibility
 
@@ -59,6 +63,12 @@ npm i html2canvas
 ```
 
 ## Usage
+
+The following example shows how to take a screenshot of the current screen.
+
+### Take a screenshot
+
+Take a screenshot of the current screen. The result contains the file path of the screenshot on Android and iOS, or a data URI on the Web:
 
 ```ts
 import { Screenshot } from '@capawesome/capacitor-screenshot';
@@ -106,6 +116,34 @@ Take a screenshot.
 | **`uri`** | <code>string</code> | The file path (Android and iOS) or data URI (Web) of the screenshot. | 6.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### What does the take method return on each platform?
+
+On Android and iOS, the `take()` method returns the file path of the captured screenshot. On the Web, it returns a data URI instead, since the screenshot is rendered with `html2canvas` in the browser.
+
+### Why do I need to install html2canvas?
+
+The `html2canvas` package is only required if you use the plugin on the Web platform, where it is used to render the screenshot. On Android and iOS, the screenshot is captured natively and `html2canvas` is not needed. See the [Installation](#installation) section for details.
+
+### Can I prevent screenshots of my app?
+
+No, this plugin only takes screenshots. If you want to block screenshots, hide sensitive app content in the app switcher, or detect when a screenshot is taken, use the [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/) plugin instead.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
+- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo, for example a captured screenshot.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

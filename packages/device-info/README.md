@@ -21,9 +21,15 @@ Capacitor plugin to read device information, such as the model, manufacturer, op
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Device Info plugin is typically used whenever an app needs to know more about the device it is running on, for example:
+
+- **Bug reports and support**: Attach the device model, manufacturer, operating system version, and WebView version to support tickets or crash reports.
+- **Device registration**: Use the per-install identifier to register a device on your backend without collecting personal data.
+- **Adaptive user interfaces**: Adjust your layout based on the device type, for example phone versus tablet.
+- **Feature gating**: Enable or disable features depending on the Android SDK version or the major iOS version.
+- **Diagnostics**: Monitor the memory used by your app or detect whether it is running on an emulator or simulator.
 
 ## Compatibility
 
@@ -61,6 +67,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to read the device identifier, read device information, and read the device uptime.
+
+### Read the device identifier
+
+Get a unique per-install identifier for the device, for example to register the device on your backend. See the [API documentation](#getid) for when the identifier is reset on each platform:
+
 ```typescript
 import { DeviceInfo } from '@capawesome/capacitor-device-info';
 
@@ -68,11 +80,27 @@ const getId = async () => {
   const { identifier } = await DeviceInfo.getId();
   return identifier;
 };
+```
+
+### Read device information
+
+Get information about the device, such as the model, manufacturer, operating system, device type, and memory. Fields that a platform cannot determine are `null` (see [Platform Support](#platform-support)):
+
+```typescript
+import { DeviceInfo } from '@capawesome/capacitor-device-info';
 
 const getInfo = async () => {
   const info = await DeviceInfo.getInfo();
   return info;
 };
+```
+
+### Read the device uptime
+
+Get the time the device has been running since its last boot, in milliseconds. Only available on Android and iOS:
+
+```typescript
+import { DeviceInfo } from '@capawesome/capacitor-device-info';
 
 const getUptime = async () => {
   const { uptime } = await DeviceInfo.getUptime();
@@ -254,6 +282,42 @@ This plugin can be used as a replacement for the official [`@capacitor/device`](
 | `getBatteryInfo()`  | Use the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) plugin           |
 | `getLanguageCode()` | Use the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin |
 | `getLanguageTag()`  | Use the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin |
+
+## FAQ
+
+### How stable is the identifier returned by `getId`?
+
+The identifier is unique per install. On Android, it is the `ANDROID_ID` value, which is reset when the app is reinstalled after the signing key changes or the device is factory reset. On iOS, it is the `identifierForVendor` value, which is reset when all apps from the vendor are uninstalled. On the Web, it is a random UUID persisted in the browser's `localStorage`, which is reset when the browser storage is cleared.
+
+### Can this plugin replace the official `@capacitor/device` plugin?
+
+Yes, this plugin can be used as a replacement for the official `@capacitor/device` plugin. The `getId()` and `getInfo()` methods map directly, while battery information and language settings are covered by the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) and [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugins. See the [migration table](#migration-from-capacitordevice) above.
+
+### Why is the device name always a generic value like `iPhone` on iOS?
+
+On iOS 16 and newer, a generic device name is returned unless the app has the required entitlement from Apple. If the name cannot be determined at all, the `name` property is `null`.
+
+### Why are some fields `null` on my platform?
+
+The plugin returns `null` for any field that a platform cannot determine. For example, `totalMemory` and `usedMemory` are only available on Android and iOS, and `androidSdkVersion` is only available on Android. See the [Platform Support](#platform-support) section for a complete overview.
+
+### Can I get the battery level or the device language with this plugin?
+
+No, this plugin focuses on device information such as the model, manufacturer, operating system, and memory. For battery information, use the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) plugin. For the user's language and locale preferences, use the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information.
+- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's localization preferences, such as preferred locales and time zone.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-maps-launcher",
   "version": "0.0.1",
-  "description": "Capacitor plugin to launch navigation apps with turn-by-turn directions.",
+  "description": "Capacitor plugin to launch navigation apps with turn-by-turn directions on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,11 +36,18 @@
   "homepage": "https://capawesome.io/docs/sdks/capacitor/maps-launcher/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "maps",
     "navigation",
-    "launch navigator"
+    "launch navigator",
+    "maps launcher",
+    "google maps",
+    "apple maps",
+    "waze",
+    "directions",
+    "turn-by-turn navigation"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

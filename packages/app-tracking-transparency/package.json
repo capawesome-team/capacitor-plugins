@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-app-tracking-transparency",
   "version": "0.0.1",
-  "description": "Capacitor plugin for the App Tracking Transparency framework.",
+  "description": "Capacitor plugin for the App Tracking Transparency framework on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "app tracking transparency",
+    "att",
+    "idfa",
+    "advertising identifier",
+    "tracking permission",
+    "tracking authorization",
+    "ios tracking"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

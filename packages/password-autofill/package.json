@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-password-autofill",
   "version": "0.0.1",
-  "description": "Capacitor plugin for saving passwords to the platform credential store.",
+  "description": "Capacitor plugin for saving passwords to the platform credential store on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "password autofill",
+    "save password",
+    "credential manager",
+    "shared web credentials",
+    "icloud keychain",
+    "google password manager",
+    "autofill"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

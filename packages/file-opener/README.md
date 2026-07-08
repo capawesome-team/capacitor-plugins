@@ -10,7 +10,7 @@ Capacitor plugin to open a file with the default application.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for opening files. Here are some of the key features:
+The Capacitor File Opener plugin is one of the most complete file opening solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 📄 **Multiple file formats**: Open various file types with their default applications.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The File Opener plugin is typically used whenever an app hands a file over to another application, for example:
+
+- **Document viewing**: Open downloaded documents such as PDFs, invoices, or reports with the device's default viewer app.
+- **Post-download handling**: Let users open a file right after your app has downloaded or generated it.
+- **Media playback**: Open images, videos, or audio files with the app the user has associated with that file type.
+- **Web downloads**: Open files from `Blob` objects on the Web without saving them first.
 
 ## Compatibility
 
@@ -96,6 +101,12 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following example shows how to open a file with the default application.
+
+### Open a file with the default application
+
+On Android and iOS, pass the path of the file. On Android, both file paths and content URIs are supported. The mime type is determined automatically, but you can also specify it with the `mimeType` option. On Web, pass a `Blob` instance instead:
+
 ```typescript
 import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 
@@ -147,6 +158,43 @@ Open a file with the default application.
 | **`mimeType`** | <code>string</code> | The mime type of the file. If not specified, the mime type will be determined. Only available on Android and iOS. | 0.0.1 |
 
 </docgen-api>
+
+## FAQ
+
+### Which file types can I open with this plugin?
+
+The plugin can open various file types with their default applications. On Android and iOS, it uses the system file associations, so any file type for which the user has a suitable app installed can be opened. The mime type is determined automatically, but you can also specify it manually with the `mimeType` option.
+
+### Why can't a file be opened on Android?
+
+Make sure that the directory containing the file is declared in the `file_paths.xml` file of your Android project, as described in the [Installation](#installation) section. Without this configuration, the file can not be shared with the app that should open it.
+
+### How do I open a file on the Web?
+
+On the Web, pass a `Blob` instance to the `openFile(...)` method using the `blob` option. The `path` and `mimeType` options are only available on Android and iOS.
+
+### Do I need to specify the mime type of the file?
+
+No, if the `mimeType` option is not specified, the mime type will be determined automatically. You only need to set it if you want to override the detected type. This option is only available on Android and iOS.
+
+### How is this plugin different from the File Picker plugin?
+
+The [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) plugin lets the user select a file from the device and returns its path and metadata. The File Opener plugin does the opposite: it takes a file your app already has and opens it with the default application. Both plugins work well together, for example to pick a file and then open it.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress files with support for image formats like PNG, JPEG, and WebP.
+- [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print files, HTML, PDFs, and web views on Android and iOS.
+- [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive text, links, and files shared from other apps.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

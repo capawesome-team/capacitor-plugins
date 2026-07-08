@@ -10,7 +10,7 @@ Capacitor plugin to access network information.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for network information. Here are some of the key features:
+The Capacitor Network plugin is one of the most complete network information solutions for Capacitor apps. Here are some of the key features:
 
 - 📶 **Network status**: Read whether the device is connected and how (Wi-Fi, cellular, ethernet, VPN).
 - 🌍 **Internet reachability**: Detect whether the connection has verified access to the internet (Android).
@@ -23,9 +23,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Network plugin is typically used whenever an app needs to react to the device's connectivity, for example:
+
+- **Offline detection**: Show an offline banner or disable network-dependent features when the connection is lost.
+- **Conditional downloads**: Only download large files when the device is connected via Wi-Fi instead of a cellular network.
+- **Reliable syncing**: On Android, check whether the connection has verified internet access before starting a sync, avoiding false positives caused by captive portals or VPNs.
+- **Airplane mode hints**: On Android, detect that airplane mode is enabled and inform the user why no connection is available.
 
 ## Compatibility
 
@@ -63,6 +68,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to get the current network status, check whether airplane mode is enabled, and listen for changes to the network status.
+
+### Get the current network status
+
+Read whether the device is currently connected, the type of the connection (e.g. Wi-Fi or cellular) and, on Android, whether the connection has verified access to the internet:
+
 ```typescript
 import { Network } from '@capawesome/capacitor-network';
 
@@ -70,17 +81,39 @@ const getStatus = async () => {
   const status = await Network.getStatus();
   return status;
 };
+```
+
+### Check whether airplane mode is enabled
+
+Read whether the airplane mode is currently enabled. Only available on Android:
+
+```typescript
+import { Network } from '@capawesome/capacitor-network';
 
 const isAirplaneModeEnabled = async () => {
   const { enabled } = await Network.isAirplaneModeEnabled();
   return enabled;
 };
+```
+
+### Listen for changes to the network status
+
+Get notified whenever the network status of the device changes. The device is only observed while at least one listener is attached:
+
+```typescript
+import { Network } from '@capawesome/capacitor-network';
 
 const addNetworkStatusChangeListener = async () => {
   await Network.addListener('networkStatusChange', status => {
     console.log('Network status changed:', status);
   });
 };
+```
+
+When you no longer need updates, remove all listeners:
+
+```typescript
+import { Network } from '@capawesome/capacitor-network';
 
 const removeAllListeners = async () => {
   await Network.removeAllListeners();
@@ -223,6 +256,42 @@ Keep the following platform differences in mind when accessing network informati
 - **Android**: The network status is read from the [`ConnectivityManager`](https://developer.android.com/reference/android/net/ConnectivityManager). The `internetReachable` property reflects the [`NET_CAPABILITY_VALIDATED`](https://developer.android.com/reference/android/net/NetworkCapabilities#NET_CAPABILITY_VALIDATED) capability, which fixes false positives when a VPN or captive portal is active.
 - **iOS**: The network status is read from the [`NWPathMonitor`](https://developer.apple.com/documentation/network/nwpathmonitor) of the Network framework. The `internetReachable` property is always `null` because iOS cannot distinguish validated internet access from mere connectivity. VPN connections are reported as `UNKNOWN`. The `isAirplaneModeEnabled()` method is not available because there is no public API for it.
 - **Web**: The network status is read from [`navigator.onLine`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/onLine) and the [Network Information API](https://developer.mozilla.org/en-US/docs/Web/API/Network_Information_API) (where supported). The `internetReachable` property is always `null`. The `isAirplaneModeEnabled()` method is not available.
+
+## FAQ
+
+### What is the difference between `connected` and `internetReachable`?
+
+The `connected` property tells you whether the device is connected to any network, while `internetReachable` tells you whether that connection has verified access to the internet. A device can be connected to a network without actually reaching the internet, for example behind a captive portal or when a VPN is active. The `internetReachable` property is only available on Android, where it reflects the `NET_CAPABILITY_VALIDATED` capability of the connection.
+
+### Why is `internetReachable` always `null` on iOS and Web?
+
+iOS and the Web platform cannot distinguish validated internet access from mere network connectivity, so the plugin returns `null` instead of a potentially misleading value. On these platforms, being connected to a network does not guarantee that the internet is reachable. See the [Network Information](#network-information) section for the platform-specific details.
+
+### Can I check whether airplane mode is enabled on iOS or Web?
+
+No, the `isAirplaneModeEnabled()` method is only available on Android. On iOS, there is no public API to read the airplane mode state, and the Web platform does not expose this information either.
+
+### Do I need any permissions to use this plugin?
+
+No, the plugin works without any additional configuration. On Android, the plugin already declares the required `ACCESS_NETWORK_STATE` permission in its own manifest, see the [Installation](#installation) section.
+
+### Why is a VPN connection reported as `UNKNOWN` on iOS?
+
+On iOS, the network status is read from the `NWPathMonitor` of the Network framework, and VPN connections are reported as `UNKNOWN`. The `VPN` connection type is only reported on platforms that can detect it, such as Android. See the [Network Information](#network-information) section for more platform differences.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
+- [Sim](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

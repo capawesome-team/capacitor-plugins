@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-pixlive",
   "version": "0.1.4",
-  "description": "Unofficial Capacitor plugin for Pixlive SDK.",
+  "description": "Unofficial Capacitor plugin for Pixlive SDK on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,7 +36,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "pixlive",
+    "vidinoti",
+    "augmented reality",
+    "ar",
+    "ar view",
+    "qr code"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

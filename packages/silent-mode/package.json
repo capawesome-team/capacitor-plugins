@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-silent-mode",
   "version": "0.0.1",
-  "description": "Capacitor plugin to detect whether the device is in silent mode.",
+  "description": "Capacitor plugin to detect whether the device is in silent mode on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,14 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "silent mode",
+    "ringer mode",
+    "mute switch",
+    "mute detection",
+    "vibrate mode",
+    "silent switch"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

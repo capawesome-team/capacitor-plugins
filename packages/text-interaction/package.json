@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-text-interaction",
   "version": "0.0.1",
-  "description": "Capacitor plugin to enable and disable text interaction in the WebView.",
+  "description": "Capacitor plugin to enable and disable text interaction in the WebView on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -37,7 +37,16 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "text interaction",
+    "text selection",
+    "disable text selection",
+    "user-select",
+    "callout menu",
+    "magnifier",
+    "webview",
+    "ios"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

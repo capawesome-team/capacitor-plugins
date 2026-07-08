@@ -20,9 +20,14 @@ Capacitor plugin to launch navigation apps with turn-by-turn directions.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Maps Launcher plugin is typically used whenever an app wants to hand the user over to a navigation app, for example:
+
+- **Store locators**: Add a "Get directions" button that starts turn-by-turn navigation to a store or office.
+- **Delivery and field service**: Launch navigation to the next stop using its coordinates.
+- **Event apps**: Navigate attendees to a venue by its plain address, without needing coordinates.
+- **User choice**: Detect which navigation apps are installed with `getAvailableApps` and let users pick their favorite one.
 
 ## Compatibility
 
@@ -78,18 +83,40 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to get the available and default navigation apps and how to navigate to coordinates or an address.
+
+### Get the available navigation apps
+
+Check which navigation apps are installed and can be launched. On iOS, Apple Maps is always included, while Google Maps and Waze are only included if the corresponding URL schemes are declared in your `Info.plist` file (see [Installation](#installation)). Only available on Android and iOS:
+
 ```typescript
-import { MapsLauncher, NavigationApp } from '@capawesome/capacitor-maps-launcher';
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
 
 const getAvailableApps = async () => {
   const { apps } = await MapsLauncher.getAvailableApps();
   return apps;
 };
+```
+
+### Get the default navigation app
+
+Find out which navigation app is configured as the default handler for navigation intents. Returns `null` if the default app is not part of the curated list of supported apps or if no default app is set. Only available on Android:
+
+```typescript
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
 
 const getDefaultApp = async () => {
   const { app } = await MapsLauncher.getDefaultApp();
   return app;
 };
+```
+
+### Navigate to coordinates
+
+Launch a navigation app with turn-by-turn directions to a destination defined by its latitude and longitude. You can optionally specify the app to launch and the travel mode:
+
+```typescript
+import { MapsLauncher, NavigationApp } from '@capawesome/capacitor-maps-launcher';
 
 const navigate = async () => {
   await MapsLauncher.navigate({
@@ -101,6 +128,14 @@ const navigate = async () => {
     travelMode: 'driving',
   });
 };
+```
+
+### Navigate to an address
+
+Instead of coordinates, you can also pass a plain address as the destination. If no `app` is provided, the system default behavior is used (a chooser on Android, Apple Maps on iOS):
+
+```typescript
+import { MapsLauncher } from '@capawesome/capacitor-maps-launcher';
 
 const navigateToAddress = async () => {
   await MapsLauncher.navigate({
@@ -282,6 +317,38 @@ If `start` is not provided, the current location of the device is used.
 | Waze        | ✅        | ❌        | ❌          | ❌        |
 
 Unsupported travel modes fall back to the default behavior of the respective app. Waze only supports driving and ignores the `travelMode` option.
+
+## FAQ
+
+### Why are Google Maps and Waze reported as unavailable on iOS?
+
+To detect and launch Google Maps and Waze on iOS, the `comgooglemaps` and `waze` URL schemes must be added to the `LSApplicationQueriesSchemes` array in the `Info.plist` file of your app. Without them, `getAvailableApps` reports those apps as unavailable and `navigate` rejects with the `APP_NOT_AVAILABLE` error code. See the [Installation](#installation) section for details.
+
+### What happens if I do not specify a navigation app?
+
+If no `app` is provided, the system default behavior is used: Android shows a chooser and iOS opens Apple Maps. On Android, you can use `getDefaultApp` to find out which supported navigation app is configured as the default handler.
+
+### Which travel modes are supported?
+
+The plugin supports the `driving`, `walking`, `bicycling`, and `transit` travel modes, but the support depends on the selected app and is best-effort. Google Maps supports all four modes, Apple Maps does not support bicycling, and Waze only supports driving and ignores the option. Unsupported travel modes fall back to the default behavior of the respective app.
+
+### Can I set a custom start location for the route?
+
+Yes, use the `start` option of the `navigate` method. However, the support depends on the selected app: Apple Maps supports it fully, Google Maps opens the directions preview instead of starting turn-by-turn navigation, and Waze ignores it. If no start location is provided, the current location of the device is used.
+
+### Does the plugin work on the web?
+
+No, the `getAvailableApps` and `navigate` methods are only available on Android and iOS, and `getDefaultApp` is only available on Android. Launching installed navigation apps is a native capability that is not available in the browser.
+
+## Related Plugins
+
+- [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
+- [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/): Convert addresses into coordinates and vice versa.
+- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

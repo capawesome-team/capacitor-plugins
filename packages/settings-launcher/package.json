@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-settings-launcher",
   "version": "0.0.1",
-  "description": "Capacitor plugin to open native settings screens.",
+  "description": "Capacitor plugin to open native settings screens on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -39,7 +39,14 @@
     "plugin",
     "native",
     "settings",
-    "native settings"
+    "native settings",
+    "capacitor-plugin",
+    "open settings",
+    "app settings",
+    "notification settings",
+    "android settings",
+    "settings screen",
+    "permission settings"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",

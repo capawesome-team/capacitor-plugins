@@ -18,9 +18,14 @@ Capacitor plugin to change the app icon at runtime.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Icon plugin is typically used to personalize or refresh the app's appearance on the home screen, for example:
+
+- **Seasonal campaigns**: Switch to a themed icon for events like Christmas and restore the default icon afterwards.
+- **Premium personalization**: Let paying users choose their favorite icon from a set of alternate icons.
+- **In-app icon picker**: Build a settings screen that lists all icons and highlights the one currently in use.
+- **Brand updates**: Roll out a new logo as an alternate icon and switch to it at runtime.
 
 ## Compatibility
 
@@ -132,6 +137,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check for alternate icon support, read the current icon, set an alternate icon, and reset to the default icon.
+
+### Check if changing the app icon is supported
+
+Use `isAvailable()` to check whether the current device supports alternate icons. On Android, this always resolves to `true`; on iOS, it resolves to the value of `supportsAlternateIcons`. Only available on Android and iOS:
+
 ```typescript
 import { AppIcon } from '@capawesome/capacitor-app-icon';
 
@@ -139,15 +150,39 @@ const isAvailable = async () => {
   const { available } = await AppIcon.isAvailable();
   return available;
 };
+```
+
+### Get the current icon
+
+Read the name of the icon that is currently in use, for example to highlight it in an icon picker. Returns `null` if the default icon is in use. Only available on Android and iOS:
+
+```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
 
 const getCurrentIcon = async () => {
   const { icon } = await AppIcon.getCurrentIcon();
   return icon;
 };
+```
+
+### Set an alternate icon
+
+Change the app icon to an alternate icon that your app has declared beforehand (see [Installation](#installation)). Only available on Android and iOS:
+
+```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
 
 const setIcon = async () => {
   await AppIcon.setIcon({ icon: 'AppIconChristmas' });
 };
+```
+
+### Reset to the default icon
+
+Restore the default app icon at any time. Only available on Android and iOS:
+
+```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
 
 const resetIcon = async () => {
   await AppIcon.resetIcon();
@@ -270,6 +305,42 @@ Only available on Android and iOS.
 | **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `&lt;activity-alias&gt;` (without the leading dot). On iOS, this is the key of the icon inside `CFBundleAlternateIcons`. | 0.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Can I add new app icons at runtime?
+
+No, this plugin cannot add icons dynamically. Every icon you want to switch to must be declared by the app beforehand, as an `<activity-alias>` in the `AndroidManifest.xml` on Android and under the `CFBundleAlternateIcons` key in the `Info.plist` on iOS. See the [Installation](#installation) section for detailed setup instructions.
+
+### What icon name do I pass to `setIcon`?
+
+On Android, it is the name of the `<activity-alias>` without the leading dot (e.g. `AppIconChristmas`). On iOS, it is the key of the icon inside `CFBundleAlternateIcons` in your `Info.plist`.
+
+### Why is the new icon not applied immediately on Android?
+
+The behavior after a change depends on the launcher. Some launchers apply the new icon only after the app's task is closed, and a few even kill the app despite the plugin requesting otherwise. Also note that shortcuts pinned to a now-disabled alias may stop working.
+
+### Why does iOS show an alert when the icon changes?
+
+The system shows a user-visible alert every time the icon changes. This is standard iOS behavior and cannot be suppressed. Also note that the icon cannot be changed while the app is in the background.
+
+### How do I know if the device supports alternate icons?
+
+Call `isAvailable()` before offering an icon picker. On Android, it always resolves to `true`. On iOS, it resolves to the value of `supportsAlternateIcons`.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Shortcuts](https://capawesome.io/docs/sdks/capacitor/app-shortcuts/): Manage app shortcuts and quick actions on the home screen.
+- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+- [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/): Assist your users with native app updates.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 
