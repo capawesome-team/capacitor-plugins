@@ -3,8 +3,8 @@
 Capacitor plugin to securely store key/value pairs in lockable, biometric-protected vaults.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -31,7 +31,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Newsletter
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Compatibility
 
@@ -860,7 +860,7 @@ Then use the following prompt:
 Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Identity Vault to `@capawesome-team/capacitor-vault`.
 ```
 
-Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post:[Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/).
+Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/).
 
 The stored data needs to be migrated at runtime while **both** plugins are still installed. Identity Vault exposes `exportVault()`, which returns a plain key/value map after the user unlocks the vault. That map has the exact shape expected by this plugin's [`importData(...)`](#importdata) method, so the two can be bridged directly:
 
@@ -900,6 +900,14 @@ const migrateFromIdentityVault = async () => {
 Once all users have migrated (for example, after a release cycle in which everyone has opened the app at least once), you can remove the Identity Vault dependency in a follow-up release.
 
 **Note**: The user has to authenticate once during the migration to unlock the old vault. This is unavoidable, since the data is protected by the device's biometric or passcode authentication by design.
+
+## Next steps
+
+Here are a few resources to help you continue:
+
+- Read [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/) if you are migrating from Ionic Identity Vault.
+- Need simple secure key/value storage without vault locking? Check out the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
+- Check out [Getting Started with Insiders](https://capawesome.io/docs/insiders/getting-started/) to learn how to install the plugin.
 
 ## Changelog
 

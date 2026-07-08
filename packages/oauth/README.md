@@ -3,8 +3,8 @@
 Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.[^1][^2]
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
@@ -29,7 +29,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 ## Newsletter
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
 
 ## Compatibility
 
@@ -51,6 +51,7 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 - [How to Sign in with Auth0 using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-auth0-using-capacitor/)
 - [How to Sign in with Azure Entra ID using Capacitor](https://capawesome.io/blog/how-to-sign-in-with-azure-entra-id-using-capacitor/)
 - [Alternatives to Ionic Enterprise Plugins](https://capawesome.io/blog/alternatives-to-ionic-enterprise-plugins/)
+- [Alternative to the Ionic Auth Connect Plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/)
 
 ## Installation
 
@@ -516,6 +517,42 @@ Refresh the access token using a refresh token.
 On iOS, `login(...)` may hang forever (while working on Android and Web) if the redirect URI returned by your provider does not exactly match the `redirectUrl` you passed. The plugin compares scheme, host and path and silently ignores any mismatch, so the promise never settles. The usual culprit is a **trailing slash** added by the provider or its infrastructure (`com.example.app://callback` vs `com.example.app://callback/`).
 
 Compare the returned redirect URI (e.g. via a network proxy such as [Proxyman](https://proxyman.io/)) byte-for-byte with your `redirectUrl` and make them match exactly.
+
+## FAQ
+
+### Is this plugin an alternative to Ionic Auth Connect?
+
+Yes. This plugin was built as an actively maintained alternative to [Ionic Auth Connect](https://ionic.io/products/auth-connect), which has been discontinued and reaches end of life on December 31, 2027. It offers a similar feature set:
+
+- OAuth 2.0 and OpenID Connect support for any provider, including Auth0, Azure AD, Amazon Cognito, Okta and OneLogin
+- Authorization Code flow with Proof Key for Code Exchange (PKCE)
+- Automatic endpoint discovery via OpenID Connect discovery
+- Access token refresh using a refresh token
+- Logout via the provider's end-session endpoint
+
+### How do I migrate from Ionic Auth Connect?
+
+For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool:
+
+```bash
+npx skills add capawesome-team/skills --skill ionic-enterprise-sdk-migration
+```
+
+Then use the following prompt:
+
+```
+Use the `ionic-enterprise-sdk-migration` skill from `capawesome-team/skills` to migrate my project from Ionic Auth Connect to `@capawesome-team/capacitor-oauth`.
+```
+
+Alternatively, if you want to perform the migration manually, you can follow the instructions in this blog post: [Alternative to the Ionic Auth Connect plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/).
+
+## Next steps
+
+Here are a few resources to help you continue:
+
+- Read [Alternative to the Ionic Auth Connect plugin](https://capawesome.io/blog/alternative-to-ionic-auth-connect-plugin/) if you are migrating from Ionic Auth Connect.
+- Store tokens and other sensitive data with the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
+- Check out [Getting Started with Insiders](https://capawesome.io/docs/insiders/getting-started/) to learn how to install the plugin.
 
 ## Changelog
 
