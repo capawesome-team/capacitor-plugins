@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-google-sign-in",
   "version": "0.1.2",
-  "description": "Capacitor plugin to sign-in with Google.",
+  "description": "Capacitor plugin to sign-in with Google on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -36,7 +36,15 @@
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "google",
+    "google login",
+    "google sign-in",
+    "social login",
+    "authentication",
+    "credential manager",
+    "id token"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -64,7 +72,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

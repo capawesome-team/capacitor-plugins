@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-photo-editor",
   "version": "8.0.1",
-  "description": "Capacitor plugin that allows the user to edit a photo.",
+  "description": "Capacitor plugin that allows the user to edit a photo on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/photo-editor/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/photo-editor/",
   "keywords": [
     "capacitor",
     "plugin",
@@ -41,7 +41,13 @@
     "ionic",
     "android",
     "ios",
-    "photo editor"
+    "photo editor",
+    "capacitor-plugin",
+    "edit photo",
+    "image editor",
+    "photo editing",
+    "edit image",
+    "annotate photo"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -69,7 +75,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

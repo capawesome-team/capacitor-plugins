@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-speech-recognition
+# Capacitor Speech Recognition Plugin
 
 Capacitor plugin to transcribe speech into text (also known as speech-to-text) with advanced features like silence detection, contextual strings, and more.
 
@@ -10,7 +10,7 @@ Capacitor plugin to transcribe speech into text (also known as speech-to-text) w
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for speech recognition. Here are some of the key features:
+The Capacitor Speech Recognition plugin is one of the most complete speech-to-text solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
@@ -19,8 +19,10 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔇 **Silence Detection**: Automatically detects silence to stop the recording.
 - 📊 **Silence Threshold**: Define what's considered "silence" for your recordings.
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
-- ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- 📱 **On-Device Recognition**: Force on-device-only speech recognition, query available on-device languages, and download language models.
+- 🧠 **SpeechTranscriber**: Opt-in support for Apple's modern `SpeechTranscriber` API (iOS 26+) with fully on-device processing and no "Speech data will be sent to Apple" permission dialog.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
+- ⚔️ **Battle-Tested**: Used in more than 250 projects.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -28,9 +30,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Speech Recognition plugin is typically used whenever an app needs to turn spoken words into text, for example:
+
+- **Voice dictation**: Let users dictate messages, notes, or form inputs instead of typing, with live feedback via the `partialResult` event.
+- **Voice commands**: Trigger actions in your app by recognizing spoken phrases, using contextual strings to reliably detect custom terms that are not in the system vocabulary.
+- **Voice search**: Let users search your app hands-free by speaking their query instead of typing it.
+- **Privacy-sensitive transcription**: Force on-device speech recognition so that no audio is sent to external servers.
+- **Accessibility**: Offer users with limited mobility an alternative way to enter text.
 
 ## Compatibility
 
@@ -106,6 +114,43 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to check availability and permissions, start and stop listening, query the recognizer state and available languages, and handle recognition events.
+
+### Check if speech recognition is available
+
+Check whether the speech recognizer is available on the device before offering the feature to the user:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
+
+const isAvailable = async () => {
+  const { isAvailable } = await SpeechRecognition.isAvailable();
+  return isAvailable;
+};
+```
+
+### Check and request permissions
+
+Speech recognition requires permission to record audio and, on iOS, to use speech recognition. Check and request the permissions before you start listening:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
+
+const checkPermissions = async () => {
+  const { audioRecording, speechRecognition } = await SpeechRecognition.checkPermissions();
+};
+
+const requestPermissions = async () => {
+  const { audioRecording, speechRecognition } = await SpeechRecognition.requestPermissions({
+    permissions: ['audioRecording', 'speechRecognition'],
+  });
+};
+```
+
+### Start and stop listening
+
+Start listening for speech in a specific language. The `silenceThreshold` option automatically stops the recognition after the given number of milliseconds of silence. You can also stop listening manually:
+
 ```typescript
 import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
@@ -119,31 +164,40 @@ const startListening = async () => {
 const stopListening = async () => {
   await SpeechRecognition.stopListening();
 };
+```
 
-const checkPermissions = async () => {
-  const { audioRecording, speechRecognition } = await SpeechRecognition.checkPermissions();
-};
+### Check if the recognizer is listening
 
-const requestPermissions = async () => {
-  const { audioRecording, speechRecognition } = await SpeechRecognition.requestPermissions({
-    permissions: ['audioRecording', 'speechRecognition'],
-  });
-};
+Query whether the speech recognizer is currently listening:
 
-const isAvailable = async () => {
-  const { isAvailable } = await SpeechRecognition.isAvailable();
-  return isAvailable;
-};
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const isListening = async () => {
   const { isListening } = await SpeechRecognition.isListening();
   return isListening;
 };
+```
+
+### Get the available languages
+
+Retrieve the supported languages for speech recognition as BCP-47 language tags. Only available on Android and iOS:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const getLanguages = async () => {
   const { languages } = await SpeechRecognition.getLanguages();
   return languages;
 };
+```
+
+### Listen for recognition events
+
+React to the different stages of the recognition, for example to display partial results while the user is still speaking:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const addListeners = () => {
   SpeechRecognition.addListener('start', () => {
@@ -171,6 +225,14 @@ const addListeners = () => {
     console.log('User stopped speaking');
   });
 };
+```
+
+### Remove all listeners
+
+Remove all listeners for this plugin when they are no longer needed:
+
+```typescript
+import { SpeechRecognition } from '@capawesome-team/capacitor-speech-recognition';
 
 const removeAllListeners = async () => {
   await SpeechRecognition.removeAllListeners();
@@ -182,6 +244,8 @@ const removeAllListeners = async () => {
 <docgen-index>
 
 * [`getLanguages()`](#getlanguages)
+* [`getOnDeviceLanguages()`](#getondevicelanguages)
+* [`downloadOnDeviceLanguage(...)`](#downloadondevicelanguage)
 * [`isAvailable()`](#isavailable)
 * [`isListening()`](#islistening)
 * [`startListening(...)`](#startlistening)
@@ -223,6 +287,51 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#getlanguagesresult">GetLanguagesResult</a>&gt;</code>
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### getOnDeviceLanguages()
+
+```typescript
+getOnDeviceLanguages() => Promise<GetOnDeviceLanguagesResult>
+```
+
+Get the available on-device languages for speech recognition.
+
+Only available on Android (SDK 33+) and iOS (26+).
+
+**Returns:** <code>Promise&lt;<a href="#getondevicelanguagesresult">GetOnDeviceLanguagesResult</a>&gt;</code>
+
+**Since:** 8.1.0
+
+--------------------
+
+
+### downloadOnDeviceLanguage(...)
+
+```typescript
+downloadOnDeviceLanguage(options: DownloadOnDeviceLanguageOptions, callback: DownloadOnDeviceLanguageCallback) => Promise<CallbackId>
+```
+
+Download an on-device language model for speech recognition.
+
+**Note**: On Android, this might trigger user interaction to approve the download.
+
+**Note**: On Android (SDK 33), the `callback` is never invoked because
+progress tracking is only available on SDK 34+. Use {@link getOnDeviceLanguages}
+to verify when the download completes.
+
+Only available on Android (SDK 33+) and iOS (26+).
+
+| Param          | Type                                                                                          |
+| -------------- | --------------------------------------------------------------------------------------------- |
+| **`options`**  | <code><a href="#downloadondevicelanguageoptions">DownloadOnDeviceLanguageOptions</a></code>   |
+| **`callback`** | <code><a href="#downloadondevicelanguagecallback">DownloadOnDeviceLanguageCallback</a></code> |
+
+**Returns:** <code>Promise&lt;string&gt;</code>
+
+**Since:** 8.1.0
 
 --------------------
 
@@ -516,6 +625,30 @@ Remove all listeners for this plugin.
 | **`languages`** | <code>string[]</code> | The supported languages for speech recognition as BCP-47 language tags. | 6.0.0 |
 
 
+#### GetOnDeviceLanguagesResult
+
+| Prop                     | Type                  | Description                                                                                                                                                       | Since |
+| ------------------------ | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`installedLanguages`** | <code>string[]</code> | The installed on-device languages as BCP-47 language tags.                                                                                                        | 8.1.0 |
+| **`pendingLanguages`**   | <code>string[]</code> | The on-device languages whose download is scheduled or in progress as BCP-47 language tags. Only available on Android.                                            | 8.1.0 |
+| **`supportedLanguages`** | <code>string[]</code> | The supported on-device languages as BCP-47 language tags. These languages can be downloaded for on-device use using the {@link downloadOnDeviceLanguage} method. | 8.1.0 |
+
+
+#### DownloadOnDeviceLanguageOptions
+
+| Prop           | Type                | Description                                           | Since |
+| -------------- | ------------------- | ----------------------------------------------------- | ----- |
+| **`language`** | <code>string</code> | The BCP-47 language tag for the language to download. | 8.1.0 |
+
+
+#### DownloadOnDeviceLanguageCallbackEvent
+
+| Prop            | Type                 | Description                                             | Since |
+| --------------- | -------------------- | ------------------------------------------------------- | ----- |
+| **`progress`**  | <code>number</code>  | The download progress, as a percentage between 0 and 1. | 8.1.0 |
+| **`completed`** | <code>boolean</code> | Whether the download is completed or not.               | 8.1.0 |
+
+
 #### IsAvailableResult
 
 | Prop              | Type                 | Description                                                      | Since |
@@ -532,15 +665,18 @@ Remove all listeners for this plugin.
 
 #### StartListeningOptions
 
-| Prop                               | Type                                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                             | Default                                  | Since |
-| ---------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ----- |
-| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                                                                                                                                                                                                                                                                                        | <code>AudioSessionCategory.Record</code> | 7.2.0 |
-| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS.                                                                                                                                                                                                                                                              |                                          | 7.3.0 |
-| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                                                                                                                                                                                                                                                                                   | <code>true</code>                        | 7.2.0 |
-| **`enableFormatting`**             | <code>boolean</code>                                                  | Whether to add punctuation to speech recognition results. **Note**: On Android, this option does not work reliably as it varies depending on the device and TTS engine. Only available on Android (SDK 33+) and iOS (+16).                                                                                                                                                                              | <code>false</code>                       | 7.4.0 |
-| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                                                                                                                                                                                                                                                                                  |                                          | 6.0.0 |
-| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. **Attention**: This option may not work reliably on all devices and platforms as it depends on the underlying speech recognition service. This is a limitation of the platform and not the plugin itself. Continuous listening by setting an extremely high value will not work. Only available on Android (SDK 33+) and iOS. | <code>2000</code>                        | 6.0.0 |
-| **`taskHint`**                     | <code><a href="#taskhint">TaskHint</a></code>                         | The type of task for which the speech recognition is being used for. Only available on iOS.                                                                                                                                                                                                                                                                                                             | <code>TaskHint.Unspecified</code>        | 7.5.0 |
+| Prop                               | Type                                                                  | Description                                                                                                                                                                                                                                                                                                                                                                                             | Default                                   | Since |
+| ---------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`audioSessionCategory`**         | <code><a href="#audiosessioncategory">AudioSessionCategory</a></code> | The audio session category to use for speech recognition. Only available on iOS.                                                                                                                                                                                                                                                                                                                        | <code>AudioSessionCategory.Record</code>  | 7.2.0 |
+| **`audioSessionMode`**             | <code><a href="#audiosessionmode">AudioSessionMode</a></code>         | The audio session mode for speech recognition. Only available on iOS.                                                                                                                                                                                                                                                                                                                                   | <code>AudioSessionMode.Measurement</code> | 8.1.0 |
+| **`contextualStrings`**            | <code>string[]</code>                                                 | An array of phrases that should be recognized, even if they are not in the system vocabulary. Only available on Android (SDK 33+) and iOS.                                                                                                                                                                                                                                                              |                                           | 7.3.0 |
+| **`deactivateAudioSessionOnStop`** | <code>boolean</code>                                                  | Whether or not to deactivate your app's audio session on stop. Only available on iOS.                                                                                                                                                                                                                                                                                                                   | <code>true</code>                         | 7.2.0 |
+| **`enableFormatting`**             | <code>boolean</code>                                                  | Whether to add punctuation to speech recognition results. **Note**: On Android, this option does not work reliably as it varies depending on the device and TTS engine. Only available on Android (SDK 33+) and iOS (+16).                                                                                                                                                                              | <code>false</code>                        | 7.4.0 |
+| **`language`**                     | <code>string</code>                                                   | The BC-47 language tag for the language to use for speech recognition.                                                                                                                                                                                                                                                                                                                                  |                                           | 6.0.0 |
+| **`silenceThreshold`**             | <code>number</code>                                                   | The number of milliseconds of silence before the speech recognition ends. **Attention**: This option may not work reliably on all devices and platforms as it depends on the underlying speech recognition service. This is a limitation of the platform and not the plugin itself. Continuous listening by setting an extremely high value will not work. Only available on Android (SDK 33+) and iOS. | <code>2000</code>                         | 6.0.0 |
+| **`taskHint`**                     | <code><a href="#taskhint">TaskHint</a></code>                         | The type of task for which the speech recognition is being used for. Only available on iOS.                                                                                                                                                                                                                                                                                                             | <code>TaskHint.Unspecified</code>         | 7.5.0 |
+| **`requireOnDeviceRecognition`**   | <code>boolean</code>                                                  | Whether to require on-device speech recognition. If `true`, speech recognition will only use on-device models. If the on-device model is not available, the call will fail with an error. Only available on Android (SDK 33+) and iOS.                                                                                                                                                                  | <code>false</code>                        | 8.1.0 |
+| **`useSpeechTranscriber`**         | <code>boolean</code>                                                  | Whether to use the `SpeechTranscriber` API for on-device speech recognition. This avoids the "Speech data from this app will be sent to Apple" permission dialog and only requires microphone permission. On-device recognition is used implicitly when this option is set to `true`, so `requireOnDeviceRecognition` does not need to be set separately. Only available on iOS (26+).                  | <code>false</code>                        | 8.1.0 |
 
 
 #### StopListeningOptions
@@ -604,6 +740,16 @@ Remove all listeners for this plugin.
 ### Type Aliases
 
 
+#### DownloadOnDeviceLanguageCallback
+
+<code>(event: <a href="#downloadondevicelanguagecallbackevent">DownloadOnDeviceLanguageCallbackEvent</a> | null, error: any): void</code>
+
+
+#### CallbackId
+
+<code>string</code>
+
+
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
@@ -625,6 +771,19 @@ Remove all listeners for this plugin.
 | **`PlayAndRecord`** | <code>'PLAY_AND_RECORD'</code> | The category for recording (input) and playback (output) of audio.    | 7.2.0 |
 
 
+#### AudioSessionMode
+
+| Members              | Value                          | Description                                                                   | Since |
+| -------------------- | ------------------------------ | ----------------------------------------------------------------------------- | ----- |
+| **`Default`**        | <code>'DEFAULT'</code>         | Default mode that doesn't enable additional audio session features.           | 8.1.0 |
+| **`GameChat`**       | <code>'GAME_CHAT'</code>       | Mode for chat communication over VoIP or internet, optimized for low latency. | 8.1.0 |
+| **`Measurement`**    | <code>'MEASUREMENT'</code>     | Mode for high-quality measurement recordings with maximum dynamic range.      | 8.1.0 |
+| **`SpokenAudio`**    | <code>'SPOKEN_AUDIO'</code>    | Mode for speech recording and transcription with optimized voice processing.  | 8.1.0 |
+| **`VideoChat`**      | <code>'VIDEO_CHAT'</code>      | Mode for two-way video chat communications.                                   | 8.1.0 |
+| **`VideoRecording`** | <code>'VIDEO_RECORDING'</code> | Mode for recording video content with high-quality audio.                     | 8.1.0 |
+| **`VoiceChat`**      | <code>'VOICE_CHAT'</code>      | Mode for voice chat communications.                                           | 8.1.0 |
+
+
 #### TaskHint
 
 | Members            | Value                       | Since |
@@ -635,6 +794,42 @@ Remove all listeners for this plugin.
 | **`Unspecified`**  | <code>'UNSPECIFIED'</code>  | 7.5.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Why does `getLanguages` never resolve on some Android devices?
+
+The `getLanguages()` method is unfortunately not supported by all Android devices. If the method is not supported, the promise will never resolve. It's therefore recommended to set a timeout for the promise and fall back to a predefined list of languages if the timeout is reached.
+
+### Can I use this plugin for continuous speech recognition?
+
+No, continuous listening is not supported. The `silenceThreshold` option controls how many milliseconds of silence end the recognition, but it depends on the underlying speech recognition service and setting an extremely high value will not keep the recognizer listening indefinitely. This is a limitation of the platforms and not of the plugin itself.
+
+### How can I avoid the "Speech data will be sent to Apple" permission dialog?
+
+Set the `useSpeechTranscriber` option of the `startListening(...)` method to `true`. This uses Apple's modern `SpeechTranscriber` API with fully on-device processing, so only the microphone permission is required and no speech recognition permission dialog is shown. This option is only available on iOS 26+.
+
+### What is the difference between the `partialResult` and `result` events?
+
+The `partialResult` event is emitted while the user is still speaking and delivers intermediate transcriptions, which is useful for displaying live feedback. The `result` event is emitted when the final results of the speech recognition are available.
+
+### What permissions does this plugin require?
+
+The plugin requires permission to record audio and, on iOS, permission to use speech recognition. On iOS, you must add the `NSSpeechRecognitionUsageDescription` and `NSMicrophoneUsageDescription` keys to your `Info.plist` file as described in the [Installation](#installation) section. You can check and request the permissions at runtime using the `checkPermissions()` and `requestPermissions(...)` methods.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text (also known as text-to-speech).
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

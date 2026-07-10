@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`d374ae0f958276c7d3e89a90cce4f6d0d090c7b0`](https://github.com/capawesome-team/capacitor-plugins/commit/d374ae0f958276c7d3e89a90cce4f6d0d090c7b0) ([#880](https://github.com/capawesome-team/capacitor-plugins/pull/880)): fix(android): show the picker dialog on the UI thread to prevent crashes (`CalledFromWrongThreadException`/`WindowLeaked`) on configuration changes
+
+## 8.1.0
+
+### Minor Changes
+
+- [`20f261efb405e6d6b1a90452a632a53e63ad3a07`](https://github.com/capawesome-team/capacitor-plugins/commit/20f261efb405e6d6b1a90452a632a53e63ad3a07) ([#862](https://github.com/capawesome-team/capacitor-plugins/pull/862)): feat: add `month` mode to `present(...)` for month and year selection
+
 ## 8.0.1
 
 ### Patch Changes

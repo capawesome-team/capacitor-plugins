@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-barometer
+# Capacitor Barometer Plugin
 
 Capacitor plugin to obtain the static air pressure, which is measured in hectopascals (hPa).
 
@@ -10,7 +10,7 @@ Capacitor plugin to obtain the static air pressure, which is measured in hectopa
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for barometer measurements. Here are some of the key features:
+The Capacitor Barometer plugin is one of the most complete air pressure sensing solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📏 **Precise Measurements**: Get accurate air pressure readings in hectopascals (hPa).
@@ -26,9 +26,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Barometer plugin is typically used whenever an app needs to react to changes in air pressure, for example:
+
+- **Weather apps**: Show the current air pressure and track pressure trends to indicate weather changes.
+- **Altitude tracking**: Use the relative altitude on iOS to detect elevation changes, for example while hiking or climbing stairs.
+- **Outdoor and fitness apps**: Combine the pressure readings with their timestamps to analyze elevation profiles during activities.
+- **Sensor dashboards**: Display real-time barometer readings using continuous measurement updates.
 
 ## Compatibility
 
@@ -98,6 +103,43 @@ Add the `NSMotionUsageDescription` key to the `ios/App/App/Info.plist` file, whi
 
 ## Usage
 
+The following examples show how to check whether the barometer is available, request permissions, read the latest measurement, and listen for continuous measurement updates.
+
+### Check if the barometer is available
+
+Check whether the device has a barometer sensor before using the other methods:
+
+```typescript
+import { Barometer } from '@capawesome-team/capacitor-barometer';
+
+const isAvailable = async () => {
+  const result = await Barometer.isAvailable();
+  console.log('Barometer is available:', result.isAvailable);
+};
+```
+
+### Check and request permissions
+
+Check and request permission to access the barometer sensor. On iOS, make sure you have added the `NSMotionUsageDescription` key to your `Info.plist` file (see [Installation](#installation)):
+
+```typescript
+import { Barometer } from '@capawesome-team/capacitor-barometer';
+
+const checkPermissions = async () => {
+  const status = await Barometer.checkPermissions();
+  console.log('Barometer permission status:', status.barometer);
+};
+
+const requestPermissions = async () => {
+  const status = await Barometer.requestPermissions();
+  console.log('Barometer permission status after request:', status.barometer);
+};
+```
+
+### Get the latest measurement
+
+Get the most recent measurement from the barometer sensor. It contains the air pressure in hectopascals (hPa), the timestamp of the measurement and, on iOS, the relative altitude in meters:
+
 ```typescript
 import { Barometer } from '@capawesome-team/capacitor-barometer';
 
@@ -107,11 +149,14 @@ const getMeasurement = async () => {
   console.log('Relative Altitude:', measurement.relativeAltitude, 'm');
   console.log('Timestamp:', new Date(measurement.timestamp));
 };
+```
 
-const isAvailable = async () => {
-  const result = await Barometer.isAvailable();
-  console.log('Barometer is available:', result.isAvailable);
-};
+### Listen for measurement updates
+
+Add a listener for the `measurement` event and start emitting measurements to monitor air pressure changes continuously. When you no longer need updates, stop them and remove your listeners:
+
+```typescript
+import { Barometer } from '@capawesome-team/capacitor-barometer';
 
 const startMeasurementUpdates = async () => {
   Barometer.addListener('measurement', (event) => {
@@ -123,16 +168,6 @@ const startMeasurementUpdates = async () => {
 const stopMeasurementUpdates = async () => {
   await Barometer.stopMeasurementUpdates();
   Barometer.removeAllListeners();
-};
-
-const checkPermissions = async () => {
-  const status = await Barometer.checkPermissions();
-  console.log('Barometer permission status:', status.barometer);
-};
-
-const requestPermissions = async () => {
-  const status = await Barometer.requestPermissions();
-  console.log('Barometer permission status after request:', status.barometer);
 };
 ```
 
@@ -343,6 +378,42 @@ Remove all listeners for this plugin.
 <code><a href="#measurement">Measurement</a></code>
 
 </docgen-api>
+
+## FAQ
+
+### What unit is the air pressure measured in?
+
+The plugin returns the static air pressure in hectopascals (hPa). Each measurement also includes a timestamp in milliseconds since the epoch.
+
+### How can I measure altitude with this plugin?
+
+On iOS, each measurement includes the relative altitude in meters in addition to the air pressure. On Android, only the air pressure is available. See the [usage example](#get-the-latest-measurement) above.
+
+### What happens if the device does not have a barometer sensor?
+
+You can check whether the barometer sensor is available on the device using the `isAvailable()` method. It is recommended to call this method before using the other methods of the plugin.
+
+### Do I need any permissions to use the barometer?
+
+The plugin provides the `checkPermissions()` and `requestPermissions()` methods to manage access to the barometer sensor. On iOS, you also need to add the `NSMotionUsageDescription` key to your `Info.plist` file as described in the [Installation](#installation) section.
+
+### How do I monitor air pressure changes continuously?
+
+Add a listener for the `measurement` event and call `startMeasurementUpdates()` to start receiving measurements. When you no longer need updates, call `stopMeasurementUpdates()` and remove your listeners with `removeAllListeners()`. See the [usage example](#listen-for-measurement-updates) above.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
+- [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device's compass heading.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

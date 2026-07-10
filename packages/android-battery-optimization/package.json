@@ -30,14 +30,21 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/android-battery-optimization/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/",
   "keywords": [
     "capacitor",
     "plugin",
     "native",
     "ionic",
     "android",
-    "battery optimization"
+    "battery optimization",
+    "capacitor-plugin",
+    "doze mode",
+    "app standby",
+    "power management",
+    "battery saver",
+    "ignore battery optimizations",
+    "background execution"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",
@@ -60,7 +67,6 @@
     "@capacitor/docgen": "0.3.1",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

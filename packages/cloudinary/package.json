@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-cloudinary",
   "version": "8.0.1",
-  "description": "Unofficial Capacitor plugin for integrating with Cloudinary.",
+  "description": "Unofficial Capacitor plugin for integrating with Cloudinary on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/cloudinary/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/cloudinary/",
   "keywords": [
     "capacitor",
     "plugin",
@@ -42,7 +42,15 @@
     "android",
     "ios",
     "web",
-    "cloudinary"
+    "cloudinary",
+    "capacitor-plugin",
+    "cloudinary sdk",
+    "file upload",
+    "image upload",
+    "video upload",
+    "media upload",
+    "chunked upload",
+    "file download"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -72,7 +80,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

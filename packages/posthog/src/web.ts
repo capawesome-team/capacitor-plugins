@@ -4,6 +4,7 @@ import type { PostHogConfig } from 'posthog-js';
 
 import type {
   AliasOptions,
+  CaptureExceptionOptions,
   CaptureOptions,
   GetDistinctIdResult,
   GetFeatureFlagOptions,
@@ -19,6 +20,7 @@ import type {
   RegisterOptions,
   ScreenOptions,
   SetupOptions,
+  StackFrame,
   UnregisterOptions,
 } from './definitions';
 
@@ -29,6 +31,21 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   async capture(options: CaptureOptions): Promise<void> {
     posthog.capture(options.event, options.properties);
+  }
+
+  async captureException(options: CaptureExceptionOptions): Promise<void> {
+    const error = new Error(options.message);
+    if (options.name) {
+      error.name = options.name;
+    }
+    if (options.stacktrace?.length) {
+      error.stack = this.createStackString(
+        error.name,
+        options.message,
+        options.stacktrace,
+      );
+    }
+    posthog.captureException(error, options.properties);
   }
 
   async flush(): Promise<void> {
@@ -49,7 +66,8 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
   async getFeatureFlagPayload(
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult> {
-    return { value: posthog.getFeatureFlagPayload(options.key) };
+    const value = posthog.getFeatureFlagPayload(options.key) ?? null;
+    return { value: value as GetFeatureFlagPayloadResult['value'] };
   }
 
   async group(options: GroupOptions): Promise<void> {
@@ -116,6 +134,9 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     if (options.cookielessMode) {
       config.cookieless_mode = options.cookielessMode;
     }
+    if (options.autoCaptureExceptions) {
+      config.capture_exceptions = true;
+    }
 
     // Configure session recording if enabled
     if (options.enableSessionReplay) {
@@ -148,6 +169,20 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
 
   private throwUnimplementedError(): never {
     throw this.unimplemented('Not implemented on web.');
+  }
+
+  private createStackString(
+    name: string,
+    message: string,
+    stacktrace: StackFrame[],
+  ): string {
+    const lines = stacktrace.map(frame => {
+      const location = [frame.fileName, frame.lineNumber, frame.columnNumber]
+        .filter(value => value !== undefined)
+        .join(':');
+      return `    at ${frame.functionName ?? '?'} (${location})`;
+    });
+    return [`${name}: ${message}`, ...lines].join('\n');
   }
 
   private getApiHost(apiHost?: string, host?: string): string {

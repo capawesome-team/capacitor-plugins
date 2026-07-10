@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-speech-synthesis
+# Capacitor Speech Synthesis Plugin
 
 Capacitor plugin for synthesizing speech from text (also known as text-to-speech) with advanced features like voice selection, pitch, and rate control.
 
@@ -10,7 +10,7 @@ Capacitor plugin for synthesizing speech from text (also known as text-to-speech
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for speech synthesis. Here are some of the key features:
+The Capacitor Speech Synthesis plugin offers one of the most feature-rich text-to-speech solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌐 **Multiple Languages**: Supports many different languages.
@@ -20,7 +20,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
 - ⏸️ **Pause/Resume**: Pause and resume speech synthesis.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Audio Recorder](https://capawesome.io/plugins/audio-recorder/) and [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -29,9 +29,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Speech Synthesis plugin is typically used whenever an app needs to read text aloud to the user, for example:
+
+- **Read content aloud**: Read articles, messages, or notifications to users, for example while they are driving or exercising.
+- **Voice feedback**: Give spoken confirmations or instructions in response to user actions, even while your app runs in the background.
+- **Accessibility**: Make your app usable for people with visual impairments or reading difficulties by speaking on-screen content.
+- **Language learning**: Demonstrate the pronunciation of words and sentences in many different languages and voices.
+- **Audio file generation**: Synthesize speech to an audio file, for example to play it later or share it.
 
 ## Compatibility
 
@@ -90,8 +96,14 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to speak and synthesize text, pause and cancel speech, check availability, list languages and voices, and handle synthesis events.
+
+### Speak a text
+
+Add an utterance to the utterance queue to be spoken. You can customize the language, pitch, rate, voice, and volume. The `end` event is emitted when the utterance has finished:
+
 ```typescript
-import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
+import { SpeechSynthesis, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
 
 const speak = async () => {
   // Add an utterance to the utterance queue to be spoken
@@ -113,6 +125,14 @@ const speak = async () => {
     });
   });
 };
+```
+
+### Synthesize speech to an audio file
+
+Instead of speaking an utterance, you can synthesize it to an audio file, for example to play it later. The file is available as soon as the `end` event is emitted. Only available on Android and iOS:
+
+```typescript
+import { SpeechSynthesis, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
 
 const synthesizeToFile = async () => {
   // Add an utterance to the utterance queue to be synthesized to a file
@@ -136,10 +156,14 @@ const synthesizeToFile = async () => {
   // Return the path to the synthesized audio file
   return path;
 };
+```
 
-const cancel = async () => {
-  await SpeechSynthesis.cancel();
-};
+### Pause, resume, and cancel speech
+
+Pause the speech immediately and resume it later, or remove all utterances from the utterance queue:
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 
 const pause = async () => {
   await SpeechSynthesis.pause();
@@ -148,6 +172,18 @@ const pause = async () => {
 const resume = async () => {
   await SpeechSynthesis.resume();
 };
+
+const cancel = async () => {
+  await SpeechSynthesis.cancel();
+};
+```
+
+### Check availability
+
+Check whether speech synthesis is available on the current device and whether a specific language or voice is supported:
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 
 const isAvailable = async () => {
   const result = await SpeechSynthesis.isAvailable();
@@ -163,6 +199,14 @@ const isVoiceAvailable = async () => {
   const result = await SpeechSynthesis.isVoiceAvailable({ voiceId: 'com.apple.ttsbundle.Samantha-compact' });
   return result.isAvailable;
 };
+```
+
+### Get the available languages and voices
+
+Retrieve the available languages as BCP-47 language tags and the available voices, for example to let the user pick a preferred voice:
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 
 const getLanguages = async () => {
   const result = await SpeechSynthesis.getLanguages();
@@ -173,6 +217,14 @@ const getVoices = async () => {
   const result = await SpeechSynthesis.getVoices();
   return result.voices;
 };
+```
+
+### Listen for speech synthesis events
+
+React to the different stages of the speech synthesis, for example to highlight the word that is currently being spoken using the `boundary` event:
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 
 const addListeners = () => {
   SpeechSynthesis.addListener('boundary', (event) => {
@@ -191,6 +243,14 @@ const addListeners = () => {
     console.log('start', event);
   });
 };
+```
+
+### Remove all listeners
+
+Remove all listeners for this plugin when they are no longer needed:
+
+```typescript
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 
 const removeAllListeners = async () => {
   await SpeechSynthesis.removeAllListeners();
@@ -733,6 +793,42 @@ Remove all listeners for the plugin.
 | **`Flush`** | <code>1</code> | Flush the queue and add the utterance to the beginning of the queue. | 6.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### How do I know when an utterance has finished?
+
+The `speak(...)` and `synthesizeToFile(...)` methods resolve as soon as the utterance has been added to the utterance queue, not when it has finished. To be notified when the utterance has finished, add a listener for the `end` event and compare the `utteranceId` of the event with the one returned by the method, as shown in the [usage example](#speak-a-text) above.
+
+### Why is no audio played when my iPhone is in silent mode?
+
+By default, the plugin uses the `SoloAmbient` audio session category on iOS, which is silenced by the Silent switch and when the screen locks. If the speech should continue to play in silent mode or when the screen locks, set the `audioSessionCategory` option of the `speak(...)` method to `AudioSessionCategory.Playback`.
+
+### Can I save the synthesized speech as an audio file?
+
+Yes, use the `synthesizeToFile(...)` method to synthesize an utterance to an audio file instead of speaking it. The result contains the path to which the file is saved, and the file is available as soon as the `end` event is emitted. This method is only available on Android and iOS.
+
+### How do I use a specific voice?
+
+First, retrieve the available voices using the `getVoices()` method. Then pass the identifier of the desired voice as the `voiceId` option to the `speak(...)` method. Note that on iOS, the `language` option is only used when the `voiceId` option is not provided.
+
+### What is the difference between the `Add` and `Flush` queue strategies?
+
+The `QueueStrategy.Add` strategy adds the utterance to the end of the utterance queue, so it is spoken after all previously queued utterances. The `QueueStrategy.Flush` strategy flushes the queue and adds the utterance to the beginning of the queue, so it is spoken as soon as possible.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/): Transcribe speech into text (also known as speech-to-text).
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

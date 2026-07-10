@@ -1,4 +1,4 @@
-# @capawesome/capacitor-posthog
+# Capacitor PostHog Plugin
 
 Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
 
@@ -8,9 +8,15 @@ Unofficial Capacitor plugin for [PostHog](https://posthog.com/).[^1]
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The PostHog plugin is typically used to understand how users interact with an app, for example:
+
+- **Product analytics**: Capture custom events and screen views to analyze how users move through your app.
+- **User identification**: Identify users with a distinct ID, assign aliases, and associate their events with groups.
+- **Feature flags**: Roll out features gradually by checking feature flags and their payloads at runtime.
+- **Session replay**: Record user sessions to understand usage patterns and debug issues.
+- **Error tracking**: Capture exceptions manually or automatically to monitor the stability of your app.
 
 ## Compatibility
 
@@ -66,6 +72,7 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 | **`enableSessionReplay`**               | <code>boolean</code>                                                  | Whether to enable session recording automatically.                                        | <code>false</code>                      | 7.3.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session recording configuration options.                                                  |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events.                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture unhandled exceptions.                                    | <code>false</code>                      | 8.5.0 |
 
 ### Examples
 
@@ -81,7 +88,8 @@ In `capacitor.config.json`:
       "uiHost": 'https://eu.posthog.com',
       "enableSessionReplay": undefined,
       "sessionReplayConfig": undefined,
-      "captureApplicationLifecycleEvents": undefined
+      "captureApplicationLifecycleEvents": undefined,
+      "autoCaptureExceptions": undefined
     }
   }
 }
@@ -104,6 +112,7 @@ const config: CapacitorConfig = {
       enableSessionReplay: undefined,
       sessionReplayConfig: undefined,
       captureApplicationLifecycleEvents: undefined,
+      autoCaptureExceptions: undefined,
     },
   },
 };
@@ -119,14 +128,29 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to set up the SDK, capture events, track screen views, identify users, associate users with a group, manage super properties, reset the user, and flush queued events.
+
+### Set up the SDK
+
+Call `setup(...)` before any other method. Alternatively, on Android and iOS, you can configure the plugin in your Capacitor configuration file (see [Configuration](#configuration)); in that case, you must not call this method:
+
 ```typescript
 import { Posthog } from '@capawesome/capacitor-posthog';
 
-const alias = async () => {
-  await Posthog.alias({
-    alias: 'new-distinct-id',
+const setup = async () => {
+  await Posthog.setup({
+    apiKey: 'YOUR_API_KEY',
+    apiHost: 'https://eu.i.posthog.com',
   });
 };
+```
+
+### Capture events
+
+Capture a custom event with optional properties:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
 
 const capture = async () => {
   await Posthog.capture({
@@ -136,20 +160,31 @@ const capture = async () => {
     },
   });
 };
+```
 
-const flush = async () => {
-  await Posthog.flush();
-};
+### Track screen views
 
-const group = async () => {
-  await Posthog.group({
-    type: 'group',
-    key: 'key',
-    groupProperties: {
+Send a screen event with the title of the screen. Only available on Android and iOS:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const screen = async () => {
+  await Posthog.screen({
+    screenTitle: 'screen',
+    properties: {
       key: 'value',
     },
   });
 };
+```
+
+### Identify users
+
+Identify the current user with a distinct ID and set person properties. You can also assign another distinct ID to the current user using `alias(...)`:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
 
 const identify = async () => {
   await Posthog.identify({
@@ -160,30 +195,42 @@ const identify = async () => {
   });
 };
 
-const register = async () => {
-  await Posthog.register({
-    key: 'super-property',
-    value: 'super-value',
+const alias = async () => {
+  await Posthog.alias({
+    alias: 'new-distinct-id',
   });
 };
+```
 
-const reset = async () => {
-  await Posthog.reset();
-};
+### Associate users with a group
 
-const screen = async () => {
-  await Posthog.screen({
-    screenTitle: 'screen',
-    properties: {
+Associate the events of the current user with a group, for example a company or a team:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const group = async () => {
+  await Posthog.group({
+    type: 'group',
+    key: 'key',
+    groupProperties: {
       key: 'value',
     },
   });
 };
+```
 
-const setup = async () => {
-  await Posthog.setup({
-    apiKey: 'YOUR_API_KEY',
-    apiHost: 'https://eu.i.posthog.com',
+### Manage super properties
+
+Register a super property that is sent with every event, and unregister it when it is no longer needed:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const register = async () => {
+  await Posthog.register({
+    key: 'super-property',
+    value: 'super-value',
   });
 };
 
@@ -194,12 +241,37 @@ const unregister = async () => {
 };
 ```
 
+### Reset the user
+
+Reset the current user's ID and anonymous ID, for example after a logout:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const reset = async () => {
+  await Posthog.reset();
+};
+```
+
+### Flush queued events
+
+Manually flush all events in the queue. Only available on Android and iOS:
+
+```typescript
+import { Posthog } from '@capawesome/capacitor-posthog';
+
+const flush = async () => {
+  await Posthog.flush();
+};
+```
+
 ## API
 
 <docgen-index>
 
 * [`alias(...)`](#alias)
 * [`capture(...)`](#capture)
+* [`captureException(...)`](#captureexception)
 * [`flush()`](#flush)
 * [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
@@ -256,6 +328,23 @@ Capture an event.
 | **`options`** | <code><a href="#captureoptions">CaptureOptions</a></code> |
 
 **Since:** 6.0.0
+
+--------------------
+
+
+### captureException(...)
+
+```typescript
+captureException(options: CaptureExceptionOptions) => Promise<void>
+```
+
+Capture an exception.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#captureexceptionoptions">CaptureExceptionOptions</a></code> |
+
+**Since:** 8.5.0
 
 --------------------
 
@@ -569,6 +658,26 @@ Remove a super property.
 | **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the event. | 6.0.0 |
 
 
+#### CaptureExceptionOptions
+
+| Prop             | Type                                   | Description                                                                                                                | Default              | Since |
+| ---------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`message`**    | <code>string</code>                    | The message of the exception.                                                                                              |                      | 8.5.0 |
+| **`name`**       | <code>string</code>                    | The name of the exception. Used as the exception type for grouping.                                                        | <code>'Error'</code> | 8.5.0 |
+| **`stacktrace`** | <code>StackFrame[]</code>              | The stack trace of the exception. Can be generated from an `Error` using [`stacktrace.js`](https://www.stacktracejs.com/). |                      | 8.5.0 |
+| **`properties`** | <code>Record&lt;string, any&gt;</code> | The properties to send with the exception.                                                                                 |                      | 8.5.0 |
+
+
+#### StackFrame
+
+| Prop               | Type                | Description                        | Since |
+| ------------------ | ------------------- | ---------------------------------- | ----- |
+| **`functionName`** | <code>string</code> | The name of the function.          | 8.5.0 |
+| **`fileName`**     | <code>string</code> | The name of the file.              | 8.5.0 |
+| **`lineNumber`**   | <code>number</code> | The line number within the file.   | 8.5.0 |
+| **`columnNumber`** | <code>number</code> | The column number within the file. | 8.5.0 |
+
+
 #### GetDistinctIdResult
 
 | Prop             | Type                | Description              | Since |
@@ -671,6 +780,7 @@ Remove a super property.
 | **`optOut`**                            | <code>boolean</code>                                                  | Whether to opt out of capturing by default. User must call `optIn()` to enable capturing.                                                                                                                                                                                                    | <code>false</code>                      | 8.1.0 |
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events. Only available on iOS and Android.                                                                                                                                                                                                          | <code>true</code>                       | 8.3.0 |
+| **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture unhandled exceptions.                                                                                                                                                                                                                                       | <code>false</code>                      | 8.5.0 |
 
 
 #### SessionReplayOptions
@@ -706,6 +816,42 @@ Remove a super property.
 ### Reverse Proxy
 
 For PostHog managed reverse proxy, set `apiHost` to your proxy URL and `uiHost` to your PostHog app host (`https://us.posthog.com` or `https://eu.posthog.com`). `host` remains supported as a deprecated alias for `apiHost`. `uiHost` is only available on Web.
+
+## FAQ
+
+### Do I have to call the `setup` method before using the plugin?
+
+Yes, the `setup(...)` method should be called before any other method. Alternatively, on Android and iOS, you can configure the plugin in your Capacitor configuration file (see [Configuration](#configuration)). In that case, you must not call the `setup(...)` method.
+
+### What is the difference between the `apiHost` and `host` options?
+
+The `host` option is a deprecated alias for `apiHost`. Both point to the API host of your PostHog instance or reverse proxy. If both options are provided, `apiHost` takes precedence, so new projects should only use `apiHost`.
+
+### How do I use the plugin with a reverse proxy?
+
+Set the `apiHost` option to your proxy URL and the `uiHost` option to your PostHog app host, such as `https://us.posthog.com` or `https://eu.posthog.com`. Note that `uiHost` is only available on Web. See the [Reverse Proxy](#reverse-proxy) section for more details.
+
+### How do I enable session replay?
+
+Set the `enableSessionReplay` option to `true` in the `setup(...)` method or in your Capacitor configuration file, and fine-tune the recording behavior with the `sessionReplayConfig` option. You can also start and stop recording manually using the `startSessionRecording()` and `stopSessionRecording()` methods.
+
+### How can users opt out of tracking?
+
+Call the `optOut()` method to stop event capturing and the `optIn()` method to re-enable it. You can check the current state with `isOptOut()` or opt users out by default with the `optOut` setup option. On Web with `cookielessMode: 'on_reject'`, opting out switches to cookieless anonymous tracking instead of stopping capturing entirely.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Unofficial Capacitor plugin for Firebase Analytics.
+- [Grafana Faro](https://capawesome.io/docs/sdks/capacitor/grafana-faro/): Unofficial Capacitor plugin for Grafana Faro to monitor your app.
+- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

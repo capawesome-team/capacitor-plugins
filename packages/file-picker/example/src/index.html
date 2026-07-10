@@ -47,9 +47,60 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <ion-button id="copy-file" expand="block">Copy File</ion-button>
-        <ion-button id="pick-files" expand="block">Pick Files</ion-button>
-        <ion-button id="pick-images" expand="block">Pick Images</ion-button>
+        <ion-list>
+          <ion-button id="copy-file" expand="block">Copy File</ion-button>
+          <ion-button id="pick-files" expand="block">Pick Files</ion-button>
+          <ion-button id="pick-images" expand="block">Pick Images</ion-button>
+          <ion-button id="pick-media" expand="block">Pick Media</ion-button>
+          <ion-button id="pick-videos" expand="block">Pick Videos</ion-button>
+        </ion-list>
+        <ion-list>
+          <ion-item>
+            <ion-input id="name-input" label="Name" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="mime-type-input"
+              label="MIME Type"
+              readonly
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="size-input"
+              label="Size (bytes)"
+              readonly
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="path-input" label="Path" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="modified-at-input"
+              label="Modified At"
+              readonly
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="duration-input"
+              label="Duration (s)"
+              readonly
+            ></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input id="width-input" label="Width (px)" readonly></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input
+              id="height-input"
+              label="Height (px)"
+              readonly
+            ></ion-input>
+          </ion-item>
+        </ion-list>
+        <ion-img id="image"></ion-img>
       </ion-content>
     </ion-app>
   </body>

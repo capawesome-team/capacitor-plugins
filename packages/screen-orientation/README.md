@@ -1,4 +1,4 @@
-# @capawesome/capacitor-screen-orientation
+# Capacitor Screen Orientation Plugin
 
 Capacitor plugin to lock/unlock the screen orientation.
 
@@ -10,7 +10,7 @@ Capacitor plugin to lock/unlock the screen orientation.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for screen orientation control. Here are some of the key features:
+The Capacitor Screen Orientation plugin is one of the most complete orientation control solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, and Web.
 - 🔒 **Orientation locking**: Lock screen to specific orientations.
@@ -24,9 +24,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Screen Orientation plugin is typically used whenever certain screens of an app only work well in a specific orientation, for example:
+
+- **Video players**: Lock the screen to landscape for fullscreen video playback.
+- **Games**: Keep the game in a fixed orientation regardless of how the device is held.
+- **Camera and scanner screens**: Lock the screen to portrait while capturing photos or scanning codes.
+- **Forms and reading views**: Prevent accidental rotation while the user is typing or reading.
+- **Responsive layouts**: React to orientation changes with the `screenOrientationChange` event to adapt your UI.
 
 ## Compatibility
 
@@ -66,7 +72,7 @@ npx cap sync
 On iOS you must add the following to your app's `AppDelegate.swift`:
 
 ```diff
-+ import CapawesomeCapacitorScreenOrientation
++ import ScreenOrientationPlugin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -74,6 +80,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 + func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
 +   return ScreenOrientation.getSupportedInterfaceOrientations()
 + }
+```
+
+If your project still uses CocoaPods instead of Swift Package Manager (SPM), import `CapawesomeCapacitorScreenOrientation` rather than `ScreenOrientationPlugin`:
+
+```diff
++ import CapawesomeCapacitorScreenOrientation
 ```
 
 #### iPad Orientation Lock
@@ -95,16 +107,38 @@ A working example can be found here: [robingenz/capacitor-plugin-demo](https://g
 
 ## Usage
 
+The following examples show how to lock, unlock, and read the current screen orientation.
+
+### Lock the screen orientation
+
+Lock the device to a specific orientation, for example landscape. Besides `LANDSCAPE` and `PORTRAIT`, you can also lock to a primary or secondary mode such as `LANDSCAPE_PRIMARY` for fine-grained control:
+
 ```typescript
 import { ScreenOrientation, OrientationType } from '@capawesome/capacitor-screen-orientation';
 
 const lock = async () => {
   await ScreenOrientation.lock({ type: OrientationType.LANDSCAPE });
 };
+```
+
+### Unlock the screen orientation
+
+Remove the orientation lock and restore automatic rotation:
+
+```typescript
+import { ScreenOrientation } from '@capawesome/capacitor-screen-orientation';
 
 const unlock = async () => {
   await ScreenOrientation.unlock();
 };
+```
+
+### Get the current screen orientation
+
+Read the current orientation type of the device:
+
+```typescript
+import { ScreenOrientation } from '@capawesome/capacitor-screen-orientation';
 
 const getCurrentOrientation = async () => {
   const result = await ScreenOrientation.getCurrentOrientation();
@@ -254,6 +288,43 @@ Callback to receive the screen orientation change notifications.
 | **`PORTRAIT_SECONDARY`**  | <code>'portrait-secondary'</code>  | The orientation is in the secondary portrait mode.                  |
 
 </docgen-api>
+
+## FAQ
+
+### Why does the orientation lock not work on iPad?
+
+For the orientation lock to work on iPad, you must add the `UIRequiresFullScreen` key with the value `true` to your app's `Info.plist` file, as described in the [Installation](#installation) section. Also make sure that you have applied the required changes to your `AppDelegate.swift`.
+
+### Do I need to modify my AppDelegate on iOS?
+
+Yes. You must implement the `supportedInterfaceOrientationsFor` method in your app's `AppDelegate.swift` and return `ScreenOrientation.getSupportedInterfaceOrientations()`, as shown in the [Installation](#installation) section. Without this change, the orientation lock has no effect on iOS.
+
+### What is the difference between LANDSCAPE and LANDSCAPE_PRIMARY?
+
+The `LANDSCAPE` type covers both landscape modes, so the device can be rotated between landscape-primary and landscape-secondary while locked. The `LANDSCAPE_PRIMARY` and `LANDSCAPE_SECONDARY` types lock the screen to exactly one of the two landscape modes. The same applies to `PORTRAIT`, `PORTRAIT_PRIMARY` and `PORTRAIT_SECONDARY`.
+
+### How do I restore automatic rotation after locking the orientation?
+
+Simply call the `unlock()` method. It removes the orientation lock so that the device rotates automatically again based on the user's device settings.
+
+### How can I react to orientation changes?
+
+Add a listener for the `screenOrientationChange` event using the `addListener(...)` method. The listener receives the new orientation type every time the screen orientation changes. Use `removeAllListeners()` to remove all listeners when you no longer need them.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake, for example during video playback.
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
+- [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/): Hide and show the iOS home indicator.
+- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the Android navigation bar.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

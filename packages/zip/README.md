@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-zip
+# Capacitor Zip Plugin
 
 Capacitor plugin to zip and unzip files and directories with support for encryption.
 
@@ -10,12 +10,12 @@ Capacitor plugin to zip and unzip files and directories with support for encrypt
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for zipping and unzipping files. Here are some of the key features:
+The Capacitor Zip plugin is one of the most complete file archiving solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📁 **File Compression**: Zip and unzip single or multiple files.
 - 🔑 **Encryption**: Encrypt and decrypt files.
-- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/plugins/file-compressor/) plugin.
+- 🤝 **Compatibility**: Compatible with the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -23,9 +23,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Zip plugin is typically used whenever an app needs to work with zip archives, for example:
+
+- **File uploads**: Bundle multiple files or an entire directory into a single zip archive before uploading it to a server.
+- **Content downloads**: Unzip archives downloaded from a server, for example to make content available offline.
+- **Data backups**: Compress app data into an archive that can be exported and restored later.
+- **Sensitive data protection**: Encrypt archives with a password when zipping and decrypt them when unzipping.
 
 ## Compatibility
 
@@ -113,6 +118,28 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to create a zip archive and extract an existing one.
+
+### Zip a file or directory
+
+Create a zip archive from a source file or directory. You can optionally provide a `password` to encrypt the archive. Only available on Android and iOS:
+
+```typescript
+import { Zip } from '@capawesome-team/capacitor-zip';
+
+const zip = async () => {
+  await Zip.zip({
+    source: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398',
+    destination: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398.zip',
+    password: 'secret',
+  });
+};
+```
+
+### Unzip an archive
+
+Extract a zip archive into a destination directory. If the archive is encrypted, provide the `password` to decrypt it. Only available on Android and iOS:
+
 ```typescript
 import { Zip } from '@capawesome-team/capacitor-zip';
 
@@ -120,14 +147,6 @@ const unzip = async () => {
   await Zip.unzip({
     source: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398.zip',
     destination: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398',
-    password: 'secret',
-  });
-};
-
-const zip = async () => {
-  await Zip.zip({
-    source: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398',
-    destination: 'file:///data/user/0/dev.robingenz.capacitor.plugindemo/cache/1714900095398.zip',
     password: 'secret',
   });
 };
@@ -205,6 +224,39 @@ Only available on Android and iOS.
 | **`source`**      | <code>string</code> | The source file or directory to zip.  | 6.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Can I create password-protected zip archives?
+
+Yes. Pass the `password` option to the `zip(...)` method to encrypt the archive and pass the same option to the `unzip(...)` method to decrypt it. See the [usage examples](#usage) above.
+
+### Can I zip an entire directory?
+
+Yes. The `source` option of the `zip(...)` method accepts either a single file or a directory. When unzipping, the archive is extracted into the directory specified by the `destination` option.
+
+### Does this plugin work on the Web?
+
+No, the `zip(...)` and `unzip(...)` methods are only available on Android and iOS, as documented in the [API](#api) section.
+
+### How is this plugin different from the File Compressor plugin?
+
+The [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) plugin reduces the file size of individual image files such as PNG, JPEG, and WebP. The Zip plugin, on the other hand, bundles one or more files or directories into a zip archive and extracts them again. Both plugins are compatible and can be used together, for example to compress images before zipping them.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress image files such as PNG, JPEG, and WebP.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive files shared from other apps.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

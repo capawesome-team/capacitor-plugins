@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-managed-configurations",
   "version": "8.0.1",
-  "description": "Capacitor plugin to access managed configuration settings.",
+  "description": "Capacitor plugin to access managed configuration settings on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,15 +33,22 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/managed-configurations/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/managed-configurations/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
     "native",
     "ionic",
     "android",
     "ios",
-    "managed configurations"
+    "managed configurations",
+    "managed app configuration",
+    "app restrictions",
+    "mdm",
+    "emm",
+    "mobile device management",
+    "enterprise"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -69,7 +76,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

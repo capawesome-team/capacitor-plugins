@@ -10,54 +10,113 @@ body:
       description: Select the plugins that this feature request affects.
       options:
         - label: Accelerometer
+        - label: Accessibility Preferences
+        - label: Action Sheet
         - label: Age Signals
+        - label: Alarm
         - label: Android Battery Optimization
         - label: Android Dark Mode Support
         - label: Android Edge-to-Edge Support
         - label: Android Foreground Service
+        - label: Android Intent Launcher
+        - label: Android SMS Retriever
+        - label: App Icon
+        - label: App Integrity
+        - label: App Language
+        - label: App Launcher
         - label: App Review
         - label: App Shortcuts
+        - label: App Tracking Transparency
         - label: App Update
         - label: Apple Sign-In
         - label: Asset Manager
         - label: Audio Player
         - label: Audio Recorder
+        - label: Audio Session
         - label: Background Task
         - label: Badge
         - label: Barometer
+        - label: Battery
         - label: Biometrics
         - label: Bluetooth Low Energy
+        - label: Clipboard
         - label: Cloudinary
+        - label: Compass
         - label: Contacts
         - label: Datetime Picker
+        - label: Device Info
+        - label: Dialog
+        - label: Exif
+        - label: Facebook Sign-In
         - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: Formbricks
         - label: Geocoder
         - label: Google Sign-In
+        - label: Grafana Faro
+        - label: Gyroscope
+        - label: Haptics
+        - label: Home Indicator
+        - label: In-App Browser
+        - label: Install Referrer
+        - label: Keep Awake
         - label: libSQL
+        - label: Light Sensor
         - label: Live Update
+        - label: Localization
+        - label: Mail Composer
         - label: Managed Configurations
+        - label: Maps Launcher
         - label: Media Session
+        - label: Navigation Bar
+        - label: Network
         - label: NFC
+        - label: Node.js
         - label: OAuth
+        - label: Passkeys
+        - label: Password Autofill
+        - label: PDF Generator
+        - label: PDF Viewer
         - label: Pedometer
+        - label: Permissions
+        - label: Phone Dialer
         - label: Photo Editor
+        - label: Photo Manipulator
         - label: PixLive
         - label: Posthog
+        - label: Privacy Screen
+        - label: Proximity Sensor
         - label: Purchases
         - label: Printer
         - label: RealtimeKit
+        - label: Root Detection
+        - label: Screen Brightness
+        - label: Screen Reader
         - label: Secure Preferences
         - label: Screen Orientation
         - label: Screenshot
+        - label: Settings Launcher
+        - label: Shake
+        - label: Silent Mode
+        - label: SIM
+        - label: SMS Composer
         - label: Speech Recognition
         - label: Speech Synthesis
         - label: Share Target
         - label: Square Mobile Payments
         - label: SQLite
         - label: Superwall
+        - label: System WebView
+        - label: Text Interaction
+        - label: Text Zoom
+        - label: Thermal State
+        - label: Toast
         - label: Torch
+        - label: Vault
+        - label: Volume
+        - label: Wallet
+        - label: Wifi
         - label: Zip
   - type: textarea
     attributes:
@@ -86,7 +145,7 @@ body:
       description: |
         Please ensure your idea fulfills all of the following requirements.
       options:
-      - label: I have read and followed the [feature request guidelines](https://capawesome.io/contributing/feature-requests/).
+      - label: I have read and followed the [feature request guidelines](https://capawesome.io/docs/contributing/feature-requests/).
         required: true
       - label: I have attached links to possibly related issues and discussions.
         required: true

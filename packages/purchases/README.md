@@ -1,15 +1,16 @@
-# @capawesome-team/capacitor-purchases
+# Capacitor Purchases Plugin
 
 Capacitor plugin to support in-app purchases.
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for in-app purchases. Here are some of the key features:
+The Capacitor Purchases plugin is one of the most complete in-app purchase solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🛍️ **Product Types**: Supports subscriptions, consumables, and non-consumable in-app products.
 - 🗂️ **Product Retrieval**: Fetch multiple products in a single call for efficient loading.
 - 🎁 **Intro Offer Eligibility**: Check if introductory offers are available for subscription products.
+- 📅 **Billing Plans**: Supports monthly-with-12-month-commitment subscriptions on iOS (26.4+).
 - 🔒 **Server Validation**: Provides verification tokens (iOS JWS, Android purchase tokens) for server-side validation.
 - 🔗 **Third-Party Validation**: Includes transaction properties for third-party validation.
 - 📋 **Transaction Management**: Track current, unfinished, and historical transactions.
@@ -23,15 +24,27 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Purchases plugin is typically used whenever an app wants to monetize with in-app purchases, for example:
+
+- **Premium subscriptions**: Sell auto-renewable subscriptions and check whether an introductory offer is available for a product.
+- **One-time unlocks**: Sell consumable and non-consumable in-app products, such as feature unlocks or in-app currency.
+- **Server-side validation**: Pass the verification tokens (JWS on iOS, purchase tokens on Android) to your backend to validate purchases.
+- **Purchase restoration**: Sync and restore purchases so users keep their content across devices.
+- **Reliable transaction handling**: Track current, unfinished, and historical transactions to make sure every purchase is delivered.
 
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.3.x          | >=8.x.x           | Active support |
+
+## Prerequisites
+
+### iOS
+
+Xcode 26.5 or later is required to build the plugin.
 
 ## Guides
 
@@ -91,6 +104,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to purchase a product and restore previous purchases.
+
+### Purchase a product
+
+Purchase a product by its ID and finish the transaction after the content has been delivered or the service has been enabled. On Android, this is the product ID configured in the Google Play Console. On iOS, this is the product ID configured in App Store Connect. Only available on Android, and on iOS 15.0 and later:
+
 ```typescript
 import { Purchases } from '@capawesome-team/capacitor-purchases';
 
@@ -101,6 +120,14 @@ const purchaseProduct = async (productId: string) => {
   // Finish the transaction
   await Purchases.finishTransaction({ transactionId: transaction.id });
 };
+```
+
+### Restore previous purchases
+
+Sync the transactions with the store and retrieve the currently owned items to restore purchases across devices. On iOS, `syncTransactions()` displays a system dialog asking the user to authenticate, so call it only in response to an explicit user action. Only available on Android, and on iOS 15.0 and later:
+
+```typescript
+import { Purchases } from '@capawesome-team/capacitor-purchases';
 
 const restorePurchases = async () => {
   await Purchases.syncTransactions();
@@ -366,14 +393,28 @@ Only available on Android and iOS (15.0+).
 
 #### Transaction
 
-| Prop                     | Type                | Description                                                                                                                                                                                                                       | Since |
-| ------------------------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**                 | <code>string</code> | The unique identifier for the transaction.                                                                                                                                                                                        | 0.1.0 |
-| **`verificationResult`** | <code>string</code> | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS. | 0.1.0 |
-| **`token`**              | <code>string</code> | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                              | 0.2.1 |
-| **`productId`**          | <code>string</code> | The product identifier associated with the transaction.                                                                                                                                                                           | 0.3.2 |
-| **`originalJson`**       | <code>string</code> | The original JSON purchase data. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                    | 0.3.2 |
-| **`signature`**          | <code>string</code> | The RSA signature for purchase verification. Pass this to your server to validate the purchase. Only available on Android.                                                                                                        | 0.3.2 |
+| Prop                     | Type                                                                            | Description                                                                                                                                                                                                                       | Since |
+| ------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**                 | <code>string</code>                                                             | The unique identifier for the transaction.                                                                                                                                                                                        | 0.1.0 |
+| **`verificationResult`** | <code>string</code>                                                             | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS. | 0.1.0 |
+| **`token`**              | <code>string</code>                                                             | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                              | 0.2.1 |
+| **`productId`**          | <code>string</code>                                                             | The product identifier associated with the transaction.                                                                                                                                                                           | 0.3.2 |
+| **`originalJson`**       | <code>string</code>                                                             | The original JSON purchase data. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                    | 0.3.2 |
+| **`signature`**          | <code>string</code>                                                             | The RSA signature for purchase verification. Pass this to your server to validate the purchase. Only available on Android.                                                                                                        | 0.3.2 |
+| **`planType`**           | <code><a href="#billingplantype">BillingPlanType</a></code>                     | The billing plan type the user committed to when this transaction was made. Only available on iOS (26.4+).                                                                                                                        | 0.3.8 |
+| **`commitmentInfo`**     | <code><a href="#transactioncommitmentinfo">TransactionCommitmentInfo</a></code> | The commitment details for transactions made under a billing plan that includes a commitment (e.g. monthly with 12-month commitment). Only available on iOS (26.4+).                                                              | 0.3.8 |
+
+
+#### TransactionCommitmentInfo
+
+The commitment details for a transaction.
+
+| Prop                      | Type                | Description                                                             | Since |
+| ------------------------- | ------------------- | ----------------------------------------------------------------------- | ----- |
+| **`billingPeriodNumber`** | <code>number</code> | The 1-based number of the current billing period within the commitment. | 0.3.8 |
+| **`totalBillingPeriods`** | <code>number</code> | The total number of billing periods in the commitment.                  | 0.3.8 |
+| **`expirationDate`**      | <code>string</code> | The date the commitment expires, as an ISO 8601 string.                 | 0.3.8 |
+| **`price`**               | <code>number</code> | The price charged for this billing period, as a decimal number.         | 0.3.8 |
 
 
 #### GetCurrentTransactionsResult
@@ -394,15 +435,50 @@ Only available on Android and iOS (15.0+).
 
 Represents an in-app product available for purchase.
 
-| Prop               | Type                                                | Description                                                                                                                                                            | Since |
-| ------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**           | <code>string</code>                                 | The unique product identifier.                                                                                                                                         | 0.3.1 |
-| **`displayName`**  | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.               | 0.3.1 |
-| **`description`**  | <code>string</code>                                 | The localized description of the product.                                                                                                                              | 0.3.1 |
-| **`displayPrice`** | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                     | 0.3.1 |
-| **`price`**        | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal. | 0.3.1 |
-| **`currencyCode`** | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                  | 0.3.1 |
-| **`type`**         | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                   | 0.3.1 |
+| Prop               | Type                                                | Description                                                                                                                                                                                                                                    | Since |
+| ------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**           | <code>string</code>                                 | The unique product identifier.                                                                                                                                                                                                                 | 0.3.1 |
+| **`displayName`**  | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.                                                                                       | 0.3.1 |
+| **`description`**  | <code>string</code>                                 | The localized description of the product.                                                                                                                                                                                                      | 0.3.1 |
+| **`displayPrice`** | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                                                                                             | 0.3.1 |
+| **`price`**        | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal.                                                                         | 0.3.1 |
+| **`currencyCode`** | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                                                                                          | 0.3.1 |
+| **`type`**         | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                                                                                           | 0.3.1 |
+| **`pricingTerms`** | <code>PricingTerms[]</code>                         | The pricing terms available for the product, one entry per billing plan. Only present for auto-renewable subscriptions that are configured with multiple billing plans (e.g. monthly with 12-month commitment). Only available on iOS (26.4+). | 0.3.8 |
+
+
+#### PricingTerms
+
+The pricing terms for a billing plan of an auto-renewable subscription.
+
+| Prop                 | Type                                                                              | Description                                                                  | Since |
+| -------------------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ----- |
+| **`planType`**       | <code><a href="#billingplantype">BillingPlanType</a></code>                       | The plan type the pricing terms apply to.                                    | 0.3.8 |
+| **`price`**          | <code>number</code>                                                               | The price billed per billing period, as a decimal number.                    | 0.3.8 |
+| **`displayPrice`**   | <code>string</code>                                                               | The localized price string billed per billing period, formatted for display. | 0.3.8 |
+| **`period`**         | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code>                 | The duration of one billing period.                                          | 0.3.8 |
+| **`commitmentInfo`** | <code><a href="#pricingtermscommitmentinfo">PricingTermsCommitmentInfo</a></code> | The total commitment details that apply to this billing plan.                | 0.3.8 |
+
+
+#### SubscriptionPeriod
+
+A length of time for a subscription period.
+
+| Prop        | Type                                                                      | Description                        | Since |
+| ----------- | ------------------------------------------------------------------------- | ---------------------------------- | ----- |
+| **`value`** | <code>number</code>                                                       | The number of units in the period. | 0.3.8 |
+| **`unit`**  | <code><a href="#subscriptionperiodunit">SubscriptionPeriodUnit</a></code> | The unit of time for the period.   | 0.3.8 |
+
+
+#### PricingTermsCommitmentInfo
+
+The total commitment details of a billing plan.
+
+| Prop               | Type                                                              | Description                                                        | Since |
+| ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
+| **`price`**        | <code>number</code>                                               | The total committed price, as a decimal number.                    | 0.3.8 |
+| **`displayPrice`** | <code>string</code>                                               | The localized total committed price string, formatted for display. | 0.3.8 |
+| **`period`**       | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The total commitment duration.                                     | 0.3.8 |
 
 
 #### GetProductByIdOptions
@@ -465,14 +541,23 @@ Represents an in-app product available for purchase.
 
 #### PurchaseProductOptions
 
-| Prop             | Type                | Description                                                                                                                                                                                                                            | Since |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`basePlanId`** | <code>string</code> | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                           | 0.3.5 |
-| **`offerId`**    | <code>string</code> | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                         | 0.3.5 |
-| **`productId`**  | <code>string</code> | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
+| Prop             | Type                                                        | Description                                                                                                                                                                                                                            | Since |
+| ---------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`basePlanId`** | <code>string</code>                                         | The base plan ID of the subscription to purchase. Only available on Android.                                                                                                                                                           | 0.3.5 |
+| **`offerId`**    | <code>string</code>                                         | The offer ID of the subscription offer to purchase. Only available on Android.                                                                                                                                                         | 0.3.5 |
+| **`planType`**   | <code><a href="#billingplantype">BillingPlanType</a></code> | The billing plan type to purchase for a monthly-with-12-month-commitment auto-renewable subscription. Only available on iOS (26.4+).                                                                                                   | 0.3.8 |
+| **`productId`**  | <code>string</code>                                         | The product ID of the product to purchase. On **Android**, this is the <a href="#product">Product</a> ID configured in Google Play Console. On **iOS**, this is the <a href="#product">Product</a> ID configured in App Store Connect. | 0.1.0 |
 
 
 ### Enums
+
+
+#### BillingPlanType
+
+| Members       | Value                   | Description                                                                     | Since |
+| ------------- | ----------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`Monthly`** | <code>'MONTHLY'</code>  | The subscription is billed once per renewal period.                             | 0.3.8 |
+| **`UpFront`** | <code>'UP_FRONT'</code> | The subscription is paid in full upfront at the start of the commitment period. | 0.3.8 |
 
 
 #### ProductType
@@ -483,6 +568,17 @@ Represents an in-app product available for purchase.
 | **`NonConsumable`**             | <code>'NON_CONSUMABLE'</code>              | A non-consumable in-app product. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonConsumable. Only available on iOS.                                          | 0.3.1 |
 | **`AutoRenewableSubscription`** | <code>'AUTO_RENEWABLE_SUBSCRIPTION'</code> | An auto-renewable subscription. On Android, this is <a href="#producttype">ProductType</a>.SUBS. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.autoRenewable. | 0.3.1 |
 | **`NonRenewableSubscription`**  | <code>'NON_RENEWABLE_SUBSCRIPTION'</code>  | A non-renewing subscription. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonRenewable. Only available on iOS.                                               | 0.3.1 |
+
+
+#### SubscriptionPeriodUnit
+
+| Members       | Value                  | Description                                                | Since |
+| ------------- | ---------------------- | ---------------------------------------------------------- | ----- |
+| **`Day`**     | <code>'DAY'</code>     |                                                            | 0.3.8 |
+| **`Week`**    | <code>'WEEK'</code>    |                                                            | 0.3.8 |
+| **`Month`**   | <code>'MONTH'</code>   |                                                            | 0.3.8 |
+| **`Year`**    | <code>'YEAR'</code>    |                                                            | 0.3.8 |
+| **`Unknown`** | <code>'UNKNOWN'</code> | The unit of time is not recognized by this plugin version. | 0.3.8 |
 
 
 #### ProductCategory
@@ -518,6 +614,42 @@ Sandbox accounts can be created in App Store Connect under **Users and Access** 
 
 See [Testing In-App Purchases](https://developer.apple.com/documentation/storekit/in-app_purchase/testing_in-app_purchases) for more details.
 
+## FAQ
+
+### Do I need a third-party service to use this plugin?
+
+No, the plugin uses the native store APIs directly, namely StoreKit 2 on iOS and the Google Play Billing Library on Android. For server-side validation, the plugin provides verification tokens (JWS on iOS, purchase tokens on Android) that you can pass to your own backend, and it includes transaction properties for third-party validation services if you prefer to use one.
+
+### Why do I need to call `finishTransaction` after a purchase?
+
+Calling `finishTransaction(...)` indicates to the store that your app has delivered the purchased content or enabled the service. Make sure to call it after every purchase, and check for unfinished transactions with `getUnfinishedTransactions()` at least once every app launch to ensure that all transactions are processed correctly.
+
+### How do I validate purchases on my server?
+
+Every transaction contains properties that you can pass to your server for validation. On iOS, use the `verificationResult` property, which contains the JWS representation of the transaction verification result. On Android, use the `token`, `originalJson`, and `signature` properties.
+
+### Why does `syncTransactions` show a system dialog on iOS?
+
+On iOS, calling `syncTransactions()` displays a system dialog asking the user to authenticate with their App Store credentials. You should therefore call this method only in response to an explicit user action, for example a "Restore Purchases" button. On Android, this method silently queries and refreshes purchases from Google Play without user interaction.
+
+### Which iOS versions are supported?
+
+Most methods require iOS 15.0 or later because the plugin uses StoreKit 2. Billing plan features, such as monthly-with-12-month-commitment subscriptions, require iOS 26.4 or later. Additionally, Xcode 26.5 or later is required to build the plugin, as mentioned in the [Prerequisites](#prerequisites) section.
+
+### How do I test in-app purchases?
+
+On Android, upload your app to the Google Play Console, add test accounts under License Testing, and install the app from Google Play. On iOS, use sandbox test accounts created in App Store Connect or a StoreKit configuration file in Xcode. See the [Testing](#testing) section for detailed instructions.
+
+## Related Plugins
+
+- [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/): Unofficial Capacitor plugin for the Superwall SDK to present remotely configured paywalls.
+- [Square Mobile Payments](https://capawesome.io/docs/sdks/capacitor/square-mobile-payments/): Unofficial Capacitor plugin for the Square Mobile Payments SDK.
+- [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Allow users to submit app store reviews and ratings.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/purchases/CHANGELOG.md).
@@ -529,3 +661,18 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/purchases/LICENSE).
+
+## Third-Party Notices
+
+This plugin depends on the **Google Play Billing Library**
+(`com.android.billingclient:billing`), governed by the [Android Software
+Development Kit License Agreement](https://developer.android.com/studio/terms).
+The library is not bundled in this plugin; it is fetched at build time from
+Google's Maven repository by your application's build system. By building
+an Android application that uses this plugin, you accept the Android SDK
+License Agreement and the [Google Play Developer Program Policies](https://play.google.com/about/developer-content-policy/),
+and you are responsible for ensuring your app complies with both. This
+plugin is intended for use in applications distributed via the Google Play
+Store on compatible Android devices. "Google Play", "Google Play Billing",
+and "Google Play Store" are used as descriptive identifiers only — no
+affiliation with or endorsement by Google is claimed or implied.

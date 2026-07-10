@@ -1,20 +1,21 @@
-# @capawesome-team/capacitor-sqlite
+# Capacitor SQLite Plugin
 
-Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.
+Capacitor plugin to access SQLite databases with support for encryption, transactions, and schema migrations.[^1][^2][^3]
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
   </a>
 </div>
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins to access SQLite databases. Here are some of the key features:
+The Capacitor SQLite plugin is one of the most complete local database solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS, Web and Electron.
 - 🔒 **Encryption**: Supports 256 bit AES encryption with custom keys.
 - 📦 **Bundled SQLite**: Opt-in bundling of the latest SQLite version.
+- 🧩 **Custom Extensions**: Load app-bundled SQLite extensions on Android.
 - 📖 **Read-only mode**: Open databases in read-only mode to prevent modifications.
 - 📂 **File-based**: Open existing databases or create new ones with a file path.
 - 💾 **In-memory databases**: Create temporary in-memory databases for quick operations or testing.
@@ -28,7 +29,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📝 **Full Text Search**: Supports full text search with [FTS5](https://www.sqlite.org/fts5.html).
 - 🗄️ **Key-Value Store**: Built-in [key-value store](#key-value-store) for simple data persistence without SQL.
 - 🗃️ **ORM Support**: Works with popular ORMs like [Drizzle](#drizzle), [Kysely](#kysely) and [TypeORM](#typeorm).
-- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -36,9 +37,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll add it for you!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The SQLite plugin is typically used whenever an app needs a robust local database, for example:
+
+- **Offline-first apps**: Store structured records locally so the app remains fully functional without a network connection.
+- **Encrypted data storage**: Protect sensitive records with 256 bit AES encryption using a custom encryption key.
+- **Complex queries**: Filter, join, and aggregate large datasets with SQL instead of loading everything into memory.
+- **Full text search**: Search large amounts of text quickly using the FTS5 extension.
+- **Settings and session data**: Persist small key/value data with the built-in key-value store without writing any SQL.
 
 ## Compatibility
 
@@ -106,6 +113,8 @@ ext {
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
+
 #### Bundled SQLite
 
 By default, this plugin uses the system SQLite version provided by the Android device. If you want to use a newer, consistent SQLite version across all devices, you can opt in to bundling [requery/sqlite-android](https://github.com/requery/sqlite-android) by setting the `capawesomeCapacitorSqliteIncludeRequery` variable to `true` in your app's `variables.gradle` file:
@@ -127,6 +136,12 @@ repositories {
 +   maven { url 'https://jitpack.io' }
 }
 ```
+
+#### Custom Extensions
+
+You can load app-bundled SQLite extensions when opening a database using the `androidExtensions` option of the `open(...)` method. This requires the bundled SQLite backend to be enabled (see [Bundled SQLite](#bundled-sqlite)), because the system SQLite version does not support loading extensions.
+
+The extension libraries (`.so` files) must be bundled with your app for each supported ABI. The `name` of an extension is resolved to the corresponding native library, e.g. `sqlite_tokenizer_ar` resolves to `libsqlite_tokenizer_ar.so`.
 
 #### Proguard
 
@@ -176,6 +191,8 @@ end
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
+
 #### Swift Package Manager
 
 No additional setup is required for SPM.
@@ -201,6 +218,31 @@ Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
 **Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
+
+**Attention**: SQLCipher's Community Edition license requires that the SQLCipher copyright notice and BSD-style license text be reproduced in a **user-accessible location** within your application — for example, an "About" or "Licensing" screen, or in product documentation linked from the application. See the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the full text.
+
+#### Custom Extensions
+
+If you want to use custom SQLite extensions, you must **statically link** them into your app and register them at startup, after which they are automatically available in every database opened by the plugin. This is required because iOS does not support loading extensions at runtime.
+
+First, add the extension's C source file to your app target in Xcode and set the per-file compiler flag `-DSQLITE_CORE` (in **Build Phases › Compile Sources**). Then declare its entry point in your bridging header:
+
+```c
+#include <sqlite3.h>
+
+int sqlite3_myextension_init(sqlite3 *db, char **pzErrMsg, const sqlite3_api_routines *pApi);
+```
+
+Finally, register the extension before any database is opened, e.g. in your `AppDelegate`:
+
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+  sqlite3_auto_extension(unsafeBitCast(sqlite3_myextension_init, to: (@convention(c) () -> Void).self))
+  return true
+}
+```
+
+The entry point name must follow the SQLite naming convention `sqlite3_<name>_init` and the extension must be compiled with `-DSQLITE_CORE` so that it links against the host SQLite. See [Run-Time Loadable Extensions](https://www.sqlite.org/loadext.html#statically_linking_a_run_time_loadable_extension) for details.
 
 ### Web
 
@@ -277,6 +319,10 @@ export default defineConfig({
 });
 ```
 
+#### Debugging
+
+You can inspect the SQLite database stored in OPFS using the [OPFS Explorer](https://chromewebstore.google.com/detail/opfs-explorer/acndjpgkpaclldomagafnognkcgjignd) Chrome DevTools extension.
+
 ### Electron
 
 This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 33+).
@@ -317,9 +363,13 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to open and close a database, execute statements, query data, run transactions, change the encryption key, read the SQLite version, reclaim space, and handle errors.
+
+### Open or create a database
+
+Open an existing database or create a new one at the given path. You can optionally provide an encryption key (only available on Android and iOS) and schema migrations that are applied automatically when the database is opened:
+
 ```typescript
-import { Capacitor } from '@capacitor/core';
-import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const open = async () => {
@@ -342,6 +392,14 @@ const open = async () => {
     version: 2,
   });
 };
+```
+
+### Execute a statement
+
+Execute a single SQL statement such as `INSERT`, `UPDATE`, `DELETE`, or `CREATE TABLE`. Use placeholders to bind values and prevent SQL injection attacks:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const execute = async () => {
   const { databaseId } = await Sqlite.open();
@@ -351,6 +409,14 @@ const execute = async () => {
     values: ['Alice', 30],
   });
 };
+```
+
+### Query data
+
+Execute a `SELECT` statement and retrieve the result set:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const query = async () => {
   const { databaseId } = await Sqlite.open();
@@ -362,6 +428,14 @@ const query = async () => {
   console.log(result.columns); // The column names in the result set
   console.log(result.rows); // The rows returned by the query
 };
+```
+
+### Perform a transaction
+
+Group multiple statements into a transaction so that they are either all committed or all rolled back:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const performTransaction = async () => {
   const { databaseId } = await Sqlite.open();
@@ -378,11 +452,27 @@ const performTransaction = async () => {
   });
   await Sqlite.commitTransaction({ databaseId });
 };
+```
+
+### Close the database
+
+Close the database when it is no longer needed:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const close = async () => {
   const { databaseId } = await Sqlite.open();
   await Sqlite.close({ databaseId });
 };
+```
+
+### Change the encryption key
+
+Change the encryption key of an encrypted database. The database must first be opened with the current encryption key. Only available on Android and iOS:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const changeEncryptionKey = async () => {
   // Open the database with the old encryption key
@@ -395,15 +485,48 @@ const changeEncryptionKey = async () => {
     encryptionKey: 'new-secret',
   });
 };
+```
+
+### Get the SQLite version
+
+Get the version of the SQLite library used by the plugin:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const getVersion = async () => {
   const result = await Sqlite.getVersion();
   console.log(result.version); // The version of the SQLite library used by the plugin
 };
+```
+
+### Reclaim unused space
+
+Run the `VACUUM` command to rebuild the database file and optimize its size:
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
 
 const vacuum = async () => {
   const { databaseId } = await Sqlite.open();
   await Sqlite.vacuum({ databaseId });
+};
+```
+
+### Handle errors
+
+Errors that originate from SQLite expose the SQLite result code in the `data.sqliteCode` property (see [Error Handling](#error-handling)):
+
+```typescript
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+
+const handleErrors = async () => {
+  try {
+    await Sqlite.open({ path: '/invalid/path/to.db' });
+  } catch (error) {
+    // `error.data.sqliteCode` contains the SQLite result code (e.g. `14` for `SQLITE_CANTOPEN`)
+    console.error(error.message, error.data?.sqliteCode);
+  }
 };
 ```
 
@@ -661,7 +784,7 @@ This command can be used to reclaim unused space and optimize the database file.
 | Prop                | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                     | Since |
 | ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`databaseId`**    | <code>string</code> | The unique identifier for the database to change the encryption key for.                                                                                                                                                                                                                                                                                                                                                                        | 0.1.0 |
-| **`encryptionKey`** | <code>string</code> | The new encryption key to set for the database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin to securely store the encryption key. | 0.1.0 |
+| **`encryptionKey`** | <code>string</code> | The new encryption key to set for the database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the encryption key. | 0.1.0 |
 
 
 #### CloseOptions
@@ -722,11 +845,20 @@ This command can be used to reclaim unused space and optimize the database file.
 
 | Prop                    | Type                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Default            | Since |
 | ----------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`encryptionKey`**     | <code>string</code>             | The encryption key to use for the database. If provided, the database will be opened as an encrypted database using the specified key. If not provided, the database will be opened as an unencrypted database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin to securely store the encryption key. Only available on Android and iOS.                                                                                                                                                                                                                                 |                    | 0.1.0 |
+| **`encryptionKey`**     | <code>string</code>             | The encryption key to use for the database. If provided, the database will be opened as an encrypted database using the specified key. If not provided, the database will be opened as an unencrypted database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the encryption key. Only available on Android and iOS.                                                                                                                                                                                                                                 |                    | 0.1.0 |
 | **`readOnly`**          | <code>boolean</code>            | Whether the database should be opened in read-only mode. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | <code>false</code> | 0.1.0 |
 | **`path`**              | <code>string</code>             | The path to the database file. If no file exists at the specified path, a new file will be created. If no path or URL is provided, the plugin will create a new in-memory database. On **Android**, the path can either be a simple filename or a file URI. If a simple filename is provided, the plugin will create the database in the default database directory (see [getDatabasePath](https://developer.android.com/reference/android/content/Context#getDatabasePath(java.lang.String))). On **iOS**, the path can either be a simple filename or a file URL. If a simple filename is provided, the plugin will create the database in the default documents directory (see [documentsDirectory](https://developer.apple.com/documentation/foundation/url/documentsdirectory)). On **Web**, the path should be a simple filename without a directory (e.g., `mydb.sqlite3`). |                    | 0.1.0 |
+| **`androidExtensions`** | <code>AndroidExtension[]</code> | App-bundled SQLite extensions to load when opening the database. Only available on Android when the requery SQLite backend is bundled (see `capawesomeCapacitorSqliteIncludeRequery`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |                    | 0.3.9 |
 | **`upgradeStatements`** | <code>UpgradeStatement[]</code> | An array of upgrade statements to apply when opening the database. Each statement should specify the version of the database schema it applies to and the SQL statements to execute for the upgrade. The current version of the database schema can be checked using the `PRAGMA user_version;` command.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                    | 0.1.0 |
 | **`version`**           | <code>number</code>             | The version of the database schema. If provided, the plugin will check the schema version and apply migrations if necessary. If not provided, the latest version of the upgrade statements will be used, if any. If neither `version` nor `upgradeStatements` are provided, the database version will not be managed by the plugin. **Attention:** The version must be 1 or higher.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                    | 0.1.0 |
+
+
+#### AndroidExtension
+
+| Prop             | Type                | Description                                                                                                                                                                                                                                     | Since |
+| ---------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`name`**       | <code>string</code> | The bundled extension library name without the `lib` prefix or `.so` suffix. The plugin resolves the name to the corresponding native library bundled with the app. For example, `sqlite_tokenizer_ar` resolves to `libsqlite_tokenizer_ar.so`. | 0.3.9 |
+| **`entryPoint`** | <code>string</code> | The extension entry point. If not provided, SQLite derives the entry point from the library name.                                                                                                                                               | 0.3.9 |
 
 
 #### UpgradeStatement
@@ -833,7 +965,7 @@ const db = drizzle(Sqlite, { databaseId, schema });
 const users = await db.select().from(schema.users);
 ```
 
-Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
+Check out the [How to use Drizzle with Capacitor SQLite](https://capawesome.io/blog/how-to-use-drizzle-orm-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use Drizzle ORM with this plugin.
 
 ### Kysely
 
@@ -852,7 +984,7 @@ const db = new Kysely<Database>({
 const users = await db.selectFrom('users').selectAll().execute();
 ```
 
-Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
+Check out the [How to use Kysely with Capacitor SQLite](https://capawesome.io/blog/how-to-use-kysely-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use Kysely with this plugin.
 
 ### TypeORM
 
@@ -875,11 +1007,34 @@ const createDataSource = async () => {
 };
 ```
 
-Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
+Check out the [How to use TypeORM with Capacitor SQLite](https://capawesome.io/blog/how-to-use-typeorm-with-capacitor-and-sqlite/) blog post for a step-by-step guide on how to set up and use TypeORM with this plugin.
+
+## Error Handling
+
+Every method rejects with an `Error` whose `message` describes what went wrong. Errors that originate from SQLite additionally expose the primary [SQLite result code](https://www.sqlite.org/rescode.html) as a number in the `data.sqliteCode` property. This lets you handle specific failures programmatically instead of parsing the error message.
+
+Only available on Android and iOS.
+
+```typescript
+try {
+  await Sqlite.open({ path: '/invalid/path/to.db' });
+} catch (error) {
+  if (error.data?.sqliteCode === 14) {
+    // SQLITE_CANTOPEN: unable to open the database file
+  }
+}
+```
 
 ## Limitations
 
 This plugin has some limitations on certain platforms.
+
+### Android
+
+The Android implementation of this plugin has the following limitations:
+
+- **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
+- **Statements that return data must use `query(...)`**: `execute(...)` cannot run statements that return rows. For example, `PRAGMA journal_mode = WAL` and `PRAGMA journal_size_limit = ...` both return the resulting value and must be run via `query(...)`. `PRAGMA synchronous = ...` does not return a value and can be run via `execute(...)`.
 
 ### Web
 
@@ -893,6 +1048,7 @@ The Electron implementation of this plugin has the following limitations:
 
 - **Encryption**: Database encryption is not supported.
 - **Node.js version**: Requires Node.js 22.5.0 or later (Electron 33+) to use the native `node:sqlite` module.
+- **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
 
 ## Troubleshooting
 
@@ -934,6 +1090,64 @@ end
 
 **Attention**: Both `CapawesomeTeamCapacitorSqlite` and `CapawesomeTeamCapacitorSqlite/Plain` or `CapawesomeTeamCapacitorSqlite/SQLCipher` must be included in the `Podfile`. The first one is required for the plugin to work, while the second one is required for the specific implementation (Plain or SQLCipher).
 
+## FAQ
+
+### When should I use SQLite instead of Vault or Secure Preferences?
+
+All three plugins protect data on the device, but they target different problems:
+
+- **SQLite** (this plugin) is a full relational database with optional SQLCipher encryption. Use it when the shape of your data calls for queries, joins, indexes, or large record sets — for example, an offline-first app that syncs structured records, or anything you would otherwise model with a server-side database.
+
+- **[Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/)** is a transparent key/value store. Values are encrypted at rest using the Android Keystore and iOS Keychain, but the app can read them at any time without prompting the user. Reach for it when you need to keep small bits of sensitive data around that the app itself accesses in the background — typical examples are OAuth refresh tokens, server-issued API keys, or preference flags that contain personal information.
+
+- **[Vault](https://capawesome.io/docs/sdks/capacitor/vault/)** is a key/value store with an active lock state and biometric or device-passcode gating. The user has to unlock it before any read or write, and it locks again on demand or after a configurable background timeout. Reach for it when access to the data should require an explicit user action — a password manager's entries, an authenticator app's TOTP secrets, or the credentials sitting behind an "app lock" screen.
+
+A quick decision tree:
+
+- Need queries, relations, or large datasets? → **SQLite**.
+- Need encrypted key/value storage the app can read freely in the background? → **Secure Preferences**.
+- Need encrypted key/value storage the user must actively unlock with biometrics or a passcode? → **Vault**.
+
+The three plugins are designed to coexist. A real-world app might use Secure Preferences for app-managed tokens, SQLite for synced records, and Vault for the master password that protects everything else.
+
+### Is this plugin an alternative to Ionic Secure Storage?
+
+Yes. [Ionic Secure Storage](https://ionic.io/products/secure-storage), which sunsets on December 31, 2027, provides an encrypted SQLite database based on SQLCipher — and so does this plugin: it offers 256 bit AES encryption via SQLCipher on Android and iOS (see the [Encryption](#encryption) section). Since both are built on SQLCipher and this plugin applies SQLCipher's default configuration, an existing database created by Ionic Secure Storage can generally be opened with the same encryption key — but verify this with your own database before migrating. For a step-by-step guide, check out the blog post [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/). If you only store key/value data, the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin may be the better fit.
+
+### Is this plugin an alternative to the Capacitor Community SQLite plugin?
+
+Yes. Check out the blog post [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) for a detailed comparison of `@capacitor-community/sqlite` and this plugin, including a migration guide.
+
+### Is database encryption supported on all platforms?
+
+No, encryption is only available on Android and iOS, where the plugin provides 256 bit AES encryption via SQLCipher. On both platforms, SQLCipher is opt-in and requires additional setup, as described in the [Installation](#installation) section. On Electron, database encryption is not supported.
+
+### Can I execute multiple SQL statements in a single call?
+
+On Android and Electron, only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement, optionally wrapped in a transaction.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects. It also works with popular ORMs like Drizzle, Kysely and TypeORM, as described in the [ORMs](#orms) section.
+
+## Related Plugins
+
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
+- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
+
+## Next steps
+
+Here are a few resources to help you continue:
+
+- Read [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/) if you are migrating from Ionic Secure Storage.
+- Read [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/) to see how this plugin compares.
+- Store small pieces of sensitive data like tokens with the [Capacitor Secure Preferences plugin](https://capawesome.io/docs/sdks/capacitor/secure-preferences/).
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://capawesome.io/newsletter/).
+
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/sqlite/CHANGELOG.md).
@@ -945,3 +1159,18 @@ See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/sqlite/LICENSE).
+
+## Third-Party Notices
+
+If you enable SQLCipher (see the [Encryption](#encryption) section), your
+application takes on the SQLCipher Community Edition BSD-style license
+obligations. You must reproduce the copyright notice and license text in a
+**user-accessible location** — typically an "About" or "Licensing" screen,
+or product documentation linked from the application. This plugin does not
+include a SQLCipher commercial license; the BSD attribution applies. See
+the [SQLCipher license](https://www.zetetic.net/sqlcipher/license/) for the
+full text.
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Hipp, Wyrick & Company, Inc., Zetetic, LLC, or any of their affiliates or subsidiaries.
+[^2]: `SQLite` is a registered trademark of Hipp, Wyrick & Company, Inc.
+[^3]: `SQLCipher` is a registered trademark of Zetetic, LLC.

@@ -1,5 +1,25 @@
 # Changelog
 
+## 8.3.1
+
+### Patch Changes
+
+- [`074bff47ca544735db1148a8fc16665964adc323`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/074bff47ca544735db1148a8fc16665964adc323) ([#445](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/445)): fix(android): prevent `ForegroundServiceDidNotStartInTimeException` crash when triggered from native media controls
+
+## 8.3.0
+
+### Minor Changes
+
+- [`cfd83abaf5639f53d009addc40664361e14da0e5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cfd83abaf5639f53d009addc40664361e14da0e5) ([#456](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/456)): feat: support custom seek offset on Android and iOS
+
+## 8.2.2
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
 ## 8.2.1
 
 ### Patch Changes

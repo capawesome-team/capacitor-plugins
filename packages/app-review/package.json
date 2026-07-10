@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-app-review",
   "version": "8.0.1",
-  "description": "Capacitor plugin that allows users to submit app store reviews and ratings.",
+  "description": "Capacitor plugin that allows users to submit app store reviews and ratings on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/app-review/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/app-review/",
   "keywords": [
     "capacitor",
     "plugin",
@@ -41,7 +41,15 @@
     "ionic",
     "android",
     "ios",
-    "app review"
+    "app review",
+    "capacitor-plugin",
+    "in-app review",
+    "app rating",
+    "rate app",
+    "request review",
+    "store review",
+    "play store review",
+    "app store review"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -69,7 +77,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

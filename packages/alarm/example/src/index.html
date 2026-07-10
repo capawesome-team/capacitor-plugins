@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Alarm</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Alarm</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-button id="isAvailable" expand="block">Is Available</ion-button>
+        <ion-button id="checkPermissions" expand="block"
+          >Check Permissions</ion-button
+        >
+        <ion-button id="requestPermissions" expand="block"
+          >Request Permissions</ion-button
+        >
+        <ion-item>
+          <ion-input
+            id="hour"
+            label="Hour"
+            type="number"
+            min="0"
+            max="23"
+            value="6"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            id="minute"
+            label="Minute"
+            type="number"
+            min="0"
+            max="59"
+            value="30"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input id="label" label="Label" value="Wake up"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select id="days" label="Days" multiple>
+            <ion-select-option value="MONDAY">MONDAY</ion-select-option>
+            <ion-select-option value="TUESDAY">TUESDAY</ion-select-option>
+            <ion-select-option value="WEDNESDAY">WEDNESDAY</ion-select-option>
+            <ion-select-option value="THURSDAY">THURSDAY</ion-select-option>
+            <ion-select-option value="FRIDAY">FRIDAY</ion-select-option>
+            <ion-select-option value="SATURDAY">SATURDAY</ion-select-option>
+            <ion-select-option value="SUNDAY">SUNDAY</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="createAlarm" expand="block">Create Alarm</ion-button>
+        <ion-item>
+          <ion-input
+            id="duration"
+            label="Duration (seconds)"
+            type="number"
+            min="1"
+            max="86400"
+            value="300"
+          ></ion-input>
+        </ion-item>
+        <ion-button id="createTimer" expand="block">Create Timer</ion-button>
+        <ion-button id="getAlarms" expand="block">Get Alarms</ion-button>
+        <ion-item>
+          <ion-input id="alarmId" label="Alarm ID"></ion-input>
+        </ion-item>
+        <ion-button id="cancelAlarm" expand="block">Cancel Alarm</ion-button>
+        <ion-button id="openAlarms" expand="block">Open Alarms</ion-button>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

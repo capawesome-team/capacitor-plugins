@@ -1,4 +1,4 @@
-# @capawesome/capacitor-android-edge-to-edge-support
+# Capacitor Android Edge-to-Edge Support Plugin
 
 Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) display on Android with advanced features like setting the background color of the status bar and navigation bar.
 
@@ -14,9 +14,14 @@ Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop
 
 **Attention:** Despite its name, this plugin doesn't enable edge-to-edge mode by default. Instead, it preserves the traditional app behavior by applying proper insets to the webview, preventing Android's edge-to-edge changes from affecting apps that haven't been designed to support it.
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Android Edge-to-Edge Support plugin is typically used whenever an app needs to deal with Android's edge-to-edge display behavior, for example:
+
+- **Preserving traditional layouts**: Prevent Android's edge-to-edge changes from affecting apps that haven't been designed to support it by applying proper insets to the web view.
+- **Styling the system bars**: Set the background color of the status bar and navigation bar so they match your app's design.
+- **Switching between light and dark themes**: Update the system bar background colors together with the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin when the user changes the theme.
+- **Custom inset handling**: Read the insets that are currently applied to the web view to fine-tune your own layout.
 
 ## Compatibility
 
@@ -132,11 +137,14 @@ export default config;
 
 ## Usage
 
-The plugin **only needs to be installed**. It applies insets to the web view to support edge-to-edge display on Android. The plugin also provides a method to set the background color of the status bar and navigation bar. It's recommended to use this method in combination with the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin.
+The plugin applies insets to the web view automatically once installed; the following examples show how to enable or disable the edge-to-edge mode, read the applied insets, and set the system bar colors for light and dark themes.
+
+### Enable or disable the edge-to-edge mode
+
+Enable or disable the edge-to-edge mode at runtime. Only available on Android:
 
 ```typescript
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
-import { SystemBars, SystemBarsStyle } from '@capacitor/core';
 
 const enable = async () => {
   await EdgeToEdge.enable();
@@ -145,11 +153,28 @@ const enable = async () => {
 const disable = async () => {
   await EdgeToEdge.disable();
 };
+```
+
+### Get the applied insets
+
+Read the insets that are currently applied to the web view, for example to fine-tune your own layout. Only available on Android:
+
+```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 
 const getInsets = async () => {
   const result = await EdgeToEdge.getInsets();
   console.log('Insets:', result);
 };
+```
+
+### Set the system bar colors for light and dark themes
+
+Set the background color of the status bar and navigation bar, for example when the user switches between a light and a dark theme. It's recommended to combine this with the `setStyle(...)` method of the [SystemBars](https://capacitorjs.com/docs/apis/system-bars) plugin so the system bar icons remain readable:
+
+```typescript
+import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
+import { SystemBars, SystemBarsStyle } from '@capacitor/core';
 
 const setDarkStyle = async () => {
   await SystemBars.setStyle({ style: SystemBarsStyle.Dark });
@@ -327,6 +352,28 @@ Capacitor 8 introduced native edge-to-edge functionality through the internal `S
 ### Is this plugin compatible with Capacitor's SystemBars API?
 
 Yes, this plugin is partially compatible with the new [SystemBars API](https://capacitorjs.com/docs/apis/system-bars) introduced in Capacitor 8. For example, methods like `setStyle()` from the SystemBars API are supported and can be used alongside this plugin without conflicts.
+
+### Does this plugin enable edge-to-edge mode by default?
+
+No, despite its name, this plugin doesn't enable edge-to-edge mode by default. Instead, it preserves the traditional app behavior by applying proper insets to the web view, preventing Android's edge-to-edge changes from affecting apps that haven't been designed to support it. You can still enable or disable the edge-to-edge mode at runtime using the `enable()` and `disable()` methods.
+
+### Why does my layout break when the keyboard is displayed?
+
+If you are using the [Capacitor Keyboard](https://capacitorjs.com/docs/apis/keyboard) plugin, make sure the `resizeOnFullScreen` property is set to `false` (the default) in your Capacitor configuration file. Otherwise, the web view will be resized to fit the screen, which may cause issues with this plugin. See the [Installation](#installation) section for more information.
+
+### Does this plugin work on iOS or Web?
+
+No, this plugin only provides an Android implementation, as the name suggests. All methods are only available on Android since it addresses Android's edge-to-edge display behavior.
+
+## Related Plugins
+
+- [Android Dark Mode Support](https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/): Support dark mode on Android via the `prefers-color-scheme` CSS media feature.
+- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the navigation bar.
+- [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/): Hide and show the iOS home indicator.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

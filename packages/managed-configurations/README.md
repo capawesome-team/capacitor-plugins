@@ -1,4 +1,4 @@
-# @capawesome/capacitor-managed-configurations
+# Capacitor Managed Configurations Plugin
 
 Capacitor plugin to access managed configuration settings.
 
@@ -8,9 +8,13 @@ Capacitor plugin to access managed configuration settings.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Managed Configurations plugin is typically used in enterprise apps that are distributed through an EMM or MDM solution, for example:
+
+- **Preconfigured server settings**: Read a server URL or port that the organization's IT department has configured, instead of asking the user to enter it.
+- **Policy-driven features**: Use boolean configuration entries to enable or disable features per deployment, such as allowing downloads on cellular connections.
+- **Multi-tenant deployments**: Ship a single app to multiple organizations and adapt it at runtime based on the managed configuration values of each tenant.
 
 ## Compatibility
 
@@ -56,6 +60,12 @@ No configuration required for this plugin.
 A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
+
+The following example shows how to read managed configuration values as strings, numbers, and booleans.
+
+### Read managed configuration values
+
+Fetch the value associated with a given key as a string, number, or boolean. The result contains `null` if no mapping exists for the given key. These methods are only available on Android and iOS:
 
 ```typescript
 import { ManagedConfigurations } from '@capawesome/capacitor-managed-configurations';
@@ -172,6 +182,42 @@ Only available on Android and iOS.
 On **Android**, see [Set up device owner for testing](https://source.android.com/devices/tech/admin/testing-setup#set_up_the_device_owner_for_testing) and follow the instructions to set up a device owner testing environment.
 
 On **iOS**, you need to install the app as a [managed app](https://support.apple.com/de-de/guide/deployment-reference-ios/iorf4d72eded/web) with a MDM solution.
+
+## FAQ
+
+### What are managed configurations?
+
+Managed configurations are settings that an organization's EMM or MDM solution pushes to an app, for example a server URL or a feature toggle. This plugin lets your Capacitor app read these settings at runtime using the `getString`, `getNumber`, and `getBoolean` methods.
+
+### What happens if a configuration key does not exist?
+
+The `getString`, `getNumber`, and `getBoolean` methods return a result whose `value` is `null` if no mapping exists for the given key. Your app should handle this case, for example by falling back to a default value.
+
+### Do I need to declare the managed configurations in my app?
+
+On Android, yes. You need to declare your app's managed configurations as described in [Define managed configurations](https://developer.android.com/work/managed-configurations#define-configuration) so that EMM solutions can discover and set them. See the [Installation](#installation) section for details.
+
+### How can I test managed configurations during development?
+
+On Android, you can set up a device owner testing environment as described in [Set up device owner for testing](https://source.android.com/devices/tech/admin/testing-setup#set_up_the_device_owner_for_testing). On iOS, the app must be installed as a managed app through an MDM solution. See the [Test your implementation](#test-your-implementation) section for details.
+
+### Is the Web platform supported?
+
+No, the `getString`, `getNumber`, and `getBoolean` methods are only available on Android and iOS. Managed configurations are a concept of mobile device management, which does not exist in the browser.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Photo Manipulator</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Photo Manipulator</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-select id="source" label="Source Image" value="sample.jpeg">
+            <ion-select-option value="sample.jpeg">JPEG</ion-select-option>
+            <ion-select-option value="sample.png">PNG</ion-select-option>
+            <ion-select-option value="sample.heic">HEIC</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="getInfo" expand="block">Get Info</ion-button>
+        <ion-item>
+          <ion-select id="format" label="Format" value="JPEG">
+            <ion-select-option value="JPEG">JPEG</ion-select-option>
+            <ion-select-option value="PNG">PNG</ion-select-option>
+            <ion-select-option value="WEBP">WEBP</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            id="resizeWidth"
+            label="Resize Width"
+            type="number"
+            placeholder="e.g. 400"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select id="rotate" label="Rotate" value="0">
+            <ion-select-option value="0">0°</ion-select-option>
+            <ion-select-option value="90">90°</ion-select-option>
+            <ion-select-option value="180">180°</ion-select-option>
+            <ion-select-option value="270">270°</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-toggle id="flipHorizontal">Flip Horizontal</ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle id="flipVertical">Flip Vertical</ion-toggle>
+        </ion-item>
+        <ion-item>
+          <ion-toggle id="crop">Crop Center Square</ion-toggle>
+        </ion-item>
+        <ion-button id="transform" expand="block">Transform</ion-button>
+        <ion-item>
+          <ion-label id="result" class="ion-text-wrap"></ion-label>
+        </ion-item>
+        <img id="preview" alt="" style="max-width: 100%" />
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

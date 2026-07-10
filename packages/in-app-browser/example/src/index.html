@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor In-App Browser</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>In-App Browser</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-button id="openInExternalBrowser" expand="block"
+          >Open In External Browser</ion-button
+        >
+        <ion-button id="openInSystemBrowser" expand="block"
+          >Open In System Browser</ion-button
+        >
+        <ion-button id="openInWebView" expand="block"
+          >Open In Web View</ion-button
+        >
+        <ion-button id="openInWebViewHidden" expand="block"
+          >Open In Web View (Hidden)</ion-button
+        >
+        <ion-button id="show" expand="block">Show</ion-button>
+        <ion-button id="close" expand="block">Close</ion-button>
+        <ion-button id="executeScript" expand="block"
+          >Execute Script</ion-button
+        >
+        <ion-button id="getCookies" expand="block">Get Cookies</ion-button>
+        <ion-button id="postMessage" expand="block">Post Message</ion-button>
+        <ion-button id="clearCache" expand="block">Clear Cache</ion-button>
+        <ion-button id="clearSessionData" expand="block"
+          >Clear Session Data</ion-button
+        >
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

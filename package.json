@@ -10,6 +10,8 @@
     "verify:android": "turbo run verify:android --concurrency=1 --no-cache --env-mode=loose",
     "verify:ios": "turbo run verify:ios --concurrency=1 --no-cache --env-mode=loose",
     "verify:web": "turbo run verify:web --no-cache --env-mode=loose",
+    "e2e:android": "turbo run e2e:android --concurrency=1",
+    "e2e:ios": "turbo run e2e:ios --concurrency=1",
     "lint": "turbo run lint",
     "fmt": "turbo run fmt",
     "docgen": "turbo run docgen",
@@ -21,6 +23,8 @@
     "affected:verify:android": "turbo run verify:android --affected --concurrency=1 --no-cache --env-mode=loose",
     "affected:verify:ios": "turbo run verify:ios --affected --concurrency=1 --no-cache --env-mode=loose",
     "affected:verify:web": "turbo run verify:web --affected --no-cache --env-mode=loose",
+    "affected:e2e:android": "turbo run e2e:android --affected --concurrency=1",
+    "affected:e2e:ios": "turbo run e2e:ios --affected --concurrency=1",
     "affected:lint": "turbo run lint --affected",
     "affected:fmt": "turbo run fmt --affected",
     "affected:docgen": "turbo run docgen --affected",
@@ -31,15 +35,22 @@
     "changeset": "changeset",
     "release": "npm run build && changeset publish",
     "release:preview": "pkg-pr-new publish './packages/*'",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/cli": "2.29.8",
     "@ionic/swiftlint-config": "2.0.0",
     "@robingenz/changelog-github": "0.0.1",
+    "husky": "9.1.7",
+    "lint-staged": "17.0.5",
     "patch-package": "8.0.1",
     "pkg-pr-new": "0.0.20",
+    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "turbo": "2.6.3"
+  },
+  "lint-staged": {
+    "**/*.{css,html,ts,js,java}": "prettier --write"
   }
 }

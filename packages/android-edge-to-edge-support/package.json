@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-android-edge-to-edge-support",
-  "version": "8.0.6",
+  "version": "8.0.8",
   "description": "Capacitor plugin to support edge-to-edge display on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -31,11 +31,20 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/android-edge-to-edge-support/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/android-edge-to-edge-support/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "edge-to-edge",
+    "edge to edge",
+    "status bar",
+    "navigation bar",
+    "system bars",
+    "insets",
+    "safe area"
   ],
   "scripts": {
     "verify": "npm run verify:android && npm run verify:web",
@@ -55,7 +64,6 @@
     "@capacitor/cli": "8.0.0",
     "@capacitor/core": "8.0.0",
     "@capacitor/docgen": "0.3.1",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

@@ -1,4 +1,4 @@
-# @capawesome/capacitor-background-task
+# Capacitor Background Task Plugin
 
 Capacitor plugin for running background tasks.
 
@@ -8,9 +8,14 @@ Capacitor plugin for running background tasks.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Background Task plugin is typically used to finish short-running work when the app moves to the background, for example:
+
+- **Finish network requests**: Complete an upload or API request that was started while the app was in the foreground.
+- **Save application state**: Persist unsaved user input or app state before the OS puts the app to sleep.
+- **Sync data**: Finish writing pending changes to your backend or local storage.
+- **Clean up resources**: Close connections or release resources gracefully before the app is suspended.
 
 ## Compatibility
 
@@ -155,6 +160,42 @@ Read more about the implementation and any limitations [here](https://developer.
 
 There is currently no ready implementation on **Android**.
 It's planned to add the support in the near future.
+
+## FAQ
+
+### How much time does my task have to run in the background?
+
+On iOS, the task started with `beforeExit(...)` should be finished in less than 30 seconds. As soon as your work is done, call `finish(...)` so the OS can put the app to sleep. Read more about the underlying background execution mechanism in the [Apple documentation](https://developer.apple.com/documentation/uikit/app_and_environment/scenes/preparing_your_ui_to_run_in_the_background/extending_your_app_s_background_execution_time).
+
+### Is this plugin supported on Android?
+
+There is currently no ready implementation on Android, so the task is not extended there. Support for Android is planned for the future, see the [Quirks](#quirks) section.
+
+### Can I run periodic or scheduled tasks with this plugin?
+
+No, this plugin is designed to extend the execution time of your app when it moves to the background, so you can finish a short-running task. It does not schedule tasks that run while the app is closed.
+
+### How do I know when the app moves to the background?
+
+Use the `appStateChange` listener of the official `@capacitor/app` plugin, as shown in the [Usage](#usage) section. When `isActive` becomes `false`, call `beforeExit(...)` to start the background task.
+
+### When do I have to call the `finish` method?
+
+Call `finish(...)` with the task ID returned by `beforeExit(...)` as soon as everything is done. This tells the OS that the task is complete so it can put the app to sleep.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android for long-running work.
+- [Alarm](https://capawesome.io/docs/sdks/capacitor/alarm/): Create system alarms and timers.
+- [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake while your app is in the foreground.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

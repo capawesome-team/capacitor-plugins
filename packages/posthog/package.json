@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-posthog",
-  "version": "8.4.0",
-  "description": "Unofficial Capacitor plugin for PostHog SDK.",
+  "version": "8.5.0",
+  "description": "Unofficial Capacitor plugin for PostHog SDK on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/capawesome-team/capacitor-plugins/issues"
   },
-  "homepage": "https://capawesome.io/plugins/posthog/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/posthog/",
   "funding": [
     {
       "type": "github",
@@ -38,7 +38,14 @@
     "capacitor",
     "plugin",
     "native",
-    "posthog"
+    "posthog",
+    "capacitor-plugin",
+    "analytics",
+    "product analytics",
+    "event tracking",
+    "feature flags",
+    "session replay",
+    "error tracking"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -66,8 +73,7 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "posthog-js": "1.160.3",
-    "prettier": "3.4.2",
+    "posthog-js": "1.306.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

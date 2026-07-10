@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-file-compressor
+# Capacitor File Compressor Plugin
 
 Capacitor plugin for efficient file compression with support for image formats like PNG, JPEG, and WebP.
 
@@ -10,11 +10,11 @@ Capacitor plugin for efficient file compression with support for image formats l
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for file compression. Here are some of the key features:
+The Capacitor File Compressor plugin offers one of the most complete file compression solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🌅 **Compress Images**: Compress png, jpeg, and webp images.
-- 🤝 **Compatibility**: Compatible with the [Zip](https://capawesome.io/plugins/zip/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Zip](https://capawesome.io/docs/sdks/capacitor/zip/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -22,9 +22,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The File Compressor plugin is typically used to shrink images before they leave the device, for example:
+
+- **Image uploads**: Compress photos before uploading them to a server to save bandwidth and speed up uploads.
+- **Storage savings**: Reduce the size of images before storing them on the device or in the cloud.
+- **Thumbnails and previews**: Use the `width` and `height` options to create smaller versions of images for lists and galleries.
+- **Format conversion**: Convert PNG images to smaller JPEG or WebP files using the `mimeType` option.
 
 ## Compatibility
 
@@ -103,6 +108,12 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following example shows how to compress an image while controlling its quality and dimensions.
+
+### Compress an image
+
+Compress a PNG, JPEG, or WebP image by passing its path (Android and iOS) or blob (Web). Use the `quality` option to control the compression level and the optional `width` and `height` options to resize the image:
+
 ```typescript
 import { FileCompressor } from '@capawesome-team/capacitor-file-compressor';
 
@@ -176,6 +187,38 @@ Only png, jpeg, and webp images are supported.
 | **`width`**    | <code>number</code> | The width of the resulting image.                                                                                                                                                                                              |                           | 7.1.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Which image formats are supported?
+
+The plugin can compress PNG, JPEG, and WebP images. The output format is controlled by the `mimeType` option: on Android and Web, `image/jpeg` and `image/webp` are supported, while on iOS only `image/jpeg` is supported. The default output format is `image/jpeg`.
+
+### How do I control the compression quality?
+
+Use the `quality` option, which accepts a value from `0.0` to `1.0`. The value `0.0` represents the maximum compression (or lowest quality) while `1.0` represents the least compression (or best quality). The default is `0.6`. You can additionally resize the image with the `width` and `height` options to reduce the file size even further.
+
+### Does the plugin preserve EXIF metadata?
+
+No, the EXIF data of the image is lost during compression. If you need the metadata, read it before compressing the image and store it separately.
+
+### What does `compressImage` return on each platform?
+
+On Android and iOS, the result contains the `path` of the compressed file. On Web, the result contains a `Blob` instance instead. Take this into account if you share code across platforms, for example when uploading the compressed image to a server.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the images to compress from the file system or gallery.
+- [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, flip and format conversion.
+- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories with support for encryption.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

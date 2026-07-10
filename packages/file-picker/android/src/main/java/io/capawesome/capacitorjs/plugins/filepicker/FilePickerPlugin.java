@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import androidx.activity.result.ActivityResult;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -125,59 +128,17 @@ public class FilePickerPlugin extends Plugin {
 
     @PluginMethod
     public void pickImages(PluginCall call) {
-        try {
-            int limit = call.getInt("limit", 0);
-
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            intent.setType("image/*");
-            intent.putExtra("multi-pick", limit == 0);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*" });
-
-            startActivityForResult(call, intent, "pickFilesResult");
-        } catch (Exception ex) {
-            String message = ex.getMessage();
-            Log.e(TAG, message);
-            call.reject(message);
-        }
+        pickVisualMedia(call, ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE);
     }
 
     @PluginMethod
     public void pickMedia(PluginCall call) {
-        try {
-            int limit = call.getInt("limit", 0);
-
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            intent.setType("*/*");
-            intent.putExtra("multi-pick", limit == 0);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "image/*", "video/*" });
-
-            startActivityForResult(call, intent, "pickFilesResult");
-        } catch (Exception ex) {
-            String message = ex.getMessage();
-            Log.e(TAG, message);
-            call.reject(message);
-        }
+        pickVisualMedia(call, ActivityResultContracts.PickVisualMedia.ImageAndVideo.INSTANCE);
     }
 
     @PluginMethod
     public void pickVideos(PluginCall call) {
-        try {
-            int limit = call.getInt("limit", 0);
-
-            Intent intent = new Intent(Intent.ACTION_PICK);
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            intent.setType("video/*");
-            intent.putExtra("multi-pick", limit == 0);
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] { "video/*" });
-
-            startActivityForResult(call, intent, "pickFilesResult");
-        } catch (Exception ex) {
-            String message = ex.getMessage();
-            Log.e(TAG, message);
-            call.reject(message);
-        }
+        pickVisualMedia(call, ActivityResultContracts.PickVisualMedia.VideoOnly.INSTANCE);
     }
 
     @Override
@@ -217,6 +178,26 @@ public class FilePickerPlugin extends Plugin {
     @PermissionCallback
     private void permissionsCallback(PluginCall call) {
         this.checkPermissions(call);
+    }
+
+    private void pickVisualMedia(PluginCall call, @NonNull ActivityResultContracts.PickVisualMedia.VisualMediaType mediaType) {
+        try {
+            int limit = call.getInt("limit", 0);
+
+            PickVisualMediaRequest request = new PickVisualMediaRequest.Builder().setMediaType(mediaType).build();
+            Intent intent;
+            if (limit == 0) {
+                intent = new ActivityResultContracts.PickMultipleVisualMedia().createIntent(getContext(), request);
+            } else {
+                intent = new ActivityResultContracts.PickVisualMedia().createIntent(getContext(), request);
+            }
+
+            startActivityForResult(call, intent, "pickFilesResult");
+        } catch (Exception ex) {
+            String message = ex.getMessage();
+            Log.e(TAG, message);
+            call.reject(message);
+        }
     }
 
     @ActivityCallback

@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-audio-recorder
+# Capacitor Audio Recorder Plugin
 
 Capacitor plugin for seamless audio recording using the device's microphone. Supports Android, iOS, and Web with advanced features and high performance.
 
@@ -10,7 +10,7 @@ Capacitor plugin for seamless audio recording using the device's microphone. Sup
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for audio recording. Here are some of the key features:
+The Capacitor Audio Recorder plugin is one of the most advanced audio recording solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - ⏯️ **Full Control**: Start, pause, resume, cancel and stop recording.
@@ -18,7 +18,7 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 🔑 **Permissions**: Check and request microphone permissions.
 - 🔊 **Events**: Listen for events like `recordingError`, `recordingPaused` or `recordingStopped`.
 - 🌙 **Background Mode**: Record audio even when the app is in the background.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/plugins/audio-player/), [Speech Recognition](https://capawesome.io/plugins/speech-recognition/) and [Speech Synthesis](https://capawesome.io/plugins/speech-synthesis/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -26,9 +26,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Audio Recorder plugin is typically used whenever an app needs to capture audio with the device's microphone, for example:
+
+- **Voice messages**: Record voice messages in chat apps and play them back with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin.
+- **Voice notes and memos**: Let users record notes with full control to pause, resume, or cancel the recording.
+- **Dictation and transcription**: Capture spoken audio that is later transcribed, for example by a server-side speech-to-text service.
+- **Interviews and long sessions**: Record long audio sessions without performance issues, even while the app is in the background.
 
 ## Compatibility
 
@@ -106,9 +111,32 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to manage permissions, start a recording, save it to a custom location, stop and play it back, pause, resume or cancel it, read the recording status, and listen for recording events.
+
+### Check and request permissions
+
+Recording requires the microphone permission. Check and request it before starting a recording:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
+
+const checkPermissions = async () => {
+  const { recordAudio } = await AudioRecorder.checkPermissions();
+  console.log('Record audio permission:', recordAudio);
+};
+
+const requestPermissions = async () => {
+  const { recordAudio } = await AudioRecorder.requestPermissions();
+  console.log('Record audio permission:', recordAudio);
+};
+```
+
+### Start a recording
+
+Start recording audio in AAC format. You can optionally configure the bitrate and sample rate (Android and iOS) as well as the audio session category options and mode (iOS only):
+
 ```typescript
 import { AudioRecorder, AudioSessionCategoryOption, AudioSessionMode } from '@capawesome-team/capacitor-audio-recorder';
-import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const startRecording = async () => {
   await AudioRecorder.startRecording({
@@ -118,6 +146,32 @@ const startRecording = async () => {
     sampleRate: 44100
   });
 };
+```
+
+### Save the recording to a custom location
+
+By default, the recording is saved to a temporary location in the cache directory. On Android and iOS, use the `uri` option to save it to a custom location instead, for example one generated with the Capacitor Filesystem plugin:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+
+const startRecordingToCustomLocation = async () => {
+  const { uri } = await Filesystem.getUri({
+    directory: Directory.Data,
+    path: 'recordings/my-recording.aac'
+  });
+  await AudioRecorder.startRecording({ uri });
+};
+```
+
+### Stop the recording and play it back
+
+Stop the recording to receive the recorded audio as a `Blob` (Web) or URI (Android and iOS), which you can then play back, for example with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const stopRecording = async () => {
   // Stop recording and get the audio blob or URI
@@ -131,6 +185,14 @@ const stopRecording = async () => {
     await AudioPlayer.play({ uri });
   }
 };
+```
+
+### Pause, resume or cancel the recording
+
+Pause a running recording and resume it later, or cancel it to discard the recorded audio. Pausing and resuming is only available on Android (SDK 24+), iOS and Web:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
 
 const pauseRecording = async () => {
   await AudioRecorder.pauseRecording();
@@ -143,21 +205,27 @@ const resumeRecording = async () => {
 const cancelRecording = async () => {
   await AudioRecorder.cancelRecording();
 };
+```
+
+### Get the current recording status
+
+Check whether a recording is currently inactive, active or paused:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
 
 const getRecordingStatus = async () => {
   const { status } = await AudioRecorder.getRecordingStatus();
   console.log('Recording status:', status);
 };
+```
 
-const checkPermissions = async () => {
-  const { recordAudio } = await AudioRecorder.checkPermissions();
-  console.log('Record audio permission:', recordAudio);
-};
+### Listen for recording events
 
-const requestPermissions = async () => {
-  const { recordAudio } = await AudioRecorder.requestPermissions();
-  console.log('Record audio permission:', recordAudio);
-};
+Get notified when the recording is paused (e.g. when it is interrupted by a phone call), when it is stopped, or when an error occurs. The `recordingError` event is only available on iOS:
+
+```typescript
+import { AudioRecorder } from '@capawesome-team/capacitor-audio-recorder';
 
 const addRecordingErrorListener = async () => {
   await AudioRecorder.addListener('recordingError', (event) => {
@@ -192,6 +260,7 @@ const addRecordingStoppedListener = async () => {
 * [`requestPermissions()`](#requestpermissions)
 * [`addListener('recordingError', ...)`](#addlistenerrecordingerror-)
 * [`addListener('recordingPaused', ...)`](#addlistenerrecordingpaused-)
+* [`addListener('recordingResumed', ...)`](#addlistenerrecordingresumed-)
 * [`addListener('recordingStopped', ...)`](#addlistenerrecordingstopped-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -364,6 +433,26 @@ Called when the recording is paused (e.g. when the recording is interrupted by a
 --------------------
 
 
+### addListener('recordingResumed', ...)
+
+```typescript
+addListener(eventName: 'recordingResumed', listenerFunc: () => void) => Promise<PluginListenerHandle>
+```
+
+Called when the recording is resumed (e.g. after an audio session interruption ends, when `autoResumeAfterInterruption` is enabled).
+
+| Param              | Type                            |
+| ------------------ | ------------------------------- |
+| **`eventName`**    | <code>'recordingResumed'</code> |
+| **`listenerFunc`** | <code>() =&gt; void</code>      |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### addListener('recordingStopped', ...)
 
 ```typescript
@@ -399,12 +488,14 @@ or paused or if an error occurs.
 
 #### StartRecordingOptions
 
-| Prop                              | Type                                                          | Description                                                                              | Default                               | Since |
-| --------------------------------- | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
-| **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                 | <code>['duckOthers']</code>           | 7.5.0 |
-| **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                             | <code>AudioSessionMode.Default</code> | 7.4.0 |
-| **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS. | <code>192000</code>                   | 7.2.0 |
-| **`sampleRate`**                  | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.           | <code>44100</code>                    | 7.1.0 |
+| Prop                              | Type                                                          | Description                                                                                                                                                                                                                                                                 | Default                               | Since |
+| --------------------------------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----- |
+| **`autoResumeAfterInterruption`** | <code>boolean</code>                                          | Whether the recording should automatically resume after an audio session interruption ends (e.g. after a phone call). The system only resumes the recording if it indicates that resuming is appropriate. Only available on iOS.                                            | <code>false</code>                    | 8.2.0 |
+| **`audioSessionCategoryOptions`** | <code>AudioSessionCategoryOption[]</code>                     | The audio session category options for recording. Only available on iOS.                                                                                                                                                                                                    | <code>['duckOthers']</code>           | 7.5.0 |
+| **`audioSessionMode`**            | <code><a href="#audiosessionmode">AudioSessionMode</a></code> | The audio session mode for recording. Only available on iOS.                                                                                                                                                                                                                | <code>AudioSessionMode.Default</code> | 7.4.0 |
+| **`bitRate`**                     | <code>number</code>                                           | The audio bitrate in bytes per second. This option is only available on Android and iOS.                                                                                                                                                                                    | <code>192000</code>                   | 7.2.0 |
+| **`sampleRate`**                  | <code>number</code>                                           | The audio sample rate in Hz. This option is only available on Android and iOS.                                                                                                                                                                                              | <code>44100</code>                    | 7.1.0 |
+| **`uri`**                         | <code>string</code>                                           | The URI where the recorded audio should be saved. If not provided, the recording is saved to a temporary location in the cache directory. **Tip:** Generate this path using the `getUri(...)` method of the Capacitor Filesystem plugin. Only available on Android and iOS. |                                       | 8.1.0 |
 
 
 #### StopRecordingResult
@@ -493,6 +584,57 @@ or paused or if an error occurs.
 | **`VoiceChat`**      | <code>'VOICE_CHAT'</code>      | Mode for voice chat communications.                                           | 7.4.0 |
 
 </docgen-api>
+
+## Troubleshooting
+
+##### `recordingError` event fires with "An unknown error occurred." and the recording file is 0 bytes
+
+This typically happens when an incompatible combination of `bitRate` and `sampleRate` is passed to `startRecording(...)`. The AAC encoder accepts the settings without error at start, but silently fails to encode, producing an empty file and triggering the `recordingError` event on stop.
+
+For example, requesting `bitRate: 256000` with `sampleRate: 16000` (mono AAC) is invalid, because the requested bitrate is far higher than what the encoder can produce from the given sample rate. As a rule of thumb, AAC requires roughly `bitRate <= sampleRate * channels * 6`. Either lower the `bitRate` or raise the `sampleRate` (the default is `44100` Hz, which works with bitrates up to ~256 kbps):
+
+```typescript
+await AudioRecorder.startRecording({
+  bitRate: 256_000,
+  sampleRate: 44_100,
+});
+```
+
+## FAQ
+
+### Which audio format is used for recordings?
+
+The plugin records audio in AAC format. You can configure the bitrate (default: 192000 bytes per second) and sample rate (default: 44100 Hz) via the options of the `startRecording(...)` method on Android and iOS.
+
+### Can I record audio while the app is in the background?
+
+Yes, the plugin supports background recording. On iOS, you need to enable the `Background Modes` capability with `Audio, AirPlay, and Picture in Picture` in your Xcode project, as described in the [Installation](#installation) section.
+
+### What permissions are required to record audio?
+
+The plugin needs access to the device's microphone, which you can check and request using the `checkPermissions()` and `requestPermissions()` methods. On iOS, you also need to add the `NSMicrophoneUsageDescription` key to your `Info.plist` file as described in the [Installation](#installation) section.
+
+### Why is my recording file empty?
+
+This typically happens when an incompatible combination of `bitRate` and `sampleRate` is passed to `startRecording(...)`. The AAC encoder silently fails to encode, producing an empty file and triggering the `recordingError` event. Either lower the `bitRate` or raise the `sampleRate`. See the [Troubleshooting](#troubleshooting) section for more details.
+
+### Where is the recorded audio saved?
+
+By default, the recording is saved to a temporary location in the cache directory on Android and iOS, and its URI is returned by the `stopRecording()` method. You can save the recording to a custom location instead by passing the `uri` option to `startRecording(...)`. On Web, the recorded audio is returned as a `Blob`.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play back recorded audio with background support.
+- [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/): Transcribe speech into text (speech-to-text).
+- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text (text-to-speech).
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

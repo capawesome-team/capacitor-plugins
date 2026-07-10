@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-nfc
+# Capacitor NFC Plugin
 
 Capacitor plugin for NFC tag reading, writing, and emulation. Supports Android, iOS, and Web with advanced features like HCE and raw command handling.
 
@@ -10,7 +10,7 @@ Capacitor plugin for NFC tag reading, writing, and emulation. Supports Android, 
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for NFC. Here are some of the key features:
+The Capacitor NFC plugin is one of the most complete NFC solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 🔄 **NDEF**: Read and write NFC Data Exchange Format (NDEF) messages.
@@ -26,9 +26,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The NFC plugin is typically used whenever an app needs to interact with NFC tags or readers, for example:
+
+- **Inventory and asset tracking**: Scan NFC tags to read their identifiers and NDEF messages, for example to identify equipment or products.
+- **Tag provisioning**: Write NDEF messages such as text or URI records to tags and optionally make them permanently read-only.
+- **App launching**: Launch your app by scanning a tag containing a URI record, using an intent filter on Android or universal links on iOS.
+- **Smartcard communication**: Exchange raw commands such as APDUs with tags and smartcards using the `transceive(...)` method.
+- **Card emulation**: Emulate an NFC card on Android using Host Card Emulation (HCE) so that other devices can interact with it.
 
 ## Compatibility
 
@@ -183,9 +189,33 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to read, write, make read-only, erase, and format NFC tags, send raw commands, check NFC support and permissions, and use Host Card Emulation.
+
+### Read an NFC tag
+
+Start a scan session and listen for the `nfcTagScanned` event to receive the scanned tag. Only one session can be active at a time, so stop the session as soon as you are done. On iOS, starting a scan session triggers the NFC Reader Session alert:
+
 ```typescript
-import { Nfc, NfcUtils, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
-import { Capacitor } from '@capacitor/core';
+import { Nfc } from '@capawesome-team/capacitor-nfc';
+
+const read = async () => {
+  return new Promise((resolve) => {
+    Nfc.addListener('nfcTagScanned', async (event) => {
+      await Nfc.stopScanSession();
+      resolve(event.nfcTag);
+    });
+
+    Nfc.startScanSession();
+  });
+};
+```
+
+### Write to an NFC tag
+
+Create an NDEF record, for example with the `NfcUtils` class (see [Utils](#utils)), and write it to the tag from within the `nfcTagScanned` handler:
+
+```typescript
+import { Nfc, NfcUtils } from '@capawesome-team/capacitor-nfc';
 
 const createNdefTextRecord = () => {
   const utils = new NfcUtils();
@@ -206,17 +236,14 @@ const write = async () => {
     Nfc.startScanSession();
   });
 };
+```
 
-const read = async () => {
-  return new Promise((resolve) => {
-    Nfc.addListener('nfcTagScanned', async (event) => {
-      await Nfc.stopScanSession();
-      resolve(event.nfcTag);
-    });
+### Make an NFC tag read-only
 
-    Nfc.startScanSession();
-  });
-};
+Use the `makeReadOnly()` method to write-protect a tag. **Attention**: This is permanent and cannot be undone:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const makeReadOnly = async () => {
   return new Promise((resolve) => {
@@ -229,30 +256,14 @@ const makeReadOnly = async () => {
     Nfc.startScanSession();
   });
 };
+```
 
-const readSignature = async () => {
-  return new Promise((resolve) => {
-    Nfc.addListener('nfcTagScanned', async (event) => {
-      if (Capacitor.getPlatform() === 'android') {
-        // 1. Connect to the tag.
-        await Nfc.connect({ techType: NfcTagTechType.NfcA }); 
-        // 2. Send one or more commands to the tag and receive the response.
-        const result = await Nfc.transceive({ data: [60, 0] });
-        // 3. Close the connection to the tag.
-        await Nfc.close();
-        await Nfc.stopScanSession();
-        resolve(result);
-      } else {
-        // 1. Send one or more commands to the tag and receive the response.
-        const result = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
-        await Nfc.stopScanSession();
-        resolve(result);
-      }
-    });
+### Erase or format an NFC tag
 
-    Nfc.startScanSession();
-  });
-};
+Use the `erase()` method to write an empty NDEF message to the tag, or the `format()` method to format the tag as NDEF first. The `format()` method is only available on Android:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const erase = async () => {
   return new Promise((resolve) => {
@@ -277,6 +288,47 @@ const format = async () => {
     Nfc.startScanSession();
   });
 };
+```
+
+### Send raw commands to an NFC tag
+
+Use the `transceive(...)` method to send raw commands to the tag and receive the response. On Android, you must connect to the tag with `connect(...)` first and close the connection with `close()` afterwards. On iOS, pass the tag technology directly to `transceive(...)`. This method is only available on Android and iOS. The following example reads the signature of a tag:
+
+```typescript
+import { Nfc, NfcTagTechType } from '@capawesome-team/capacitor-nfc';
+import { Capacitor } from '@capacitor/core';
+
+const readSignature = async () => {
+  return new Promise((resolve) => {
+    Nfc.addListener('nfcTagScanned', async (event) => {
+      if (Capacitor.getPlatform() === 'android') {
+        // 1. Connect to the tag.
+        await Nfc.connect({ techType: NfcTagTechType.NfcA }); 
+        // 2. Send one or more commands to the tag and receive the response.
+        const result = await Nfc.transceive({ data: [60, 0] });
+        // 3. Close the connection to the tag.
+        await Nfc.close();
+        await Nfc.stopScanSession();
+        resolve(result);
+      } else {
+        // 1. Send one or more commands to the tag and receive the response.
+        const result = await Nfc.transceive({ techType: NfcTagTechType.NfcA, data: [60, 0] });
+        await Nfc.stopScanSession();
+        resolve(result);
+      }
+    });
+
+    Nfc.startScanSession();
+  });
+};
+```
+
+### Check whether NFC is supported and enabled
+
+Use the `isSupported()` method to check whether the device supports NFC and the `isEnabled()` method to check whether NFC is enabled:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const isSupported = async () => {
   const { nfc } = await Nfc.isSupported();
@@ -287,10 +339,26 @@ const isEnabled = async () => {
   const { isEnabled } = await Nfc.isEnabled();
   return isEnabled;
 };
+```
+
+### Open the NFC device settings
+
+Open the NFC device settings so that the user can enable or disable NFC. Only available on Android:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const openSettings = async () => {
   await Nfc.openSettings();
 };
+```
+
+### Check and request permissions
+
+Checking and requesting permissions is only needed on Web. On Android and iOS, `granted` is always returned:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const checkPermissions = async () => {
   const { nfc } = await Nfc.checkPermissions();
@@ -301,6 +369,14 @@ const requestPermissions = async () => {
   const { nfc } = await Nfc.requestPermissions();
   return nfc;
 };
+```
+
+### Remove all listeners
+
+Remove all listeners for this plugin when they are no longer needed:
+
+```typescript
+import { Nfc } from '@capawesome-team/capacitor-nfc';
 
 const removeAllListeners = async () => {
   await Nfc.removeAllListeners();
@@ -1184,6 +1260,42 @@ See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/
 ##### `The connection to service named com.apple.nfcd.service.corenfc was invalidated from this process`
 
 This error occurs on iOS when the required NFC capability is not added to the app. To fix this, add the `Near Field Communication Tag Reading` capability in Xcode under the `Signing & Capabilities` tab. See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+
+## FAQ
+
+### What do I need to configure before using the plugin on iOS?
+
+You need to enable the `Near Field Communication Tag Reading` capability in Xcode, make sure the `App.entitlements` file contains the `com.apple.developer.nfc.readersession.formats` key, and add the `NFCReaderUsageDescription` key to the `Info.plist` file to tell the user why the app needs to use NFC. See the [Installation](#installation) section for details. If the capability is missing, the scan session fails with an error, as described in the [Troubleshooting](#troubleshooting) section.
+
+### Is Host Card Emulation (HCE) available on all platforms?
+
+No, card emulation is only available on Android. The `respond(...)` method and the `commandReceived` event are Android-only, and you need to declare an HCE service in your `AndroidManifest.xml` as described in the [Installation](#installation) section. You can check whether HCE is supported on the device using the `isSupported()` method.
+
+### Can I launch my app by scanning an NFC tag?
+
+Yes. On Android, you need to add an intent filter to your `AndroidManifest.xml` as described in the [Android documentation](https://developer.android.com/guide/topics/connectivity/nfc/nfc#dispatching). On iOS, the tag requires a URI record containing either a universal link or a supported URL scheme, as described in the [Core NFC documentation](https://developer.apple.com/documentation/corenfc/adding_support_for_background_tag_reading#3032598). See the [Installation](#installation) section for details.
+
+### What is the difference between `isSupported` and `isEnabled`?
+
+The `isSupported()` method returns whether the device supports NFC and Host Card Emulation (HCE) at all, while the `isEnabled()` method returns whether NFC is currently enabled. On Android, you can open the NFC device settings with `openSettings()` so that the user can enable NFC. On iOS and Web, `isEnabled()` reflects whether NFC reading is available on the device, since iOS does not expose a global NFC on/off setting.
+
+### Can making an NFC tag read-only be undone?
+
+No, the `makeReadOnly()` method permanently write-protects the tag and cannot be undone. On Android, you can check the `canMakeReadOnly` property of the scanned tag to find out whether it can be made read-only at all.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy (BLE) devices in the central and peripheral role.
+- [ML Kit Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
+- [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

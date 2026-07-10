@@ -558,7 +558,10 @@ export interface Channel {
  */
 export interface FetchLatestBundleOptions {
   /**
-   * The name of the channel where the latest bundle is fetched from.
+   * The preferred channel name from which the latest bundle should be fetched.
+   *
+   * This is the SDK preference and may be overridden by a forced channel assignment
+   * configured in the Capawesome Cloud Console.
    *
    * @since 6.7.0
    */
@@ -585,6 +588,15 @@ export interface FetchLatestBundleResult {
    * @since 6.6.0
    */
   bundleId: string | null;
+  /**
+   * The name of the channel that the bundle is actually from.
+   *
+   * This is the resolved channel after applying any forced channel assignment
+   * and may differ from the channel set by the Live Update SDK.
+   *
+   * @since 8.3.0
+   */
+  channel?: string;
   /**
    * The checksum of the latest bundle if the bundle is self-hosted.
    *
@@ -915,7 +927,10 @@ export interface SetNextBundleOptions {
  */
 export interface SyncOptions {
   /**
-   * The name of the channel where the latest bundle is fetched from.
+   * The preferred channel name from which the latest bundle should be fetched.
+   *
+   * This is the SDK preference and may be overridden by a forced channel assignment
+   * configured in the Capawesome Cloud Console.
    *
    * @since 6.7.0
    */

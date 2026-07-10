@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-age-signals",
-  "version": "0.3.3",
-  "description": "Capacitor plugin to use the Play Age Signals API to retrieve age-related signals for users.",
+  "version": "0.4.1",
+  "description": "Capacitor plugin to retrieve age-related signals for users via the Play Age Signals API on Android and the Declared Age Range framework on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,11 +33,19 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/age-signals/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/age-signals/",
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "age signals",
+    "age verification",
+    "age assurance",
+    "age gate",
+    "declared age range",
+    "play age signals",
+    "parental controls"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -65,7 +73,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-badge",
-  "version": "8.0.1",
-  "description": "Capacitor plugin to access and update the badge number of the app icon.",
+  "version": "8.0.2",
+  "description": "Capacitor plugin to access and update the badge number of the app icon on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/badge/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/badge/",
   "keywords": [
     "capacitor",
     "plugin",
@@ -42,7 +42,14 @@
     "android",
     "ios",
     "web",
-    "badge"
+    "badge",
+    "capacitor-plugin",
+    "app icon badge",
+    "badge count",
+    "notification badge",
+    "app badge",
+    "badge number",
+    "unread count"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -70,7 +77,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

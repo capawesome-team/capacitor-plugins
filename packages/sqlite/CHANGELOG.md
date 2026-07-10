@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.3.9
+
+### Patch Changes
+
+- [`e0a90dbc893359430a106d2f4cee9af97b3dfcf5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/e0a90dbc893359430a106d2f4cee9af97b3dfcf5): feat: support loading custom SQLite extensions on Android via the `androidExtensions` option on the `open(...)` method
+
+## 0.4.0
+
+### Minor Changes
+
+- [`7372cdcf4d30e3c045e02ce59f5ece0a0b97ba57`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7372cdcf4d30e3c045e02ce59f5ece0a0b97ba57): feat: support loading custom SQLite extensions on Android via the `androidExtensions` option on the `open(...)` method
+
+## 0.3.8
+
+### Patch Changes
+
+- [`1a96a56955888a22a42b1f2194989cb431d2304d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1a96a56955888a22a42b1f2194989cb431d2304d) ([#472](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/472)): fix: include the SQLite result code in `error.data.sqliteCode`
+
+## 0.3.7
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
 ## 0.3.6
 
 ### Patch Changes

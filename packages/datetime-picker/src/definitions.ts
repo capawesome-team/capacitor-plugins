@@ -107,12 +107,17 @@ export interface PresentOptions {
    */
   min?: string;
   /**
-   * Whether you want a date or time or datetime picker.
+   * Whether you want a date, time, datetime or month picker.
+   *
+   * The `month` mode (since `8.1.0`) lets the user pick a month and year only.
+   * Unlike the other modes, it uses a custom (non-native) UI on both platforms,
+   * because neither Android nor iOS provide a native month-only picker.
+   * The returned value is the first day of the selected month at 00:00:00 local time.
    *
    * @since 0.0.1
    * @default 'datetime'
    */
-  mode?: 'date' | 'time' | 'datetime';
+  mode?: 'date' | 'time' | 'datetime' | 'month';
   /**
    * Choose the theme that the datetime picker should have.
    * With `auto` the system theme is used.

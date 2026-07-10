@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-pedometer
+# Capacitor Pedometer Plugin
 
 Capacitor plugin to retrieve motion data, such as the number of steps and other information about the distance traveled.
 
@@ -10,7 +10,7 @@ Capacitor plugin to retrieve motion data, such as the number of steps and other 
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for pedometer data. Here are some of the key features:
+The Capacitor Pedometer plugin is one of the most complete motion tracking solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🚶 **Motion Tracking**: Retrieve step count, distance, pace, cadence, and floor counting data.
@@ -24,9 +24,15 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Pedometer plugin is typically used whenever an app needs to track the user's physical activity, for example:
+
+- **Fitness and step tracking**: Show the user's step count in a health or fitness app.
+- **Workout sessions**: Stream live pedometer data with the `measurement` event to display real-time progress during a walk or run.
+- **Distance and pace insights**: Display the distance traveled, current pace, and cadence of the user on iOS.
+- **Floor climbing challenges**: Count the floors ascended and descended by the user on iOS.
+- **Activity history**: Query pedometer measurements for a specific time range to build daily or weekly summaries.
 
 ## Compatibility
 
@@ -91,13 +97,14 @@ Add the `NSMotionUsageDescription` key to the `ios/App/App/Info.plist` file, whi
 
 ## Usage
 
+The following examples show how to check which pedometer features are available, retrieve a measurement, receive live measurement updates, and check and request permissions.
+
+### Check which features are available
+
+Not every device supports every pedometer feature. Use `isAvailable()` to check whether step counting, distance tracking, pace, cadence, and floor counting are supported before relying on them:
+
 ```typescript
 import { Pedometer } from '@capawesome-team/capacitor-pedometer';
-
-const getMeasurement = async () => {
-  const { measurement } = await Pedometer.getMeasurement();
-  console.log(measurement);
-};
 
 const isAvailable = async () => {
   const { cadence, distance, floorCounting, pace, stepCounting } = await Pedometer.isAvailable();
@@ -107,6 +114,27 @@ const isAvailable = async () => {
   console.log('Pace available:', pace);
   console.log('Step counting available:', stepCounting);
 };
+```
+
+### Retrieve a pedometer measurement
+
+Retrieve the pedometer data, such as the number of steps taken by the user. On iOS, you must provide the `start` and `end` options to query a specific time range. Only available on Android and iOS:
+
+```typescript
+import { Pedometer } from '@capawesome-team/capacitor-pedometer';
+
+const getMeasurement = async () => {
+  const { measurement } = await Pedometer.getMeasurement();
+  console.log(measurement);
+};
+```
+
+### Receive live measurement updates
+
+Add a listener for the `measurement` event and call `startMeasurementUpdates()` to continuously receive pedometer data, for example during a workout session. Call `stopMeasurementUpdates()` when you no longer need updates. Only available on Android and iOS:
+
+```typescript
+import { Pedometer } from '@capawesome-team/capacitor-pedometer';
 
 const startMeasurementUpdates = async () => {
   Pedometer.addListener('measurement', (event) => {
@@ -118,6 +146,14 @@ const startMeasurementUpdates = async () => {
 const stopMeasurementUpdates = async () => {
   await Pedometer.stopMeasurementUpdates();
 };
+```
+
+### Check and request permissions
+
+Check and request the permission for the activity recognition feature before accessing pedometer data:
+
+```typescript
+import { Pedometer } from '@capawesome-team/capacitor-pedometer';
 
 const checkPermissions = async () => {
   const status = await Pedometer.checkPermissions();
@@ -356,6 +392,42 @@ Remove all listeners for this plugin.
 <code><a href="#measurement">Measurement</a></code>
 
 </docgen-api>
+
+## FAQ
+
+### Does the plugin work on the web?
+
+No, the plugin only supports Android and iOS. The pedometer methods such as `getMeasurement(...)` and `startMeasurementUpdates()` rely on the native motion APIs of the device and are therefore not available on the web.
+
+### Why are distance, pace, cadence, and floor counts missing on Android?
+
+On Android, only step counting is supported. Distance tracking, pace, cadence, and floor counting are only available on iOS. You can use the `isAvailable()` method to check at runtime which features are supported on the current device, as shown in the [usage example](#check-which-features-are-available) above.
+
+### Do I need any permissions to use the plugin?
+
+Yes. The plugin provides the `checkPermissions()` and `requestPermissions()` methods to check and request the permission for the activity recognition feature. On iOS, you also need to add the `NSMotionUsageDescription` key to your `Info.plist` file, as described in the [Installation](#installation) section.
+
+### Can I query pedometer data for a specific time range?
+
+Yes, the `getMeasurement(...)` method accepts `start` and `end` options in milliseconds since epoch. On iOS, both options must be provided. On Android, the start date is always set to the boot time of the device.
+
+### Why do I stop receiving measurement events while the app is suspended?
+
+When the app is suspended, the delivery of updates stops temporarily. When the app is resumed, the updates will continue from where they left off. Also note that the `startMeasurementUpdates()` method must be called before the `measurement` event can be received.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
+- [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure measured in hectopascals.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

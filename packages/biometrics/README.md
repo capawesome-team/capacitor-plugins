@@ -1,4 +1,4 @@
-# @capawesome-team/capacitor-biometrics
+# Capacitor Biometrics Plugin
 
 Capacitor plugin to request biometric authentication, such as using face recognition or fingerprint recognition.
 
@@ -10,14 +10,14 @@ Capacitor plugin to request biometric authentication, such as using face recogni
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for biometric authentication. Here are some of the key features:
+The Capacitor Biometrics plugin is one of the most complete biometric authentication solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 👁️ **Fingerprint, Face and Iris**: Supports fingerprint, face and iris recognition.
 - 🔑 **Device Credential**: Optionally allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - ✨ **Customizable**: Customize the authentication prompt with a title, subtitle, and button text.
-- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/plugins/secure-preferences/) plugin.
+- 🤝 **Compatibility**: Compatible with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) and [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -25,9 +25,14 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The Biometrics plugin is typically used whenever an app needs to verify the identity of the user, for example:
+
+- **App lock**: Require fingerprint or face authentication before the app or sensitive screens can be opened.
+- **Confirming sensitive actions**: Ask the user to re-authenticate before critical actions such as payments or deleting data.
+- **Protecting stored credentials**: Combine biometric authentication with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) or [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugin to guard tokens and passwords.
+- **Device credential fallback**: Let users fall back to their device PIN or password when biometric authentication is not available or fails.
 
 ## Compatibility
 
@@ -107,7 +112,35 @@ Add the `NSFaceIDUsageDescription` key to the `ios/App/App/Info.plist` file, whi
 <string>This app uses Face ID for authentication.</string>
 ```
 
+## Configuration
+
+No configuration required for this plugin.
+
 ## Usage
+
+The following examples show how to check whether biometric authentication can be used, authenticate and cancel the user, prompt for enrollment, and query the device's biometric capabilities.
+
+### Check if biometric authentication can be used
+
+Before showing the authentication prompt, check whether biometrics is available on the device and has been configured by the current user. Only available on Android and iOS:
+
+```typescript
+import { Biometrics } from '@capawesome-team/capacitor-biometrics';
+
+const isAvailable = async () => {
+  const { isAvailable } = await Biometrics.isAvailable();
+  return isAvailable;
+};
+
+const isEnrolled = async () => {
+  const { isEnrolled } = await Biometrics.isEnrolled();
+  return isEnrolled;
+};
+```
+
+### Authenticate the user
+
+Show a prompt asking the user to authenticate with their biometrics, with a customizable title, subtitle, and button texts. If the authentication succeeds, the promise resolves; if the user cancels or an error occurs, the promise rejects with a detailed error code. Only available on Android and iOS:
 
 ```typescript
 import { Biometrics, ErrorCode } from '@capawesome-team/capacitor-biometrics';
@@ -135,15 +168,38 @@ const authenticate = async () => {
     }
   }
 };
+```
+
+### Cancel an ongoing authentication
+
+Cancel the ongoing authentication session and dismiss the prompt. Only available on Android (SDK 29+) and iOS:
+
+```typescript
+import { Biometrics } from '@capawesome-team/capacitor-biometrics';
 
 const cancelAuthentication = async () => {
   await Biometrics.cancelAuthentication();
 };
+```
+
+### Prompt the user to enroll their biometrics
+
+If the user has not yet set up biometric authentication, you can prompt them to enroll. Only available on Android:
+
+```typescript
+import { Biometrics } from '@capawesome-team/capacitor-biometrics';
 
 const enroll = async () => {
   await Biometrics.enroll();
 };
+```
 
+### Check the device's biometric capabilities
+
+Query the supported biometric strength level (only available on Android) and check whether the user has set up a device credential such as a PIN or password:
+
+```typescript
+import { Biometrics } from '@capawesome-team/capacitor-biometrics';
 
 const getBiometricStrengthLevel = async () => {
   const { strengthLevel } = await Biometrics.getBiometricStrengthLevel();
@@ -153,16 +209,6 @@ const getBiometricStrengthLevel = async () => {
 const hasDeviceCredential = async () => {
   const { hasDeviceCredential } = await Biometrics.hasDeviceCredential();
   return hasDeviceCredential;
-};
-
-const isAvailable = async () => {
-  const { isAvailable } = await Biometrics.isAvailable();
-  return isAvailable;
-};
-
-const isEnrolled = async () => {
-  const { isEnrolled } = await Biometrics.isEnrolled();
-  return isEnrolled;
 };
 ```
 
@@ -176,9 +222,12 @@ const isEnrolled = async () => {
 * [`getAuthenticationType()`](#getauthenticationtype)
 * [`getBiometricStrengthLevel()`](#getbiometricstrengthlevel)
 * [`getBiometricType()`](#getbiometrictype)
+* [`getBiometricTypes()`](#getbiometrictypes)
 * [`hasDeviceCredential()`](#hasdevicecredential)
+* [`isAllowed()`](#isallowed)
 * [`isAvailable()`](#isavailable)
 * [`isEnrolled()`](#isenrolled)
+* [`isLockedOut()`](#islockedout)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -304,6 +353,28 @@ Only available on Android and iOS.
 --------------------
 
 
+### getBiometricTypes()
+
+```typescript
+getBiometricTypes() => Promise<GetBiometricTypesResult>
+```
+
+Returns all biometric authentication types available on the device.
+
+On **iOS**, this returns at most a single-element array because the
+platform exposes only one biometric type per device.
+
+If no biometric authentication is available, an empty array is returned.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getbiometrictypesresult">GetBiometricTypesResult</a>&gt;</code>
+
+**Since:** 0.5.4
+
+--------------------
+
+
 ### hasDeviceCredential()
 
 ```typescript
@@ -318,6 +389,32 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#hasdevicecredentialresult">HasDeviceCredentialResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### isAllowed()
+
+```typescript
+isAllowed() => Promise<IsAllowedResult>
+```
+
+Check whether the user has granted permission to use biometric
+authentication.
+
+On **Android**, biometrics have no OS-level permission gate, so this
+always resolves to `true`.
+
+On **iOS**, this returns `false` only after the user has explicitly
+denied the Face ID permission prompt. Before the first `authenticate()`
+call it returns `true`, since iOS provides no API to distinguish the
+pre-prompt state from a granted state.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#isallowedresult">IsAllowedResult</a>&gt;</code>
+
+**Since:** 0.5.4
 
 --------------------
 
@@ -353,6 +450,29 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#isenrolledresult">IsEnrolledResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### isLockedOut()
+
+```typescript
+isLockedOut() => Promise<IsLockedOutResult>
+```
+
+Check whether biometric authentication is currently locked out due
+to too many failed attempts.
+
+On **Android**, the platform exposes no queryable lockout status.
+This returns `true` only if the most recent `authenticate()` call
+in the current process failed with a lockout error; the state is
+cleared on the next successful authentication or process restart.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#islockedoutresult">IsLockedOutResult</a>&gt;</code>
+
+**Since:** 0.5.4
 
 --------------------
 
@@ -393,11 +513,25 @@ Only available on Android and iOS.
 | **`biometricType`** | <code><a href="#biometrictype">BiometricType</a></code> | The type of biometric authentication available on the device. | 0.5.1 |
 
 
+#### GetBiometricTypesResult
+
+| Prop        | Type                         | Description                                                                                                    | Since |
+| ----------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
+| **`types`** | <code>BiometricType[]</code> | The biometric authentication types available on the device. Empty if no biometric authentication is available. | 0.5.4 |
+
+
 #### HasDeviceCredentialResult
 
 | Prop                      | Type                 | Description                                                                                                     | Since |
 | ------------------------- | -------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
 | **`hasDeviceCredential`** | <code>boolean</code> | Whether or not the device's credential (e.g., PIN, password) has been set up by the current user of the device. | 0.1.0 |
+
+
+#### IsAllowedResult
+
+| Prop            | Type                 | Description                                                                     | Since |
+| --------------- | -------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`isAllowed`** | <code>boolean</code> | Whether or not the user has granted permission to use biometric authentication. | 0.5.4 |
 
 
 #### IsAvailableResult
@@ -412,6 +546,13 @@ Only available on Android and iOS.
 | Prop             | Type                 | Description                                                                                                     | Since |
 | ---------------- | -------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
 | **`isEnrolled`** | <code>boolean</code> | Whether or not biometrics is supported by the device and has been configured by the current user of the device. | 0.1.0 |
+
+
+#### IsLockedOutResult
+
+| Prop              | Type                 | Description                                                                                      | Since |
+| ----------------- | -------------------- | ------------------------------------------------------------------------------------------------ | ----- |
+| **`isLockedOut`** | <code>boolean</code> | Whether or not biometric authentication is currently locked out due to too many failed attempts. | 0.5.4 |
 
 
 ### Enums
@@ -444,6 +585,43 @@ Only available on Android and iOS.
 | **`None`**        | <code>'NONE'</code>        | No biometric authentication available on the device.                  | 0.5.1 |
 
 </docgen-api>
+
+## FAQ
+
+### Which biometric authentication methods are supported?
+
+The plugin supports fingerprint, face, and iris recognition, where iris recognition is only available on Android. You can query the available methods on the device using the `getBiometricType()` and `getBiometricTypes()` methods.
+
+### Can users authenticate with their device PIN or password instead?
+
+Yes, set the `allowDeviceCredential` option of the `authenticate(...)` method to `true` to allow the user to authenticate with their device credential (e.g. PIN or password) if biometric authentication is not available or fails. You can check whether a device credential has been set up using the `hasDeviceCredential()` method.
+
+### How do I check if biometric authentication is available before showing the prompt?
+
+It is recommended to call the `isAvailable()` and `isEnrolled()` methods before calling `authenticate(...)`. This way you can check whether biometrics is available on the device and has been configured by the current user. See the [usage example](#check-if-biometric-authentication-can-be-used) above.
+
+### How do I handle a failed or canceled authentication?
+
+If the user cancels the authentication or an error occurs, the promise returned by `authenticate(...)` rejects with a detailed error code such as `USER_CANCELED`, `NOT_ENROLLED`, or `NOT_AVAILABLE`. See the [usage example](#authenticate-the-user) above for how to handle these error codes.
+
+### What configuration is required on iOS?
+
+You need to add the `NSFaceIDUsageDescription` key to your `Info.plist` file as described in the [Installation](#installation) section. The first time the user is prompted to authenticate, iOS will ask for permission to use biometrics; if the user denies it, the promise rejects with an error.
+
+### How can I securely store credentials behind biometric authentication?
+
+The plugin is compatible with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) and [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugins, which can store sensitive key/value pairs. Check out the guide [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/) for a complete walkthrough.
+
+## Related Plugins
+
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
+- [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

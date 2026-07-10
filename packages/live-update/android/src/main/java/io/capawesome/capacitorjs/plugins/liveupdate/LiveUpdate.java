@@ -232,6 +232,7 @@ public class LiveUpdate {
                 public void success(@Nullable GetLatestBundleResponse response) {
                     ArtifactType artifactType = response == null ? null : response.getArtifactType();
                     String bundleId = response == null ? null : response.getBundleId();
+                    String channel = response == null ? null : response.getChannelName();
                     String checksum = response == null ? null : response.getChecksum();
                     JSONObject customProperties = response == null ? null : response.getCustomProperties();
                     String downloadUrl = response == null ? null : response.getUrl();
@@ -239,6 +240,7 @@ public class LiveUpdate {
                     FetchLatestBundleResult result = new FetchLatestBundleResult(
                         artifactType,
                         bundleId,
+                        channel,
                         checksum,
                         customProperties,
                         downloadUrl,
@@ -678,8 +680,11 @@ public class LiveUpdate {
 
     private void deleteFileRecursively(@NonNull File file) {
         if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                deleteFileRecursively(child);
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteFileRecursively(child);
+                }
             }
         }
         file.delete();

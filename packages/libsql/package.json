@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-libsql",
   "version": "0.2.2",
-  "description": "Capacitor plugin for libSQL databases.",
+  "description": "Capacitor plugin for libSQL databases on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -32,11 +32,20 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/libsql/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/libsql/",
   "keywords": [
     "capacitor",
     "plugin",
-    "native"
+    "native",
+    "capacitor-plugin",
+    "libsql",
+    "turso",
+    "sqlite",
+    "sql database",
+    "local database",
+    "remote database",
+    "database sync",
+    "offline-first"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -63,7 +72,6 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

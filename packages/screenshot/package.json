@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-screenshot",
   "version": "8.0.1",
-  "description": "Capacitor plugin for taking screenshots.",
+  "description": "Capacitor plugin for taking screenshots on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -33,7 +33,7 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/screenshot/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/screenshot/",
   "keywords": [
     "capacitor",
     "plugin",
@@ -41,7 +41,13 @@
     "ionic",
     "android",
     "ios",
-    "screenshot"
+    "screenshot",
+    "capacitor-plugin",
+    "screen capture",
+    "take screenshot",
+    "capture screen",
+    "save screenshot",
+    "screenshot api"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -70,7 +76,6 @@
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
     "html2canvas": "1.4.1",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7",
     "rimraf": "6.1.2",
     "rollup": "4.53.3",

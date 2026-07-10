@@ -6,6 +6,7 @@ public enum CustomError: Error {
     case distinctIdMissing
     case eventMissing
     case keyMissing
+    case messageMissing
     case screenTitleMissing
     case typeMissing
     case valueMissing
@@ -24,6 +25,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("event must be provided.", comment: "eventMissing")
         case .keyMissing:
             return NSLocalizedString("key must be provided.", comment: "keyMissing")
+        case .messageMissing:
+            return NSLocalizedString("message must be provided.", comment: "messageMissing")
         case .screenTitleMissing:
             return NSLocalizedString("screenTitle must be provided.", comment: "screenTitleMissing")
         case .typeMissing:

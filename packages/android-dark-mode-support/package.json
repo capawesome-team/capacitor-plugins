@@ -25,11 +25,20 @@
       "url": "https://opencollective.com/capawesome"
     }
   ],
-  "homepage": "https://capawesome.io/plugins/android-dark-mode-support/",
+  "homepage": "https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/",
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
     "plugin",
-    "native"
+    "native",
+    "android",
+    "dark mode",
+    "dark theme",
+    "night mode",
+    "prefers-color-scheme",
+    "color scheme",
+    "theming",
+    "webview dark mode"
   ],
   "scripts": {
     "verify": "npm run verify:android",
@@ -41,7 +50,6 @@
   "devDependencies": {
     "@capacitor/android": "8.0.0",
     "@capacitor/cli": "8.0.0",
-    "prettier": "3.4.2",
     "prettier-plugin-java": "2.6.7"
   },
   "peerDependencies": {

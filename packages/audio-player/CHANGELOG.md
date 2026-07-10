@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.3.1
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
 ## 8.3.0
 
 ### Minor Changes

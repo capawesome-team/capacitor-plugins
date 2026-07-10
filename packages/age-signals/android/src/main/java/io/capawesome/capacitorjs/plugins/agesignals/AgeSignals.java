@@ -125,6 +125,8 @@ public class AgeSignals {
                 return CustomExceptions.APP_NOT_OWNED;
             case 25009:
                 return CustomExceptions.INTERNAL_ERROR;
+            case 25010:
+                return CustomExceptions.SDK_VERSION_OUTDATED;
             default:
                 return exception;
         }

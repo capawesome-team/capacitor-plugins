@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`327b8bfd715701ea2fcd019dac95b52bd16a322b`](https://github.com/capawesome-team/capacitor-plugins/commit/327b8bfd715701ea2fcd019dac95b52bd16a322b) ([#893](https://github.com/capawesome-team/capacitor-plugins/pull/893)): fix(android): use the Android Photo Picker for `pickMedia(...)`, `pickImages(...)` and `pickVideos(...)` to avoid unreadable `file://` URIs on OEM devices
+
 ## 8.0.2
 
 ### Patch Changes
