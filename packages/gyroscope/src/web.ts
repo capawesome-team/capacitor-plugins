@@ -70,13 +70,6 @@ export class GyroscopeWeb extends WebPlugin implements GyroscopePlugin {
     return { available };
   }
 
-  async removeAllListeners(): Promise<void> {
-    await super.removeAllListeners();
-    if (this.measurementEventStarted) {
-      await this.stopMeasurementUpdates();
-    }
-  }
-
   async requestPermissions(): Promise<PermissionStatus> {
     const { state } = await navigator.permissions.query({
       name: 'gyroscope' as PermissionName,
@@ -108,6 +101,13 @@ export class GyroscopeWeb extends WebPlugin implements GyroscopePlugin {
     const gyroscope = this.createOrGetGyroscope();
     gyroscope.stop();
     gyroscope.onreading = null;
+  }
+
+  async removeAllListeners(): Promise<void> {
+    await super.removeAllListeners();
+    if (this.measurementEventStarted) {
+      await this.stopMeasurementUpdates();
+    }
   }
 
   // @ts-ignore

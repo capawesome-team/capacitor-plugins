@@ -99,10 +99,10 @@ const stopWatching = async () => {
 
 <docgen-index>
 
-* [`addListener('shake', ...)`](#addlistenershake-)
-* [`removeAllListeners()`](#removealllisteners)
 * [`startWatching(...)`](#startwatching)
 * [`stopWatching()`](#stopwatching)
+* [`addListener('shake', ...)`](#addlistenershake-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -110,6 +110,40 @@ const stopWatching = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### startWatching(...)
+
+```typescript
+startWatching(options?: StartWatchingOptions | undefined) => Promise<void>
+```
+
+Start watching for shake gestures.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#startwatchingoptions">StartWatchingOptions</a></code> |
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### stopWatching()
+
+```typescript
+stopWatching() => Promise<void>
+```
+
+Stop watching for shake gestures.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.0
+
+--------------------
+
 
 ### addListener('shake', ...)
 
@@ -146,48 +180,7 @@ Remove all listeners for this plugin.
 --------------------
 
 
-### startWatching(...)
-
-```typescript
-startWatching(options?: StartWatchingOptions | undefined) => Promise<void>
-```
-
-Start watching for shake gestures.
-
-Only available on Android and iOS.
-
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#startwatchingoptions">StartWatchingOptions</a></code> |
-
-**Since:** 0.1.0
-
---------------------
-
-
-### stopWatching()
-
-```typescript
-stopWatching() => Promise<void>
-```
-
-Stop watching for shake gestures.
-
-Only available on Android and iOS.
-
-**Since:** 0.1.0
-
---------------------
-
-
 ### Interfaces
-
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### StartWatchingOptions
@@ -195,6 +188,13 @@ Only available on Android and iOS.
 | Prop              | Type                                                | Description                                                                                                                                                 | Default               | Since |
 | ----------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----- |
 | **`sensitivity`** | <code><a href="#sensitivity">Sensitivity</a></code> | The sensitivity of the shake detection. Use `'light'` to detect gentle shakes and `'hard'` to only detect strong shakes. Only available on Android and iOS. | <code>'medium'</code> | 0.1.0 |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 ### Type Aliases

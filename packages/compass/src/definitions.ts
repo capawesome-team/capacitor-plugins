@@ -2,17 +2,6 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface CompassPlugin {
   /**
-   * Add a listener for heading changes.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'headingChange',
-    listenerFunc: (event: HeadingChangeEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
    * Get the current device heading.
    *
    * This method returns the most recent heading reading from the device's
@@ -32,14 +21,6 @@ export interface CompassPlugin {
    */
   isAvailable(): Promise<IsAvailableResult>;
   /**
-   * Remove all listeners for this plugin.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  removeAllListeners(): Promise<void>;
-  /**
    * Start emitting `headingChange` events.
    *
    * Only available on Android and iOS.
@@ -55,6 +36,25 @@ export interface CompassPlugin {
    * @since 0.1.0
    */
   stopHeadingUpdates(): Promise<void>;
+  /**
+   * Add a listener for heading changes.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'headingChange',
+    listenerFunc: (event: HeadingChangeEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

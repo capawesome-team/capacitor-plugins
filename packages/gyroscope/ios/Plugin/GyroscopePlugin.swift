@@ -59,11 +59,6 @@ public class GyroscopePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
-        super.removeAllListeners(call)
-        implementation?.stopMeasurementUpdates()
-    }
-
     @objc override public func requestPermissions(_ call: CAPPluginCall) {
         call.resolve(["gyroscope": "granted"])
     }
@@ -91,6 +86,11 @@ public class GyroscopePlugin: CAPPlugin, CAPBridgedPlugin {
             }
             self.resolveCall(call)
         }
+    }
+
+    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
+        super.removeAllListeners(call)
+        implementation?.stopMeasurementUpdates()
     }
 
     private func hasUsageDescription(forKey key: String) -> Bool {

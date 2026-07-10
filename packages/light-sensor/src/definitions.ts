@@ -2,17 +2,6 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface LightSensorPlugin {
   /**
-   * Called when a new measurement is available.
-   *
-   * Only available on Android.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'measurement',
-    listenerFunc: (event: MeasurementEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
    * Get the latest measurement.
    *
    * This method returns the most recent measurement from the ambient light sensor.
@@ -31,12 +20,6 @@ export interface LightSensorPlugin {
    */
   isAvailable(): Promise<IsAvailableResult>;
   /**
-   * Remove all listeners for this plugin.
-   *
-   * @since 0.1.0
-   */
-  removeAllListeners(): Promise<void>;
-  /**
    * Start emitting `measurement` events.
    *
    * Only available on Android.
@@ -52,6 +35,23 @@ export interface LightSensorPlugin {
    * @since 0.1.0
    */
   stopMeasurementUpdates(): Promise<void>;
+  /**
+   * Called when a new measurement is available.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'measurement',
+    listenerFunc: (event: MeasurementEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 0.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

@@ -5,6 +5,22 @@ import type { PluginListenerHandle } from '@capacitor/core';
  */
 export interface ShakePlugin {
   /**
+   * Start watching for shake gestures.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  startWatching(options?: StartWatchingOptions): Promise<void>;
+  /**
+   * Stop watching for shake gestures.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  stopWatching(): Promise<void>;
+  /**
    * Called when a shake gesture is detected.
    *
    * Only available on Android and iOS.
@@ -21,22 +37,6 @@ export interface ShakePlugin {
    * @since 0.1.0
    */
   removeAllListeners(): Promise<void>;
-  /**
-   * Start watching for shake gestures.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  startWatching(options?: StartWatchingOptions): Promise<void>;
-  /**
-   * Stop watching for shake gestures.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  stopWatching(): Promise<void>;
 }
 
 /**

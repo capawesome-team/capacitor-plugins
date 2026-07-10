@@ -64,12 +64,6 @@ public class LightSensorPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void removeAllListeners(PluginCall call) {
-        super.removeAllListeners(call);
-        implementation.stopMeasurementUpdates(null);
-    }
-
-    @PluginMethod
     public void startMeasurementUpdates(PluginCall call) {
         try {
             if (!implementation.isAvailable()) {
@@ -114,6 +108,12 @@ public class LightSensorPlugin extends Plugin {
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    @PluginMethod
+    public void removeAllListeners(PluginCall call) {
+        super.removeAllListeners(call);
+        implementation.stopMeasurementUpdates(null);
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

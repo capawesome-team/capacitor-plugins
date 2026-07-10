@@ -169,13 +169,13 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`addListener('interruption', ...)`](#addlistenerinterruption-)
-* [`addListener('routeChange', ...)`](#addlistenerroutechange-)
 * [`configure(...)`](#configure)
 * [`getCurrentOutputs()`](#getcurrentoutputs)
 * [`overrideOutput(...)`](#overrideoutput)
-* [`removeAllListeners()`](#removealllisteners)
 * [`setActive(...)`](#setactive)
+* [`addListener('interruption', ...)`](#addlistenerinterruption-)
+* [`addListener('routeChange', ...)`](#addlistenerroutechange-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -183,50 +183,6 @@ const removeAllListeners = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### addListener('interruption', ...)
-
-```typescript
-addListener(eventName: 'interruption', listenerFunc: (event: InterruptionEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when the audio session is interrupted, e.g. by an incoming phone call.
-
-Only available on iOS.
-
-| Param              | Type                                                                                |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'interruption'</code>                                                         |
-| **`listenerFunc`** | <code>(event: <a href="#interruptionevent">InterruptionEvent</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
-
-### addListener('routeChange', ...)
-
-```typescript
-addListener(eventName: 'routeChange', listenerFunc: (event: RouteChangeEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when the audio route changes, e.g. when headphones are plugged in or out.
-
-Only available on iOS.
-
-| Param              | Type                                                                              |
-| ------------------ | --------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'routeChange'</code>                                                        |
-| **`listenerFunc`** | <code>(event: <a href="#routechangeevent">RouteChangeEvent</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
 
 ### configure(...)
 
@@ -283,21 +239,6 @@ Only available on iOS.
 --------------------
 
 
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => Promise<void>
-```
-
-Remove all listeners for this plugin.
-
-Only available on iOS.
-
-**Since:** 0.1.0
-
---------------------
-
-
 ### setActive(...)
 
 ```typescript
@@ -317,38 +258,66 @@ Only available on iOS.
 --------------------
 
 
+### addListener('interruption', ...)
+
+```typescript
+addListener(eventName: 'interruption', listenerFunc: (event: InterruptionEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the audio session is interrupted, e.g. by an incoming phone call.
+
+Only available on iOS.
+
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'interruption'</code>                                                         |
+| **`listenerFunc`** | <code>(event: <a href="#interruptionevent">InterruptionEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### addListener('routeChange', ...)
+
+```typescript
+addListener(eventName: 'routeChange', listenerFunc: (event: RouteChangeEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the audio route changes, e.g. when headphones are plugged in or out.
+
+Only available on iOS.
+
+| Param              | Type                                                                              |
+| ------------------ | --------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'routeChange'</code>                                                        |
+| **`listenerFunc`** | <code>(event: <a href="#routechangeevent">RouteChangeEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+Only available on iOS.
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### Interfaces
-
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
-
-
-#### InterruptionEvent
-
-| Prop               | Type                                                          | Description                                                                                    | Since |
-| ------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----- |
-| **`shouldResume`** | <code>boolean</code>                                          | Whether playback should resume after the interruption ended. Only `true` if `type` is `ended`. | 0.1.0 |
-| **`type`**         | <code><a href="#interruptiontype">InterruptionType</a></code> | The type of the interruption.                                                                  | 0.1.0 |
-
-
-#### RouteChangeEvent
-
-| Prop          | Type                                                            | Description                                            | Since |
-| ------------- | --------------------------------------------------------------- | ------------------------------------------------------ | ----- |
-| **`outputs`** | <code>AudioSessionOutput[]</code>                               | The audio outputs of the audio route after the change. | 0.1.0 |
-| **`reason`**  | <code><a href="#routechangereason">RouteChangeReason</a></code> | The reason why the audio route changed.                | 0.1.0 |
-
-
-#### AudioSessionOutput
-
-| Prop           | Type                | Description                                       | Since |
-| -------------- | ------------------- | ------------------------------------------------- | ----- |
-| **`portName`** | <code>string</code> | The human-readable name of the audio output port. | 0.1.0 |
-| **`portType`** | <code>string</code> | The type of the audio output port.                | 0.1.0 |
 
 
 #### ConfigureOptions
@@ -380,6 +349,14 @@ Only available on iOS.
 | **`outputs`** | <code>AudioSessionOutput[]</code> | The audio outputs of the current audio route. | 0.1.0 |
 
 
+#### AudioSessionOutput
+
+| Prop           | Type                | Description                                       | Since |
+| -------------- | ------------------- | ------------------------------------------------- | ----- |
+| **`portName`** | <code>string</code> | The human-readable name of the audio output port. | 0.1.0 |
+| **`portType`** | <code>string</code> | The type of the audio output port.                | 0.1.0 |
+
+
 #### OverrideOutputOptions
 
 | Prop       | Type                                                              | Description                                 | Since |
@@ -395,21 +372,30 @@ Only available on iOS.
 | **`notifyOthersOnDeactivation`** | <code>boolean</code> | Whether other audio sessions are notified when this session is deactivated, so they can resume playback. | <code>true</code> | 0.1.0 |
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
+#### InterruptionEvent
+
+| Prop               | Type                                                          | Description                                                                                    | Since |
+| ------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| **`shouldResume`** | <code>boolean</code>                                          | Whether playback should resume after the interruption ended. Only `true` if `type` is `ended`. | 0.1.0 |
+| **`type`**         | <code><a href="#interruptiontype">InterruptionType</a></code> | The type of the interruption.                                                                  | 0.1.0 |
+
+
+#### RouteChangeEvent
+
+| Prop          | Type                                                            | Description                                            | Since |
+| ------------- | --------------------------------------------------------------- | ------------------------------------------------------ | ----- |
+| **`outputs`** | <code>AudioSessionOutput[]</code>                               | The audio outputs of the audio route after the change. | 0.1.0 |
+| **`reason`**  | <code><a href="#routechangereason">RouteChangeReason</a></code> | The reason why the audio route changed.                | 0.1.0 |
+
+
 ### Type Aliases
-
-
-#### InterruptionType
-
-The type of an audio session interruption.
-
-<code>'began' | 'ended'</code>
-
-
-#### RouteChangeReason
-
-The reason why the audio route changed.
-
-<code>'categoryChange' | 'newDeviceAvailable' | 'noSuitableRouteForCategory' | 'oldDeviceUnavailable' | 'override' | 'routeConfigurationChange' | 'unknown' | 'wakeFromSleep'</code>
 
 
 #### AudioSessionCategory
@@ -431,6 +417,20 @@ The audio session mode.
 The audio output port to route playback to.
 
 <code>'default' | 'speaker'</code>
+
+
+#### InterruptionType
+
+The type of an audio session interruption.
+
+<code>'began' | 'ended'</code>
+
+
+#### RouteChangeReason
+
+The reason why the audio route changed.
+
+<code>'categoryChange' | 'newDeviceAvailable' | 'noSuitableRouteForCategory' | 'oldDeviceUnavailable' | 'override' | 'routeConfigurationChange' | 'unknown' | 'wakeFromSleep'</code>
 
 </docgen-api>
 

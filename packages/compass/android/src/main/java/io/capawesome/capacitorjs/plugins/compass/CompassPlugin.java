@@ -64,12 +64,6 @@ public class CompassPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void removeAllListeners(PluginCall call) {
-        super.removeAllListeners(call);
-        implementation.stopHeadingUpdates(null);
-    }
-
-    @PluginMethod
     public void startHeadingUpdates(PluginCall call) {
         try {
             if (!implementation.isAvailable()) {
@@ -114,6 +108,12 @@ public class CompassPlugin extends Plugin {
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    @PluginMethod
+    public void removeAllListeners(PluginCall call) {
+        super.removeAllListeners(call);
+        implementation.stopHeadingUpdates(null);
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

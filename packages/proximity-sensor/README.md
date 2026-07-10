@@ -130,12 +130,12 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`addListener('measurement', ...)`](#addlistenermeasurement-)
 * [`getMeasurement()`](#getmeasurement)
 * [`isAvailable()`](#isavailable)
-* [`removeAllListeners()`](#removealllisteners)
 * [`startMeasurementUpdates()`](#startmeasurementupdates)
 * [`stopMeasurementUpdates()`](#stopmeasurementupdates)
+* [`addListener('measurement', ...)`](#addlistenermeasurement-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -143,28 +143,6 @@ const removeAllListeners = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### addListener('measurement', ...)
-
-```typescript
-addListener(eventName: 'measurement', listenerFunc: (event: MeasurementEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when a new measurement is available.
-
-Only available on Android and iOS.
-
-| Param              | Type                                                                    |
-| ------------------ | ----------------------------------------------------------------------- |
-| **`eventName`**    | <code>'measurement'</code>                                              |
-| **`listenerFunc`** | <code>(event: <a href="#measurement">Measurement</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
 
 ### getMeasurement()
 
@@ -199,19 +177,6 @@ Check if the proximity sensor is available on the device.
 Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#isavailableresult">IsAvailableResult</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
-
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => Promise<void>
-```
-
-Remove all listeners for this plugin.
 
 **Since:** 0.1.0
 
@@ -253,14 +218,42 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('measurement', ...)
+
+```typescript
+addListener(eventName: 'measurement', listenerFunc: (event: MeasurementEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a new measurement is available.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'measurement'</code>                                              |
+| **`listenerFunc`** | <code>(event: <a href="#measurement">Measurement</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### Interfaces
-
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### Measurement
@@ -278,15 +271,22 @@ Only available on Android and iOS.
 | **`available`** | <code>boolean</code> | Whether the proximity sensor is available on the device. | 0.1.0 |
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
 ### Type Aliases
 
 
-#### MeasurementEvent
+#### GetMeasurementResult
 
 <code><a href="#measurement">Measurement</a></code>
 
 
-#### GetMeasurementResult
+#### MeasurementEvent
 
 <code><a href="#measurement">Measurement</a></code>
 

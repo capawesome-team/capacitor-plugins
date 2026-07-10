@@ -134,12 +134,12 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`addListener('headingChange', ...)`](#addlistenerheadingchange-)
 * [`getHeading()`](#getheading)
 * [`isAvailable()`](#isavailable)
-* [`removeAllListeners()`](#removealllisteners)
 * [`startHeadingUpdates()`](#startheadingupdates)
 * [`stopHeadingUpdates()`](#stopheadingupdates)
+* [`addListener('headingChange', ...)`](#addlistenerheadingchange-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -147,28 +147,6 @@ const removeAllListeners = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### addListener('headingChange', ...)
-
-```typescript
-addListener(eventName: 'headingChange', listenerFunc: (event: HeadingChangeEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Add a listener for heading changes.
-
-Only available on Android and iOS.
-
-| Param              | Type                                                            |
-| ------------------ | --------------------------------------------------------------- |
-| **`eventName`**    | <code>'headingChange'</code>                                    |
-| **`listenerFunc`** | <code>(event: <a href="#heading">Heading</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
 
 ### getHeading()
 
@@ -207,21 +185,6 @@ Only available on Android and iOS.
 --------------------
 
 
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => Promise<void>
-```
-
-Remove all listeners for this plugin.
-
-Only available on Android and iOS.
-
-**Since:** 0.1.0
-
---------------------
-
-
 ### startHeadingUpdates()
 
 ```typescript
@@ -252,14 +215,44 @@ Only available on Android and iOS.
 --------------------
 
 
+### addListener('headingChange', ...)
+
+```typescript
+addListener(eventName: 'headingChange', listenerFunc: (event: HeadingChangeEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Add a listener for heading changes.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                            |
+| ------------------ | --------------------------------------------------------------- |
+| **`eventName`**    | <code>'headingChange'</code>                                    |
+| **`listenerFunc`** | <code>(event: <a href="#heading">Heading</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### Interfaces
-
-
-#### PluginListenerHandle
-
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
 #### Heading
@@ -278,15 +271,22 @@ Only available on Android and iOS.
 | **`available`** | <code>boolean</code> | Whether the compass sensor is available on the device. | 0.1.0 |
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
 ### Type Aliases
 
 
-#### HeadingChangeEvent
+#### GetHeadingResult
 
 <code><a href="#heading">Heading</a></code>
 
 
-#### GetHeadingResult
+#### HeadingChangeEvent
 
 <code><a href="#heading">Heading</a></code>
 

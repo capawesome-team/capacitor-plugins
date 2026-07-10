@@ -45,11 +45,6 @@ public class CompassPlugin: CAPPlugin, CAPBridgedPlugin {
         self.notifyListeners(Self.eventHeadingChange, data: event.toJSObject() as? [String: Any])
     }
 
-    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
-        super.removeAllListeners(call)
-        implementation?.stopHeadingUpdates()
-    }
-
     @objc func startHeadingUpdates(_ call: CAPPluginCall) {
         guard let implementation = implementation, implementation.isAvailable() else {
             rejectCallAsUnavailable(call)
@@ -72,6 +67,11 @@ public class CompassPlugin: CAPPlugin, CAPBridgedPlugin {
             }
             self.resolveCall(call)
         }
+    }
+
+    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
+        super.removeAllListeners(call)
+        implementation?.stopHeadingUpdates()
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

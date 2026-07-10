@@ -42,11 +42,6 @@ public class ProximitySensorPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
-        super.removeAllListeners(call)
-        implementation?.stopMeasurementUpdates()
-    }
-
     @objc func startMeasurementUpdates(_ call: CAPPluginCall) {
         guard implementation?.isAvailable() == true else {
             rejectCallAsUnavailable(call)
@@ -62,6 +57,11 @@ public class ProximitySensorPlugin: CAPPlugin, CAPBridgedPlugin {
         implementation?.stopMeasurementUpdates {
             self.resolveCall(call)
         }
+    }
+
+    @objc override public func removeAllListeners(_ call: CAPPluginCall) {
+        super.removeAllListeners(call)
+        implementation?.stopMeasurementUpdates()
     }
 
     private func rejectCallAsUnavailable(_ call: CAPPluginCall) {

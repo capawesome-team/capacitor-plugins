@@ -2,17 +2,6 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface ProximitySensorPlugin {
   /**
-   * Called when a new measurement is available.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'measurement',
-    listenerFunc: (event: MeasurementEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
    * Get the latest measurement.
    *
    * This method returns the most recent measurement from the proximity sensor.
@@ -34,12 +23,6 @@ export interface ProximitySensorPlugin {
    */
   isAvailable(): Promise<IsAvailableResult>;
   /**
-   * Remove all listeners for this plugin.
-   *
-   * @since 0.1.0
-   */
-  removeAllListeners(): Promise<void>;
-  /**
    * Start emitting `measurement` events.
    *
    * On iOS, this enables proximity monitoring, which turns off the screen
@@ -60,6 +43,23 @@ export interface ProximitySensorPlugin {
    * @since 0.1.0
    */
   stopMeasurementUpdates(): Promise<void>;
+  /**
+   * Called when a new measurement is available.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'measurement',
+    listenerFunc: (event: MeasurementEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 0.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

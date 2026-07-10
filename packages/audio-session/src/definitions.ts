@@ -2,28 +2,6 @@ import type { PluginListenerHandle } from '@capacitor/core';
 
 export interface AudioSessionPlugin {
   /**
-   * Called when the audio session is interrupted, e.g. by an incoming phone call.
-   *
-   * Only available on iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'interruption',
-    listenerFunc: (event: InterruptionEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
-   * Called when the audio route changes, e.g. when headphones are plugged in or out.
-   *
-   * Only available on iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'routeChange',
-    listenerFunc: (event: RouteChangeEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
    * Configure the audio session category, mode and options.
    *
    * Only available on iOS.
@@ -48,14 +26,6 @@ export interface AudioSessionPlugin {
    */
   overrideOutput(options: OverrideOutputOptions): Promise<void>;
   /**
-   * Remove all listeners for this plugin.
-   *
-   * Only available on iOS.
-   *
-   * @since 0.1.0
-   */
-  removeAllListeners(): Promise<void>;
-  /**
    * Activate or deactivate the audio session.
    *
    * Only available on iOS.
@@ -63,6 +33,36 @@ export interface AudioSessionPlugin {
    * @since 0.1.0
    */
   setActive(options: SetActiveOptions): Promise<void>;
+  /**
+   * Called when the audio session is interrupted, e.g. by an incoming phone call.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'interruption',
+    listenerFunc: (event: InterruptionEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Called when the audio route changes, e.g. when headphones are plugged in or out.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'routeChange',
+    listenerFunc: (event: RouteChangeEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**

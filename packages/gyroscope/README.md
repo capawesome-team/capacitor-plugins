@@ -171,14 +171,14 @@ const removeAllListeners = async () => {
 
 <docgen-index>
 
-* [`addListener('measurement', ...)`](#addlistenermeasurement-)
 * [`checkPermissions()`](#checkpermissions)
 * [`getMeasurement()`](#getmeasurement)
 * [`isAvailable()`](#isavailable)
-* [`removeAllListeners()`](#removealllisteners)
 * [`requestPermissions()`](#requestpermissions)
 * [`startMeasurementUpdates()`](#startmeasurementupdates)
 * [`stopMeasurementUpdates()`](#stopmeasurementupdates)
+* [`addListener('measurement', ...)`](#addlistenermeasurement-)
+* [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -186,28 +186,6 @@ const removeAllListeners = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
-
-### addListener('measurement', ...)
-
-```typescript
-addListener(eventName: 'measurement', listenerFunc: (event: MeasurementEvent) => void) => Promise<PluginListenerHandle>
-```
-
-Called when a new measurement is available.
-
-Only available on Android and iOS.
-
-| Param              | Type                                                                    |
-| ------------------ | ----------------------------------------------------------------------- |
-| **`eventName`**    | <code>'measurement'</code>                                              |
-| **`listenerFunc`** | <code>(event: <a href="#measurement">Measurement</a>) =&gt; void</code> |
-
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
-
-**Since:** 0.1.0
-
---------------------
-
 
 ### checkPermissions()
 
@@ -256,19 +234,6 @@ Check if the gyroscope sensor is available on the device.
 --------------------
 
 
-### removeAllListeners()
-
-```typescript
-removeAllListeners() => Promise<void>
-```
-
-Remove all listeners for this plugin.
-
-**Since:** 0.1.0
-
---------------------
-
-
 ### requestPermissions()
 
 ```typescript
@@ -310,14 +275,49 @@ Stop emitting `measurement` events.
 --------------------
 
 
+### addListener('measurement', ...)
+
+```typescript
+addListener(eventName: 'measurement', listenerFunc: (event: MeasurementEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a new measurement is available.
+
+Only available on Android and iOS.
+
+| Param              | Type                                                                    |
+| ------------------ | ----------------------------------------------------------------------- |
+| **`eventName`**    | <code>'measurement'</code>                                              |
+| **`listenerFunc`** | <code>(event: <a href="#measurement">Measurement</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.1.0
+
+--------------------
+
+
+### removeAllListeners()
+
+```typescript
+removeAllListeners() => Promise<void>
+```
+
+Remove all listeners for this plugin.
+
+**Since:** 0.1.0
+
+--------------------
+
+
 ### Interfaces
 
 
-#### PluginListenerHandle
+#### PermissionStatus
 
-| Prop         | Type                                      |
-| ------------ | ----------------------------------------- |
-| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+| Prop            | Type                                                                          | Description                                    | Since |
+| --------------- | ----------------------------------------------------------------------------- | ---------------------------------------------- | ----- |
+| **`gyroscope`** | <code><a href="#gyroscopepermissionstate">GyroscopePermissionState</a></code> | The permission status of the gyroscope sensor. | 0.1.0 |
 
 
 #### Measurement
@@ -329,13 +329,6 @@ Stop emitting `measurement` events.
 | **`z`** | <code>number</code> | The rotation rate around the z-axis in radians per second (rad/s). | 0.1.0 |
 
 
-#### PermissionStatus
-
-| Prop            | Type                                                                          | Description                                    | Since |
-| --------------- | ----------------------------------------------------------------------------- | ---------------------------------------------- | ----- |
-| **`gyroscope`** | <code><a href="#gyroscopepermissionstate">GyroscopePermissionState</a></code> | The permission status of the gyroscope sensor. | 0.1.0 |
-
-
 #### IsAvailableResult
 
 | Prop            | Type                 | Description                                              | Since |
@@ -343,12 +336,14 @@ Stop emitting `measurement` events.
 | **`available`** | <code>boolean</code> | Whether the gyroscope sensor is available on the device. | 0.1.0 |
 
 
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
+
+
 ### Type Aliases
-
-
-#### MeasurementEvent
-
-<code><a href="#measurement">Measurement</a></code>
 
 
 #### GyroscopePermissionState
@@ -362,6 +357,11 @@ Stop emitting `measurement` events.
 
 
 #### GetMeasurementResult
+
+<code><a href="#measurement">Measurement</a></code>
+
+
+#### MeasurementEvent
 
 <code><a href="#measurement">Measurement</a></code>
 

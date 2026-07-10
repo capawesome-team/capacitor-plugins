@@ -79,12 +79,6 @@ public class GyroscopePlugin extends Plugin {
     }
 
     @PluginMethod
-    public void removeAllListeners(PluginCall call) {
-        super.removeAllListeners(call);
-        implementation.stopMeasurementUpdates(null);
-    }
-
-    @PluginMethod
     public void requestPermissions(PluginCall call) {
         JSObject result = new JSObject();
         result.put("gyroscope", "granted");
@@ -131,6 +125,12 @@ public class GyroscopePlugin extends Plugin {
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    @PluginMethod
+    public void removeAllListeners(PluginCall call) {
+        super.removeAllListeners(call);
+        implementation.stopMeasurementUpdates(null);
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

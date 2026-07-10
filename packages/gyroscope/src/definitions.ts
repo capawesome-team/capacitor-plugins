@@ -4,17 +4,6 @@ export type GyroscopePermissionState = PermissionState | 'limited';
 
 export interface GyroscopePlugin {
   /**
-   * Called when a new measurement is available.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 0.1.0
-   */
-  addListener(
-    eventName: 'measurement',
-    listenerFunc: (event: MeasurementEvent) => void,
-  ): Promise<PluginListenerHandle>;
-  /**
    * Check if the app has permission to access the gyroscope sensor.
    *
    * @since 0.1.0
@@ -35,12 +24,6 @@ export interface GyroscopePlugin {
    */
   isAvailable(): Promise<IsAvailableResult>;
   /**
-   * Remove all listeners for this plugin.
-   *
-   * @since 0.1.0
-   */
-  removeAllListeners(): Promise<void>;
-  /**
    * Request permission to access the gyroscope sensor.
    *
    * @since 0.1.0
@@ -58,6 +41,23 @@ export interface GyroscopePlugin {
    * @since 0.1.0
    */
   stopMeasurementUpdates(): Promise<void>;
+  /**
+   * Called when a new measurement is available.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.0
+   */
+  addListener(
+    eventName: 'measurement',
+    listenerFunc: (event: MeasurementEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Remove all listeners for this plugin.
+   *
+   * @since 0.1.0
+   */
+  removeAllListeners(): Promise<void>;
 }
 
 /**
