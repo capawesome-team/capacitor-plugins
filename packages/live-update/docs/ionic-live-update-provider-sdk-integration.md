@@ -2,7 +2,12 @@
 
 This plugin implements the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk) (`1.0.0`) contract, so **Ionic Portals** and **Federated Capacitor** apps can deliver live updates through Capawesome Cloud.
 
-There is no registry and no separate provider id: the plugin class itself implements the SDK's `LiveUpdateProvider` contract, and Federated Capacitor resolves it by its **Capacitor plugin name** — `LiveUpdate` on both platforms. The SDK is a regular native dependency of this plugin, so no opt-in is required.
+There is no registry and no separate provider id: Federated Capacitor resolves the provider by its **Capacitor plugin name** — `LiveUpdate` on both platforms — and calls `createManager(...)` natively on the resolved plugin instance.
+
+The SDK integration is **optional** on both platforms, in different ways:
+
+- **Android** — zero configuration. The SDK is a compile-time-only dependency of the plugin; Federated Capacitor and Ionic Portals bring it at runtime. The plugin deliberately does not implement the SDK's `LiveUpdateProvider` interface — instead it exposes `createManager` with the exact interface signature, which Federated Capacitor invokes via its reflection fallback. Apps that don't use Portals/FedCap ship zero extra bytes.
+- **iOS** — opt-in at build time via the `IonicProvider` CocoaPods subspec or SPM package trait (see below), which links the SDK and compiles in the provider classes.
 
 > **Real-world example:** [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) is a complete Ionic Portals app that delivers live updates to multiple portals via Capawesome Cloud.
 
@@ -16,16 +21,13 @@ There is no registry and no separate provider id: the plugin class itself implem
 
 ## Installation
 
-### Capacitor app host
+### Android
 
-Nothing extra to do — installing the plugin is enough. The SDK ships as a regular dependency on both platforms:
+Nothing to do. The plugin compiles against `io.ionic:liveupdateprovider` (override the version via the `ionicLiveUpdateProviderVersion` project variable, default: `1.0.0`), and Federated Capacitor / Ionic Portals provide the SDK at runtime.
 
-- **Android**: `io.ionic:liveupdateprovider` (override the version via the `ionicLiveUpdateProviderVersion` project variable, default: `1.0.0`).
-- **iOS**: the `LiveUpdateProvider` pod (CocoaPods) or the `live-update-provider-sdk` package (SPM).
+> The Ionic Live Update Provider SDK requires `minSdkVersion` **24** or higher.
 
-> The Ionic Live Update Provider SDK requires `minSdkVersion` **24** (Android) and iOS **15** or higher.
-
-### Native Android host (Ionic Portals)
+#### Native Android host (Ionic Portals)
 
 A native Portals host isn't a Capacitor project, so there's no `npx cap sync` to generate the plugin's Gradle module include — wire it from a local `node_modules` instead. The plugin's module depends on the local `:capacitor-android` module, while Portals pulls Capacitor in via Maven, so you reconcile the two to a **single** Capacitor core.
 
@@ -64,7 +66,7 @@ A native Portals host isn't a Capacitor project, so there's no `npx cap sync` to
    }
    ```
 
-   > Use a Portals version that is built against Live Update Provider SDK `1.0.0`. Both Portals and this plugin depend on `io.ionic:liveupdateprovider`; Gradle resolves them to a single version, so mixing a pre-1.0 Portals release with this plugin will fail at runtime.
+   Portals brings `io.ionic:liveupdateprovider` transitively — use a Portals version that is built against Live Update Provider SDK `1.0.0`.
 
 4. **Apply `variables.gradle`** from your root `build.gradle` (Capacitor's module reads `minSdkVersion` etc. from root `ext` properties):
 
@@ -73,11 +75,53 @@ A native Portals host isn't a Capacitor project, so there's no `npx cap sync` to
    apply from: "variables.gradle"
    ```
 
-### Native iOS host (Ionic Portals)
+### iOS
+
+How you install on iOS depends on what kind of app hosts the web content:
+
+- **A Capacitor app** — a regular Capacitor app, or a Federated Capacitor super-app shell. The Capacitor CLI manages the `Podfile`, and `capacitor_pods` already includes the base `CapawesomeCapacitorLiveUpdate` pod. You only opt into the Ionic provider.
+- **A native iOS app** — an Ionic Portals host, not a Capacitor project. You wire up `IonicPortals` and reference the pods manually.
+
+#### Capacitor app host (CocoaPods)
+
+Add the `IonicProvider` subspec **outside** the `capacitor_pods` function (the Capacitor CLI regenerates the body of `capacitor_pods` on every `npx cap sync`, reverting any edit inside it):
+
+```diff
+target 'App' do
+  capacitor_pods
+  # Add your Pods here
++  pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => '../../node_modules/@capawesome/capacitor-live-update'
+end
+```
+
+The `IonicProvider` subspec additionally pulls in the `LiveUpdateProvider` pod and sets the `-DCAPAWESOME_INCLUDE_IONIC_PROVIDER` compile flag that includes the Ionic provider classes.
+
+#### Capacitor app host (Swift Package Manager)
+
+Enable the `IonicProvider` package trait in `capacitor.config.json` (or `capacitor.config.ts`):
+
+```json
+{
+  "experimental": {
+    "ios": {
+      "spm": {
+        "swiftToolsVersion": "6.1",
+        "packageTraits": {
+          "@capawesome/capacitor-live-update": ["IonicProvider"]
+        }
+      }
+    }
+  }
+}
+```
+
+> SPM traits live in `capacitor.config.json`, so this path applies to Capacitor app hosts only. Requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+
+#### Native iOS host (Ionic Portals, CocoaPods)
 
 A Portals host is a plain native iOS app, so there is no Capacitor project — and therefore no `capacitor_pods` — next to the `Podfile`. Two things follow:
 
-1. There is no `capacitor_pods` to supply the pod, so you reference it yourself.
+1. There is no `capacitor_pods` to supply the base pod, so you reference **both** the base pod and the `IonicProvider` subspec yourself.
 2. The plugin is **not published to CocoaPods trunk**, so a bare `pod '...'` (without `:path`) won't resolve — the pod needs a local source.
 
 To provide that source, add a minimal `package.json` next to the host app and run `npm install`. Note this is **not** turning the app into a Capacitor project — `npm install` here only downloads the plugin's pod source into `node_modules` so CocoaPods has something to resolve `:path` against:
@@ -95,11 +139,45 @@ To provide that source, add a minimal `package.json` next to the host app and ru
 ```ruby
 # Podfile
 pod 'CapawesomeCapacitorLiveUpdate', :path => 'node_modules/@capawesome/capacitor-live-update'
+pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => 'node_modules/@capawesome/capacitor-live-update'
 ```
 
-If the host uses SPM instead of CocoaPods, add the package root (`node_modules/@capawesome/capacitor-live-update`) as a local package dependency — no wrapper package or package trait is needed anymore.
+> Prefer not to commit a `node_modules`/npm step? Vendor the plugin's `ios/` directory, `CapawesomeCapacitorLiveUpdate.podspec`, and `package.json` into your repo and point `:path` at that folder instead.
 
-> Prefer not to commit a `node_modules`/npm step? Vendor the plugin's `ios/` directory, `CapawesomeCapacitorLiveUpdate.podspec`, `Package.swift`, and `package.json` into your repo and point the local reference at that folder instead.
+#### Native iOS host (Ionic Portals, Swift Package Manager)
+
+Add the package root (`node_modules/@capawesome/capacitor-live-update`) as a **local package dependency with the `IonicProvider` trait enabled**. A package trait is enabled in a `Package.swift` (`traits: [...]`), so route the dependency through a small local wrapper package — exactly how the Capacitor CLI wires SPM under the hood:
+
+```swift
+// Package.swift of a local wrapper package next to your app
+// swift-tools-version: 6.1
+import PackageDescription
+
+let package = Package(
+    name: "Portals-SPM",
+    platforms: [.iOS(.v15)],
+    products: [
+        .library(name: "Portals-SPM", targets: ["Portals-SPM"])
+    ],
+    dependencies: [
+        .package(
+            name: "CapawesomeCapacitorLiveUpdate",
+            path: "../../node_modules/@capawesome/capacitor-live-update",
+            traits: ["IonicProvider"]
+        )
+    ],
+    targets: [
+        .target(
+            name: "Portals-SPM",
+            dependencies: [
+                .product(name: "CapawesomeCapacitorLiveUpdate", package: "CapawesomeCapacitorLiveUpdate")
+            ]
+        )
+    ]
+)
+```
+
+Reference the wrapper from your app (_File → Add Package Dependencies… → Add Local…_) and link its product to your app target.
 
 ## Provider configuration
 
@@ -115,26 +193,27 @@ All other settings (`serverDomain`, `publicKey`, `httpTimeout`, etc.) come from 
 
 ## Federated Capacitor usage
 
-Federated Capacitor resolves providers by their Capacitor plugin name (`jsName` on iOS, `@CapacitorPlugin(name = ...)` on Android). For this plugin, that name is **`LiveUpdate`** on both platforms. Reference it in your Federated Capacitor configuration together with the provider configuration for each app:
+Select the provider by this plugin's Capacitor plugin name (**`LiveUpdate`**) and pass the provider configuration for each app:
 
 ```ts
 liveUpdateConfig: {
-  provider: 'LiveUpdate',
-  providerConfig: {
+  pluginName: 'LiveUpdate',
+  config: {
     managerKey: 'my-shell',
     appId: '6e351b4f-69a7-415e-a057-4567df7ffe94',
     channel: 'production',
   },
+  autoUpdateMethod: 'none',
 }
 ```
 
-> Requires a `@ionic-enterprise/federated-capacitor` version built against Live Update Provider SDK `1.0.0`. Check the [Federated Capacitor documentation](https://ionic.io/docs/portals/for-capacitor/live-updates) for the exact configuration key names supported by your version.
+> Requires a `@ionic-enterprise/federated-capacitor` version built against Live Update Provider SDK `1.0.0`. See the [Federated Capacitor documentation](https://ionic.io/docs/portals/for-capacitor/live-updates) for details.
 
 ## Ionic Portals usage
 
-Ionic Portals uses a `ProviderManager` directly — no provider resolution is involved. You construct the manager and attach it to the Portal's configuration; Portals reads `latestAppDirectory` to locate the web assets and calls `sync()` to refresh them.
+Ionic Portals uses a `ProviderManager` directly — there is no resolution step. You construct the manager in your native app and attach it to the Portal's configuration; Portals reads `latestAppDirectory` to locate the web assets and calls `sync()` to refresh them.
 
-> Requires a Portals release built against Live Update Provider SDK `1.0.0`. Earlier releases (up to `0.14.0-rc.0`) consumed the pre-1.0 registry-based contract, which this plugin no longer implements. This guide and the [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) will be updated with concrete snippets once such a release is available.
+> Requires a Portals release built against Live Update Provider SDK `1.0.0` (earlier releases consumed the pre-1.0 registry-based contract). Direct manager construction support in this plugin is tracked as a follow-up; this guide and the [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) will be updated with concrete snippets once available.
 
 Bundle **seed content** at each Portal's `startDir` so the first Portal can render on a fresh, offline launch; Live Updates refresh it afterward.
 

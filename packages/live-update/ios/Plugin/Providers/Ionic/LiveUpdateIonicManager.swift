@@ -1,3 +1,4 @@
+#if CAPAWESOME_INCLUDE_IONIC_PROVIDER
 import Foundation
 import Capacitor
 import LiveUpdateProvider
@@ -96,3 +97,4 @@ public final class LiveUpdateIonicManager: ProviderManager {
         return Self.userDefaultsPrefix + managerKey
     }
 }
+#endif

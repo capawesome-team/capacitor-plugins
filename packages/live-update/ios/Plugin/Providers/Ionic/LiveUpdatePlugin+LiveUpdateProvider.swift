@@ -1,3 +1,4 @@
+#if CAPAWESOME_INCLUDE_IONIC_PROVIDER
 import Foundation
 import LiveUpdateProvider
 
@@ -11,3 +12,4 @@ extension LiveUpdatePlugin: LiveUpdateProvider {
         return try LiveUpdateIonicManager(configuration: configuration, liveUpdate: implementation)
     }
 }
+#endif

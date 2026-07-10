@@ -34,6 +34,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
     }
     buildTypes {
         release {
@@ -68,7 +69,10 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "net.lingala.zip4j:zip4j:$zip4jVersion"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
-    implementation "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
+    // The Ionic Live Update Provider SDK is compile-time only: Federated Capacitor
+    // and Ionic Portals bring it transitively at runtime, and the provider classes
+    // are only loaded when a host actually calls `createManager`.
+    compileOnly "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

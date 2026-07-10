@@ -1,5 +1,6 @@
 package com.example.plugin
 
+import android.content.Context
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -8,6 +9,7 @@ import com.getcapacitor.annotation.CapacitorPlugin
 import io.ionic.liveupdateprovider.LiveUpdateProvider
 import io.ionic.liveupdateprovider.MetadataSyncResult
 import io.ionic.liveupdateprovider.ProviderManager
+import java.lang.reflect.InvocationTargetException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +25,7 @@ class IonicProviderTestPlugin : Plugin() {
 
     companion object {
         const val ERROR_MANAGER_KEY_MISSING = "managerKey must be provided."
-        const val ERROR_PROVIDER_NOT_AVAILABLE = "The LiveUpdate plugin does not implement LiveUpdateProvider."
+        const val ERROR_PROVIDER_NOT_AVAILABLE = "The LiveUpdate plugin does not provide createManager."
         const val ERROR_UNKNOWN_ERROR = "An unknown error has occurred."
     }
 
@@ -38,7 +40,7 @@ class IonicProviderTestPlugin : Plugin() {
     @PluginMethod
     fun isProviderAvailable(call: PluginCall) {
         val ret = JSObject()
-        ret.put("available", resolveProvider() != null)
+        ret.put("available", resolveCreateManager() != null)
         call.resolve(ret)
     }
 
@@ -66,8 +68,8 @@ class IonicProviderTestPlugin : Plugin() {
             call.reject(ERROR_MANAGER_KEY_MISSING)
             return null
         }
-        val provider = resolveProvider()
-        if (provider == null) {
+        val createManager = resolveCreateManager()
+        if (createManager == null) {
             call.reject(ERROR_PROVIDER_NOT_AVAILABLE)
             return null
         }
@@ -75,7 +77,7 @@ class IonicProviderTestPlugin : Plugin() {
         call.getString("appId")?.let { configuration["appId"] = it }
         call.getString("channel")?.let { configuration["channel"] = it }
         return try {
-            provider.createManager(context.applicationContext, configuration)
+            createManager(context.applicationContext, configuration)
         } catch (exception: Exception) {
             call.reject(exception.message ?: ERROR_UNKNOWN_ERROR)
             null
@@ -84,9 +86,26 @@ class IonicProviderTestPlugin : Plugin() {
 
     /**
      * Resolves the provider the same way Federated Capacitor does: look up the
-     * Capacitor plugin by name and check that it implements [LiveUpdateProvider].
+     * Capacitor plugin by name, try the cast to [LiveUpdateProvider] first, and
+     * fall back to reflectively invoking `createManager(Context, Map)` (the
+     * plugin skips the conformance so the SDK can stay a compileOnly dependency).
      */
-    private fun resolveProvider(): LiveUpdateProvider? {
-        return bridge.getPlugin("LiveUpdate")?.instance as? LiveUpdateProvider
+    private fun resolveCreateManager(): ((Context, Map<String, Any>) -> ProviderManager)? {
+        val plugin = bridge.getPlugin("LiveUpdate")?.instance ?: return null
+        if (plugin is LiveUpdateProvider) {
+            return { context, configuration -> plugin.createManager(context, configuration) }
+        }
+        val method = try {
+            plugin.javaClass.getMethod("createManager", Context::class.java, Map::class.java)
+        } catch (exception: NoSuchMethodException) {
+            return null
+        }
+        return { context, configuration ->
+            try {
+                method.invoke(plugin, context, configuration) as ProviderManager
+            } catch (exception: InvocationTargetException) {
+                throw exception.targetException
+            }
+        }
     }
 }

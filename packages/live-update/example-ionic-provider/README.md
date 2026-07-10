@@ -15,17 +15,24 @@ Capawesome Cloud as a live update provider.
 
 ## How it's wired up
 
-- **Android** — the plugin ships `io.ionic:liveupdateprovider` as a regular
-  dependency, so no opt-in is needed. The custom `IonicProviderTestPlugin.kt`
-  lives in `android/app/src/main/java/com/example/plugin/` and is registered in
+- **Android** — the plugin compiles against `io.ionic:liveupdateprovider` as a
+  `compileOnly` dependency; at runtime the SDK is normally provided by
+  Federated Capacitor or Portals, so this example app declares it itself in
+  `android/app/build.gradle` (plus kotlinx-coroutines to call the suspending
+  `sync()`). The custom `IonicProviderTestPlugin.kt` lives in
+  `android/app/src/main/java/com/example/plugin/` and is registered in
   `MainActivity.java`. It resolves the provider the same way Federated
-  Capacitor does: `bridge.getPlugin("LiveUpdate")` plus a cast to
-  `LiveUpdateProvider`.
-- **iOS** — the plugin's pod depends on `LiveUpdateProvider`, so no opt-in is
-  needed. The custom `IonicProviderTestPlugin.swift` lives in `ios/App/App/`
-  and is auto-discovered by the Capacitor bridge via the `CAPBridgedPlugin`
-  protocol. It resolves the provider via `bridge?.plugin(withName: "LiveUpdate")`
-  plus a cast to `LiveUpdateProvider`.
+  Capacitor does: `bridge.getPlugin("LiveUpdate")`, a cast to
+  `LiveUpdateProvider` first, then the reflection fallback on
+  `createManager(Context, Map)` (which is the path this plugin actually uses,
+  since it skips the interface conformance to keep the SDK optional).
+- **iOS** — `ios/App/Podfile` uses the
+  `CapawesomeCapacitorLiveUpdate/IonicProvider` subspec, which adds the
+  `LiveUpdateProvider` pod and sets `-DCAPAWESOME_INCLUDE_IONIC_PROVIDER`. The
+  custom `IonicProviderTestPlugin.swift` lives in `ios/App/App/` and is
+  auto-discovered by the Capacitor bridge via the `CAPBridgedPlugin` protocol.
+  It resolves the provider via `bridge?.plugin(withName: "LiveUpdate")` plus a
+  cast to `LiveUpdateProvider`.
 
 ## Setup
 

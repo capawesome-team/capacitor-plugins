@@ -16,6 +16,7 @@ end
 
 target 'App' do
   capacitor_pods
+  pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => '../../..'
 end
 
 post_install do |installer|

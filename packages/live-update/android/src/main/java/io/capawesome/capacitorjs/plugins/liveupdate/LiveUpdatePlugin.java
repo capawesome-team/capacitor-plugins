@@ -34,13 +34,12 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicManager;
-import io.ionic.liveupdateprovider.LiveUpdateProvider;
 import io.ionic.liveupdateprovider.ProviderError;
 import io.ionic.liveupdateprovider.ProviderManager;
 import java.util.Map;
 
 @CapacitorPlugin(name = "LiveUpdate")
-public class LiveUpdatePlugin extends Plugin implements LiveUpdateProvider {
+public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
     public static final String VERSION = "8.3.0";
@@ -89,9 +88,15 @@ public class LiveUpdatePlugin extends Plugin implements LiveUpdateProvider {
     /**
      * Creates a manager for the Ionic Live Update Provider SDK. Invoked natively by
      * Federated Capacitor after resolving this plugin by its Capacitor plugin name.
+     *
+     * This class deliberately does NOT implement the SDK's `LiveUpdateProvider` interface:
+     * superinterfaces are resolved eagerly at class-definition time, which would crash the
+     * plugin when the compileOnly SDK is absent at runtime. Instead, this method matches the
+     * interface's exact signature and Federated Capacitor invokes it via reflection when the
+     * cast to `LiveUpdateProvider` fails. Method references are resolved lazily, so this
+     * class loads fine without the SDK. Do NOT change the signature.
      */
     @NonNull
-    @Override
     public ProviderManager createManager(@NonNull Context context, @NonNull Map<String, ?> configuration)
         throws ProviderError.InvalidConfiguration {
         if (implementation == null) {

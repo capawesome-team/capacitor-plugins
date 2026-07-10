@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.1
 import PackageDescription
 
 let package = Package(
@@ -8,6 +8,12 @@ let package = Package(
         .library(
             name: "CapawesomeCapacitorLiveUpdate",
             targets: ["LiveUpdatePlugin"])
+    ],
+    traits: [
+        .trait(
+            name: "IonicProvider",
+            description: "Enables the Ionic Live Update Provider SDK integration."
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
@@ -23,12 +29,20 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "ZIPFoundation", package: "ZIPFoundation"),
-                .product(name: "LiveUpdateProvider", package: "live-update-provider-sdk")
+                .product(
+                    name: "LiveUpdateProvider",
+                    package: "live-update-provider-sdk",
+                    condition: .when(traits: ["IonicProvider"])
+                )
             ],
-            path: "ios/Plugin"),
+            path: "ios/Plugin",
+            swiftSettings: [
+                .define("CAPAWESOME_INCLUDE_IONIC_PROVIDER", .when(traits: ["IonicProvider"]))
+            ]),
         .testTarget(
             name: "LiveUpdatePluginTests",
             dependencies: ["LiveUpdatePlugin"],
             path: "ios/PluginTests")
-    ]
+    ],
+    swiftLanguageModes: [.v5]
 )
