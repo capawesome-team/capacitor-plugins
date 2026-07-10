@@ -16,6 +16,7 @@ public enum CustomError: Error {
     case downloadUrlMissing
     case httpTimeout
     case managerKeyMissing
+    case pluginNotInitialized
     case signatureMissing
     case signatureVerificationFailed
     case syncInProgress
@@ -56,6 +57,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Request timed out.", comment: "httpTimeout")
         case .managerKeyMissing:
             return NSLocalizedString("managerKey must be provided.", comment: "managerKeyMissing")
+        case .pluginNotInitialized:
+            return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .signatureMissing:
             return NSLocalizedString("Bundle does not contain a signature.", comment: "signatureMissing")
         case .signatureVerificationFailed:

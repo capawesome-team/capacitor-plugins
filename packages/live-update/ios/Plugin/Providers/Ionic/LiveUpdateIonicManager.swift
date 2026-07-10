@@ -1,5 +1,5 @@
-#if CAPAWESOME_INCLUDE_IONIC_PROVIDER
 import Foundation
+import Capacitor
 import LiveUpdateProvider
 
 /// Ionic Live Update Provider manager backed by the Capawesome live update plugin.
@@ -8,30 +8,27 @@ import LiveUpdateProvider
 /// Federated Capacitor apps) can persist their own active bundle without colliding with
 /// each other or with the standalone plugin's `currentBundleId` / `nextBundleId` state.
 ///
-/// Provider config keys (V1):
+/// Provider configuration keys (V1):
 /// - `managerKey` (required) — scopes per-manager persisted state
 /// - `appId` (optional) — Capawesome Cloud app UUID; falls back to plugin config
 /// - `channel` (optional) — channel to sync; falls back to plugin config
-public final class LiveUpdateIonicManager: LiveUpdateManaging {
+public final class LiveUpdateIonicManager: ProviderManager {
     private static let userDefaultsPrefix = "CapawesomeLiveUpdateIonicProvider.lastSyncedBundleId."
+
+    public private(set) var latestAppDirectory: URL?
 
     private let appId: String?
     private let channel: String?
     private let liveUpdate: LiveUpdate
     private let managerKey: String
 
-    public private(set) var latestAppDirectory: URL?
-
-    public init(config: [String: Any], liveUpdate: LiveUpdate) throws {
-        guard let managerKey = config["managerKey"] as? String, !managerKey.isEmpty else {
-            throw LiveUpdateProviderError.invalidConfiguration(
-                CustomError.managerKeyMissing.localizedDescription,
-                underlyingError: nil
-            )
+    init(configuration: [String: Any], liveUpdate: LiveUpdate) throws {
+        guard let managerKey = configuration["managerKey"] as? String, !managerKey.isEmpty else {
+            throw ProviderError.invalidConfiguration(message: CustomError.managerKeyMissing.localizedDescription)
         }
         self.managerKey = managerKey
-        self.appId = config["appId"] as? String
-        self.channel = config["channel"] as? String
+        self.appId = configuration["appId"] as? String
+        self.channel = configuration["channel"] as? String
         self.liveUpdate = liveUpdate
 
         // Restore the last synced bundle directory, if any.
@@ -40,34 +37,27 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
         }
     }
 
-    public func sync() async throws -> any LiveUpdateProvider.SyncResult {
+    public func sync() async throws -> (any ProviderSyncResult)? {
         do {
-            let fetchOptions = FetchLatestBundleOptions(appId: appId, channel: channel)
-            let result = try await liveUpdate.fetchLatestBundle(fetchOptions)
+            let result = try await liveUpdate.fetchLatestBundle(FetchLatestBundleOptions(appId: appId, channel: channel))
 
+            // No update available; nothing to report.
             guard let bundleId = result.getBundleId() else {
-                // No update available; report success without changing state.
-                return DefaultFederatedCapacitorSyncResult(metadata: buildMetadata(bundleId: nil, customProperties: nil))
+                return nil
             }
 
             // Bundle already on disk — just point latestAppDirectory at it and persist.
             if let existingDirectory = liveUpdate.getBundleDirectory(bundleId: bundleId) {
                 applySyncedBundle(bundleId: bundleId, directory: existingDirectory)
-                return DefaultFederatedCapacitorSyncResult(
-                    metadata: buildMetadata(bundleId: bundleId, customProperties: result.getCustomProperties())
-                )
+                return MetadataSyncResult(metadata: buildMetadata(bundleId: bundleId, customProperties: result.getCustomProperties()))
             }
 
             // Otherwise, download and then apply.
             guard let downloadUrl = result.getDownloadUrl(), !downloadUrl.isEmpty else {
-                throw LiveUpdateProviderError.syncFailed(
-                    CustomError.downloadUrlMissing.localizedDescription,
-                    underlyingError: nil
-                )
+                throw CustomError.downloadUrlMissing
             }
-            let artifactType = result.getArtifactType() ?? "zip"
             let downloadOptions = DownloadBundleOptions(
-                artifactType: artifactType,
+                artifactType: result.getArtifactType() ?? "zip",
                 bundleId: bundleId,
                 checksum: result.getChecksum(),
                 signature: result.getSignature(),
@@ -76,19 +66,13 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
             try await liveUpdate.downloadBundle(downloadOptions)
 
             guard let downloadedDirectory = liveUpdate.getBundleDirectory(bundleId: bundleId) else {
-                throw LiveUpdateProviderError.syncFailed(
-                    CustomError.bundleDirectoryNotFound.localizedDescription,
-                    underlyingError: nil
-                )
+                throw CustomError.bundleDirectoryNotFound
             }
             applySyncedBundle(bundleId: bundleId, directory: downloadedDirectory)
-            return DefaultFederatedCapacitorSyncResult(
-                metadata: buildMetadata(bundleId: bundleId, customProperties: result.getCustomProperties())
-            )
-        } catch let error as LiveUpdateProviderError {
-            throw error
+            return MetadataSyncResult(metadata: buildMetadata(bundleId: bundleId, customProperties: result.getCustomProperties()))
         } catch {
-            throw LiveUpdateProviderError.syncFailed(error.localizedDescription, underlyingError: error)
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] Ionic provider sync failed: ", error.localizedDescription)
+            throw error
         }
     }
 
@@ -97,22 +81,18 @@ public final class LiveUpdateIonicManager: LiveUpdateManaging {
         UserDefaults.standard.set(bundleId, forKey: lastSyncedBundleIdKey())
     }
 
-    private func buildMetadata(bundleId: String?, customProperties: [String: Any]?) -> [String: Any]? {
-        var metadata: [String: Any] = [:]
-        if let bundleId = bundleId {
-            metadata["bundleId"] = bundleId
-        }
+    private func buildMetadata(bundleId: String, customProperties: [String: Any]?) -> [String: Any] {
+        var metadata: [String: Any] = ["bundleId": bundleId]
         if let channel = channel {
             metadata["channel"] = channel
         }
         if let customProperties = customProperties, !customProperties.isEmpty {
             metadata["customProperties"] = customProperties
         }
-        return metadata.isEmpty ? nil : metadata
+        return metadata
     }
 
     private func lastSyncedBundleIdKey() -> String {
         return Self.userDefaultsPrefix + managerKey
     }
 }
-#endif

@@ -13,7 +13,4 @@ ext {
     androidxJunitVersion = '1.2.1'
     androidxEspressoCoreVersion = '3.6.1'
     cordovaAndroidVersion = '10.1.1'
-    // Opt in to the Ionic Live Update Provider SDK so that the Capawesome
-    // live update plugin registers itself with `LiveUpdateProviderRegistry`.
-    capawesomeCapacitorLiveUpdateIncludeIonicProvider = true
 }

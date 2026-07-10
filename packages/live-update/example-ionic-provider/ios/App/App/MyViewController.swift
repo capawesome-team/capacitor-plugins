@@ -7,7 +7,7 @@ import Capacitor
 ///
 /// See https://capacitorjs.com/docs/ios/custom-code
 class MyViewController: CAPBridgeViewController {
-    override open func capacitorDidLoad() {
+    override func capacitorDidLoad() {
         bridge?.registerPluginInstance(IonicProviderTestPlugin())
     }
 }

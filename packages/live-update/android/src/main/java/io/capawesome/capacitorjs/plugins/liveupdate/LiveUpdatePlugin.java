@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import android.content.Context;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,10 +33,14 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
-import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicProviderRegistration;
+import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicManager;
+import io.ionic.liveupdateprovider.LiveUpdateProvider;
+import io.ionic.liveupdateprovider.ProviderError;
+import io.ionic.liveupdateprovider.ProviderManager;
+import java.util.Map;
 
 @CapacitorPlugin(name = "LiveUpdate")
-public class LiveUpdatePlugin extends Plugin {
+public class LiveUpdatePlugin extends Plugin implements LiveUpdateProvider {
 
     public static final String TAG = "LiveUpdate";
     public static final String VERSION = "8.3.0";
@@ -53,6 +58,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_DOWNLOAD_URL_MISSING = "Bundle does not have a valid download URL.";
     public static final String ERROR_HTTP_TIMEOUT = "Request timed out.";
     public static final String ERROR_MANAGER_KEY_MISSING = "managerKey must be provided.";
+    public static final String ERROR_PLUGIN_NOT_INITIALIZED = "Plugin is not initialized.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
@@ -75,13 +81,23 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             config = getLiveUpdateConfig();
             implementation = new LiveUpdate(config, this);
-            // Register the Ionic Live Update Provider when the optional SDK is on the classpath.
-            if (LiveUpdateIonicProviderRegistration.isAvailable()) {
-                LiveUpdateIonicProviderRegistration.tryRegister(implementation);
-            }
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
+    }
+
+    /**
+     * Creates a manager for the Ionic Live Update Provider SDK. Invoked natively by
+     * Federated Capacitor after resolving this plugin by its Capacitor plugin name.
+     */
+    @NonNull
+    @Override
+    public ProviderManager createManager(@NonNull Context context, @NonNull Map<String, ?> configuration)
+        throws ProviderError.InvalidConfiguration {
+        if (implementation == null) {
+            throw new ProviderError.InvalidConfiguration(ERROR_PLUGIN_NOT_INITIALIZED, null);
+        }
+        return new LiveUpdateIonicManager(context, configuration, implementation);
     }
 
     @Override

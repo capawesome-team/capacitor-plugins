@@ -1,7 +1,7 @@
 import { registerPlugin } from '@capacitor/core';
 
 // Custom Capacitor plugin defined in the example app's native code
-// (`IonicProviderTestPlugin.java` on Android, `IonicProviderTestPlugin.swift`
+// (`IonicProviderTestPlugin.kt` on Android, `IonicProviderTestPlugin.swift`
 // on iOS). It exposes the Ionic Live Update Provider SDK to JavaScript so we
 // can test the integration end-to-end without a real Federated Capacitor or
 // Portals host.
@@ -39,10 +39,10 @@ const safeCall = async (label, fn) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   document
-    .querySelector('#is-provider-registered-button')
+    .querySelector('#is-provider-available-button')
     .addEventListener('click', () =>
-      safeCall('isProviderRegistered', () =>
-        IonicProviderTest.isProviderRegistered(),
+      safeCall('isProviderAvailable', () =>
+        IonicProviderTest.isProviderAvailable(),
       ),
     );
 

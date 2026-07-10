@@ -46,13 +46,13 @@
 		7CAB12562DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12552DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift */; };
 		7CAB12672DEFA3E0003BB4F7 /* SetConfigOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12662DEFA3E0003BB4F7 /* SetConfigOptions.swift */; };
 		7CAB12782DEFA3F0003BB5F8 /* GetConfigResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB12772DEFA3F0003BB5F8 /* GetConfigResult.swift */; };
-		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
-		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
 		7CAB13012DEFB100003BC5A2 /* FetchChannelsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13002DEFB100003BC5A2 /* FetchChannelsOptions.swift */; };
 		7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */; };
 		7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */; };
 		7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */; };
-		AA0300000000000000010001 /* LiveUpdateIonicProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */; };
+		7CB7B8AE2CC9419800833086 /* FetchLatestBundleResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */; };
+		7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */; };
+		AA0300000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift */; };
 		AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010002 /* LiveUpdateIonicManager.swift */; };
 /* End PBXBuildFile section */
 
@@ -109,16 +109,16 @@
 		7CAB12552DEFA2D0003BB3E6 /* GetBlockedBundlesResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBlockedBundlesResult.swift; sourceTree = "<group>"; };
 		7CAB12662DEFA3E0003BB4F7 /* SetConfigOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetConfigOptions.swift; sourceTree = "<group>"; };
 		7CAB12772DEFA3F0003BB5F8 /* GetConfigResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetConfigResult.swift; sourceTree = "<group>"; };
-		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
-		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		7CAB13002DEFB100003BC5A2 /* FetchChannelsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChannelsOptions.swift; sourceTree = "<group>"; };
 		7CAB13022DEFB110003BC5B3 /* ChannelResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelResult.swift; sourceTree = "<group>"; };
 		7CAB13042DEFB120003BC5C4 /* FetchChannelsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChannelsResult.swift; sourceTree = "<group>"; };
 		7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetChannelsResponseItem.swift; sourceTree = "<group>"; };
-		AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicProvider.swift; sourceTree = "<group>"; };
-		AA0200000000000000010002 /* LiveUpdateIonicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicManager.swift; sourceTree = "<group>"; };
+		7CB7B8AD2CC9419000833086 /* FetchLatestBundleResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLatestBundleResult.swift; sourceTree = "<group>"; };
+		7CD426B12D155AFB003F93F9 /* SetNextBundleOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetNextBundleOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		AA0200000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveUpdatePlugin+LiveUpdateProvider.swift"; sourceTree = "<group>"; };
+		AA0200000000000000010002 /* LiveUpdateIonicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicManager.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -180,23 +180,6 @@
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
-			sourceTree = "<group>";
-		};
-		AA0400000000000000010001 /* Providers */ = {
-			isa = PBXGroup;
-			children = (
-				AA0400000000000000010002 /* Ionic */,
-			);
-			path = Providers;
-			sourceTree = "<group>";
-		};
-		AA0400000000000000010002 /* Ionic */ = {
-			isa = PBXGroup;
-			children = (
-				AA0200000000000000010001 /* LiveUpdateIonicProvider.swift */,
-				AA0200000000000000010002 /* LiveUpdateIonicManager.swift */,
-			);
-			path = Ionic;
 			sourceTree = "<group>";
 		};
 		50ADFF95201F53D600D50D53 /* PluginTests */ = {
@@ -315,6 +298,23 @@
 				F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AA0400000000000000010001 /* Providers */ = {
+			isa = PBXGroup;
+			children = (
+				AA0400000000000000010002 /* Ionic */,
+			);
+			path = Providers;
+			sourceTree = "<group>";
+		};
+		AA0400000000000000010002 /* Ionic */ = {
+			isa = PBXGroup;
+			children = (
+				AA0200000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift */,
+				AA0200000000000000010002 /* LiveUpdateIonicManager.swift */,
+			);
+			path = Ionic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -456,6 +456,7 @@
 				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
 				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/LiveUpdateProvider/LiveUpdateProvider.framework",
 				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -463,6 +464,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LiveUpdateProvider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -535,7 +537,7 @@
 				7CAB13032DEFB110003BC5B3 /* ChannelResult.swift in Sources */,
 				7CAB13052DEFB120003BC5C4 /* FetchChannelsResult.swift in Sources */,
 				7CAB13072DEFB130003BC5D5 /* GetChannelsResponseItem.swift in Sources */,
-				AA0300000000000000010001 /* LiveUpdateIonicProvider.swift in Sources */,
+				AA0300000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift in Sources */,
 				AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

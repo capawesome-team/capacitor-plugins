@@ -101,6 +101,7 @@ android {
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
+- `$ionicLiveUpdateProviderVersion` version of `io.ionic:liveupdateprovider` (default: `1.0.0`)
 - `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `5.3.2`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
 
@@ -149,7 +150,7 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 
 ## Ionic Live Update Provider SDK Integration
 
-This plugin can register itself as a provider for the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk), so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
+This plugin implements the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk) contract, so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. Federated Capacitor resolves the provider by the plugin name `LiveUpdate`. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
 
 ## Configuration
 

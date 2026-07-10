@@ -8,29 +8,20 @@ import LiveUpdateProvider
 @objc(IonicProviderTestPlugin)
 public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
     public static let errorManagerKeyMissing = "managerKey must be provided."
-    public static let errorProviderNotRegistered =
-        "Provider 'capawesome' is not registered. Make sure the IonicProvider subspec is used in the Podfile."
+    public static let errorProviderNotAvailable = "The LiveUpdate plugin does not conform to LiveUpdateProvider."
 
     public let identifier = "IonicProviderTestPlugin"
     public let jsName = "IonicProviderTest"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "isProviderRegistered", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getLatestAppDirectory", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isProviderAvailable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "syncManager", returnType: CAPPluginReturnPromise)
     ]
-
-    private static let providerId = "capawesome"
-
-    @objc func isProviderRegistered(_ call: CAPPluginCall) {
-        let provider = LiveUpdateProviderRegistry.shared.resolve(IonicProviderTestPlugin.providerId)
-        call.resolve(["registered": provider != nil])
-    }
 
     @objc func getLatestAppDirectory(_ call: CAPPluginCall) {
         do {
             let manager = try createManager(from: call)
-            let path = manager.latestAppDirectory?.path
-            call.resolve(["latestAppDirectory": path ?? NSNull()])
+            call.resolve(["latestAppDirectory": manager.latestAppDirectory?.path ?? NSNull()])
         } catch let error as PluginCallError {
             call.reject(error.message)
         } catch {
@@ -38,8 +29,12 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func isProviderAvailable(_ call: CAPPluginCall) {
+        call.resolve(["available": resolveProvider() != nil])
+    }
+
     @objc func syncManager(_ call: CAPPluginCall) {
-        let manager: any LiveUpdateManaging
+        let manager: any ProviderManager
         do {
             manager = try createManager(from: call)
         } catch let error as PluginCallError {
@@ -55,8 +50,8 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
                 let result = try await manager.sync()
                 var ret: [String: Any] = [:]
                 ret["latestAppDirectory"] = manager.latestAppDirectory?.path ?? NSNull()
-                if let fedCap = result as? FederatedCapacitorSyncResult, let metadata = fedCap.metadata {
-                    ret["metadata"] = metadata
+                if let metadataResult = result as? MetadataSyncResult {
+                    ret["metadata"] = metadataResult.metadata
                 }
                 call.resolve(ret as PluginCallResultData)
             } catch {
@@ -65,21 +60,27 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    private func createManager(from call: CAPPluginCall) throws -> any LiveUpdateManaging {
+    private func createManager(from call: CAPPluginCall) throws -> any ProviderManager {
         guard let managerKey = call.getString("managerKey"), !managerKey.isEmpty else {
             throw PluginCallError(IonicProviderTestPlugin.errorManagerKeyMissing)
         }
-        guard let provider = LiveUpdateProviderRegistry.shared.resolve(IonicProviderTestPlugin.providerId) else {
-            throw PluginCallError(IonicProviderTestPlugin.errorProviderNotRegistered)
+        guard let provider = resolveProvider() else {
+            throw PluginCallError(IonicProviderTestPlugin.errorProviderNotAvailable)
         }
-        var config: [String: Any] = ["managerKey": managerKey]
+        var configuration: [String: Any] = ["managerKey": managerKey]
         if let appId = call.getString("appId") {
-            config["appId"] = appId
+            configuration["appId"] = appId
         }
         if let channel = call.getString("channel") {
-            config["channel"] = channel
+            configuration["channel"] = channel
         }
-        return try provider.createManager(config: config)
+        return try provider.createManager(configuration: configuration)
+    }
+
+    /// Resolves the provider the same way Federated Capacitor does: look up the
+    /// Capacitor plugin by name and check that it conforms to `LiveUpdateProvider`.
+    private func resolveProvider() -> (any LiveUpdateProvider)? {
+        return bridge?.plugin(withName: "LiveUpdate") as? LiveUpdateProvider
     }
 }
 
