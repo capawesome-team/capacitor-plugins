@@ -12,6 +12,7 @@ body:
         - label: Accelerometer
         - label: Accessibility Preferences
         - label: Action Sheet
+        - label: AdMob
         - label: Age Signals
         - label: Alarm
         - label: Android Battery Optimization
@@ -33,8 +34,10 @@ body:
         - label: Audio Player
         - label: Audio Recorder
         - label: Audio Session
+        - label: Background Geolocation
         - label: Background Task
         - label: Badge
+        - label: Barcode Scanner
         - label: Barometer
         - label: Battery
         - label: Biometrics
@@ -47,17 +50,21 @@ body:
         - label: Datetime Picker
         - label: Device Info
         - label: Dialog
+        - label: Document Scanner
         - label: Exif
         - label: Facebook Sign-In
         - label: File Compressor
         - label: File Opener
         - label: File Picker
+        - label: File Transfer
         - label: Formbricks
         - label: Geocoder
+        - label: Geofences
         - label: Google Sign-In
         - label: Grafana Faro
         - label: Gyroscope
         - label: Haptics
+        - label: Health
         - label: Home Indicator
         - label: In-App Browser
         - label: Install Referrer
@@ -67,6 +74,7 @@ body:
         - label: libSQL
         - label: Light Sensor
         - label: Live Update
+        - label: LLM
         - label: Localization
         - label: Mail Composer
         - label: Managed Configurations
@@ -119,6 +127,7 @@ body:
         - label: Vault
         - label: Volume
         - label: Wallet
+        - label: Watch
         - label: Wifi
         - label: YouTube Player
         - label: Zip
