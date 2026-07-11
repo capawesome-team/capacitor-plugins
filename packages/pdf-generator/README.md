@@ -231,6 +231,10 @@ Only available on Android and iOS.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It turns HTML content or a URL into a paginated PDF with real page breaks, selectable page sizes and orientation, and vector output so text stays sharp and selectable at any zoom. Results are written to a file rather than held in memory, so even large documents generate reliably, and a configurable timeout keeps a slow page from hanging your app — all through a fully typed API on Android and iOS using only official platform APIs. Actively maintained against the latest Capacitor version, it hands off cleanly to the PDF Viewer, Printer, and File Opener plugins.
+
 ### Where is the generated PDF file stored?
 
 The generated PDF file is written to the cache directory and deleted on the next app launch. Move it to a permanent location if you want to keep it, for example with the `rename(...)` method of the [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin.

@@ -66,7 +66,7 @@ import UIKit
                     self?.plugin.notifyPageChangeListeners(PageChangeEvent(page: page))
                 }
                 let navigationController = UINavigationController(rootViewController: viewController)
-                navigationController.modalPresentationStyle = .fullScreen
+                navigationController.modalPresentationStyle = .overFullScreen
                 self.viewController = viewController
                 bridgeViewController.present(navigationController, animated: true) {
                     completion(nil)

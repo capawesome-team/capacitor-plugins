@@ -307,6 +307,10 @@ On Android, reading the proximity sensor has no effect on the screen.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It covers the whole proximity story through one fully typed API: a one-time reading, continuous real-time `measurement` events, and an availability check, working consistently across Android and iOS. It surfaces platform specifics honestly — a distance in centimeters on Android and the near/far state on iOS — and documents the iOS screen-dimming behavior so there are no surprises. The package is kept current with the latest Capacitor version and ships for both CocoaPods and Swift Package Manager.
+
 ### Why does the screen turn off on iOS when reading the sensor?
 
 On iOS, reading the proximity sensor requires enabling proximity monitoring via `UIDevice`. While monitoring is enabled, iOS automatically turns off the screen whenever an object is close to the sensor, exactly like during a phone call. This is a system-level behavior that cannot be disabled. See the [Screen Dimming (iOS)](#screen-dimming-ios) section for details.

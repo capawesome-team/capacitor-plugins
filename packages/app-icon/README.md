@@ -86,7 +86,7 @@ Open your `AndroidManifest.xml` and remove the launcher `<intent-filter>` from y
 
 <!-- An alternate icon (disabled). -->
 <activity-alias
-    android:name=".AppIconChristmas"
+    android:name=".Christmas"
     android:enabled="false"
     android:exported="true"
     android:icon="@mipmap/ic_launcher_christmas"
@@ -97,36 +97,42 @@ Open your `AndroidManifest.xml` and remove the launcher `<intent-filter>` from y
         <category android:name="android.intent.category.LAUNCHER" />
     </intent-filter>
 </activity-alias>
+
+<!-- Another alternate icon (disabled). -->
+<activity-alias
+    android:name=".Halloween"
+    android:enabled="false"
+    android:exported="true"
+    android:icon="@mipmap/ic_launcher_halloween"
+    android:roundIcon="@mipmap/ic_launcher_halloween_round"
+    android:targetActivity=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity-alias>
 ```
 
-The icon name passed to `setIcon(...)` is the alias name **without the leading dot** (e.g. `AppIconChristmas`). Add the referenced icon resources (e.g. `@mipmap/ic_launcher_christmas`) to your `res/mipmap-*` folders.
+The icon name passed to `setIcon(...)` is the alias name **without the leading dot** (e.g. `Christmas`). Add the referenced icon resources (e.g. `@mipmap/ic_launcher_christmas`) to your `res/mipmap-*` folders.
 
 > [!NOTE]
 > The behavior after a change depends on the launcher. Some launchers apply the new icon only after the app's task is closed, and a few kill the app despite the plugin requesting otherwise. Shortcuts that were pinned to a now-disabled alias may stop working.
 
 ### iOS
 
-On iOS, alternate icons are declared under the `CFBundleIcons` key in your app's `Info.plist`. The icon image files must be bundled with the app (e.g. `AppIconChristmas@2x.png` and `AppIconChristmas@3x.png`).
+On iOS, alternate icons are declared as additional app icon sets in the asset catalog. Add one icon set per alternate icon (e.g. `Christmas` and `Halloween`) next to your primary `AppIcon` in `Assets.xcassets` and register the names (space-separated) in the build settings of your app target:
 
-```xml
-<key>CFBundleIcons</key>
-<dict>
-    <key>CFBundleAlternateIcons</key>
-    <dict>
-        <key>AppIconChristmas</key>
-        <dict>
-            <key>CFBundleIconFiles</key>
-            <array>
-                <string>AppIconChristmas</string>
-            </array>
-            <key>UIPrerenderedIcon</key>
-            <false/>
-        </dict>
-    </dict>
-</dict>
+```
+ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "Christmas Halloween";
+ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 ```
 
-The icon name passed to `setIcon(...)` is the key inside `CFBundleAlternateIcons` (e.g. `AppIconChristmas`). The default icon (declared via `CFBundlePrimaryIcon` or the asset catalog) is restored with `resetIcon(...)`.
+In Xcode, these settings are called **Alternate App Icon Sets** and **Include All App Icon Assets** in the *Asset Catalog Compiler* section of the build settings.
+
+The icon name passed to `setIcon(...)` is the name of the icon set (e.g. `Christmas`), case-sensitive. The primary icon (`AppIcon`) is restored with `resetIcon(...)`.
+
+> [!WARNING]
+> Do **not** give an alternate icon set a name that starts with `AppIcon` (e.g. `AppIconChristmas`). In our testing on physical devices running iOS 26, alternate icons whose name shares the primary icon set's `AppIcon` prefix are not rendered on the home screen: `setIcon(...)` succeeds, but the system displays a blank placeholder icon instead of the alternate icon. The iOS Simulator is not affected, so make sure to test on a real device. This is an undocumented iOS behavior; using names without the `AppIcon` prefix is safe on all iOS versions.
 
 > [!NOTE]
 > The system shows a user-visible alert every time the icon changes, and the icon cannot be changed while the app is in the background.
@@ -173,7 +179,7 @@ Change the app icon to an alternate icon that your app has declared beforehand (
 import { AppIcon } from '@capawesome/capacitor-app-icon';
 
 const setIcon = async () => {
-  await AppIcon.setIcon({ icon: 'AppIconChristmas' });
+  await AppIcon.setIcon({ icon: 'Christmas' });
 };
 ```
 
@@ -300,21 +306,25 @@ Only available on Android and iOS.
 
 #### SetIconOptions
 
-| Prop       | Type                | Description                                                                                                                                                                                         | Since |
-| ---------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `&lt;activity-alias&gt;` (without the leading dot). On iOS, this is the key of the icon inside `CFBundleAlternateIcons`. | 0.1.0 |
+| Prop       | Type                | Description                                                                                                                                                                                                 | Since |
+| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `&lt;activity-alias&gt;` (without the leading dot). On iOS, this is the name of the alternate app icon set in the asset catalog. | 0.1.0 |
 
 </docgen-api>
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It changes the app icon at runtime on both Android and iOS through one fully typed API — switching to a declared alternate icon, reading the icon currently in use, resetting to the default, and checking whether the device supports alternate icons. It documents the platform realities honestly, from Android's launcher-dependent behavior to the system alert iOS shows on every change, so there are no surprises in production. The plugin is actively maintained against the latest Capacitor and OS versions.
+
 ### Can I add new app icons at runtime?
 
-No, this plugin cannot add icons dynamically. Every icon you want to switch to must be declared by the app beforehand, as an `<activity-alias>` in the `AndroidManifest.xml` on Android and under the `CFBundleAlternateIcons` key in the `Info.plist` on iOS. See the [Installation](#installation) section for detailed setup instructions.
+No, this plugin cannot add icons dynamically. Every icon you want to switch to must be declared by the app beforehand, as an `<activity-alias>` in the `AndroidManifest.xml` on Android and as an alternate app icon set in the asset catalog on iOS. See the [Installation](#installation) section for detailed setup instructions.
 
 ### What icon name do I pass to `setIcon`?
 
-On Android, it is the name of the `<activity-alias>` without the leading dot (e.g. `AppIconChristmas`). On iOS, it is the key of the icon inside `CFBundleAlternateIcons` in your `Info.plist`.
+On Android, it is the name of the `<activity-alias>` without the leading dot (e.g. `Christmas`). On iOS, it is the name of the alternate app icon set in the asset catalog.
 
 ### Why is the new icon not applied immediately on Android?
 

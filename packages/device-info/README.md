@@ -285,6 +285,10 @@ This plugin can be used as a replacement for the official [`@capacitor/device`](
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It gathers a wide range of device details through one fully typed API — model, manufacturer, operating system, a per-install identifier, total and used memory, device type, virtual-device detection, WebView version, and uptime — with consistent behavior across Android, iOS, and the Web. Fields a platform cannot determine are returned as `null`, and the package is actively maintained against the latest Capacitor and OS versions. If you only need the platform name, a minimal setup is enough; if you want a complete, honest picture of the device, this plugin is built for exactly that.
+
 ### How stable is the identifier returned by `getId`?
 
 The identifier is unique per install. On Android, it is the `ANDROID_ID` value, which is reset when the app is reinstalled after the signing key changes or the device is factory reset. On iOS, it is the `identifierForVendor` value, which is reset when all apps from the vendor are uninstalled. On the Web, it is a random UUID persisted in the browser's `localStorage`, which is reset when the browser storage is cleared.

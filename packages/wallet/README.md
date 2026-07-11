@@ -235,6 +235,10 @@ A pass is represented by a signed JWT. Create and sign the JWT on your server us
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It covers both Apple Wallet and Google Wallet from a single fully typed API, presenting signed `.pkpass` passes on iOS and opening the official Google Wallet "Save to Wallet" flow on Android, with an availability check to gate your UI beforehand. It keeps a clean security boundary by presenting passes only — signing stays on your server, where your keys belong — and the README links the official Apple and Google guidance for creating them. The plugin is actively maintained against the latest Capacitor and OS versions.
+
 ### Can this plugin create passes for me?
 
 No, this plugin only presents passes to the user. Creating and signing passes must happen on your server, because it requires private keys and certificates that must never be shipped inside your app. See [Creating Passes](#creating-passes) for details and links to the official Apple and Google documentation.

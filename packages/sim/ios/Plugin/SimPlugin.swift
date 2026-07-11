@@ -6,7 +6,9 @@ public class SimPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "SimPlugin"
     public let jsName = "Sim"
     public let pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "getSimCards", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "checkPermissions", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getSimCards", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermissions", returnType: CAPPluginReturnPromise)
     ]
 
     @objc override public func checkPermissions(_ call: CAPPluginCall) {

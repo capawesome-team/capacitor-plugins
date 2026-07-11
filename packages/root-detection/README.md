@@ -62,7 +62,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$rootbeerVersion` version of `com.scottyab:rootbeer-lib` (default: `0.1.0`)
+- `$rootbeerVersion` version of `com.scottyab:rootbeer-lib` (default: `0.1.2`)
 
 ### iOS
 
@@ -224,6 +224,10 @@ The checks provided by this plugin are performed entirely on the device and are 
 For **server-verifiable** device and app integrity, use the [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) plugin, which leverages the Play Integrity API (Android) and App Attest (iOS) to produce attestations that can be validated on your backend.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It combines several device-trust signals in one fully typed API: root and jailbreak detection on Android and iOS, emulator and simulator detection, and a developer-mode check on Android. These are fast, client-side checks that are easy to drop into any app, and the plugin is designed to work alongside the App Integrity plugin when you also need server-verifiable attestation. If a lightweight client-side signal is all you need, this covers it well; when you need a full trust story, the two plugins fit together.
 
 ### Can root detection be bypassed?
 

@@ -195,6 +195,10 @@ Before opening the dialer, the phone number is sanitized: all characters except 
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens the native phone dialer prefilled with a number on Android and iOS, and adds a `canDial()` capability check so you can hide or disable call buttons on devices without telephony, such as Wi-Fi-only tablets. It is privacy-friendly by design: the user always reviews the number and places the call, so on Android it needs no runtime permission by using `Intent.ACTION_DIAL`, and it sanitizes the number for you before dialing. The API is fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor and OS versions.
+
 ### Can the plugin place a phone call directly without user confirmation?
 
 No, this is a deliberate design decision. On Android, direct calling would require the `CALL_PHONE` runtime permission and comes with additional Google Play policy requirements, so the plugin uses `Intent.ACTION_DIAL` instead. On iOS, there is no public API to place a call without user confirmation. The plugin always opens the dialer prefilled with the number and the user decides whether to place the call.

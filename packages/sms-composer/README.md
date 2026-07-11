@@ -212,6 +212,10 @@ Multiple recipients are joined with a semicolon (`;`) in the underlying `smsto:`
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens the native SMS composer prefilled with recipients and a message body through a fully typed API, with a `canComposeSms()` check so you can hide the feature on devices without SMS capability such as Wi-Fi-only tablets. The user always reviews and sends the message, so no SMS permissions are needed, and on iOS you get the real send status back. If you only need a basic `smsto:` link, that's simple enough; if you want capability detection and a consistent composer across Android and iOS, this plugin is designed for exactly that.
+
 ### Does the plugin send SMS messages automatically?
 
 No, the plugin never sends SMS messages on its own. It opens the native SMS composer prefilled with the recipients and message body you provide, and the user always reviews the message and decides whether to send it. This makes the plugin privacy-friendly and avoids the need for any SMS permissions.

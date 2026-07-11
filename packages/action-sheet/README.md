@@ -189,6 +189,10 @@ This plugin is API-compatible with the official [`@capacitor/action-sheet`](http
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It presents the platform's own native action sheet on Android and iOS through a fully typed API, rendering the title, message, and button styles — including destructive and cancel styles — consistently on both platforms, and automatically anchoring as a popover on iPad. The result reports the selected button index along with a `canceled` flag, and the `cancelable` option controls dismissal, all using only official platform APIs. Actively maintained against the latest Capacitor version, it lets a single dependency cover the whole action-sheet story.
+
 ### On which platforms can I show an action sheet?
 
 The `showActions(...)` method is only available on Android and iOS, where it presents the native action sheet of the respective platform. On iPad, the action sheet is automatically anchored as a popover.

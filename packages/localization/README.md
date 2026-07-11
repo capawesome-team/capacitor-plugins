@@ -206,6 +206,10 @@ The plugin returns `null` for any field that a platform cannot determine. On the
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads the user's complete localization picture in one fully typed API — ordered preferred locales, currency and number separators, text direction, measurement system, time zone, clock format, and first day of the week — across Android, iOS, and the Web. It's honest about platform limits, returning `null` for fields a platform can't determine. If you only need the current language, a minimal lookup is enough; if you want to format numbers, currencies, dates, and layouts to match each user's region, this plugin is designed for exactly that.
+
 ### Why are some locale fields `null` on the Web?
 
 The plugin returns `null` for any field that a platform cannot determine. On the Web, `currencyCode`, `currencySymbol`, and `measurementSystem` are always `null` because the browser does not expose this information. On Android and iOS, the plugin has full access to the system's localization settings.

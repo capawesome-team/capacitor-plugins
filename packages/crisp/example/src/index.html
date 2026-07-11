@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Crisp</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js"
+    ></script>
+
+    <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Crisp</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-button id="configure-button" expand="block"
+            >Configure</ion-button
+          >
+          <ion-button id="open-chat-button" expand="block"
+            >Open Chat</ion-button
+          >
+          <ion-button id="set-user-button" expand="block">Set User</ion-button>
+          <ion-button id="set-company-button" expand="block"
+            >Set Company</ion-button
+          >
+          <ion-button id="set-session-data-button" expand="block"
+            >Set Session Data</ion-button
+          >
+          <ion-button id="push-session-event-button" expand="block"
+            >Push Session Event</ion-button
+          >
+          <ion-button id="search-helpdesk-button" expand="block"
+            >Search Helpdesk</ion-button
+          >
+          <ion-button id="reset-session-button" expand="block"
+            >Reset Session</ion-button
+          >
+        </ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

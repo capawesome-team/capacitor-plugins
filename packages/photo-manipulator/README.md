@@ -318,6 +318,10 @@ The EXIF orientation of the source image is applied during decoding so that the 
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It performs headless image transforms — crop, resize, rotate, flip and format conversion, including HEIC and AVIF to JPEG, PNG or WebP — using the native platform decoders, with no UI and no WebView memory spikes. It decodes bounds-aware and downsampled so full-resolution bitmaps are never loaded when resizing, applies the EXIF orientation for always-upright output, writes results to files, and strips metadata on re-encode for privacy-safe sharing. It works on Android, iOS and the Web, uses only official platform APIs, and is fully typed and kept current with the latest Capacitor version.
+
 ### In which order are the transformations applied?
 
 The operations are always applied in the following fixed order: crop → resize → rotate → flip. If you need a different order, chain multiple `transform(...)` calls, passing the output path of one call as the input path of the next.

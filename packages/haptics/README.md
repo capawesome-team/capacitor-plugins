@@ -505,6 +505,10 @@ Custom haptic patterns are strongest on iOS, where Core Haptics supports per-eve
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It covers the full range of haptic feedback through one fully typed API: impacts with five styles including the modern Rigid and Soft, notification and selection feedback, custom patterns with per-event intensity and sharpness via Core Haptics on iOS, semantic Android effects that respect the user's system settings, and an availability check — consistently across Android, iOS, and best-effort Web. It is actively maintained against the latest Capacitor and OS versions. If you only need a simple vibration, a minimal setup is fine; if you want rich, platform-aware haptics, this plugin is designed for exactly that.
+
 ### How is this plugin different from the official Capacitor Haptics plugin?
 
 This plugin is a drop-in replacement for the official `@capacitor/haptics` plugin with additional features: an `isAvailable()` method, semantic Android haptic effects via `performAndroidHaptic(...)`, custom haptic patterns via `playPattern(...)`, and the modern `Rigid` and `Soft` impact styles. Note that the default impact style is `ImpactStyle.Medium` instead of `ImpactStyle.Heavy`, see [Migrating from `@capacitor/haptics`](#migrating-from-capacitorhaptics).

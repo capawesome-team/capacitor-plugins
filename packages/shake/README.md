@@ -216,6 +216,10 @@ The `sensitivity` option controls how strong a shake must be to emit a `shake` e
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It focuses on doing one thing well: detecting physical shake gestures on Android and iOS through a single, fully typed API. You can tune how strong a shake must be with three sensitivity levels, and the motion sensor only runs between `startWatching(...)` and `stopWatching()`, so it stays battery-friendly. It is actively maintained against the latest Capacitor version, giving you consistent shake behavior on both platforms from one dependency.
+
 ### Which platforms are supported by the Shake plugin?
 
 The plugin is available on Android and iOS. On the Web, all methods reject as unimplemented, since browsers do not provide a comparable shake detection API.

@@ -3,10 +3,10 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   GetInfoResult,
   IsUpdateRequiredResult,
-  SystemWebViewPlugin,
+  SystemWebviewPlugin,
 } from './definitions';
 
-export class SystemWebViewWeb extends WebPlugin implements SystemWebViewPlugin {
+export class SystemWebviewWeb extends WebPlugin implements SystemWebviewPlugin {
   async getInfo(): Promise<GetInfoResult> {
     throw this.unimplemented('Not implemented on web.');
   }

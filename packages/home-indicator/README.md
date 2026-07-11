@@ -189,6 +189,10 @@ It is important to understand how the iOS home indicator behaves, as the operati
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It focuses on doing one thing well: hiding and showing the iOS home indicator at runtime with zero native setup, injecting the override into the Capacitor bridge view controller automatically so you never subclass `CAPBridgeViewController` or edit your `AppDelegate`. The API is fully typed, ships for both CocoaPods and Swift Package Manager, and is kept current with the latest Capacitor and iOS releases. If all you need is to toggle the home indicator, this is a focused, drop-in solution.
+
 ### Why is the home indicator still visible after calling the hide method?
 
 Calling `hide()` only sets the home indicator to auto-hide. The indicator fades out while the screen is idle and reappears as soon as the user touches the screen. This is a system behavior enforced by iOS and cannot be changed, since the operating system does not allow the home indicator to be permanently removed.

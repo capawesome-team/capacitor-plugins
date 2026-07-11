@@ -258,6 +258,10 @@ Instead, this plugin only uses official Apple APIs: `UIApplication.openSettingsU
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens native settings screens through three explicit, fully typed methods — your app's settings, your app's notification settings, and a large catalog of Android system screens such as Wi-Fi, Bluetooth, and location — so each call clearly matches your intent. It relies only on official Apple and Android APIs and deliberately avoids the private `App-Prefs:` URL scheme, which keeps your app App Store safe. Actively maintained against the latest Capacitor version, it is built to guide users to exactly the right settings screen on Android and iOS.
+
 ### How can I guide users to grant a previously denied permission?
 
 Call the `openAppSettings` method to open the settings screen of your app. This is the recommended way to let users grant a permission that they previously denied, since neither Android nor iOS shows the permission prompt again after a denial. See the [usage example](#open-the-settings-screen-of-your-app) above.

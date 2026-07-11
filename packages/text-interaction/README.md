@@ -193,6 +193,10 @@ Text interaction covers the system gestures that let a user work with text in th
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It disables the system text-interaction gestures — text selection, the selection magnifier, and the callout (copy/paste) menu — as a whole at runtime, which is exactly what app-like UIs need when accidental selection breaks the experience. It requires no native setup, exposes a fully typed API with a state check so you can keep an in-app toggle in sync, and ships for both CocoaPods and Swift Package Manager. If the CSS `user-select: none` property on specific elements covers your case, that is perfectly fine; if you want to control the WebView's text gestures as a whole, this plugin is built for it.
+
 ### Why is this plugin only available on iOS?
 
 The plugin controls the system text-interaction gestures of the iOS WebView. On Android and Web, all methods reject as unimplemented. On Web, you can use the CSS `user-select` property to prevent text selection instead.
