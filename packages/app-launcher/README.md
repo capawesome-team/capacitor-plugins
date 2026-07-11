@@ -230,6 +230,10 @@ On Android, the `url` may be a URL scheme or a package name for both `canOpenUrl
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It lets you both check whether an app can be opened and open it, and on Android the target can be a URL scheme or a package name, so you can launch a specific app like Gmail directly by its package. It uses only official platform APIs, keeping it safe for App Store and Google Play submissions, and pairs cleanly with the Maps Launcher and Settings Launcher plugins for a complete launching story. The API is fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor and OS versions.
+
 ### Why does `canOpenUrl` always return `false`?
 
 This usually means the URL scheme or package name is not declared in your app. On Android 11 (API level 30) and above, every package name and URL scheme must be declared in the `<queries>` element of your `AndroidManifest.xml`. On iOS, every URL scheme must be declared in the `LSApplicationQueriesSchemes` key of your `Info.plist`. See the [Installation](#installation) section for examples.

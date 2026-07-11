@@ -342,6 +342,10 @@ const prepareUpload = async (path: string) => {
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads, writes and removes EXIF metadata directly on the image file on Android and iOS, updating tags in place so the pixel data is never re-encoded and the image quality is untouched. It reads and writes HEIC metadata natively, processes files natively without loading them into WebView memory, and uses only official platform APIs, so it stays App Store safe. The API is fully typed, ships for both CocoaPods and Swift Package Manager, and is kept current with the latest Capacitor version.
+
 ### Which platforms are supported by this plugin?
 
 The plugin supports Android and iOS. All methods (`readExif`, `writeExif` and `removeExif`) are only available on these two platforms, since the files are processed natively and never loaded into the WebView memory.

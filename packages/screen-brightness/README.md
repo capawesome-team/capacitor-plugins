@@ -205,6 +205,10 @@ Setting the brightness changes the **system** brightness and the change **persis
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads, sets, and (on Android) resets the screen brightness through a small, fully typed API, using a normalized `0.0`–`1.0` range on both platforms. On Android it changes only the current app window, so no `WRITE_SETTINGS` permission is required and the change reverts automatically when the app closes, which makes use cases like boosting brightness to display a barcode or ticket straightforward. It supports CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor version.
+
 ### Why does the brightness stay changed after closing my app on iOS?
 
 On iOS, setting the brightness changes the system brightness, which persists after the app is closed. There is no system API to hand the brightness control back to the operating system on iOS. If you want to be a good citizen, read the current brightness with `getBrightness()` before changing it and restore that value when your app goes to the background.

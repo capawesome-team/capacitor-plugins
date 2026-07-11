@@ -259,6 +259,10 @@ Keep the following platform differences in mind when accessing network informati
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reports connectivity and the connection type (Wi-Fi, cellular, ethernet, or VPN) on Android, iOS, and the web, and on Android it adds verified internet reachability that avoids false positives from captive portals or VPNs, plus an airplane-mode check. You can read the status once or listen for change events, with the device observed only while a listener is attached, all through a fully typed API with typed connection-type enums. It supports both CocoaPods and Swift Package Manager on iOS, is honest about platform limits by returning `null` where reachability cannot be validated, and is actively maintained against the latest Capacitor and OS versions.
+
 ### What is the difference between `connected` and `internetReachable`?
 
 The `connected` property tells you whether the device is connected to any network, while `internetReachable` tells you whether that connection has verified access to the internet. A device can be connected to a network without actually reaching the internet, for example behind a captive portal or when a VPN is active. The `internetReachable` property is only available on Android, where it reflects the `NET_CAPABILITY_VALIDATED` capability of the connection.

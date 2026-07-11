@@ -61,13 +61,13 @@ npx cap sync
 
 ### Android
 
-On Android, this plugin uses the [android-pdf-viewer](https://github.com/mhiew/AndroidPdfViewer) library, which renders PDF documents with [Pdfium](https://pdfium.googlesource.com/pdfium/). Be aware that the library bundles the Pdfium native libraries, which add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an [Android App Bundle](https://developer.android.com/guide/app-bundle), each device only downloads the native libraries for its own ABI, which significantly reduces the download size. Also note that the viewer does not support text selection on Android.
+On Android, this plugin uses the [android-pdf-viewer](https://github.com/oothp/AndroidPdfViewer) library, which renders PDF documents with [Pdfium](https://pdfium.googlesource.com/pdfium/). Be aware that the library bundles the Pdfium native libraries, which add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an [Android App Bundle](https://developer.android.com/guide/app-bundle), each device only downloads the native libraries for its own ABI, which significantly reduces the download size. Also note that the viewer does not support text selection on Android.
 
 #### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
 
-- `$androidPdfViewerVersion` version of `com.github.mhiew:android-pdf-viewer` (default: `3.2.0-beta.3`)
+- `$androidPdfViewerVersion` version of `io.github.oothp:android-pdf-viewer` (default: `3.2.0-beta06`)
 
 ### iOS
 
@@ -289,6 +289,10 @@ Remove all listeners for this plugin.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It displays PDF documents in a fullscreen native viewer with a toolbar, paging, pinch-to-zoom, and support for password-protected files, backed by PDFKit on iOS and Pdfium on Android for a genuinely native reading experience. Page-change and closed events let you track reading progress and reopen a document where the user left off, all through a fully typed API that uses only official platform APIs. Actively maintained against the latest Capacitor version, it also pairs naturally with the PDF Generator and File Picker plugins.
+
 ### Can I display a PDF from a remote URL?
 
 No, the plugin only supports local files. Download the file first, for example with the `downloadFile(...)` method of the official [Filesystem](https://capacitorjs.com/docs/apis/filesystem) plugin, and then pass the local file path to the `open(...)` method.
@@ -303,7 +307,7 @@ Pass the password using the `password` option of the `open(...)` method. The vie
 
 ### How much does the plugin add to my Android app size?
 
-On Android, the plugin uses the [android-pdf-viewer](https://github.com/mhiew/AndroidPdfViewer) library, which bundles the Pdfium native libraries. These add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an Android App Bundle, each device only downloads the native libraries for its own ABI, which significantly reduces the download size.
+On Android, the plugin uses the [android-pdf-viewer](https://github.com/oothp/AndroidPdfViewer) library, which bundles the Pdfium native libraries. These add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an Android App Bundle, each device only downloads the native libraries for its own ABI, which significantly reduces the download size.
 
 ### Can I select text in the viewer on Android?
 

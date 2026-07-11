@@ -320,6 +320,10 @@ Unsupported travel modes fall back to the default behavior of the respective app
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It launches turn-by-turn navigation in Google Maps, Apple Maps, and Waze from a single fully typed API, accepting either coordinates or a plain address and supporting driving, walking, bicycling, and transit modes. It also detects which navigation apps are installed and, on Android, which one is the default handler, so you can let users pick their favorite. Per-app behavior is documented transparently, and the plugin is actively maintained against the latest Capacitor and OS versions across Android and iOS.
+
 ### Why are Google Maps and Waze reported as unavailable on iOS?
 
 To detect and launch Google Maps and Waze on iOS, the `comgooglemaps` and `waze` URL schemes must be added to the `LSApplicationQueriesSchemes` array in the `Info.plist` file of your app. Without them, `getAvailableApps` reports those apps as unavailable and `navigate` rejects with the `APP_NOT_AVAILABLE` error code. See the [Installation](#installation) section for details.

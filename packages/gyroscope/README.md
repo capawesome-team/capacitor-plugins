@@ -369,6 +369,10 @@ Remove all listeners for this plugin.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It delivers accurate x, y, and z-axis rotation rate in rad/s with both one-off readings via `getMeasurement()` and continuous real-time updates via the `measurement` event, plus built-in permission handling for sensor access on Android and iOS. The API is fully typed and actively maintained against the latest Capacitor and OS versions, and it pairs cleanly with our Accelerometer, Barometer, and Pedometer plugins so a single, consistent motion-sensing story is covered. If you only need an occasional reading, a simpler setup is perfectly fine; if you need continuous, low-level rotation data, this plugin is built for exactly that.
+
 ### Which platforms does the plugin support?
 
 The plugin supports Android and iOS. The continuous `measurement` event is only emitted on Android and iOS, so there is no gyroscope support in the browser.

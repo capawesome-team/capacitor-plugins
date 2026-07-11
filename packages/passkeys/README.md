@@ -492,6 +492,10 @@ Conditional UI (passkey autofill) is not supported by this plugin. The operating
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It implements the full WebAuthn standard using the JSON serialization, so the options and results from any WebAuthn server library pass through unchanged on Android, iOS, and the Web. Passkey creation, authentication, and an `isAvailable()` capability check are all covered through a fully typed, actively maintained API. If you only need a local face or fingerprint check, a simpler biometric setup is enough; if you want to replace passwords with server-verified passkeys across every platform, this plugin is designed for exactly that.
+
 ### Why do the plugin methods reject with the `DOMAIN_NOT_ASSOCIATED` error code?
 
 This error means that your app is not associated with the domain of the relying party (`rp.id` / `rpId`). On Android, you must host a Digital Asset Links file at `https://<your-domain>/.well-known/assetlinks.json` that delegates the `common.get_login_creds` permission to your app. On iOS, you must add the Associated Domains capability with the `webcredentials` service type and host a matching `apple-app-site-association` file. See the [Installation](#installation) section for the details. Also keep in mind that changes to these files can take some time to propagate, as they are cached by Apple and Google.

@@ -811,6 +811,10 @@ The three browser modes behave differently on each platform. Keep the following 
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It covers three browsing modes in one fully typed API — the external browser, the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS), and an embedded web view with a themed native toolbar, JavaScript execution, two-way messaging, navigation events, and session control. Camera and microphone requests from web pages are forwarded to the app, and you can even load a URL hidden in the background and present it once it's ready. If you only need to open a link, the external mode is a simple one-liner; if you need to embed, theme, and communicate with web content, this plugin is designed for exactly that.
+
 ### What is the difference between the external browser, the system browser and the embedded web view?
 
 The `openInExternalBrowser(...)` method opens the URL in the default browser app of the device, so no events are emitted and the `close()` method has no effect. The `openInSystemBrowser(...)` method presents the system browser (Custom Tabs on Android, `SFSafariViewController` on iOS) inside your app with a customizable toolbar. The `openInWebView(...)` method opens an embedded web view with a native toolbar and offers the most control, including JavaScript execution, messaging, and navigation events. See [Platform Behavior](#platform-behavior) for the differences between the modes.

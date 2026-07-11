@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor YouTube Player</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <style>
+      .player-placeholder {
+        border: 2px dashed #92949c;
+        border-radius: 8px;
+        height: 220px;
+        margin-bottom: 16px;
+        width: 100%;
+      }
+    </style>
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor YouTube Player</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding" scroll-events="true">
+        <div id="player-one" class="player-placeholder"></div>
+        <div id="player-two" class="player-placeholder"></div>
+        <ion-item>
+          <ion-select
+            id="player-select"
+            label="Player"
+            value="player-one"
+            interface="popover"
+          >
+            <ion-select-option value="player-one">Player One</ion-select-option>
+            <ion-select-option value="player-two">Player Two</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label id="current-time-label">Current time: -</ion-label>
+        </ion-item>
+        <ion-list>
+          <ion-button id="create-players-button" expand="block"
+            >Create Players</ion-button
+          >
+          <ion-button id="load-video-button" expand="block"
+            >Load Video</ion-button
+          >
+          <ion-button id="cue-video-button" expand="block"
+            >Cue Video</ion-button
+          >
+          <ion-button id="play-button" expand="block">Play</ion-button>
+          <ion-button id="pause-button" expand="block">Pause</ion-button>
+          <ion-button id="seek-to-button" expand="block">Seek +10s</ion-button>
+          <ion-button id="mute-button" expand="block">Mute</ion-button>
+          <ion-button id="unmute-button" expand="block">Unmute</ion-button>
+          <ion-button id="set-volume-button" expand="block"
+            >Set Volume to 50%</ion-button
+          >
+          <ion-button id="set-playback-rate-button" expand="block"
+            >Set Playback Rate to 1.5x</ion-button
+          >
+          <ion-button id="get-current-time-button" expand="block"
+            >Get Current Time</ion-button
+          >
+          <ion-button id="get-duration-button" expand="block"
+            >Get Duration</ion-button
+          >
+          <ion-button id="remove-players-button" expand="block"
+            >Remove Players</ion-button
+          >
+        </ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

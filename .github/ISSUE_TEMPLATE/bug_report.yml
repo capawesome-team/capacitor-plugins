@@ -43,6 +43,7 @@ body:
         - label: Cloudinary
         - label: Compass
         - label: Contacts
+        - label: Crisp
         - label: Datetime Picker
         - label: Device Info
         - label: Dialog
@@ -60,6 +61,8 @@ body:
         - label: Home Indicator
         - label: In-App Browser
         - label: Install Referrer
+        - label: Intercom
+        - label: Intune
         - label: Keep Awake
         - label: libSQL
         - label: Light Sensor
@@ -117,6 +120,7 @@ body:
         - label: Volume
         - label: Wallet
         - label: Wifi
+        - label: YouTube Player
         - label: Zip
   - type: input
     attributes:

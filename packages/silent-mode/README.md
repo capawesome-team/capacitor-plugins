@@ -270,6 +270,10 @@ Keep the following platform differences in mind when detecting silent mode:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reports whether the device is in silent mode on both Android and iOS, and on Android it also exposes the exact ringer mode so you can distinguish vibrate from fully silent. A `silentModeChange` listener lets you react the moment the state changes, and the device is only observed while a listener is attached. Everything is delivered through a fully typed API that supports CocoaPods and Swift Package Manager on iOS and tracks the latest Capacitor version.
+
 ### How does silent mode detection work on iOS?
 
 iOS provides no public API to read the state of the ring/silent switch. The plugin therefore relies on a heuristic that plays a short muted system sound and measures how long it takes to complete. As a result, the detection may be inaccurate while other audio is playing or when the audio session category overrides the switch. See [Silent Mode Detection](#silent-mode-detection) for details.

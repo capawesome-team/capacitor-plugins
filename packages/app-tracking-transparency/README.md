@@ -249,6 +249,10 @@ Apple requires that any app that tracks users requests permission via the App Tr
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It wraps Apple's App Tracking Transparency framework in a small, fully typed API: read the current authorization status, present the system prompt, and read the advertising identifier (IDFA) once the user has authorized tracking. It also ships focused App Review guidance on prompt timing, purpose strings, and simulator behavior — the details that most often decide whether a tracking-enabled app is approved. It supports CocoaPods and Swift Package Manager and is actively maintained against the latest Capacitor version.
+
 ### Does this plugin work on Android or Web?
 
 No, the App Tracking Transparency framework is an iOS-only concept. The plugin is only available on iOS; on Android and Web, all methods reject as unimplemented.

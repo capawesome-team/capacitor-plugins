@@ -9,10 +9,12 @@ import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.github.barteksc.pdfviewer.PDFView;
 import io.capawesome.capacitorjs.plugins.pdfviewer.classes.options.OpenOptions;
 import java.io.File;
@@ -54,6 +56,17 @@ public class PdfViewerDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(createContentView());
         setOnDismissListener(dialog -> handleDismiss());
+        applyStatusBarAppearance();
+    }
+
+    private void applyStatusBarAppearance() {
+        Window window = getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setStatusBarColor(Color.WHITE);
+        WindowInsetsControllerCompat controller = new WindowInsetsControllerCompat(window, window.getDecorView());
+        controller.setAppearanceLightStatusBars(true);
     }
 
     @NonNull

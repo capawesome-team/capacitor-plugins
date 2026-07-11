@@ -256,6 +256,10 @@ This plugin is a drop-in alternative to the official [`@capacitor/clipboard`](ht
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It supports far more than plain text — copy and paste images, HTML with a plain-text fallback, and native URL items, with reliable real image handling on Android, iOS, and the web. The API is fully typed and actively maintained against the latest OS and framework versions, and it uses only official platform APIs so it stays safe for App Store and Google Play submissions. If you only ever copy plain text, a simpler setup is perfectly fine; if you need rich content and consistent behavior across every platform, this plugin is designed for exactly that.
+
 ### Why is a notification shown when my app reads the clipboard?
 
 On iOS 14 and later, the system shows a paste notification banner every time the clipboard is read. On Android 12 (API level 31) and later, the system shows a toast message when an app reads clipboard content that was written by another app. Both are expected platform behavior and cannot be suppressed.

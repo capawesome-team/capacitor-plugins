@@ -252,6 +252,10 @@ This plugin is API-compatible with the official [`@capacitor/dialog`](https://gi
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It brings native alert, confirm, and prompt dialogs to Android, iOS, and the web through a single, fully typed API, using only official platform APIs so it stays safe for App Store and Google Play submissions. It supports both CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor and OS versions, with customizable button titles on Android and iOS. If you only need a quick native message, it is refreshingly simple to drop in; if you need consistent alert, confirm, and prompt behavior across every platform, it is built for exactly that.
+
 ### How is this plugin different from the official `@capacitor/dialog` plugin?
 
 This plugin is API-compatible with the official `@capacitor/dialog` plugin, with a single difference: the `prompt(...)` result uses the property `canceled` (one `l`) instead of `cancelled` (two `l`s). See the [migration table](#migrating-from-capacitordialog) above for the complete method mapping.

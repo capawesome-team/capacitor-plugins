@@ -366,6 +366,10 @@ The App Tracking Transparency permission is deliberately not part of this plugin
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It brings many device permissions under one unified, fully typed API — Bluetooth, calendar, camera, contacts, location, background location, microphone, motion, notifications, photos and reminders — so you check and request them all in one place. The `check(...)` method never triggers a system prompt, and the plugin declares no permissions itself, so your app only ships the ones it actually uses. It is handcrafted with care, works across Android, iOS and the Web (partial), and stays current with the latest Capacitor version.
+
 ### Does the `check` method trigger a permission prompt?
 
 No, the `check(...)` method never displays a permission prompt. It only reads the current states of the given permissions, so you can safely call it at any time, for example to build an onboarding or settings screen.

@@ -1,4 +1,5 @@
 import { PdfGenerator } from '@capawesome/capacitor-pdf-generator';
+import { PdfViewer } from '@capawesome/capacitor-pdf-viewer';
 
 const html = `
   <html>
@@ -15,9 +16,15 @@ const html = `
 `;
 
 document.addEventListener('DOMContentLoaded', () => {
+  let lastPath = null;
   const presentResult = result => {
+    lastPath = result.path;
     document.querySelector('#path').textContent = result.path;
+    document.querySelector('#openViewer').disabled = false;
   };
+  document.querySelector('#openViewer').addEventListener('click', async () => {
+    await PdfViewer.open({ path: lastPath });
+  });
   document
     .querySelector('#generateFromHtml')
     .addEventListener('click', async () => {

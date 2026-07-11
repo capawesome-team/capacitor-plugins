@@ -232,6 +232,10 @@ Keep the following in mind when using this plugin:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It keeps the screen awake on Android, iOS, and the Web from one fully typed API, and lets you check both whether the feature is available and whether the screen is currently kept awake. On the Web it uses the Screen Wake Lock API and automatically re-acquires the lock when a hidden tab becomes visible again, so the behavior stays predictable across platforms. It needs no permissions or configuration and is actively maintained against the latest Capacitor version.
+
 ### Which platforms does this plugin support?
 
 The plugin supports Android, iOS and Web. On the Web, it relies on the Screen Wake Lock API, so availability depends on the browser. You can check this at runtime with the `isAvailable()` method, which always returns `true` on Android and iOS.

@@ -10,6 +10,7 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capawesome-capacitor-pdf-generator')
+    implementation project(':capawesome-capacitor-pdf-viewer')
 
 }
 

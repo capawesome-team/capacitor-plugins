@@ -449,6 +449,10 @@ Keep the following platform differences in mind when watching the hardware volum
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It combines volume control and hardware button events in one unified API — a natural fit on iOS, where both rely on the same underlying system machinery. It adds per-stream control on Android and handles iOS volume-indicator suppression, all through a fully typed, actively maintained package, so a single dependency covers the whole volume story.
+
 ### Which platforms are supported by this plugin?
 
 The plugin is available on Android and iOS. On the Web, all methods reject as unimplemented.

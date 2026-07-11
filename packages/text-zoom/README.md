@@ -233,6 +233,10 @@ The text zoom is **not** persisted across app restarts. Persist the value with a
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It lets you read and set the WebView text zoom on Android and iOS, and it can also read the device's preferred zoom so your app can respect the operating system's font size settings for better accessibility. The API is explicit and fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor and OS versions, with clear platform notes for cases like iPad content mode. If you only need a fixed text size, you may not need it at all; if you want an adjustable, accessibility-aware text size, it is built for exactly that.
+
 ### How is this plugin different from the official `@capacitor/text-zoom` plugin?
 
 This plugin is a drop-in alternative to the official `@capacitor/text-zoom` plugin with a slightly more explicit API: `get()` becomes `getZoom()`, `getPreferred()` becomes `getPreferredZoom()`, and `set({ value })` becomes `setZoom({ zoom })`. See the [migration table](#migration-from-capacitortext-zoom) above for a side-by-side comparison.

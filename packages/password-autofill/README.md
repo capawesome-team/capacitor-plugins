@@ -197,6 +197,10 @@ What this plugin does **not** replace:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It saves credentials into the platform credential store — iCloud Keychain on iOS and Google Password Manager on Android — with an explicit `savePassword(...)` call after a successful login. Because saving is triggered by an explicit call, it reliably covers single-page app logins built on `fetch()` and `preventDefault()` as well as non-form flows such as social signups with generated passwords, all without changing your WebView origin. The API is fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor version.
+
 ### Does this plugin fill login forms with saved credentials?
 
 No, this plugin only saves credentials into the platform autofill system (iCloud Keychain on iOS, Google Password Manager on Android). Filling credentials back into a form is handled by the operating system and still benefits from the `autocomplete` attributes described in the [official Capacitor autofill guide](https://capacitorjs.com/docs/guides/autofill-credentials).

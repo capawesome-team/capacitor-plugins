@@ -220,6 +220,10 @@ Keep the following platform-specific behavior in mind:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens the native email composer prefilled with recipients, subject, body, and CC and BCC, and supports file attachments and HTML bodies through a fully typed API on Android, iOS, and the Web. A `canComposeMail()` check lets you confirm the device can actually send mail before you show the feature, and the user always stays in control of sending. If you only need a plain `mailto:` link, a simpler approach is fine; if you need attachments, rich bodies, and reliable capability detection, this plugin is built for exactly that.
+
 ### Does the plugin send the email itself?
 
 No, the plugin only opens the native email composer prefilled with the provided data. The user reviews the email and decides whether to send it. The email is always sent through the user's own mail app and account.

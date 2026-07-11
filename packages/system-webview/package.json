@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "CapawesomeCapacitorSystemWebView.podspec",
+    "CapawesomeCapacitorSystemWebview.podspec",
     "Package.swift"
   ],
   "author": "Robin Genz <mail@robingenz.dev>",
@@ -57,7 +57,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api SystemWebViewPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api SystemWebviewPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",

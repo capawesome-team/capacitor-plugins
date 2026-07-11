@@ -163,6 +163,10 @@ This plugin offers an API very similar to the official [`@capacitor/toast`](http
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It shows native toast notifications on Android and iOS and ships a self-contained web implementation with no additional peer dependencies, so toasts work out of the box on every platform. You get typed enums for choosing a short or long duration and a top, center, or bottom position, all through a fully typed API that supports both CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor version. If you just need brief, non-blocking feedback anywhere your app runs, a single dependency covers the whole story.
+
 ### Why is my toast always shown at the bottom of the screen on Android?
 
 On Android 12 and newer, the operating system ignores the requested position and always shows toasts at the bottom of the screen. This is a system restriction and not a bug of this plugin.

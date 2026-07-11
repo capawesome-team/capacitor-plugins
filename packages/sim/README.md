@@ -214,6 +214,10 @@ Only available on Android.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads the full picture of the device's SIM cards in a single call — carrier name, ISO country code, MCC and MNC, eSIM status, and the slot index for every active card on multi-SIM devices — through a fully typed API that handles the required Android runtime permission for you. It's honest about platform reality, too: SIM data is well supported on Android, while iOS no longer exposes it reliably, so the plugin focuses where the information is actually available. If you only need a rough country hint, a lighter approach may be enough; if you need dependable multi-SIM and carrier details, this plugin is built for exactly that.
+
 ### Why is the SIM plugin not available on iOS?
 
 Apple deprecated the `CTCarrier` APIs of the Core Telephony framework with iOS 16, and they return placeholder values (e.g. `"--"` and `65535`) on iOS 16.4 and later. Because there is no reliable system API left for reading SIM card and carrier information, all methods reject as unimplemented on iOS. See the [iOS installation notes](#ios) for details.

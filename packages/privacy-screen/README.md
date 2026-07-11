@@ -294,6 +294,10 @@ The capabilities of this plugin differ between platforms. The following table gi
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It combines three protections in one fully typed API — hiding sensitive content in the app switcher, blocking screenshots and screen recordings, and detecting when a screenshot is taken — across both Android and iOS. It's honest about what each platform can actually guarantee, with a clear capability table and opt-in handling for the areas where iOS has no official API, so you always know the real behavior you're getting. The API is actively maintained against the latest Capacitor and OS versions.
+
 ### Can this plugin block screenshots on iOS?
 
 Yes, but only as an opt-in. There is no official iOS API to prevent screenshots, so the plugin uses an unofficial secure text field technique that may stop working in future iOS versions. You can enable it via the `ios.preventScreenshots` option of the `enable(...)` method. On Android, screenshots are blocked reliably via the `FLAG_SECURE` window flag.

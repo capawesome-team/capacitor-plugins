@@ -442,6 +442,10 @@ Because the session is shared, the **last write wins**: calling `configure(...)`
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It gives you fine-grained control over the iOS audio session through one fully typed API: set the category, mode and options, activate or deactivate the session, read the current outputs and override the output route, and observe interruption and route-change events. It documents the shared, app-wide nature of the audio session honestly, so you know exactly how it behaves alongside other audio code, and it's actively maintained against the latest Capacitor and iOS versions. If you only play a simple sound, a basic setup is enough; if you need precise session control, this plugin is designed for exactly that.
+
 ### Is this plugin available on Android or the Web?
 
 No, this plugin is only available on iOS since it controls the iOS-specific [audio session](https://developer.apple.com/documentation/avfaudio/avaudiosession). On Android and Web, all methods reject as unimplemented, so you can safely include the plugin in a cross-platform app.

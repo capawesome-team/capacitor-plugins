@@ -8,6 +8,7 @@ import UIKit
 
     private let document: PDFDocument
     private let initialPage: Int
+    private var didGoToInitialPage = false
     private var lastPage: Int
     private var pdfView: PDFView?
 
@@ -34,6 +35,11 @@ import UIKit
         }
     }
 
+    override public func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        goToInitialPage()
+    }
+
     override public func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -53,7 +59,6 @@ import UIKit
             name: Notification.Name.PDFViewPageChanged,
             object: pdfView
         )
-        goToInitialPage()
     }
 
     private func configureNavigationBar() {
@@ -75,10 +80,14 @@ import UIKit
     }
 
     private func goToInitialPage() {
+        guard !didGoToInitialPage, let pdfView = pdfView, !pdfView.bounds.isEmpty else {
+            return
+        }
+        didGoToInitialPage = true
         guard initialPage > 1, let page = document.page(at: initialPage - 1) else {
             return
         }
-        pdfView?.go(to: page)
+        pdfView.go(to: page)
     }
 
     @objc private func handleDone() {

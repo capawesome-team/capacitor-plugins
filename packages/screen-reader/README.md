@@ -265,6 +265,10 @@ The `speak(...)` method has been renamed to `announce(...)` to make it clear tha
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It focuses on real accessibility work with VoiceOver and TalkBack: you can post announcements, check whether a screen reader is enabled, and listen for state changes, with the device observed only while a listener is attached. Announcements work on Android, iOS, and the web, where they use a visually hidden `aria-live` region, and on Android you can provide the announcement language so it is pronounced correctly. The API is fully typed, is actively maintained against the latest Capacitor version, and pairs naturally with the Accessibility Preferences and Speech Synthesis plugins for a complete accessibility toolkit.
+
 ### Does the announce method perform text-to-speech?
 
 No. The `announce(...)` method posts an accessibility announcement that is only read out by the screen reader (VoiceOver/TalkBack) if one is active. If you are looking for real text-to-speech that always speaks, use the [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugin instead.

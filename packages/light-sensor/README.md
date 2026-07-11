@@ -296,6 +296,10 @@ Remove all listeners for this plugin.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads the Android ambient light sensor in lux through a fully typed API, offering both a one-time reading and continuous real-time `measurement` events, plus an availability check so you can gracefully handle devices without the sensor. It pairs naturally with the Screen Brightness plugin for adaptive theming and brightness control, and is kept current with the latest Capacitor version. If a rough light signal is enough, screen brightness may cover it; if you need true illuminance values in lux, this plugin is built for exactly that.
+
 ### Why is this plugin not available on iOS?
 
 iOS does not provide a public API to read the ambient light sensor, so the plugin is not implemented on this platform. The closest available signal is the screen brightness, which you can read using the [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) plugin.

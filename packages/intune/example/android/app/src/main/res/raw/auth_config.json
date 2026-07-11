@@ -1,0 +1,15 @@
+{
+  "client_id": "YOUR_CLIENT_ID",
+  "authorization_user_agent": "DEFAULT",
+  "redirect_uri": "msauth://com.example.plugin/YOUR_BASE64_URL_ENCODED_PACKAGE_SIGNATURE",
+  "account_mode": "MULTIPLE",
+  "broker_redirect_uri_registered": true,
+  "authorities": [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMultipleOrgs"
+      }
+    }
+  ]
+}

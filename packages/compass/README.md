@@ -294,6 +294,10 @@ Only available on Android and iOS.
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reads the device compass heading both on demand and as a continuous stream of updates, returning the magnetic heading, the accuracy, and — on iOS with location services — the true geographic heading. An `isAvailable()` check lets you confirm the sensor is present before you rely on it, and the whole surface is fully typed. It supports CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor version, giving you consistent heading data across Android and iOS.
+
 ### What is the difference between the magnetic heading and the true heading?
 
 The `magneticHeading` value is the heading relative to magnetic north, while the `trueHeading` value is the heading relative to true (geographic) north. Both range from `0` to `360` degrees. The magnetic heading is always available, whereas the true heading can only be determined on iOS and may be `null`.

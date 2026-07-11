@@ -1,4 +1,4 @@
-export interface SystemWebViewPlugin {
+export interface SystemWebviewPlugin {
   /**
    * Get information about the active Android System WebView provider.
    *

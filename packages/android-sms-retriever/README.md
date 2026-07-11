@@ -217,6 +217,10 @@ The underlying broadcast waits up to 5 minutes for a matching SMS. If no message
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It implements OTP autofill on Android through the SMS User Consent and Phone Number Hint APIs, so you can read a verification SMS and prefill the user's phone number without requesting any SMS permissions and while staying within Google Play policy. It's a focused, fully typed API that handles the system consent dialog and bottom sheet for you, and it's actively maintained against the latest Capacitor and Android versions. On iOS you don't need it at all — the WebView already autofills one-time codes — and the README explains exactly how.
+
 ### Does this plugin require any SMS permissions?
 
 No, the plugin uses the SMS User Consent and Phone Number Hint APIs, which are Play-policy-safe and require no SMS permissions. Instead of reading SMS messages silently, the user explicitly consents via a one-tap system dialog before your app receives the message.

@@ -403,6 +403,10 @@ Keep the following platform differences in mind when accessing battery informati
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It reports the full battery picture — level, charging state, and low power mode — plus change events that observe the device only while a listener is attached, all through a fully typed API that works across Android, iOS, and supported browsers on the Web. If you just need a one-off battery reading, that's a quick call; if you want to react to charging and low-power changes over time without wasting energy, this plugin is built for exactly that.
+
 ### Why does `getBatteryLevel` fail on the iOS Simulator?
 
 The battery level is not available on the iOS Simulator, so `getBatteryLevel()` rejects with an error there. Use a real device to test this method.
