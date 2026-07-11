@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-intercom",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial Capacitor plugin for Intercom on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

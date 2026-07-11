@@ -1,4 +1,4 @@
-# Changelog
+# @capawesome/capacitor-device-info
 
 ## 0.1.0
 

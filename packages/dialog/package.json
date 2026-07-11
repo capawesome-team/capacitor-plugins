@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-dialog",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for native alert, confirm, and prompt dialogs on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

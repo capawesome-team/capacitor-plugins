@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-action-sheet",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for native action sheets on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-youtube-player",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to embed and control YouTube players on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

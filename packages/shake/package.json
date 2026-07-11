@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-shake",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to detect shake gestures on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

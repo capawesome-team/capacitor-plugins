@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-maps-launcher",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to launch navigation apps with turn-by-turn directions on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
