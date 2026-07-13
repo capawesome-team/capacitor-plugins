@@ -23,6 +23,14 @@ public final class LiveUpdateIonicManager: ProviderManager {
     private let liveUpdate: LiveUpdate
     private let managerKey: String
 
+    /// Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
+    /// that construct the manager directly and attach it to a Portal via
+    /// `liveUpdateSource: .provider(manager:)`. Uses a headless `LiveUpdate` instance with
+    /// the default configuration; pass `appId` and `channel` via the configuration dictionary.
+    public convenience init(configuration: [String: Any]) throws {
+        try self.init(configuration: configuration, liveUpdate: LiveUpdate(config: LiveUpdateConfig()))
+    }
+
     init(configuration: [String: Any], liveUpdate: LiveUpdate) throws {
         guard let managerKey = configuration["managerKey"] as? String, !managerKey.isEmpty else {
             throw ProviderError.invalidConfiguration(message: CustomError.managerKeyMissing.localizedDescription)

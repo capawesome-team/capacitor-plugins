@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -87,12 +88,15 @@ public class LiveUpdate {
     @NonNull
     private final LiveUpdateConfig config;
 
+    @NonNull
+    private final Context context;
+
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
     private final LiveUpdateHttpClient httpClient;
 
-    @NonNull
+    @Nullable
     private final LiveUpdatePlugin plugin;
 
     @NonNull
@@ -111,11 +115,26 @@ public class LiveUpdate {
     private boolean syncInProgress = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
+        this(config, plugin.getContext(), plugin);
+    }
+
+    /**
+     * Creates a headless instance without a Capacitor plugin, e.g. for Ionic Portals hosts
+     * that construct a provider manager directly. WebView-related operations (server path
+     * changes, reload) and plugin events are skipped in this mode.
+     */
+    public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context) throws PackageManager.NameNotFoundException {
+        this(config, context, null);
+    }
+
+    private LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context, @Nullable LiveUpdatePlugin plugin)
+        throws PackageManager.NameNotFoundException {
         this.config = config;
+        this.context = context;
         this.httpClient = new LiveUpdateHttpClient(config);
         this.plugin = plugin;
-        this.preferences = new LiveUpdatePreferences(plugin.getContext());
-        this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
+        this.preferences = new LiveUpdatePreferences(context);
+        this.webViewSettingsEditor = context.getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
@@ -560,21 +579,21 @@ public class LiveUpdate {
     }
 
     private File buildBundlesDirectory() {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
+        return new File(context.getFilesDir(), bundlesDirectory);
     }
 
     private File buildBundleDirectoryFor(@NonNull String bundleId) {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
+        return new File(context.getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private File buildTemporaryDirectory() {
         String fileName = UUID.randomUUID().toString();
-        return new File(plugin.getContext().getCacheDir(), fileName);
+        return new File(context.getCacheDir(), fileName);
     }
 
     private File buildTemporaryZipFile() {
         String fileName = UUID.randomUUID().toString() + ".zip";
-        return new File(plugin.getContext().getCacheDir(), fileName);
+        return new File(context.getCacheDir(), fileName);
     }
 
     private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
@@ -582,7 +601,7 @@ public class LiveUpdate {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
             // Create the source input stream
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
             // Create the destination file
             File destination = new File(destinationDirectory, href);
@@ -1112,14 +1131,11 @@ public class LiveUpdate {
 
     @Nullable
     private String getNativeChannel() {
-        int resId = plugin
-            .getContext()
-            .getResources()
-            .getIdentifier("capawesome_live_update_default_channel", "string", plugin.getContext().getPackageName());
+        int resId = context.getResources().getIdentifier("capawesome_live_update_default_channel", "string", context.getPackageName());
         if (resId == 0) {
             return null;
         }
-        return plugin.getContext().getResources().getString(resId);
+        return context.getResources().getString(resId);
     }
 
     /**
@@ -1138,6 +1154,10 @@ public class LiveUpdate {
      * @return The absolute path to the current bundle directory (`public` for the built-in bundle).
      */
     private String getCurrentCapacitorServerPath() {
+        if (plugin == null) {
+            // Headless mode: there is no WebView, so the default bundle is always current.
+            return defaultWebAssetDir;
+        }
         return plugin.getBridge().getServerBasePath();
     }
 
@@ -1168,8 +1188,7 @@ public class LiveUpdate {
      */
     @NonNull
     private String getNextCapacitorServerPath() {
-        String path = plugin
-            .getContext()
+        String path = context
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
         // Empty path means default path
@@ -1214,7 +1233,7 @@ public class LiveUpdate {
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
                 InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
@@ -1246,6 +1265,9 @@ public class LiveUpdate {
     }
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+        if (plugin == null) {
+            return;
+        }
         plugin.notifyDownloadBundleProgressListeners(event);
     }
 
@@ -1332,6 +1354,10 @@ public class LiveUpdate {
     }
 
     private void setCurrentCapacitorServerPath(@NonNull String path) {
+        if (plugin == null) {
+            // Headless mode: there is no WebView to point at the new path.
+            return;
+        }
         if (path.equals(defaultWebAssetDir)) {
             this.plugin.getBridge().setServerAssetPath(path);
         } else {
@@ -1358,11 +1384,17 @@ public class LiveUpdate {
     }
 
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
+        if (plugin == null) {
+            return;
+        }
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
         plugin.notifyNextBundleSetListeners(event);
     }
 
     private void notifyReloadedListeners() {
+        if (plugin == null) {
+            return;
+        }
         plugin.notifyReloadedListeners();
     }
 
@@ -1515,11 +1547,11 @@ public class LiveUpdate {
     }
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {
-        String packageName = this.plugin.getContext().getPackageName();
+        String packageName = this.context.getPackageName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
+            return this.context.getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
         } else {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, 0);
+            return this.context.getPackageManager().getPackageInfo(packageName, 0);
         }
     }
 }

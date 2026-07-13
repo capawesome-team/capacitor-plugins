@@ -16,7 +16,7 @@ import CommonCrypto
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
-    private let plugin: LiveUpdatePlugin
+    private let plugin: LiveUpdatePlugin?
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
@@ -24,7 +24,10 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
+    /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
+    ///   (e.g. for Ionic Portals hosts that construct a provider manager directly).
+    ///   In headless mode, WebView-related operations and plugin events are skipped.
+    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin? = nil) {
         self.config = config
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
@@ -692,7 +695,7 @@ import CommonCrypto
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return nil
         }
         return viewController.getServerBasePath()
@@ -774,7 +777,7 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
-        plugin.notifyDownloadBundleProgressListeners(event)
+        plugin?.notifyDownloadBundleProgressListeners(event)
     }
 
     private func performAutoUpdate() {
@@ -851,7 +854,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPath(path: String) {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return
         }
         viewController.setServerBasePath(path: path)
@@ -870,11 +873,11 @@ import CommonCrypto
 
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
-        plugin.notifyNextBundleSetListeners(event)
+        plugin?.notifyNextBundleSetListeners(event)
     }
 
     private func notifyReloadedListeners() {
-        plugin.notifyReloadedListeners()
+        plugin?.notifyReloadedListeners()
     }
 
     private func addBlockedBundleId(_ bundleId: String) {

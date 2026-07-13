@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.getcapacitor.Logger
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdateConfig
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdatePlugin
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions
@@ -36,6 +37,15 @@ import org.json.JSONObject
 class LiveUpdateIonicManager
 @Throws(ProviderError.InvalidConfiguration::class)
 constructor(context: Context, configuration: Map<String, *>, private val liveUpdate: LiveUpdate) : ProviderManager {
+
+    /**
+     * Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
+     * that construct the manager directly and attach it to a Portal via
+     * `setLiveUpdateProviderManager(...)`. Uses a headless [LiveUpdate] instance with the
+     * default configuration; pass `appId` and `channel` via the configuration map.
+     */
+    @Throws(ProviderError.InvalidConfiguration::class)
+    constructor(context: Context, configuration: Map<String, *>) : this(context, configuration, LiveUpdate(LiveUpdateConfig(), context))
 
     companion object {
         const val SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdateIonicProvider"

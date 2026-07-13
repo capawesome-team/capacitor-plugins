@@ -211,9 +211,57 @@ liveUpdateConfig: {
 
 ## Ionic Portals usage
 
-Ionic Portals uses a `ProviderManager` directly — there is no resolution step. You construct the manager in your native app and attach it to the Portal's configuration; Portals reads `latestAppDirectory` to locate the web assets and calls `sync()` to refresh them.
+Ionic Portals uses a `ProviderManager` directly — there is no resolution step. You construct the manager in your native app and attach it to the Portal's configuration; Portals reads `latestAppDirectory` to locate the web assets, and you trigger `syncProvider()` to refresh them.
 
-> Requires a Portals release built against Live Update Provider SDK `1.0.0` (earlier releases consumed the pre-1.0 registry-based contract). Direct manager construction support in this plugin is tracked as a follow-up; this guide and the [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) will be updated with concrete snippets once available.
+> Requires Portals `0.14.0` or later (earlier releases consumed the pre-1.0 registry-based contract).
+
+### iOS
+
+```swift
+import CapawesomeCapacitorLiveUpdate
+import IonicPortals
+
+let manager = try LiveUpdateIonicManager(configuration: [
+    "managerKey": "portal-checkout",
+    "appId": "6e351b4f-69a7-415e-a057-4567df7ffe94",
+    "channel": "production"
+])
+
+let checkout = Portal(
+    name: "checkout",
+    startDir: "portals/shopwebapp",
+    liveUpdateSource: .provider(manager: manager)
+)
+
+// Trigger a sync (e.g. at app launch or on resume):
+let result = try await checkout.syncProvider()
+```
+
+### Android
+
+```kotlin
+import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicManager
+import io.ionic.portals.PortalManager
+
+val manager = LiveUpdateIonicManager(
+    context,
+    mapOf(
+        "managerKey" to "portal-checkout",
+        "appId" to "6e351b4f-69a7-415e-a057-4567df7ffe94",
+        "channel" to "production",
+    ),
+)
+
+PortalManager.newPortal("checkout")
+    .setStartDir("webapp")
+    .setLiveUpdateProviderManager(manager)
+    .create()
+
+// Trigger a sync: `portal.syncProvider()` from a coroutine,
+// or `portal.syncProviderAsync()` (CompletableFuture) from Java.
+```
+
+The directly constructed manager runs headless: it uses the plugin's default configuration (e.g. `serverDomain`), so pass `appId` and `channel` via the configuration map. Because there is no registration step, no retry logic is needed — construct and sync right away.
 
 Bundle **seed content** at each Portal's `startDir` so the first Portal can render on a fresh, offline launch; Live Updates refresh it afterward.
 
