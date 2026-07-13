@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.8
+
+### Patch Changes
+
+- [`baa70310a031a90bf31e399fe0c14dc23eb8826c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/baa70310a031a90bf31e399fe0c14dc23eb8826c) ([#489](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/489)): feat: add `additionalParameters` property to `LoginResult` to expose non-standard token endpoint response parameters
+
 ## 0.1.7
 
 ### Patch Changes
