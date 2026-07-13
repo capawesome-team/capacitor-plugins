@@ -490,14 +490,15 @@ Refresh the access token using a refresh token.
 
 #### LoginResult
 
-| Prop                            | Type                | Description                                             | Since |
-| ------------------------------- | ------------------- | ------------------------------------------------------- | ----- |
-| **`accessToken`**               | <code>string</code> | The access token.                                       | 0.1.0 |
-| **`accessTokenExpirationDate`** | <code>number</code> | The access token expiration date in epoch milliseconds. | 0.1.0 |
-| **`idToken`**                   | <code>string</code> | The JWT ID token (OpenID Connect).                      | 0.1.0 |
-| **`refreshToken`**              | <code>string</code> | The refresh token.                                      | 0.1.0 |
-| **`scope`**                     | <code>string</code> | The granted scopes as a space-delimited string.         | 0.1.0 |
-| **`tokenType`**                 | <code>string</code> | The token type.                                         | 0.1.0 |
+| Prop                            | Type                                      | Description                                                                                            | Since |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----- |
+| **`accessToken`**               | <code>string</code>                       | The access token.                                                                                      | 0.1.0 |
+| **`accessTokenExpirationDate`** | <code>number</code>                       | The access token expiration date in epoch milliseconds.                                                | 0.1.0 |
+| **`additionalParameters`**      | <code>Record&lt;string, string&gt;</code> | Additional non-standard parameters returned by the token endpoint. All values are returned as strings. | 0.1.8 |
+| **`idToken`**                   | <code>string</code>                       | The JWT ID token (OpenID Connect).                                                                     | 0.1.0 |
+| **`refreshToken`**              | <code>string</code>                       | The refresh token.                                                                                     | 0.1.0 |
+| **`scope`**                     | <code>string</code>                       | The granted scopes as a space-delimited string.                                                        | 0.1.0 |
+| **`tokenType`**                 | <code>string</code>                       | The token type.                                                                                        | 0.1.0 |
 
 
 #### LoginOptions
