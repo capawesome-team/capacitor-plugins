@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-live-update",
   "version": "8.3.0",
-  "description": "Capacitor plugin to update your app remotely in real-time on Android and iOS.",
+  "description": "Capacitor plugin to update your app remotely in real-time on Android, iOS and Electron.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -10,6 +10,7 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
+    "electron/",
     "ios/Plugin/",
     "CapawesomeCapacitorLiveUpdate.podspec",
     "Package.swift"
@@ -41,6 +42,7 @@
     "ionic",
     "android",
     "ios",
+    "electron",
     "live update",
     "remote update",
     "ota",
@@ -54,10 +56,11 @@
     "bundle management"
   ],
   "scripts": {
-    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
+    "verify": "npm run verify:ios && npm run verify:android && npm run verify:web && npm run verify:electron",
     "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
+    "verify:electron": "npm run build:electron",
     "e2e:android": "npm install --prefix example && npm run build && npm --prefix example run e2e:android",
     "e2e:ios": "npm install --prefix example && npm run build && npm --prefix example run e2e:ios",
     "lint": "npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
@@ -67,11 +70,15 @@
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api LiveUpdatePlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
+    "build:electron": "rimraf ./electron/dist && tsc -p electron/tsconfig.json && rollup -c electron/rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "version": "node scripts/sync-plugin-version.mjs",
     "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build && npm run build:electron"
+  },
+  "dependencies": {
+    "@capawesome/electron-live-update": "^0.1.0"
   },
   "devDependencies": {
     "@capacitor/android": "8.0.0",
@@ -99,6 +106,9 @@
     },
     "android": {
       "src": "android"
+    },
+    "electron": {
+      "src": "electron"
     }
   }
 }

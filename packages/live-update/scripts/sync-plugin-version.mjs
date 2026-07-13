@@ -6,7 +6,7 @@ import { joinPath, replaceInFile } from './lib/file-helper.mjs';
 
 execute(async () => {
   const packageJson = await readFile('./package.json')
-    .then((json) => JSON.parse(json.toString()))
+    .then(json => JSON.parse(json.toString()))
     .catch(() => null);
   const version = packageJson?.version;
   if (!version) {
@@ -24,15 +24,21 @@ execute(async () => {
       'capacitorjs',
       'plugins',
       'liveupdate',
-      'LiveUpdatePlugin.java'
+      'LiveUpdatePlugin.java',
     ),
     /public static final String VERSION = "(\d+\.\d+\.\d+)"/,
-    'public static final String VERSION = "' + version + '"'
+    'public static final String VERSION = "' + version + '"',
   );
   // Replace version in iOS plugin
   await replaceInFile(
     joinPath('ios', 'Plugin', 'LiveUpdatePlugin.swift'),
     /public static let version = "(\d+\.\d+\.\d+)"/,
-    'public static let version = "' + version + '"'
+    'public static let version = "' + version + '"',
+  );
+  // Replace version in Electron plugin
+  await replaceInFile(
+    joinPath('electron', 'src', 'version.ts'),
+    /export const PLUGIN_VERSION = '(\d+\.\d+\.\d+)'/,
+    "export const PLUGIN_VERSION = '" + version + "'",
   );
 });
