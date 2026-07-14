@@ -153,6 +153,23 @@ A Capacitor Electron app uses the **same Capawesome Cloud app** (and therefore t
 
 On Electron, the app version (returned by `getVersionCode()`/`getVersionName()` and matched against Electron version constraints) is the `version` from your app's `electron/package.json` file (see [`app.getVersion()`](https://www.electronjs.org/docs/latest/api/app#appgetversion)). It refers to the installed desktop binary and never changes through a live update — the desktop equivalent of the native app version on Android and iOS. Make sure to maintain this version (the scaffolded default is `0.0.0`), otherwise version constraints cannot distinguish your desktop releases.
 
+To use [versioned channels](https://capawesome.io/docs/cloud/live-updates/setup/#make-updates-version-compatible) on Electron, set the channel in `electron/capacitor.electron.config.ts` — the Electron equivalent of the Android string resource and iOS `Info.plist` configuration. Since the file is TypeScript, the channel can be derived from the app version:
+
+```ts
+import { defineConfig } from '@capawesome/capacitor-electron/config';
+import { version } from './package.json';
+
+export default defineConfig({
+  plugins: {
+    LiveUpdate: {
+      defaultChannel: `production-${version}`,
+    },
+  },
+});
+```
+
+This configuration takes precedence over the `defaultChannel` plugin property in the Capacitor configuration, mirroring the channel resolution order on Android and iOS.
+
 It is strongly **recommended** to configure the `readyTimeout` option (e.g. `10000` ms) so that the plugin can roll back to the last working bundle in case of problems. The rollback on Electron is kill-safe: if the app is closed or crashes before `ready()` is called, the rollback is performed on the next app start.
 
 The following methods are not available on Electron: `setConfig(...)` and `resetConfig()`.
