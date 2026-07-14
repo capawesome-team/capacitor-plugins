@@ -11,10 +11,14 @@
     "noUnusedParameters": true,
     "outDir": "dist/esm",
     "paths": {
-      // Type-check against the local engine repository until
-      // `@capawesome/electron-live-update` is published. TypeScript falls
-      // back to `node_modules` resolution when the mapped file is missing.
+      // TypeScript tries each candidate in order and uses the first one
+      // that exists on disk. Once `@capawesome/electron-live-update` is
+      // published, the installed package (package-level or hoisted to the
+      // workspace root `node_modules`) is used; the sibling repository
+      // checkout is only a fallback for local development before then.
       "@capawesome/electron-live-update/engine": [
+        "../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
+        "../../../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
         "../../../../electron-live-update/dist/engine/index.d.ts"
       ]
     },
@@ -25,10 +29,5 @@
     "target": "es2022",
     "types": []
   },
-  "include": [
-    "src/**/*.ts",
-    // Ambient Electron types from the local engine repository until
-    // `electron` is installed as a dev dependency.
-    "../../../../electron-live-update/node_modules/electron/electron.d.ts"
-  ]
+  "include": ["src/**/*.ts"]
 }
