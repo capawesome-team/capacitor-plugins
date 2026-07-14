@@ -1,7 +1,13 @@
 import { createHash } from 'node:crypto';
-import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import {
+  createReadStream,
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+} from 'node:fs';
 import { createServer } from 'node:http';
-import { dirname, join, posix, relative } from 'node:path';
+import { dirname, isAbsolute, join, posix, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -9,6 +15,11 @@ const LEGACY_BUNDLE_PATH = join(HERE, 'fixtures', 'bundle.zip');
 const MANIFEST_FILE_NAME = 'capawesome-live-update-manifest.json';
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
+
+const isPathInside = (parentDir, childPath) => {
+  const rel = relative(resolve(parentDir), resolve(childPath));
+  return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
+};
 
 const walkFiles = dir => {
   const result = [];
@@ -61,7 +72,12 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
     let body = '';
     req.on('data', chunk => (body += chunk));
     req.on('end', () => {
-      const patch = body ? JSON.parse(body) : {};
+      let patch;
+      try {
+        patch = body ? JSON.parse(body) : {};
+      } catch {
+        return sendJson(res, 400, { message: 'Invalid JSON body.' });
+      }
       if (patch.latestByChannel !== undefined) {
         state.latestByChannel = patch.latestByChannel;
       }
@@ -75,7 +91,8 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
   const handleChannels = (res, url) => {
     if (!state.channelsEnabled) {
       return sendJson(res, 401, {
-        message: 'Unauthorized. Channel Discovery may not be enabled for this app.',
+        message:
+          'Unauthorized. Channel Discovery may not be enabled for this app.',
       });
     }
     const query = url.searchParams.get('query');
@@ -142,7 +159,9 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
       const items = walkFiles(bundleDir).map(full => {
         const bytes = readFileSync(full);
         return {
-          href: posix.normalize(relative(bundleDir, full).split(/[\\/]/).join('/')),
+          href: posix.normalize(
+            relative(bundleDir, full).split(/[\\/]/).join('/'),
+          ),
           checksum: sha256(bytes),
           sizeInBytes: bytes.length,
         };
@@ -150,7 +169,7 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
       return sendJson(res, 200, items);
     }
     const filePath = join(bundleDir, href ?? '');
-    if (!href || !existsSync(filePath) || !filePath.startsWith(bundleDir)) {
+    if (!href || !existsSync(filePath) || !isPathInside(bundleDir, filePath)) {
       res.writeHead(404);
       return res.end();
     }
@@ -190,14 +209,24 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
     if (req.method === 'GET' && /^\/v1\/apps\/[^/]+\/channels$/.test(path)) {
       return handleChannels(res, url);
     }
-    if (req.method === 'GET' && /^\/v1\/apps\/[^/]+\/bundles\/latest$/.test(path)) {
+    if (
+      req.method === 'GET' &&
+      /^\/v1\/apps\/[^/]+\/bundles\/latest$/.test(path)
+    ) {
       return handleLatest(res, url, requestOrigin);
     }
     if (req.method === 'GET' && path.startsWith('/download/')) {
-      return handleDownload(res, decodeURIComponent(path.slice('/download/'.length)));
+      return handleDownload(
+        res,
+        decodeURIComponent(path.slice('/download/'.length)),
+      );
     }
     if (req.method === 'GET' && path.startsWith('/manifest/')) {
-      return handleManifest(res, decodeURIComponent(path.slice('/manifest/'.length)), url);
+      return handleManifest(
+        res,
+        decodeURIComponent(path.slice('/manifest/'.length)),
+        url,
+      );
     }
     res.writeHead(404);
     res.end();
