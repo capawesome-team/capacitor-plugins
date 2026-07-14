@@ -8,3 +8,9 @@ dist/
 
 *.pem
 *.crt
+
+# Electron e2e (temporary local scaffolding)
+.local-tarballs/
+test/electron/.fixtures/
+test/electron/.userdata/
+test/electron/test-results/
