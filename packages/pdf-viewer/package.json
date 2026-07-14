@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-pdf-viewer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to display PDF documents in a fullscreen native viewer on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

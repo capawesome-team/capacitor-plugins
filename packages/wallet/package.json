@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-wallet",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for adding passes to Apple Wallet and Google Wallet on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,4 +1,4 @@
-# Changelog
+# @capawesome/capacitor-in-app-browser
 
 ## 0.1.0
 

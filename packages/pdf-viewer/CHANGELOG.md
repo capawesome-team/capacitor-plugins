@@ -1,4 +1,4 @@
-# Changelog
+# @capawesome/capacitor-pdf-viewer
 
 ## 0.1.0
 

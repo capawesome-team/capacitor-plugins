@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-home-indicator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to hide and show the iOS home indicator.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

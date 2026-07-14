@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-photo-manipulator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for headless image transforms like crop, resize, rotate, flip and format conversion, including HEIC to JPEG, on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
