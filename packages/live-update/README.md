@@ -151,6 +151,8 @@ This plugin supports the [Capacitor Electron platform](https://github.com/capawe
 
 A Capacitor Electron app uses the **same Capawesome Cloud app** (and therefore the same `appId`) as the Android and iOS targets of your app. Bundles can be delivered to desktop devices using [Electron version constraints](https://capawesome.io/docs/cloud/live-updates/).
 
+On Electron, the app version (returned by `getVersionCode()`/`getVersionName()` and matched against Electron version constraints) is the `version` from your app's `electron/package.json` file (see [`app.getVersion()`](https://www.electronjs.org/docs/latest/api/app#appgetversion)). It refers to the installed desktop binary and never changes through a live update — the desktop equivalent of the native app version on Android and iOS. Make sure to maintain this version (the scaffolded default is `0.0.0`), otherwise version constraints cannot distinguish your desktop releases.
+
 It is strongly **recommended** to configure the `readyTimeout` option (e.g. `10000` ms) so that the plugin can roll back to the last working bundle in case of problems. The rollback on Electron is kill-safe: if the app is closed or crashes before `ready()` is called, the rollback is performed on the next app start.
 
 The following methods are not available on Electron: `setConfig(...)` and `resetConfig()`.

@@ -7,6 +7,7 @@ export default {
   external: [
     'electron',
     '@capacitor/core',
+    '@capawesome/capacitor-electron/plugin',
     '@capawesome/electron-live-update/engine',
     /^node:/,
   ],

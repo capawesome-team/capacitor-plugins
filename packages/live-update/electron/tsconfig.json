@@ -20,6 +20,11 @@
         "../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
         "../../../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
         "../../../../electron-live-update/dist/engine/index.d.ts"
+      ],
+      "@capawesome/capacitor-electron/plugin": [
+        "../node_modules/@capawesome/capacitor-electron/dist/types/plugin/index.d.ts",
+        "../../../node_modules/@capawesome/capacitor-electron/dist/types/plugin/index.d.ts",
+        "../../../../capacitor-electron/dist/types/plugin/index.d.ts"
       ]
     },
     "pretty": true,

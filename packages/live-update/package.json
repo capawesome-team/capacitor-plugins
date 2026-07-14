@@ -86,6 +86,7 @@
     "@capacitor/core": "8.0.0",
     "@capacitor/docgen": "0.3.1",
     "@capacitor/ios": "8.0.0",
+    "@capawesome/capacitor-electron": "^0.1.0",
     "@ionic/eslint-config": "0.4.0",
     "electron": "43.1.0",
     "eslint": "8.57.0",
@@ -96,7 +97,13 @@
     "typescript": "5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": ">=8.0.0",
+    "@capawesome/capacitor-electron": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "@capawesome/capacitor-electron": {
+      "optional": true
+    }
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"

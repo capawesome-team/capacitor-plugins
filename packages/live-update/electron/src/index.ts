@@ -1,7 +1,10 @@
 import type { PluginsConfig } from '@capacitor/cli';
 import { CapacitorException, ExceptionCode } from '@capacitor/core';
+import { ElectronPlugin } from '@capawesome/capacitor-electron/plugin';
+import type { ElectronPluginContext } from '@capawesome/capacitor-electron/plugin';
 import { LiveUpdateEngine } from '@capawesome/electron-live-update/engine';
 import { app, powerMonitor } from 'electron';
+import { createRequire } from 'node:module';
 import { join } from 'node:path';
 
 import type {
@@ -33,16 +36,19 @@ import type {
   SyncResult,
 } from '../../src/definitions';
 
-import type { ElectronPluginContext } from './definitions';
-import { PLUGIN_VERSION } from './version';
-
 const AUTO_UPDATE_MIN_INTERVAL = 15 * 60 * 1000;
 const CAPACITOR_RUNTIME = 'capacitor';
 const ELECTRON_PLATFORM = '2';
+// Resolve the plugin version from the package's own `package.json`. The built
+// file lives at `electron/dist/plugin.mjs`, so the package root is two levels up.
+const PLUGIN_VERSION: string = createRequire(import.meta.url)(
+  '../../package.json',
+).version;
 
 type LiveUpdateConfig = NonNullable<PluginsConfig['LiveUpdate']>;
 
 export class LiveUpdateElectron
+  extends ElectronPlugin
   implements Omit<LiveUpdatePlugin, 'addListener' | 'removeAllListeners'>
 {
   public static readonly __capacitorElectronPlugin = {
@@ -80,18 +86,18 @@ export class LiveUpdateElectron
   private static readonly errorNotImplemented = 'Not implemented on Electron.';
 
   private readonly config: LiveUpdateConfig;
-  private readonly context: ElectronPluginContext;
   private readonly engine: LiveUpdateEngine;
   private lastAutoUpdateCheck = 0;
 
   constructor(context: ElectronPluginContext) {
-    this.context = context;
-    this.config = context.config.plugins?.LiveUpdate ?? {};
+    super(context);
+    this.config =
+      (context.config.plugins as PluginsConfig | undefined)?.LiveUpdate ?? {};
     this.engine = new LiveUpdateEngine({
       appId: this.config.appId,
       autoBlockRolledBackBundles: this.config.autoBlockRolledBackBundles,
       autoDeleteBundles: this.config.autoDeleteBundles,
-      dataDirectory: join(app.getPath('userData'), 'live-update'),
+      dataDirectory: join(app.getPath('userData'), 'capawesome-live-update'),
       defaultBundlePath: join(app.getAppPath(), 'app'),
       defaultChannel: this.config.defaultChannel,
       httpTimeout: this.config.httpTimeout,
@@ -192,7 +198,7 @@ export class LiveUpdateElectron
     return this.engine.getVersionName();
   }
 
-  public async initialize(): Promise<void> {
+  public async load(): Promise<void> {
     await this.engine.initialize();
     const bundlePath = this.engine.getCurrentBundlePath();
     if (

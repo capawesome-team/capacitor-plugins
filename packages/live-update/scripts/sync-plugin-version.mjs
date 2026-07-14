@@ -35,10 +35,4 @@ execute(async () => {
     /public static let version = "(\d+\.\d+\.\d+)"/,
     'public static let version = "' + version + '"',
   );
-  // Replace version in Electron plugin
-  await replaceInFile(
-    joinPath('electron', 'src', 'version.ts'),
-    /export const PLUGIN_VERSION = '(\d+\.\d+\.\d+)'/,
-    "export const PLUGIN_VERSION = '" + version + "'",
-  );
 });
