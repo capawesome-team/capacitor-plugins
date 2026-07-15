@@ -35,6 +35,7 @@ The NFC plugin is typically used whenever an app needs to interact with NFC tags
 - **App launching**: Launch your app by scanning a tag containing a URI record, using an intent filter on Android or universal links on iOS.
 - **Smartcard communication**: Exchange raw commands such as APDUs with tags and smartcards using the `transceive(...)` method.
 - **Card emulation**: Emulate an NFC card on Android using Host Card Emulation (HCE) so that other devices can interact with it.
+- **Tap-to-pair onboarding**: Read a nearby device's identifier from an NFC tag, then connect to it over [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/) — no manual scanning or pairing UI needed.
 
 ## Compatibility
 
@@ -1292,6 +1293,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy (BLE) devices in the central and peripheral role.
 - [ML Kit Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
 - [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
 
 ## Newsletter
 

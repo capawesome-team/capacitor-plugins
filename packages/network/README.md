@@ -292,6 +292,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 - [Sim](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
 - [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
+- [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy (BLE) devices in the central and peripheral role.
+- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
 
 ## Newsletter
 
