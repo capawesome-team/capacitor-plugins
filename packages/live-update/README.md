@@ -82,7 +82,7 @@ npx cap sync
 
 #### Channel
 
-If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a string resource.
+If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels), you can set a default channel directly in your native project by adding a string resource.
 This allows you to tie the channel to the version code at build time.
 
 Add the following to your app's `build.gradle` file:
@@ -108,7 +108,7 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 #### Channel
 
-If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a key to your `Info.plist` file.
+If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels), you can set a default channel directly in your native project by adding a key to your `Info.plist` file.
 This allows you to tie the channel to the build version at build time.
 
 Add the following to your `Info.plist` file:
@@ -1360,7 +1360,7 @@ On Capawesome Cloud, the bundle ID corresponds to the ID of the app build artifa
 There are four ways to set a channel, listed from lowest to highest priority:
 
 1. **Capacitor config**: Set the `defaultChannel` property in the [plugin configuration](#configuration). This is the simplest way to set a static default channel.
-2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels) where the channel is tied to the build version.
+2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels) where the channel is tied to the build version.
 3. **[`setChannel(...)`](#setchannel)**: Set the channel at runtime. The value is persisted across app restarts.
 4. **[`sync(...)`](#sync)**: Pass a `channel` option to override the channel for a single sync call. This does **not** persist the channel.
 
