@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.2
+
+### Patch Changes
+
+- [`716aa861ff005253bce0bc7a88d5a2789270f4fb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/716aa861ff005253bce0bc7a88d5a2789270f4fb) ([#493](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/493)): fix: prevent `NullPointerException` on Android when scanning an `Ndef`-capable tag that carries no NDEF message
+
 ## 8.1.1
 
 ### Patch Changes
