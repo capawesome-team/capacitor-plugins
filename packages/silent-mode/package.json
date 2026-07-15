@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-silent-mode",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin to detect whether the device is in silent mode on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

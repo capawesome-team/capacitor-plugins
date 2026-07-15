@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-apple-sign-in",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Capacitor plugin to sign-in with Apple on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
