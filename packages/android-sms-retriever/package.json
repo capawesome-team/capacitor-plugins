@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-android-sms-retriever",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin for OTP autofill on Android via the SMS User Consent and Phone Number Hint APIs.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-install-referrer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin for reading install attribution data on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

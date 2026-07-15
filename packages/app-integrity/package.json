@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-integrity",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin to verify app and device integrity using the Play Integrity API (Android) and App Attest (iOS).",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

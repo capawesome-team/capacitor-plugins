@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-launcher",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin to check if an app can be opened and to open it on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

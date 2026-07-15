@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-light-sensor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin to read the device's ambient light sensor on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

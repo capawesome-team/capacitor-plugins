@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-pixlive",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Unofficial Capacitor plugin for Pixlive SDK on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

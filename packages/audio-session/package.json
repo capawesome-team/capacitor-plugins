@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-audio-session",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Capacitor plugin to configure and observe the iOS audio session.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

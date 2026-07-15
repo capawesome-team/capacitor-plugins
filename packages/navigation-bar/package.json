@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-navigation-bar",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Capacitor plugin to set the background color and button style of the navigation bar on Android.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
