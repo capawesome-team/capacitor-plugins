@@ -139,7 +139,6 @@ public class EdgeToEdgePlugin extends Plugin {
                 config.setNavigationBarColor(Color.parseColor(navigationBarColor));
             }
 
-            // Keep backgroundColor for any legacy code that might use it
             if (backgroundColor != null) {
                 config.setBackgroundColor(Color.parseColor(backgroundColor));
             }
