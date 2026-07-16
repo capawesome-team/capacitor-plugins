@@ -266,6 +266,10 @@ It opens native settings screens through three explicit, fully typed methods —
 
 Call the `openAppSettings` method to open the settings screen of your app. This is the recommended way to let users grant a permission that they previously denied, since neither Android nor iOS shows the permission prompt again after a denial. See the [usage example](#open-the-settings-screen-of-your-app) above.
 
+### How does this plugin work with the Permissions plugin?
+
+Use the [Permissions](https://capawesome.io/docs/sdks/capacitor/permissions/) plugin's `checkPermissions()` method to detect a `denied` permission state, then call `openAppSettings()` from this plugin to send the user straight to your app's settings screen to grant it manually. The two plugins are commonly used together for this check-then-recover flow.
+
 ### Why can't I open specific iOS settings sections like Wi-Fi or Bluetooth?
 
 Deep links into specific iOS system settings sections rely on the private `App-Prefs:` URL scheme, which is not part of the public iOS API. Apps that use it risk rejection during App Store review, and Apple may break it without notice between iOS releases. This plugin deliberately only uses official Apple APIs to keep your app App Store safe (see [iOS and the `App-Prefs:` URL scheme](#ios-and-the-app-prefs-url-scheme)).
@@ -292,6 +296,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions on Android.
 - [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
 - [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
+- [Permissions](https://capawesome.io/docs/sdks/capacitor/permissions/): Check and request device permissions with a unified API.
 
 ## Newsletter
 
