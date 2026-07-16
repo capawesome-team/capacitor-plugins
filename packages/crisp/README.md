@@ -924,6 +924,12 @@ Generate an HMAC-SHA256 signature of the user's email address on your backend us
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
 
+## Related Plugins
+
+- [Intercom](https://capawesome.io/docs/sdks/capacitor/intercom/): Unofficial Capacitor plugin for the Intercom live chat and customer support platform.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
+- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
+
 ## Newsletter
 
 Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
