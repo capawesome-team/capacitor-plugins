@@ -682,6 +682,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
 - [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 - [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
+- [YouTube Player](https://capawesome.io/docs/sdks/capacitor/youtube-player/): Embed and control YouTube players, with lock-screen media controls via this plugin.
 
 ## Newsletter
 

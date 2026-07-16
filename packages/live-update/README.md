@@ -55,6 +55,7 @@ The Live Update plugin is typically used to ship changes to users without going 
 - [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/docs/cloud/live-updates/setup/)
 - [Migrating from Ionic Appflow to Capawesome Cloud](https://capawesome.io/blog/migrating-from-ionic-appflow-to-capawesome-cloud/)
 - [Migrating from App Center to Capawesome Cloud](https://capawesome.io/blog/migrating-from-app-center-to-capawesome-cloud/)
+- [Live Updates for Nuxt Capacitor Apps](https://capawesome.io/blog/live-updates-for-nuxt-capacitor/)
 
 ## Installation
 
