@@ -34,6 +34,8 @@ The Pedometer plugin is typically used whenever an app needs to track the user's
 - **Floor climbing challenges**: Count the floors ascended and descended by the user on iOS.
 - **Activity history**: Query pedometer measurements for a specific time range to build daily or weekly summaries.
 
+📖 **Guide**: See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/) for fitness-tracking use cases and how this plugin compares to the raw Accelerometer.
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

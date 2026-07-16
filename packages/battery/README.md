@@ -33,6 +33,8 @@ The Battery plugin is typically used whenever an app should adapt its behavior t
 - **Status display**: Show the current battery level and charging state inside your app, for example in a kiosk or fleet app.
 - **Reacting to changes**: Warn the user when the battery level drops by listening for change events.
 
+📖 **Guide**: See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/) for how battery state pairs with Thermal State to gate background work.
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

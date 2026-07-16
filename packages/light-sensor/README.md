@@ -30,6 +30,8 @@ The Light Sensor plugin is typically used to react to the lighting conditions ar
 - **Environment monitoring**: Continuously measure the light level in a room using real-time measurement events.
 - **Reading comfort**: Detect dark environments and suggest a more comfortable display mode to the user.
 
+📖 **Guide**: See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/) for how ambient light readings pair with the Proximity Sensor for adaptive UX.
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

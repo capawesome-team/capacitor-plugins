@@ -26,6 +26,8 @@ The Thermal State plugin is typically used to adapt an app's workload to the dev
 - **Machine learning**: Defer on-device ML inference or other background work while the thermal state is elevated.
 - **Data prefetching**: Reduce the prefetching rate or pause background sync when the device gets warm.
 
+📖 **Guide**: For gating heavy background work like video processing or ML inference before the OS throttles your app, see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

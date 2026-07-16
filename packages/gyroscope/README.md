@@ -31,6 +31,8 @@ The Gyroscope plugin is typically used whenever an app needs to react to the rot
 - **Gesture detection**: Detect rotation gestures such as twisting the device to trigger actions in your app.
 - **Motion analysis**: Record the rotation rate around the x, y, and z axes to analyze movement patterns.
 
+📖 **Guide**: For tilt-to-steer game mechanics and AR features that also need the Accelerometer, see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

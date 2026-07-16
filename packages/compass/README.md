@@ -27,6 +27,8 @@ The Compass plugin is typically used whenever an app needs to know which directi
 - **Outdoor activities**: Guide hikers or geocachers towards a target bearing.
 - **Points of interest**: Point the user towards a fixed geographic direction, such as a landmark or a prayer direction.
 
+📖 **Guide**: Building a navigation or wayfinding feature? See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/) for how heading data fits into the bigger picture.
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |

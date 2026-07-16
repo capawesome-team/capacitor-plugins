@@ -27,6 +27,8 @@ The Shake plugin is typically used to trigger an action when the user shakes the
 - **Undo actions**: Offer a shake-to-undo interaction, a gesture many users already know from iOS.
 - **Refresh content**: Reload data or shuffle content when a shake gesture is detected.
 
+📖 **Guide**: For shake-to-undo and shake-to-reroll gestures alongside the Accelerometer and Gyroscope, see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/).
+
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
