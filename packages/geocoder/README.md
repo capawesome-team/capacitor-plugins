@@ -257,6 +257,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
 - [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device compass heading.
+- [PixLive](https://capawesome.io/docs/sdks/capacitor/pixlive/): Build augmented reality experiences with location-based triggers.
 
 ## Newsletter
 

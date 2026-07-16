@@ -222,6 +222,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
 - [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher and block screenshots.
 - [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/): Detect an outdated Android System WebView and guide users to update it.
+- [Clipboard](https://capawesome.io/docs/sdks/capacitor/clipboard/): Read from and write to the system clipboard.
 
 ## Newsletter
 

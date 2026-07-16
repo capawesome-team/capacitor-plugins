@@ -192,6 +192,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android for long-running work.
 - [Alarm](https://capawesome.io/docs/sdks/capacitor/alarm/): Create system alarms and timers.
 - [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake while your app is in the foreground.
+- [Node.js](https://capawesome.io/docs/sdks/capacitor/nodejs/): Run Node.js in your Capacitor app for on-device backend logic.
 
 ## Newsletter
 

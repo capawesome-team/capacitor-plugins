@@ -600,6 +600,7 @@ This plugin talks to any OAuth 2.0 / OpenID Connect provider directly, which is 
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
 - [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+- [In-App Browser](https://capawesome.io/docs/sdks/capacitor/in-app-browser/): Open the OAuth authorization page in an embedded browser instead of the system browser.
 
 ## Next steps
 
