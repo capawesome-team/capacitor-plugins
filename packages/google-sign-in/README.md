@@ -339,6 +339,10 @@ On Web, the plugin uses a redirect-based OAuth flow. The `signIn(...)` method re
 
 Configure the `scopes` option in the `initialize(...)` method. The plugin then requests authorization in addition to authentication, which enables the `accessToken` and `serverAuthCode` properties in the sign-in result. If you need access and refresh tokens on your backend, exchange the `serverAuthCode` there, never client-side, as described in the [Security](#security) section.
 
+### Should I add biometric authentication on top of Google Sign-In?
+
+Many apps do, for returning sessions: sign in with Google once, then use the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/) plugin to re-authenticate the user with a fingerprint or face scan on subsequent app launches instead of repeating the full sign-in flow.
+
 ## Related Plugins
 
 - [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/): Sign in users with their Apple account.

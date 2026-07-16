@@ -591,6 +591,10 @@ Tokens are sensitive data and should not be stored in plain text. The plugin is 
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
 
+### How does OAuth compare to Apple, Google, or Facebook Sign-In?
+
+This plugin talks to any OAuth 2.0 / OpenID Connect provider directly, which is the right fit for a custom identity provider or one without a dedicated Capacitor plugin. If you're specifically integrating Apple, Google, or Facebook, their dedicated [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/), [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/), and [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/) plugins use each provider's native SDK and are usually simpler to set up than configuring them through generic OAuth.
+
 ## Related Plugins
 
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
