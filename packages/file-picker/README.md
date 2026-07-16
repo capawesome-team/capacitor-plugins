@@ -43,7 +43,7 @@ The File Picker plugin is typically used whenever an app needs the user to hand 
 
 ## Guides
 
-- [The File Handling Guide for Capacitor](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/)
+- [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/)
 
 ## Installation
 
@@ -559,7 +559,7 @@ Remove all listeners for this plugin.
 | -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
 | **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set.                                                                                                                                                                    |                    |       |
 | **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                                       | <code>0</code>     | 6.0.0 |
-| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file). | <code>false</code> |       |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file). | <code>false</code> |       |
 
 
 #### PickDirectoryResult
@@ -636,7 +636,7 @@ Remove all listeners for this plugin.
 
 ### How do I upload a picked file to a server?
 
-On the Web, the picked file already contains a `Blob` instance that you can append to a `FormData` object. On Android and iOS, load the file as a blob using the Fetch API and the file's path, then upload it the same way. See the [usage example](#upload-a-picked-file-to-a-server) above and [The File Handling Guide for Capacitor](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/) for a complete walkthrough.
+On the Web, the picked file already contains a `Blob` instance that you can append to a `FormData` object. On Android and iOS, load the file as a blob using the Fetch API and the file's path, then upload it the same way. See the [usage example](#upload-a-picked-file-to-a-server) above and [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/) for a complete walkthrough.
 
 ### Why does my app crash when picking large files?
 
