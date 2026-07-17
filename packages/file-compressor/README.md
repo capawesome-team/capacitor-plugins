@@ -215,7 +215,6 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the images to compress from the file system or gallery.
 - [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, flip and format conversion.
 - [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories with support for encryption.
-- [Cloudinary](https://capawesome.io/docs/sdks/capacitor/cloudinary/): Upload compressed images and videos directly to your Cloudinary account.
 
 ## Newsletter
 
