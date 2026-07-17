@@ -29,7 +29,7 @@ The Proximity Sensor plugin is typically used to react when an object is close t
 - **Pocket detection**: Detect when the device is in a pocket or bag to ignore accidental input.
 - **Proximity-triggered actions**: Start or stop app behavior based on real-time `measurement` events.
 
-📖 **Guide**: Commonly paired with the Light Sensor for call and media apps that adapt to the environment — see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/).
+📖 **Guide**: Commonly paired with the Light Sensor for call and media apps that adapt to the environment — see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/).
 
 ## Compatibility
 

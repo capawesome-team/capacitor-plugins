@@ -32,7 +32,7 @@ The Accelerometer plugin is typically used whenever an app needs to react to dev
 - **Fitness and activity tracking**: Analyze continuous motion data to detect movement patterns during workouts.
 - **Device orientation**: Determine how the device is being held based on the gravitational force along each axis.
 
-📖 **Guide**: Paired with the Pedometer for fitness tracking or the Gyroscope for motion-based games? See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/docs/blog/capacitor-device-sensors-guide/) for the full use case breakdown.
+📖 **Guide**: Paired with the Pedometer for fitness tracking or the Gyroscope for motion-based games? See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/) for the full use case breakdown.
 
 ## Compatibility
 
