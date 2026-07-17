@@ -14,6 +14,7 @@ Capacitor plugin for reading SIM card and carrier information.
 - 🔀 **Multi-SIM**: Supports devices with multiple SIM slots.
 - 🌐 **Carrier details**: Read carrier name, country code, MCC and MNC.
 - 🔒 **Permissions**: Built-in handling of the required runtime permission.
+- 🤝 **Compatibility**: Works alongside the [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/), [Network](https://capawesome.io/docs/sdks/capacitor/network/) and [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!

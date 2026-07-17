@@ -392,10 +392,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for PostHog.
-- [Grafana Faro](https://capawesome.io/docs/sdks/capacitor/grafana-faro/): Unofficial Capacitor plugin for Grafana Faro.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [Grafana Faro](https://capawesome.io/docs/sdks/capacitor/grafana-faro/): Unofficial Capacitor plugin for Grafana Faro.
 - [Intercom](https://capawesome.io/docs/sdks/capacitor/intercom/): Unofficial Capacitor plugin for the Intercom live chat and customer support platform.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for PostHog.
 
 ## Newsletter
 

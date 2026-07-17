@@ -13,6 +13,7 @@ Capacitor plugin for reading and controlling the screen brightness.
 - ☀️ **Read brightness**: Read the current screen brightness.
 - 🔆 **Set brightness**: Set the screen brightness, e.g. to boost it for barcode or ticket display.
 - 🔄 **Reset brightness**: Hand the brightness control back to the operating system.
+- 🤝 **Compatibility**: Works alongside the [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/) and [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

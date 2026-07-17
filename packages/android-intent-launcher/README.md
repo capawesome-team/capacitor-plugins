@@ -14,8 +14,8 @@ Capacitor plugin to launch arbitrary Android intents.
 - 🔍 **Resolve activities**: Check whether an activity can handle an intent before launching it.
 - 🎯 **Explicit & implicit intents**: Target a specific component or let the system pick a handler.
 - 📦 **Extras & flags**: Attach primitive extras and intent flags.
-- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - 🤝 **Compatibility**: Works alongside the [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) and [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/) plugins.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -284,9 +284,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens with a typed API.
 - [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens with a typed API.
 
 ## Newsletter
 

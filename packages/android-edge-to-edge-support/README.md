@@ -368,8 +368,8 @@ No, this plugin only provides an Android implementation, as the name suggests. A
 ## Related Plugins
 
 - [Android Dark Mode Support](https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/): Support dark mode on Android via the `prefers-color-scheme` CSS media feature.
-- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the navigation bar.
 - [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/): Hide and show the iOS home indicator.
+- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the navigation bar.
 
 ## Newsletter
 

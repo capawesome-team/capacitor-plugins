@@ -35,8 +35,6 @@ The Barometer plugin is typically used whenever an app needs to react to changes
 - **Outdoor and fitness apps**: Combine the pressure readings with their timestamps to analyze elevation profiles during activities.
 - **Sensor dashboards**: Display real-time barometer readings using continuous measurement updates.
 
-📖 **Guide**: For outdoor and hiking apps that need faster-than-GPS elevation change detection, see [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/).
-
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
@@ -48,6 +46,7 @@ The Barometer plugin is typically used whenever an app needs to react to changes
 
 - [Announcing the Capacitor Barometer Plugin](https://capawesome.io/blog/announcing-the-capacitor-barometer-plugin/)
 - [Exploring the Capacitor Barometer API](https://capawesome.io/blog/exploring-the-capacitor-barometer-api/)
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How to use pressure readings for faster-than-GPS elevation change detection in outdoor and hiking apps.
 
 ## Installation
 

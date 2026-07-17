@@ -13,6 +13,7 @@ Capacitor plugin to detect whether the device is in silent mode.
 - 🔇 **Silent detection**: Check whether the device is currently in silent mode.
 - 🔔 **Ringer mode**: Read the exact ringer mode (normal, vibrate or silent) on Android.
 - 👂 **Change events**: Listen for changes to the silent mode state.
+- 🤝 **Compatibility**: Works alongside the [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/), [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/) and [Volume](https://capawesome.io/docs/sdks/capacitor/volume/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -296,9 +297,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
 - [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 - [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
+- [Volume](https://capawesome.io/docs/sdks/capacitor/volume/): Control the volume and observe hardware volume button presses.
 
 ## Newsletter
 

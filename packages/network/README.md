@@ -17,8 +17,8 @@ The Capacitor Network plugin is one of the most complete network information sol
 - ✈️ **Airplane mode**: Read whether the airplane mode is enabled (Android).
 - 👂 **Change events**: Listen for changes to the network status.
 - 🌐 **Web support**: Read the network status on the web.
-- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🤝 **Compatibility**: Works alongside the [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/) plugin.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -289,11 +289,11 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
-- [Sim](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
 - [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
 - [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy (BLE) devices in the central and peripheral role.
 - [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
+- [Sim](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+- [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 
 ## Newsletter
 

@@ -19,6 +19,7 @@ The Capacitor Asset Manager plugin is one of the most complete native asset acce
 - 🔄 **Bundle access**: Direct access to native app bundle assets.
 - 🗂️ **Directory operations**: Handle both individual files and entire directories.
 - 📦 **Multiple encodings**: Support for Base64 and UTF-8 file reading.
+- 🤝 **Compatibility**: Works alongside the [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/), [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) and [Zip](https://capawesome.io/docs/sdks/capacitor/zip/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -274,8 +275,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Select a file, directory, image, or video from the device's file system or gallery.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Select a file, directory, image, or video from the device's file system or gallery.
 - [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories with support for encryption.
 
 ## Newsletter

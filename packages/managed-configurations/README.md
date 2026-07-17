@@ -225,10 +225,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Intune](https://capawesome.io/docs/sdks/capacitor/intune/): Protect corporate data with Microsoft Intune Mobile Application Management (the MAM channel counterpart to this plugin).
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [Intune](https://capawesome.io/docs/sdks/capacitor/intune/): Protect corporate data with Microsoft Intune Mobile Application Management (the MAM channel counterpart to this plugin).
 - [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter
 

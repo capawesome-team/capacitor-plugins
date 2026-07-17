@@ -15,6 +15,7 @@ Capacitor plugin for native alert, confirm, and prompt dialogs.
 - ⌨️ **Prompt**: Request text input from the user.
 - 🌐 **Cross-platform**: Works on Android, iOS, and the web.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/), [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/) and [Toast](https://capawesome.io/docs/sdks/capacitor/toast/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -283,8 +284,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
-- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
 - [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Let the user pick a date and time with a native picker.
+- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
 
 ## Newsletter
 

@@ -612,10 +612,6 @@ You need to add the `NSFaceIDUsageDescription` key to your `Info.plist` file as 
 
 The plugin is compatible with the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) and [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugins, which can store sensitive key/value pairs. Check out the guide [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/) for a complete walkthrough.
 
-### Can I use Biometrics alongside social sign-in providers?
-
-Yes. A common pattern is to sign in once with [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/) or [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/), then use this plugin to re-authenticate the user locally on subsequent app launches instead of repeating the full sign-in flow every time.
-
 ## Related Plugins
 
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.

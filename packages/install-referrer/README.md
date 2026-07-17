@@ -12,6 +12,7 @@ Capacitor plugin for reading install attribution data from the [Play Install Ref
 
 - 🤖 **Play Install Referrer**: Read the Play Store install referrer on Android.
 - 🍏 **Apple Ad Services**: Read the Apple Ad Services attribution token on iOS.
+- 🤝 **Compatibility**: Works alongside the [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/), [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/) and [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -220,8 +221,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request the user's permission to track them via the App Tracking Transparency framework on iOS.
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Capture analytics events with the PostHog platform.
 - [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Measure user engagement with Firebase Analytics.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Capture analytics events with the PostHog platform.
 
 ## Newsletter
 

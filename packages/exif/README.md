@@ -16,8 +16,8 @@ Capacitor plugin to read, write and remove EXIF metadata from image files.
 - 💎 **Lossless**: The pixel data is never re-encoded, so the image quality is not affected.
 - 🖼️ **HEIC support**: Read and write HEIC metadata natively, which JavaScript libraries can not do.
 - ⚡ **Native performance**: Files are processed natively and never loaded into the WebView memory.
-- 🤝 **Compatibility**: Works alongside the [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/), [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) and [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/) plugins.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/), [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) and [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -372,8 +372,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Pick the image files whose metadata you want to read or edit.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images in formats like PNG, JPEG, and WebP.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Pick the image files whose metadata you want to read or edit.
 - [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo.
 - [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, and format conversion.
 

@@ -17,6 +17,7 @@ The Capacitor Age Signals plugin is one of the most complete age assurance solut
 - 👨‍👩‍👧‍👦 **Parental Controls**: Support for supervised accounts with parental approval status.
 - 🧪 **Testing Support**: Built-in `FakeAgeSignalsManager` integration for testing different age verification scenarios (Android).
 - 🌍 **Compliance Ready**: Built for US state age verification requirements (effective January 1, 2026).
+- 🤝 **Compatibility**: Works alongside the [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/) and [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

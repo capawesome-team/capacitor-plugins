@@ -38,7 +38,6 @@ The Bluetooth Low Energy plugin is typically used to communicate with nearby BLE
 - **Background data collection**: Keep the connection alive while the app is in the background using a foreground service on Android.
 - **Device-to-device communication**: Act as a BLE peripheral and advertise your own services to other central devices.
 - **Multi-device setups**: Connect to and communicate with multiple BLE devices at the same time.
-- **Connectivity-aware sync**: Buffer data collected from BLE devices and only upload it once the [Network](https://capawesome.io/docs/sdks/capacitor/network/) plugin reports the device is online, avoiding failed syncs over an unreliable connection.
 - **Tap-to-pair onboarding**: Read a device's identifier from an [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/) tag, then connect to it over BLE — no manual scanning or pairing UI needed.
 
 ## Testimonials

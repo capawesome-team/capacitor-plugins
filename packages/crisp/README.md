@@ -21,6 +21,7 @@ The Capacitor Crisp plugin is a comprehensive integration of the Crisp chat SDKs
 - 🔔 **Push Notifications**: Interoperate with Firebase Cloud Messaging (Android) and APNs (iOS).
 - 📡 **Typed Events**: Listen for chat, message, and session events with typed listeners.
 - 🌐 **Typed Web SDK**: Uses the official `crisp-sdk-web` package on the web.
+- 🤝 **Compatibility**: Looking for a different chat SDK? Check out the [Intercom](https://capawesome.io/docs/sdks/capacitor/intercom/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -926,9 +927,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
 - [Intercom](https://capawesome.io/docs/sdks/capacitor/intercom/): Unofficial Capacitor plugin for the Intercom live chat and customer support platform.
 - [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
-- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
 
 ## Newsletter
 

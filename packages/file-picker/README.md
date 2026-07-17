@@ -19,6 +19,7 @@ The Capacitor File Picker plugin is one of the most complete file selection solu
 - 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
 - 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
 - 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
+- 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS. 
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -661,10 +662,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a picked file with the default application.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images before uploading them.
-- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a picked file with the default application.
 - [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive files shared from other apps.
+- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
 
 ## Newsletter
 

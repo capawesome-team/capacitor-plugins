@@ -15,8 +15,8 @@ Capacitor plugin to display PDF documents in a fullscreen native viewer.
 - 🔍 **Zoom**: Pinch to zoom in and out.
 - 🔑 **Password Protection**: Open password-protected PDF documents.
 - 🔔 **Events**: Listen for page changes and the closing of the viewer.
-- 🤝 **Compatibility**: Works alongside the [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) plugins.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -319,8 +319,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a PDF file from the device's file system.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application instead of an in-app viewer.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a PDF file from the device's file system.
 - [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/): Generate paginated PDF files from HTML content or URLs.
 - [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print PDF documents on Android and iOS.
 

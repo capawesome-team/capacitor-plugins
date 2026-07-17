@@ -15,6 +15,7 @@ Capacitor plugin to launch navigation apps with turn-by-turn directions.
 - 📍 **Coordinates & addresses**: Navigate to coordinates or a plain address.
 - 🚗 **Travel modes**: Choose between driving, walking, bicycling and transit (best-effort per app).
 - ✅ **Availability**: Check which navigation apps are installed and can be launched.
+- 🤝 **Compatibility**: Works alongside the [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/), [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/) and [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -346,9 +347,9 @@ No, the `getAvailableApps` and `navigate` methods are only available on Android 
 
 ## Related Plugins
 
+- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
 - [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
 - [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/): Convert addresses into coordinates and vice versa.
-- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
 
 ## Newsletter
 

@@ -15,6 +15,7 @@ Capacitor plugin to create system alarms and timers.
 - 📋 **Alarm management**: List and cancel the alarms created by your app on iOS.
 - 🍏 **AlarmKit**: One of the first plugins to support Apple's new AlarmKit framework on iOS 26.
 - 🔐 **Permissions**: Check and request the alarm authorization with a single call.
+- 🤝 **Compatibility**: Works alongside the [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/), [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/) and [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -523,9 +524,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
 - [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Let the user pick the alarm time with a native date and time picker.
 - [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
-- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
 
 ## Newsletter
 

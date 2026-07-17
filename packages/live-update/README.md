@@ -28,6 +28,7 @@ The Capacitor Live Update plugin is one of the most feature-rich Over-the-Air (O
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 1,000 projects to update apps on more than 20,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
+- 🤝 **Compatibility**: Works alongside the [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/) and [Firebase Remote Config](https://capawesome.io/docs/sdks/capacitor/firebase/remote-config/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 

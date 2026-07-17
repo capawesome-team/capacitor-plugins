@@ -17,8 +17,8 @@ The Capacitor Battery plugin is one of the most complete battery monitoring solu
 - 🪫 **Low power mode**: Read whether the low power mode is enabled.
 - 👂 **Change events**: Listen for changes to the battery level, state and low power mode.
 - 🌐 **Web support**: Read the battery level and state on supported browsers.
-- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🤝 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/) plugin.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -33,13 +33,15 @@ The Battery plugin is typically used whenever an app should adapt its behavior t
 - **Status display**: Show the current battery level and charging state inside your app, for example in a kiosk or fleet app.
 - **Reacting to changes**: Warn the user when the battery level drops by listening for change events.
 
-📖 **Guide**: See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/) for how battery state pairs with Thermal State to gate background work.
-
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How battery state pairs with the Thermal State plugin to gate background work.
 
 ## Installation
 

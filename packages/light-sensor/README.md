@@ -15,9 +15,9 @@ The Capacitor Light Sensor plugin provides a complete solution for ambient light
 - 🌗 **Illuminance**: Read the ambient light level in lux.
 - ⚡ **Real-time measurements**: Continuous light data with event listeners.
 - 🖥️ **Native**: Supports Android.
+- 🤝 **Compatibility**: Works alongside the [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) plugin.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -30,13 +30,15 @@ The Light Sensor plugin is typically used to react to the lighting conditions ar
 - **Environment monitoring**: Continuously measure the light level in a room using real-time measurement events.
 - **Reading comfort**: Detect dark environments and suggest a more comfortable display mode to the user.
 
-📖 **Guide**: See [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/) for how ambient light readings pair with the Proximity Sensor for adaptive UX.
-
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How ambient light readings pair with the Proximity Sensor for adaptive UX.
 
 ## Installation
 
@@ -328,10 +330,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
-- [Proximity Sensor](https://capawesome.io/docs/sdks/capacitor/proximity-sensor/): Read the device's proximity sensor.
-- [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure in hectopascals (hPa).
 - [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
+- [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure in hectopascals (hPa).
+- [Proximity Sensor](https://capawesome.io/docs/sdks/capacitor/proximity-sensor/): Read the device's proximity sensor.
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 
 ## Newsletter
 

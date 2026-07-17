@@ -19,7 +19,7 @@ The Capacitor Google Sign-In plugin is one of the most complete Google authentic
 - 🛡️ **Nonce Support**: Prevent replay attacks with a custom nonce on Android and Web.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
-- 🤝 **Compatibility**: Compatible with the [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/) and [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -338,10 +338,6 @@ On Web, the plugin uses a redirect-based OAuth flow. The `signIn(...)` method re
 ### How do I get an access token for Google APIs?
 
 Configure the `scopes` option in the `initialize(...)` method. The plugin then requests authorization in addition to authentication, which enables the `accessToken` and `serverAuthCode` properties in the sign-in result. If you need access and refresh tokens on your backend, exchange the `serverAuthCode` there, never client-side, as described in the [Security](#security) section.
-
-### Should I add biometric authentication on top of Google Sign-In?
-
-Many apps do, for returning sessions: sign in with Google once, then use the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/) plugin to re-authenticate the user with a fingerprint or face scan on subsequent app launches instead of repeating the full sign-in flow.
 
 ## Related Plugins
 

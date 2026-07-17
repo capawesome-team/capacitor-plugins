@@ -20,6 +20,7 @@ The Capacitor Superwall plugin brings remotely-configured paywalls and paywall e
 - 🧪 **A/B Testing**: Built-in support for paywall experiments and holdout groups.
 - 🔗 **Deep Linking**: Handle deep links for paywall campaigns.
 - 🎨 **Customization**: Configure paywall behavior, logging, and appearance.
+- 🤝 **Compatibility**: Works alongside the [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/) and [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -964,9 +965,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Track events and analyze user behavior with PostHog.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Track events and analyze user behavior with PostHog.
+- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
 
 ## Newsletter
 

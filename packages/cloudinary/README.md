@@ -16,6 +16,7 @@ Capacitor Cloudinary allows you to use the native Cloudinary SDKs to upload file
 - 🍕 Chunk upload of large files
 - ❌ No more out-of-memory issues
 - 📁 Works with the [Capacitor Filesystem](https://capacitorjs.com/docs/apis/filesystem) and [Capacitor File Picker](https://github.com/capawesome-team/capacitor-file-picker)
+- 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) plugins.
 
 ## Use Cases
 
@@ -318,9 +319,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, image, or video to upload to Cloudinary.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images before uploading them.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a downloaded file with the default application.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, image, or video to upload to Cloudinary.
 
 ## Newsletter
 

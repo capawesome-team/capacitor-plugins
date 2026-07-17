@@ -13,9 +13,9 @@ Capacitor plugin to open the native phone dialer prefilled with a phone number.
 - 📞 **Dial**: Open the native phone dialer prefilled with a phone number.
 - ✅ **Capability check**: Check whether the device is able to open the phone dialer.
 - 🔒 **Privacy-friendly**: The user always reviews the number and places the call. The plugin never calls on its own.
+- 🤝 **Compatibility**: Works alongside the [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -225,9 +225,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
-- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
 - [Contacts](https://capawesome.io/docs/sdks/capacitor/contacts/): Read, write, or select device contacts, for example to look up a phone number before dialing.
+- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

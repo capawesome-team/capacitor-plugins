@@ -18,6 +18,7 @@ The Capacitor Node.js plugin is one of the most complete solutions for running N
 - 🔁 **Bidirectional communication**: Event-based message passing between the Capacitor app and the Node.js runtime.
 - 📦 **npm ecosystem**: Use npm packages that are not browser-compatible and rely on Node.js core modules.
 - 🛠️ **Configurable**: Start the Node.js runtime automatically or manually with custom arguments, environment variables and script.
+- 🤝 **Compatibility**: Works alongside the [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/), [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/) and [Zip](https://capawesome.io/docs/sdks/capacitor/zip/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!

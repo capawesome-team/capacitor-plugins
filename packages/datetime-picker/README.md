@@ -20,6 +20,7 @@ The Capacitor Datetime Picker plugin is one of the most feature-rich date and ti
 - 🔒 **Min/Max constraints**: Set minimum and maximum selectable dates/times.
 - 📱 **Native UI**: Uses platform-specific picker components.
 - ⚙️ **Flexible configuration**: Customizable button texts and picker modes.
+- 🤝 **Compatibility**: Works alongside the [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/), [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) and [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -234,8 +235,8 @@ No, this plugin is only available on Android and iOS, where it uses platform-spe
 
 ## Related Plugins
 
-- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
 - [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's preferred locales to localize the picker.
 
 ## Credits

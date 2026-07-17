@@ -16,6 +16,7 @@ The Capacitor Screenshot plugin is one of the most capable screen capture soluti
 - 📸 **Easy screenshots**: Simple one-method API for taking screenshots.
 - 🌐 **Web support**: Uses html2canvas for web platform screenshot capture.
 - 📱 **Native capture**: High-quality native screenshot capture on mobile.
+- 🤝 **Compatibility**: Works alongside the [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/), [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/) and [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -137,9 +138,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
-- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo, for example a captured screenshot.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo, for example a captured screenshot.
+- [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
 
 ## Newsletter
 

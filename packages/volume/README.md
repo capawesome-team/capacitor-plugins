@@ -15,6 +15,7 @@ Capacitor plugin to control the volume and observe hardware volume button presse
 - 🔘 **Volume buttons**: Listen for hardware volume button presses.
 - 🤫 **Suppression**: Keep the volume unchanged and hide the system volume indicator while watching.
 - 👂 **Change events**: Listen for changes to the volume level.
+- 🤝 **Compatibility**: Works alongside the [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/), [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/) and [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -479,9 +480,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 - [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
 - [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
-- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 
 ## Newsletter
 

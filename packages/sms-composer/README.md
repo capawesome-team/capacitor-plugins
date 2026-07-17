@@ -13,6 +13,7 @@ Capacitor plugin to open the native SMS composer prefilled with recipients and a
 - ✉️ **Compose**: Open the native SMS composer prefilled with recipients and a message body.
 - ✅ **Capability check**: Check whether the device is able to compose and send SMS messages.
 - 🔒 **Privacy-friendly**: The user always reviews and sends the message. The plugin never sends SMS on its own.
+- 🤝 **Compatibility**: Works alongside the [Android SMS Retriever](https://capawesome.io/docs/sdks/capacitor/android-sms-retriever/), [Contacts](https://capawesome.io/docs/sdks/capacitor/contacts/) and [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -242,10 +243,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
-- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
 - [Android SMS Retriever](https://capawesome.io/docs/sdks/capacitor/android-sms-retriever/): OTP autofill on Android via the SMS User Consent and Phone Number Hint APIs.
 - [Contacts](https://capawesome.io/docs/sdks/capacitor/contacts/): Read, write, or select device contacts.
+- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
 
 ## Newsletter
 

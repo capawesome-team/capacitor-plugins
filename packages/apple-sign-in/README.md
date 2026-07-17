@@ -259,14 +259,10 @@ On iOS, Apple only provides the user's email address, given name, and family nam
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
 
-### Should I add biometric authentication on top of Apple Sign-In?
-
-Many apps do, for returning sessions: sign in with Apple once, then use the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/) plugin to re-authenticate the user with Face ID or Touch ID on subsequent app launches instead of repeating the full sign-in flow.
-
 ## Related Plugins
 
-- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in with Google.
 - [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/): Sign in with Facebook.
+- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in with Google.
 - [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
 - [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 
