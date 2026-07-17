@@ -16,6 +16,7 @@ The Capacitor Wifi plugin is one of the most complete Wi-Fi management solutions
 - 🌐 **Network Management**: Add, connect and disconnect networks.
 - 🔍 **Network Scan**: Perform scans for available networks.
 - 📟 **Device Info**: Retrieve essential device information like IP address.
+- 🤝 **Compatibility**: Works alongside the [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/), [Network](https://capawesome.io/docs/sdks/capacitor/network/) and [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
@@ -685,8 +686,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as the connection type and status.
 - [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy devices in the central and peripheral role.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as the connection type and status.
 - [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags.
 - [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
 

@@ -16,6 +16,7 @@ The Capacitor Share Target plugin is one of the most complete solutions for rece
 - 📝 **Multi-content types**: Handle text, URLs, images, videos, and files.
 - 🌐 **Web Share Target API**: Leverage the native sharing capabilities of the web.
 - 📦 **Large File Support**: Efficient file caching without memory limitations.
+- 🤝 **Compatibility**: Works alongside the [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/), [Clipboard](https://capawesome.io/docs/sdks/capacitor/clipboard/) and [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -951,9 +952,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
-- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a received file with the default application.
 - [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents, for example to share content with other apps.
+- [Clipboard](https://capawesome.io/docs/sdks/capacitor/clipboard/): Read from and write to the system clipboard.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a received file with the default application.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
 
 ## Newsletter
 

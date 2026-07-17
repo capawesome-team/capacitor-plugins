@@ -19,6 +19,7 @@ The Capacitor Barometer plugin is one of the most complete air pressure sensing 
 - 🔑 **Permissions**: Check and request barometer sensor permissions.
 - 📊 **Additional Data**: Get relative altitude measurements.
 - ⏱️ **Timestamps**: Each measurement includes precise timing information.
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Compass](https://capawesome.io/docs/sdks/capacitor/compass/) and [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -46,6 +47,7 @@ The Barometer plugin is typically used whenever an app needs to react to changes
 
 - [Announcing the Capacitor Barometer Plugin](https://capawesome.io/blog/announcing-the-capacitor-barometer-plugin/)
 - [Exploring the Capacitor Barometer API](https://capawesome.io/blog/exploring-the-capacitor-barometer-api/)
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How to use pressure readings for faster-than-GPS elevation change detection in outdoor and hiking apps.
 
 ## Installation
 
@@ -408,8 +410,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
-- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
 - [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device's compass heading.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
 
 ## Newsletter
 

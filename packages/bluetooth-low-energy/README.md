@@ -22,6 +22,7 @@ The Capacitor Bluetooth Low Energy plugin is one of the most complete BLE commun
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 300 projects.
+- 🤝 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/), [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/) and [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -38,6 +39,7 @@ The Bluetooth Low Energy plugin is typically used to communicate with nearby BLE
 - **Background data collection**: Keep the connection alive while the app is in the background using a foreground service on Android.
 - **Device-to-device communication**: Act as a BLE peripheral and advertise your own services to other central devices.
 - **Multi-device setups**: Connect to and communicate with multiple BLE devices at the same time.
+- **Tap-to-pair onboarding**: Read a device's identifier from an [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/) tag, then connect to it over BLE — no manual scanning or pairing UI needed.
 
 ## Testimonials
 
@@ -1806,10 +1808,11 @@ A headless task lets you run your own native code when a specific Bluetooth Low 
 
 ## Related Plugins
 
-- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
-- [Wi-Fi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 - [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions to keep background work running reliably.
 - [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
+- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
+- [Wi-Fi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 
 ## Newsletter
 
