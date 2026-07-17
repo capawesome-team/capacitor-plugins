@@ -5,9 +5,7 @@
  *
  * Each bundle is a copy of the web app with a `<meta name="bundle-version">`
  * tag injected into its `<head>` so the e2e spec can detect which bundle is
- * active after a reload. Bundles are emitted both as signed zip artifacts and
- * (for the delta case) as a plain directory the mock server turns into a
- * manifest on the fly.
+ * active after a reload. Bundles are emitted as signed zip artifacts.
  *
  * Output (git-ignored): `test/electron/.fixtures/`.
  */
@@ -114,12 +112,6 @@ const main = () => {
   addZipBundle('beta-1.0.0', 'beta-1.0.0', {
     privateKeyPem: signer.privateKeyPem,
   });
-  // Manifest (delta) bundle: served as a directory, manifest built on the fly.
-  const manifestDir = createBundleDir('4.0.0-manifest', '4.0.0');
-  bundles['4.0.0-manifest'] = {
-    type: 'manifest',
-    dir: join('bundles', '4.0.0-manifest'),
-  };
 
   const registry = {
     keys: {

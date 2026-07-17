@@ -98,7 +98,6 @@ export class LiveUpdateElectron
       autoBlockRolledBackBundles: this.config.autoBlockRolledBackBundles,
       autoDeleteBundles: this.config.autoDeleteBundles,
       dataDirectory: join(app.getPath('userData'), 'capawesome-live-update'),
-      defaultBundlePath: join(app.getAppPath(), 'app'),
       defaultChannel: this.config.defaultChannel,
       httpTimeout: this.config.httpTimeout,
       osVersion: process.getSystemVersion(),

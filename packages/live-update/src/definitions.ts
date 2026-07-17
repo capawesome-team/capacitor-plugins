@@ -448,6 +448,9 @@ export interface DownloadBundleOptions {
   /**
    * The artifact type of the bundle.
    *
+   * **Attention**: The `manifest` artifact type is not supported on Electron.
+   * Only the `zip` artifact type is supported there.
+   *
    * @since 6.6.0
    * @default 'zip'
    * @example 'manifest'
@@ -578,6 +581,9 @@ export interface FetchLatestBundleOptions {
 export interface FetchLatestBundleResult {
   /**
    * The artifact type of the bundle.
+   *
+   * **Attention**: The `manifest` artifact type is not supported on Electron.
+   * Only the `zip` artifact type is supported there.
    *
    * @since 6.7.0
    */

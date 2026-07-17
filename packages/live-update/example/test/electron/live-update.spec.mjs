@@ -203,25 +203,3 @@ test('fetchChannels rejects when channel discovery is disabled', async () => {
 
   await mock.control({ channelsEnabled: true });
 });
-
-test('manifest (delta) update applies on top of the packaged default bundle', async () => {
-  await mock.control({ latestByChannel: { default: '4.0.0-manifest' } });
-  const { page } = await boot({
-    liveUpdate: { readyTimeout: 0 },
-    userDataDir: freshUserDataDir(),
-  });
-
-  // The current bundle is the packaged default: the first delta is computed
-  // against it lazily.
-  expect(await activeBundleVersion(page)).toBeNull();
-
-  const sync = await callPlugin(page, 'sync');
-  expect(sync.nextBundleId).toBe('4.0.0-manifest');
-
-  await triggerReload(page);
-  await waitForBundle(page, '4.0.0');
-  expect(await activeBundleVersion(page)).toBe('4.0.0');
-  expect((await callPlugin(page, 'getCurrentBundle')).bundleId).toBe(
-    '4.0.0-manifest',
-  );
-});

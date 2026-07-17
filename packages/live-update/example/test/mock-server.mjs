@@ -1,38 +1,13 @@
 import { createHash } from 'node:crypto';
-import {
-  createReadStream,
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
-import { dirname, isAbsolute, join, posix, relative, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const LEGACY_BUNDLE_PATH = join(HERE, 'fixtures', 'bundle.zip');
-const MANIFEST_FILE_NAME = 'capawesome-live-update-manifest.json';
 
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-
-const isPathInside = (parentDir, childPath) => {
-  const rel = relative(resolve(parentDir), resolve(childPath));
-  return rel !== '' && !rel.startsWith('..') && !isAbsolute(rel);
-};
-
-const walkFiles = dir => {
-  const result = [];
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory()) {
-      result.push(...walkFiles(full));
-    } else if (entry.isFile()) {
-      result.push(full);
-    }
-  }
-  return result;
-};
 
 const sendJson = (res, status, body) => {
   const payload = JSON.stringify(body);
@@ -45,9 +20,9 @@ const sendJson = (res, status, body) => {
 
 /**
  * Creates a mock Capawesome Cloud server that implements the endpoints the
- * live-update engine calls: `bundles/latest`, `channels`, zip downloads and
- * `manifest` (delta) downloads. When `registry` is omitted only the legacy
- * `GET /bundle.zip` route (used by the mobile Maestro flows) is served.
+ * live-update engine calls: `bundles/latest`, `channels` and zip downloads.
+ * When `registry` is omitted only the legacy `GET /bundle.zip` route (used by
+ * the mobile Maestro flows) is served.
  */
 export const createMockServer = ({ registry, fixturesDir } = {}) => {
   const bundles = registry?.bundles ?? {};
@@ -112,14 +87,6 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
     if (!entry) {
       return sendJson(res, 404, { message: 'No bundle available.' });
     }
-    if (entry.type === 'manifest') {
-      return sendJson(res, 200, {
-        artifactType: 'manifest',
-        bundleId,
-        channelName: channelName ?? null,
-        url: `${requestOrigin}/manifest/${encodeURIComponent(bundleId)}`,
-      });
-    }
     sendJson(res, 200, {
       artifactType: 'zip',
       bundleId,
@@ -143,41 +110,6 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
       'Content-Length': bytes.length,
       'X-Checksum': sha256(bytes),
       ...(entry.signature ? { 'X-Signature': entry.signature } : {}),
-    });
-    res.end(bytes);
-  };
-
-  const handleManifest = (res, bundleId, url) => {
-    const entry = bundles[bundleId];
-    if (!entry || entry.type !== 'manifest') {
-      res.writeHead(404);
-      return res.end();
-    }
-    const bundleDir = join(fixturesDir, entry.dir);
-    const href = url.searchParams.get('href');
-    if (href === MANIFEST_FILE_NAME) {
-      const items = walkFiles(bundleDir).map(full => {
-        const bytes = readFileSync(full);
-        return {
-          href: posix.normalize(
-            relative(bundleDir, full).split(/[\\/]/).join('/'),
-          ),
-          checksum: sha256(bytes),
-          sizeInBytes: bytes.length,
-        };
-      });
-      return sendJson(res, 200, items);
-    }
-    const filePath = join(bundleDir, href ?? '');
-    if (!href || !existsSync(filePath) || !isPathInside(bundleDir, filePath)) {
-      res.writeHead(404);
-      return res.end();
-    }
-    const bytes = readFileSync(filePath);
-    res.writeHead(200, {
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': bytes.length,
-      'X-Checksum': sha256(bytes),
     });
     res.end(bytes);
   };
@@ -219,13 +151,6 @@ export const createMockServer = ({ registry, fixturesDir } = {}) => {
       return handleDownload(
         res,
         decodeURIComponent(path.slice('/download/'.length)),
-      );
-    }
-    if (req.method === 'GET' && path.startsWith('/manifest/')) {
-      return handleManifest(
-        res,
-        decodeURIComponent(path.slice('/manifest/'.length)),
-        url,
       );
     }
     res.writeHead(404);
