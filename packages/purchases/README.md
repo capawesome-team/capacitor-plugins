@@ -17,6 +17,7 @@ The Capacitor Purchases plugin is one of the most complete in-app purchase solut
 - 🔄 **Purchase Restoration**: Easily sync and restore purchases across devices.
 - 🚀 **Modern APIs**: Uses StoreKit 2 and Google Play Billing Library 8.0.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
+- 🤝 **Compatibility**: Works alongside the [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/) and [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -642,9 +643,9 @@ On Android, upload your app to the Google Play Console, add test accounts under 
 
 ## Related Plugins
 
-- [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/): Unofficial Capacitor plugin for the Superwall SDK to present remotely configured paywalls.
-- [Square Mobile Payments](https://capawesome.io/docs/sdks/capacitor/square-mobile-payments/): Unofficial Capacitor plugin for the Square Mobile Payments SDK.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Allow users to submit app store reviews and ratings.
+- [Square Mobile Payments](https://capawesome.io/docs/sdks/capacitor/square-mobile-payments/): Unofficial Capacitor plugin for the Square Mobile Payments SDK.
+- [Superwall](https://capawesome.io/docs/sdks/capacitor/superwall/): Unofficial Capacitor plugin for the Superwall SDK to present remotely configured paywalls.
 
 ## Newsletter
 

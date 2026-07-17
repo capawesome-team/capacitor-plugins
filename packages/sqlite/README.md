@@ -1132,9 +1132,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
-- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
 
 ## Next steps
 

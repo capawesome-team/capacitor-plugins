@@ -19,6 +19,7 @@ The Capacitor NFC plugin is one of the most complete NFC solutions for Capacitor
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 500 projects.
 - 📚 **Documentation**: Comprehensive documentation to help you get started.
+- 🤝 **Compatibility**: Works alongside the [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/), [ML Kit Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/) and [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -1292,6 +1293,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy (BLE) devices in the central and peripheral role.
 - [ML Kit Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
 - [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 - [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
 

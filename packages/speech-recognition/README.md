@@ -21,8 +21,8 @@ The Capacitor Speech Recognition plugin is one of the most complete speech-to-te
 - 💬 **Contextual Strings**: Provide an array of phrases that should be recognized, even if they are not in the system vocabulary.
 - 📱 **On-Device Recognition**: Force on-device-only speech recognition, query available on-device languages, and download language models.
 - 🧠 **SpeechTranscriber**: Opt-in support for Apple's modern `SpeechTranscriber` API (iOS 26+) with fully on-device processing and no "Speech data will be sent to Apple" permission dialog.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 250 projects.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -823,9 +823,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text (also known as text-to-speech).
-- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
 - [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
+- [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/): Synthesize speech from text (also known as text-to-speech).
 
 ## Newsletter
 

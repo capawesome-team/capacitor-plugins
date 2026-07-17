@@ -19,6 +19,7 @@ The Capacitor Printer plugin is one of the most complete printing solutions for 
 - 🖨️ **PDF Printer**: Print PDF files.
 - 🖨️ **Web View Printer**: Print web view content.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- 🤝 **Compatibility**: Works alongside the [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/), [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/) and [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -377,9 +378,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file to print from the device's file system.
 - [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/): Generate paginated PDF files from HTML content or URLs.
 - [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/): Display PDF documents in a fullscreen native viewer.
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file to print from the device's file system.
 
 ## Newsletter
 

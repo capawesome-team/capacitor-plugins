@@ -22,6 +22,7 @@ The Capacitor Bluetooth Low Energy plugin is one of the most complete BLE commun
 - 📱 **Multiple Devices**: Connect to multiple devices at the same time.
 - 🛠️ **Utils**: Utility functions to make your life easier.
 - ⚔️ **Battle-Tested**: Used in more than 300 projects.
+- 🤝 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/), [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/) and [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -1807,11 +1808,11 @@ A headless task lets you run your own native code when a specific Bluetooth Low 
 
 ## Related Plugins
 
-- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
-- [Wi-Fi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 - [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions to keep background work running reliably.
 - [Android Foreground Service](https://capawesome.io/docs/sdks/capacitor/android-foreground-service/): Run a foreground service on Android.
 - [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
+- [NFC](https://capawesome.io/docs/sdks/capacitor/nfc/): Read, write, and emulate NFC tags with advanced features like HCE and raw command handling.
+- [Wi-Fi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
 
 ## Newsletter
 

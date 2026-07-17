@@ -20,8 +20,8 @@ The Capacitor Speech Synthesis plugin offers one of the most feature-rich text-t
 - 📜 **Queue Strategy**: Add or flush the utterance to the queue.
 - 🔊 **Events**: Listen for events like `boundary`, `end`, `error` and `start`.
 - ⏸️ **Pause/Resume**: Pause and resume speech synthesis.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) plugins.
 - ⚔️ **Battle-Tested**: Used in more than 100 projects.
+- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/), [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/) and [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -822,9 +822,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/): Transcribe speech into text (also known as speech-to-text).
 - [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/): Play audio with background support.
 - [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/): Record audio using the device's microphone.
+- [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/): Transcribe speech into text (also known as speech-to-text).
 
 ## Newsletter
 
