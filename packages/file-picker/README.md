@@ -564,9 +564,10 @@ Remove all listeners for this plugin.
 
 #### PickDirectoryResult
 
-| Prop       | Type                | Description                         | Since |
-| ---------- | ------------------- | ----------------------------------- | ----- |
-| **`path`** | <code>string</code> | The path to the selected directory. | 6.2.0 |
+| Prop           | Type                | Description                                                                                                                                                         | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bookmark`** | <code>string</code> | The base64-encoded security-scoped bookmark of the selected directory. It can be used to retain access to the directory across app launches. Only available on iOS. | 8.1.0 |
+| **`path`**     | <code>string</code> | The path to the selected directory.                                                                                                                                 | 6.2.0 |
 
 
 #### PickMediaOptions

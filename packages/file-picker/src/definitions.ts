@@ -318,6 +318,16 @@ export interface PickMediaOptions {
 
 export interface PickDirectoryResult {
   /**
+   * The base64-encoded security-scoped bookmark of the selected directory.
+   *
+   * It can be used to retain access to the directory across app launches.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  bookmark?: string;
+  /**
    * The path to the selected directory.
    *
    * @since 6.2.0

@@ -118,6 +118,11 @@ public class FilePickerPlugin extends Plugin {
     public void pickDirectory(PluginCall call) {
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION |
+                Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            );
             startActivityForResult(call, intent, "pickDirectoryResult");
         } catch (Exception ex) {
             String message = ex.getMessage();
