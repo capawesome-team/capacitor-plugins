@@ -309,7 +309,15 @@ extension FilePicker: UIDocumentPickerDelegate {
                 plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
             }
         } else if invokedMethod == "pickDirectory" {
-            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, error: nil)
+            var bookmark: String?
+            if let url = urls.first {
+                let isSecurityScoped = url.startAccessingSecurityScopedResource()
+                bookmark = (try? url.bookmarkData())?.base64EncodedString()
+                if isSecurityScoped {
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, bookmark: bookmark, error: nil)
         } else {
             return
         }
@@ -320,7 +328,7 @@ extension FilePicker: UIDocumentPickerDelegate {
         if invokedMethod == "pickFiles" {
             plugin?.handleDocumentPickerResult(urls: nil, error: nil)
         } else if invokedMethod == "pickDirectory" {
-            plugin?.handleDirectoryPickerResult(path: nil, error: nil)
+            plugin?.handleDirectoryPickerResult(path: nil, bookmark: nil, error: nil)
         } else {
             return
         }
