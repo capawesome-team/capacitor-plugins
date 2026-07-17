@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.3
+
+### Patch Changes
+
+- [`587cd56a9661c767c7ab46a162ff002931ef706d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/587cd56a9661c767c7ab46a162ff002931ef706d) ([#495](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/495)): fix: map tech types to tag technology class names on Android so that `startScanSession` delivers matching tags
+
 ## 8.1.2
 
 ### Patch Changes
