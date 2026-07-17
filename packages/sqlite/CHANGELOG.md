@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.10
+
+### Patch Changes
+
+- [`c8ff47dc84589f90ef2591da15279324303b7ea1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c8ff47dc84589f90ef2591da15279324303b7ea1) ([#497](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/497)): feat: add `closeAll()` method to close all open databases
+
 ## 0.3.9
 
 ### Patch Changes
