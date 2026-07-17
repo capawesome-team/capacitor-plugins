@@ -261,8 +261,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in with Google.
 - [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/): Sign in with Facebook.
+- [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in with Google.
 - [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
 - [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 

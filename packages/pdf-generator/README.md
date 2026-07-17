@@ -16,8 +16,8 @@ Capacitor plugin to generate paginated PDF files from HTML content or URLs.
 - 🖋️ **Vector Output**: Text stays selectable and sharp at any zoom level.
 - 📂 **File Output**: Results are written to a file so even large documents don't exhaust memory.
 - ⏱️ **Timeout**: Configurable timeout so hung pages never hang your app.
-- 🤝 **Compatibility**: Works alongside the [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/), [Printer](https://capawesome.io/docs/sdks/capacitor/printer/) and [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) plugins.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/), [Printer](https://capawesome.io/docs/sdks/capacitor/printer/) and [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -261,9 +261,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
 - [PDF Viewer](https://capawesome.io/docs/sdks/capacitor/pdf-viewer/): Display PDF documents in a fullscreen native viewer.
 - [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print HTML, PDFs, files and more on Android and iOS.
-- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
 
 ## Newsletter
 

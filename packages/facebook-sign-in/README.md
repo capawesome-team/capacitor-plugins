@@ -397,9 +397,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/): Sign in users with their Apple account.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication such as face or fingerprint recognition.
 - [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in users with their Google account.
 - [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with any OAuth 2.0 and OpenID Connect provider.
-- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication such as face or fingerprint recognition.
 
 ## Newsletter
 

@@ -12,6 +12,7 @@ Capacitor plugin to read the device thermal state and react before the operating
 
 - 🌡️ **Thermal state**: Read the current thermal state of the device.
 - 🔔 **Change events**: Get notified whenever the thermal state changes.
+- 🤝 **Compatibility**: Works alongside the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) and [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -31,6 +32,10 @@ The Thermal State plugin is typically used to adapt an app's workload to the dev
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How to gate heavy work like video processing or ML inference before the OS throttles your app.
 
 ## Installation
 

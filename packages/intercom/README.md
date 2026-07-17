@@ -21,9 +21,9 @@ The Capacitor Intercom plugin is a modern integration of the Intercom SDKs for C
 - 🔢 **Unread Count**: Read the unread conversation count and listen for changes.
 - 🔔 **Push Notifications**: Compose cleanly with Firebase Cloud Messaging (Android) and APNs (iOS).
 - 🌐 **Typed Web SDK**: Uses the official `@intercom/messenger-js-sdk` package on the web.
+- 🤝 **Compatibility**: Looking for a different chat SDK? Check out the [Crisp](https://capawesome.io/docs/sdks/capacitor/crisp/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Looking for a different chat SDK? Check out the [Crisp](https://capawesome.io/docs/sdks/capacitor/crisp/) plugin.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -916,6 +916,12 @@ Generate a user hash (HMAC) or a JSON Web Token (JWT) on your backend using your
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Crisp](https://capawesome.io/docs/sdks/capacitor/crisp/): Unofficial Capacitor plugin for the Crisp live chat and customer support platform.
+- [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
 
 ## Newsletter
 

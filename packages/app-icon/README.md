@@ -13,6 +13,7 @@ Capacitor plugin to change the app icon at runtime.
 - 🎨 **Alternate icons**: Switch the home-screen icon between the icons your app declares.
 - 🔍 **Current icon**: Read the name of the icon that is currently in use.
 - 🔄 **Reset**: Restore the default icon at any time.
+- 🤝 **Compatibility**: Works alongside the [App Shortcuts](https://capawesome.io/docs/sdks/capacitor/app-shortcuts/) and [Badge](https://capawesome.io/docs/sdks/capacitor/badge/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -345,8 +346,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [App Shortcuts](https://capawesome.io/docs/sdks/capacitor/app-shortcuts/): Manage app shortcuts and quick actions on the home screen.
-- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
 - [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/): Assist your users with native app updates.
+- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
 
 ## Newsletter
 

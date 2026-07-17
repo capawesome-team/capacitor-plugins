@@ -199,7 +199,7 @@ export interface PickFilesOptions {
    * **Attention**: Reading large files can lead to app crashes.
    * It's therefore not recommended to use this option.
    * Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-   * to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file).
+   * to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file).
    *
    * @default false
    */

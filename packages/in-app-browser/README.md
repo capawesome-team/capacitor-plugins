@@ -19,6 +19,7 @@ The Capacitor In-App Browser plugin is one of the most complete in-app browsing 
 - 🎨 **Toolbar theming**: Customize the toolbar color, title, close button and navigation buttons.
 - 🍪 **Session control**: Clear the cache and session data, or use an isolated data store on iOS.
 - 🎥 **Media permissions**: Camera and microphone permission requests from web pages are forwarded to the app.
+- 🤝 **Compatibility**: Works alongside the [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/), [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) and [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

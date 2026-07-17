@@ -1295,6 +1295,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [ML Kit Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
 - [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
 - [Wifi](https://capawesome.io/docs/sdks/capacitor/wifi/): Manage Wi-Fi connectivity, including adding, connecting, and disconnecting networks.
+- [Network](https://capawesome.io/docs/sdks/capacitor/network/): Access network information such as connection status and type, and listen for network changes.
 
 ## Newsletter
 

@@ -215,8 +215,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the Android navigation bar.
 - [Android Edge-to-Edge Support](https://capawesome.io/docs/sdks/capacitor/android-edge-to-edge-support/): Support edge-to-edge display on Android with features like setting the status bar and navigation bar color.
+- [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the Android navigation bar.
 - [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation.
 
 ## Newsletter

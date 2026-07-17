@@ -17,6 +17,7 @@ The Capacitor Navigation Bar plugin offers one of the most complete solutions fo
 - ➖ **Divider color**: Customize the navigation bar divider color on Android 9+.
 - 👁️ **Visibility**: Hide or show the navigation bar on demand.
 - ⚙️ **Configuration**: Apply defaults at app launch via the Capacitor configuration.
+- 🤝 **Compatibility**: Works alongside the [Android Dark Mode Support](https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/), [Android Edge-to-Edge Support](https://capawesome.io/docs/sdks/capacitor/android-edge-to-edge-support/) and [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
 - ✨ **Handcrafted**: Built from the ground up with care and expertise, not forked or AI-generated.
@@ -361,9 +362,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Android Dark Mode Support](https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/): Seamless dark mode support for Android with `prefers-color-scheme` compatibility.
 - [Android Edge-to-Edge Support](https://capawesome.io/docs/sdks/capacitor/android-edge-to-edge-support/): Support edge-to-edge display on Android, including setting the background color of the status bar and navigation bar.
 - [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/): Hide and show the home indicator on iOS.
-- [Android Dark Mode Support](https://capawesome.io/docs/sdks/capacitor/android-dark-mode-support/): Seamless dark mode support for Android with `prefers-color-scheme` compatibility.
 - [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation.
 
 ## Newsletter

@@ -22,6 +22,7 @@ The Capacitor App Update plugin is one of the most complete native app update so
 - 📈 **Update priority**: Supports update priority levels on Android.
 - 🏪 **App store navigation**: Opens the app store entry for manual updates.
 - 📊 **Update state tracking**: Monitors flexible update progress with listeners.
+- 🤝 **Compatibility**: Works alongside the [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/) plugin.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -434,8 +435,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
 
 ## Newsletter
 

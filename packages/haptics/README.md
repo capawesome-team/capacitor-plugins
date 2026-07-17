@@ -18,6 +18,7 @@ Capacitor plugin to provide haptic feedback such as impacts, notifications, vibr
 - 📳 **Vibrate**: Vibrate the device with a custom duration.
 - 🔎 **Availability check**: Check if haptic feedback is available on the device.
 - 🌐 **Web support**: Best-effort support for the Web using the Vibration API.
+- 🤝 **Compatibility**: Works alongside the [Shake](https://capawesome.io/docs/sdks/capacitor/shake/), [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) and [Volume](https://capawesome.io/docs/sdks/capacitor/volume/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

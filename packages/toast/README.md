@@ -14,6 +14,7 @@ Capacitor plugin to show native toast notifications.
 - 🌐 **Zero-dependency web**: A self-contained web implementation with no additional peer dependencies.
 - 🧭 **Positioning**: Show toasts at the top, center or bottom of the screen.
 - ⏱️ **Durations**: Choose between a short and a long display duration.
+- 🤝 **Compatibility**: Works alongside the [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/), [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) and [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -193,9 +194,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
 - [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
 - [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
 
 ## Newsletter

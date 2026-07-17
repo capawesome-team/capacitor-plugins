@@ -16,6 +16,7 @@ Capacitor plugin to read from and write to the system clipboard.
 - 🔗 **URLs**: Copy URLs as native URL clipboard items.
 - 🌐 **Cross-platform**: Works on Android, iOS, and the web.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/) and [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

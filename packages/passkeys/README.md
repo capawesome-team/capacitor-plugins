@@ -524,8 +524,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
 - [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords or tokens.
 - [Password Autofill](https://capawesome.io/docs/sdks/capacitor/password-autofill/): Save passwords to the platform credential store.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords or tokens.
 
 ## Newsletter
 

@@ -14,6 +14,7 @@ Capacitor plugin to open the native email composer.
 - 📎 **Attachments**: Attach one or more files to the email.
 - ✅ **Availability**: Check whether the device is able to compose and send emails.
 - 🌐 **Cross-platform**: Supports Android, iOS and the web (via `mailto:`).
+- 🤝 **Compatibility**: Works alongside the [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/), [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -250,9 +251,9 @@ Yes, set the `isHtml` option to `true` to have the body interpreted as HTML. On 
 
 ## Related Plugins
 
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
-- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
 - [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select files to attach to an email.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

@@ -16,6 +16,7 @@ Capacitor plugin to read the user's localization preferences, such as preferred 
 - 📏 **Measurement system**: Detect the metric, US, or UK measurement system.
 - 🕐 **Settings**: Read the time zone, clock format, and first day of the week.
 - 🖥️ **Cross-platform**: Full support for Android, iOS, and Web.
+- 🤝 **Compatibility**: Works alongside the [App Language](https://capawesome.io/docs/sdks/capacitor/app-language/), [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/) and [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -233,8 +234,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [App Language](https://capawesome.io/docs/sdks/capacitor/app-language/): Manage the app's own language override, independent of the device language.
-- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, and operating system.
 - [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Native date and time selection with localization and theming support.
+- [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/): Read device information, such as the model, manufacturer, and operating system.
 
 ## Newsletter
 

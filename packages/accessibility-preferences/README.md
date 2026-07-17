@@ -15,6 +15,7 @@ Capacitor plugin for reading the user's system accessibility preferences.
 - 🎞️ **Reduce motion**: Disable animations when the user prefers reduced motion.
 - 🎨 **Contrast & colors**: React to increased contrast and inverted colors.
 - 🌐 **Cross-platform**: Works on Android, iOS, and the Web.
+- 🤝 **Compatibility**: Works alongside the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/), [Screen Reader](https://capawesome.io/docs/sdks/capacitor/screen-reader/) and [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -190,9 +191,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's localization preferences, such as preferred locales and time zone.
 - [Screen Reader](https://capawesome.io/docs/sdks/capacitor/screen-reader/): Interact with screen readers such as VoiceOver and TalkBack.
 - [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
-- [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's localization preferences, such as preferred locales and time zone.
 
 ## Newsletter
 

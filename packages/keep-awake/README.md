@@ -14,6 +14,7 @@ Capacitor plugin to keep the screen awake.
 - 💤 **Allow sleep**: Restore the default screen sleep behavior at any time.
 - 🔍 **State**: Read whether the screen is currently kept awake.
 - 🌐 **Cross-platform**: Supports Android, iOS and Web (via the Screen Wake Lock API).
+- 🤝 **Compatibility**: Works alongside the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/), [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) and [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -262,9 +263,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
 - [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 - [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation.
-- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
 
 ## Newsletter
 

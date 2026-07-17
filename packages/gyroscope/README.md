@@ -16,9 +16,9 @@ The Capacitor Gyroscope plugin is one of the most complete motion sensing soluti
 - ⚡ **Real-time measurements**: Continuous gyroscope data with event listeners.
 - 📊 **Rotation rate**: Accurate x, y, and z-axis rotation rate in rad/s.
 - 🔒 **Permission handling**: Built-in permission management for sensor access.
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -36,6 +36,10 @@ The Gyroscope plugin is typically used whenever an app needs to react to the rot
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How rotation data powers tilt-to-steer game mechanics and AR features together with the Accelerometer.
 
 ## Installation
 

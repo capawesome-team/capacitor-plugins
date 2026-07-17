@@ -19,6 +19,7 @@ The Capacitor YouTube Player plugin embeds YouTube videos as inline, frame-posit
 - 🎛️ **Playback Controls**: Load, cue, play, pause, seek, mute, volume, and playback rate.
 - 📡 **Typed Events**: Listen for ready, state, time, rate, error, and fullscreen events with typed listeners.
 - 📜 **Terms Compliant**: Built on the official YouTube IFrame Player API with TOS-compliant plumbing (see [YouTube Terms of Service](#youtube-terms-of-service)).
+- 🤝 **Compatibility**: Works alongside the [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/) and [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -924,6 +925,11 @@ No. The YouTube Terms of Service prohibit background playback, so the plugin aut
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
+- [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation, for example to allow landscape playback.
 
 ## Newsletter
 

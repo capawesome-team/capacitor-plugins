@@ -18,6 +18,7 @@ The Capacitor Badge plugin is one of the most complete app icon badge solutions 
 - 🔄 **Auto-clear option**: Automatically reset counter when resuming the app.
 - 🔐 **Permission handling**: Check and request badge display permissions.
 - ⚙️ **Configurable**: Customize persistence and auto-clear behaviors.
+- 🤝 **Compatibility**: Works alongside the [App Icon](https://capawesome.io/docs/sdks/capacitor/app-icon/) and [Firebase Cloud Messaging](https://capawesome.io/docs/sdks/capacitor/firebase/cloud-messaging/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!

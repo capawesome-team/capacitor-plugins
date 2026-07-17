@@ -20,6 +20,7 @@ The Capacitor Screen Orientation plugin is one of the most complete orientation 
 - 📢 **Event listeners**: Listen to orientation change events.
 - 📐 **Fine-grained control**: Primary and secondary orientation modes.
 - 🍎 **iPad support**: Special configuration for iPad orientation locking.
+- 🤝 **Compatibility**: Works alongside the [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/), [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/) and [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -317,10 +318,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake, for example during video playback.
-- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 - [Home Indicator](https://capawesome.io/docs/sdks/capacitor/home-indicator/): Hide and show the iOS home indicator.
+- [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake, for example during video playback.
 - [Navigation Bar](https://capawesome.io/docs/sdks/capacitor/navigation-bar/): Set the background color and button style of the Android navigation bar.
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 
 ## Newsletter
 

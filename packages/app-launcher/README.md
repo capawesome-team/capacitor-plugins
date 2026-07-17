@@ -14,9 +14,9 @@ Capacitor plugin to check if an app can be opened and to open it.
 - ✅ **Availability**: Check whether an app can be opened before trying to open it.
 - 🤖 **Package names**: Check and open apps by their package name on Android.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/) and [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/) and [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -256,10 +256,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
-- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens.
 - [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
+- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
 - [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens.
 
 ## Newsletter
 

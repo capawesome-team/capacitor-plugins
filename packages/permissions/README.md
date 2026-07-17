@@ -396,8 +396,8 @@ On the web, only the `NOTIFICATIONS` permission can be checked and requested. Th
 
 ## Related Plugins
 
-- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens, for example to recover from denied permissions.
 - [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request the App Tracking Transparency permission on iOS.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens, for example to recover from denied permissions.
 
 ## Newsletter
 

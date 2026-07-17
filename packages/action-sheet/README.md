@@ -15,9 +15,9 @@ Capacitor plugin for native action sheets.
 - 📝 **Title & Message**: Show a title and message on both Android and iOS.
 - 📱 **iPad Ready**: Automatically anchored as a popover on iPad.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -220,8 +220,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
-- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
 - [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
+- [Toast](https://capawesome.io/docs/sdks/capacitor/toast/): Show native toast notifications.
 
 ## Newsletter
 

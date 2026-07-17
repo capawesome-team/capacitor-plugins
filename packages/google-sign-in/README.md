@@ -19,7 +19,7 @@ The Capacitor Google Sign-In plugin is one of the most complete Google authentic
 - 🛡️ **Nonce Support**: Prevent replay attacks with a custom nonce on Android and Web.
 - 🪶 **Lightweight**: Just a single dependency and zero unnecessary bloat.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
-- 🤝 **Compatibility**: Compatible with the [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/) and [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 

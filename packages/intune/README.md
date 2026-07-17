@@ -21,9 +21,9 @@ The Capacitor Intune plugin integrates the Microsoft Intune App SDK for Mobile A
 - 🧹 **Selective Wipe Events**: Get notified when the Intune service requests a wipe so you can purge the web layer storage (e.g. IndexedDB, Local Storage) that the SDK cannot wipe itself.
 - 🩺 **Diagnostics**: Show the Intune diagnostic console from JavaScript.
 - 📌 **Current SDK Pins**: Built against current Microsoft Intune App SDK and MSAL versions — Microsoft blocks apps that ship outdated SDKs.
+- 🤝 **Compatibility**: Works alongside the [Managed Configurations](https://capawesome.io/docs/sdks/capacitor/managed-configurations/) plugin, which covers the MDM channel (see [Choosing between the MAM and MDM channel](#choosing-between-the-mam-and-mdm-channel)).
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Managed Configurations](https://capawesome.io/docs/sdks/capacitor/managed-configurations/) plugin, which covers the MDM channel (see [Choosing between the MAM and MDM channel](#choosing-between-the-mam-and-mdm-channel)).
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -1051,6 +1051,12 @@ This plugin reads the MAM channel (Intune App SDK, no device enrollment required
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [Managed Configurations](https://capawesome.io/docs/sdks/capacitor/managed-configurations/): Access managed configuration settings deployed by an MDM channel, the counterpart to Intune's MAM channel.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
 
 ## Newsletter
 

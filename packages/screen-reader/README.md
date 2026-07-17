@@ -14,8 +14,8 @@ Capacitor plugin to interact with screen readers.
 - 📣 **Announcements**: Post accessibility announcements that are read out by the active screen reader.
 - 🔔 **State changes**: Listen for changes to the enabled state of the screen reader.
 - 🖥️ **Cross-platform**: Supports Android, iOS and the web.
-- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - 🤝 **Compatibility**: Works alongside the [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
