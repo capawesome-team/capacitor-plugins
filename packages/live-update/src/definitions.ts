@@ -24,7 +24,7 @@ declare module '@capacitor/cli' {
        *
        * **Attention**: This option has no effect if `readyTimeout` is set to `0`.
        *
-       * Only available on Android and iOS.
+       * Only available on Android, iOS and Electron.
        *
        * @since 7.3.0
        * @default false
@@ -47,7 +47,7 @@ declare module '@capacitor/cli' {
        * and applied in the background at app startup and when the app resumes
        * (if the last check was more than 15 minutes ago).
        *
-       * Only available on Android and iOS.
+       * Only available on Android, iOS and Electron.
        *
        * @since 7.3.0
        * @default 'none'
@@ -117,7 +117,7 @@ export interface LiveUpdatePlugin {
    * This removes all bundle identifiers that were automatically blocked
    * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -125,7 +125,7 @@ export interface LiveUpdatePlugin {
   /**
    * Delete a bundle from the app.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -133,7 +133,7 @@ export interface LiveUpdatePlugin {
   /**
    * Download a bundle.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -149,7 +149,7 @@ export interface LiveUpdatePlugin {
    * If channels are private, they can still be set using `setChannel(...)`
    * but won't be returned by this method.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 8.2.0
    */
@@ -157,7 +157,7 @@ export interface LiveUpdatePlugin {
   /**
    * Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 6.6.0
    */
@@ -170,7 +170,7 @@ export interface LiveUpdatePlugin {
    * Returns the list of bundle identifiers that were automatically blocked
    * due to rollbacks when `autoBlockRolledBackBundles` is enabled.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -178,7 +178,7 @@ export interface LiveUpdatePlugin {
   /**
    * Get all identifiers of bundles that have been downloaded.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    * @deprecated Use `getDownloadedBundles()` instead.
@@ -193,10 +193,12 @@ export interface LiveUpdatePlugin {
    *    `capawesome_live_update_default_channel` in `strings.xml` on Android)
    * 3. Capacitor config `defaultChannel`
    *
+   * On **Electron**, the native config (2) is not available.
+   *
    * **Note**: The `channel` parameter of `sync()` takes the highest priority
    * but is not persisted and therefore not returned by this method.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -207,7 +209,7 @@ export interface LiveUpdatePlugin {
    * Returns the current plugin configuration including any runtime
    * overrides set via `setConfig()`.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -215,7 +217,7 @@ export interface LiveUpdatePlugin {
   /**
    * Get all identifiers of bundles that have been downloaded.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -224,7 +226,7 @@ export interface LiveUpdatePlugin {
    * Get the bundle identifier of the current bundle.
    * The current bundle is the bundle that is currently used by the app.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 6.7.0
    */
@@ -232,7 +234,7 @@ export interface LiveUpdatePlugin {
   /**
    * Get the custom identifier of the device.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -240,7 +242,7 @@ export interface LiveUpdatePlugin {
   /**
    * Get the unique device identifier.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -248,7 +250,7 @@ export interface LiveUpdatePlugin {
   /**
    * Check whether a sync operation is currently in progress.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -258,7 +260,7 @@ export interface LiveUpdatePlugin {
    * The next bundle is the bundle that will be used after calling `reload()`
    * or restarting the app.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 6.7.0
    */
@@ -268,8 +270,9 @@ export interface LiveUpdatePlugin {
    *
    * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
    * On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
+   * On **Electron**, this is the `version` from the app's `package.json` file.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -279,8 +282,9 @@ export interface LiveUpdatePlugin {
    *
    * On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
    * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
+   * On **Electron**, this is the `version` from the app's `package.json` file.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -291,7 +295,7 @@ export interface LiveUpdatePlugin {
    * **Attention**: This method should be called as soon as the app is ready to use
    * to prevent the app from being reset to the default bundle.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -299,7 +303,7 @@ export interface LiveUpdatePlugin {
   /**
    * Reload the app to apply the new bundle.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -309,7 +313,7 @@ export interface LiveUpdatePlugin {
    *
    * Call `reload()` or restart the app to apply the changes.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -328,7 +332,7 @@ export interface LiveUpdatePlugin {
   /**
    * Set the channel to use for the update.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -351,7 +355,7 @@ export interface LiveUpdatePlugin {
   /**
    * Set the custom identifier of the device.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -361,7 +365,7 @@ export interface LiveUpdatePlugin {
    *
    * Call `reload()` or restart the app to apply the changes.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 6.7.0
    */
@@ -371,7 +375,7 @@ export interface LiveUpdatePlugin {
    *
    * Call `reload()` or restart the app to apply the changes.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
    */
@@ -379,7 +383,7 @@ export interface LiveUpdatePlugin {
   /**
    * Listen for the download progress of a bundle.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.0.0
    */
@@ -393,7 +397,7 @@ export interface LiveUpdatePlugin {
    * This event is triggered whenever a bundle is set to be used on the next app restart,
    * either through automatic updates or manual calls to `setNextBundle()`.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.3.0
    */
@@ -411,7 +415,7 @@ export interface LiveUpdatePlugin {
    * use the `ready()` method instead. The `ready()` method provides detailed information
    * about the current bundle, previous bundle, and whether a rollback occurred.
    *
-   * Only available on Android and iOS.
+   * Only available on Android, iOS and Electron.
    *
    * @since 7.4.0
    */
@@ -443,6 +447,9 @@ export interface DeleteBundleOptions {
 export interface DownloadBundleOptions {
   /**
    * The artifact type of the bundle.
+   *
+   * **Attention**: The `manifest` artifact type is not supported on Electron.
+   * Only the `zip` artifact type is supported there.
    *
    * @since 6.6.0
    * @default 'zip'
@@ -574,6 +581,9 @@ export interface FetchLatestBundleOptions {
 export interface FetchLatestBundleResult {
   /**
    * The artifact type of the bundle.
+   *
+   * **Attention**: The `manifest` artifact type is not supported on Electron.
+   * Only the `zip` artifact type is supported there.
    *
    * @since 6.7.0
    */
@@ -743,6 +753,8 @@ export interface GetDeviceIdResult {
    * On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used.
    * The value of this property is the same for apps that come from the same vendor running on the same device.
    *
+   * On Electron, a random UUID is generated on first use and persisted on the device.
+   *
    * @since 5.0.0
    *
    * @example '50d2a548-80b7-4dad-adc7-97c0e79d8a89'
@@ -785,6 +797,7 @@ export interface GetVersionCodeResult {
    *
    * On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
    * On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
+   * On **Electron**, this is the `version` from the app's `package.json` file.
    *
    * @since 5.0.0
    * @example "1"
@@ -801,6 +814,7 @@ export interface GetVersionNameResult {
    *
    * On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
    * On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
+   * On **Electron**, this is the `version` from the app's `package.json` file.
    *
    * @since 5.0.0
    * @example "1.0.0"
