@@ -1,5 +1,5 @@
 ---
-"@capawesome/capacitor-volume": minor
+"@capawesome/capacitor-volume": patch
 ---
 
 feat(android): add `volumeButtonReleased` event
