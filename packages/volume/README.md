@@ -169,6 +169,7 @@ const removeAllListeners = async () => {
 * [`startWatching(...)`](#startwatching)
 * [`stopWatching()`](#stopwatching)
 * [`addListener('volumeButtonPressed', ...)`](#addlistenervolumebuttonpressed-)
+* [`addListener('volumeButtonReleased', ...)`](#addlistenervolumebuttonreleased-)
 * [`addListener('volumeChange', ...)`](#addlistenervolumechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
@@ -249,8 +250,8 @@ startWatching(options?: StartWatchingOptions | undefined) => Promise<void>
 
 Start watching the hardware volume buttons.
 
-The `volumeButtonPressed` and `volumeChange` events are only
-emitted while watching.
+The `volumeButtonPressed`, `volumeButtonReleased` and `volumeChange`
+events are only emitted while watching.
 
 If the volume buttons are already being watched, this call has
 no effect. Call `stopWatching()` first to change the options.
@@ -302,6 +303,28 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### addListener('volumeButtonReleased', ...)
+
+```typescript
+addListener(eventName: 'volumeButtonReleased', listenerFunc: (event: VolumeButtonReleasedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a hardware volume button is released while watching.
+
+Only available on Android.
+
+| Param              | Type                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'volumeButtonReleased'</code>                                                                 |
+| **`listenerFunc`** | <code>(event: <a href="#volumebuttonreleasedevent">VolumeButtonReleasedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -396,6 +419,13 @@ Remove all listeners for this plugin.
 | Prop            | Type                                            | Description                                          | Since |
 | --------------- | ----------------------------------------------- | ---------------------------------------------------- | ----- |
 | **`direction`** | <code><a href="#direction">Direction</a></code> | The direction of the pressed hardware volume button. | 0.1.0 |
+
+
+#### VolumeButtonReleasedEvent
+
+| Prop            | Type                                            | Description                                           | Since |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------- | ----- |
+| **`direction`** | <code><a href="#direction">Direction</a></code> | The direction of the released hardware volume button. | 0.2.0 |
 
 
 #### VolumeChangeEvent
