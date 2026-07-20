@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`7f7c750277a0749be103b9bf3aeb824ac902a63d`](https://github.com/capawesome-team/capacitor-plugins/commit/7f7c750277a0749be103b9bf3aeb824ac902a63d) ([#931](https://github.com/capawesome-team/capacitor-plugins/pull/931)): feat(android): add `volumeButtonReleased` event
+
 ## 0.1.1
 
 ### Patch Changes

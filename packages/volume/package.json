@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-volume",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Capacitor plugin to control the volume and observe hardware volume button presses on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
