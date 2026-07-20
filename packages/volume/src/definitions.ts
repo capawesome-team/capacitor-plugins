@@ -32,8 +32,8 @@ export interface VolumePlugin {
   /**
    * Start watching the hardware volume buttons.
    *
-   * The `volumeButtonPressed` and `volumeChange` events are only
-   * emitted while watching.
+   * The `volumeButtonPressed`, `volumeButtonReleased` and `volumeChange`
+   * events are only emitted while watching.
    *
    * If the volume buttons are already being watched, this call has
    * no effect. Call `stopWatching()` first to change the options.
@@ -64,6 +64,17 @@ export interface VolumePlugin {
   addListener(
     eventName: 'volumeButtonPressed',
     listenerFunc: (event: VolumeButtonPressedEvent) => void,
+  ): Promise<PluginListenerHandle>;
+  /**
+   * Called when a hardware volume button is released while watching.
+   *
+   * Only available on Android.
+   *
+   * @since 0.2.0
+   */
+  addListener(
+    eventName: 'volumeButtonReleased',
+    listenerFunc: (event: VolumeButtonReleasedEvent) => void,
   ): Promise<PluginListenerHandle>;
   /**
    * Called when the volume level changes while watching.
@@ -184,6 +195,19 @@ export interface VolumeButtonPressedEvent {
    * The direction of the pressed hardware volume button.
    *
    * @since 0.1.0
+   * @example 'up'
+   */
+  direction: Direction;
+}
+
+/**
+ * @since 0.2.0
+ */
+export interface VolumeButtonReleasedEvent {
+  /**
+   * The direction of the released hardware volume button.
+   *
+   * @since 0.2.0
    * @example 'up'
    */
   direction: Direction;
