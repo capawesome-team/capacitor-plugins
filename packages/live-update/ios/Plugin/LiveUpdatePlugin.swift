@@ -47,7 +47,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     private let eventReloaded = "reloaded"
 
     private var config: LiveUpdateConfig?
-    private var implementation: LiveUpdate?
+    var implementation: LiveUpdate?
 
     override public func load() {
         self.config = liveUpdateConfig()

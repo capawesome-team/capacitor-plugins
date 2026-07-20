@@ -16,7 +16,7 @@ import CommonCrypto
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
-    private let plugin: LiveUpdatePlugin
+    private let plugin: LiveUpdatePlugin?
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
@@ -24,7 +24,10 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
+    /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
+    ///   (e.g. for Ionic Portals hosts that construct a provider manager directly).
+    ///   In headless mode, WebView-related operations and plugin events are skipped.
+    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin? = nil) {
         self.config = config
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
@@ -159,6 +162,14 @@ import CommonCrypto
         let bundleId = getCurrentBundleId()
         let result = GetCurrentBundleResult(bundleId: bundleId)
         completion(result, nil)
+    }
+
+    /// - Returns: The on-disk URL of a downloaded bundle, or `nil` if the bundle does not exist.
+    public func getBundleDirectory(bundleId: String) -> URL? {
+        guard hasBundleById(bundleId) else {
+            return nil
+        }
+        return buildBundleURLFor(bundleId: bundleId)
     }
 
     @objc public func getCustomId(completion: @escaping (Result?, Error?) -> Void) {
@@ -580,6 +591,9 @@ import CommonCrypto
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
+        guard let appId = options.getAppId() ?? getAppId(), !appId.isEmpty else {
+            throw CustomError.appIdMissing
+        }
         let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
@@ -591,7 +605,7 @@ import CommonCrypto
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/bundles/latest")!
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(appId)/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
         CAPLog.print("[", LiveUpdatePlugin.tag, "] Fetching latest bundle: ", url)
@@ -681,7 +695,7 @@ import CommonCrypto
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return nil
         }
         return viewController.getServerBasePath()
@@ -763,7 +777,7 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
-        plugin.notifyDownloadBundleProgressListeners(event)
+        plugin?.notifyDownloadBundleProgressListeners(event)
     }
 
     private func performAutoUpdate() {
@@ -840,7 +854,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPath(path: String) {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return
         }
         viewController.setServerBasePath(path: path)
@@ -859,11 +873,11 @@ import CommonCrypto
 
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
-        plugin.notifyNextBundleSetListeners(event)
+        plugin?.notifyNextBundleSetListeners(event)
     }
 
     private func notifyReloadedListeners() {
-        plugin.notifyReloadedListeners()
+        plugin?.notifyReloadedListeners()
     }
 
     private func addBlockedBundleId(_ bundleId: String) {
