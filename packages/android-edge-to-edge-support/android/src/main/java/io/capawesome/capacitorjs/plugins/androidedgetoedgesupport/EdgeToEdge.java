@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,10 +92,13 @@ public class EdgeToEdge {
     private void applyInsetsInternal(View view, WindowInsetsCompat currentInsets) {
         Insets systemBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
         Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
-        boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
-        // When keyboard is visible, don't apply bottom margin to avoid double-counting
-        // (the system already resizes the window for the keyboard)
-        int bottomMargin = keyboardVisible ? 0 : Math.max(imeInsets.bottom, systemBarsInsets.bottom);
+
+        int bottomMargin;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            bottomMargin = systemBarsInsets.bottom;
+        } else {
+            bottomMargin = Math.max(imeInsets.bottom, systemBarsInsets.bottom);
+        }
 
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.bottomMargin = bottomMargin;
