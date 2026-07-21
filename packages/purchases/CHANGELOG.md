@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.10
+
+### Patch Changes
+
+- [`7a0038d8bdfa0d87e89d2f0db578dffa47164a6b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7a0038d8bdfa0d87e89d2f0db578dffa47164a6b) ([#499](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/499)): feat: add `subscriptionOffers` and `subscriptionGroupId` to `Product`
+
 ## 0.3.9
 
 ### Patch Changes

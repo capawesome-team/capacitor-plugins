@@ -436,16 +436,18 @@ The commitment details for a transaction.
 
 Represents an in-app product available for purchase.
 
-| Prop               | Type                                                | Description                                                                                                                                                                                                                                    | Since |
-| ------------------ | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**           | <code>string</code>                                 | The unique product identifier.                                                                                                                                                                                                                 | 0.3.1 |
-| **`displayName`**  | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.                                                                                       | 0.3.1 |
-| **`description`**  | <code>string</code>                                 | The localized description of the product.                                                                                                                                                                                                      | 0.3.1 |
-| **`displayPrice`** | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                                                                                             | 0.3.1 |
-| **`price`**        | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal.                                                                         | 0.3.1 |
-| **`currencyCode`** | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                                                                                          | 0.3.1 |
-| **`type`**         | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                                                                                           | 0.3.1 |
-| **`pricingTerms`** | <code>PricingTerms[]</code>                         | The pricing terms available for the product, one entry per billing plan. Only present for auto-renewable subscriptions that are configured with multiple billing plans (e.g. monthly with 12-month commitment). Only available on iOS (26.4+). | 0.3.8 |
+| Prop                      | Type                                                | Description                                                                                                                                                                                                                                                              | Since  |
+| ------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| **`id`**                  | <code>string</code>                                 | The unique product identifier.                                                                                                                                                                                                                                           | 0.3.1  |
+| **`displayName`**         | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.                                                                                                                 | 0.3.1  |
+| **`description`**         | <code>string</code>                                 | The localized description of the product.                                                                                                                                                                                                                                | 0.3.1  |
+| **`displayPrice`**        | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                                                                                                                       | 0.3.1  |
+| **`price`**               | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal.                                                                                                   | 0.3.1  |
+| **`currencyCode`**        | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                                                                                                                    | 0.3.1  |
+| **`type`**                | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                                                                                                                     | 0.3.1  |
+| **`pricingTerms`**        | <code>PricingTerms[]</code>                         | The pricing terms available for the product, one entry per billing plan. Only present for auto-renewable subscriptions that are configured with multiple billing plans (e.g. monthly with 12-month commitment). Only available on iOS (26.4+).                           | 0.3.8  |
+| **`subscriptionGroupId`** | <code>string</code>                                 | The identifier of the subscription group the product belongs to. Only present for auto-renewable subscriptions. Only available on iOS.                                                                                                                                   | 0.3.10 |
+| **`subscriptionOffers`**  | <code>SubscriptionOffer[]</code>                    | The subscription offers available for the product. Only present for subscriptions. On **Android**, this contains one entry per base plan and offer combination. On **iOS**, this always contains exactly one entry, because every plan is configured as its own product. | 0.3.10 |
 
 
 #### PricingTerms
@@ -480,6 +482,36 @@ The total commitment details of a billing plan.
 | **`price`**        | <code>number</code>                                               | The total committed price, as a decimal number.                    | 0.3.8 |
 | **`displayPrice`** | <code>string</code>                                               | The localized total committed price string, formatted for display. | 0.3.8 |
 | **`period`**       | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The total commitment duration.                                     | 0.3.8 |
+
+
+#### SubscriptionOffer
+
+An offer to subscribe to a product.
+
+| Prop               | Type                                                              | Description                                                                                                                                                                                            | Since  |
+| ------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
+| **`basePlanId`**   | <code>string</code>                                               | The ID of the base plan the offer belongs to. Only available on Android.                                                                                                                               | 0.3.10 |
+| **`offerId`**      | <code>string</code>                                               | The ID of the offer. Not present if the offer is the base plan itself. Only available on Android.                                                                                                      | 0.3.10 |
+| **`tags`**         | <code>string[]</code>                                             | The tags associated with the offer. Empty on iOS.                                                                                                                                                      | 0.3.10 |
+| **`displayPrice`** | <code>string</code>                                               | The localized recurring price string, formatted for display. This is the price the user pays after all introductory pricing phases have ended.                                                         | 0.3.10 |
+| **`price`**        | <code>number</code>                                               | The recurring price as a decimal number. This is the price the user pays after all introductory pricing phases have ended.                                                                             | 0.3.10 |
+| **`currencyCode`** | <code>string</code>                                               | The ISO 4217 currency code.                                                                                                                                                                            | 0.3.10 |
+| **`period`**       | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code> | The duration of one recurring billing period.                                                                                                                                                          | 0.3.10 |
+| **`phases`**       | <code>SubscriptionPricingPhase[]</code>                           | The pricing phases of the offer, in the order they are applied. The last phase is always the recurring phase. Any preceding phase is an introductory phase such as a free trial or a discounted price. | 0.3.10 |
+
+
+#### SubscriptionPricingPhase
+
+A pricing phase of a subscription offer.
+
+| Prop                 | Type                                                                              | Description                                                                                            | Since  |
+| -------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------ |
+| **`displayPrice`**   | <code>string</code>                                                               | The localized price string of the phase, formatted for display.                                        | 0.3.10 |
+| **`price`**          | <code>number</code>                                                               | The price of the phase as a decimal number. This is `0` for a free trial.                              | 0.3.10 |
+| **`currencyCode`**   | <code>string</code>                                                               | The ISO 4217 currency code.                                                                            | 0.3.10 |
+| **`period`**         | <code><a href="#subscriptionperiod">SubscriptionPeriod</a></code>                 | The duration of one billing period of the phase.                                                       | 0.3.10 |
+| **`cycleCount`**     | <code>number</code>                                                               | The number of billing periods the phase is applied for. This is `0` if the phase repeats indefinitely. | 0.3.10 |
+| **`recurrenceMode`** | <code><a href="#pricingphaserecurrencemode">PricingPhaseRecurrenceMode</a></code> | How the phase is repeated.                                                                             | 0.3.10 |
 
 
 #### GetProductByIdOptions
@@ -580,6 +612,15 @@ The total commitment details of a billing plan.
 | **`Month`**   | <code>'MONTH'</code>   |                                                            | 0.3.8 |
 | **`Year`**    | <code>'YEAR'</code>    |                                                            | 0.3.8 |
 | **`Unknown`** | <code>'UNKNOWN'</code> | The unit of time is not recognized by this plugin version. | 0.3.8 |
+
+
+#### PricingPhaseRecurrenceMode
+
+| Members                 | Value                             | Description                                                        | Since  |
+| ----------------------- | --------------------------------- | ------------------------------------------------------------------ | ------ |
+| **`InfiniteRecurring`** | <code>'INFINITE_RECURRING'</code> | The phase repeats indefinitely until the subscription is canceled. | 0.3.10 |
+| **`FiniteRecurring`**   | <code>'FINITE_RECURRING'</code>   | The phase repeats for a fixed number of billing periods.           | 0.3.10 |
+| **`NonRecurring`**      | <code>'NON_RECURRING'</code>      | The phase is billed only once.                                     | 0.3.10 |
 
 
 #### ProductCategory
