@@ -75,7 +75,7 @@ import UIKit
             navigationItem.leftBarButtonItem = UIBarButtonItem(
                 barButtonSystemItem: .action,
                 target: self,
-                action: #selector(handleShare)
+                action: #selector(handleShare(_:))
             )
         }
     }

@@ -133,14 +133,12 @@ public class PdfViewerDialog extends Dialog {
         if (options.getShowShareButton()) {
             ImageView shareButton = new ImageView(getContext());
             shareButton.setImageResource(android.R.drawable.ic_menu_share);
+            shareButton.setContentDescription("Share");
             shareButton.setColorFilter(Color.BLACK);
             shareButton.setPadding(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8));
             shareButton.setClickable(true);
             shareButton.setOnClickListener(view -> handleShare());
-            toolbar.addView(
-                shareButton,
-                new LinearLayout.LayoutParams(dpToPx(40), dpToPx(40))
-            );
+            toolbar.addView(shareButton, new LinearLayout.LayoutParams(dpToPx(40), dpToPx(40)));
         }
 
         return toolbar;
