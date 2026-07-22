@@ -5,12 +5,14 @@ import Capacitor
     let page: Int
     let password: String?
     let path: String
+    let showShareButton: Bool
     let title: String?
 
     init(_ call: CAPPluginCall) throws {
         self.page = call.getInt("page", 1)
         self.password = call.getString("password")
         self.path = try OpenOptions.getPathFromCall(call)
+        self.showShareButton = call.getBool("showShareButton", true)
         self.title = call.getString("title")
     }
 

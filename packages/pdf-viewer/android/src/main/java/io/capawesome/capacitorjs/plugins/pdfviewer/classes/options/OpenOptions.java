@@ -15,6 +15,8 @@ public class OpenOptions {
     @NonNull
     private final String path;
 
+    private final boolean showShareButton;
+
     @Nullable
     private final String title;
 
@@ -26,6 +28,7 @@ public class OpenOptions {
         this.path = path;
         this.page = call.getInt("page", 1);
         this.password = call.getString("password");
+        this.showShareButton = call.getBoolean("showShareButton", true);
         this.title = call.getString("title");
     }
 
@@ -41,6 +44,10 @@ public class OpenOptions {
     @NonNull
     public String getPath() {
         return path;
+    }
+
+    public boolean getShowShareButton() {
+        return showShareButton;
     }
 
     @Nullable

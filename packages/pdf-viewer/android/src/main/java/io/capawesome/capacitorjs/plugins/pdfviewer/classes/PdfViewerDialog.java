@@ -2,19 +2,24 @@ package io.capawesome.capacitorjs.plugins.pdfviewer.classes;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.core.view.WindowInsetsControllerCompat;
+import com.getcapacitor.Logger;
 import com.github.barteksc.pdfviewer.PDFView;
 import io.capawesome.capacitorjs.plugins.pdfviewer.classes.options.OpenOptions;
 import java.io.File;
@@ -28,6 +33,7 @@ public class PdfViewerDialog extends Dialog {
         void onPageChanged(int page);
     }
 
+    private static final String TAG = "PdfViewerPlugin";
     private static final int TOOLBAR_HEIGHT_IN_DP = 56;
 
     @NonNull
@@ -124,6 +130,19 @@ public class PdfViewerDialog extends Dialog {
         titleView.setPadding(dpToPx(8), 0, dpToPx(8), 0);
         toolbar.addView(titleView, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
+        if (options.getShowShareButton()) {
+            ImageView shareButton = new ImageView(getContext());
+            shareButton.setImageResource(android.R.drawable.ic_menu_share);
+            shareButton.setColorFilter(Color.BLACK);
+            shareButton.setPadding(dpToPx(8), dpToPx(8), dpToPx(8), dpToPx(8));
+            shareButton.setClickable(true);
+            shareButton.setOnClickListener(view -> handleShare());
+            toolbar.addView(
+                shareButton,
+                new LinearLayout.LayoutParams(dpToPx(40), dpToPx(40))
+            );
+        }
+
         return toolbar;
     }
 
@@ -141,6 +160,23 @@ public class PdfViewerDialog extends Dialog {
         loadFailed = true;
         listener.onLoadError(this, throwable);
         dismiss();
+    }
+
+    private void handleShare() {
+        try {
+            Context context = getContext();
+            String authority = context.getPackageName() + ".fileprovider";
+            Uri uri = FileProvider.getUriForFile(context, authority, file);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("application/pdf");
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            String title = options.getTitle() == null ? file.getName() : options.getTitle();
+            intent.putExtra(Intent.EXTRA_SUBJECT, title);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(intent, null));
+        } catch (Exception exception) {
+            Logger.error(TAG, exception.getMessage(), exception);
+        }
     }
 
     private void handlePageChange(int page) {

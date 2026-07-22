@@ -50,8 +50,10 @@ import UIKit
                 }
                 let viewController = PdfViewerViewController(
                     document: document,
+                    url: url,
                     title: options.title ?? url.lastPathComponent,
-                    page: options.page
+                    page: options.page,
+                    showShareButton: options.showShareButton
                 )
                 viewController.onClosed = { [weak self] closedViewController in
                     guard let self = self else {
