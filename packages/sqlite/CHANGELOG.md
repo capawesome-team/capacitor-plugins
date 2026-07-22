@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.11
+
+### Patch Changes
+
+- [`42ca11e0ba383af117b0f1db3e25708442555be3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/42ca11e0ba383af117b0f1db3e25708442555be3) ([#501](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/501)): fix: roll back open transactions in `close()` and `closeAll()` so a dangling transaction no longer keeps the database locked
+
 ## 0.3.10
 
 ### Patch Changes
