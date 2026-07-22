@@ -1,5 +1,11 @@
 # @capawesome/capacitor-pdf-viewer
 
+## 0.1.2
+
+### Patch Changes
+
+- [`9c75faa31b808c8efe1fd4503a4e9adf80645926`](https://github.com/capawesome-team/capacitor-plugins/commit/9c75faa31b808c8efe1fd4503a4e9adf80645926) ([#933](https://github.com/capawesome-team/capacitor-plugins/pull/933)): feat: add `showShareButton` option to the viewer toolbar
+
 ## 0.1.1
 
 ### Patch Changes
