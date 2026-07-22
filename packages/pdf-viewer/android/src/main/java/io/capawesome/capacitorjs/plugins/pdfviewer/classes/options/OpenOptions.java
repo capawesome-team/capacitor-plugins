@@ -28,7 +28,7 @@ public class OpenOptions {
         this.path = path;
         this.page = call.getInt("page", 1);
         this.password = call.getString("password");
-        this.showShareButton = call.getBoolean("showShareButton", true);
+        this.showShareButton = call.getBoolean("showShareButton", false);
         this.title = call.getString("title");
     }
 

@@ -87,8 +87,8 @@ export interface OpenOptions {
    * Only available on Android and iOS.
    *
    * @since 0.1.2
-   * @default true
-   * @example false
+   * @default false
+   * @example true
    */
   showShareButton?: boolean;
   /**

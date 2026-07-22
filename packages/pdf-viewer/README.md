@@ -286,7 +286,7 @@ Remove all listeners for this plugin.
 | **`page`**            | <code>number</code>  | The page (1-based) to display initially.                                                                                                                                            | <code>1</code>                              | 0.1.0 |
 | **`password`**        | <code>string</code>  | The password to unlock the PDF file if it is password-protected.                                                                                                                    |                                             | 0.1.0 |
 | **`path`**            | <code>string</code>  | The path of the local PDF file to display. Remote URLs are not supported. Download the file first, for example to the cache directory, and pass the local file path to this method. |                                             | 0.1.0 |
-| **`showShareButton`** | <code>boolean</code> | Whether to display a share button in the toolbar of the viewer. Only available on Android and iOS.                                                                                  | <code>true</code>                           | 0.1.2 |
+| **`showShareButton`** | <code>boolean</code> | Whether to display a share button in the toolbar of the viewer. Only available on Android and iOS.                                                                                  | <code>false</code>                          | 0.1.2 |
 | **`title`**           | <code>string</code>  | The title to display in the toolbar of the viewer.                                                                                                                                  | <code>The file name of the PDF file.</code> | 0.1.0 |
 
 
@@ -333,7 +333,7 @@ No, the viewer does not support text selection on Android. On iOS, the plugin us
 
 ### Why does the share button not work on Android?
 
-On Android, the file is shared using a [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider). Make sure that the directory containing the PDF file is declared in the `file_paths.xml` file of your Android project, as described in the [Installation](#android) section. Without this configuration, the file can not be shared. You can also hide the button by setting the `showShareButton` option to `false`.
+The share button is hidden by default. Enable it by setting the `showShareButton` option to `true`. On Android, the file is then shared using a [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider). Make sure that the directory containing the PDF file is declared in the `file_paths.xml` file of your Android project, as described in the [Installation](#android) section. Without this configuration, the file can not be shared.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 

@@ -12,7 +12,7 @@ import Capacitor
         self.page = call.getInt("page", 1)
         self.password = call.getString("password")
         self.path = try OpenOptions.getPathFromCall(call)
-        self.showShareButton = call.getBool("showShareButton", true)
+        self.showShareButton = call.getBool("showShareButton", false)
         self.title = call.getString("title")
     }
 
