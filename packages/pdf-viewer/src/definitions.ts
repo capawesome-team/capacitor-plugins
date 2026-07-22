@@ -82,6 +82,16 @@ export interface OpenOptions {
    */
   path: string;
   /**
+   * Whether to display a share button in the toolbar of the viewer.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.2
+   * @default false
+   * @example true
+   */
+  showShareButton?: boolean;
+  /**
    * The title to display in the toolbar of the viewer.
    *
    * @since 0.1.0

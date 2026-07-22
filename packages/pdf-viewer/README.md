@@ -63,6 +63,23 @@ npx cap sync
 
 On Android, this plugin uses the [android-pdf-viewer](https://github.com/oothp/AndroidPdfViewer) library, which renders PDF documents with [Pdfium](https://pdfium.googlesource.com/pdfium/). Be aware that the library bundles the Pdfium native libraries, which add about 10 to 16 MB (uncompressed, across all ABIs) to your app. If you publish your app as an [Android App Bundle](https://developer.android.com/guide/app-bundle), each device only downloads the native libraries for its own ABI, which significantly reduces the download size. Also note that the viewer does not support text selection on Android.
 
+#### Share Button
+
+If you use the share button (see the `showShareButton` option), you need to specify the directories that contain the PDF files you want to share. To do this, create a new file named `file_paths.xml` in the `res/xml` directory of your Android project (e.g. `android/app/src/main/res/xml/file_paths.xml`). Here is an example of the content of the file:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="files" path="." />
+    <cache-path name="cache" path="." />
+    <external-files-path name="external-files" path="." />
+    <external-cache-path name="external-cache" path="." />
+    <external-path name="external" path="." />
+</paths>
+```
+
+More information can be found in the [Android documentation](https://developer.android.com/training/secure-file-sharing/setup-sharing#DefineMetaData).
+
 #### Variables
 
 This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
@@ -264,12 +281,13 @@ Remove all listeners for this plugin.
 
 #### OpenOptions
 
-| Prop           | Type                | Description                                                                                                                                                                         | Default                                     | Since |
-| -------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
-| **`page`**     | <code>number</code> | The page (1-based) to display initially.                                                                                                                                            | <code>1</code>                              | 0.1.0 |
-| **`password`** | <code>string</code> | The password to unlock the PDF file if it is password-protected.                                                                                                                    |                                             | 0.1.0 |
-| **`path`**     | <code>string</code> | The path of the local PDF file to display. Remote URLs are not supported. Download the file first, for example to the cache directory, and pass the local file path to this method. |                                             | 0.1.0 |
-| **`title`**    | <code>string</code> | The title to display in the toolbar of the viewer.                                                                                                                                  | <code>The file name of the PDF file.</code> | 0.1.0 |
+| Prop                  | Type                 | Description                                                                                                                                                                         | Default                                     | Since |
+| --------------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
+| **`page`**            | <code>number</code>  | The page (1-based) to display initially.                                                                                                                                            | <code>1</code>                              | 0.1.0 |
+| **`password`**        | <code>string</code>  | The password to unlock the PDF file if it is password-protected.                                                                                                                    |                                             | 0.1.0 |
+| **`path`**            | <code>string</code>  | The path of the local PDF file to display. Remote URLs are not supported. Download the file first, for example to the cache directory, and pass the local file path to this method. |                                             | 0.1.0 |
+| **`showShareButton`** | <code>boolean</code> | Whether to display a share button in the toolbar of the viewer. Only available on Android and iOS.                                                                                  | <code>false</code>                          | 0.1.2 |
+| **`title`**           | <code>string</code>  | The title to display in the toolbar of the viewer.                                                                                                                                  | <code>The file name of the PDF file.</code> | 0.1.0 |
 
 
 #### PluginListenerHandle
@@ -312,6 +330,10 @@ On Android, the plugin uses the [android-pdf-viewer](https://github.com/oothp/An
 ### Can I select text in the viewer on Android?
 
 No, the viewer does not support text selection on Android. On iOS, the plugin uses the PDFKit framework, which provides the native viewer experience of the platform.
+
+### Why does the share button not work on Android?
+
+The share button is hidden by default. Enable it by setting the `showShareButton` option to `true`. On Android, the file is then shared using a [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider). Make sure that the directory containing the PDF file is declared in the `file_paths.xml` file of your Android project, as described in the [Installation](#android) section. Without this configuration, the file can not be shared.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 

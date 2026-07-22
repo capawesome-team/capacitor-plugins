@@ -8,14 +8,18 @@ import UIKit
 
     private let document: PDFDocument
     private let initialPage: Int
+    private let showShareButton: Bool
+    private let url: URL
     private var didGoToInitialPage = false
     private var lastPage: Int
     private var pdfView: PDFView?
 
-    init(document: PDFDocument, title: String?, page: Int) {
+    init(document: PDFDocument, url: URL, title: String?, page: Int, showShareButton: Bool) {
         self.document = document
+        self.url = url
         self.initialPage = page
         self.lastPage = page
+        self.showShareButton = showShareButton
         super.init(nibName: nil, bundle: nil)
         self.title = title
     }
@@ -67,6 +71,13 @@ import UIKit
             target: self,
             action: #selector(handleDone)
         )
+        if showShareButton {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .action,
+                target: self,
+                action: #selector(handleShare(_:))
+            )
+        }
     }
 
     private func createPdfView() -> PDFView {
@@ -92,6 +103,12 @@ import UIKit
 
     @objc private func handleDone() {
         dismiss(animated: true)
+    }
+
+    @objc private func handleShare(_ sender: UIBarButtonItem) {
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.barButtonItem = sender
+        present(activityViewController, animated: true)
     }
 
     @objc private func handlePageChanged() {
