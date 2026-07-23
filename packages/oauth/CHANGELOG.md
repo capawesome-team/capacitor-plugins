@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.9
+
+### Patch Changes
+
+- [`ecc85ac59f28f3141febc23abf703e15f58f6166`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ecc85ac59f28f3141febc23abf703e15f58f6166) ([#505](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/505)): fix(android): re-present the in-app browser in `login()` and `logout()` when the system destroys it, e.g. when the app is reopened via the launcher icon with `launchMode="singleTask"`, instead of rejecting with `USER_CANCELED`
+
 ## 0.1.8
 
 ### Patch Changes
