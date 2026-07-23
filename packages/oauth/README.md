@@ -563,6 +563,58 @@ On iOS, `login(...)` may hang forever (while working on Android and Web) if the 
 
 Compare the returned redirect URI (e.g. via a network proxy such as [Proxyman](https://proxyman.io/)) byte-for-byte with your `redirectUrl` and make them match exactly.
 
+##### In-app browser closes when the app is reopened on Android
+
+With the Capacitor default `android:launchMode="singleTask"`, Android destroys all activities on top of the main activity, including the in-app browser, when the app is reopened via the launcher icon, for example after switching to a mail app to look up a one-time password. The plugin detects this and automatically re-opens the in-app browser so the user can complete the flow. Since the identity provider's session cookies are preserved, the user can usually continue where they left off.
+
+If you prefer to keep the in-app browser (including any entered form data) alive while the app is in the background, you can optionally apply one of the following workarounds in your app:
+
+**Launcher activity (recommended)**: Add a launcher activity that receives the launcher intent instead of your main activity. This way, reopening the app via the launcher icon no longer targets the `singleTask` main activity, so Android brings the task to the foreground without destroying the in-app browser, while your main activity keeps its `singleTask` behavior. Create the following activity next to your `MainActivity` (adjust the package name):
+
+```java
+package com.example.app;
+
+import android.content.Intent;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LauncherActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!isTaskRoot()) {
+            // The app is already running, so just bring the existing task
+            // (including any open in-app browser) to the foreground.
+            finish();
+            return;
+        }
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.replaceExtras(getIntent());
+        startActivity(intent);
+        finish();
+    }
+}
+```
+
+Then, in your `AndroidManifest.xml` file, move the `MAIN`/`LAUNCHER` intent filter from your main activity to the new launcher activity and set `android:exported` of your main activity to `false`:
+
+```xml
+<activity
+    android:name=".LauncherActivity"
+    android:theme="@style/AppTheme.NoActionBarLaunch"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+Your main activity keeps `android:launchMode="singleTask"` and all other intent filters (e.g. for deep links).
+
+**`singleTop` launch mode**: Alternatively, set `android:launchMode="singleTop"` on your main activity in the `AndroidManifest.xml` file. Be aware that this may change how Android delivers intents (e.g. deep links) to your app, so make sure to test this change carefully.
+
 ## FAQ
 
 ### Is this plugin an alternative to Ionic Auth Connect?
