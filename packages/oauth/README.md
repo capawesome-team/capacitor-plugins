@@ -597,7 +597,7 @@ public class LauncherActivity extends AppCompatActivity {
 }
 ```
 
-Then, in your `AndroidManifest.xml` file, move the `MAIN`/`LAUNCHER` intent filter from your main activity to the new launcher activity and set `android:exported` of your main activity to `false`:
+Then, in your `AndroidManifest.xml` file, move the `MAIN`/`LAUNCHER` intent filter from your main activity to the new launcher activity:
 
 ```xml
 <activity
@@ -611,7 +611,7 @@ Then, in your `AndroidManifest.xml` file, move the `MAIN`/`LAUNCHER` intent filt
 </activity>
 ```
 
-Your main activity keeps `android:launchMode="singleTask"` and all other intent filters (e.g. for deep links).
+Everything else on your main activity stays as it is, including `android:launchMode="singleTask"`, `android:exported="true"` and all other intent filters (e.g. for deep links) — only the `MAIN`/`LAUNCHER` intent filter moves.
 
 **`singleTop` launch mode**: Alternatively, set `android:launchMode="singleTop"` on your main activity in the `AndroidManifest.xml` file. Be aware that this may change how Android delivers intents (e.g. deep links) to your app, so make sure to test this change carefully.
 
