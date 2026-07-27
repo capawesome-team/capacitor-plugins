@@ -34,10 +34,6 @@ The Privacy Screen plugin is typically used in apps that display sensitive infor
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
-## Demo
-
-A working example can be found here [capawesome-team/capacitor-privacy-screen-demo](https://github.com/capawesome-team/capacitor-privacy-screen-demo).
-
 ## Guides
 
 - [Capacitor Privacy Screen: Hide Sensitive App Content](https://capawesome.io/blog/capacitor-privacy-screen-hide-app-content/)
@@ -75,6 +71,10 @@ The plugin declares the `android.permission.DETECT_SCREEN_CAPTURE` permission in
 ## Configuration
 
 No configuration required for this plugin.
+
+## Demo
+
+A working example can be found here [capawesome-team/capacitor-privacy-screen-demo](https://github.com/capawesome-team/capacitor-privacy-screen-demo).
 
 ## Usage
 
