@@ -28,13 +28,19 @@ The Privacy Screen plugin is typically used in apps that display sensitive infor
 - **Messaging and health apps**: Protect private conversations and medical data from being captured.
 - **Screenshot auditing**: Get notified via the `screenshotTaken` event when the user takes a screenshot, for example to log the event or warn the user.
 
-For a deeper look at these scenarios and the apps that rely on them, read [Capacitor Privacy Screen: Hide Sensitive App Content](https://capawesome.io/blog/capacitor-privacy-screen-hide-app-content). You can also clone the [demo app](https://github.com/capawesome-team/capacitor-privacy-screen-demo) to see the plugin running in a sample app on iOS and Android.
-
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+A working example can be found here [capawesome-team/capacitor-privacy-screen-demo](https://github.com/capawesome-team/capacitor-privacy-screen-demo).
+
+## Guides
+
+- [Capacitor Privacy Screen: Hide Sensitive App Content](https://capawesome.io/blog/capacitor-privacy-screen-hide-app-content/)
 
 ## Installation
 
