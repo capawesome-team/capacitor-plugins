@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat!: update to Play Age Signals `0.0.4` (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): fix(android): map the error codes of the Play Age Signals library
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat(ios): add `getRegulatoryRequirements()` and `showSignificantUpdateAcknowledgment(...)` methods
+
 ## 0.4.1
 
 ### Patch Changes
