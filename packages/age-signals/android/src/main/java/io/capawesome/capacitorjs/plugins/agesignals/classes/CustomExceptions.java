@@ -37,6 +37,13 @@ public class CustomExceptions {
         "SDK_VERSION_OUTDATED",
         "The Age Signals SDK version is outdated."
     );
-    public static final CustomException USER_STATUS_MISSING = new CustomException(null, "userStatus must be provided.");
-    public static final CustomException FAKE_MANAGER_NOT_ENABLED = new CustomException(null, "Fake manager is not enabled.");
+    public static final CustomException FAKE_MANAGER_NOT_ALLOWED = new CustomException(
+        "FAKE_MANAGER_NOT_ALLOWED",
+        "The fake manager is only available in debuggable builds."
+    );
+    public static final CustomException FAKE_MANAGER_NOT_ENABLED = new CustomException(
+        "FAKE_MANAGER_NOT_ENABLED",
+        "Fake manager is not enabled."
+    );
+    public static final CustomException STATUS_MISSING = new CustomException(null, "status must be provided.");
 }
