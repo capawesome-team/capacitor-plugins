@@ -88,7 +88,8 @@ import DeclaredAgeRange
         _ options: ShowSignificantUpdateAcknowledgmentOptions,
         completion: @escaping (Error?) -> Void
     ) {
-        #if compiler(>=6.3.1) && canImport(DeclaredAgeRange)
+        // `showSignificantUpdateAcknowledgment` requires the iOS 26.4 SDK (Xcode 26.4, Swift 6.3).
+        #if compiler(>=6.3) && canImport(DeclaredAgeRange)
         guard #available(iOS 26.4, *) else {
             completion(CustomError.notSupported)
             return
@@ -117,7 +118,8 @@ import DeclaredAgeRange
     #if canImport(DeclaredAgeRange)
     @available(iOS 26.2, *)
     private static func fetchRegulatoryFeatures() async throws -> [RegulatoryFeature] {
-        #if compiler(>=6.3.1)
+        // `requiredRegulatoryFeatures` requires the iOS 26.4 SDK (Xcode 26.4, Swift 6.3).
+        #if compiler(>=6.3)
         guard #available(iOS 26.4, *) else {
             return []
         }

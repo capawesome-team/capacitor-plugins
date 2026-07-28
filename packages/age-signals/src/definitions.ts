@@ -480,7 +480,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   CheckedByOtherMethod = 'CHECKED_BY_OTHER_METHOD',
@@ -498,7 +498,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   GovernmentIdChecked = 'GOVERNMENT_ID_CHECKED',
@@ -507,7 +507,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   GuardianCheckedByOtherMethod = 'GUARDIAN_CHECKED_BY_OTHER_METHOD',
@@ -522,7 +522,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   GuardianGovernmentIdChecked = 'GUARDIAN_GOVERNMENT_ID_CHECKED',
@@ -532,7 +532,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   GuardianPaymentChecked = 'GUARDIAN_PAYMENT_CHECKED',
@@ -542,7 +542,7 @@ export enum AgeRangeDeclaration {
    *
    * Only available on iOS (26.2+).
    *
-   * @deprecated Listed as deprecated by Apple in favor of `Confirmed`. Apple has not annotated a deprecation version, so this value may still be returned on iOS 26.5 and later.
+   * @deprecated Deprecated by Apple in favor of `Confirmed`, but still returned by devices running iOS 26.2 to 26.4.
    * @since 0.5.0
    */
   PaymentChecked = 'PAYMENT_CHECKED',
