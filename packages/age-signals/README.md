@@ -152,160 +152,6 @@ const getRegulatoryRequirements = async () => {
 };
 ```
 
-## Testing
-
-The plugin includes support for the `FakeAgeSignalsManager` API on Android, which allows you to simulate different age signals scenarios in your tests without requiring live responses from Google Play.
-
-### Android Testing
-
-**Important**: The fake manager is only available if your app is debuggable. In release builds, `setUseFakeManager(...)` rejects with `FAKE_MANAGER_NOT_ALLOWED`, because it would otherwise allow age signals to be forged from the web layer.
-
-**Important**: Due to a known issue in versions 0.0.1 and 0.0.2 of the Age Signals API, you may encounter a `java.lang.VerifyError` when calling the builder method of `AgeSignalsResult` in unit tests. As a workaround, run your tests as Android instrumented tests within the `androidTest` source set.
-
-#### Example: Testing a Self-Declared Adult User
-
-```typescript
-import {
-  AgeRangeSource,
-  AgeRangeStatus,
-  AgeSignals,
-} from '@capawesome/capacitor-age-signals';
-
-// Enable the fake manager
-await AgeSignals.setUseFakeManager({ useFake: true });
-
-// The user agrees to share their age range
-await AgeSignals.setNextAgeSignalsAccessResult({
-  status: AgeRangeStatus.Shared,
-});
-
-// Set up an adult user
-await AgeSignals.setNextAgeSignalsResult({
-  ageLower: 18,
-  ageRangeSource: AgeRangeSource.TierA,
-});
-
-const result = await AgeSignals.requestAgeRange();
-console.log(result.status); // 'SHARED'
-console.log(result.ageRange?.lowerBound); // 18
-```
-
-#### Example: Testing a Supervised User (13-17 years old)
-
-```typescript
-import {
-  AgeRangeSource,
-  AgeRangeStatus,
-  AgeSignals,
-} from '@capawesome/capacitor-age-signals';
-
-await AgeSignals.setUseFakeManager({ useFake: true });
-
-await AgeSignals.setNextAgeSignalsAccessResult({
-  status: AgeRangeStatus.Shared,
-});
-
-await AgeSignals.setNextAgeSignalsResult({
-  ageLower: 13,
-  ageUpper: 17,
-  ageRangeSource: AgeRangeSource.TierB,
-  installId: 'fake_install_id',
-});
-
-const result = await AgeSignals.requestAgeRange();
-console.log(result.ageRange?.lowerBound); // 13
-console.log(result.ageRange?.upperBound); // 17
-console.log(result.installId); // 'fake_install_id'
-```
-
-#### Example: Testing Parental Approval Scenarios
-
-```typescript
-import {
-  AgeRangeSource,
-  AgeRangeStatus,
-  AgeSignals,
-  SignificantChangeStatus,
-} from '@capawesome/capacitor-age-signals';
-
-await AgeSignals.setUseFakeManager({ useFake: true });
-
-await AgeSignals.setNextAgeSignalsAccessResult({
-  status: AgeRangeStatus.Shared,
-});
-
-// Test pending approval
-await AgeSignals.setNextAgeSignalsResult({
-  ageLower: 13,
-  ageUpper: 17,
-  ageRangeSource: AgeRangeSource.TierB,
-  significantChangeApprovalDate: '2026-02-01T00:00:00.000Z',
-  significantChangeStatus: SignificantChangeStatus.Pending,
-});
-
-const result = await AgeSignals.requestAgeRange();
-console.log(result.significantChange?.status); // 'PENDING'
-console.log(result.significantChange?.approvalDate); // '2026-02-01T00:00:00.000Z'
-```
-
-#### Example: Testing a User Who Must Verify Their Age
-
-```typescript
-import { AgeRangeStatus, AgeSignals } from '@capawesome/capacitor-age-signals';
-
-await AgeSignals.setUseFakeManager({ useFake: true });
-
-await AgeSignals.setNextAgeSignalsAccessResult({
-  status: AgeRangeStatus.VerificationRequired,
-});
-
-const result = await AgeSignals.requestAgeRange();
-console.log(result.status); // 'VERIFICATION_REQUIRED'
-console.log(result.ageRange); // undefined
-```
-
-#### Example: Testing Error Scenarios
-
-```typescript
-import { AgeSignals, ErrorCode } from '@capawesome/capacitor-age-signals';
-
-await AgeSignals.setUseFakeManager({ useFake: true });
-
-// Simulate a network error while access is requested
-await AgeSignals.setNextRequestAgeSignalsAccessException({
-  errorCode: ErrorCode.NetworkError,
-});
-
-try {
-  await AgeSignals.requestAgeRange();
-} catch (error) {
-  console.log('Caught network error:', error);
-}
-
-// Simulate a network error while the age range is read
-await AgeSignals.setNextAgeSignalsException({
-  errorCode: ErrorCode.NetworkError,
-});
-
-try {
-  await AgeSignals.getAgeRange();
-} catch (error) {
-  console.log('Caught network error:', error);
-}
-```
-
-#### Disabling the Fake Manager
-
-```typescript
-import { AgeSignals } from '@capawesome/capacitor-age-signals';
-
-// Switch back to the production manager
-await AgeSignals.setUseFakeManager({ useFake: false });
-
-// This will now use the real Age Signals API
-const result = await AgeSignals.requestAgeRange();
-```
-
 ## API
 
 <docgen-index>
@@ -744,6 +590,160 @@ Only available on iOS (26.4+).
 | **`SdkVersionOutdated`**             | <code>'SDK_VERSION_OUTDATED'</code>             | The Age Signals SDK version is outdated. Only available on Android.                                                                                                                         | 0.4.0 |
 
 </docgen-api>
+
+## Testing
+
+The plugin includes support for the `FakeAgeSignalsManager` API on Android, which allows you to simulate different age signals scenarios in your tests without requiring live responses from Google Play.
+
+### Android Testing
+
+**Important**: The fake manager is only available if your app is debuggable. In release builds, `setUseFakeManager(...)` rejects with `FAKE_MANAGER_NOT_ALLOWED`, because it would otherwise allow age signals to be forged from the web layer.
+
+**Important**: Due to a known issue in versions 0.0.1 and 0.0.2 of the Age Signals API, you may encounter a `java.lang.VerifyError` when calling the builder method of `AgeSignalsResult` in unit tests. As a workaround, run your tests as Android instrumented tests within the `androidTest` source set.
+
+#### Example: Testing a Self-Declared Adult User
+
+```typescript
+import {
+  AgeRangeSource,
+  AgeRangeStatus,
+  AgeSignals,
+} from '@capawesome/capacitor-age-signals';
+
+// Enable the fake manager
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+// The user agrees to share their age range
+await AgeSignals.setNextAgeSignalsAccessResult({
+  status: AgeRangeStatus.Shared,
+});
+
+// Set up an adult user
+await AgeSignals.setNextAgeSignalsResult({
+  ageLower: 18,
+  ageRangeSource: AgeRangeSource.TierA,
+});
+
+const result = await AgeSignals.requestAgeRange();
+console.log(result.status); // 'SHARED'
+console.log(result.ageRange?.lowerBound); // 18
+```
+
+#### Example: Testing a Supervised User (13-17 years old)
+
+```typescript
+import {
+  AgeRangeSource,
+  AgeRangeStatus,
+  AgeSignals,
+} from '@capawesome/capacitor-age-signals';
+
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+await AgeSignals.setNextAgeSignalsAccessResult({
+  status: AgeRangeStatus.Shared,
+});
+
+await AgeSignals.setNextAgeSignalsResult({
+  ageLower: 13,
+  ageUpper: 17,
+  ageRangeSource: AgeRangeSource.TierB,
+  installId: 'fake_install_id',
+});
+
+const result = await AgeSignals.requestAgeRange();
+console.log(result.ageRange?.lowerBound); // 13
+console.log(result.ageRange?.upperBound); // 17
+console.log(result.installId); // 'fake_install_id'
+```
+
+#### Example: Testing Parental Approval Scenarios
+
+```typescript
+import {
+  AgeRangeSource,
+  AgeRangeStatus,
+  AgeSignals,
+  SignificantChangeStatus,
+} from '@capawesome/capacitor-age-signals';
+
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+await AgeSignals.setNextAgeSignalsAccessResult({
+  status: AgeRangeStatus.Shared,
+});
+
+// Test pending approval
+await AgeSignals.setNextAgeSignalsResult({
+  ageLower: 13,
+  ageUpper: 17,
+  ageRangeSource: AgeRangeSource.TierB,
+  significantChangeApprovalDate: '2026-02-01T00:00:00.000Z',
+  significantChangeStatus: SignificantChangeStatus.Pending,
+});
+
+const result = await AgeSignals.requestAgeRange();
+console.log(result.significantChange?.status); // 'PENDING'
+console.log(result.significantChange?.approvalDate); // '2026-02-01T00:00:00.000Z'
+```
+
+#### Example: Testing a User Who Must Verify Their Age
+
+```typescript
+import { AgeRangeStatus, AgeSignals } from '@capawesome/capacitor-age-signals';
+
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+await AgeSignals.setNextAgeSignalsAccessResult({
+  status: AgeRangeStatus.VerificationRequired,
+});
+
+const result = await AgeSignals.requestAgeRange();
+console.log(result.status); // 'VERIFICATION_REQUIRED'
+console.log(result.ageRange); // undefined
+```
+
+#### Example: Testing Error Scenarios
+
+```typescript
+import { AgeSignals, ErrorCode } from '@capawesome/capacitor-age-signals';
+
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+// Simulate a network error while access is requested
+await AgeSignals.setNextRequestAgeSignalsAccessException({
+  errorCode: ErrorCode.NetworkError,
+});
+
+try {
+  await AgeSignals.requestAgeRange();
+} catch (error) {
+  console.log('Caught network error:', error);
+}
+
+// Simulate a network error while the age range is read
+await AgeSignals.setNextAgeSignalsException({
+  errorCode: ErrorCode.NetworkError,
+});
+
+try {
+  await AgeSignals.getAgeRange();
+} catch (error) {
+  console.log('Caught network error:', error);
+}
+```
+
+#### Disabling the Fake Manager
+
+```typescript
+import { AgeSignals } from '@capawesome/capacitor-age-signals';
+
+// Switch back to the production manager
+await AgeSignals.setUseFakeManager({ useFake: false });
+
+// This will now use the real Age Signals API
+const result = await AgeSignals.requestAgeRange();
+```
 
 ## FAQ
 
