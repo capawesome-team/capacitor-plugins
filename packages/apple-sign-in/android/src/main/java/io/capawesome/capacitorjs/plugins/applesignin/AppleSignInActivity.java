@@ -195,11 +195,11 @@ public class AppleSignInActivity extends Activity {
                     Log.e(
                         "AppleSignIn",
                         "HTTP error " +
-                        errorResponse.getStatusCode() +
-                        " for URL: " +
-                        request.getUrl() +
-                        " | Reason: " +
-                        errorResponse.getReasonPhrase()
+                            errorResponse.getStatusCode() +
+                            " for URL: " +
+                            request.getUrl() +
+                            " | Reason: " +
+                            errorResponse.getReasonPhrase()
                     );
                     java.util.Map<String, String> headers = errorResponse.getResponseHeaders();
                     if (headers != null) {

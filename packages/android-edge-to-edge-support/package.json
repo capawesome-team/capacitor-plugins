@@ -64,7 +64,7 @@
     "@capacitor/cli": "8.4.2",
     "@capacitor/core": "8.0.0",
     "@capacitor/docgen": "0.3.1",
-    "prettier-plugin-java": "2.10.3",
+    "prettier-plugin-java": "2.9.7",
     "rimraf": "6.1.2",
     "rollup": "4.62.3",
     "typescript": "5.9.3"

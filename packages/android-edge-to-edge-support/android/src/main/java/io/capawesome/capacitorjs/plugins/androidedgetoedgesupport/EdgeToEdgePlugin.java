@@ -25,28 +25,26 @@ public class EdgeToEdgePlugin extends Plugin {
 
     @PluginMethod
     public void enable(PluginCall call) {
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.enable();
-                    call.resolve();
-                } catch (Exception exception) {
-                    call.reject(exception.getMessage());
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.enable();
+                call.resolve();
+            } catch (Exception exception) {
+                call.reject(exception.getMessage());
+            }
+        });
     }
 
     @PluginMethod
     public void disable(PluginCall call) {
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.disable();
-                    call.resolve();
-                } catch (Exception exception) {
-                    call.reject(exception.getMessage());
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.disable();
+                call.resolve();
+            } catch (Exception exception) {
+                call.reject(exception.getMessage());
+            }
+        });
     }
 
     @PluginMethod
@@ -71,15 +69,14 @@ public class EdgeToEdgePlugin extends Plugin {
             call.reject(ERROR_COLOR_MISSING);
             return;
         }
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.setBackgroundColor(color);
-                    call.resolve();
-                } catch (Exception exception) {
-                    call.reject(exception.getMessage());
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.setBackgroundColor(color);
+                call.resolve();
+            } catch (Exception exception) {
+                call.reject(exception.getMessage());
+            }
+        });
     }
 
     @PluginMethod
@@ -89,15 +86,14 @@ public class EdgeToEdgePlugin extends Plugin {
             call.reject(ERROR_COLOR_MISSING);
             return;
         }
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.setNavigationBarColor(color);
-                    call.resolve();
-                } catch (Exception exception) {
-                    call.reject(exception.getMessage());
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.setNavigationBarColor(color);
+                call.resolve();
+            } catch (Exception exception) {
+                call.reject(exception.getMessage());
+            }
+        });
     }
 
     @PluginMethod
@@ -107,15 +103,14 @@ public class EdgeToEdgePlugin extends Plugin {
             call.reject(ERROR_COLOR_MISSING);
             return;
         }
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.setStatusBarColor(color);
-                    call.resolve();
-                } catch (Exception exception) {
-                    call.reject(exception.getMessage());
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.setStatusBarColor(color);
+                call.resolve();
+            } catch (Exception exception) {
+                call.reject(exception.getMessage());
+            }
+        });
     }
 
     private EdgeToEdgeConfig getEdgeToEdgeConfig() {

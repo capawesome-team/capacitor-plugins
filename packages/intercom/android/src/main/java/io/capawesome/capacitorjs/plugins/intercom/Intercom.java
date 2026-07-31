@@ -237,12 +237,11 @@ public class Intercom {
         runOnMainThread(() -> {
             try {
                 requireInitialized();
-                io.intercom.android.sdk.Intercom.client()
-                    .setInAppMessageVisibility(
-                        options.getVisible()
-                            ? io.intercom.android.sdk.Intercom.Visibility.VISIBLE
-                            : io.intercom.android.sdk.Intercom.Visibility.GONE
-                    );
+                io.intercom.android.sdk.Intercom.client().setInAppMessageVisibility(
+                    options.getVisible()
+                        ? io.intercom.android.sdk.Intercom.Visibility.VISIBLE
+                        : io.intercom.android.sdk.Intercom.Visibility.GONE
+                );
                 callback.success();
             } catch (Exception exception) {
                 callback.error(exception);
@@ -254,12 +253,11 @@ public class Intercom {
         runOnMainThread(() -> {
             try {
                 requireInitialized();
-                io.intercom.android.sdk.Intercom.client()
-                    .setLauncherVisibility(
-                        options.getVisible()
-                            ? io.intercom.android.sdk.Intercom.Visibility.VISIBLE
-                            : io.intercom.android.sdk.Intercom.Visibility.GONE
-                    );
+                io.intercom.android.sdk.Intercom.client().setLauncherVisibility(
+                    options.getVisible()
+                        ? io.intercom.android.sdk.Intercom.Visibility.VISIBLE
+                        : io.intercom.android.sdk.Intercom.Visibility.GONE
+                );
                 callback.success();
             } catch (Exception exception) {
                 callback.error(exception);

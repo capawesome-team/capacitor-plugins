@@ -81,14 +81,12 @@ public class Volume {
         lastVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         registerVolumeObserver();
         watching = true;
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                View webView = plugin.getBridge().getWebView();
-                webView.setOnKeyListener(onKeyListener);
-                webView.requestFocus();
-                callback.success();
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            View webView = plugin.getBridge().getWebView();
+            webView.setOnKeyListener(onKeyListener);
+            webView.requestFocus();
+            callback.success();
+        });
     }
 
     public void stopWatching(@Nullable EmptyCallback callback) {
@@ -101,14 +99,12 @@ public class Volume {
         unregisterVolumeObserver();
         suppressVolumeChange = false;
         watching = false;
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                plugin.getBridge().getWebView().setOnKeyListener(null);
-                if (callback != null) {
-                    callback.success();
-                }
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            plugin.getBridge().getWebView().setOnKeyListener(null);
+            if (callback != null) {
+                callback.success();
+            }
+        });
     }
 
     private double getNormalizedVolume(int streamType) {

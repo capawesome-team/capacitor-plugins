@@ -50,7 +50,7 @@
   "devDependencies": {
     "@capacitor/android": "8.0.0",
     "@capacitor/cli": "8.4.2",
-    "prettier-plugin-java": "2.10.3"
+    "prettier-plugin-java": "2.9.7"
   },
   "peerDependencies": {
     "@capacitor/core": ">=8.0.0"

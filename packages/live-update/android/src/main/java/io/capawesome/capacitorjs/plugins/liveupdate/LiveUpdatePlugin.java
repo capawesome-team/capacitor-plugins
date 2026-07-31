@@ -89,17 +89,16 @@ public class LiveUpdatePlugin extends Plugin {
             // or constructor, it MUST be done here in onResume().
             if (!webViewListenerRegistered) {
                 webViewListenerRegistered = true;
-                getBridge()
-                    .addWebViewListener(
-                        new WebViewListener() {
-                            @Override
-                            public void onPageLoaded(WebView webView) {
-                                if (implementation != null) {
-                                    implementation.handleOnPageLoaded();
-                                }
+                getBridge().addWebViewListener(
+                    new WebViewListener() {
+                        @Override
+                        public void onPageLoaded(WebView webView) {
+                            if (implementation != null) {
+                                implementation.handleOnPageLoaded();
                             }
                         }
-                    );
+                    }
+                );
             }
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
