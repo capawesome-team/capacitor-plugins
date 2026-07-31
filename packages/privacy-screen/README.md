@@ -314,6 +314,10 @@ Yes, but only as an opt-in. There is no official iOS API to prevent screenshots,
 
 On Android, yes: calling `enable(...)` sets the `FLAG_SECURE` window flag, which blocks both screenshots and screen recordings. On iOS, the `screenshotTaken` event can only be observed after the screenshot has been taken and therefore cannot be prevented; blocking is only possible via the opt-in `ios.preventScreenshots` option.
 
+### Does the privacy screen appear during permission or biometric prompts on iOS?
+
+No. On iOS, the overlay is only installed when the app actually enters the background, not when it merely becomes inactive. System dialogs such as permission prompts, Face ID or Touch ID prompts, incoming calls, the Control Center and the Notification Center therefore leave the app content visible.
+
 ### Why is the `screenshotTaken` event never emitted on my Android device?
 
 On Android, screenshot detection is only available on Android 14 (API level 34) and newer. On older Android versions, the listener is never called. On iOS, the event is available without version restrictions.

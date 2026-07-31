@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`442df9e837de5e06484f64c400454965f6405fec`](https://github.com/capawesome-team/capacitor-plugins/commit/442df9e837de5e06484f64c400454965f6405fec) ([#942](https://github.com/capawesome-team/capacitor-plugins/pull/942)): fix(ios): do not show the privacy screen during system dialogs such as permission or biometric prompts
+
 ## 0.1.1
 
 ### Patch Changes
