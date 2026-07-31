@@ -108,12 +108,20 @@ public class FilePicker {
         try {
             long modifiedAt = 0;
             Cursor cursor = plugin.getBridge().getContext().getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
-                modifiedAt = cursor.getLong(columnIdx);
-                cursor.close();
-            }
+                if (cursor != null) {
+                    try {
+                        if (cursor.moveToFirst()) {
+                            int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
+                            if (columnIdx >= 0) {
+                                modifiedAt = cursor.getLong(columnIdx);
+                            } else {
+                                Logger.warn(TAG, "COLUMN_LAST_MODIFIED not found for uri: " + uri);
+                            }
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                }
             return modifiedAt;
         } catch (Exception e) {
             Logger.error(TAG, "getModifiedAtFromUri failed.", e);
