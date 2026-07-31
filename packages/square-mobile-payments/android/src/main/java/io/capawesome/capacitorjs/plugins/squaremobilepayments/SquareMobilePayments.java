@@ -737,13 +737,15 @@ public class SquareMobilePayments {
             sdkPayment.getTotalMoney().getCurrencyCode().toString()
         );
 
-        MoneyResult tipMoney = sdkPayment.getTipMoney() != null
-            ? new MoneyResult((int) sdkPayment.getTipMoney().getAmount(), sdkPayment.getTipMoney().getCurrencyCode().toString())
-            : null;
+        MoneyResult tipMoney =
+            sdkPayment.getTipMoney() != null
+                ? new MoneyResult((int) sdkPayment.getTipMoney().getAmount(), sdkPayment.getTipMoney().getCurrencyCode().toString())
+                : null;
 
-        MoneyResult applicationFee = sdkPayment.getAppFeeMoney() != null
-            ? new MoneyResult((int) sdkPayment.getAppFeeMoney().getAmount(), sdkPayment.getAppFeeMoney().getCurrencyCode().toString())
-            : null;
+        MoneyResult applicationFee =
+            sdkPayment.getAppFeeMoney() != null
+                ? new MoneyResult((int) sdkPayment.getAppFeeMoney().getAmount(), sdkPayment.getAppFeeMoney().getCurrencyCode().toString())
+                : null;
 
         return new io.capawesome.capacitorjs.plugins.squaremobilepayments.classes.results.Payment(
             id,

@@ -181,9 +181,8 @@ public class PhotoManipulator {
                 extension = "png";
                 break;
             case TransformOptions.FORMAT_WEBP:
-                compressFormat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
-                    ? Bitmap.CompressFormat.WEBP_LOSSY
-                    : Bitmap.CompressFormat.WEBP;
+                compressFormat =
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? Bitmap.CompressFormat.WEBP_LOSSY : Bitmap.CompressFormat.WEBP;
                 extension = "webp";
                 break;
             default:

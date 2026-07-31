@@ -34,10 +34,14 @@ public class AndroidSmsRetrieverPlugin extends Plugin {
     @Override
     public void load() {
         implementation = new AndroidSmsRetriever(this);
-        phoneNumberHintLauncher = getActivity()
-            .registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), this::handlePhoneNumberHintResult);
-        smsConsentLauncher = getActivity()
-            .registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), this::handleSmsConsentResult);
+        phoneNumberHintLauncher = getActivity().registerForActivityResult(
+            new ActivityResultContracts.StartIntentSenderForResult(),
+            this::handlePhoneNumberHintResult
+        );
+        smsConsentLauncher = getActivity().registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            this::handleSmsConsentResult
+        );
     }
 
     @Override
