@@ -292,7 +292,6 @@ public class AppleSignInActivity extends Activity {
     @SuppressWarnings("deprecation")
     private void setupStatusBar() {
         Window window = getWindow();
-        window.setStatusBarColor(0xFFF8F8F8);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             android.view.WindowInsetsController controller = window.getInsetsController();
             if (controller != null) {
