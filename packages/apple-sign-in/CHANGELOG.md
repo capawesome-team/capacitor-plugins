@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2`](https://github.com/capawesome-team/capacitor-plugins/commit/c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2) ([#945](https://github.com/capawesome-team/capacitor-plugins/pull/945)): fix(android): remove deprecated status bar color call
+
 ## 0.1.2
 
 ### Patch Changes
