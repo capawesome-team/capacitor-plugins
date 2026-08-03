@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`93f37920e705ba8de35ce6f272ac47f2e41b35da`](https://github.com/capawesome-team/capacitor-plugins/commit/93f37920e705ba8de35ce6f272ac47f2e41b35da) ([#949](https://github.com/capawesome-team/capacitor-plugins/pull/949)): fix(android): pass activity provider to Superwall SDK
+
 ## 0.1.1
 
 ### Patch Changes
