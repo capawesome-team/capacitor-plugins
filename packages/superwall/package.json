@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-superwall",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Unofficial Capacitor plugin for Superwall SDK to present paywalls on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
