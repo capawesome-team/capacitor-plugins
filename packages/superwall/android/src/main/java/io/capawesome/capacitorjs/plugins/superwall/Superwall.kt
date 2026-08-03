@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.superwall
 
+import android.app.Activity
 import android.app.Application
 import android.net.Uri
 import com.getcapacitor.JSObject
@@ -18,6 +19,7 @@ import com.superwall.sdk.paywall.presentation.internal.state.PaywallResult
 import com.superwall.sdk.paywall.presentation.result.PresentationResult
 import com.superwall.sdk.paywall.presentation.register
 import com.superwall.sdk.paywall.presentation.get_presentation_result.getPresentationResultSync
+import com.superwall.sdk.misc.ActivityProvider
 import com.superwall.sdk.models.entitlements.SubscriptionStatus
 import com.superwall.sdk.logger.LogLevel
 import com.superwall.sdk.logger.LogScope
@@ -50,7 +52,9 @@ class Superwall(private val plugin: SuperwallPlugin) : SuperwallDelegate {
             apiKey = options.getApiKey(),
             purchaseController = null,
             options = options.getSuperwallOptions(),
-            activityProvider = null
+            activityProvider = object : ActivityProvider {
+                override fun getCurrentActivity(): Activity? = plugin.activity
+            }
         )
 
         isConfigured = true
