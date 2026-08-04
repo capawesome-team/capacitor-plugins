@@ -105,16 +105,16 @@ public class FilePicker {
 
     @Nullable
     public Long getModifiedAtFromUri(@NonNull Uri uri) {
-        try {
-            long modifiedAt = 0;
-            Cursor cursor = plugin.getBridge().getContext().getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
-                modifiedAt = cursor.getLong(columnIdx);
-                cursor.close();
+        try (Cursor cursor = plugin.getBridge().getContext().getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor == null || !cursor.moveToFirst()) {
+                return null;
             }
-            return modifiedAt;
+            int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
+            if (columnIdx < 0) {
+                Logger.warn(TAG, "The column " + DocumentsContract.Document.COLUMN_LAST_MODIFIED + " is not available.");
+                return null;
+            }
+            return cursor.getLong(columnIdx);
         } catch (Exception e) {
             Logger.error(TAG, "getModifiedAtFromUri failed.", e);
             return null;
