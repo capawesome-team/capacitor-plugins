@@ -15,6 +15,7 @@ import com.superwall.sdk.delegate.SuperwallDelegate
 import com.superwall.sdk.analytics.superwall.SuperwallEventInfo
 import com.superwall.sdk.paywall.presentation.PaywallInfo
 import com.superwall.sdk.paywall.presentation.PaywallPresentationHandler
+import com.superwall.sdk.paywall.presentation.dismiss
 import com.superwall.sdk.paywall.presentation.internal.state.PaywallResult
 import com.superwall.sdk.paywall.presentation.result.PresentationResult
 import com.superwall.sdk.paywall.presentation.register
@@ -97,6 +98,18 @@ class Superwall(private val plugin: SuperwallPlugin) : SuperwallDelegate {
             params = params,
             handler = handler
         )
+    }
+
+    fun dismiss(callback: EmptyCallback) {
+        if (!isConfigured) {
+            callback.error(CustomExceptions.NOT_CONFIGURED)
+            return
+        }
+
+        coroutineScope.launch {
+            SuperwallSDK.instance.dismiss()
+            callback.success()
+        }
     }
 
     fun getPresentationResult(
