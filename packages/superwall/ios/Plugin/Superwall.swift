@@ -56,6 +56,17 @@ import SuperwallKit
         )
     }
 
+    @objc public func dismiss(completion: @escaping (_ error: Error?) -> Void) throws {
+        guard isConfigured else {
+            completion(CustomError.notConfigured)
+            return
+        }
+
+        SuperwallKit.Superwall.shared.dismiss {
+            completion(nil)
+        }
+    }
+
     @objc public func getPresentationResult(_ options: GetPresentationResultOptions, completion: @escaping (_ result: GetPresentationResultResult?, _ error: Error?) -> Void) throws {
         guard isConfigured else {
             completion(nil, CustomError.notConfigured)

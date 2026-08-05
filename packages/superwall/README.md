@@ -274,6 +274,7 @@ const logout = async () => {
 
 * [`configure(...)`](#configure)
 * [`register(...)`](#register)
+* [`dismiss()`](#dismiss)
 * [`getPresentationResult(...)`](#getpresentationresult)
 * [`identify(...)`](#identify)
 * [`reset()`](#reset)
@@ -340,6 +341,24 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#registerresult">RegisterResult</a>&gt;</code>
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### dismiss()
+
+```typescript
+dismiss() => Promise<void>
+```
+
+Dismiss the currently presented paywall, if one exists.
+
+Resolves once the paywall has been dismissed.
+If no paywall is presented, the method resolves immediately.
+
+Only available on Android and iOS.
+
+**Since:** 0.2.0
 
 --------------------
 
