@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`f1d3d338cc5998d745f3617cbaf9c032beb0f726`](https://github.com/capawesome-team/capacitor-plugins/commit/f1d3d338cc5998d745f3617cbaf9c032beb0f726) ([#954](https://github.com/capawesome-team/capacitor-plugins/pull/954)): feat: add `dismiss()` method
+
 ## 0.1.2
 
 ### Patch Changes
