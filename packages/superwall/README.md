@@ -358,7 +358,7 @@ If no paywall is presented, the method resolves immediately.
 
 Only available on Android and iOS.
 
-**Since:** 0.2.0
+**Since:** 0.1.3
 
 --------------------
 
