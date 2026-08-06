@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "lib": ["es2022"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "outDir": "dist/esm",
+    "paths": {
+      // TypeScript tries each candidate in order and uses the first one
+      // that exists on disk. Once `@capawesome/electron-live-update` is
+      // published, the installed package (package-level or hoisted to the
+      // workspace root `node_modules`) is used; the sibling repository
+      // checkout is only a fallback for local development before then.
+      "@capawesome/electron-live-update/engine": [
+        "../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
+        "../../../node_modules/@capawesome/electron-live-update/dist/engine/index.d.ts",
+        "../../../../electron-live-update/dist/engine/index.d.ts"
+      ],
+      "@capawesome/capacitor-electron/plugin": [
+        "../node_modules/@capawesome/capacitor-electron/dist/types/plugin/index.d.ts",
+        "../../../node_modules/@capawesome/capacitor-electron/dist/types/plugin/index.d.ts",
+        "../../../../capacitor-electron/dist/types/plugin/index.d.ts"
+      ]
+    },
+    "pretty": true,
+    "rootDir": "..",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "types": []
+  },
+  "include": ["src/**/*.ts"]
+}
