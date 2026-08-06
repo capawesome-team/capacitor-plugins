@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
+import android.content.Context;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,10 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
+import io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic.LiveUpdateIonicManager;
+import io.ionic.liveupdateprovider.ProviderError;
+import io.ionic.liveupdateprovider.ProviderManager;
+import java.util.Map;
 
 @CapacitorPlugin(name = "LiveUpdate")
 public class LiveUpdatePlugin extends Plugin {
@@ -40,6 +45,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String VERSION = "8.3.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
+    public static final String ERROR_BUNDLE_DIRECTORY_NOT_FOUND = "Bundle directory could not be resolved.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
@@ -48,7 +54,10 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
+    public static final String ERROR_DOWNLOAD_URL_MISSING = "Bundle does not have a valid download URL.";
     public static final String ERROR_HTTP_TIMEOUT = "Request timed out.";
+    public static final String ERROR_MANAGER_KEY_MISSING = "managerKey must be provided.";
+    public static final String ERROR_PLUGIN_NOT_INITIALIZED = "Plugin is not initialized.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
     public static final String ERROR_PUBLIC_KEY_INVALID = "Invalid public key.";
@@ -74,6 +83,26 @@ public class LiveUpdatePlugin extends Plugin {
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
+    }
+
+    /**
+     * Creates a manager for the Ionic Live Update Provider SDK. Invoked natively by
+     * Federated Capacitor after resolving this plugin by its Capacitor plugin name.
+     *
+     * This class deliberately does NOT implement the SDK's `LiveUpdateProvider` interface:
+     * superinterfaces are resolved eagerly at class-definition time, which would crash the
+     * plugin when the compileOnly SDK is absent at runtime. Instead, this method matches the
+     * interface's exact signature and Federated Capacitor invokes it via reflection when the
+     * cast to `LiveUpdateProvider` fails. Method references are resolved lazily, so this
+     * class loads fine without the SDK. Do NOT change the signature.
+     */
+    @NonNull
+    public ProviderManager createManager(@NonNull Context context, @NonNull Map<String, ?> configuration)
+        throws ProviderError.InvalidConfiguration {
+        if (implementation == null) {
+            throw new ProviderError.InvalidConfiguration(ERROR_PLUGIN_NOT_INITIALIZED, null);
+        }
+        return new LiveUpdateIonicManager(context, configuration, implementation);
     }
 
     @Override

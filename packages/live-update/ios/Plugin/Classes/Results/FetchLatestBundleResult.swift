@@ -20,6 +20,30 @@ import Capacitor
         self.signature = signature
     }
 
+    public func getArtifactType() -> String? {
+        return artifactType?.rawValue
+    }
+
+    public func getBundleId() -> String? {
+        return bundleId
+    }
+
+    public func getChecksum() -> String? {
+        return checksum
+    }
+
+    public func getCustomProperties() -> [String: Any]? {
+        return customProperties
+    }
+
+    public func getDownloadUrl() -> String? {
+        return downloadUrl
+    }
+
+    public func getSignature() -> String? {
+        return signature
+    }
+
     public func toJSObject() -> AnyObject {
         var result = JSObject()
         if artifactType == .manifest {

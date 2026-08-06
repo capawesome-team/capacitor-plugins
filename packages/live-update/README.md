@@ -25,6 +25,8 @@ The Capacitor Live Update plugin is one of the most feature-rich Over-the-Air (O
 - 📡 **Update Lifecycle Events**: Track download progress, react to bundle changes, and detect reloads with auto-blocking of rolled back bundles.
 - 🏠 **Self-Hosted Bundles**: Download bundles from any URL, no Capawesome Cloud dependency required.
 - 🏷️ **Custom Properties**: Associate custom key-value metadata with bundles via Capawesome Cloud.
+- 🌀 **Ionic Portals Support**: Power live updates for [Ionic Portals](https://ionic.io/docs/portals) via the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk).
+- 🧩 **Federated Capacitor Support**: Power live updates for [Federated Capacitor](https://ionic.io/docs/portals/for-capacitor/overview) shells via the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk).
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 1,000 projects to update apps on more than 20,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
@@ -101,6 +103,7 @@ android {
 
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
+- `$ionicLiveUpdateProviderVersion` version of `io.ionic:liveupdateprovider` (default: `1.0.0`)
 - `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `5.3.2`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
 
@@ -146,6 +149,10 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 ```
 
 We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278401) as the reason for accessing the [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults) API.
+
+## Ionic Live Update Provider SDK Integration
+
+This plugin implements the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk) contract, so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. Federated Capacitor resolves the provider by the plugin name `LiveUpdate`. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
 
 ## Configuration
 
