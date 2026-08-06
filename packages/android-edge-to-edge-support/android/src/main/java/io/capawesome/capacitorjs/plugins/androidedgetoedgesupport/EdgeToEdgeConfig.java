@@ -1,34 +1,42 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
-import android.graphics.Color;
+import androidx.annotation.Nullable;
 
 public class EdgeToEdgeConfig {
 
-    private int backgroundColor = Color.TRANSPARENT;
-    private int navigationBarColor = Color.TRANSPARENT;
-    private int statusBarColor = Color.TRANSPARENT;
+    @Nullable
+    private Integer backgroundColor;
 
-    public int getBackgroundColor() {
+    @Nullable
+    private Integer navigationBarColor;
+
+    @Nullable
+    private Integer statusBarColor;
+
+    @Nullable
+    public Integer getBackgroundColor() {
         return this.backgroundColor;
     }
 
-    public int getNavigationBarColor() {
+    @Nullable
+    public Integer getNavigationBarColor() {
         return this.navigationBarColor;
     }
 
-    public int getStatusBarColor() {
+    @Nullable
+    public Integer getStatusBarColor() {
         return this.statusBarColor;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
+    public void setBackgroundColor(@Nullable Integer backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 
-    public void setNavigationBarColor(int navigationBarColor) {
+    public void setNavigationBarColor(@Nullable Integer navigationBarColor) {
         this.navigationBarColor = navigationBarColor;
     }
 
-    public void setStatusBarColor(int statusBarColor) {
+    public void setStatusBarColor(@Nullable Integer statusBarColor) {
         this.statusBarColor = statusBarColor;
     }
 }

@@ -1,9 +1,13 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
+import android.os.Build;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,9 +31,11 @@ public class EdgeToEdge {
     @Nullable
     private View statusBarOverlay;
 
-    private int currentNavigationBarColor;
+    @Nullable
+    private Integer currentNavigationBarColor;
 
-    private int currentStatusBarColor;
+    @Nullable
+    private Integer currentStatusBarColor;
 
     public EdgeToEdge(@NonNull EdgeToEdgePlugin plugin, @NonNull EdgeToEdgeConfig config) {
         this.config = config;
@@ -42,17 +48,27 @@ public class EdgeToEdge {
     }
 
     public void enable() {
-        // Create color overlays if they don't exist
-        createColorOverlays();
-        // Restore previously set colors
-        setStatusBarColor(currentStatusBarColor);
-        setNavigationBarColor(currentNavigationBarColor);
-        // Apply insets
-        applyInsets();
+        if (isEdgeToEdgeEnforced()) {
+            // Create color overlays if they don't exist
+            createColorOverlays();
+            // Restore previously set colors
+            applyStatusBarColor();
+            applyNavigationBarColor();
+            // Apply insets
+            applyInsets();
+        } else {
+            // Pre-Android 15 (or Android 15 with opt-out): the platform still honors
+            // Window.setStatusBarColor/setNavigationBarColor, so we use that directly
+            // instead of overlay views that depend on the inset dispatch chain.
+            applyStatusBarColor();
+            applyNavigationBarColor();
+        }
     }
 
     public void disable() {
-        removeInsets();
+        if (isEdgeToEdgeEnforced()) {
+            removeInsets();
+        }
     }
 
     public ViewGroup.MarginLayoutParams getInsets() {
@@ -98,14 +114,7 @@ public class EdgeToEdge {
 
         ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
         mlp.bottomMargin = bottomMargin;
-        // Apply top margin when edge-to-edge is active. On Android 15+ it is always enforced.
-        // On older versions, use the system content view's top padding only as a heuristic that
-        // the top inset may already be handled elsewhere (for example by decor fitting or another
-        // insets/padding adjustment), rather than as a guaranteed signal of decorFitsSystemWindows.
-        View contentView = plugin.getActivity().findViewById(android.R.id.content);
-        boolean topInsetLikelyHandledBySystem =
-            contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
-        mlp.topMargin = topInsetLikelyHandledBySystem ? 0 : systemBarsInsets.top;
+        mlp.topMargin = systemBarsInsets.top;
         mlp.leftMargin = systemBarsInsets.left;
         mlp.rightMargin = systemBarsInsets.right;
         view.setLayoutParams(mlp);
@@ -114,93 +123,34 @@ public class EdgeToEdge {
         updateColorOverlays(systemBarsInsets);
     }
 
-    private void removeInsets() {
-        View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
-        // Reset insets
-        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        mlp.topMargin = 0;
-        mlp.leftMargin = 0;
-        mlp.rightMargin = 0;
-        mlp.bottomMargin = 0;
-        view.setLayoutParams(mlp);
-        // Set a no-op listener that consumes insets without applying them.
-        // Using null would allow Android 15's default edge-to-edge handling to take over,
-        // which can cause extra padding when re-enabling.
-        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> WindowInsetsCompat.CONSUMED);
-        // Remove color overlays
-        removeColorOverlays();
-    }
-
-    private void createColorOverlays() {
-        View webView = plugin.getBridge().getWebView();
-        ViewGroup parent = (ViewGroup) webView.getParent();
-
-        if (statusBarOverlay == null) {
-            statusBarOverlay = new View(parent.getContext());
-            parent.addView(statusBarOverlay, 0); // Add behind webview
+    private void applyNavigationBarColor() {
+        if (currentNavigationBarColor == null) {
+            return;
         }
-
-        if (navigationBarOverlay == null) {
-            navigationBarOverlay = new View(parent.getContext());
-            parent.addView(navigationBarOverlay, 0); // Add behind webview
+        if (isEdgeToEdgeEnforced()) {
+            if (navigationBarOverlay != null) {
+                navigationBarOverlay.setBackgroundColor(currentNavigationBarColor);
+            }
+        } else {
+            Window window = plugin.getActivity().getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            setNavigationBarColorDeprecated(window, currentNavigationBarColor);
         }
     }
 
-    private void removeColorOverlays() {
-        View webView = plugin.getBridge().getWebView();
-        ViewGroup parent = (ViewGroup) webView.getParent();
-
-        if (statusBarOverlay != null) {
-            parent.removeView(statusBarOverlay);
-            statusBarOverlay = null;
+    private void applyStatusBarColor() {
+        if (currentStatusBarColor == null) {
+            return;
         }
-
-        if (navigationBarOverlay != null) {
-            parent.removeView(navigationBarOverlay);
-            navigationBarOverlay = null;
-        }
-    }
-
-    private void setNavigationBarColor(int color) {
-        this.currentNavigationBarColor = color;
-        if (navigationBarOverlay != null) {
-            navigationBarOverlay.setBackgroundColor(color);
-        }
-    }
-
-    private void setStatusBarColor(int color) {
-        this.currentStatusBarColor = color;
-        if (statusBarOverlay != null) {
-            statusBarOverlay.setBackgroundColor(color);
-        }
-    }
-
-    private void updateColorOverlays(Insets systemBarsInsets) {
-        View webView = plugin.getBridge().getWebView();
-        ViewGroup parent = (ViewGroup) webView.getParent();
-
-        if (statusBarOverlay != null) {
-            // Position status bar overlay at top
-            ViewGroup.LayoutParams statusParams = createLayoutParams(
-                parent,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                systemBarsInsets.top,
-                Gravity.TOP
-            );
-            statusBarOverlay.setLayoutParams(statusParams);
-        }
-
-        if (navigationBarOverlay != null) {
-            // Position navigation bar overlay at bottom
-            ViewGroup.LayoutParams navParams = createLayoutParams(
-                parent,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                systemBarsInsets.bottom,
-                Gravity.BOTTOM
-            );
-            navigationBarOverlay.setLayoutParams(navParams);
+        if (isEdgeToEdgeEnforced()) {
+            if (statusBarOverlay != null) {
+                statusBarOverlay.setBackgroundColor(currentStatusBarColor);
+            }
+        } else {
+            Window window = plugin.getActivity().getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            setStatusBarColorDeprecated(window, currentStatusBarColor);
         }
     }
 
@@ -231,5 +181,123 @@ public class EdgeToEdge {
         // Fallback to MarginLayoutParams
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(width, height);
         return params;
+    }
+
+    private void createColorOverlays() {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay == null) {
+            statusBarOverlay = new View(parent.getContext());
+            parent.addView(statusBarOverlay, 0); // Add behind webview
+        }
+
+        if (navigationBarOverlay == null) {
+            navigationBarOverlay = new View(parent.getContext());
+            parent.addView(navigationBarOverlay, 0); // Add behind webview
+        }
+    }
+
+    private boolean isEdgeToEdgeEnforced() {
+        int deviceApi = Build.VERSION.SDK_INT;
+        if (deviceApi < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            // Pre-Android 15: platform honors legacy Window.setStatusBarColor/setNavigationBarColor
+            return false;
+        }
+        if (deviceApi == Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            // Android 15: edge-to-edge enforced unless the app opted out via
+            // android:windowOptOutEdgeToEdgeEnforcement on its theme
+            return !isEdgeToEdgeOptOutEnabled();
+        }
+        // Android 16+: opt-out is ignored, edge-to-edge is always enforced
+        return true;
+    }
+
+    private boolean isEdgeToEdgeOptOutEnabled() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            return false;
+        }
+        TypedValue value = new TypedValue();
+        plugin.getActivity().getTheme().resolveAttribute(android.R.attr.windowOptOutEdgeToEdgeEnforcement, value, true);
+        return value.data != 0;
+    }
+
+    private void removeColorOverlays() {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay != null) {
+            parent.removeView(statusBarOverlay);
+            statusBarOverlay = null;
+        }
+
+        if (navigationBarOverlay != null) {
+            parent.removeView(navigationBarOverlay);
+            navigationBarOverlay = null;
+        }
+    }
+
+    private void removeInsets() {
+        View view = plugin.getBridge().getWebView();
+        // Reset insets
+        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        mlp.topMargin = 0;
+        mlp.leftMargin = 0;
+        mlp.rightMargin = 0;
+        mlp.bottomMargin = 0;
+        view.setLayoutParams(mlp);
+        // Set a no-op listener that consumes insets without applying them.
+        // Using null would allow Android 15's default edge-to-edge handling to take over,
+        // which can cause extra padding when re-enabling.
+        ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> WindowInsetsCompat.CONSUMED);
+        // Remove color overlays
+        removeColorOverlays();
+    }
+
+    private void setNavigationBarColor(int color) {
+        this.currentNavigationBarColor = color;
+        applyNavigationBarColor();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setNavigationBarColorDeprecated(@NonNull Window window, int color) {
+        window.setNavigationBarColor(color);
+    }
+
+    private void setStatusBarColor(int color) {
+        this.currentStatusBarColor = color;
+        applyStatusBarColor();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void setStatusBarColorDeprecated(@NonNull Window window, int color) {
+        window.setStatusBarColor(color);
+    }
+
+    private void updateColorOverlays(Insets systemBarsInsets) {
+        View webView = plugin.getBridge().getWebView();
+        ViewGroup parent = (ViewGroup) webView.getParent();
+
+        if (statusBarOverlay != null) {
+            // Position status bar overlay at top
+            ViewGroup.LayoutParams statusParams = createLayoutParams(
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.top,
+                Gravity.TOP
+            );
+            statusBarOverlay.setLayoutParams(statusParams);
+        }
+
+        if (navigationBarOverlay != null) {
+            // Position navigation bar overlay at bottom
+            ViewGroup.LayoutParams navParams = createLayoutParams(
+                parent,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                systemBarsInsets.bottom,
+                Gravity.BOTTOM
+            );
+            navigationBarOverlay.setLayoutParams(navParams);
+        }
     }
 }
