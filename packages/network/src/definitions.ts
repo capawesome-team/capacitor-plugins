@@ -70,7 +70,8 @@ export interface GetStatusResult {
   internetReachable: boolean | null;
   /**
    * Whether the active network connection is subject to data saving
-   * restrictions, such as Data Saver on Android or Low Data Mode on iOS.
+   * restrictions or limited bandwidth, such as Data Saver on Android,
+   * Low Data Mode on iOS or a satellite network.
    *
    * This is `false` if the device is not connected to a network and `null`
    * on browsers that do not expose this information.
@@ -142,6 +143,14 @@ export enum ConnectionType {
    * @since 0.1.0
    */
   None = 'NONE',
+  /**
+   * The device is connected via a satellite network.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.2
+   */
+  Satellite = 'SATELLITE',
   /**
    * The type of the network connection could not be determined.
    *
