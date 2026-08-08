@@ -1,10 +1,8 @@
 package io.capawesome.capacitorjs.plugins.network.classes.results;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import io.capawesome.capacitorjs.plugins.network.interfaces.Result;
-import org.json.JSONObject;
 
 public class GetStatusResult implements Result {
 
@@ -19,8 +17,7 @@ public class GetStatusResult implements Result {
 
     private final boolean expensive;
 
-    @Nullable
-    private final Boolean ultraConstrained;
+    private final boolean ultraConstrained;
 
     public GetStatusResult(
         boolean connected,
@@ -28,7 +25,7 @@ public class GetStatusResult implements Result {
         boolean internetReachable,
         boolean constrained,
         boolean expensive,
-        @Nullable Boolean ultraConstrained
+        boolean ultraConstrained
     ) {
         this.connected = connected;
         this.connectionType = connectionType;
@@ -47,7 +44,7 @@ public class GetStatusResult implements Result {
         result.put("internetReachable", internetReachable);
         result.put("constrained", constrained);
         result.put("expensive", expensive);
-        result.put("ultraConstrained", ultraConstrained == null ? JSONObject.NULL : ultraConstrained);
+        result.put("ultraConstrained", ultraConstrained);
         return result;
     }
 }

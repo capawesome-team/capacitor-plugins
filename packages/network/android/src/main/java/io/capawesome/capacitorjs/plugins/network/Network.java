@@ -123,18 +123,6 @@ public class Network {
     }
 
     private boolean computeConstrained(@Nullable NetworkCapabilities capabilities) {
-        if (capabilities == null) {
-            return false;
-        }
-        if (isSatellite(capabilities)) {
-            return true;
-        }
-        if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
-            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
-        ) {
-            return true;
-        }
         return computeExpensive(capabilities) && isDataSaverEnabled();
     }
 
@@ -154,8 +142,21 @@ public class Network {
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
         boolean constrained = computeConstrained(capabilities);
         boolean expensive = computeExpensive(capabilities);
-        Boolean ultraConstrained = connected ? null : Boolean.FALSE;
+        boolean ultraConstrained = computeUltraConstrained(capabilities);
         return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive, ultraConstrained);
+    }
+
+    private boolean computeUltraConstrained(@Nullable NetworkCapabilities capabilities) {
+        if (capabilities == null) {
+            return false;
+        }
+        if (isSatellite(capabilities)) {
+            return true;
+        }
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
+        );
     }
 
     @NonNull
