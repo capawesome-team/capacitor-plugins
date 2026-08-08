@@ -44,11 +44,8 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
         ? this.mapConnectionType(connection?.type)
         : ConnectionType.None,
       internetReachable: null,
-      constrained:
-        connection?.saveData === undefined
-          ? null
-          : connected && connection.saveData,
-      expensive: null,
+      constrained: connected ? (connection?.saveData ?? null) : false,
+      expensive: connected ? null : false,
     };
   }
 

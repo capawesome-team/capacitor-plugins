@@ -84,7 +84,7 @@ export interface GetStatusResult {
    * for example a metered Wi-Fi or cellular network.
    *
    * This is `false` if the device is not connected to a network and `null`
-   * on the web, because browsers do not expose this information.
+   * on platforms that cannot determine the cost of the connection (Web).
    *
    * @example false
    * @since 0.1.2
