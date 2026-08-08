@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.13
+
+### Patch Changes
+
+- [`abbcdc11efc79461f6a3997dff8821d170282f95`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/abbcdc11efc79461f6a3997dff8821d170282f95) ([#515](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/515)): fix(ios): `query(...)` now rejects with the SQLite error instead of crashing the app when a statement fails while its rows are read
+
 ## 0.3.12
 
 ### Patch Changes
