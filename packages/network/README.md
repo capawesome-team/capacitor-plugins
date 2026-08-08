@@ -15,7 +15,7 @@ The Capacitor Network plugin is one of the most complete network information sol
 - 📶 **Network status**: Read whether the device is connected and how (Wi-Fi, cellular, ethernet, VPN).
 - 🌍 **Internet reachability**: Detect whether the connection has verified access to the internet (Android).
 - 💸 **Data saving & cost**: Detect whether the connection is constrained (Data Saver or Low Data Mode) or expensive (metered).
-- 🛰️ **Satellite networks**: Detect carrier-provided satellite connections on Android 15+ and iOS 26+.
+- 🛰️ **Satellite networks**: Detect satellite transport on Android 15+ and ultra-constrained connections on iOS 26+.
 - ✈️ **Airplane mode**: Read whether the airplane mode is enabled (Android).
 - 👂 **Change events**: Listen for changes to the network status.
 - 🌐 **Web support**: Read the network status on the web.
@@ -107,7 +107,7 @@ Android only uses constrained satellite networks for apps that identify themselv
 />
 ```
 
-This plugin does not add this element automatically, because each app must decide whether it is suitable for constrained satellite access. Push notifications must additionally be sent with the `bandwidth_constrained_ok` flag to be delivered on such a network. See [Constrained satellite networks](https://developer.android.com/develop/connectivity/satellite/constrained-networks) for more information.
+Replace `PACKAGE_NAME` with your app's package name. This plugin does not add this element automatically, because each app must decide whether it is suitable for constrained satellite access. Push notifications must additionally be sent with the `bandwidth_constrained_ok` flag to be delivered on such a network. See [Constrained satellite networks](https://developer.android.com/develop/connectivity/satellite/constrained-networks) for more information.
 
 On **iOS**, carrier-provided satellite connections are reported as `CELLULAR` with `ultraConstrained` set to `true`, because Apple does not expose satellite as a connection type.
 
