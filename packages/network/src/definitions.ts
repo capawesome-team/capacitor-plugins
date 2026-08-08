@@ -91,13 +91,13 @@ export interface GetStatusResult {
    */
   expensive: boolean | null;
   /**
-   * Whether the active network connection is ultra-constrained, such as a
-   * carrier-provided satellite network.
+   * Whether the active network connection is severely limited in bandwidth,
+   * such as a carrier-provided satellite network.
    *
    * This is `false` if the device is not connected to a network and `null`
-   * on platforms that cannot determine this (Android, Web and iOS below 26).
+   * on platforms that cannot determine this (Web and iOS below 26).
    *
-   * Only available on iOS 26+.
+   * Only available on Android and iOS 26+.
    *
    * @example false
    * @since 0.1.2
@@ -142,6 +142,14 @@ export enum ConnectionType {
    * @since 0.1.0
    */
   None = 'NONE',
+  /**
+   * The device is connected via a satellite network.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.2
+   */
+  Satellite = 'SATELLITE',
   /**
    * The type of the network connection could not be determined.
    *

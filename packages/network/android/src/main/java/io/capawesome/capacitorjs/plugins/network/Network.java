@@ -20,6 +20,7 @@ public class Network {
     private static final String CONNECTION_TYPE_CELLULAR = "CELLULAR";
     private static final String CONNECTION_TYPE_ETHERNET = "ETHERNET";
     private static final String CONNECTION_TYPE_NONE = "NONE";
+    private static final String CONNECTION_TYPE_SATELLITE = "SATELLITE";
     private static final String CONNECTION_TYPE_UNKNOWN = "UNKNOWN";
     private static final String CONNECTION_TYPE_VPN = "VPN";
     private static final String CONNECTION_TYPE_WIFI = "WIFI";
@@ -106,6 +107,9 @@ public class Network {
         if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
             return CONNECTION_TYPE_VPN;
         }
+        if (isSatellite(capabilities)) {
+            return CONNECTION_TYPE_SATELLITE;
+        }
         if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
             return CONNECTION_TYPE_WIFI;
         }
@@ -119,15 +123,6 @@ public class Network {
     }
 
     private boolean computeConstrained(@Nullable NetworkCapabilities capabilities) {
-        if (capabilities == null) {
-            return false;
-        }
-        if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
-            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
-        ) {
-            return true;
-        }
         return computeExpensive(capabilities) && isDataSaverEnabled();
     }
 
@@ -147,8 +142,21 @@ public class Network {
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
         boolean constrained = computeConstrained(capabilities);
         boolean expensive = computeExpensive(capabilities);
-        Boolean ultraConstrained = connected ? null : Boolean.FALSE;
+        boolean ultraConstrained = computeUltraConstrained(capabilities);
         return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive, ultraConstrained);
+    }
+
+    private boolean computeUltraConstrained(@Nullable NetworkCapabilities capabilities) {
+        if (capabilities == null) {
+            return false;
+        }
+        if (isSatellite(capabilities)) {
+            return true;
+        }
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
+        );
     }
 
     @NonNull
@@ -168,5 +176,12 @@ public class Network {
 
     private boolean isDataSaverEnabled() {
         return connectivityManager.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
+    }
+
+    private boolean isSatellite(@NonNull NetworkCapabilities capabilities) {
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM &&
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_SATELLITE)
+        );
     }
 }
