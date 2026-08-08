@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`25a987d05f9a6dd16c1aa138fc4376f97210a366`](https://github.com/capawesome-team/capacitor-plugins/commit/25a987d05f9a6dd16c1aa138fc4376f97210a366) ([#963](https://github.com/capawesome-team/capacitor-plugins/pull/963)): feat: add support for constrained satellite networks on Android
+
+- [`860f7152a475df1cafa34872e73eda20b5f95ca7`](https://github.com/capawesome-team/capacitor-plugins/commit/860f7152a475df1cafa34872e73eda20b5f95ca7) ([#960](https://github.com/capawesome-team/capacitor-plugins/pull/960)): feat: add `constrained` and `expensive` properties to `GetStatusResult`
+
+- [`7a4b9a60ccf67c1092e5b6ec82b946e1193b715e`](https://github.com/capawesome-team/capacitor-plugins/commit/7a4b9a60ccf67c1092e5b6ec82b946e1193b715e) ([#962](https://github.com/capawesome-team/capacitor-plugins/pull/962)): feat: add `ultraConstrained` property to `GetStatusResult`
+
 ## 0.1.1
 
 ### Patch Changes
