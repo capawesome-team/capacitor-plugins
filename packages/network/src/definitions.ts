@@ -90,6 +90,19 @@ export interface GetStatusResult {
    * @since 0.1.2
    */
   expensive: boolean | null;
+  /**
+   * Whether the active network connection is ultra-constrained, such as a
+   * carrier-provided satellite network.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on platforms that cannot determine this (Android, Web and iOS below 26).
+   *
+   * Only available on iOS 26+.
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  ultraConstrained: boolean | null;
 }
 
 /**

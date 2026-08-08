@@ -48,7 +48,8 @@ import Network
 
     private func createStatusKey(_ path: NWPath) -> String {
         let connected = path.status == .satisfied
-        return "\(connected)|\(mapConnectionType(path))|\(connected && path.isConstrained)|\(connected && path.isExpensive)"
+        let ultraConstrained = mapUltraConstrained(path)?.boolValue.description ?? "null"
+        return "\(connected)|\(mapConnectionType(path))|\(connected && path.isConstrained)|\(connected && path.isExpensive)|\(ultraConstrained)"
     }
 
     private func createStatusResult(_ path: NWPath) -> GetStatusResult {
@@ -58,7 +59,8 @@ import Network
             connectionType: mapConnectionType(path),
             internetReachable: nil,
             constrained: connected && path.isConstrained,
-            expensive: connected && path.isExpensive
+            expensive: connected && path.isExpensive,
+            ultraConstrained: mapUltraConstrained(path)
         )
     }
 
@@ -89,5 +91,15 @@ import Network
             return Network.connectionTypeEthernet
         }
         return Network.connectionTypeUnknown
+    }
+
+    private func mapUltraConstrained(_ path: NWPath) -> NSNumber? {
+        if path.status != .satisfied {
+            return NSNumber(value: false)
+        }
+        guard #available(iOS 26.0, *) else {
+            return nil
+        }
+        return NSNumber(value: path.isUltraConstrained)
     }
 }

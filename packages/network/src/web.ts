@@ -46,6 +46,7 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
       internetReachable: null,
       constrained: connected ? (connection?.saveData ?? null) : false,
       expensive: connected ? null : false,
+      ultraConstrained: connected ? null : false,
     };
   }
 
