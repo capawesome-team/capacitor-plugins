@@ -9,7 +9,8 @@ class NetworkTests: XCTestCase {
             connectionType: "WIFI",
             internetReachable: nil,
             constrained: false,
-            expensive: true
+            expensive: true,
+            ultraConstrained: nil
         )
 
         let jsObject = result.toJSObject() as? [String: Any]
@@ -19,5 +20,6 @@ class NetworkTests: XCTestCase {
         XCTAssertTrue(jsObject?["internetReachable"] is NSNull)
         XCTAssertEqual(false, jsObject?["constrained"] as? Bool)
         XCTAssertEqual(true, jsObject?["expensive"] as? Bool)
+        XCTAssertTrue(jsObject?["ultraConstrained"] is NSNull)
     }
 }

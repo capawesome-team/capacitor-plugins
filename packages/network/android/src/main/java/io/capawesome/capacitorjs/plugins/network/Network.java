@@ -147,7 +147,8 @@ public class Network {
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
         boolean constrained = computeConstrained(capabilities);
         boolean expensive = computeExpensive(capabilities);
-        return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive);
+        Boolean ultraConstrained = connected ? null : Boolean.FALSE;
+        return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive, ultraConstrained);
     }
 
     @NonNull

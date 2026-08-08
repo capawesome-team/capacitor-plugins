@@ -15,6 +15,7 @@ The Capacitor Network plugin is one of the most complete network information sol
 - 📶 **Network status**: Read whether the device is connected and how (Wi-Fi, cellular, ethernet, VPN).
 - 🌍 **Internet reachability**: Detect whether the connection has verified access to the internet (Android).
 - 💸 **Data saving & cost**: Detect whether the connection is constrained (Data Saver or Low Data Mode) or expensive (metered).
+- 🛰️ **Ultra-constrained networks**: Detect carrier-provided satellite connections on iOS 26+.
 - ✈️ **Airplane mode**: Read whether the airplane mode is enabled (Android).
 - 👂 **Change events**: Listen for changes to the network status.
 - 🌐 **Web support**: Read the network status on the web.
@@ -83,6 +84,21 @@ const getStatus = async () => {
   return status;
 };
 ```
+
+### Detect ultra-constrained networks
+
+Read whether the connection is ultra-constrained, such as a carrier-provided satellite network. Only available on iOS 26+:
+
+```typescript
+import { Network } from '@capawesome/capacitor-network';
+
+const isUltraConstrained = async () => {
+  const { ultraConstrained } = await Network.getStatus();
+  return ultraConstrained;
+};
+```
+
+Detecting this state requires no entitlement. However, if your app wants to transfer data over such a network, it must allow this per request (see [`allowsUltraConstrainedNetworkAccess`](https://developer.apple.com/documentation/foundation/urlrequest/allowsultraconstrainednetworkaccess)) and may need the [`com.apple.developer.networking.carrier-constrained.appcategory`](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.networking.carrier-constrained.appcategory) entitlement to be allowed on all carriers. This plugin neither adds entitlements nor modifies your `URLSession` or `NWParameters` configuration. See [Configuring your app for ultra-constrained networks](https://developer.apple.com/documentation/bundleresources/configuring-your-app-for-ultra-constrained-networks) for more information.
 
 ### Check whether airplane mode is enabled
 
@@ -213,13 +229,14 @@ Remove all listeners for this plugin.
 
 #### GetStatusResult
 
-| Prop                    | Type                                                      | Description                                                                                                                                                                                                                                                  | Since |
-| ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`connected`**         | <code>boolean</code>                                      | Whether the device is currently connected to a network.                                                                                                                                                                                                      | 0.1.0 |
-| **`connectionType`**    | <code><a href="#connectiontype">ConnectionType</a></code> | The type of the currently active network connection.                                                                                                                                                                                                         | 0.1.0 |
-| **`internetReachable`** | <code>boolean \| null</code>                              | Whether the active network connection has verified access to the internet. This is `null` on platforms that cannot validate internet access (iOS and Web), where connectivity does not guarantee reachability. Only available on Android.                    | 0.1.0 |
-| **`constrained`**       | <code>boolean \| null</code>                              | Whether the active network connection is subject to data saving restrictions, such as Data Saver on Android or Low Data Mode on iOS. This is `false` if the device is not connected to a network and `null` on browsers that do not expose this information. | 0.1.2 |
-| **`expensive`**         | <code>boolean \| null</code>                              | Whether the active network connection is considered expensive, for example a metered Wi-Fi or cellular network. This is `false` if the device is not connected to a network and `null` on platforms that cannot determine the cost of the connection (Web).  | 0.1.2 |
+| Prop                    | Type                                                      | Description                                                                                                                                                                                                                                                                          | Since |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`connected`**         | <code>boolean</code>                                      | Whether the device is currently connected to a network.                                                                                                                                                                                                                              | 0.1.0 |
+| **`connectionType`**    | <code><a href="#connectiontype">ConnectionType</a></code> | The type of the currently active network connection.                                                                                                                                                                                                                                 | 0.1.0 |
+| **`internetReachable`** | <code>boolean \| null</code>                              | Whether the active network connection has verified access to the internet. This is `null` on platforms that cannot validate internet access (iOS and Web), where connectivity does not guarantee reachability. Only available on Android.                                            | 0.1.0 |
+| **`constrained`**       | <code>boolean \| null</code>                              | Whether the active network connection is subject to data saving restrictions, such as Data Saver on Android or Low Data Mode on iOS. This is `false` if the device is not connected to a network and `null` on browsers that do not expose this information.                         | 0.1.2 |
+| **`expensive`**         | <code>boolean \| null</code>                              | Whether the active network connection is considered expensive, for example a metered Wi-Fi or cellular network. This is `false` if the device is not connected to a network and `null` on platforms that cannot determine the cost of the connection (Web).                          | 0.1.2 |
+| **`ultraConstrained`**  | <code>boolean \| null</code>                              | Whether the active network connection is ultra-constrained, such as a carrier-provided satellite network. This is `false` if the device is not connected to a network and `null` on platforms that cannot determine this (Android, Web and iOS below 26). Only available on iOS 26+. | 0.1.2 |
 
 
 #### IsAirplaneModeEnabledResult
