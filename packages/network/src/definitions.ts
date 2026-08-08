@@ -68,6 +68,28 @@ export interface GetStatusResult {
    * @since 0.1.0
    */
   internetReachable: boolean | null;
+  /**
+   * Whether the active network connection is subject to data saving
+   * restrictions, such as Data Saver on Android or Low Data Mode on iOS.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on browsers that do not expose this information.
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  constrained: boolean | null;
+  /**
+   * Whether the active network connection is considered expensive,
+   * for example a metered Wi-Fi or cellular network.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on the web, because browsers do not expose this information.
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  expensive: boolean | null;
 }
 
 /**

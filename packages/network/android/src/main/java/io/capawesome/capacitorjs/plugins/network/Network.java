@@ -1,11 +1,16 @@
 package io.capawesome.capacitorjs.plugins.network;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import android.os.Build;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import io.capawesome.capacitorjs.plugins.network.classes.results.GetStatusResult;
 import io.capawesome.capacitorjs.plugins.network.classes.results.IsAirplaneModeEnabledResult;
 import io.capawesome.capacitorjs.plugins.network.interfaces.NonEmptyResultCallback;
@@ -47,6 +52,13 @@ public class Network {
         }
     };
 
+    private final BroadcastReceiver restrictBackgroundChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            handleNetworkStatusChange();
+        }
+    };
+
     public Network(@NonNull NetworkPlugin plugin) {
         this.plugin = plugin;
         this.connectivityManager = (ConnectivityManager) plugin.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -67,6 +79,12 @@ public class Network {
         }
         lastStatusKey = createStatusKey(computeStatus());
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
+        ContextCompat.registerReceiver(
+            plugin.getContext(),
+            restrictBackgroundChangedReceiver,
+            new IntentFilter(ConnectivityManager.ACTION_RESTRICT_BACKGROUND_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        );
         isObserving = true;
     }
 
@@ -75,6 +93,7 @@ public class Network {
             return;
         }
         connectivityManager.unregisterNetworkCallback(networkCallback);
+        plugin.getContext().unregisterReceiver(restrictBackgroundChangedReceiver);
         lastStatusKey = null;
         isObserving = false;
     }
@@ -99,6 +118,23 @@ public class Network {
         return CONNECTION_TYPE_UNKNOWN;
     }
 
+    private boolean computeConstrained(@Nullable NetworkCapabilities capabilities) {
+        if (capabilities == null) {
+            return false;
+        }
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
+        ) {
+            return true;
+        }
+        return computeExpensive(capabilities) && isDataSaverEnabled();
+    }
+
+    private boolean computeExpensive(@Nullable NetworkCapabilities capabilities) {
+        return capabilities != null && !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+    }
+
     @NonNull
     private GetStatusResult computeStatus() {
         android.net.Network network = connectivityManager.getActiveNetwork();
@@ -109,7 +145,9 @@ public class Network {
             capabilities != null &&
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
-        return new GetStatusResult(connected, connectionType, internetReachable);
+        boolean constrained = computeConstrained(capabilities);
+        boolean expensive = computeExpensive(capabilities);
+        return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive);
     }
 
     @NonNull
@@ -125,5 +163,9 @@ public class Network {
         }
         lastStatusKey = statusKey;
         plugin.notifyNetworkStatusChangeListeners(status);
+    }
+
+    private boolean isDataSaverEnabled() {
+        return connectivityManager.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
     }
 }
