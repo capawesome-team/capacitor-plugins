@@ -97,6 +97,10 @@ export interface GetStatusResult {
    * This is `false` if the device is not connected to a network and `null`
    * on platforms that cannot determine this (Web and iOS below 26).
    *
+   * On Android, satellite networks are always reported as ultra-constrained.
+   * Detecting other bandwidth-constrained networks requires Android 16+
+   * (API level 36) or U Extensions 16+.
+   *
    * Only available on Android and iOS 26+.
    *
    * @example false
