@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`997575a49aad9b24c9d483cdf2c8bb7eb23f4b8e`](https://github.com/capawesome-team/capacitor-plugins/commit/997575a49aad9b24c9d483cdf2c8bb7eb23f4b8e) ([#965](https://github.com/capawesome-team/capacitor-plugins/pull/965)): feat: detect bandwidth-constrained networks via U Extensions 16 on Android
+
 ## 0.1.2
 
 ### Patch Changes
