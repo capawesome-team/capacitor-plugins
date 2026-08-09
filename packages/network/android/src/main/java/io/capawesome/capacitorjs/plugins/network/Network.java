@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.os.Build;
+import android.os.ext.SdkExtensions;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -154,7 +155,7 @@ public class Network {
             return true;
         }
         return (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+            isBandwidthConstrainedCapabilityAvailable() &&
             !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
         );
     }
@@ -172,6 +173,15 @@ public class Network {
         }
         lastStatusKey = statusKey;
         plugin.notifyNetworkStatusChangeListeners(status);
+    }
+
+    private boolean isBandwidthConstrainedCapabilityAvailable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            return true;
+        }
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) >= 16
+        );
     }
 
     private boolean isDataSaverEnabled() {
