@@ -7,7 +7,7 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "InAppBrowser"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "clearCache", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "clearSessionData", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearCookies", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "close", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "executeScript", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getCookies", returnType: CAPPluginReturnPromise),
@@ -37,14 +37,20 @@ public class InAppBrowserPlugin: CAPPlugin, CAPBridgedPlugin {
         })
     }
 
-    @objc func clearSessionData(_ call: CAPPluginCall) {
-        implementation?.clearSessionData(completion: { error in
-            if let error = error {
-                self.rejectCall(call, error)
-                return
-            }
-            self.resolveCall(call)
-        })
+    @objc func clearCookies(_ call: CAPPluginCall) {
+        do {
+            let options = try ClearCookiesOptions(call)
+
+            implementation?.clearCookies(options, completion: { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                    return
+                }
+                self.resolveCall(call)
+            })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func close(_ call: CAPPluginCall) {

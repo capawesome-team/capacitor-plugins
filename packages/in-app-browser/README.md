@@ -17,7 +17,7 @@ The Capacitor In-App Browser plugin is one of the most complete in-app browsing 
 - 💉 **JavaScript execution**: Execute any JavaScript code in the embedded web view.
 - 💬 **Messaging**: Exchange messages between your app and the web page in both directions.
 - 🎨 **Toolbar theming**: Customize the toolbar color, title, close button and navigation buttons.
-- 🍪 **Session control**: Clear the cache and session data, or use an isolated data store on iOS.
+- 🍪 **Session control**: Clear the cache and cookies, or use an isolated data store on iOS.
 - 🎥 **Media permissions**: Camera and microphone permission requests from web pages are forwarded to the app.
 - 🤝 **Compatibility**: Works alongside the [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/), [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/) and [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
@@ -33,7 +33,7 @@ The In-App Browser plugin is typically used whenever an app needs to display web
 - **Login and checkout flows**: Open a web-based flow in the embedded web view and watch for a redirect using the `browserUrlChanged` event.
 - **Hybrid web content**: Embed a web page with a themed native toolbar and exchange messages between the app and the page.
 - **Background loading**: Load a URL in a hidden web view with the `visible` option and present it once the page has loaded.
-- **Session control**: Clear the cache and session data of the web view, or use an isolated data store on iOS.
+- **Session control**: Clear the cache and cookies of the web view, or use an isolated data store on iOS.
 
 ## Compatibility
 
@@ -201,9 +201,9 @@ const postMessage = async () => {
 };
 ```
 
-### Clear the cache and session data
+### Clear the cache and cookies
 
-Clear the cache or the session data (cookies and web storage) of the web view. Only available on Android and iOS:
+Clear the cache or the cookies of the web view, either for all URLs or only for a specific URL. Only available on Android and iOS:
 
 ```typescript
 import { InAppBrowser } from '@capawesome/capacitor-in-app-browser';
@@ -212,8 +212,12 @@ const clearCache = async () => {
   await InAppBrowser.clearCache();
 };
 
-const clearSessionData = async () => {
-  await InAppBrowser.clearSessionData();
+const clearAllCookies = async () => {
+  await InAppBrowser.clearCookies();
+};
+
+const clearCookiesForUrl = async () => {
+  await InAppBrowser.clearCookies({ url: 'https://capawesome.io' });
 };
 ```
 
@@ -248,7 +252,7 @@ const addListeners = async () => {
 <docgen-index>
 
 * [`clearCache()`](#clearcache)
-* [`clearSessionData()`](#clearsessiondata)
+* [`clearCookies(...)`](#clearcookies)
 * [`close()`](#close)
 * [`executeScript(...)`](#executescript)
 * [`getCookies(...)`](#getcookies)
@@ -286,17 +290,21 @@ Only available on Android and iOS.
 --------------------
 
 
-### clearSessionData()
+### clearCookies(...)
 
 ```typescript
-clearSessionData() => Promise<void>
+clearCookies(options?: ClearCookiesOptions | undefined) => Promise<void>
 ```
 
-Clear the session data (cookies and web storage) of the web view.
+Clear the cookies of the web view.
 
 Only available on Android and iOS.
 
-**Since:** 0.1.0
+| Param         | Type                                                                |
+| ------------- | ------------------------------------------------------------------- |
+| **`options`** | <code><a href="#clearcookiesoptions">ClearCookiesOptions</a></code> |
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -608,6 +616,13 @@ Remove all listeners for this plugin.
 ### Interfaces
 
 
+#### ClearCookiesOptions
+
+| Prop      | Type                | Description                                                                 | Since |
+| --------- | ------------------- | --------------------------------------------------------------------------- | ----- |
+| **`url`** | <code>string</code> | The URL to clear the cookies for. If not provided, all cookies are cleared. | 0.2.0 |
+
+
 #### ExecuteScriptResult
 
 | Prop         | Type                        | Description                                                                                                                                  | Since |
@@ -853,6 +868,10 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 ## Changelog
 
 See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/in-app-browser/CHANGELOG.md).
+
+## Breaking Changes
+
+See [BREAKING.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/in-app-browser/BREAKING.md).
 
 ## License
 

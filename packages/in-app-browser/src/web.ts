@@ -14,7 +14,7 @@ export class InAppBrowserWeb extends WebPlugin implements InAppBrowserPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async clearSessionData(): Promise<void> {
+  async clearCookies(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
