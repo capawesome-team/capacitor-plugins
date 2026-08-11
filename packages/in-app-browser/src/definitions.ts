@@ -12,6 +12,9 @@ export interface InAppBrowserPlugin {
   /**
    * Clear the cookies of the web view.
    *
+   * Provide the `url` option to clear only the cookies of a specific URL.
+   * Otherwise, all cookies are cleared.
+   *
    * Only available on Android and iOS.
    *
    * @since 0.2.0

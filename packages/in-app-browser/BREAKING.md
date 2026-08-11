@@ -1,6 +1,6 @@
 # Breaking Changes
 
-This is a comprehensive list of the breaking changes introduced in the major version releases.
+This is a comprehensive list of the breaking changes introduced in the different releases.
 
 ## Versions
 

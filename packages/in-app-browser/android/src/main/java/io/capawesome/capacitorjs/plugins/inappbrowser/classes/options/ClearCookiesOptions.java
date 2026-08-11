@@ -10,7 +10,8 @@ public class ClearCookiesOptions {
     private final String url;
 
     public ClearCookiesOptions(@NonNull PluginCall call) {
-        this.url = call.getString("url");
+        String url = call.getString("url");
+        this.url = url == null || url.isEmpty() ? null : url;
     }
 
     @Nullable

@@ -298,6 +298,9 @@ clearCookies(options?: ClearCookiesOptions | undefined) => Promise<void>
 
 Clear the cookies of the web view.
 
+Provide the `url` option to clear only the cookies of a specific URL.
+Otherwise, all cookies are cleared.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                                |

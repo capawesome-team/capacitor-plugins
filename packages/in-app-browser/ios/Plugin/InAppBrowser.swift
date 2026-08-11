@@ -26,13 +26,17 @@ import WebKit
 
     @objc public func clearCookies(_ options: ClearCookiesOptions, completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
-            let cookieStore = WKWebsiteDataStore.default().httpCookieStore
+            let dataStore = WKWebsiteDataStore.default()
+            guard let url = options.url else {
+                dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies], modifiedSince: .distantPast) {
+                    completion(nil)
+                }
+                return
+            }
+            let cookieStore = dataStore.httpCookieStore
             cookieStore.getAllCookies { cookies in
                 let cookiesToDelete = cookies.filter { cookie in
-                    guard let url = options.url else {
-                        return true
-                    }
-                    return InAppBrowserHelper.isCookie(cookie, matchingURL: url)
+                    InAppBrowserHelper.isCookie(cookie, matchingURL: url)
                 }
                 let dispatchGroup = DispatchGroup()
                 for cookie in cookiesToDelete {
