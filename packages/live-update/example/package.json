@@ -12,7 +12,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "e2e:android": "adb reverse tcp:4000 tcp:4000 && concurrently -k -s first \"node test/mock-server.mjs\" \"node test/run-maestro-flows.mjs\"",
-    "e2e:ios": "concurrently -k -s first \"node test/mock-server.mjs\" \"node test/run-maestro-flows.mjs\""
+    "e2e:ios": "concurrently -k -s first \"node test/mock-server.mjs\" \"node test/run-maestro-flows.mjs\"",
+    "e2e:electron": "npm run e2e:electron:prepare && playwright test -c test/electron/playwright.config.mjs",
+    "e2e:electron:prepare": "npm run build && cap sync @capawesome/capacitor-electron && tsc -p electron/tsconfig.json && node test/electron/support/build-fixtures.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.0.0",
@@ -22,8 +24,12 @@
   },
   "devDependencies": {
     "@capacitor/cli": "^8.0.0",
+    "@capawesome/capacitor-electron": "^0.1.0",
     "@capawesome/cli": "^3.8.0",
+    "@playwright/test": "1.61.1",
     "concurrently": "^9.0.0",
+    "electron": "43.1.0",
+    "typescript": "5.9.3",
     "vite": "7.2.2"
   }
 }

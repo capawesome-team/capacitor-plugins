@@ -1,0 +1,17 @@
+{
+  "name": "example-electron",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Electron platform project for example.",
+  "main": "build/main.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "electron .",
+    "pack": "npm run build && capacitor-electron vendor && electron-builder --config electron-builder.config.js"
+  },
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.5.0"
+  }
+}

@@ -16,7 +16,7 @@
     "fmt": "turbo run fmt",
     "docgen": "turbo run docgen",
     "build": "turbo run build",
-    "version": "turbo run version",
+    "version": "changeset version && turbo run version",
     "ios:pod:install": "turbo run ios:pod:install --concurrency=1 --no-cache",
     "ios:spm:install": "turbo run ios:spm:install --concurrency=1 --no-cache",
     "affected:verify": "npm run affected:verify:android && npm run affected:verify:ios && npm run affected:verify:web",
