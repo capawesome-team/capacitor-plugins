@@ -2,8 +2,8 @@ package io.capawesome.capacitorjs.plugins.inappbrowser;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.webkit.CookieManager;
-import android.webkit.WebStorage;
 import android.webkit.WebView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +14,7 @@ import io.capawesome.capacitorjs.plugins.inappbrowser.classes.WebViewDialog;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserMessageReceivedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserNavigationCompletedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserUrlChangedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ClearCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ExecuteScriptOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.GetCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.OpenInExternalBrowserOptions;
@@ -52,14 +53,30 @@ public class InAppBrowser {
         });
     }
 
-    public void clearSessionData(@NonNull EmptyCallback callback) {
+    public void clearCookies(@NonNull ClearCookiesOptions options, @NonNull EmptyCallback callback) {
         plugin.getActivity().runOnUiThread(() -> {
             CookieManager cookieManager = CookieManager.getInstance();
-            cookieManager.removeAllCookies(value -> {
+            String url = options.getUrl();
+            if (url == null) {
+                cookieManager.removeAllCookies(value -> {
+                    cookieManager.flush();
+                    callback.success();
+                });
+            } else {
+                String cookieString = cookieManager.getCookie(url);
+                if (cookieString != null) {
+                    String host = Uri.parse(url).getHost();
+                    for (String cookie : cookieString.split("; ")) {
+                        int separatorIndex = cookie.indexOf('=');
+                        if (separatorIndex < 0) {
+                            continue;
+                        }
+                        expireCookie(cookieManager, url, host, cookie.substring(0, separatorIndex));
+                    }
+                }
                 cookieManager.flush();
-                WebStorage.getInstance().deleteAllData();
                 callback.success();
-            });
+            }
         });
     }
 
@@ -240,5 +257,17 @@ public class InAppBrowser {
             value = data;
         }
         plugin.notifyBrowserMessageReceivedListeners(new BrowserMessageReceivedEvent(value));
+    }
+
+    private void expireCookie(@NonNull CookieManager cookieManager, @NonNull String url, @Nullable String host, @NonNull String name) {
+        String expiredCookie = name + "=; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Max-Age=0; Path=/";
+        cookieManager.setCookie(url, expiredCookie);
+        // Also expire the domain cookie variants of all parent domains
+        // because the cookie string does not reveal the cookie domain.
+        String domain = host;
+        while (domain != null && domain.indexOf('.') != -1) {
+            cookieManager.setCookie(url, expiredCookie + "; Domain=" + domain);
+            domain = domain.substring(domain.indexOf('.') + 1);
+        }
     }
 }
