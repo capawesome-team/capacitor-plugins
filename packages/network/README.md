@@ -14,6 +14,8 @@ The Capacitor Network plugin is one of the most complete network information sol
 
 - 📶 **Network status**: Read whether the device is connected and how (Wi-Fi, cellular, ethernet, VPN).
 - 🌍 **Internet reachability**: Detect whether the connection has verified access to the internet (Android).
+- 💸 **Data saving & cost**: Detect whether the connection is constrained (Data Saver or Low Data Mode) or expensive (metered).
+- 🛰️ **Satellite networks**: Detect satellite transport on Android 15+ and ultra-constrained connections on iOS 26+.
 - ✈️ **Airplane mode**: Read whether the airplane mode is enabled (Android).
 - 👂 **Change events**: Listen for changes to the network status.
 - 🌐 **Web support**: Read the network status on the web.
@@ -40,8 +42,8 @@ The Network plugin is typically used whenever an app needs to react to the devic
 
 ## Guides
 
-- [How to Detect the Network Status in Capacitor](https://capawesome.io/blog/how-to-detect-the-network-status-in-a-capacitor-app/)
-- [How to Detect Satellite Networks in Capacitor](https://capawesome.io/blog/how-to-detect-satellite-networks-in-a-capacitor-app/)
+- [How to Detect the Network Status in Capacitor](https://capawesome.io/blog/how-to-detect-the-network-status-in-a-capacitor-app/): Check the connection type, listen for changes, and handle offline and metered connections.
+- [How to Detect Satellite Networks in Capacitor](https://capawesome.io/blog/how-to-detect-satellite-networks-in-a-capacitor-app/): Detect satellite and ultra-constrained networks on Android 15+ and iOS 26 and adapt to limited bandwidth.
 
 ## Installation
 
@@ -87,6 +89,49 @@ const getStatus = async () => {
   return status;
 };
 ```
+
+### Detect satellite networks
+
+Read whether the device is connected via a satellite network. Only available on Android:
+
+```typescript
+import { ConnectionType, Network } from '@capawesome/capacitor-network';
+
+const isSatellite = async () => {
+  const { connectionType } = await Network.getStatus();
+  return connectionType === ConnectionType.Satellite;
+};
+```
+
+Android only uses constrained satellite networks for apps that identify themselves as optimized for them. If your app is optimized for extremely limited bandwidth and variable latency, add the following element to the `application` element in your `AndroidManifest.xml`:
+
+```xml
+<meta-data
+  android:name="android.telephony.PROPERTY_SATELLITE_DATA_OPTIMIZED"
+  android:value="PACKAGE_NAME"
+/>
+```
+
+Replace `PACKAGE_NAME` with your app's package name. This plugin does not add this element automatically, because each app must decide whether it is suitable for constrained satellite access. Push notifications must additionally be sent with the `bandwidth_constrained_ok` flag to be delivered on such a network. See [Constrained satellite networks](https://developer.android.com/develop/connectivity/satellite/constrained-networks) for more information.
+
+On **iOS**, carrier-provided satellite connections are reported as `CELLULAR` with `ultraConstrained` set to `true`, because Apple does not expose satellite as a connection type.
+
+### Detect ultra-constrained networks
+
+Read whether the connection is severely limited in bandwidth, such as a carrier-provided satellite network. Only available on Android and iOS 26+:
+
+```typescript
+import { Network } from '@capawesome/capacitor-network';
+
+const isUltraConstrained = async () => {
+  const { ultraConstrained } = await Network.getStatus();
+  return ultraConstrained;
+};
+```
+
+On **Android**, this is `true` on satellite networks and on networks that the system reports as bandwidth-constrained. Satellite networks are always reported as ultra-constrained, while bandwidth-constraint detection requires Android 16+ (API level 36) or [U Extensions](https://developer.android.com/guide/sdk-extensions) 16+, which can be present on eligible devices running Android 14 or later.
+
+On **iOS**, detecting this state requires no entitlement. However, if your app wants to transfer data over such a network, it must allow this per request (see [`allowsUltraConstrainedNetworkAccess`](https://developer.apple.com/documentation/foundation/urlrequest/allowsultraconstrainednetworkaccess)) and may need the [`com.apple.developer.networking.carrier-constrained.appcategory`](https://developer.apple.com/documentation/bundleresources/entitlements/com.apple.developer.networking.carrier-constrained.appcategory) entitlement to be allowed on all carriers. This plugin neither adds entitlements nor modifies your `URLSession` or `NWParameters` configuration. See [Configuring your app for ultra-constrained networks](https://developer.apple.com/documentation/bundleresources/configuring-your-app-for-ultra-constrained-networks) for more information.
 
 ### Check whether airplane mode is enabled
 
@@ -217,11 +262,14 @@ Remove all listeners for this plugin.
 
 #### GetStatusResult
 
-| Prop                    | Type                                                      | Description                                                                                                                                                                                                                               | Since |
-| ----------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`connected`**         | <code>boolean</code>                                      | Whether the device is currently connected to a network.                                                                                                                                                                                   | 0.1.0 |
-| **`connectionType`**    | <code><a href="#connectiontype">ConnectionType</a></code> | The type of the currently active network connection.                                                                                                                                                                                      | 0.1.0 |
-| **`internetReachable`** | <code>boolean \| null</code>                              | Whether the active network connection has verified access to the internet. This is `null` on platforms that cannot validate internet access (iOS and Web), where connectivity does not guarantee reachability. Only available on Android. | 0.1.0 |
+| Prop                    | Type                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Since |
+| ----------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`connected`**         | <code>boolean</code>                                      | Whether the device is currently connected to a network.                                                                                                                                                                                                                                                                                                                                                                                                                              | 0.1.0 |
+| **`connectionType`**    | <code><a href="#connectiontype">ConnectionType</a></code> | The type of the currently active network connection.                                                                                                                                                                                                                                                                                                                                                                                                                                 | 0.1.0 |
+| **`internetReachable`** | <code>boolean \| null</code>                              | Whether the active network connection has verified access to the internet. This is `null` on platforms that cannot validate internet access (iOS and Web), where connectivity does not guarantee reachability. Only available on Android.                                                                                                                                                                                                                                            | 0.1.0 |
+| **`constrained`**       | <code>boolean \| null</code>                              | Whether the active network connection is subject to data saving restrictions, such as Data Saver on Android or Low Data Mode on iOS. This is `false` if the device is not connected to a network and `null` on browsers that do not expose this information.                                                                                                                                                                                                                         | 0.1.2 |
+| **`expensive`**         | <code>boolean \| null</code>                              | Whether the active network connection is considered expensive, for example a metered Wi-Fi or cellular network. This is `false` if the device is not connected to a network and `null` on platforms that cannot determine the cost of the connection (Web).                                                                                                                                                                                                                          | 0.1.2 |
+| **`ultraConstrained`**  | <code>boolean \| null</code>                              | Whether the active network connection is severely limited in bandwidth, such as a carrier-provided satellite network. This is `false` if the device is not connected to a network and `null` on platforms that cannot determine this (Web and iOS below 26). On Android, satellite networks are always reported as ultra-constrained. Detecting other bandwidth-constrained networks requires Android 16+ (API level 36) or U Extensions 16+. Only available on Android and iOS 26+. | 0.1.2 |
 
 
 #### IsAirplaneModeEnabledResult
@@ -243,14 +291,15 @@ Remove all listeners for this plugin.
 
 #### ConnectionType
 
-| Members        | Value                   | Description                                                  | Since |
-| -------------- | ----------------------- | ------------------------------------------------------------ | ----- |
-| **`Cellular`** | <code>'CELLULAR'</code> | The device is connected via a cellular network.              | 0.1.0 |
-| **`Ethernet`** | <code>'ETHERNET'</code> | The device is connected via a wired ethernet network.        | 0.1.0 |
-| **`None`**     | <code>'NONE'</code>     | The device is not connected to any network.                  | 0.1.0 |
-| **`Unknown`**  | <code>'UNKNOWN'</code>  | The type of the network connection could not be determined.  | 0.1.0 |
-| **`Vpn`**      | <code>'VPN'</code>      | The device is connected via a virtual private network (VPN). | 0.1.0 |
-| **`Wifi`**     | <code>'WIFI'</code>     | The device is connected via a Wi-Fi network.                 | 0.1.0 |
+| Members         | Value                    | Description                                                                 | Since |
+| --------------- | ------------------------ | --------------------------------------------------------------------------- | ----- |
+| **`Cellular`**  | <code>'CELLULAR'</code>  | The device is connected via a cellular network.                             | 0.1.0 |
+| **`Ethernet`**  | <code>'ETHERNET'</code>  | The device is connected via a wired ethernet network.                       | 0.1.0 |
+| **`None`**      | <code>'NONE'</code>      | The device is not connected to any network.                                 | 0.1.0 |
+| **`Satellite`** | <code>'SATELLITE'</code> | The device is connected via a satellite network. Only available on Android. | 0.1.2 |
+| **`Unknown`**   | <code>'UNKNOWN'</code>   | The type of the network connection could not be determined.                 | 0.1.0 |
+| **`Vpn`**       | <code>'VPN'</code>       | The device is connected via a virtual private network (VPN).                | 0.1.0 |
+| **`Wifi`**      | <code>'WIFI'</code>      | The device is connected via a Wi-Fi network.                                | 0.1.0 |
 
 </docgen-api>
 
@@ -275,6 +324,10 @@ The `connected` property tells you whether the device is connected to any networ
 ### Why is `internetReachable` always `null` on iOS and Web?
 
 iOS and the Web platform cannot distinguish validated internet access from mere network connectivity, so the plugin returns `null` instead of a potentially misleading value. On these platforms, being connected to a network does not guarantee that the internet is reachable. See the [Network Information](#network-information) section for the platform-specific details.
+
+### What is the difference between the `SATELLITE` connection type and `ultraConstrained`?
+
+The `SATELLITE` connection type tells you what the connection is, while `ultraConstrained` tells you that it is severely limited in bandwidth. Satellite is only reported as a connection type on Android, because iOS exposes this condition as a property of the connection instead. The two do not always match: a satellite network is not necessarily reported as bandwidth-constrained, and a bandwidth-constrained network is not necessarily a satellite network.
 
 ### Can I check whether airplane mode is enabled on iOS or Web?
 

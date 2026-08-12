@@ -68,6 +68,45 @@ export interface GetStatusResult {
    * @since 0.1.0
    */
   internetReachable: boolean | null;
+  /**
+   * Whether the active network connection is subject to data saving
+   * restrictions, such as Data Saver on Android or Low Data Mode on iOS.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on browsers that do not expose this information.
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  constrained: boolean | null;
+  /**
+   * Whether the active network connection is considered expensive,
+   * for example a metered Wi-Fi or cellular network.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on platforms that cannot determine the cost of the connection (Web).
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  expensive: boolean | null;
+  /**
+   * Whether the active network connection is severely limited in bandwidth,
+   * such as a carrier-provided satellite network.
+   *
+   * This is `false` if the device is not connected to a network and `null`
+   * on platforms that cannot determine this (Web and iOS below 26).
+   *
+   * On Android, satellite networks are always reported as ultra-constrained.
+   * Detecting other bandwidth-constrained networks requires Android 16+
+   * (API level 36) or U Extensions 16+.
+   *
+   * Only available on Android and iOS 26+.
+   *
+   * @example false
+   * @since 0.1.2
+   */
+  ultraConstrained: boolean | null;
 }
 
 /**
@@ -107,6 +146,14 @@ export enum ConnectionType {
    * @since 0.1.0
    */
   None = 'NONE',
+  /**
+   * The device is connected via a satellite network.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.2
+   */
+  Satellite = 'SATELLITE',
   /**
    * The type of the network connection could not be determined.
    *

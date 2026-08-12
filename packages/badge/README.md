@@ -405,7 +405,7 @@ Request permission to display badge.
 
 ## Quirks
 
-On **Android** not all launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger). All supported launchers are listed [there](https://github.com/leolin310148/ShortcutBadger#supported-launchers).
+On **Android** there is no official API to set a badge, so not all launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger), which relies on vendor-specific mechanisms. All supported launchers are listed [there](https://github.com/leolin310148/ShortcutBadger#supported-launchers). On stock Android launchers, such as the Pixel Launcher, no badge is displayed.
 
 On **Web**, the app must run as an installed PWA (in the taskbar or dock).
 
@@ -413,7 +413,11 @@ On **Web**, the app must run as an installed PWA (in the taskbar or dock).
 
 ### Why is the badge not showing on my Android device?
 
-Not all Android launchers support badges. This plugin uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger) under the hood, and only the launchers listed as [supported launchers](https://github.com/leolin310148/ShortcutBadger#supported-launchers) can display the badge. You can use the `isSupported()` method to check whether badges are supported on the current device.
+Android provides no official API to set a badge on the launcher icon. This plugin therefore uses [ShortcutBadger](https://github.com/leolin310148/ShortcutBadger) under the hood, which relies on vendor-specific mechanisms offered by some manufacturers (such as Samsung, Xiaomi, HTC and Sony). Only the launchers listed as [supported launchers](https://github.com/leolin310148/ShortcutBadger#supported-launchers) can display the badge. On stock Android launchers, most notably the Pixel Launcher, no badge is displayed. You can use the `isSupported()` method to check whether badges are supported on the current device.
+
+### Can the plugin display an Android notification badge (dot) instead?
+
+No. Since Android 8.0, the launcher displays a [notification badge](https://developer.android.com/develop/ui/views/notifications/badges) only while the app has an *active* notification. The badge is derived from that notification and disappears as soon as the notification is dismissed, so it cannot be set independently of one. On stock Android it is also a dot without a count. If your app already displays notifications, the badge is shown automatically without any plugin call.
 
 ### Does the badge count persist after a reboot or app restart?
 
@@ -422,6 +426,10 @@ Yes, by default the badge count is restored after a reboot or app restart. You c
 ### How can I automatically clear the badge when the app is resumed?
 
 Set the `autoClear` configuration option to `true` to reset the counter after resuming the application. Note that on iOS, this will also clear all notifications. See the [Configuration](#configuration) section for an example.
+
+### Why does `checkPermissions()` always return `granted` on Android and Web?
+
+Only iOS requires a permission to display a badge. On Android and Web no permission is needed, so the permission state is always `granted`.
 
 ### Why does clearing the badge also remove my notifications on iOS?
 

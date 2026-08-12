@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
@@ -102,7 +104,7 @@ public class LiveUpdate {
     private final SharedPreferences.Editor webViewSettingsEditor;
 
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
-    private final Handler rollbackHandler = new Handler();
+    private final Handler rollbackHandler = new Handler(Looper.getMainLooper());
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
     private boolean initialPageLoaded = false;
@@ -1050,7 +1052,7 @@ public class LiveUpdate {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             BufferedSource source = Okio.buffer(Okio.source(file));
             Buffer buffer = new Buffer();
-            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1; ) {
                 digest.update(buffer.readByteArray());
             }
             source.close();
@@ -1173,7 +1175,7 @@ public class LiveUpdate {
     }
 
     private int getVersionCodeAsInt() throws PackageManager.NameNotFoundException {
-        return getPackageInfo().versionCode;
+        return (int) PackageInfoCompat.getLongVersionCode(getPackageInfo());
     }
 
     private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
@@ -1488,7 +1490,7 @@ public class LiveUpdate {
             sig.initVerify(key);
             BufferedSource source = Okio.buffer(Okio.source(file));
             Buffer buffer = new Buffer();
-            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1;) {
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1; ) {
                 sig.update(buffer.readByteArray());
             }
             source.close();

@@ -133,10 +133,8 @@ public class Intune {
         application.acquireToken(builder.build());
     }
 
-    public void acquireTokenSilent(
-        @NonNull AcquireTokenSilentOptions options,
-        @NonNull NonEmptyResultCallback<AcquireTokenResult> callback
-    ) throws Exception {
+    public void acquireTokenSilent(@NonNull AcquireTokenSilentOptions options, @NonNull NonEmptyResultCallback<AcquireTokenResult> callback)
+        throws Exception {
         IMultipleAccountPublicClientApplication application = getPublicClientApplication();
         application.getAccount(
             options.getAccountId(),
@@ -510,38 +508,26 @@ public class Intune {
         if (registry == null) {
             return;
         }
-        registry.registerReceiver(
-            notification -> {
-                MAMEnrollmentNotification enrollmentNotification = (MAMEnrollmentNotification) notification;
-                handleEnrollmentChange(
-                    enrollmentNotification.getUserOid(),
-                    mapEnrollmentResultToStatus(enrollmentNotification.getEnrollmentResult())
-                );
-                return true;
-            },
-            MAMNotificationType.MAM_ENROLLMENT_RESULT
-        );
-        registry.registerReceiver(
-            notification -> {
-                handleAppConfigChange(getAccountIdFromNotification(notification));
-                return true;
-            },
-            MAMNotificationType.REFRESH_APP_CONFIG
-        );
-        registry.registerReceiver(
-            notification -> {
-                handlePolicyChange(getAccountIdFromNotification(notification));
-                return true;
-            },
-            MAMNotificationType.REFRESH_POLICY
-        );
-        registry.registerReceiver(
-            notification -> {
-                handleWipeRequested(getAccountIdFromNotification(notification));
-                return true;
-            },
-            MAMNotificationType.WIPE_USER_DATA
-        );
+        registry.registerReceiver(notification -> {
+            MAMEnrollmentNotification enrollmentNotification = (MAMEnrollmentNotification) notification;
+            handleEnrollmentChange(
+                enrollmentNotification.getUserOid(),
+                mapEnrollmentResultToStatus(enrollmentNotification.getEnrollmentResult())
+            );
+            return true;
+        }, MAMNotificationType.MAM_ENROLLMENT_RESULT);
+        registry.registerReceiver(notification -> {
+            handleAppConfigChange(getAccountIdFromNotification(notification));
+            return true;
+        }, MAMNotificationType.REFRESH_APP_CONFIG);
+        registry.registerReceiver(notification -> {
+            handlePolicyChange(getAccountIdFromNotification(notification));
+            return true;
+        }, MAMNotificationType.REFRESH_POLICY);
+        registry.registerReceiver(notification -> {
+            handleWipeRequested(getAccountIdFromNotification(notification));
+            return true;
+        }, MAMNotificationType.WIPE_USER_DATA);
     }
 
     @Nullable

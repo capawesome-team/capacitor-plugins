@@ -97,12 +97,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.cueVideo(options.getVideoId(), options.getStartSeconds());
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.cueVideo(options.getVideoId(), options.getStartSeconds());
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -142,12 +140,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.loadVideo(options.getVideoId(), options.getStartSeconds());
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.loadVideo(options.getVideoId(), options.getStartSeconds());
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -158,12 +154,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.mute();
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.mute();
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -174,12 +168,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.pause();
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.pause();
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -190,12 +182,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.play();
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.play();
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -219,12 +209,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.seekTo(options.getSeconds());
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.seekTo(options.getSeconds());
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -236,12 +224,10 @@ public class YoutubePlayer {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
                 PlayerConstants.PlaybackRate playbackRate = YoutubePlayerHelper.mapPlaybackRate(options.getRate());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.setPlaybackRate(playbackRate);
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.setPlaybackRate(playbackRate);
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -270,12 +256,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.setVolume(options.getVolume());
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.setVolume(options.getVolume());
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }
@@ -286,12 +270,10 @@ public class YoutubePlayer {
         runOnMainThread(() -> {
             try {
                 PlayerInstance instance = getPlayerInstance(options.getId());
-                instance
-                    .getView()
-                    .getYouTubePlayerWhenReady(youTubePlayer -> {
-                        youTubePlayer.unMute();
-                        callback.success();
-                    });
+                instance.getView().getYouTubePlayerWhenReady(youTubePlayer -> {
+                    youTubePlayer.unMute();
+                    callback.success();
+                });
             } catch (Exception exception) {
                 callback.error(exception);
             }

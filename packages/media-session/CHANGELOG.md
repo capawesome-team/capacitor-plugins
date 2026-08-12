@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.0
+
+### Minor Changes
+
+- [`aad79bcb73641013bee17ec8ca2e995b3d6a04fd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aad79bcb73641013bee17ec8ca2e995b3d6a04fd): feat(android): support custom notification action icons via the new `playIcon`, `pauseIcon`, `previousTrackIcon`, `nextTrackIcon`, `seekBackwardIcon`, `seekForwardIcon` and `stopIcon` configuration options
+
 ## 8.3.1
 
 ### Patch Changes

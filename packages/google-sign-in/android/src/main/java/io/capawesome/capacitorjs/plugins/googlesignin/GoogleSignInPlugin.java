@@ -37,8 +37,10 @@ public class GoogleSignInPlugin extends Plugin {
     public void load() {
         super.load();
         this.implementation = new GoogleSignIn(this);
-        this.authorizationLauncher = getActivity()
-            .registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), this::handleAuthorizationActivityResult);
+        this.authorizationLauncher = getActivity().registerForActivityResult(
+            new ActivityResultContracts.StartIntentSenderForResult(),
+            this::handleAuthorizationActivityResult
+        );
     }
 
     @PluginMethod

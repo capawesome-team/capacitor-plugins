@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`38e9913d1d3f8cb1a68ea1714997696c5908c0af`](https://github.com/capawesome-team/capacitor-plugins/commit/38e9913d1d3f8cb1a68ea1714997696c5908c0af) ([#952](https://github.com/capawesome-team/capacitor-plugins/pull/952)): fix(android): handle missing `COLUMN_LAST_MODIFIED` column
+
 ## 8.0.3
 
 ### Patch Changes

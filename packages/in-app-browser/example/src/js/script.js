@@ -75,9 +75,9 @@ document.addEventListener('DOMContentLoaded', () => {
     await InAppBrowser.clearCache();
   });
   document
-    .querySelector('#clearSessionData')
+    .querySelector('#clearCookies')
     .addEventListener('click', async () => {
-      await InAppBrowser.clearSessionData();
+      await InAppBrowser.clearCookies({ url });
     });
 
   void InAppBrowser.addListener('browserClosed', () => {

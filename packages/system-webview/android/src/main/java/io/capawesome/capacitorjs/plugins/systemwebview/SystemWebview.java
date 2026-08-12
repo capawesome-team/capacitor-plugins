@@ -34,10 +34,8 @@ public class SystemWebview {
         callback.success(new GetInfoResult(packageInfo.packageName, versionName, majorVersion));
     }
 
-    public void isUpdateRequired(
-        @NonNull IsUpdateRequiredOptions options,
-        @NonNull NonEmptyResultCallback<IsUpdateRequiredResult> callback
-    ) throws Exception {
+    public void isUpdateRequired(@NonNull IsUpdateRequiredOptions options, @NonNull NonEmptyResultCallback<IsUpdateRequiredResult> callback)
+        throws Exception {
         PackageInfo packageInfo = getCurrentWebViewPackage();
         Integer majorVersion = parseMajorVersion(packageInfo.versionName);
         if (majorVersion == null) {

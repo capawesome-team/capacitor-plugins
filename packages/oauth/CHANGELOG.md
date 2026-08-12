@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.10
+
+### Patch Changes
+
+- [`2893c97753ebc7e829d11038c876234e73c8355b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2893c97753ebc7e829d11038c876234e73c8355b) ([#511](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/511)): fix(android): `login()` and `logout()` no longer block the main thread and the `AuthorizationService` is now disposed
+
+- [`891802c1669e7b373e5284c423a2c4695cae7b69`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/891802c1669e7b373e5284c423a2c4695cae7b69) ([#510](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/510)): fix(android): crash when an option like `idToken` was passed as an empty string
+
+- [`54acba6b13ec1a9149bdc1fae3d30400ab8583fd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/54acba6b13ec1a9149bdc1fae3d30400ab8583fd) ([#507](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/507)): fix(android): endless loop in `login()` and `logout()` where the in-app browser was re-presented over and over
+
 ## 0.1.9
 
 ### Patch Changes

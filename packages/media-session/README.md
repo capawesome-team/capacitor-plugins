@@ -96,7 +96,14 @@ These configuration options are available:
 
 | Prop          | Type     | Description                                                                                                                                                                                                                                               | Default           | Since |
 | ------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
-| **smallIcon** | `string` | The name of the drawable resource to use as the small icon in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_play"` | 8.1.0 |
+| **nextTrackIcon** | `string` | The name of the drawable resource to use as the icon for the next track action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_next"` (Android built-in icon) | 8.4.0 |
+| **pauseIcon** | `string` | The name of the drawable resource to use as the icon for the pause action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_pause"` (Android built-in icon) | 8.4.0 |
+| **playIcon** | `string` | The name of the drawable resource to use as the icon for the play action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_play"` (Android built-in icon) | 8.4.0 |
+| **previousTrackIcon** | `string` | The name of the drawable resource to use as the icon for the previous track action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_previous"` (Android built-in icon) | 8.4.0 |
+| **seekBackwardIcon** | `string` | The name of the drawable resource to use as the icon for the seek backward action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_rew"` (Android built-in icon) | 8.4.0 |
+| **seekForwardIcon** | `string` | The name of the drawable resource to use as the icon for the seek forward action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_ff"` (Android built-in icon) | 8.4.0 |
+| **smallIcon** | `string` | The name of the drawable resource to use as the small icon in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_media_play"` (Android built-in icon) | 8.1.0 |
+| **stopIcon** | `string` | The name of the drawable resource to use as the icon for the stop action in the media notification. Only available on Android. The resource name should not include the `R.drawable.` prefix or file extension. If the resource is not found, the default icon is used. | `"ic_menu_close_clear_cancel"` (Android built-in icon) | 8.4.0 |
 
 ### Examples
 
@@ -130,10 +137,10 @@ In `capacitor.config.json`:
 
 ### Android Custom Icon Setup
 
-To use a custom notification icon on Android:
+To use custom notification icons on Android:
 
-1. Add your icon to `android/app/src/main/res/drawable/` (e.g., `ic_notification.png`)
-   - Icon should be single-color white with transparent background for best display
+1. Add your icons to `android/app/src/main/res/drawable/` (e.g., `ic_notification.png`)
+   - Icons should be single-color white with transparent background for best display
    - Can use density-specific folders (`drawable-mdpi`, `drawable-hdpi`, etc.)
 
 2. Configure the plugin in `capacitor.config.ts`:
@@ -142,12 +149,16 @@ To use a custom notification icon on Android:
      plugins: {
        MediaSession: {
          smallIcon: 'ic_notification',  // Matches ic_notification.png
+         seekBackwardIcon: 'ic_seek_backward_15',  // Matches ic_seek_backward_15.png
+         seekForwardIcon: 'ic_seek_forward_15',  // Matches ic_seek_forward_15.png
        },
      },
    };
    ```
 
 3. Run: `npx cap sync`
+
+Note that the action icons (e.g. `playIcon`, `seekForwardIcon`) only affect the media notification on Android. On iOS, the playback controls on the lock screen and in the Control Center are rendered by the operating system and cannot be customized.
 
 ## Usage
 
@@ -664,6 +675,10 @@ The `artwork` option of the `setMetadata` method is only available on iOS and We
 ### Can I customize the notification icon on Android?
 
 Yes, use the `smallIcon` configuration option to set the name of a drawable resource from your app's `res/drawable` directory. The icon should be single-color white with a transparent background for the best display. If the resource is not found, the default icon is used. See the [Configuration](#configuration) section for details.
+
+### Can I customize the playback control icons?
+
+On Android, yes. Use the configuration options `playIcon`, `pauseIcon`, `previousTrackIcon`, `nextTrackIcon`, `seekBackwardIcon`, `seekForwardIcon` and `stopIcon` to set the name of a drawable resource from your app's `res/drawable` directory for each action button in the media notification (e.g. a custom 15 seconds seek icon). If a resource is not found, the default icon is used. On iOS, this is not possible because the playback controls on the lock screen and in the Control Center are rendered by the operating system. See the [Configuration](#configuration) section for details.
 
 ### Can I use this plugin together with the Audio Player plugin?
 

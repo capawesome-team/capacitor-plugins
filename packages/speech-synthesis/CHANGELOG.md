@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`8af0d3ac6802dd6bf29b2d5a42a147174e9ca102`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8af0d3ac6802dd6bf29b2d5a42a147174e9ca102) ([#517](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/517)): fix(ios): restoring the audio session no longer blocks the main thread when an utterance finishes or is cancelled
+
 ## 8.0.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @capawesome/capacitor-in-app-browser
 
+## 0.2.0
+
+### Minor Changes
+
+- [`33181b675300eeda498ad91a06b61394fb347a01`](https://github.com/capawesome-team/capacitor-plugins/commit/33181b675300eeda498ad91a06b61394fb347a01) ([#967](https://github.com/capawesome-team/capacitor-plugins/pull/967)): feat!: replace `clearSessionData()` with `clearCookies()`, which supports clearing the cookies of a specific URL and no longer deletes the web storage of the app's own origin
+
 ## 0.1.1
 
 ### Patch Changes
