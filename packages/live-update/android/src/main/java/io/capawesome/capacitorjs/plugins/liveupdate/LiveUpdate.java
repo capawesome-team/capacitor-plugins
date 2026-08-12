@@ -7,9 +7,11 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
@@ -103,7 +105,7 @@ public class LiveUpdate {
 
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
     private final String downloadsDirectory = "capawesome_capacitor_live_update_downloads";
-    private final Handler rollbackHandler = new Handler();
+    private final Handler rollbackHandler = new Handler(Looper.getMainLooper());
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
     private boolean initialPageLoaded = false;
@@ -1190,7 +1192,7 @@ public class LiveUpdate {
     }
 
     private int getVersionCodeAsInt() throws PackageManager.NameNotFoundException {
-        return getPackageInfo().versionCode;
+        return (int) PackageInfoCompat.getLongVersionCode(getPackageInfo());
     }
 
     private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
