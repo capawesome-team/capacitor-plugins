@@ -1631,9 +1631,10 @@ Remove all listeners for this plugin.
 
 #### StartScanOptions
 
-| Prop             | Type                  | Description                                                                             | Since |
-| ---------------- | --------------------- | --------------------------------------------------------------------------------------- | ----- |
-| **`serviceIds`** | <code>string[]</code> | Find devices with services that match any of the provided UUIDs. Only available on iOS. | 6.0.0 |
+| Prop                  | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default            | Since |
+| --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`allowDuplicates`** | <code>boolean</code>  | Whether to emit the `deviceScanned` event for every advertisement packet received, instead of only the first advertisement of each device. This is required to receive manufacturer data or service data that is spread across multiple advertisement packets (e.g. when the value is delivered in the scan response packet on iOS). On iOS, this maps to `CBCentralManagerScanOptionAllowDuplicatesKey` and is only honored while the app is in the foreground. | <code>false</code> | 8.2.0 |
+| **`serviceIds`**      | <code>string[]</code> | Find devices with services that match any of the provided UUIDs. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                          |                    | 6.0.0 |
 
 
 #### StopCharacteristicNotificationsOptions
@@ -1732,11 +1733,17 @@ Remove all listeners for this plugin.
 
 #### DeviceScannedEvent
 
-| Prop       | Type                | Description                                                  | Since |
-| ---------- | ------------------- | ------------------------------------------------------------ | ----- |
-| **`id`**   | <code>string</code> | The address of the scanned device.                           | 6.0.0 |
-| **`name`** | <code>string</code> | The name of the scanned device.                              | 6.0.0 |
-| **`rssi`** | <code>number</code> | The RSSI value of the scanned device. Only available on iOS. | 6.0.0 |
+| Prop                   | Type                                       | Description                                                                                                                                                    | Since |
+| ---------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**               | <code>string</code>                        | The address of the scanned device.                                                                                                                             | 6.0.0 |
+| **`localName`**        | <code>string</code>                        | The local name of the scanned device from the advertisement data. In contrast to `name`, this always reflects the value from the current advertisement packet. | 8.2.0 |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code>  | The manufacturer specific data from the advertisement data. The key is the 16-bit company identifier and the value is the payload bytes.                       | 8.2.0 |
+| **`name`**             | <code>string</code>                        | The name of the scanned device. On iOS, this returns the cached GAP name and may differ from `localName` after a previous connection to the device.            | 6.0.0 |
+| **`rawAdvertisement`** | <code>number[]</code>                      | The raw bytes of the advertisement data. Only available on Android.                                                                                            | 8.2.0 |
+| **`rssi`**             | <code>number</code>                        | The RSSI value of the scanned device.                                                                                                                          | 6.0.0 |
+| **`serviceData`**      | <code>{ [uuid: string]: number[]; }</code> | The service data from the advertisement data. The key is the service UUID and the value is the payload bytes.                                                  | 8.2.0 |
+| **`serviceUuids`**     | <code>string[]</code>                      | The UUIDs of the services advertised by the device.                                                                                                            | 8.2.0 |
+| **`txPower`**          | <code>number</code>                        | The transmit power of the scanned device in dBm.                                                                                                               | 8.2.0 |
 
 
 ### Type Aliases
