@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [`04d3494196c9bf6fde39e930220a00b681b8809f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/04d3494196c9bf6fde39e930220a00b681b8809f) ([#379](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/379)): feat(android): add BLE 5 extended advertising support
+
 ## 8.2.0
 
 ### Minor Changes
