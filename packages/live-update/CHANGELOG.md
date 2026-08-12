@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.4.0
+
+### Minor Changes
+
+- [`a24563f3c888d8f36498384faca71084a047abe4`](https://github.com/capawesome-team/capacitor-plugins/commit/a24563f3c888d8f36498384faca71084a047abe4) ([#826](https://github.com/capawesome-team/capacitor-plugins/pull/826)): feat(android): add brotli compression support to OkHttp client
+
+### Patch Changes
+
+- [`268e1cb5d6ee569c9edc0f35a9ffe8f2a3f4d07e`](https://github.com/capawesome-team/capacitor-plugins/commit/268e1cb5d6ee569c9edc0f35a9ffe8f2a3f4d07e) ([#971](https://github.com/capawesome-team/capacitor-plugins/pull/971)): fix: validate HTTP status of file downloads, ignore the URL cache and overwrite leftover files from failed download attempts on iOS
+
+- [`cc44c67331599f6930f5b3a74f1844d30af2d6d9`](https://github.com/capawesome-team/capacitor-plugins/commit/cc44c67331599f6930f5b3a74f1844d30af2d6d9) ([#825](https://github.com/capawesome-team/capacitor-plugins/pull/825)): fix(android): replace deprecated Android APIs with AndroidX compat alternatives
+
 ## 8.3.0
 
 ### Minor Changes
