@@ -15,6 +15,7 @@ The Capacitor Bluetooth Low Energy plugin is one of the most complete BLE commun
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔄 **Central Role**: Communicate with BLE peripherals as a central device.
 - 📳 **Peripheral Role**: Act as a BLE peripheral to communicate with other central devices.
+- 📡 **Extended Advertising**: Advertise larger payloads with BLE 5.0+ extended advertising.
 - 🦾 **Headless Task**: Add custom native code for specific events.
 - 🌙 **Foreground Service**: Keep the connection alive even when the app is in the background.
 - 🔌 **Auto Reconnection**: Automatically reconnect to peripherals when the connection is lost.
@@ -601,6 +602,7 @@ const convertBytesToHex = (bytes: number[]) => {
 * [`isAvailable()`](#isavailable)
 * [`isBonded(...)`](#isbonded)
 * [`isEnabled()`](#isenabled)
+* [`isExtendedAdvertisingAvailable()`](#isextendedadvertisingavailable)
 * [`isLocationEnabled()`](#islocationenabled)
 * [`openAppSettings()`](#openappsettings)
 * [`openBluetoothSettings()`](#openbluetoothsettings)
@@ -830,6 +832,32 @@ Only available on Android and iOS.
 --------------------
 
 
+### isExtendedAdvertisingAvailable()
+
+```typescript
+isExtendedAdvertisingAvailable() => Promise<IsExtendedAdvertisingAvailableResult>
+```
+
+Check if extended advertising is available on the device.
+
+Extended advertising (BLE 5.0+) allows for larger advertising payloads
+(up to ~250 bytes in a single packet or ~1650 bytes with chaining)
+compared to legacy advertising (~27-31 bytes).
+
+On **Android**, Bluetooth must be enabled; otherwise this always resolves
+to `false`, even if the device supports extended advertising. Use
+`isEnabled()` to check whether Bluetooth is enabled.
+
+On **iOS**, this always resolves to `false`, since extended advertisements
+cannot be transmitted via CoreBluetooth.
+
+**Returns:** <code>Promise&lt;<a href="#isextendedadvertisingavailableresult">IsExtendedAdvertisingAvailableResult</a>&gt;</code>
+
+**Since:** 8.2.0
+
+--------------------
+
+
 ### isLocationEnabled()
 
 ```typescript
@@ -1001,7 +1029,7 @@ setCharacteristicValue(options: SetCharacteristicValueOptions) => Promise<void>
 
 Set the value of a characteristic.
 
-Only available on Android.
+Only available on Android and iOS.
 
 | Param         | Type                                                                                    |
 | ------------- | --------------------------------------------------------------------------------------- |
@@ -1516,6 +1544,14 @@ Remove all listeners for this plugin.
 | **`enabled`** | <code>boolean</code> | Whether or not Bluetooth is enabled. | 6.0.0 |
 
 
+#### IsExtendedAdvertisingAvailableResult
+
+| Prop                           | Type                 | Description                                                                                    | Since |
+| ------------------------------ | -------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| **`isAvailable`**              | <code>boolean</code> | Whether extended advertising is available on the device.                                       | 8.2.0 |
+| **`maxAdvertisingDataLength`** | <code>number</code>  | Maximum advertising data length in bytes. This is only available when `isAvailable` is `true`. | 8.2.0 |
+
+
 #### IsLocationEnabledResult
 
 | Prop          | Type                 | Description                                   | Since |
@@ -1602,11 +1638,26 @@ Remove all listeners for this plugin.
 
 #### StartAdvertisingOptions
 
-| Prop                   | Type                                      | Description                                                                                                                                                                                                                                                                                                | Since |
-| ---------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code> | The manufacturer specific data to advertise. Only available on Android.                                                                                                                                                                                                                                    | 7.5.0 |
-| **`name`**             | <code>string</code>                       | The name of the local device to advertise. On **Android**, for apps targeting `Build.VERSION_CODES.R` or lower, this requires the `BLUETOOTH_ADMIN` permission. For apps targeting `Build.VERSION_CODES.S` or higher, this requires the `BLUETOOTH_CONNECT` permission. Only available on Android and iOS. | 7.2.0 |
-| **`services`**         | <code>Service[]</code>                    | The services to advertise.                                                                                                                                                                                                                                                                                 | 7.2.0 |
+| Prop                   | Type                                                                | Description                                                                                                                                                                                                                                                                                                | Since |
+| ---------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`manufacturerData`** | <code>{ [key: number]: number[]; }</code>                           | The manufacturer specific data to advertise. Only available on Android.                                                                                                                                                                                                                                    | 7.5.0 |
+| **`name`**             | <code>string</code>                                                 | The name of the local device to advertise. On **Android**, for apps targeting `Build.VERSION_CODES.R` or lower, this requires the `BLUETOOTH_ADMIN` permission. For apps targeting `Build.VERSION_CODES.S` or higher, this requires the `BLUETOOTH_CONNECT` permission. Only available on Android and iOS. | 7.2.0 |
+| **`serviceData`**      | <code>{ [key: string]: number[]; }</code>                           | <a href="#service">Service</a> data to advertise (UUID -&gt; byte array). Only available on Android and only when `settings.legacyMode` is `false`.                                                                                                                                                        | 8.2.0 |
+| **`services`**         | <code>Service[]</code>                                              | The services to advertise.                                                                                                                                                                                                                                                                                 | 7.2.0 |
+| **`settings`**         | <code><a href="#advertisingsettings">AdvertisingSettings</a></code> | Extended advertising settings (BLE 5.0+). Only available on Android.                                                                                                                                                                                                                                       | 8.2.0 |
+
+
+#### AdvertisingSettings
+
+| Prop               | Type                                                                        | Description                                                                                                                                                                                                                                                                    | Default                                      | Since |
+| ------------------ | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- | ----- |
+| **`legacyMode`**   | <code>boolean</code>                                                        | Whether to use legacy advertising mode (BLE 4.x compatible). When `true`, uses legacy advertising which is compatible with all BLE devices but limited to ~27-31 bytes of advertising data. When `false`, uses extended advertising (BLE 5.0+) which supports larger payloads. | <code>true</code>                            | 8.2.0 |
+| **`connectable`**  | <code>boolean</code>                                                        | Whether the advertisement is connectable.                                                                                                                                                                                                                                      | <code>true</code>                            | 8.2.0 |
+| **`scannable`**    | <code>boolean</code>                                                        | Whether the advertisement is scannable. Only applies when `legacyMode` is `false`.                                                                                                                                                                                             | <code>false</code>                           | 8.2.0 |
+| **`interval`**     | <code><a href="#advertisinginterval">AdvertisingInterval</a></code>         | Advertising interval.                                                                                                                                                                                                                                                          | <code>AdvertisingInterval.LOW_LATENCY</code> | 8.2.0 |
+| **`txPowerLevel`** | <code><a href="#advertisingtxpowerlevel">AdvertisingTxPowerLevel</a></code> | TX power level.                                                                                                                                                                                                                                                                | <code>AdvertisingTxPowerLevel.HIGH</code>    | 8.2.0 |
+| **`primaryPhy`**   | <code><a href="#advertisingphy">AdvertisingPhy</a></code>                   | Primary PHY for advertising. Only applies when `legacyMode` is `false`.                                                                                                                                                                                                        | <code>AdvertisingPhy.PHY_LE_1M</code>        | 8.2.0 |
+| **`secondaryPhy`** | <code><a href="#advertisingphy">AdvertisingPhy</a></code>                   | Secondary PHY for advertising. Only applies when `legacyMode` is `false`.                                                                                                                                                                                                      | <code>AdvertisingPhy.PHY_LE_1M</code>        | 8.2.0 |
 
 
 #### StartCharacteristicNotificationsOptions
@@ -1631,10 +1682,12 @@ Remove all listeners for this plugin.
 
 #### StartScanOptions
 
-| Prop                  | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default            | Since |
-| --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`allowDuplicates`** | <code>boolean</code>  | Whether to emit the `deviceScanned` event for every advertisement packet received, instead of only the first advertisement of each device. This is required to receive manufacturer data or service data that is spread across multiple advertisement packets (e.g. when the value is delivered in the scan response packet on iOS). On iOS, this maps to `CBCentralManagerScanOptionAllowDuplicatesKey` and is only honored while the app is in the foreground. | <code>false</code> | 8.2.0 |
-| **`serviceIds`**      | <code>string[]</code> | Find devices with services that match any of the provided UUIDs. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                          |                    | 6.0.0 |
+| Prop                  | Type                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default                                   | Since |
+| --------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ----- |
+| **`allowDuplicates`** | <code>boolean</code>                        | Whether to emit the `deviceScanned` event for every advertisement packet received, instead of only the first advertisement of each device. This is required to receive manufacturer data or service data that is spread across multiple advertisement packets (e.g. when the value is delivered in the scan response packet on iOS). On iOS, this maps to `CBCentralManagerScanOptionAllowDuplicatesKey` and is only honored while the app is in the foreground. | <code>false</code>                        | 8.2.0 |
+| **`extended`**        | <code>boolean</code>                        | Whether to use extended advertising scanning (BLE 5.0+) to also discover devices that use extended advertising. When enabled, both legacy and extended advertisements are reported. On **iOS**, extended advertisements are received automatically during a normal scan, so this option is not needed and has no effect. Only available on Android.                                                                                                              | <code>false</code>                        | 8.2.0 |
+| **`phy`**             | <code><a href="#scanphy">ScanPhy</a></code> | The PHY to use for scanning. Only applies when `extended` is `true`. Only available on Android.                                                                                                                                                                                                                                                                                                                                                                  | <code>ScanPhy.PHY_LE_ALL_SUPPORTED</code> | 8.2.0 |
+| **`serviceIds`**      | <code>string[]</code>                       | Find devices with services that match any of the provided UUIDs. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                          |                                           | 6.0.0 |
 
 
 #### StopCharacteristicNotificationsOptions
@@ -1771,6 +1824,43 @@ Remove all listeners for this plugin.
 | **`LOW_POWER`**    | <code>2</code> | Low power connection priority.       | 6.0.0 |
 | **`PRIORITY_DCK`** | <code>3</code> | Digital Car Key connection priority. | 6.0.0 |
 
+
+#### AdvertisingInterval
+
+| Members           | Value                      | Description                                | Since |
+| ----------------- | -------------------------- | ------------------------------------------ | ----- |
+| **`LOW_LATENCY`** | <code>'LOW_LATENCY'</code> | Low latency advertising interval (~100ms). | 8.2.0 |
+| **`BALANCED`**    | <code>'BALANCED'</code>    | Balanced advertising interval (~250ms).    | 8.2.0 |
+| **`LOW_POWER`**   | <code>'LOW_POWER'</code>   | Low power advertising interval (~1000ms).  | 8.2.0 |
+
+
+#### AdvertisingTxPowerLevel
+
+| Members         | Value                    | Description               | Since |
+| --------------- | ------------------------ | ------------------------- | ----- |
+| **`ULTRA_LOW`** | <code>'ULTRA_LOW'</code> | Ultra-low TX power level. | 8.2.0 |
+| **`LOW`**       | <code>'LOW'</code>       | Low TX power level.       | 8.2.0 |
+| **`MEDIUM`**    | <code>'MEDIUM'</code>    | Medium TX power level.    | 8.2.0 |
+| **`HIGH`**      | <code>'HIGH'</code>      | High TX power level.      | 8.2.0 |
+
+
+#### AdvertisingPhy
+
+| Members            | Value                       | Description                                   | Since |
+| ------------------ | --------------------------- | --------------------------------------------- | ----- |
+| **`PHY_LE_1M`**    | <code>'PHY_LE_1M'</code>    | LE 1M PHY (default, compatible with BLE 4.x). | 8.2.0 |
+| **`PHY_LE_2M`**    | <code>'PHY_LE_2M'</code>    | LE 2M PHY (higher throughput, BLE 5.0+).      | 8.2.0 |
+| **`PHY_LE_CODED`** | <code>'PHY_LE_CODED'</code> | LE Coded PHY (longer range, BLE 5.0+).        | 8.2.0 |
+
+
+#### ScanPhy
+
+| Members                    | Value                               | Description                            | Since |
+| -------------------------- | ----------------------------------- | -------------------------------------- | ----- |
+| **`PHY_LE_1M`**            | <code>'PHY_LE_1M'</code>            | LE 1M PHY (compatible with BLE 4.x).   | 8.2.0 |
+| **`PHY_LE_CODED`**         | <code>'PHY_LE_CODED'</code>         | LE Coded PHY (longer range, BLE 5.0+). | 8.2.0 |
+| **`PHY_LE_ALL_SUPPORTED`** | <code>'PHY_LE_ALL_SUPPORTED'</code> | Scan on all supported PHYs (default).  | 8.2.0 |
+
 </docgen-api>
 
 ## Utils
@@ -1786,6 +1876,16 @@ const convertBytesToHex = (bytes: number[]) => {
 ```
 
 See [docs/utils/README.md](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/bluetooth-low-energy/docs/utils/README.md) for more information.
+
+## Bluetooth 5.0 (BLE 5) support
+
+Several BLE 5 capabilities behave differently across platforms due to operating system constraints. These are platform limitations, not limitations of the plugin.
+
+| Capability                                                                                | Android                                       | iOS                                       |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------- | ----------------------------------------- |
+| Extended advertising (large payloads, manufacturer/service data, PHY, interval, TX power) | ✅ Supported                                  | ❌ Not supported (no CoreBluetooth API)   |
+| Extended advertisement scanning                                                           | ✅ Supported and configurable (`extended`, `phy`) | ✅ Handled automatically, not configurable |
+| Coded PHY (LE Long Range)                                                                 | ✅ Supported                                  | ⚠️ Not reliably supported                  |
 
 ## FAQ
 

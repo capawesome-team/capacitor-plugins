@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`34dfe7e39c90fff8eb6d3d5cdb7bf0f2ec6eb84f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/34dfe7e39c90fff8eb6d3d5cdb7bf0f2ec6eb84f) ([#436](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/436)): feat: expose advertisement data in `deviceScanned` event and add `allowDuplicates` option to `startScan(...)`
+
+### Patch Changes
+
+- [`b278d98c18cc8d6e9508657a4a76ce2795ece746`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b278d98c18cc8d6e9508657a4a76ce2795ece746) ([#520](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/520)): fix(android): create the CCCD descriptor manually if the peripheral does not expose it
+
+- [`b278d98c18cc8d6e9508657a4a76ce2795ece746`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b278d98c18cc8d6e9508657a4a76ce2795ece746) ([#520](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/520)): fix(android): enable indications for indication-only characteristics when starting characteristic notifications
+
 ## 8.1.0
 
 ### Minor Changes
