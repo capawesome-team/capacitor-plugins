@@ -463,7 +463,8 @@ import CommonCrypto
 
     private func downloadAndVerifyFile(url: String, file: URL, checksum: String?, signature: String?, callback: ((Progress) -> Void)?) async throws {
         let destination: DownloadRequest.Destination = { _, _ in
-            return (file, [.createIntermediateDirectories])
+            // `removePreviousFile` ensures that a leftover file from a failed attempt does not fail the download
+            return (file, [.createIntermediateDirectories, .removePreviousFile])
         }
         let urlComponents = URLComponents(string: url)!
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
