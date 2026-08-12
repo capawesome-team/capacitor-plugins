@@ -38,6 +38,11 @@ The Network plugin is typically used whenever an app needs to react to the devic
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [How to Detect the Network Status in Capacitor](https://capawesome.io/blog/how-to-detect-the-network-status-in-a-capacitor-app/)
+- [How to Detect Satellite Networks in Capacitor](https://capawesome.io/blog/how-to-detect-satellite-networks-in-a-capacitor-app/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.

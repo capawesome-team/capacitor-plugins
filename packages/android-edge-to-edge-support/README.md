@@ -30,6 +30,10 @@ The Android Edge-to-Edge Support plugin is typically used whenever an app needs 
 | 8.x.x          | >=8.x.x           | Active support |
 | 7.x.x          | 7.x.x             | Deprecated     |
 
+## Guides
+
+- [Capacitor Edge-to-Edge & Safe Areas: The Complete Guide](https://capawesome.io/blog/capacitor-edge-to-edge-and-safe-areas-guide/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
