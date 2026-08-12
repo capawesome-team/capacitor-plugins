@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Exif</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Exif</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-select
+            id="image"
+            label="Image"
+            value="exif-sample.jpg"
+            interface="popover"
+          >
+            <ion-select-option value="exif-sample.jpg">JPEG</ion-select-option>
+            <ion-select-option value="exif-sample.heic">HEIC</ion-select-option>
+            <ion-select-option value="exif-sample.png">PNG</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="read-exif" expand="block">Read EXIF</ion-button>
+        <ion-button id="write-exif" expand="block">Write EXIF</ion-button>
+        <ion-button id="remove-exif" expand="block">Remove EXIF</ion-button>
+        <ion-button id="remove-exif-and-orientation" expand="block"
+          >Remove EXIF (incl. orientation)</ion-button
+        >
+        <ion-button id="reset-files" expand="block" fill="outline"
+          >Reset Sample Files</ion-button
+        >
+        <ion-item>
+          <ion-label id="result" class="ion-text-wrap">Result: -</ion-label>
+        </ion-item>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

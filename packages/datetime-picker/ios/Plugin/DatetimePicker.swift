@@ -32,6 +32,17 @@ import Foundation
         }
     }
 
+    @objc public func presentMonthPicker(date: Date, minDate: Date?, maxDate: Date?, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, completion: @escaping (Date?, ErrorCode) -> Void) {
+        closeKeyboard()
+        DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
+            MonthPicker.selectMonth(cancelText: cancelButtonText, doneText: doneButtonText, selectedDate: date,
+                                    minDate: minDate, maxDate: maxDate, locale: locale,
+                                    theme: self.getTheme(unconvertedTheme: theme), completion: { (date, errorCode) in
+                                        completion(date, errorCode)
+                                    })
+        }
+    }
+
     @objc public func presentTimePicker(date: Date, locale: Locale?, cancelButtonText: String, doneButtonText: String, theme: String?, minuteInterval: Int, completion: @escaping (Date?, ErrorCode) -> Void) {
         closeKeyboard()
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
@@ -63,5 +74,6 @@ import Foundation
 
     @objc public func cancel() {
         RPicker.cancel()
+        MonthPicker.cancel()
     }
 }

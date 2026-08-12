@@ -4,14 +4,16 @@ import Capacitor
 @objc public class FetchLatestBundleResult: NSObject, Result {
     private let artifactType: ArtifactType?
     private let bundleId: String?
+    private let channel: String?
     private let checksum: String?
     private let customProperties: [String: Any]?
     private let downloadUrl: String?
     private let signature: String?
 
-    init(artifactType: ArtifactType?, bundleId: String?, checksum: String?, customProperties: [String: Any]?, downloadUrl: String?, signature: String?) {
+    init(artifactType: ArtifactType?, bundleId: String?, channel: String?, checksum: String?, customProperties: [String: Any]?, downloadUrl: String?, signature: String?) {
         self.artifactType = artifactType
         self.bundleId = bundleId
+        self.channel = channel
         self.checksum = checksum
         self.customProperties = customProperties
         self.downloadUrl = downloadUrl
@@ -26,6 +28,9 @@ import Capacitor
             result["artifactType"] = "zip"
         }
         result["bundleId"] = bundleId == nil ? NSNull() : bundleId
+        if let channel = channel {
+            result["channel"] = channel
+        }
         if let checksum = checksum {
             result["checksum"] = checksum
         }

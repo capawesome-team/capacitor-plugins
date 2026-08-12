@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="hydrated">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Grafana Faro Example</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <style>
+      body {
+        font-family: -apple-system, system-ui, sans-serif;
+        padding: 1rem;
+      }
+      h1 {
+        font-size: 1.25rem;
+      }
+      h2 {
+        font-size: 1rem;
+        margin-top: 1.5rem;
+      }
+      button {
+        display: block;
+        margin: 0.25rem 0;
+        padding: 0.5rem 0.75rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>@capawesome/capacitor-grafana-faro example</h1>
+
+      <h2>Setup</h2>
+      <button onclick="initialize()">Initialize</button>
+
+      <h2>Signals</h2>
+      <button onclick="pushLog()">Push log</button>
+      <button onclick="pushEvent()">Push event</button>
+      <button onclick="pushError()">Push error (manual)</button>
+      <button onclick="pushErrorFromCaught()">
+        Push error (from caught Error)
+      </button>
+      <button onclick="pushMeasurement()">Push measurement</button>
+
+      <h2>Meta</h2>
+      <button onclick="setUser()">Set user</button>
+      <button onclick="resetUser()">Reset user</button>
+      <button onclick="setSession()">Set session</button>
+      <button onclick="resetSession()">Reset session</button>
+      <button onclick="getSession()">Get session</button>
+      <button onclick="setView()">Set view</button>
+      <button onclick="getView()">Get view</button>
+
+      <h2>Transport</h2>
+      <button onclick="pause()">Pause</button>
+      <button onclick="unpause()">Unpause</button>
+    </main>
+
+    <script src="./js/script.js" type="module"></script>
+  </body>
+</html>

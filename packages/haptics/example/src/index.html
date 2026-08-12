@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Haptics</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Haptics</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-button id="isAvailable" expand="block">Is Available</ion-button>
+        <ion-item>
+          <ion-select id="impactStyle" label="Impact Style" value="MEDIUM">
+            <ion-select-option value="HEAVY">HEAVY</ion-select-option>
+            <ion-select-option value="LIGHT">LIGHT</ion-select-option>
+            <ion-select-option value="MEDIUM">MEDIUM</ion-select-option>
+            <ion-select-option value="RIGID">RIGID</ion-select-option>
+            <ion-select-option value="SOFT">SOFT</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="impact" expand="block">Impact</ion-button>
+        <ion-item>
+          <ion-select
+            id="notificationType"
+            label="Notification Type"
+            value="SUCCESS"
+          >
+            <ion-select-option value="ERROR">ERROR</ion-select-option>
+            <ion-select-option value="SUCCESS">SUCCESS</ion-select-option>
+            <ion-select-option value="WARNING">WARNING</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="notification" expand="block">Notification</ion-button>
+        <ion-item>
+          <ion-input
+            id="vibrateDuration"
+            label="Vibrate Duration (ms)"
+            type="number"
+            value="300"
+          ></ion-input>
+        </ion-item>
+        <ion-button id="vibrate" expand="block">Vibrate</ion-button>
+        <ion-button id="selectionStart" expand="block"
+          >Selection Start</ion-button
+        >
+        <ion-button id="selectionChanged" expand="block"
+          >Selection Changed</ion-button
+        >
+        <ion-button id="selectionEnd" expand="block">Selection End</ion-button>
+        <ion-item>
+          <ion-select
+            id="androidHapticType"
+            label="Android Haptic Type"
+            value="CONFIRM"
+          >
+            <ion-select-option value="CLOCK_TICK">CLOCK_TICK</ion-select-option>
+            <ion-select-option value="CONFIRM">CONFIRM</ion-select-option>
+            <ion-select-option value="CONTEXT_CLICK"
+              >CONTEXT_CLICK</ion-select-option
+            >
+            <ion-select-option value="KEYBOARD_TAP"
+              >KEYBOARD_TAP</ion-select-option
+            >
+            <ion-select-option value="LONG_PRESS">LONG_PRESS</ion-select-option>
+            <ion-select-option value="REJECT">REJECT</ion-select-option>
+            <ion-select-option value="TOGGLE_OFF">TOGGLE_OFF</ion-select-option>
+            <ion-select-option value="TOGGLE_ON">TOGGLE_ON</ion-select-option>
+            <ion-select-option value="VIRTUAL_KEY"
+              >VIRTUAL_KEY</ion-select-option
+            >
+          </ion-select>
+        </ion-item>
+        <ion-button id="performAndroidHaptic" expand="block"
+          >Perform Android Haptic</ion-button
+        >
+        <ion-button id="playPattern" expand="block">Play Pattern</ion-button>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

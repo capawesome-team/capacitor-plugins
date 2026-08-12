@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.3.10
+
+### Patch Changes
+
+- [`7a0038d8bdfa0d87e89d2f0db578dffa47164a6b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7a0038d8bdfa0d87e89d2f0db578dffa47164a6b) ([#499](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/499)): feat: add `subscriptionOffers` and `subscriptionGroupId` to `Product`
+
+## 0.3.9
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
+## 0.3.8
+
+### Patch Changes
+
+- [`ed048350d3dd6652dc861248252310a38a29ffab`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ed048350d3dd6652dc861248252310a38a29ffab) ([#452](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/452)): feat(ios): support monthly-with-12-month-commitment billing plans (iOS 26.4+)
+
 ## 0.3.7
 
 ### Patch Changes

@@ -1,14 +1,22 @@
 package io.capawesome.capacitorjs.plugins.datetimepicker;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.text.format.DateFormat;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.NumberPicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -185,6 +193,132 @@ public class DatetimePicker {
         });
 
         dialog.show();
+    }
+
+    public void presentMonthPicker(
+        Date date,
+        @Nullable Date minDate,
+        @Nullable Date maxDate,
+        @Nullable Locale locale,
+        String cancelButtonText,
+        String doneButtonText,
+        @Nullable String theme,
+        final PresentResultCallback resultCallback
+    ) {
+        if (locale != null) {
+            this.updateLocaleConfiguration(locale);
+        }
+
+        Calendar selected = this.createCalendarFromDate(date);
+        Locale effectiveLocale = locale != null ? locale : Locale.getDefault();
+
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int rawMinYear = minDate != null ? getYearFromDate(minDate) : currentYear - 100;
+        int rawMaxYear = maxDate != null ? getYearFromDate(maxDate) : currentYear + 100;
+        final int minYear = rawMinYear > rawMaxYear ? rawMaxYear : rawMinYear;
+        final int maxYear = rawMaxYear;
+
+        int initialYear = clamp(selected.get(Calendar.YEAR), minYear, maxYear);
+        int initialMonth = selected.get(Calendar.MONTH);
+
+        int themeRes = getTheme(theme, null, null);
+        Context themedContext = new ContextThemeWrapper(plugin.getContext(), themeRes);
+        LayoutInflater inflater = LayoutInflater.from(themedContext);
+        View dialogView = inflater.inflate(R.layout.dialog_month_picker, null);
+
+        NumberPicker monthPicker = dialogView.findViewById(R.id.month_picker_month);
+        NumberPicker yearPicker = dialogView.findViewById(R.id.month_picker_year);
+
+        String[] monthNames = new DateFormatSymbols(effectiveLocale).getMonths();
+        String[] displayedMonths = new String[12];
+        System.arraycopy(monthNames, 0, displayedMonths, 0, 12);
+
+        yearPicker.setMinValue(minYear);
+        yearPicker.setMaxValue(maxYear);
+        yearPicker.setValue(initialYear);
+        yearPicker.setWrapSelectorWheel(false);
+        yearPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+        monthPicker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+
+        applyMonthRange(monthPicker, displayedMonths, initialYear, minYear, maxYear, minDate, maxDate, initialMonth);
+
+        yearPicker.setOnValueChangedListener((picker, oldVal, newVal) ->
+            applyMonthRange(monthPicker, displayedMonths, newVal, minYear, maxYear, minDate, maxDate, monthPicker.getValue())
+        );
+
+        final AlertDialog dialog = new AlertDialog.Builder(themedContext)
+            .setView(dialogView)
+            .setPositiveButton(doneButtonText, (DialogInterface d, int which) -> {
+                Calendar result = Calendar.getInstance();
+                result.set(yearPicker.getValue(), monthPicker.getValue(), 1, 0, 0, 0);
+                result.set(Calendar.MILLISECOND, 0);
+                resultCallback.success(result.getTime());
+            })
+            .setNegativeButton(cancelButtonText, (DialogInterface d, int which) -> {
+                resultCallback.cancel();
+                d.dismiss();
+            })
+            .create();
+
+        dialog.setOnDismissListener(_dialog -> {
+            if (activeDialog == _dialog) {
+                activeDialog = null;
+            }
+            resultCallback.dismiss();
+        });
+
+        activeDialog = dialog;
+        dialog.show();
+    }
+
+    private void applyMonthRange(
+        NumberPicker monthPicker,
+        String[] monthNames,
+        int year,
+        int minYear,
+        int maxYear,
+        @Nullable Date minDate,
+        @Nullable Date maxDate,
+        int currentMonth
+    ) {
+        int minMonth = 0;
+        int maxMonth = 11;
+        if (minDate != null && year == minYear) {
+            minMonth = getMonthFromDate(minDate);
+        }
+        if (maxDate != null && year == maxYear) {
+            maxMonth = getMonthFromDate(maxDate);
+        }
+        if (minMonth > maxMonth) {
+            minMonth = maxMonth;
+        }
+
+        int rangeSize = maxMonth - minMonth + 1;
+        String[] displayed = new String[rangeSize];
+        System.arraycopy(monthNames, minMonth, displayed, 0, rangeSize);
+
+        monthPicker.setDisplayedValues(null);
+        monthPicker.setMinValue(minMonth);
+        monthPicker.setMaxValue(maxMonth);
+        monthPicker.setDisplayedValues(displayed);
+        monthPicker.setWrapSelectorWheel(false);
+        monthPicker.setValue(clamp(currentMonth, minMonth, maxMonth));
+    }
+
+    private int clamp(int value, int min, int max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
+    private int getYearFromDate(@NonNull Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.YEAR);
+    }
+
+    private int getMonthFromDate(@NonNull Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MONTH);
     }
 
     private Calendar createCalendarFromDate(Date date) {

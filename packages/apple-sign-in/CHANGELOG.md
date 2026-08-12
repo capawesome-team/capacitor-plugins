@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2`](https://github.com/capawesome-team/capacitor-plugins/commit/c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2) ([#945](https://github.com/capawesome-team/capacitor-plugins/pull/945)): fix(android): remove deprecated status bar color call
+
+## 0.1.2
+
+### Patch Changes
+
+- [`6b4f706e965d85274c97506336ab683fd449ff23`](https://github.com/capawesome-team/capacitor-plugins/commit/6b4f706e965d85274c97506336ab683fd449ff23) ([#924](https://github.com/capawesome-team/capacitor-plugins/pull/924)): fix: use `proguard-android-optimize.txt` for AGP 9.3.0 and R8 compatibility
+
+## 0.1.1
+
+### Patch Changes
+
+- [`1e01e6d8fa576f84692a160027ef74fdd88b0e07`](https://github.com/capawesome-team/capacitor-plugins/commit/1e01e6d8fa576f84692a160027ef74fdd88b0e07) ([#891](https://github.com/capawesome-team/capacitor-plugins/pull/891)): fix: surface the underlying iOS sign-in error code and message, run the authorization request on the main thread, and retain the authorization controller until completion
+
 ## 0.1.0
 
 ### Minor Changes

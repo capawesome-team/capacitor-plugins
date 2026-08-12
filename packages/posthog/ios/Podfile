@@ -9,7 +9,7 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'PostHog', '>= 3.19.1', '< 4.0'
+  pod 'PostHog', '>= 3.56.0', '< 4.0'
 end
 
 target 'PluginTests' do

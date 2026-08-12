@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.5.0
+
+### Minor Changes
+
+- [`a34394c79d35caadd06910a2efdefb88010b8d33`](https://github.com/capawesome-team/capacitor-plugins/commit/a34394c79d35caadd06910a2efdefb88010b8d33) ([#892](https://github.com/capawesome-team/capacitor-plugins/pull/892)): feat: add error tracking with `captureException(...)` method and `autoCaptureExceptions` configuration option
+
+## 8.4.2
+
+### Patch Changes
+
+- [`08b79b083fcda8bd07783a88752e42a81085a66d`](https://github.com/capawesome-team/capacitor-plugins/commit/08b79b083fcda8bd07783a88752e42a81085a66d) ([#816](https://github.com/capawesome-team/capacitor-plugins/pull/816)): fix(android): read `sessionReplayConfig` from Capacitor Configuration file
+
+## 8.4.1
+
+### Patch Changes
+
+- [`e2df0974e263d1da6c859245ca91e3531d5fafc5`](https://github.com/capawesome-team/capacitor-plugins/commit/e2df0974e263d1da6c859245ca91e3531d5fafc5) ([#822](https://github.com/capawesome-team/capacitor-plugins/pull/822)): fix(ios): align PostHog SDK version rule across Podfile and podspec
+
 ## 8.4.0
 
 ### Minor Changes

@@ -199,7 +199,7 @@ export interface PickFilesOptions {
    * **Attention**: Reading large files can lead to app crashes.
    * It's therefore not recommended to use this option.
    * Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-   * to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file).
+   * to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file).
    *
    * @default false
    */
@@ -317,6 +317,16 @@ export interface PickMediaOptions {
 }
 
 export interface PickDirectoryResult {
+  /**
+   * The base64-encoded security-scoped bookmark of the selected directory.
+   *
+   * It can be used to retain access to the directory across app launches.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  bookmark?: string;
   /**
    * The path to the selected directory.
    *

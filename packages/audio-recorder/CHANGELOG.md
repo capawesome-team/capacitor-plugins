@@ -1,5 +1,37 @@
 # Changelog
 
+## 8.2.3
+
+### Patch Changes
+
+- [`a928b095cd5732d4dc4257b89ffe02139b9c1bcc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a928b095cd5732d4dc4257b89ffe02139b9c1bcc) ([#474](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/474)): fix(ios): reject `resumeRecording(...)` if iOS `record()` returns `false`
+
+## 8.2.2
+
+### Patch Changes
+
+- [`0a961b98e3933ffaa9c216bf7a4722bf79fd24a7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0a961b98e3933ffaa9c216bf7a4722bf79fd24a7) ([#459](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/459)): fix(ios): reject `startRecording(...)` if iOS `record()` returns `false`
+
+## 8.2.1
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
+## 8.2.0
+
+### Minor Changes
+
+- [`9435c1a90e1616a1e9f36df469712f7ea61064a0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/9435c1a90e1616a1e9f36df469712f7ea61064a0) ([#448](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/448)): feat(ios): add `autoResumeAfterInterruption` option to `startRecording(...)` and `recordingResumed` event
+
+## 8.1.0
+
+### Minor Changes
+
+- [`a69866e4ca49dab710e93641d4ed7d7b85cc3e7c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a69866e4ca49dab710e93641d4ed7d7b85cc3e7c) ([#439](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/439)): feat: add `uri` option to `startRecording(...)`
+
 ## 8.0.1
 
 ### Patch Changes

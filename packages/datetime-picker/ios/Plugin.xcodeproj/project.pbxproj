@@ -20,6 +20,7 @@
 		7CD7816928A3976B001BEAAE /* DatetimePickerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD7816828A3976B001BEAAE /* DatetimePickerConfig.swift */; };
 		7CD7816B28A39BA0001BEAAE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD7816A28A39BA0001BEAAE /* Theme.swift */; };
 		7CE32AE328A6810C0064C6BE /* DatetimePickerStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE32AE228A6810C0064C6BE /* DatetimePickerStyle.swift */; };
+		A1B2C3D428A3D7D9000D55CD /* MonthPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D328A3D7D9000D55CD /* MonthPickerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		7CD7816828A3976B001BEAAE /* DatetimePickerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatetimePickerConfig.swift; sourceTree = "<group>"; };
 		7CD7816A28A39BA0001BEAAE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		7CE32AE228A6810C0064C6BE /* DatetimePickerStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatetimePickerStyle.swift; sourceTree = "<group>"; };
+		A1B2C3D328A3D7D9000D55CD /* MonthPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthPickerViewController.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				7CD7816A28A39BA0001BEAAE /* Theme.swift */,
 				7CE32AE228A6810C0064C6BE /* DatetimePickerStyle.swift */,
 				7CA3513728B69A7C00D3C1C7 /* ErrorCode.swift */,
+				A1B2C3D328A3D7D9000D55CD /* MonthPickerViewController.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -325,6 +328,7 @@
 				7CA3513828B69A7C00D3C1C7 /* ErrorCode.swift in Sources */,
 				7C0CB8CE28A3D7D9000D55CD /* RPicker.swift in Sources */,
 				7CD7816928A3976B001BEAAE /* DatetimePickerConfig.swift in Sources */,
+				A1B2C3D428A3D7D9000D55CD /* MonthPickerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -58,6 +58,13 @@ declare module '@capacitor/cli' {
        * @default true
        */
       captureApplicationLifecycleEvents?: boolean;
+      /**
+       * Whether to automatically capture unhandled exceptions.
+       *
+       * @since 8.5.0
+       * @default false
+       */
+      autoCaptureExceptions?: boolean;
     };
   }
 }
@@ -75,6 +82,12 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   capture(options: CaptureOptions): Promise<void>;
+  /**
+   * Capture an exception.
+   *
+   * @since 8.5.0
+   */
+  captureException(options: CaptureExceptionOptions): Promise<void>;
   /**
    * Flush all events in the queue.
    *
@@ -228,6 +241,70 @@ export interface CaptureOptions {
    * @since 6.0.0
    */
   properties?: Record<string, any>;
+}
+
+/**
+ * @since 8.5.0
+ */
+export interface CaptureExceptionOptions {
+  /**
+   * The message of the exception.
+   *
+   * @since 8.5.0
+   */
+  message: string;
+  /**
+   * The name of the exception. Used as the exception type for grouping.
+   *
+   * @since 8.5.0
+   * @default 'Error'
+   * @example 'TypeError'
+   */
+  name?: string;
+  /**
+   * The stack trace of the exception.
+   *
+   * Can be generated from an `Error` using [`stacktrace.js`](https://www.stacktracejs.com/).
+   *
+   * @since 8.5.0
+   */
+  stacktrace?: StackFrame[];
+  /**
+   * The properties to send with the exception.
+   *
+   * @since 8.5.0
+   */
+  properties?: Record<string, any>;
+}
+
+/**
+ * @since 8.5.0
+ */
+export interface StackFrame {
+  /**
+   * The name of the function.
+   *
+   * @since 8.5.0
+   */
+  functionName?: string;
+  /**
+   * The name of the file.
+   *
+   * @since 8.5.0
+   */
+  fileName?: string;
+  /**
+   * The line number within the file.
+   *
+   * @since 8.5.0
+   */
+  lineNumber?: number;
+  /**
+   * The column number within the file.
+   *
+   * @since 8.5.0
+   */
+  columnNumber?: number;
 }
 
 /**
@@ -485,6 +562,13 @@ export interface SetupOptions {
    * @default true
    */
   captureApplicationLifecycleEvents?: boolean;
+  /**
+   * Whether to automatically capture unhandled exceptions.
+   *
+   * @since 8.5.0
+   * @default false
+   */
+  autoCaptureExceptions?: boolean;
 }
 
 /**

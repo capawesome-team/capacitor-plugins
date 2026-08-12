@@ -10,6 +10,7 @@ import PostHog
                 apiHost: config.apiHost,
                 enableSessionReplay: config.enableSessionReplay,
                 captureApplicationLifecycleEvents: config.captureApplicationLifecycleEvents,
+                autoCaptureExceptions: config.autoCaptureExceptions,
                 sessionReplayConfig: config.sessionReplayConfig
             )
 
@@ -31,6 +32,65 @@ import PostHog
         let properties = options.getProperties()
 
         PostHogSDK.shared.capture(event, properties: properties)
+    }
+
+    @objc public func captureException(_ options: CaptureExceptionOptions) {
+        // Emit the `$exception` event directly instead of handing the SDK an `Error`.
+        // The `Error` path re-derives the type from the error domain and discards the
+        // JavaScript stack in favour of a native one, while we want the JavaScript name
+        // and stack. This mirrors the `$exception_list` payload that posthog-js produces.
+        let name = options.getName() ?? ""
+        var exception: [String: Any] = [
+            "type": name.isEmpty ? "Error" : name,
+            "value": options.getMessage(),
+            "mechanism": [
+                "type": "generic",
+                "handled": true,
+                "synthetic": false
+            ]
+        ]
+
+        let frames = Posthog.createFrames(options.getStacktrace())
+        if !frames.isEmpty {
+            exception["stacktrace"] = [
+                "type": "raw",
+                "frames": frames
+            ]
+        }
+
+        var properties: [String: Any] = [:]
+        options.getProperties()?.forEach { properties[$0.key] = $0.value }
+        properties["$exception_level"] = "error"
+        properties["$exception_list"] = [exception]
+
+        PostHogSDK.shared.capture("$exception", properties: properties)
+    }
+
+    private static func createFrames(_ stacktrace: [StackFrame]?) -> [[String: Any]] {
+        guard let stacktrace = stacktrace, !stacktrace.isEmpty else {
+            return []
+        }
+        var frames: [[String: Any]] = []
+        for frame in stacktrace {
+            var map: [String: Any] = [
+                "platform": "web:javascript",
+                "function": frame.getFunctionName() ?? "?",
+                "in_app": true
+            ]
+            if let fileName = frame.getFileName() {
+                map["filename"] = fileName
+            }
+            if let lineNumber = frame.getLineNumber() {
+                map["lineno"] = lineNumber
+            }
+            if let columnNumber = frame.getColumnNumber() {
+                map["colno"] = columnNumber
+            }
+            frames.append(map)
+        }
+        // PostHog stores frames bottom-up (oldest call first), while the JavaScript
+        // stack trace is top-down (most recent call first), so reverse them.
+        return Array(frames.reversed())
     }
 
     @objc public func flush() {
@@ -120,9 +180,18 @@ import PostHog
         let enableSessionReplay = options.getEnableSessionReplay()
         let optOut = options.getOptOut()
         let captureApplicationLifecycleEvents = options.getCaptureApplicationLifecycleEvents()
+        let autoCaptureExceptions = options.getAutoCaptureExceptions()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
-        setup(apiKey: apiKey, apiHost: apiHost, enableSessionReplay: enableSessionReplay, optOut: optOut, captureApplicationLifecycleEvents: captureApplicationLifecycleEvents, sessionReplayConfig: sessionReplayConfig)
+        setup(
+            apiKey: apiKey,
+            apiHost: apiHost,
+            enableSessionReplay: enableSessionReplay,
+            optOut: optOut,
+            captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
+            autoCaptureExceptions: autoCaptureExceptions,
+            sessionReplayConfig: sessionReplayConfig
+        )
     }
 
     @objc public func startSessionRecording() {
@@ -133,11 +202,12 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, sessionReplayConfig: SessionReplayOptions? = nil) {
+    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, autoCaptureExceptions: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
         let config = PostHogConfig(apiKey: apiKey, host: apiHost)
         config.captureScreenViews = false
         config.optOut = optOut
         config.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
+        config.errorTrackingConfig.autoCapture = autoCaptureExceptions
         config.sessionReplay = enableSessionReplay
         config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
         config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true

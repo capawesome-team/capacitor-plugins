@@ -1,0 +1,123 @@
+ext {
+    junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
+    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.1'
+    androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.3.0'
+    androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
+    nodejsMobileVersion = project.hasProperty('nodejsMobileVersion') ? rootProject.ext.nodejsMobileVersion : '18.20.4-capawesome.1'
+    nodejsMobileAndroidUrl = project.hasProperty('nodejsMobileAndroidUrl')
+        ? rootProject.ext.nodejsMobileAndroidUrl
+        : "https://github.com/capawesome-team/nodejs-mobile/releases/download/v${nodejsMobileVersion}/nodejs-mobile-v${nodejsMobileVersion}-android.zip"
+    nodejsMobileAndroidSha256 = project.hasProperty('nodejsMobileAndroidSha256')
+        ? rootProject.ext.nodejsMobileAndroidSha256
+        : '1b3c7979c81aec89a7f51b29af1f4875a5d637727ad6e2c392cdf2e127715da9'
+}
+
+def libnodeCacheDir = new File(gradle.gradleUserHomeDir, 'caches/capawesome-capacitor-nodejs')
+def libnodeDir = new File(libnodeCacheDir, "nodejs-mobile-v${nodejsMobileVersion}-android")
+
+tasks.register('downloadLibnode') {
+    def cacheDir = libnodeCacheDir
+    def zipFile = new File(cacheDir, "nodejs-mobile-v${nodejsMobileVersion}-android.zip")
+    doLast {
+        def expectedSha256 = nodejsMobileAndroidSha256
+        def calculateSha256 = { file ->
+            def digest = java.security.MessageDigest.getInstance('SHA-256')
+            file.eachByte(1024 * 1024) { buffer, length -> digest.update(buffer, 0, length) }
+            digest.digest().collect { String.format('%02x', it) }.join()
+        }
+        if (!zipFile.exists() || (expectedSha256 && calculateSha256(zipFile) != expectedSha256)) {
+            cacheDir.mkdirs()
+            logger.lifecycle("Downloading Node.js for Mobile Apps from ${nodejsMobileAndroidUrl}...")
+            new URL(nodejsMobileAndroidUrl).withInputStream { input -> zipFile.withOutputStream { output -> output << input } }
+        }
+        if (expectedSha256) {
+            def actualSha256 = calculateSha256(zipFile)
+            if (actualSha256 != expectedSha256) {
+                zipFile.delete()
+                throw new GradleException("Checksum verification failed for ${zipFile.name}. Expected ${expectedSha256} but got ${actualSha256}.")
+            }
+        }
+        if (!new File(libnodeDir, 'include').exists()) {
+            copy {
+                from zipTree(zipFile)
+                into libnodeDir
+            }
+        }
+    }
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('configureCMake') || task.name.startsWith('buildCMake') || task.name.startsWith('externalNativeBuild')) {
+        task.dependsOn('downloadLibnode')
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.13.0'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    namespace = "io.capawesome.capacitorjs.plugins.nodejs"
+    compileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
+    defaultConfig {
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 36
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                arguments "-DLIBNODE_DIR=${libnodeDir.absolutePath}", "-DANDROID_STL=c++_shared"
+            }
+        }
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path 'CMakeLists.txt'
+        }
+    }
+    sourceSets {
+        main {
+            assets.srcDirs += '../ios/Plugin/Assets'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError = false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':capacitor-android')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+}

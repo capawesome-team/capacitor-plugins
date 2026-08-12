@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.3.0
+
+### Minor Changes
+
+- [`1f21d809f20d4dce0603048aaa80fbeaa84f7d3c`](https://github.com/capawesome-team/capacitor-plugins/commit/1f21d809f20d4dce0603048aaa80fbeaa84f7d3c): feat: add `channel` to `FetchLatestBundleResult`
+
+### Patch Changes
+
+- [`ffdde834abc2127421808206254c50727274ad70`](https://github.com/capawesome-team/capacitor-plugins/commit/ffdde834abc2127421808206254c50727274ad70) ([#873](https://github.com/capawesome-team/capacitor-plugins/pull/873)): fix: widen the Alamofire dependency range to `>= 5.10.2, < 6.0.0` so it can be used alongside other plugins that require a newer 5.x release
+
+## 8.2.3
+
+### Patch Changes
+
+- [`d7a3d10e4ba1f22f7014bf814d0e3ba4d2842aa8`](https://github.com/capawesome-team/capacitor-plugins/commit/d7a3d10e4ba1f22f7014bf814d0e3ba4d2842aa8): fix: set correct plugin version
+
+## 8.2.2
+
+### Patch Changes
+
+- [`f745456d73d53e850edca6434c7c54e191be2bf1`](https://github.com/capawesome-team/capacitor-plugins/commit/f745456d73d53e850edca6434c7c54e191be2bf1) ([#855](https://github.com/capawesome-team/capacitor-plugins/pull/855)): fix(android): prevent crash during bundle cleanup when a directory is unreadable
+
 ## 8.2.1
 
 ### Patch Changes

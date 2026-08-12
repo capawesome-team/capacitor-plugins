@@ -14,6 +14,8 @@ public class PosthogConfig {
 
     private boolean captureApplicationLifecycleEvents = true;
 
+    private boolean autoCaptureExceptions = false;
+
     @Nullable
     private SessionReplayOptions sessionReplayConfig = null;
 
@@ -32,6 +34,10 @@ public class PosthogConfig {
 
     public boolean getCaptureApplicationLifecycleEvents() {
         return captureApplicationLifecycleEvents;
+    }
+
+    public boolean getAutoCaptureExceptions() {
+        return autoCaptureExceptions;
     }
 
     @Nullable
@@ -53,6 +59,10 @@ public class PosthogConfig {
 
     public void setCaptureApplicationLifecycleEvents(boolean captureApplicationLifecycleEvents) {
         this.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents;
+    }
+
+    public void setAutoCaptureExceptions(boolean autoCaptureExceptions) {
+        this.autoCaptureExceptions = autoCaptureExceptions;
     }
 
     public void setSessionReplayConfig(@Nullable SessionReplayOptions sessionReplayConfig) {

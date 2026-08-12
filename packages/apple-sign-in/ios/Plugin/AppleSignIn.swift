@@ -4,6 +4,7 @@ import AuthenticationServices
 @objc public class AppleSignIn: NSObject {
 
     private var completion: ((_ result: SignInResult?, _ error: Error?) -> Void)?
+    private var authorizationController: ASAuthorizationController?
 
     @objc public func signIn(_ options: SignInOptions, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding, completion: @escaping (_ result: SignInResult?, _ error: Error?) -> Void) {
         self.completion = completion
@@ -17,15 +18,19 @@ import AuthenticationServices
             request.nonce = nonce
         }
 
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = presentationContextProvider
-        controller.performRequests()
+        DispatchQueue.main.async {
+            let controller = ASAuthorizationController(authorizationRequests: [request])
+            controller.delegate = self
+            controller.presentationContextProvider = presentationContextProvider
+            self.authorizationController = controller
+            controller.performRequests()
+        }
     }
 }
 
 extension AppleSignIn: ASAuthorizationControllerDelegate {
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        authorizationController = nil
         guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else {
             completion?(nil, CustomError.signInFailed)
             completion = nil
@@ -37,11 +42,12 @@ extension AppleSignIn: ASAuthorizationControllerDelegate {
     }
 
     public func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        authorizationController = nil
         let asError = error as? ASAuthorizationError
         if asError?.code == .canceled {
             completion?(nil, CustomError.signInCanceled)
         } else {
-            completion?(nil, CustomError.signInFailed)
+            completion?(nil, error)
         }
         completion = nil
     }

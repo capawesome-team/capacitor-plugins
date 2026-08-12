@@ -17,6 +17,9 @@ public class GetLatestBundleResponse {
     private String bundleId;
 
     @Nullable
+    private String channelName;
+
+    @Nullable
     private String checksum;
 
     @Nullable
@@ -36,6 +39,7 @@ public class GetLatestBundleResponse {
             this.artifactType = ArtifactType.ZIP;
         }
         this.bundleId = responseJson.optString("bundleId");
+        this.channelName = responseJson.isNull("channelName") ? null : responseJson.optString("channelName");
         this.checksum = responseJson.isNull("checksum") ? null : responseJson.optString("checksum");
         this.customProperties = responseJson.optJSONObject("customProperties");
         this.signature = responseJson.isNull("signature") ? null : responseJson.optString("signature");
@@ -50,6 +54,11 @@ public class GetLatestBundleResponse {
     @NonNull
     public String getBundleId() {
         return bundleId;
+    }
+
+    @Nullable
+    public String getChannelName() {
+        return channelName;
     }
 
     @Nullable

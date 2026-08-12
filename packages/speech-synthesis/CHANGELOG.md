@@ -1,5 +1,19 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`8af0d3ac6802dd6bf29b2d5a42a147174e9ca102`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8af0d3ac6802dd6bf29b2d5a42a147174e9ca102) ([#517](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/517)): fix(ios): restoring the audio session no longer blocks the main thread when an utterance finishes or is cancelled
+
+## 8.0.2
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
 ## 8.0.1
 
 ### Patch Changes

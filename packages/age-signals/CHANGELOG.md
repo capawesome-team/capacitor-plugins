@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat!: update to Play Age Signals `0.0.4` (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): fix(android): map the error codes of the Play Age Signals library
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat(ios): add `getRegulatoryRequirements()` and `showSignificantUpdateAcknowledgment(...)` methods
+
+## 0.4.1
+
+### Patch Changes
+
+- [`8c44f7b82b7c0de3b007a0a415ddefaebe91afcc`](https://github.com/capawesome-team/capacitor-plugins/commit/8c44f7b82b7c0de3b007a0a415ddefaebe91afcc) ([#905](https://github.com/capawesome-team/capacitor-plugins/pull/905)): fix(ios): resolve compile error when building with Xcode 26.4 or older
+
+## 0.4.0
+
+### Minor Changes
+
+- [`68927802008460196e4c0c77d78108a178fbec18`](https://github.com/capawesome-team/capacitor-plugins/commit/68927802008460196e4c0c77d78108a178fbec18) ([#811](https://github.com/capawesome-team/capacitor-plugins/pull/811)): feat!: add `DECLARED` status, `ageRangeDeclaration`, and `SDK_VERSION_OUTDATED` error
+
 ## 0.3.3
 
 ### Patch Changes

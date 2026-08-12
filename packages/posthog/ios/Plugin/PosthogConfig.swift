@@ -5,5 +5,6 @@ public struct PosthogConfig {
     var apiHost = "https://us.i.posthog.com"
     var enableSessionReplay = false
     var captureApplicationLifecycleEvents = true
+    var autoCaptureExceptions = false
     var sessionReplayConfig: SessionReplayOptions?
 }

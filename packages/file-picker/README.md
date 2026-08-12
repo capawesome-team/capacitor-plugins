@@ -1,4 +1,4 @@
-# @capawesome/capacitor-file-picker
+# Capacitor File Picker Plugin
 
 Capacitor plugin that allows the user to select a file, directory, image, or video from the device's file system or gallery.
 
@@ -10,7 +10,7 @@ Capacitor plugin that allows the user to select a file, directory, image, or vid
 
 ## Features
 
-We are proud to offer one of the most complete and feature-rich Capacitor plugins for file picking. Here are some of the key features:
+The Capacitor File Picker plugin is one of the most complete file selection solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android, iOS and Web.
 - 📂 **Directory picking**: Allows users to select a directory to retrieve all files.
@@ -19,14 +19,20 @@ We are proud to offer one of the most complete and feature-rich Capacitor plugin
 - 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
 - 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
 - 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
+- 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS. 
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The File Picker plugin is typically used whenever an app needs the user to hand over a file, for example:
+
+- **File uploads**: Let users attach documents such as PDFs or spreadsheets to a form and upload them to a server.
+- **Profile and cover pictures**: Let users choose an existing photo from their gallery.
+- **Media attachments**: Add images and videos to chat messages, posts, or support tickets.
+- **Data imports**: Import CSV, JSON, or backup files into your app.
 
 ## Compatibility
 
@@ -35,6 +41,10 @@ Stay up to date with the latest news and updates about the Capawesome, Capacitor
 | 8.x.x          | >=8.x.x           | Active support |
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
+
+## Guides
+
+- [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/)
 
 ## Installation
 
@@ -59,6 +69,12 @@ npx cap sync
 ```
 
 ### Android
+
+#### Variables
+
+This plugin will use the following project variables (defined in your app’s `variables.gradle` file):
+
+- `$androidxActivityVersion` version of `androidx.activity:activity` (default: `1.13.0`)
 
 #### Permissions
 
@@ -90,57 +106,157 @@ No configuration required for this plugin.
 
 ## Usage
 
+The following examples show how to pick files, images, videos, and directories, and how to process the selected files.
+
+### Pick one or more files
+
+Open the system file picker and let the user select one or more files of any type. The result contains the metadata (name, size, mime type, last modified timestamp) and, on Android and iOS, the path of each selected file:
+
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 
-const appendFileToFormData = async () => {
+const pickFiles = async () => {
   const result = await FilePicker.pickFiles();
   const file = result.files[0];
-
-  const formData = new FormData();
-  if (file.blob) {
-    const rawFile = new File(file.blob, file.name, {
-      type: file.mimeType,
-    });
-    formData.append('file', rawFile, file.name);
-  }
 };
+```
 
-const checkPermissions = async () => {
-  const result = await FilePicker.checkPermissions();
-};
+### Restrict the picker to specific file types
 
-const copyFile = async () => {
-  const result = await FilePicker.copyFile({
-    from: 'path/to/file',
-    to: 'path/to/destination',
-  });
-};
+Use the `types` option to only accept certain [IANA media types](https://www.iana.org/assignments/media-types/media-types.xhtml), for example PDF documents:
 
-const pickFiles = async () => {
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const pickPdfFiles = async () => {
   const result = await FilePicker.pickFiles({
-    types: ['image/png'],
+    types: ['application/pdf'],
   });
 };
+```
 
-const pickDirectory = async () => {
-  const result = await FilePicker.pickDirectory();
-};
+### Pick images or videos from the gallery
+
+Use `pickImages(...)`, `pickVideos(...)` or `pickMedia(...)` to open the photo gallery instead of the file picker. These methods are only available on Android and iOS:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 
 const pickImages = async () => {
   const result = await FilePicker.pickImages();
-};
-
-const pickMedia = async () => {
-  const result = await FilePicker.pickMedia();
 };
 
 const pickVideos = async () => {
   const result = await FilePicker.pickVideos();
 };
 
+const pickMedia = async () => {
+  // Pick both images and videos
+  const result = await FilePicker.pickMedia({ limit: 3 });
+};
+```
+
+### Pick a directory
+
+Let the user select a directory, for example to import all files it contains. Only available on Android and iOS:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const pickDirectory = async () => {
+  const { path } = await FilePicker.pickDirectory();
+};
+```
+
+### Upload a picked file to a server
+
+On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's path. You can then append the blob to a `FormData` object and upload it:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+import { Capacitor } from '@capacitor/core';
+
+const uploadFile = async () => {
+  const result = await FilePicker.pickFiles({ limit: 1 });
+  const file = result.files[0];
+
+  let blob: Blob;
+  if (file.blob) {
+    // Web
+    blob = file.blob;
+  } else {
+    // Android and iOS
+    const response = await fetch(Capacitor.convertFileSrc(file.path!));
+    blob = await response.blob();
+  }
+
+  const formData = new FormData();
+  formData.append('file', blob, file.name);
+  await fetch('https://example.com/upload', {
+    method: 'POST',
+    body: formData,
+  });
+};
+```
+
+**Attention**: Avoid the `readData` option for large files. It loads the entire file into memory as a Base64 string, which can crash your app. The fetch-based approach above streams the file instead.
+
+### Convert a HEIC image to JPEG
+
+On iOS, photos are often stored in the HEIC format, which many servers and browsers cannot display. Use `convertHeicToJpeg(...)` to convert them. Only available on iOS:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const convertHeicToJpeg = async () => {
+  const { path } = await FilePicker.convertHeicToJpeg({
+    path: 'path/to/image.heic',
+  });
+};
+```
+
+### Check and request permissions
+
+Picking files does not require any permissions since the operating system presents the picker. However, if you need the `ACCESS_MEDIA_LOCATION` or `READ_EXTERNAL_STORAGE` permission on Android (see [Installation](#installation)), you can check and request them:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const checkPermissions = async () => {
+  const result = await FilePicker.checkPermissions();
+};
+
 const requestPermissions = async () => {
   const result = await FilePicker.requestPermissions();
+};
+```
+
+### Listen for the picker being dismissed
+
+On iOS, you can be notified when the user closes the picker without selecting anything:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const addPickerDismissedListener = async () => {
+  await FilePicker.addListener('pickerDismissed', () => {
+    console.log('Picker was dismissed');
+  });
+};
+```
+
+### Copy a file
+
+Copy a picked file to a new location, for example into your app's data directory:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const copyFile = async () => {
+  await FilePicker.copyFile({
+    from: 'path/to/file',
+    to: 'path/to/destination',
+  });
 };
 ```
 
@@ -440,18 +556,19 @@ Remove all listeners for this plugin.
 
 #### PickFilesOptions
 
-| Prop           | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                       | Default            | Since |
-| -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set.                                                                                                                                                                    |                    |       |
-| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                                       | <code>0</code>     | 6.0.0 |
-| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file). | <code>false</code> |       |
+| Prop           | Type                  | Description                                                                                                                                                                                                                                                                                                                                                               | Default            | Since |
+| -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set.                                                                                                                                                            |                    |       |
+| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                               | <code>0</code>     | 6.0.0 |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file). | <code>false</code> |       |
 
 
 #### PickDirectoryResult
 
-| Prop       | Type                | Description                         | Since |
-| ---------- | ------------------- | ----------------------------------- | ----- |
-| **`path`** | <code>string</code> | The path to the selected directory. | 6.2.0 |
+| Prop           | Type                | Description                                                                                                                                                         | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bookmark`** | <code>string</code> | The base64-encoded security-scoped bookmark of the selected directory. It can be used to retain access to the directory across app launches. Only available on iOS. | 8.1.0 |
+| **`path`**     | <code>string</code> | The path to the selected directory.                                                                                                                                 | 6.2.0 |
 
 
 #### PickMediaOptions
@@ -516,6 +633,43 @@ Remove all listeners for this plugin.
 <code>'accessMediaLocation' | 'readExternalStorage'</code>
 
 </docgen-api>
+
+## FAQ
+
+### How do I upload a picked file to a server?
+
+On the Web, the picked file already contains a `Blob` instance that you can append to a `FormData` object. On Android and iOS, load the file as a blob using the Fetch API and the file's path, then upload it the same way. See the [usage example](#upload-a-picked-file-to-a-server) above and [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/) for a complete walkthrough.
+
+### Why does my app crash when picking large files?
+
+This usually happens when the `readData` option is enabled. It reads the entire file into memory as a Base64 string, which can exceed the available memory for large files. Keep `readData` disabled (the default) and load the file as a blob using the Fetch API instead, as shown in the [usage example](#upload-a-picked-file-to-a-server) above.
+
+### What is the difference between `pickFiles`, `pickImages`, `pickMedia` and `pickVideos`?
+
+The `pickFiles(...)` method opens the system file picker and supports any file type on Android, iOS and Web. The `pickImages(...)`, `pickVideos(...)` and `pickMedia(...)` methods open the photo gallery instead, which provides a more familiar experience for selecting photos and videos, and are only available on Android and iOS.
+
+### Do I need any runtime permissions to pick files?
+
+No, picking files itself does not require any runtime permissions because the operating system presents the picker on behalf of your app. On Android, the `ACCESS_MEDIA_LOCATION` permission is only needed to retrieve unredacted EXIF metadata from photos, and `READ_EXTERNAL_STORAGE` is only needed to read files from external storage. On iOS, no privacy descriptions are required.
+
+### How is this plugin different from the Capacitor Camera and Filesystem plugins?
+
+The Capacitor Camera plugin takes a photo with the camera or picks images from the gallery, but it does not support other file types. The Capacitor Filesystem plugin reads and writes files at known paths, but it does not provide any user interface for selecting them. The File Picker plugin fills this gap: it lets the user select any file, directory, image, or video and returns its path and metadata, which you can then process with other plugins.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images before uploading them.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a picked file with the default application.
+- [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive files shared from other apps.
+- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

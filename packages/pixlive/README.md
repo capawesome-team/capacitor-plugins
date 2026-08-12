@@ -1,6 +1,15 @@
-# @capawesome/capacitor-pixlive
+# Capacitor PixLive Plugin
 
 Unofficial Capacitor plugin for [PixLive SDK](https://www.vidinoti.com/) by Vidinoti.
+
+## Use Cases
+
+The PixLive plugin is typically used to build augmented reality experiences with content managed in PixLive Maker, for example:
+
+- **Interactive print media**: Bring magazines, flyers, or posters to life with AR content that appears when a context is recognized by the AR camera.
+- **Guided tours**: Synchronize tours and contexts to guide visitors through museums, exhibitions, or cities.
+- **Location-based experiences**: Trigger content or local notifications when the user approaches GPS points or beacons.
+- **QR code interactions**: React to QR codes and barcodes scanned by the AR camera via the `codeRecognize` event.
 
 ## Installation
 
@@ -47,12 +56,26 @@ const config: CapacitorConfig = {
 
 ## Usage
 
+The following examples show how to synchronize content from PixLive Maker and display the AR view.
+
+### Synchronize content from PixLive Maker
+
+Sync AR content from PixLive Maker filtered by tags so that it is available on the device. Only available on Android and iOS:
+
 ```typescript
 import { Pixlive } from '@capawesome/capacitor-pixlive';
 
 const synchronize = async () => {
   await Pixlive.synchronize({ tags: [['my-tag']] });
 };
+```
+
+### Display the AR view
+
+Create the native AR camera view at the specified screen coordinates. Only available on Android and iOS:
+
+```typescript
+import { Pixlive } from '@capawesome/capacitor-pixlive';
 
 const createARView = async () => {
   await Pixlive.createARView({ x: 0, y: 0, width: 300, height: 400 });
@@ -118,7 +141,7 @@ This must be called before any other method.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -133,7 +156,7 @@ Check the status of permissions.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -152,7 +175,7 @@ Request permissions.
 
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -171,7 +194,7 @@ Only available on Android and iOS.
 | ------------- | ----------------------------------------------------------------- |
 | **`options`** | <code><a href="#synchronizeoptions">SynchronizeOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -190,7 +213,7 @@ Only available on Android and iOS.
 | ------------- | --------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#synchronizewithtoursandcontextsoptions">SynchronizeWithToursAndContextsOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -209,7 +232,7 @@ Only available on Android and iOS.
 | ------------- | --------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#updatetagmappingoptions">UpdateTagMappingOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -228,7 +251,7 @@ Only available on Android and iOS.
 | ------------- | --------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#enablecontextswithtagsoptions">EnableContextsWithTagsOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -245,7 +268,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getcontextsresult">GetContextsResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -266,7 +289,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getcontextresult">GetContextResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -285,7 +308,7 @@ Only available on Android and iOS.
 | ------------- | ------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#activatecontextoptions">ActivateContextOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -300,7 +323,7 @@ Stop the currently playing/active context.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -321,7 +344,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getnearbygpspointsresult">GetNearbyGPSPointsResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -342,7 +365,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getgpspointsinboundingboxresult">GetGPSPointsInBoundingBoxResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -359,7 +382,7 @@ Only available on Android and iOS.
 
 **Returns:** <code>Promise&lt;<a href="#getnearbybeaconsresult">GetNearbyBeaconsResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -374,7 +397,7 @@ Start background GPS proximity detection.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -389,7 +412,7 @@ Stop background GPS proximity detection.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -404,7 +427,7 @@ Enable GPS-triggered local notifications.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -419,7 +442,7 @@ Disable GPS-triggered local notifications.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -438,7 +461,7 @@ Only available on Android and iOS.
 | ------------- | ----------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setnotificationssupportoptions">SetNotificationsSupportOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -457,7 +480,7 @@ Only available on Android and iOS.
 | ------------- | ----------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setinterfacelanguageoptions">SetInterfaceLanguageOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -476,7 +499,7 @@ Only available on Android and iOS.
 | ------------- | ------------------------------------------------------------------- |
 | **`options`** | <code><a href="#createarviewoptions">CreateARViewOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -491,7 +514,7 @@ Destroy the AR camera view.
 
 Only available on Android and iOS.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -510,7 +533,7 @@ Only available on Android and iOS.
 | ------------- | ------------------------------------------------------------------- |
 | **`options`** | <code><a href="#resizearviewoptions">ResizeARViewOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -529,7 +552,7 @@ Only available on Android and iOS.
 | ------------- | ------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setarviewtouchenabledoptions">SetARViewTouchEnabledOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -548,7 +571,7 @@ Only available on Android and iOS.
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#setarviewtouchholeoptions">SetARViewTouchHoleOptions</a></code> |
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -563,7 +586,7 @@ Get the version of the sdk.
 
 **Returns:** <code>Promise&lt;<a href="#getversionresult">GetVersionResult</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -583,7 +606,7 @@ Called when a QR code or barcode is scanned by the AR camera.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -603,7 +626,7 @@ Called when an AR context is detected/entered.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -623,7 +646,7 @@ Called when an AR context is lost/exited.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -643,7 +666,7 @@ Called when AR content/annotations become visible on screen.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -663,7 +686,7 @@ Called when AR content/annotations are hidden.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -683,7 +706,7 @@ Called when AR content dispatches a custom event.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -703,7 +726,7 @@ Called during synchronization with progress updates.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -723,7 +746,7 @@ Called when the SDK requires synchronization with specific tags.
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -736,7 +759,7 @@ removeAllListeners() => Promise<void>
 
 Remove all listeners for this plugin.
 
-**Since:** 8.0.0
+**Since:** 0.0.1
 
 --------------------
 
@@ -748,202 +771,203 @@ Remove all listeners for this plugin.
 
 | Prop                   | Type                                                        | Description                                                                      | Since |
 | ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------- | ----- |
-| **`bluetooth`**        | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth permission. Only available on iOS.             | 8.0.0 |
-| **`bluetoothConnect`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Connect permission. Only available on Android. | 8.0.0 |
-| **`bluetoothScan`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Scan permission. Only available on Android.    | 8.0.0 |
-| **`camera`**           | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Camera permission.                                       | 8.0.0 |
-| **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Location permission. Only available on Android and iOS.  | 8.0.0 |
-| **`notifications`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Notifications permission.                                | 8.0.0 |
+| **`bluetooth`**        | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth permission. Only available on iOS.             | 0.0.1 |
+| **`bluetoothConnect`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Connect permission. Only available on Android. | 0.0.1 |
+| **`bluetoothScan`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Bluetooth Scan permission. Only available on Android.    | 0.0.1 |
+| **`camera`**           | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Camera permission.                                       | 0.0.1 |
+| **`location`**         | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Location permission. Only available on Android and iOS.  | 0.0.1 |
+| **`notifications`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state of the Notifications permission.                                | 0.0.1 |
 
 
 #### PixlivePluginPermission
 
 | Prop              | Type                                 | Description                 | Since |
 | ----------------- | ------------------------------------ | --------------------------- | ----- |
-| **`permissions`** | <code>PixlivePermissionType[]</code> | The permissions to request. | 8.0.0 |
+| **`permissions`** | <code>PixlivePermissionType[]</code> | The permissions to request. | 0.0.1 |
 
 
 #### SynchronizeOptions
 
 | Prop       | Type                    | Description                    | Since |
 | ---------- | ----------------------- | ------------------------------ | ----- |
-| **`tags`** | <code>string[][]</code> | The tags to filter content by. | 8.0.0 |
+| **`tags`** | <code>string[][]</code> | The tags to filter content by. | 0.0.1 |
 
 
 #### SynchronizeWithToursAndContextsOptions
 
 | Prop             | Type                    | Description                    | Since |
 | ---------------- | ----------------------- | ------------------------------ | ----- |
-| **`tags`**       | <code>string[][]</code> | The tags to filter content by. | 8.0.0 |
-| **`tourIds`**    | <code>number[]</code>   | The tour IDs to sync.          | 8.0.0 |
-| **`contextIds`** | <code>string[]</code>   | The context IDs to sync.       | 8.0.0 |
+| **`tags`**       | <code>string[][]</code> | The tags to filter content by. | 0.0.1 |
+| **`tourIds`**    | <code>number[]</code>   | The tour IDs to sync.          | 0.0.1 |
+| **`contextIds`** | <code>string[]</code>   | The context IDs to sync.       | 0.0.1 |
 
 
 #### UpdateTagMappingOptions
 
 | Prop       | Type                  | Description      | Since |
 | ---------- | --------------------- | ---------------- | ----- |
-| **`tags`** | <code>string[]</code> | The tags to map. | 8.0.0 |
+| **`tags`** | <code>string[]</code> | The tags to map. | 0.0.1 |
 
 
 #### EnableContextsWithTagsOptions
 
 | Prop       | Type                  | Description                      | Since |
 | ---------- | --------------------- | -------------------------------- | ----- |
-| **`tags`** | <code>string[]</code> | The tags to enable contexts for. | 8.0.0 |
+| **`tags`** | <code>string[]</code> | The tags to enable contexts for. | 0.0.1 |
 
 
 #### GetContextsResult
 
 | Prop           | Type                   | Description                        | Since |
 | -------------- | ---------------------- | ---------------------------------- | ----- |
-| **`contexts`** | <code>Context[]</code> | The list of synchronized contexts. | 8.0.0 |
+| **`contexts`** | <code>Context[]</code> | The list of synchronized contexts. | 0.0.1 |
 
 
 #### Context
 
-| Prop                      | Type                        | Description                           | Since |
-| ------------------------- | --------------------------- | ------------------------------------- | ----- |
-| **`contextId`**           | <code>string</code>         | The unique identifier of the context. | 8.0.0 |
-| **`name`**                | <code>string</code>         | The name of the context.              | 8.0.0 |
-| **`description`**         | <code>string \| null</code> | The description of the context.       | 8.0.0 |
-| **`lastUpdate`**          | <code>string</code>         | The last update timestamp.            | 8.0.0 |
-| **`imageThumbnailURL`**   | <code>string \| null</code> | The URL of the thumbnail image.       | 8.0.0 |
-| **`imageHiResURL`**       | <code>string \| null</code> | The URL of the high-resolution image. | 8.0.0 |
-| **`notificationTitle`**   | <code>string \| null</code> | The notification title.               | 8.0.0 |
-| **`notificationMessage`** | <code>string \| null</code> | The notification message.             | 8.0.0 |
-| **`tags`**                | <code>string[]</code>       | The tags associated with the context. | 8.0.0 |
+| Prop                      | Type                        | Description                              | Since |
+| ------------------------- | --------------------------- | ---------------------------------------- | ----- |
+| **`contextId`**           | <code>string</code>         | The unique identifier of the context.    | 0.0.1 |
+| **`name`**                | <code>string</code>         | The name of the context.                 | 0.0.1 |
+| **`description`**         | <code>string \| null</code> | The description of the context.          | 0.0.1 |
+| **`lastUpdate`**          | <code>string</code>         | The last update timestamp.               | 0.0.1 |
+| **`imageThumbnailURL`**   | <code>string \| null</code> | The URL of the thumbnail image.          | 0.0.1 |
+| **`imageHiResURL`**       | <code>string \| null</code> | The URL of the high-resolution image.    | 0.0.1 |
+| **`notificationTitle`**   | <code>string \| null</code> | The notification title.                  | 0.0.1 |
+| **`notificationMessage`** | <code>string \| null</code> | The notification message.                | 0.0.1 |
+| **`tags`**                | <code>string[]</code>       | The tags associated with the context.    | 0.0.1 |
+| **`languages`**           | <code>string[]</code>       | The languages provided for this context. | 0.1.3 |
 
 
 #### GetContextResult
 
 | Prop          | Type                                        | Description  | Since |
 | ------------- | ------------------------------------------- | ------------ | ----- |
-| **`context`** | <code><a href="#context">Context</a></code> | The context. | 8.0.0 |
+| **`context`** | <code><a href="#context">Context</a></code> | The context. | 0.0.1 |
 
 
 #### GetContextOptions
 
 | Prop            | Type                | Description                        | Since |
 | --------------- | ------------------- | ---------------------------------- | ----- |
-| **`contextId`** | <code>string</code> | The ID of the context to retrieve. | 8.0.0 |
+| **`contextId`** | <code>string</code> | The ID of the context to retrieve. | 0.0.1 |
 
 
 #### ActivateContextOptions
 
 | Prop            | Type                | Description                        | Since |
 | --------------- | ------------------- | ---------------------------------- | ----- |
-| **`contextId`** | <code>string</code> | The ID of the context to activate. | 8.0.0 |
+| **`contextId`** | <code>string</code> | The ID of the context to activate. | 0.0.1 |
 
 
 #### GetNearbyGPSPointsResult
 
 | Prop         | Type                    | Description                               | Since |
 | ------------ | ----------------------- | ----------------------------------------- | ----- |
-| **`points`** | <code>GPSPoint[]</code> | The nearby GPS points sorted by distance. | 8.0.0 |
+| **`points`** | <code>GPSPoint[]</code> | The nearby GPS points sorted by distance. | 0.0.1 |
 
 
 #### GPSPoint
 
 | Prop                              | Type                        | Description                                       | Since |
 | --------------------------------- | --------------------------- | ------------------------------------------------- | ----- |
-| **`contextId`**                   | <code>string</code>         | The ID of the associated context.                 | 8.0.0 |
-| **`category`**                    | <code>string</code>         | The category of the GPS point.                    | 8.0.0 |
-| **`label`**                       | <code>string</code>         | The label of the GPS point.                       | 8.0.0 |
-| **`latitude`**                    | <code>number</code>         | The latitude of the GPS point.                    | 8.0.0 |
-| **`longitude`**                   | <code>number</code>         | The longitude of the GPS point.                   | 8.0.0 |
-| **`detectionRadius`**             | <code>number \| null</code> | The detection radius in meters.                   | 8.0.0 |
-| **`distanceFromCurrentPosition`** | <code>number</code>         | The distance from the current position in meters. | 8.0.0 |
+| **`contextId`**                   | <code>string</code>         | The ID of the associated context.                 | 0.0.1 |
+| **`category`**                    | <code>string</code>         | The category of the GPS point.                    | 0.0.1 |
+| **`label`**                       | <code>string</code>         | The label of the GPS point.                       | 0.0.1 |
+| **`latitude`**                    | <code>number</code>         | The latitude of the GPS point.                    | 0.0.1 |
+| **`longitude`**                   | <code>number</code>         | The longitude of the GPS point.                   | 0.0.1 |
+| **`detectionRadius`**             | <code>number \| null</code> | The detection radius in meters.                   | 0.0.1 |
+| **`distanceFromCurrentPosition`** | <code>number</code>         | The distance from the current position in meters. | 0.0.1 |
 
 
 #### GetNearbyGPSPointsOptions
 
 | Prop            | Type                | Description                              | Since |
 | --------------- | ------------------- | ---------------------------------------- | ----- |
-| **`latitude`**  | <code>number</code> | The latitude of the reference location.  | 8.0.0 |
-| **`longitude`** | <code>number</code> | The longitude of the reference location. | 8.0.0 |
+| **`latitude`**  | <code>number</code> | The latitude of the reference location.  | 0.0.1 |
+| **`longitude`** | <code>number</code> | The longitude of the reference location. | 0.0.1 |
 
 
 #### GetGPSPointsInBoundingBoxResult
 
 | Prop         | Type                    | Description                             | Since |
 | ------------ | ----------------------- | --------------------------------------- | ----- |
-| **`points`** | <code>GPSPoint[]</code> | The GPS points within the bounding box. | 8.0.0 |
+| **`points`** | <code>GPSPoint[]</code> | The GPS points within the bounding box. | 0.0.1 |
 
 
 #### GetGPSPointsInBoundingBoxOptions
 
 | Prop               | Type                | Description                                | Since |
 | ------------------ | ------------------- | ------------------------------------------ | ----- |
-| **`minLatitude`**  | <code>number</code> | The minimum latitude of the bounding box.  | 8.0.0 |
-| **`minLongitude`** | <code>number</code> | The minimum longitude of the bounding box. | 8.0.0 |
-| **`maxLatitude`**  | <code>number</code> | The maximum latitude of the bounding box.  | 8.0.0 |
-| **`maxLongitude`** | <code>number</code> | The maximum longitude of the bounding box. | 8.0.0 |
+| **`minLatitude`**  | <code>number</code> | The minimum latitude of the bounding box.  | 0.0.1 |
+| **`minLongitude`** | <code>number</code> | The minimum longitude of the bounding box. | 0.0.1 |
+| **`maxLatitude`**  | <code>number</code> | The maximum latitude of the bounding box.  | 0.0.1 |
+| **`maxLongitude`** | <code>number</code> | The maximum longitude of the bounding box. | 0.0.1 |
 
 
 #### GetNearbyBeaconsResult
 
 | Prop           | Type                   | Description                                  | Since |
 | -------------- | ---------------------- | -------------------------------------------- | ----- |
-| **`contexts`** | <code>Context[]</code> | The contexts associated with nearby beacons. | 8.0.0 |
+| **`contexts`** | <code>Context[]</code> | The contexts associated with nearby beacons. | 0.0.1 |
 
 
 #### SetNotificationsSupportOptions
 
 | Prop          | Type                 | Description                                      | Since |
 | ------------- | -------------------- | ------------------------------------------------ | ----- |
-| **`enabled`** | <code>boolean</code> | Whether notifications support should be enabled. | 8.0.0 |
+| **`enabled`** | <code>boolean</code> | Whether notifications support should be enabled. | 0.0.1 |
 
 
 #### SetInterfaceLanguageOptions
 
 | Prop           | Type                | Description               | Since |
 | -------------- | ------------------- | ------------------------- | ----- |
-| **`language`** | <code>string</code> | The language code to set. | 8.0.0 |
+| **`language`** | <code>string</code> | The language code to set. | 0.0.1 |
 
 
 #### CreateARViewOptions
 
 | Prop         | Type                | Description                    | Since |
 | ------------ | ------------------- | ------------------------------ | ----- |
-| **`x`**      | <code>number</code> | The x position of the AR view. | 8.0.0 |
-| **`y`**      | <code>number</code> | The y position of the AR view. | 8.0.0 |
-| **`width`**  | <code>number</code> | The width of the AR view.      | 8.0.0 |
-| **`height`** | <code>number</code> | The height of the AR view.     | 8.0.0 |
+| **`x`**      | <code>number</code> | The x position of the AR view. | 0.0.1 |
+| **`y`**      | <code>number</code> | The y position of the AR view. | 0.0.1 |
+| **`width`**  | <code>number</code> | The width of the AR view.      | 0.0.1 |
+| **`height`** | <code>number</code> | The height of the AR view.     | 0.0.1 |
 
 
 #### ResizeARViewOptions
 
 | Prop         | Type                | Description                        | Since |
 | ------------ | ------------------- | ---------------------------------- | ----- |
-| **`x`**      | <code>number</code> | The new x position of the AR view. | 8.0.0 |
-| **`y`**      | <code>number</code> | The new y position of the AR view. | 8.0.0 |
-| **`width`**  | <code>number</code> | The new width of the AR view.      | 8.0.0 |
-| **`height`** | <code>number</code> | The new height of the AR view.     | 8.0.0 |
+| **`x`**      | <code>number</code> | The new x position of the AR view. | 0.0.1 |
+| **`y`**      | <code>number</code> | The new y position of the AR view. | 0.0.1 |
+| **`width`**  | <code>number</code> | The new width of the AR view.      | 0.0.1 |
+| **`height`** | <code>number</code> | The new height of the AR view.     | 0.0.1 |
 
 
 #### SetARViewTouchEnabledOptions
 
 | Prop          | Type                 | Description                                                | Since |
 | ------------- | -------------------- | ---------------------------------------------------------- | ----- |
-| **`enabled`** | <code>boolean</code> | Whether touch events should be intercepted by the AR view. | 8.0.0 |
+| **`enabled`** | <code>boolean</code> | Whether touch events should be intercepted by the AR view. | 0.0.1 |
 
 
 #### SetARViewTouchHoleOptions
 
 | Prop         | Type                | Description                                     | Since |
 | ------------ | ------------------- | ----------------------------------------------- | ----- |
-| **`top`**    | <code>number</code> | The top coordinate of the touch hole region.    | 8.0.0 |
-| **`bottom`** | <code>number</code> | The bottom coordinate of the touch hole region. | 8.0.0 |
-| **`left`**   | <code>number</code> | The left coordinate of the touch hole region.   | 8.0.0 |
-| **`right`**  | <code>number</code> | The right coordinate of the touch hole region.  | 8.0.0 |
+| **`top`**    | <code>number</code> | The top coordinate of the touch hole region.    | 0.0.1 |
+| **`bottom`** | <code>number</code> | The bottom coordinate of the touch hole region. | 0.0.1 |
+| **`left`**   | <code>number</code> | The left coordinate of the touch hole region.   | 0.0.1 |
+| **`right`**  | <code>number</code> | The right coordinate of the touch hole region.  | 0.0.1 |
 
 
 #### GetVersionResult
 
 | Prop          | Type                | Description             | Since |
 | ------------- | ------------------- | ----------------------- | ----- |
-| **`version`** | <code>string</code> | The version of the sdk. | 8.0.0 |
+| **`version`** | <code>string</code> | The version of the sdk. | 0.0.1 |
 
 
 #### PluginListenerHandle
@@ -957,44 +981,44 @@ Remove all listeners for this plugin.
 
 | Prop       | Type                | Description                   | Since |
 | ---------- | ------------------- | ----------------------------- | ----- |
-| **`code`** | <code>string</code> | The scanned code value.       | 8.0.0 |
-| **`type`** | <code>string</code> | The type of the scanned code. | 8.0.0 |
+| **`code`** | <code>string</code> | The scanned code value.       | 0.0.1 |
+| **`type`** | <code>string</code> | The type of the scanned code. | 0.0.1 |
 
 
 #### EnterContextEvent
 
 | Prop            | Type                | Description                    | Since |
 | --------------- | ------------------- | ------------------------------ | ----- |
-| **`contextId`** | <code>string</code> | The ID of the entered context. | 8.0.0 |
+| **`contextId`** | <code>string</code> | The ID of the entered context. | 0.0.1 |
 
 
 #### ExitContextEvent
 
 | Prop            | Type                | Description                   | Since |
 | --------------- | ------------------- | ----------------------------- | ----- |
-| **`contextId`** | <code>string</code> | The ID of the exited context. | 8.0.0 |
+| **`contextId`** | <code>string</code> | The ID of the exited context. | 0.0.1 |
 
 
 #### EventFromContentEvent
 
 | Prop         | Type                | Description                         | Since |
 | ------------ | ------------------- | ----------------------------------- | ----- |
-| **`name`**   | <code>string</code> | The name of the custom event.       | 8.0.0 |
-| **`params`** | <code>string</code> | The parameters of the custom event. | 8.0.0 |
+| **`name`**   | <code>string</code> | The name of the custom event.       | 0.0.1 |
+| **`params`** | <code>string</code> | The parameters of the custom event. | 0.0.1 |
 
 
 #### SyncProgressEvent
 
 | Prop           | Type                | Description                                  | Since |
 | -------------- | ------------------- | -------------------------------------------- | ----- |
-| **`progress`** | <code>number</code> | The sync progress value between 0.0 and 1.0. | 8.0.0 |
+| **`progress`** | <code>number</code> | The sync progress value between 0.0 and 1.0. | 0.0.1 |
 
 
 #### RequireSyncEvent
 
 | Prop       | Type                  | Description                            | Since |
 | ---------- | --------------------- | -------------------------------------- | ----- |
-| **`tags`** | <code>string[]</code> | The tags that require synchronization. | 8.0.0 |
+| **`tags`** | <code>string[]</code> | The tags that require synchronization. | 0.0.1 |
 
 
 ### Type Aliases
@@ -1010,3 +1034,35 @@ Remove all listeners for this plugin.
 <code>'bluetooth' | 'bluetoothConnect' | 'bluetoothScan' | 'camera' | 'location' | 'notifications'</code>
 
 </docgen-api>
+
+## FAQ
+
+### Which method do I have to call first?
+
+The `initialize()` method must be called before any other method of the plugin. It initializes the PixLive SDK using the license key from your Capacitor configuration file (see [Configuration](#configuration)).
+
+### How do I set up the PixLive SDK in my project?
+
+The PixLive SDK itself is not bundled with the plugin. On Android, copy the `vdarsdk-release.aar` file into your app's `android/app/libs/` directory. On iOS, copy `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project. See the [Installation](#installation) section for details.
+
+### Does this plugin support Swift Package Manager?
+
+No, this plugin only supports CocoaPods as the iOS dependency manager. Swift Package Manager is not supported.
+
+### Does this plugin work on the Web?
+
+No, the plugin methods are only available on Android and iOS since they rely on the native PixLive SDK.
+
+### Which permissions does the plugin handle?
+
+The plugin can check and request the camera, location, notifications, and Bluetooth permissions via the `checkPermissions()` and `requestPermissions(...)` methods. The Bluetooth permission is exposed as `bluetooth` on iOS and as `bluetoothConnect` and `bluetoothScan` on Android.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit.
+- [Bluetooth Low Energy](https://capawesome.io/docs/sdks/capacitor/bluetooth-low-energy/): Communicate with Bluetooth Low Energy devices such as beacons.
+- [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/): Handle geocoding and reverse geocoding.

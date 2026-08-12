@@ -172,7 +172,7 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc func handleDirectoryPickerResult(path: String?, error: String?) {
+    @objc func handleDirectoryPickerResult(path: String?, bookmark: String?, error: String?) {
         guard let savedCall = savedCall else {
             return
         }
@@ -185,6 +185,9 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         var result = JSObject()
+        if let bookmark = bookmark {
+            result["bookmark"] = bookmark
+        }
         result["path"] = path
         savedCall.resolve(result)
     }

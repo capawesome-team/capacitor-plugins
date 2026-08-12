@@ -1,5 +1,25 @@
 # Changelog
 
+## 8.1.3
+
+### Patch Changes
+
+- [`587cd56a9661c767c7ab46a162ff002931ef706d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/587cd56a9661c767c7ab46a162ff002931ef706d) ([#495](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/495)): fix: map tech types to tag technology class names on Android so that `startScanSession` delivers matching tags
+
+## 8.1.2
+
+### Patch Changes
+
+- [`716aa861ff005253bce0bc7a88d5a2789270f4fb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/716aa861ff005253bce0bc7a88d5a2789270f4fb) ([#493](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/493)): fix: prevent `NullPointerException` on Android when scanning an `Ndef`-capable tag that carries no NDEF message
+
+## 8.1.1
+
+### Patch Changes
+
+- [`ae6d88433783c1fdabce08a841078bd4420ea906`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ae6d88433783c1fdabce08a841078bd4420ea906) ([#434](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/434)): chore: declare package license
+
+- [`cc425a124a9ae2967f9e7a564f1fbfd450dd6464`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cc425a124a9ae2967f9e7a564f1fbfd450dd6464) ([#455](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/455)): chore: replace LICENSE with the new End User License Agreement (EULA). See https://capawesome.io/legal/eula/ for the current version.
+
 ## 8.1.0
 
 ### Minor Changes

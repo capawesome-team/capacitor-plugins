@@ -14,6 +14,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "alias", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "capture", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "captureException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "flush", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getDistinctId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
@@ -62,6 +63,21 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let options = CaptureOptions(event: event, properties: properties)
 
         implementation?.capture(options)
+        call.resolve()
+    }
+
+    @objc func captureException(_ call: CAPPluginCall) {
+        guard let message = call.getString("message") else {
+            call.reject(CustomError.messageMissing.localizedDescription)
+            return
+        }
+        let name = call.getString("name")
+        let stacktrace = call.getArray("stacktrace")
+        let properties = call.getObject("properties")
+
+        let options = CaptureExceptionOptions(message: message, name: name, stacktrace: stacktrace, properties: properties)
+
+        implementation?.captureException(options)
         call.resolve()
     }
 
@@ -206,6 +222,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let enableSessionReplay = call.getBool("enableSessionReplay", false)
         let optOut = call.getBool("optOut", false)
         let captureApplicationLifecycleEvents = call.getBool("captureApplicationLifecycleEvents", true)
+        let autoCaptureExceptions = call.getBool("autoCaptureExceptions", false)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
         let options = SetupOptions(
@@ -214,6 +231,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             enableSessionReplay: enableSessionReplay,
             optOut: optOut,
             captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
+            autoCaptureExceptions: autoCaptureExceptions,
             sessionReplayConfig: sessionReplayConfig
         )
 
@@ -253,6 +271,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             "captureApplicationLifecycleEvents",
             config.captureApplicationLifecycleEvents
         )
+        config.autoCaptureExceptions = getConfig().getBoolean("autoCaptureExceptions", config.autoCaptureExceptions)
 
         if let sessionReplayConfigDict = getConfig().getObject("sessionReplayConfig") as? [String: Any] {
             config.sessionReplayConfig = SessionReplayOptions(

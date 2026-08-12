@@ -1,4 +1,4 @@
-# @capawesome/capacitor-app-shortcuts
+# Capacitor App Shortcuts Plugin
 
 Capacitor plugin to manage app shortcuts and quick actions.
 
@@ -8,9 +8,14 @@ Capacitor plugin to manage app shortcuts and quick actions.
   </a>
 </div>
 
-## Newsletter
+## Use Cases
 
-Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
+The App Shortcuts plugin is typically used to give users faster access to key parts of your app right from the home screen icon, for example:
+
+- **Quick actions**: Let users jump directly to frequently used screens such as search, compose, or feedback.
+- **Dynamic shortcuts**: Create or update shortcuts at runtime based on user behavior, for example a shortcut to the most recently opened item.
+- **Default shortcuts**: Define a set of default shortcuts in your Capacitor configuration without writing any code.
+- **Deep linking**: React to shortcut clicks with the `click` listener and navigate the user to the corresponding screen.
 
 ## Compatibility
 
@@ -117,17 +122,14 @@ A working example can be found [here](https://github.com/capawesome-team/capacit
 
 ## Usage
 
+The following examples show how to create, get, and remove app shortcuts and listen for shortcut clicks.
+
+### Create or update app shortcuts
+
+Use the `set(...)` method to create or update the app shortcuts. Each shortcut needs a unique identifier and a title. Only available on Android and iOS:
+
 ```ts
 import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
-
-const clear = async () => {
-  await AppShortcuts.clear();
-};
-
-const get = async () => {
-  const result = await AppShortcuts.get();
-  return result.shortcuts;
-};
 
 const set = async () => {
   await AppShortcuts.set({
@@ -145,6 +147,39 @@ const set = async () => {
     ],
   });
 };
+```
+
+### Get all app shortcuts
+
+Retrieve the list of app shortcuts that are currently set. Only available on Android and iOS:
+
+```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
+const get = async () => {
+  const result = await AppShortcuts.get();
+  return result.shortcuts;
+};
+```
+
+### Remove all app shortcuts
+
+Clear all app shortcuts, for example when the user signs out. Only available on Android and iOS:
+
+```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
+
+const clear = async () => {
+  await AppShortcuts.clear();
+};
+```
+
+### Listen for shortcut clicks
+
+Add a listener for the `click` event to react when the user taps an app shortcut, for example to navigate to the corresponding screen. On iOS, this requires the changes to your `AppDelegate.swift` described in the [iOS configuration](#ios) instructions:
+
+```ts
+import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
 
 const addListener = async () => {
   AppShortcuts.addListener('click', (event) => {
@@ -298,6 +333,37 @@ Remove all listeners for this plugin.
 | **`shortcutId`** | <code>string</code> | The unique identifier of the app shortcut that was clicked. | 6.0.0 |
 
 </docgen-api>
+
+## FAQ
+
+### Which platforms are supported by this plugin?
+
+App shortcuts are a native concept of the Android launcher and the iOS home screen, so the plugin is only available on Android and iOS. All plugin methods and the `click` event are marked as only available on Android and iOS in the [API](#api) section.
+
+### Why is the click listener not called on iOS?
+
+On iOS, the plugin relies on changes to your app's `AppDelegate.swift` to forward shortcut items to the plugin. Make sure you have applied the code changes described in the [iOS configuration](#ios) instructions. Without them, the `click` event is never delivered.
+
+### Can I define app shortcuts without writing any code?
+
+Yes, you can use the `shortcuts` configuration option to define a list of app shortcuts that are set by default. See the [Configuration](#configuration) section for examples in `capacitor.config.json` and `capacitor.config.ts`.
+
+### Can I use different icons on Android and iOS?
+
+Yes, you can use the `androidIcon` and `iosIcon` properties to provide platform-specific icons, or the `icon` property for both platforms. On Android, drawable resources and base64 encoded images are supported, while on iOS you can use system symbol names, asset catalogue images, or `UIApplicationShortcutIcon` types. Note that on iOS, the icon and the description must be used together.
+
+### Can I use this plugin with Ionic, React, Vue or Angular?
+
+Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
+
+## Related Plugins
+
+- [App Icon](https://capawesome.io/docs/sdks/capacitor/app-icon/): Change the app icon at runtime.
+- [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+
+## Newsletter
+
+Stay up to date with the latest news and updates about the Capawesome, Capacitor, and Ionic ecosystem by subscribing to our [Capawesome Newsletter](https://cloud.capawesome.io/newsletter/).
 
 ## Changelog
 

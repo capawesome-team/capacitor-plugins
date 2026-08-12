@@ -4,6 +4,12 @@
     "verify:android": {},
     "verify:ios": {},
     "verify:web": {},
+    "e2e:android": {
+      "cache": false
+    },
+    "e2e:ios": {
+      "cache": false
+    },
     "lint": {},
     "fmt": {},
     "docgen": {},

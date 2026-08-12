@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Permissions</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js"
+    ></script>
+
+    <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Permissions</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-item>
+          <ion-select
+            id="permissions"
+            label="Permissions"
+            multiple="true"
+            value='["CAMERA"]'
+          >
+            <ion-select-option value="BLUETOOTH">Bluetooth</ion-select-option>
+            <ion-select-option value="CALENDAR">Calendar</ion-select-option>
+            <ion-select-option value="CAMERA">Camera</ion-select-option>
+            <ion-select-option value="CONTACTS">Contacts</ion-select-option>
+            <ion-select-option value="LOCATION">Location</ion-select-option>
+            <ion-select-option value="LOCATION_ALWAYS"
+              >Location Always</ion-select-option
+            >
+            <ion-select-option value="MICROPHONE">Microphone</ion-select-option>
+            <ion-select-option value="MOTION">Motion</ion-select-option>
+            <ion-select-option value="NOTIFICATIONS"
+              >Notifications</ion-select-option
+            >
+            <ion-select-option value="PHOTOS">Photos</ion-select-option>
+            <ion-select-option value="REMINDERS">Reminders</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button id="check" expand="block">Check</ion-button>
+        <ion-button id="request" expand="block">Request</ion-button>
+        <ion-list id="statuses"></ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

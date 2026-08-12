@@ -46,6 +46,8 @@ public class SetNextAgeSignalsExceptionOptions {
                 return AgeSignalsErrorCode.APP_NOT_OWNED;
             case "INTERNAL_ERROR":
                 return AgeSignalsErrorCode.INTERNAL_ERROR;
+            case "SDK_VERSION_OUTDATED":
+                return AgeSignalsErrorCode.SDK_VERSION_OUTDATED;
             default:
                 throw new Exception("Invalid errorCode: " + errorCode);
         }

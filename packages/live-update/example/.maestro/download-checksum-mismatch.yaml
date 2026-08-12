@@ -1,0 +1,30 @@
+appId: com.example.plugin
+name: Download fails on checksum mismatch
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: 'Capacitor Live Update'
+    timeout: 10000
+- extendedWaitUntil:
+    visible: 'Bundle ID'
+    timeout: 30000
+- tapOn: 'Bundle ID'
+- inputText: 'test-bundle-1'
+- scrollUntilVisible:
+    element:
+      text: 'Checksum'
+- tapOn: 'Checksum'
+- inputText: '0000000000000000000000000000000000000000000000000000000000000000'
+- scrollUntilVisible:
+    element:
+      text: 'Download URL'
+- tapOn: 'Download URL'
+- inputText: 'http://localhost:4000/bundle.zip'
+- scrollUntilVisible:
+    element:
+      text: 'Download Bundle'
+- tapOn: 'Download Bundle'
+- extendedWaitUntil:
+    visible: 'Checksum mismatch.'
+    timeout: 30000

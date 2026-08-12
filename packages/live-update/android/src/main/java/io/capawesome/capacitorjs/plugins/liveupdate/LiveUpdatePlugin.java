@@ -37,7 +37,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "8.2.0";
+    public static final String VERSION = "8.3.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
@@ -89,17 +89,16 @@ public class LiveUpdatePlugin extends Plugin {
             // or constructor, it MUST be done here in onResume().
             if (!webViewListenerRegistered) {
                 webViewListenerRegistered = true;
-                getBridge()
-                    .addWebViewListener(
-                        new WebViewListener() {
-                            @Override
-                            public void onPageLoaded(WebView webView) {
-                                if (implementation != null) {
-                                    implementation.handleOnPageLoaded();
-                                }
+                getBridge().addWebViewListener(
+                    new WebViewListener() {
+                        @Override
+                        public void onPageLoaded(WebView webView) {
+                            if (implementation != null) {
+                                implementation.handleOnPageLoaded();
                             }
                         }
-                    );
+                    }
+                );
             }
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);

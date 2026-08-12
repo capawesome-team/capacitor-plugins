@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="hydrated">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Example Capacitor App</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+  </head>
+  <body>
+    <main>
+      <h1>Nodejs</h1>
+      <p>Status: <span id="statusOutput">Not ready</span></p>
+      <button onclick="testIsReady()">Is Ready</button>
+      <hr />
+      <label for="messageInput">Message:</label>
+      <input
+        type="text"
+        id="messageInput"
+        name="messageInput"
+        value="Hello World!"
+      />
+      <button onclick="testSend()">Send</button>
+      <hr />
+      <p>Received messages:</p>
+      <ul id="messagesOutput"></ul>
+    </main>
+
+    <script src="./js/script.js" type="module"></script>
+  </body>
+</html>

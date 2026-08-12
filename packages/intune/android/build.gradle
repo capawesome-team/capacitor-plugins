@@ -1,0 +1,88 @@
+ext {
+    junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
+    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.1'
+    androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.3.0'
+    androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.7.0'
+    intuneMamSdkVersion = project.hasProperty('intuneMamSdkVersion') ? rootProject.ext.intuneMamSdkVersion : '12.4.0'
+    msalVersion = project.hasProperty('msalVersion') ? rootProject.ext.msalVersion : '8.4.0'
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.13.0'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    namespace = "io.capawesome.capacitorjs.plugins.intune"
+    compileSdk = project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 36
+    defaultConfig {
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 24
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 36
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "INTUNE_MAM_SDK_VERSION", "\"${intuneMamSdkVersion}\""
+    }
+    buildFeatures {
+        buildConfig = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    lintOptions {
+        abortOnError = false
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+    // The Microsoft Intune App SDK for Android is distributed via GitHub
+    // (https://github.com/microsoftconnect/ms-intune-app-sdk-android)
+    // and not via a Maven repository.
+    ivy {
+        url 'https://raw.githubusercontent.com/microsoftconnect/ms-intune-app-sdk-android'
+        patternLayout {
+            artifact '[revision]/[artifact].[ext]'
+        }
+        metadataSources {
+            artifact()
+        }
+        content {
+            includeGroup 'com.microsoft.intune.mam'
+        }
+    }
+    // Required by MSAL (see https://github.com/AzureAD/microsoft-authentication-library-for-android).
+    maven {
+        url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        content {
+            includeGroupByRegex 'com\\.microsoft\\.device.*'
+        }
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':capacitor-android')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "com.microsoft.identity.client:msal:$msalVersion"
+    implementation "com.microsoft.intune.mam:Microsoft.Intune.MAM.SDK:$intuneMamSdkVersion@aar"
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+}

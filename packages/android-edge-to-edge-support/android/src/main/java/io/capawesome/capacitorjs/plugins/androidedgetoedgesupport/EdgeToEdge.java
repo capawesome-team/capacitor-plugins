@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.androidedgetoedgesupport;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,60 +76,42 @@ public class EdgeToEdge {
 
     private void applyInsets() {
         View view = plugin.getBridge().getWebView();
-        // Get parent view
-        ViewGroup parent = (ViewGroup) view.getParent();
         // Set insets
         WindowInsetsCompat currentInsets = ViewCompat.getRootWindowInsets(view);
         if (currentInsets != null) {
-            Insets systemBarsInsets = currentInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
-            Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
-            boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
-            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
-            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
-
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-
-            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
-            mlp.topMargin = systemBarsInsets.top;
-            mlp.leftMargin = systemBarsInsets.left;
-            mlp.rightMargin = systemBarsInsets.right;
-
-            view.setLayoutParams(mlp);
-
-            // Update color overlays based on current insets
-            updateColorOverlays(systemBarsInsets);
+            applyInsetsInternal(view, currentInsets);
         }
         // Set listener
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            // Retrieve system bars insets (for status/navigation bars)
-            Insets systemBarsInsets = windowInsets.getInsets(
-                WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout()
-            );
-            // Retrieve keyboard (IME) insets
-            Insets imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime());
-            boolean keyboardVisible = windowInsets.isVisible(WindowInsetsCompat.Type.ime());
-            // Only use IME insets if keyboard is visible AND larger than system bars (handles external keyboard case)
-            boolean useImeInsets = keyboardVisible && imeInsets.bottom > systemBarsInsets.bottom;
-
-            ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-
-            // Apply the appropriate bottom inset: use keyboard inset if visible, else system bars inset
-            mlp.bottomMargin = useImeInsets ? imeInsets.bottom : systemBarsInsets.bottom;
-
-            // Set the other margins using system bars insets
-            mlp.topMargin = systemBarsInsets.top;
-            mlp.leftMargin = systemBarsInsets.left;
-            mlp.rightMargin = systemBarsInsets.right;
-
-            v.setLayoutParams(mlp);
-
-            // Update color overlays based on current insets
-            updateColorOverlays(systemBarsInsets);
-
+            applyInsetsInternal(v, windowInsets);
             return WindowInsetsCompat.CONSUMED;
         });
+    }
+
+    private void applyInsetsInternal(View view, WindowInsetsCompat currentInsets) {
+        Insets systemBarsInsets = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+        Insets imeInsets = currentInsets.getInsets(WindowInsetsCompat.Type.ime());
+        boolean keyboardVisible = currentInsets.isVisible(WindowInsetsCompat.Type.ime());
+        // When keyboard is visible, don't apply bottom margin to avoid double-counting
+        // (the system already resizes the window for the keyboard)
+        int bottomMargin = keyboardVisible ? 0 : Math.max(imeInsets.bottom, systemBarsInsets.bottom);
+
+        ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+        mlp.bottomMargin = bottomMargin;
+        // Apply top margin when edge-to-edge is active. On Android 15+ it is always enforced.
+        // On older versions, use the system content view's top padding only as a heuristic that
+        // the top inset may already be handled elsewhere (for example by decor fitting or another
+        // insets/padding adjustment), rather than as a guaranteed signal of decorFitsSystemWindows.
+        View contentView = plugin.getActivity().findViewById(android.R.id.content);
+        boolean topInsetLikelyHandledBySystem =
+            contentView != null && contentView.getPaddingTop() >= systemBarsInsets.top && systemBarsInsets.top > 0;
+        mlp.topMargin = topInsetLikelyHandledBySystem ? 0 : systemBarsInsets.top;
+        mlp.leftMargin = systemBarsInsets.left;
+        mlp.rightMargin = systemBarsInsets.right;
+        view.setLayoutParams(mlp);
+
+        // Update color overlays based on current insets
+        updateColorOverlays(systemBarsInsets);
     }
 
     private void removeInsets() {
