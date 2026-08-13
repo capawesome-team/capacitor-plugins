@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`29b43a85ee59bde85ac3e06fa8eb886b86aa5ad3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/29b43a85ee59bde85ac3e06fa8eb886b86aa5ad3) ([#523](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/523)): feat: add `property` option to `pickContacts(...)`
+
 ## 8.0.3
 
 ### Patch Changes
