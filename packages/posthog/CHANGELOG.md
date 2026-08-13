@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.1
+
+### Patch Changes
+
+- [`a84a011d0af745476991caaa9748424c0ac37482`](https://github.com/capawesome-team/capacitor-plugins/commit/a84a011d0af745476991caaa9748424c0ac37482) ([#975](https://github.com/capawesome-team/capacitor-plugins/pull/975)): fix(android): implement `startSessionRecording()` and `stopSessionRecording()`
+
 ## 8.5.0
 
 ### Minor Changes
