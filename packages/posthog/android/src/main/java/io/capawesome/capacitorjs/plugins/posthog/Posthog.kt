@@ -182,6 +182,14 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         )
     }
 
+    fun startSessionRecording() {
+        com.posthog.PostHog.startSessionReplay()
+    }
+
+    fun stopSessionRecording() {
+        com.posthog.PostHog.stopSessionReplay()
+    }
+
     fun unregister(options: UnregisterOptions) {
         val key = options.key
 

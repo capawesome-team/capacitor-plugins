@@ -21,7 +21,6 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
 import org.json.JSONObject;
@@ -336,6 +335,26 @@ public class PosthogPlugin extends Plugin {
             }
 
             implementation.setup(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void startSessionRecording(PluginCall call) {
+        try {
+            implementation.startSessionRecording();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void stopSessionRecording(PluginCall call) {
+        try {
+            implementation.stopSessionRecording();
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
