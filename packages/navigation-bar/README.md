@@ -39,6 +39,10 @@ The Navigation Bar plugin is typically used to make the Android system navigatio
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [Capacitor Edge-to-Edge & Safe Areas: The Complete Guide](https://capawesome.io/blog/capacitor-edge-to-edge-and-safe-areas-guide/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
