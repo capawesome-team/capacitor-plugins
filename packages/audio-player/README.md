@@ -95,7 +95,7 @@ See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/de
 
 ## Usage
 
-The following examples show how to play audio from web assets, remote URLs, the file system, or a blob, and how to control, seek, adjust the volume of, and inspect the playback.
+The following examples show how to play audio from web assets, remote URLs, the file system, or a blob, how to play playlists, and how to control, seek, adjust the volume of, and inspect the playback.
 
 ### Play an audio file from your web assets or a remote URL
 
@@ -146,9 +146,9 @@ const playFromBlob = async () => {
 };
 ```
 
-### Pause, resume and stop the playback
+### Play a playlist
 
-Pause the playback and resume it later, or stop it entirely:
+Use the `tracks` option to play multiple tracks sequentially. The next track starts automatically when the current one ends, even in the background. Use the `startIndex` option to start playback from a specific track:
 
 ```typescript
 import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
@@ -160,9 +160,78 @@ const playPlaylist = async () => {
       { src: '/assets/track2.mp3' },
       { src: '/assets/track3.mp3' },
     ],
-    volume: 100,
+    startIndex: 0,
   });
 };
+
+const listenForTrackChanges = async () => {
+  await AudioPlayer.addListener('trackChange', (event) => {
+    console.log('Track changed to index:', event.index);
+  });
+};
+```
+
+### Navigate within a playlist
+
+Skip to the next or previous track, jump to a specific track, or retrieve the index of the current track:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+
+const skipToNextTrack = async () => {
+  await AudioPlayer.skipToNextTrack();
+};
+
+const skipToPreviousTrack = async () => {
+  await AudioPlayer.skipToPreviousTrack();
+};
+
+const jumpToTrack = async () => {
+  await AudioPlayer.seekTo({ index: 2, position: 0 });
+};
+
+const getCurrentTrackIndex = async () => {
+  const { index } = await AudioPlayer.getCurrentTrackIndex();
+  console.log('Current track index:', index);
+};
+```
+
+### Modify the playlist
+
+Add tracks to the playlist or remove tracks from it while it is playing:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+
+const addTracks = async () => {
+  await AudioPlayer.addTracks({
+    tracks: [{ src: '/assets/track4.mp3' }],
+  });
+};
+
+const removeTrack = async () => {
+  await AudioPlayer.removeTrack({ index: 0 });
+};
+```
+
+### Set the repeat mode
+
+Repeat the current track or the entire playlist:
+
+```typescript
+import { AudioPlayer, RepeatMode } from '@capawesome-team/capacitor-audio-player';
+
+const setRepeatMode = async () => {
+  await AudioPlayer.setRepeatMode({ mode: RepeatMode.All });
+};
+```
+
+### Pause, resume and stop the playback
+
+Pause the playback and resume it later, or stop it entirely:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
 
 const pause = async () => {
   await AudioPlayer.pause();
@@ -222,38 +291,57 @@ const isPlaying = async () => {
   const { isPlaying } = await AudioPlayer.isPlaying();
   console.log('Is playing:', isPlaying);
 };
-
-const listenForTrackChanges = async () => {
-  await AudioPlayer.addListener('trackChange', (event) => {
-    console.log('Track changed to index:', event.index);
-  });
-};
 ```
 
 ## API
 
 <docgen-index>
 
+* [`addTracks(...)`](#addtracks)
 * [`getCurrentPosition()`](#getcurrentposition)
 * [`getCurrentTrackIndex()`](#getcurrenttrackindex)
 * [`getDuration()`](#getduration)
 * [`isPlaying()`](#isplaying)
 * [`pause()`](#pause)
 * [`play(...)`](#play)
+* [`removeTrack(...)`](#removetrack)
 * [`resume()`](#resume)
 * [`seekTo(...)`](#seekto)
 * [`setRate(...)`](#setrate)
+* [`setRepeatMode(...)`](#setrepeatmode)
 * [`setVolume(...)`](#setvolume)
+* [`skipToNextTrack()`](#skiptonexttrack)
+* [`skipToPreviousTrack()`](#skiptoprevioustrack)
 * [`stop(...)`](#stop)
 * [`addListener('stop', ...)`](#addlistenerstop-)
 * [`addListener('trackChange', ...)`](#addlistenertrackchange-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
+* [Enums](#enums)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### addTracks(...)
+
+```typescript
+addTracks(options: AddTracksOptions) => Promise<void>
+```
+
+Add tracks to the currently loaded playlist.
+
+Only available if a playlist has been loaded via `play({ tracks })`.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#addtracksoptions">AddTracksOptions</a></code> |
+
+**Since:** 8.4.0
+
+--------------------
+
 
 ### getCurrentPosition()
 
@@ -347,6 +435,28 @@ Play the audio playback.
 --------------------
 
 
+### removeTrack(...)
+
+```typescript
+removeTrack(options: RemoveTrackOptions) => Promise<void>
+```
+
+Remove a track from the currently loaded playlist.
+
+If the currently playing track is removed, playback continues with the
+track that takes its place, or stops if it was the last track.
+
+Only available if a playlist has been loaded via `play({ tracks })`.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#removetrackoptions">RemoveTrackOptions</a></code> |
+
+**Since:** 8.4.0
+
+--------------------
+
+
 ### resume()
 
 ```typescript
@@ -405,6 +515,25 @@ Only available on Android, iOS and Web.
 --------------------
 
 
+### setRepeatMode(...)
+
+```typescript
+setRepeatMode(options: SetRepeatModeOptions) => Promise<void>
+```
+
+Set the repeat mode for the current playback.
+
+This only affects the current playback session and is not persisted.
+
+| Param         | Type                                                                  |
+| ------------- | --------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setrepeatmodeoptions">SetRepeatModeOptions</a></code> |
+
+**Since:** 8.4.0
+
+--------------------
+
+
 ### setVolume(...)
 
 ```typescript
@@ -420,6 +549,42 @@ This only affects the current playback session and is not persisted.
 | **`options`** | <code><a href="#setvolumeoptions">SetVolumeOptions</a></code> |
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### skipToNextTrack()
+
+```typescript
+skipToNextTrack() => Promise<void>
+```
+
+Skip to the next track in the currently loaded playlist.
+
+If the repeat mode is `ALL`, skipping past the last track wraps around
+to the first track.
+
+Only available if a playlist has been loaded via `play({ tracks })`.
+
+**Since:** 8.4.0
+
+--------------------
+
+
+### skipToPreviousTrack()
+
+```typescript
+skipToPreviousTrack() => Promise<void>
+```
+
+Skip to the previous track in the currently loaded playlist.
+
+If the repeat mode is `ALL`, skipping before the first track wraps around
+to the last track.
+
+Only available if a playlist has been loaded via `play({ tracks })`.
+
+**Since:** 8.4.0
 
 --------------------
 
@@ -484,46 +649,21 @@ Called when the current track changes during playlist playback.
 ### Interfaces
 
 
-#### GetCurrentPositionResult
+#### AddTracksOptions
 
-| Prop           | Type                | Description                                                 | Since |
-| -------------- | ------------------- | ----------------------------------------------------------- | ----- |
-| **`position`** | <code>number</code> | The current position of the audio playback in milliseconds. | 0.0.1 |
-
-
-#### GetCurrentTrackIndexResult
-
-| Prop        | Type                | Description                                                                                                        | Since |
-| ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`index`** | <code>number</code> | The 0-based index of the currently playing track within the loaded playlist. `undefined` if no playlist is loaded. | 8.4.0 |
+| Prop         | Type                      | Description                                                                                                           | Since |
+| ------------ | ------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`index`**  | <code>number</code>       | The 0-based index at which to insert the tracks. If not provided, the tracks are appended to the end of the playlist. | 8.4.0 |
+| **`tracks`** | <code>AudioTrack[]</code> | The tracks to add to the playlist.                                                                                    | 8.4.0 |
 
 
-#### GetDurationResult
+#### AudioTrack
 
-| Prop           | Type                | Description                                         | Since |
-| -------------- | ------------------- | --------------------------------------------------- | ----- |
-| **`duration`** | <code>number</code> | The duration of the audio playback in milliseconds. | 0.0.1 |
-
-
-#### IsPlayingResult
-
-| Prop            | Type                 | Description                             | Since |
-| --------------- | -------------------- | --------------------------------------- | ----- |
-| **`isPlaying`** | <code>boolean</code> | Whether the audio is currently playing. | 0.0.1 |
-
-
-#### PlayOptions
-
-| Prop           | Type                                  | Description                                                                                                                                                                                                                       | Default          | Since |
-| -------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`blob`**     | <code><a href="#blob">Blob</a></code> | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                      |                  | 0.0.1 |
-| **`loop`**     | <code>boolean</code>                  | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                             |                  | 0.0.1 |
-| **`position`** | <code>number</code>                   | The position to start playback from (in milliseconds).                                                                                                                                                                            |                  | 0.0.1 |
-| **`rate`**     | <code>number</code>                   | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Only available on Android, iOS and Web.                                                                   | <code>1.0</code> | 8.2.0 |
-| **`tracks`**   | <code>AudioTrack[]</code>             | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                 |                  | 8.4.0 |
-| **`src`**      | <code>string</code>                   | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms. |                  | 0.1.2 |
-| **`uri`**      | <code>string</code>                   | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                         |                  | 0.0.1 |
-| **`volume`**   | <code>number</code>                   | The volume level to set (0-100).                                                                                                                                                                                                  | <code>100</code> | 0.0.1 |
+| Prop       | Type                                  | Description                                                                                                     | Since |
+| ---------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`** | <code><a href="#blob">Blob</a></code> | The audio file to play. Only available on Web.                                                                  | 8.4.0 |
+| **`src`**  | <code>string</code>                   | The path to the web asset file or a remote URL. Both web assets and remote URLs are supported on all platforms. | 8.4.0 |
+| **`uri`**  | <code>string</code>                   | The URI or path of the audio file to play. Only available on Android and iOS.                                   | 8.4.0 |
 
 
 #### Blob
@@ -743,13 +883,54 @@ An event which takes place in the DOM.
 | **`capture`** | <code>boolean</code> |
 
 
-#### AudioTrack
+#### GetCurrentPositionResult
 
-| Prop       | Type                                  | Description                                                                                                     | Since |
-| ---------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`** | <code><a href="#blob">Blob</a></code> | The audio file to play. Only available on Web.                                                                  | 8.4.0 |
-| **`src`**  | <code>string</code>                   | The path to the web asset file or a remote URL. Both web assets and remote URLs are supported on all platforms. | 8.4.0 |
-| **`uri`**  | <code>string</code>                   | The URI or path of the audio file to play. Only available on Android and iOS.                                   | 8.4.0 |
+| Prop           | Type                | Description                                                 | Since |
+| -------------- | ------------------- | ----------------------------------------------------------- | ----- |
+| **`position`** | <code>number</code> | The current position of the audio playback in milliseconds. | 0.0.1 |
+
+
+#### GetCurrentTrackIndexResult
+
+| Prop        | Type                | Description                                                                                                        | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`index`** | <code>number</code> | The 0-based index of the currently playing track within the loaded playlist. `undefined` if no playlist is loaded. | 8.4.0 |
+
+
+#### GetDurationResult
+
+| Prop           | Type                | Description                                         | Since |
+| -------------- | ------------------- | --------------------------------------------------- | ----- |
+| **`duration`** | <code>number</code> | The duration of the audio playback in milliseconds. | 0.0.1 |
+
+
+#### IsPlayingResult
+
+| Prop            | Type                 | Description                             | Since |
+| --------------- | -------------------- | --------------------------------------- | ----- |
+| **`isPlaying`** | <code>boolean</code> | Whether the audio is currently playing. | 0.0.1 |
+
+
+#### PlayOptions
+
+| Prop             | Type                                  | Description                                                                                                                                                                                                                       | Default          | Since |
+| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`blob`**       | <code><a href="#blob">Blob</a></code> | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                      |                  | 0.0.1 |
+| **`loop`**       | <code>boolean</code>                  | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                             |                  | 0.0.1 |
+| **`position`**   | <code>number</code>                   | The position to start playback from (in milliseconds).                                                                                                                                                                            |                  | 0.0.1 |
+| **`rate`**       | <code>number</code>                   | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Only available on Android, iOS and Web.                                                                   | <code>1.0</code> | 8.2.0 |
+| **`startIndex`** | <code>number</code>                   | The 0-based index of the track to start playback from. Only meaningful when `tracks` is provided.                                                                                                                                 | <code>0</code>   | 8.4.0 |
+| **`tracks`**     | <code>AudioTrack[]</code>             | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                 |                  | 8.4.0 |
+| **`src`**        | <code>string</code>                   | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms. |                  | 0.1.2 |
+| **`uri`**        | <code>string</code>                   | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                         |                  | 0.0.1 |
+| **`volume`**     | <code>number</code>                   | The volume level to set (0-100).                                                                                                                                                                                                  | <code>100</code> | 0.0.1 |
+
+
+#### RemoveTrackOptions
+
+| Prop        | Type                | Description                                                 | Since |
+| ----------- | ------------------- | ----------------------------------------------------------- | ----- |
+| **`index`** | <code>number</code> | The 0-based index of the track to remove from the playlist. | 8.4.0 |
 
 
 #### SeekToOptions
@@ -765,6 +946,13 @@ An event which takes place in the DOM.
 | Prop       | Type                | Description                                                                                                             | Since |
 | ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`rate`** | <code>number</code> | The playback rate to set. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. | 8.2.0 |
+
+
+#### SetRepeatModeOptions
+
+| Prop       | Type                                              | Description             | Since |
+| ---------- | ------------------------------------------------- | ----------------------- | ----- |
+| **`mode`** | <code><a href="#repeatmode">RepeatMode</a></code> | The repeat mode to set. | 8.4.0 |
 
 
 #### SetVolumeOptions
@@ -811,6 +999,18 @@ An event which takes place in the DOM.
 #### AbortSignal
 
 <code>unknown</code>
+
+
+### Enums
+
+
+#### RepeatMode
+
+| Members    | Value               | Description                 | Since |
+| ---------- | ------------------- | --------------------------- | ----- |
+| **`All`**  | <code>'ALL'</code>  | Repeat the entire playlist. | 8.4.0 |
+| **`None`** | <code>'NONE'</code> | Do not repeat.              | 8.4.0 |
+| **`One`**  | <code>'ONE'</code>  | Repeat the current track.   | 8.4.0 |
 
 </docgen-api>
 
