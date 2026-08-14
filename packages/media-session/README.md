@@ -2,6 +2,8 @@
 
 Capacitor plugin to interact with media controllers, volume keys and media buttons.
 
+**Attention**: This plugin relays media control events to your JavaScript code, so it is designed for playback that runs inside the web view, such as HTML5 `<audio>` and `<video>` elements or web-based audio and video calls. For native audio playback with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin, use its built-in media session integration instead, which handles the media controls natively — even when the web view is suspended.
+
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
     <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
@@ -19,7 +21,7 @@ The Capacitor Media Session plugin is one of the most complete media playback in
 - ▶️ **Action Handlers**: Support for play, pause, seek, next/previous track, and more.
 - 📍 **Position State**: Track and display playback position, duration, and playback rate.
 - 🔧 **Native APIs**: Uses MediaSession API on Android and MPNowPlayingInfoCenter on iOS for the best possible integration.
-- 🤝 **Compatibility**: Compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin.
+- 🤝 **Compatibility**: Works with any playback inside the web view, such as HTML5 `<audio>` and `<video>` elements.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -162,7 +164,7 @@ Note that the action icons (e.g. `playIcon`, `seekForwardIcon`) only affect the 
 
 ## Usage
 
-The following examples show how to display track metadata, register handlers for media actions, update the playback and position state, listen for media session actions, and unregister handlers and remove listeners, using the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin for the actual audio playback.
+The following examples show how to display track metadata, register handlers for media actions, update the playback and position state, listen for media session actions, and unregister handlers and remove listeners, using an HTML5 `<audio>` element for the actual audio playback.
 
 ### Display metadata about the current track
 
@@ -257,47 +259,42 @@ Add an `action` event listener to react to the registered actions, for example w
 
 ```typescript
 import { MediaSession, MediaSessionAction, MediaSessionPlaybackState } from '@capawesome-team/capacitor-media-session';
-import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+
+const audio = new Audio('https://example.com/audio.mp3');
 
 const addActionListener = () => {
   MediaSession.addListener('action', async (event) => {
     switch (event.action) {
       case MediaSessionAction.Play:
-        await AudioPlayer.resume();
+        await audio.play();
         await MediaSession.setPlaybackState({
           playbackState: MediaSessionPlaybackState.Playing,
         });
         break;
       case MediaSessionAction.Pause:
-        await AudioPlayer.pause();
+        audio.pause();
         await MediaSession.setPlaybackState({
           playbackState: MediaSessionPlaybackState.Paused,
         });
         break;
-      case MediaSessionAction.SeekBackward:
-        const { position: currentPos } = await AudioPlayer.getCurrentPosition();
-        const offsetMs = event.seekOffset ? event.seekOffset * 1000 : 10000;
-        await AudioPlayer.seekTo({
-          position: Math.max(0, currentPos - offsetMs)
-        });
+      case MediaSessionAction.SeekBackward: {
+        const offset = event.seekOffset ?? 10;
+        audio.currentTime = Math.max(0, audio.currentTime - offset);
         break;
-      case MediaSessionAction.SeekForward:
-        const { position: pos } = await AudioPlayer.getCurrentPosition();
-        const { duration } = await AudioPlayer.getDuration();
-        const offset = event.seekOffset ? event.seekOffset * 1000 : 10000;
-        await AudioPlayer.seekTo({
-          position: Math.min(duration, pos + offset)
-        });
+      }
+      case MediaSessionAction.SeekForward: {
+        const offset = event.seekOffset ?? 10;
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + offset);
         break;
+      }
       case MediaSessionAction.SeekTo:
         if (event.seekTime !== undefined) {
-          await AudioPlayer.seekTo({
-            position: event.seekTime * 1000
-          });
+          audio.currentTime = event.seekTime;
         }
         break;
       case MediaSessionAction.Stop:
-        await AudioPlayer.stop();
+        audio.pause();
+        audio.currentTime = 0;
         await MediaSession.setPlaybackState({
           playbackState: MediaSessionPlaybackState.None,
         });
@@ -682,7 +679,7 @@ On Android, yes. Use the configuration options `playIcon`, `pauseIcon`, `previou
 
 ### Can I use this plugin together with the Audio Player plugin?
 
-Yes, the plugin is compatible with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin. A common setup is to play audio with the Audio Player plugin and use the Media Session plugin to display metadata and respond to media actions, as shown in the [usage examples](#usage) above.
+No, this is not recommended. The [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin provides a built-in media session integration (see its `metadata` option) that handles the media controls natively, without a round trip through the web view. This is more reliable, especially when the web view is suspended while the app is in the background. Use this plugin only for playback that runs inside the web view, such as HTML5 `<audio>` and `<video>` elements.
 
 ### Why does the media session not respond to certain actions?
 

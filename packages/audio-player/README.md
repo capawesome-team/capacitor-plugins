@@ -18,6 +18,7 @@ The Capacitor Audio Player plugin is one of the most complete audio playback sol
 - ⏯️ **Full Control**: Play, pause, resume, stop, seek, and adjust volume.
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 📋 **Playlist Mode**: Play multiple tracks sequentially with native track advancement, even in the background.
+- 🎛️ **Media Session**: Control the playback from the system's media controls (e.g. notification and lock screen), even while the app is in the background.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
 - ⏩ **Playback Speed**: Adjustable playback rate with pitch preservation.
 - 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
@@ -82,9 +83,33 @@ npx cap sync
 
 #### Variables
 
-If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
+If needed, you can define the following project variables in your app's `variables.gradle` file to change the default versions of the dependencies:
 
 - `$androidxMedia3ExoPlayerVersion` version of `androidx.media3:media3-exoplayer` (default: `1.6.1`)
+- `$androidxMedia3SessionVersion` version of `androidx.media3:media3-session` (default: `1.6.1`)
+
+#### Media Session
+
+If you want to use the media session integration (see the `metadata` option of the `play(...)` method), add the following service to your `AndroidManifest.xml` inside the `application` tag:
+
+```xml
+<service
+    android:name="io.capawesome.capacitorjs.plugins.audioplayer.AudioPlayerService"
+    android:exported="false"
+    android:foregroundServiceType="mediaPlayback">
+    <intent-filter>
+        <action android:name="androidx.media3.session.MediaSessionService" />
+    </intent-filter>
+</service>
+```
+
+Also, add the following permissions before or after the `application` tag:
+
+```xml
+<!-- Required to display the media controls in a notification. -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+```
 
 ### iOS
 
@@ -226,6 +251,45 @@ const setRepeatMode = async () => {
 };
 ```
 
+### Control the playback from the system's media controls
+
+Provide the `metadata` option to display the playback in the system's media controls (e.g. notification and lock screen). The playback can then be controlled from there, even while the app is in the background. On Android, this requires additional manifest entries (see [Installation](#installation)):
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+
+const playWithMediaSession = async () => {
+  await AudioPlayer.play({
+    tracks: [
+      {
+        src: 'https://example.com/track1.mp3',
+        metadata: {
+          album: 'The Dark Side of the Moon',
+          artist: 'Pink Floyd',
+          artworkSource: 'https://example.com/artwork.png',
+          title: 'Time',
+        },
+      },
+      {
+        src: 'https://example.com/track2.mp3',
+        metadata: {
+          album: 'The Dark Side of the Moon',
+          artist: 'Pink Floyd',
+          artworkSource: 'https://example.com/artwork.png',
+          title: 'Money',
+        },
+      },
+    ],
+  });
+};
+
+const listenForPlaybackStateChanges = async () => {
+  await AudioPlayer.addListener('playbackStateChanged', (event) => {
+    console.log('Playback state changed to:', event.state);
+  });
+};
+```
+
 ### Pause, resume and stop the playback
 
 Pause the playback and resume it later, or stop it entirely:
@@ -313,6 +377,7 @@ const isPlaying = async () => {
 * [`skipToNextTrack()`](#skiptonexttrack)
 * [`skipToPreviousTrack()`](#skiptoprevioustrack)
 * [`stop(...)`](#stop)
+* [`addListener('playbackStateChanged', ...)`](#addlistenerplaybackstatechanged-)
 * [`addListener('stop', ...)`](#addlistenerstop-)
 * [`addListener('trackChange', ...)`](#addlistenertrackchange-)
 * [Interfaces](#interfaces)
@@ -606,6 +671,27 @@ Stop the audio playback.
 --------------------
 
 
+### addListener('playbackStateChanged', ...)
+
+```typescript
+addListener(eventName: 'playbackStateChanged', listenerFunc: (event: PlaybackStateChangedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the playback state changes, for example when the user
+pauses the playback via the media controls on the lock screen.
+
+| Param              | Type                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'playbackStateChanged'</code>                                                                 |
+| **`listenerFunc`** | <code>(event: <a href="#playbackstatechangedevent">PlaybackStateChangedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 8.4.0
+
+--------------------
+
+
 ### addListener('stop', ...)
 
 ```typescript
@@ -659,11 +745,12 @@ Called when the current track changes during playlist playback.
 
 #### AudioTrack
 
-| Prop       | Type                                  | Description                                                                                                     | Since |
-| ---------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`** | <code><a href="#blob">Blob</a></code> | The audio file to play. Only available on Web.                                                                  | 8.4.0 |
-| **`src`**  | <code>string</code>                   | The path to the web asset file or a remote URL. Both web assets and remote URLs are supported on all platforms. | 8.4.0 |
-| **`uri`**  | <code>string</code>                   | The URI or path of the audio file to play. Only available on Android and iOS.                                   | 8.4.0 |
+| Prop           | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                         | Since |
+| -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`**     | <code><a href="#blob">Blob</a></code>                   | The audio file to play. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                                      | 8.4.0 |
+| **`metadata`** | <code><a href="#trackmetadata">TrackMetadata</a></code> | The metadata of the track, displayed in the system's media controls (e.g. notification and lock screen). Providing metadata activates the media session integration so that the playback can be controlled from the system's media controls, even while the app is in the background. On Android, this requires additional manifest entries. See the [documentation](https://capawesome.io/docs/sdks/capacitor/audio-player/) for more information. | 8.4.0 |
+| **`src`**      | <code>string</code>                                     | The path to the web asset file or a remote URL. Both web assets and remote URLs are supported on all platforms.                                                                                                                                                                                                                                                                                                                                     | 8.4.0 |
+| **`uri`**      | <code>string</code>                                     | The URI or path of the audio file to play. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                       | 8.4.0 |
 
 
 #### Blob
@@ -883,6 +970,16 @@ An event which takes place in the DOM.
 | **`capture`** | <code>boolean</code> |
 
 
+#### TrackMetadata
+
+| Prop                | Type                | Description                                                                                                                      | Since |
+| ------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`album`**         | <code>string</code> | The album of the track.                                                                                                          | 8.4.0 |
+| **`artist`**        | <code>string</code> | The artist of the track.                                                                                                         | 8.4.0 |
+| **`artworkSource`** | <code>string</code> | The source of the artwork of the track, displayed in the system's media controls. Both web assets and remote URLs are supported. | 8.4.0 |
+| **`title`**         | <code>string</code> | The title of the track.                                                                                                          | 8.4.0 |
+
+
 #### GetCurrentPositionResult
 
 | Prop           | Type                | Description                                                 | Since |
@@ -913,17 +1010,18 @@ An event which takes place in the DOM.
 
 #### PlayOptions
 
-| Prop             | Type                                  | Description                                                                                                                                                                                                                       | Default          | Since |
-| ---------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`blob`**       | <code><a href="#blob">Blob</a></code> | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                      |                  | 0.0.1 |
-| **`loop`**       | <code>boolean</code>                  | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                             |                  | 0.0.1 |
-| **`position`**   | <code>number</code>                   | The position to start playback from (in milliseconds).                                                                                                                                                                            |                  | 0.0.1 |
-| **`rate`**       | <code>number</code>                   | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Only available on Android, iOS and Web.                                                                   | <code>1.0</code> | 8.2.0 |
-| **`startIndex`** | <code>number</code>                   | The 0-based index of the track to start playback from. Only meaningful when `tracks` is provided.                                                                                                                                 | <code>0</code>   | 8.4.0 |
-| **`tracks`**     | <code>AudioTrack[]</code>             | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                 |                  | 8.4.0 |
-| **`src`**        | <code>string</code>                   | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms. |                  | 0.1.2 |
-| **`uri`**        | <code>string</code>                   | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                         |                  | 0.0.1 |
-| **`volume`**     | <code>number</code>                   | The volume level to set (0-100).                                                                                                                                                                                                  | <code>100</code> | 0.0.1 |
+| Prop             | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Default          | Since |
+| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`blob`**       | <code><a href="#blob">Blob</a></code>                   | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                          |                  | 0.0.1 |
+| **`loop`**       | <code>boolean</code>                                    | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                                 |                  | 0.0.1 |
+| **`metadata`**   | <code><a href="#trackmetadata">TrackMetadata</a></code> | The metadata of the track, displayed in the system's media controls (e.g. notification and lock screen). Providing metadata activates the media session integration so that the playback can be controlled from the system's media controls, even while the app is in the background. On Android, this requires additional manifest entries. See the [documentation](https://capawesome.io/docs/sdks/capacitor/audio-player/) for more information. This option is ignored when `tracks` is provided. |                  | 8.4.0 |
+| **`position`**   | <code>number</code>                                     | The position to start playback from (in milliseconds).                                                                                                                                                                                                                                                                                                                                                                                                                                                |                  | 0.0.1 |
+| **`rate`**       | <code>number</code>                                     | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Only available on Android, iOS and Web.                                                                                                                                                                                                                                                                                                                                       | <code>1.0</code> | 8.2.0 |
+| **`startIndex`** | <code>number</code>                                     | The 0-based index of the track to start playback from. Only meaningful when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                     | <code>0</code>   | 8.4.0 |
+| **`tracks`**     | <code>AudioTrack[]</code>                               | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                                                                                                                                                                                                                                                                                     |                  | 8.4.0 |
+| **`src`**        | <code>string</code>                                     | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms.                                                                                                                                                                                                                                                                     |                  | 0.1.2 |
+| **`uri`**        | <code>string</code>                                     | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                             |                  | 0.0.1 |
+| **`volume`**     | <code>number</code>                                     | The volume level to set (0-100).                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>100</code> | 0.0.1 |
 
 
 #### RemoveTrackOptions
@@ -976,6 +1074,13 @@ An event which takes place in the DOM.
 | **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 
+#### PlaybackStateChangedEvent
+
+| Prop        | Type                                                    | Description             | Since |
+| ----------- | ------------------------------------------------------- | ----------------------- | ----- |
+| **`state`** | <code><a href="#playbackstate">PlaybackState</a></code> | The new playback state. | 8.4.0 |
+
+
 #### TrackChangeEvent
 
 | Prop        | Type                | Description                                 | Since |
@@ -1011,6 +1116,15 @@ An event which takes place in the DOM.
 | **`All`**  | <code>'ALL'</code>  | Repeat the entire playlist. | 8.4.0 |
 | **`None`** | <code>'NONE'</code> | Do not repeat.              | 8.4.0 |
 | **`One`**  | <code>'ONE'</code>  | Repeat the current track.   | 8.4.0 |
+
+
+#### PlaybackState
+
+| Members       | Value                  | Description              | Since |
+| ------------- | ---------------------- | ------------------------ | ----- |
+| **`Paused`**  | <code>'PAUSED'</code>  | The playback is paused.  | 8.4.0 |
+| **`Playing`** | <code>'PLAYING'</code> | The playback is playing. | 8.4.0 |
+| **`Stopped`** | <code>'STOPPED'</code> | The playback is stopped. | 8.4.0 |
 
 </docgen-api>
 
