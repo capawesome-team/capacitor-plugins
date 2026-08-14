@@ -57,8 +57,6 @@ The SQLite plugin is typically used whenever an app needs a robust local databas
 
 ## Guides
 
-- [How to Use SQLite in a Capacitor App](https://capawesome.io/blog/how-to-use-sqlite-in-a-capacitor-app/)
-- [How to Use Custom SQLite Extensions in Capacitor](https://capawesome.io/blog/how-to-use-custom-sqlite-extensions-with-capacitor/)
 - [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/)
 - [Alternative to the Ionic Secure Storage plugin](https://capawesome.io/blog/alternative-to-ionic-secure-storage-plugin/)
 - [Announcing the SQLite Plugin for Capacitor](https://capawesome.io/blog/announcing-the-capacitor-sqlite-plugin/)
