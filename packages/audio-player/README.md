@@ -46,6 +46,12 @@ The Audio Player plugin is typically used whenever an app needs to play audio, f
 | 8.x.x          | >=8.x.x           | Active support |
 | 0.2.x          | 7.x.x             | Deprecated     |
 
+## Demo
+
+| Android                                                                                                                                                                        | iOS                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/audio-player/assets/audio-player-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/audio-player/assets/audio-player-demo-ios.mp4" width="266" controls></video> |
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/). 

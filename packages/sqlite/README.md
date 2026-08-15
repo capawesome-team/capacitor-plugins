@@ -319,6 +319,27 @@ export default defineConfig({
 });
 ```
 
+#### Data persistence
+
+On the web platform, the database is stored in the [Origin Private File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), which is subject to the browser's storage eviction rules. By default, storage is granted on a best-effort basis: Chromium-based browsers and Firefox only evict data under storage pressure, but Safari deletes all script-writable storage (including the database) after seven days without user interaction if the app runs in a browser tab. Web apps added to the home screen are exempt from this rule.
+
+To reduce the risk of eviction, request persistent storage with [`navigator.storage.persist()`](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/persist). The timing of this call matters: browsers grant persistence based on engagement heuristics, and Firefox shows a permission prompt. You should therefore call it at a moment of meaningful user engagement (for example, after sign-in or after the user has saved data for the first time) instead of on the first page load:
+
+```typescript
+import { Capacitor } from '@capacitor/core';
+
+const requestPersistentStorage = async () => {
+  if (Capacitor.getPlatform() === 'web' && navigator.storage?.persist) {
+    const persisted = await navigator.storage.persisted();
+    if (!persisted) {
+      await navigator.storage.persist();
+    }
+  }
+};
+```
+
+Note that persistence is granted at the browser's discretion and applies to the entire origin's storage, not just the database. It reduces the risk of eviction but is not an absolute guarantee. On Android and iOS, the database is stored in the app's sandbox and is not affected by these rules.
+
 #### Debugging
 
 You can inspect the SQLite database stored in OPFS using the [OPFS Explorer](https://chromewebstore.google.com/detail/opfs-explorer/acndjpgkpaclldomagafnognkcgjignd) Chrome DevTools extension.
