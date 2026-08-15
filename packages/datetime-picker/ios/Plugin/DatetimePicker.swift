@@ -15,7 +15,8 @@ import Foundation
         closeKeyboard()
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             RPicker.selectDate(title: "", cancelText: cancelButtonText, doneText: doneButtonText, datePickerMode: .dateAndTime, selectedDate: date,
-                               minDate: minDate, maxDate: maxDate, locale: locale, theme: self.getTheme(unconvertedTheme: theme), minuteInterval: minuteInterval, completion: { (date, errorCode) in
+                               minDate: minDate, maxDate: maxDate, locale: locale, theme: self.getTheme(unconvertedTheme: theme),
+                               minuteInterval: minuteInterval, presenter: self.plugin.bridge?.viewController, completion: { (date, errorCode) in
                                 completion(date, errorCode)
                                })
         }
@@ -26,7 +27,8 @@ import Foundation
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             RPicker.selectDate(title: "", cancelText: cancelButtonText, doneText: doneButtonText,
                                datePickerMode: .date, selectedDate: date, minDate: minDate, maxDate: maxDate, locale: locale,
-                               theme: self.getTheme(unconvertedTheme: theme), completion: { (date, errorCode) in
+                               theme: self.getTheme(unconvertedTheme: theme), presenter: self.plugin.bridge?.viewController,
+                               completion: { (date, errorCode) in
                                 completion(date, errorCode)
                                })
         }
@@ -37,7 +39,8 @@ import Foundation
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             MonthPicker.selectMonth(cancelText: cancelButtonText, doneText: doneButtonText, selectedDate: date,
                                     minDate: minDate, maxDate: maxDate, locale: locale,
-                                    theme: self.getTheme(unconvertedTheme: theme), completion: { (date, errorCode) in
+                                    theme: self.getTheme(unconvertedTheme: theme), presenter: self.plugin.bridge?.viewController,
+                                    completion: { (date, errorCode) in
                                         completion(date, errorCode)
                                     })
         }
@@ -48,7 +51,8 @@ import Foundation
         DispatchQueue.main.asyncAfter(deadline: .now() + waitForKeyboardCloseSeconds) {
             RPicker.selectDate(title: "", cancelText: cancelButtonText, doneText: doneButtonText,
                                datePickerMode: .time, selectedDate: date, locale: locale, style: DatetimePickerStyle.wheel,
-                               theme: self.getTheme(unconvertedTheme: theme), minuteInterval: minuteInterval, completion: { (date, errorCode) in
+                               theme: self.getTheme(unconvertedTheme: theme), minuteInterval: minuteInterval,
+                               presenter: self.plugin.bridge?.viewController, completion: { (date, errorCode) in
                                 completion(date, errorCode)
                                })
         }
