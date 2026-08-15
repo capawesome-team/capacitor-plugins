@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`aad38a314f4082c2eefe7d2b38fa4f30596fe367`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aad38a314f4082c2eefe7d2b38fa4f30596fe367) ([#538](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/538)): fix(ios): `printHtml(...)` never resolved in apps using the scene-based lifecycle
+
 ## 8.0.2
 
 ### Patch Changes

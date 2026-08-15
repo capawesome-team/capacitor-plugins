@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.14
+
+### Patch Changes
+
+- [`44d90911cb8e67af8f4b0404a5a36766794424f5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/44d90911cb8e67af8f4b0404a5a36766794424f5) ([#530](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/530)): fix(android): close databases on the plugin thread on destroy so an open transaction no longer leaves the database file locked (`database is locked (code 5)`) when the bridge is recreated
+
 ## 0.3.13
 
 ### Patch Changes

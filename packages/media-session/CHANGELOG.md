@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.1
+
+### Patch Changes
+
+- [`7b95f6535c3af617e6f3628d3c3e871fb32458b8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7b95f6535c3af617e6f3628d3c3e871fb32458b8) ([#529](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/529)): docs: clarify that this plugin is designed for playback that runs inside the web view and recommend the built-in media session integration of the Audio Player plugin for native audio playback
+
 ## 8.4.0
 
 ### Minor Changes
