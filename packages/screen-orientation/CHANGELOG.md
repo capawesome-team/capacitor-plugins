@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`54939415c68095b7c47f9c98f0bf8fb4030d5f40`](https://github.com/capawesome-team/capacitor-plugins/commit/54939415c68095b7c47f9c98f0bf8fb4030d5f40) ([#983](https://github.com/capawesome-team/capacitor-plugins/pull/983)): fix(ios): resolve the window scene via the Capacitor bridge to support scene-based apps
+
 ## 8.0.1
 
 ### Patch Changes
