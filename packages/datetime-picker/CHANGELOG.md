@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.2
+
+### Patch Changes
+
+- [`fc6c32db1b10f084550ac450213f5ed447ea709f`](https://github.com/capawesome-team/capacitor-plugins/commit/fc6c32db1b10f084550ac450213f5ed447ea709f) ([#981](https://github.com/capawesome-team/capacitor-plugins/pull/981)): fix(ios): present pickers from the Capacitor bridge view controller to support scene-based apps
+
 ## 8.1.1
 
 ### Patch Changes

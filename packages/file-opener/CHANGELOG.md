@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`b7d27718e783b8f90361495e9425281d48eb26a5`](https://github.com/capawesome-team/capacitor-plugins/commit/b7d27718e783b8f90361495e9425281d48eb26a5) ([#982](https://github.com/capawesome-team/capacitor-plugins/pull/982)): fix(ios): resolve the key window via `UIWindowScene` to support scene-based apps
+
 ## 8.0.1
 
 ### Patch Changes
