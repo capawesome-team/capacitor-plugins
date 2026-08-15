@@ -16,8 +16,14 @@ import UIKit
                                  presenter: UIViewController?,
                                  completion: ((_ date: Date?, _ errorCode: ErrorCode) -> Void)?) {
 
-        guard let parent = presenter?.topMostViewController else { return }
-        guard MonthPicker.sharedInstance.isPresented == false else { return }
+        guard let parent = presenter?.topMostViewController else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
+        guard MonthPicker.sharedInstance.isPresented == false else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
 
         MonthPicker.sharedInstance.isPresented = true
 
@@ -392,21 +398,3 @@ private extension UIView {
     }
 }
 
-private extension UIViewController {
-
-    var topMostViewController: UIViewController {
-        if let nc = self as? UINavigationController {
-            if let last = nc.viewControllers.last {
-                return last.topMostViewController
-            }
-            return nc
-        }
-        if let tabController = self as? UITabBarController, let selected = tabController.selectedViewController {
-            return selected.topMostViewController
-        }
-        if let presented = presentedViewController {
-            return presented.topMostViewController
-        }
-        return self
-    }
-}

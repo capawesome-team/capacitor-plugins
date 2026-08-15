@@ -51,7 +51,10 @@ import UIKit
                                 completion: ((_ date: Date?, _ errorCode: ErrorCode) -> Void)?) {
 
         guard let vc = controller(title: title, cancelText: cancelText, doneText: doneText, datePickerMode: datePickerMode,
-                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval, presenter: presenter) else { return }
+                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval, presenter: presenter) else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
 
         vc.onDateSelected = { (selectedData) in
             completion?(selectedData, ErrorCode.none)
@@ -423,23 +426,3 @@ class RPickerController: UIViewController {
     }
 }
 
-// MARK: - Private Extensions
-
-private extension UIViewController {
-
-    var topMostViewController: UIViewController {
-        if let nc = self as? UINavigationController {
-            if let last = nc.viewControllers.last {
-                return last.topMostViewController
-            }
-            return nc
-        }
-        if let tabController = self as? UITabBarController, let selected = tabController.selectedViewController {
-            return selected.topMostViewController
-        }
-        if let presented = presentedViewController {
-            return presented.topMostViewController
-        }
-        return self
-    }
-}

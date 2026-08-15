@@ -16,6 +16,7 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     public let errorModeInvalid = "The provided mode is invalid."
     public let errorPickerCanceled = "The picker was canceled."
     public let errorPickerDismissed = "The picker was dismissed."
+    public let errorPickerUnavailable = "The picker could not be presented."
     public let errorCodeCanceled = "canceled"
     public let errorCodeDismissed = "dismissed"
 
@@ -62,6 +63,9 @@ public class DatetimePickerPlugin: CAPPlugin, CAPBridgedPlugin {
                 return
             case .dismissed:
                 call.reject(self.errorPickerDismissed, self.errorCodeDismissed, nil, nil)
+                return
+            case .unavailable:
+                call.reject(self.errorPickerUnavailable)
                 return
             case .none:
                 var value: String?
