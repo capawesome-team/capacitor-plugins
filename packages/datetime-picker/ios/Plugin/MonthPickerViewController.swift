@@ -13,10 +13,17 @@ import UIKit
                                  maxDate: Date? = nil,
                                  locale: Locale? = nil,
                                  theme: Theme = .auto,
+                                 presenter: UIViewController?,
                                  completion: ((_ date: Date?, _ errorCode: ErrorCode) -> Void)?) {
 
-        guard let parent = UIApplication.topViewController() else { return }
-        guard MonthPicker.sharedInstance.isPresented == false else { return }
+        guard let parent = presenter?.topMostViewController else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
+        guard MonthPicker.sharedInstance.isPresented == false else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
 
         MonthPicker.sharedInstance.isPresented = true
 
@@ -391,27 +398,3 @@ private extension UIView {
     }
 }
 
-private extension UIApplication {
-    static var keyWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            return UIApplication.shared.windows.filter { $0.isKeyWindow }.first
-        } else {
-            return UIApplication.shared.delegate?.window ?? nil
-        }
-    }
-
-    static func topViewController(controller: UIViewController? = UIApplication.keyWindow?.rootViewController) -> UIViewController? {
-        if let nc = controller as? UINavigationController {
-            return topViewController(controller: nc.viewControllers.last ?? nc)
-        }
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
-    }
-}

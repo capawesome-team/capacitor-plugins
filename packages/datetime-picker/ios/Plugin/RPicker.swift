@@ -47,10 +47,14 @@ import UIKit
                                 style: DatetimePickerStyle = .inline,
                                 theme: Theme = .auto,
                                 minuteInterval: Int = 1,
+                                presenter: UIViewController?,
                                 completion: ((_ date: Date?, _ errorCode: ErrorCode) -> Void)?) {
 
         guard let vc = controller(title: title, cancelText: cancelText, doneText: doneText, datePickerMode: datePickerMode,
-                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval) else { return }
+                                  selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval, presenter: presenter) else {
+            completion?(nil, ErrorCode.unavailable)
+            return
+        }
 
         vc.onDateSelected = { (selectedData) in
             completion?(selectedData, ErrorCode.none)
@@ -73,9 +77,10 @@ import UIKit
                                   locale: Locale? = nil,
                                   style: DatetimePickerStyle = .inline,
                                   theme: Theme = .auto,
-                                  minuteInterval: Int = 1) -> RPickerController? {
+                                  minuteInterval: Int = 1,
+                                  presenter: UIViewController?) -> RPickerController? {
 
-        if let cc = UIWindow.currentController {
+        if let cc = presenter?.topMostViewController {
             if RPicker.sharedInstance.isPresented == false {
                 RPicker.sharedInstance.isPresented = true
 
@@ -421,47 +426,3 @@ class RPickerController: UIViewController {
     }
 }
 
-// MARK: - Private Extensions
-
-private extension UIApplication {
-    static var keyWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            return UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        } else {
-            return UIApplication.shared.delegate?.window ?? nil
-        }
-    }
-}
-
-private extension UIWindow {
-
-    static var currentController: UIViewController? {
-        return UIApplication.keyWindow?.currentController
-    }
-
-    var currentController: UIViewController? {
-        if let vc = self.rootViewController {
-            return topViewController(controller: vc)
-        }
-        return nil
-    }
-
-    func topViewController(controller: UIViewController? = UIApplication.keyWindow?.rootViewController) -> UIViewController? {
-        if let nc = controller as? UINavigationController {
-            if nc.viewControllers.count > 0 {
-                return topViewController(controller: nc.viewControllers.last!)
-            } else {
-                return nc
-            }
-        }
-        if let tabController = controller as? UITabBarController {
-            if let selected = tabController.selectedViewController {
-                return topViewController(controller: selected)
-            }
-        }
-        if let presented = controller?.presentedViewController {
-            return topViewController(controller: presented)
-        }
-        return controller
-    }
-}
