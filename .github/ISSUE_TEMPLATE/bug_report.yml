@@ -42,6 +42,7 @@ body:
         - label: Battery
         - label: Biometrics
         - label: Bluetooth Low Energy
+        - label: Calendar
         - label: Clipboard
         - label: Cloudinary
         - label: Compass
@@ -54,6 +55,7 @@ body:
         - label: Exif
         - label: Facebook Sign-In
         - label: File Compressor
+        - label: File Manager
         - label: File Opener
         - label: File Picker
         - label: File Transfer
