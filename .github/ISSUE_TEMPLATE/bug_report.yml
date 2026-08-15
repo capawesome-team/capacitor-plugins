@@ -80,6 +80,7 @@ body:
         - label: Localization
         - label: Mail Composer
         - label: Managed Configurations
+        - label: MapLibre
         - label: Maps Launcher
         - label: Media Session
         - label: Navigation Bar
