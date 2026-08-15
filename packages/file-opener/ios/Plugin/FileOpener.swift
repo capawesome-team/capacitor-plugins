@@ -64,10 +64,16 @@ import MobileCoreServices
 extension FileOpener: UIDocumentInteractionControllerDelegate {
     public func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
         var viewController = self.plugin.bridge?.viewController
-        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        if viewController?.view.window != keyWindow {
-            viewController = keyWindow?.rootViewController
+        if viewController?.view.window?.isKeyWindow != true {
+            viewController = FileOpener.keyWindow?.rootViewController
         }
         return viewController ?? UIViewController()
+    }
+
+    private static var keyWindow: UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap(\.windows)
+            .first(where: \.isKeyWindow)
     }
 }
