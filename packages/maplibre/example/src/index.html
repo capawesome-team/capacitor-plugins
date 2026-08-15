@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor MapLibre</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <style>
+      :root {
+        --color-accent: #0f62fe;
+        --color-border: #e5e7eb;
+        --color-surface: #ffffff;
+        --color-text: #111827;
+        --color-text-muted: #6b7280;
+        --radius: 10px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        color: var(--color-text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+          sans-serif;
+        line-height: 1.5;
+        margin: 0;
+        /* No background so that the native map stays visible on Android and iOS. */
+      }
+
+      header {
+        border-bottom: 1px solid var(--color-border);
+        padding: 24px 20px;
+      }
+
+      h1 {
+        font-size: 20px;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h2 {
+        color: var(--color-text-muted);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        margin: 0 0 8px;
+        text-transform: uppercase;
+      }
+
+      p {
+        color: var(--color-text-muted);
+        font-size: 14px;
+        margin: 4px 0 0;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin: 0 auto;
+        max-width: 720px;
+        padding: 24px 20px 48px;
+      }
+
+      .map-container {
+        position: relative;
+      }
+
+      #map {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        height: 400px;
+        overflow: hidden;
+        width: 100%;
+        /* No background so that the native map stays visible on Android and iOS. */
+      }
+
+      .fab {
+        align-items: center;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgb(0 0 0 / 15%);
+        color: var(--color-accent);
+        cursor: pointer;
+        display: flex;
+        height: 48px;
+        justify-content: center;
+        position: absolute;
+        right: 16px;
+        top: 16px;
+        width: 48px;
+      }
+
+      .fab:hover {
+        background: #f9fafb;
+      }
+
+      .controls {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .control-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      button {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        color: var(--color-text);
+        cursor: pointer;
+        font-size: 14px;
+        padding: 8px 14px;
+      }
+
+      button:hover {
+        background: #f9fafb;
+      }
+
+      button:focus-visible,
+      .fab:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+
+      #event-log {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius);
+        font-size: 12px;
+        height: 220px;
+        margin: 0;
+        overflow: auto;
+        padding: 12px;
+        white-space: pre-wrap;
+      }
+    </style>
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Capacitor MapLibre</h1>
+      <p>Example app for the @capawesome/capacitor-maplibre plugin.</p>
+    </header>
+    <main>
+      <section>
+        <h2>Getting started</h2>
+        <p>
+          Create the map first. Scroll the page to verify that the map stays in
+          place and that content above and below the map is rendered correctly.
+        </p>
+      </section>
+
+      <div class="map-container">
+        <div id="map"></div>
+        <button class="fab" id="recenter-button" type="button" title="Recenter">
+          <svg
+            aria-hidden="true"
+            fill="none"
+            height="22"
+            stroke="currentColor"
+            stroke-width="1.8"
+            viewBox="0 0 24 24"
+            width="22"
+          >
+            <circle cx="12" cy="12" r="6" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      <section class="controls">
+        <div>
+          <h2>Map</h2>
+          <div class="control-group">
+            <button id="create-map-button" type="button">Create map</button>
+            <button id="destroy-map-button" type="button">Destroy map</button>
+            <button id="toggle-gestures-button" type="button">
+              Toggle gestures
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h2>Style</h2>
+          <div class="control-group">
+            <button id="demo-tiles-style-button" type="button">
+              Demo tiles
+            </button>
+            <button id="positron-style-button" type="button">Positron</button>
+          </div>
+        </div>
+
+        <div>
+          <h2>Camera</h2>
+          <div class="control-group">
+            <button id="set-camera-button" type="button">Set camera</button>
+            <button id="fit-bounds-button" type="button">Fit bounds</button>
+            <button id="get-camera-button" type="button">Get camera</button>
+          </div>
+        </div>
+
+        <div>
+          <h2>Markers</h2>
+          <div class="control-group">
+            <button id="add-markers-button" type="button">Add markers</button>
+            <button id="update-marker-button" type="button">Move marker</button>
+            <button id="remove-marker-button" type="button">
+              Remove marker
+            </button>
+            <button id="remove-all-markers-button" type="button">
+              Remove all markers
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h2>Polylines</h2>
+          <div class="control-group">
+            <button id="add-polyline-button" type="button">Add polyline</button>
+            <button id="update-polyline-button" type="button">
+              Update polyline
+            </button>
+            <button id="remove-polyline-button" type="button">
+              Remove polyline
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h2>GeoJSON</h2>
+          <div class="control-group">
+            <button id="add-geojson-button" type="button">
+              Add source and layer
+            </button>
+            <button id="remove-geojson-button" type="button">
+              Remove source and layer
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h2>User location</h2>
+          <div class="control-group">
+            <button id="enable-user-location-button" type="button">
+              Enable
+            </button>
+            <button id="disable-user-location-button" type="button">
+              Disable
+            </button>
+            <button id="check-permissions-button" type="button">
+              Check permissions
+            </button>
+            <button id="request-permissions-button" type="button">
+              Request permissions
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Events</h2>
+        <pre id="event-log"></pre>
+      </section>
+
+      <section>
+        <h2>Notes</h2>
+        <p>
+          A new style replaces all sources and layers of the map. Markers,
+          polylines, sources and layers must therefore be added again after the
+          style has been loaded.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

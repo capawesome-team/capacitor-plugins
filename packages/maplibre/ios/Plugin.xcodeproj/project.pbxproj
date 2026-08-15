@@ -1,0 +1,849 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
+		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
+		2F98D68224C9AAE500613A4C /* MapLibre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* MapLibre.swift */; };
+		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
+		50ADFF97201F53D600D50D53 /* MapLibreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* MapLibreTests.swift */; };
+		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
+		50E1A94820377CB70090CE1A /* MapLibrePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* MapLibrePlugin.swift */; };
+		CF0000000000000000000002 /* MapLibreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000001 /* MapLibreHelper.swift */; };
+		CF0000000000000000000004 /* Bounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000003 /* Bounds.swift */; };
+		CF0000000000000000000006 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000005 /* Camera.swift */; };
+		CF0000000000000000000008 /* GeoJsonManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000007 /* GeoJsonManager.swift */; };
+		CF000000000000000000000A /* GestureSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000009 /* GestureSettings.swift */; };
+		CF000000000000000000000C /* LatLng.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000B /* LatLng.swift */; };
+		CF000000000000000000000E /* LayerPaint.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000D /* LayerPaint.swift */; };
+		CF0000000000000000000010 /* LocationPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000F /* LocationPermissionManager.swift */; };
+		CF0000000000000000000012 /* MapContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000011 /* MapContainer.swift */; };
+		CF0000000000000000000014 /* MapContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000013 /* MapContentSize.swift */; };
+		CF0000000000000000000016 /* MapFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000015 /* MapFrame.swift */; };
+		CF0000000000000000000018 /* MapInstance.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000017 /* MapInstance.swift */; };
+		CF000000000000000000001A /* Marker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000019 /* Marker.swift */; };
+		CF000000000000000000001C /* MarkerAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000001B /* MarkerAnimation.swift */; };
+		CF000000000000000000001E /* MarkerIconLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000001D /* MarkerIconLoader.swift */; };
+		CF0000000000000000000020 /* MarkerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000001F /* MarkerManager.swift */; };
+		CF0000000000000000000022 /* Padding.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000021 /* Padding.swift */; };
+		CF0000000000000000000024 /* Polyline.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000023 /* Polyline.swift */; };
+		CF0000000000000000000026 /* PolylineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000025 /* PolylineManager.swift */; };
+		CF0000000000000000000028 /* CameraIdleEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000027 /* CameraIdleEvent.swift */; };
+		CF000000000000000000002A /* CameraMoveStartedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000029 /* CameraMoveStartedEvent.swift */; };
+		CF000000000000000000002C /* MapClickEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000002B /* MapClickEvent.swift */; };
+		CF000000000000000000002E /* MarkerClickEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000002D /* MarkerClickEvent.swift */; };
+		CF0000000000000000000030 /* UserLocationChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000002F /* UserLocationChangeEvent.swift */; };
+		CF0000000000000000000032 /* AddGeoJsonSourceOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000031 /* AddGeoJsonSourceOptions.swift */; };
+		CF0000000000000000000034 /* AddLayerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000033 /* AddLayerOptions.swift */; };
+		CF0000000000000000000036 /* AddMarkerOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000035 /* AddMarkerOptions.swift */; };
+		CF0000000000000000000038 /* AddMarkersOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000037 /* AddMarkersOptions.swift */; };
+		CF000000000000000000003A /* AddPolylineOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000039 /* AddPolylineOptions.swift */; };
+		CF000000000000000000003C /* AddPolylinesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000003B /* AddPolylinesOptions.swift */; };
+		CF000000000000000000003E /* CreateMapOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000003D /* CreateMapOptions.swift */; };
+		CF0000000000000000000040 /* DestroyMapOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000003F /* DestroyMapOptions.swift */; };
+		CF0000000000000000000042 /* DisableUserLocationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000041 /* DisableUserLocationOptions.swift */; };
+		CF0000000000000000000044 /* EnableUserLocationOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000043 /* EnableUserLocationOptions.swift */; };
+		CF0000000000000000000046 /* FitBoundsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000045 /* FitBoundsOptions.swift */; };
+		CF0000000000000000000048 /* GetCameraOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000047 /* GetCameraOptions.swift */; };
+		CF000000000000000000004A /* RemoveAllMarkersOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000049 /* RemoveAllMarkersOptions.swift */; };
+		CF000000000000000000004C /* RemoveAllPolylinesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000004B /* RemoveAllPolylinesOptions.swift */; };
+		CF000000000000000000004E /* RemoveGeoJsonSourceByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000004D /* RemoveGeoJsonSourceByIdOptions.swift */; };
+		CF0000000000000000000050 /* RemoveLayerByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000004F /* RemoveLayerByIdOptions.swift */; };
+		CF0000000000000000000052 /* RemoveMarkerByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000051 /* RemoveMarkerByIdOptions.swift */; };
+		CF0000000000000000000054 /* RemoveMarkersByIdsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000053 /* RemoveMarkersByIdsOptions.swift */; };
+		CF0000000000000000000056 /* RemovePolylineByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000055 /* RemovePolylineByIdOptions.swift */; };
+		CF0000000000000000000058 /* RemovePolylinesByIdsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000057 /* RemovePolylinesByIdsOptions.swift */; };
+		CF000000000000000000005A /* SetCameraOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000059 /* SetCameraOptions.swift */; };
+		CF000000000000000000005C /* SetFrameOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000005B /* SetFrameOptions.swift */; };
+		CF000000000000000000005E /* SetGesturesEnabledOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000005D /* SetGesturesEnabledOptions.swift */; };
+		CF0000000000000000000060 /* SetStyleOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000005F /* SetStyleOptions.swift */; };
+		CF0000000000000000000062 /* UpdateGeoJsonSourceByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000061 /* UpdateGeoJsonSourceByIdOptions.swift */; };
+		CF0000000000000000000064 /* UpdateMarkerByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000063 /* UpdateMarkerByIdOptions.swift */; };
+		CF0000000000000000000066 /* UpdatePolylineByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000065 /* UpdatePolylineByIdOptions.swift */; };
+		CF0000000000000000000068 /* GetCameraResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000067 /* GetCameraResult.swift */; };
+		CF000000000000000000006A /* PermissionStatusResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000069 /* PermissionStatusResult.swift */; };
+		CF000000000000000000006C /* CameraMoveReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000006B /* CameraMoveReason.swift */; };
+		CF000000000000000000006E /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000006D /* CustomError.swift */; };
+		CF0000000000000000000070 /* LayerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000006F /* LayerType.swift */; };
+		CF0000000000000000000072 /* MarkerIconAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000071 /* MarkerIconAnchor.swift */; };
+		CF0000000000000000000074 /* UserTrackingMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000073 /* UserTrackingMode.swift */; };
+		CF0000000000000000000076 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000075 /* Result.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		50ADFF93201F53D600D50D53 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 50ADFF7F201F53D600D50D53 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 50ADFF87201F53D600D50D53;
+			remoteInfo = Plugin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2F98D68124C9AAE400613A4C /* MapLibre.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLibre.swift; sourceTree = "<group>"; };
+		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		50ADFF8C201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50ADFF91201F53D600D50D53 /* PluginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PluginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		50ADFF96201F53D600D50D53 /* MapLibreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreTests.swift; sourceTree = "<group>"; };
+		50ADFF98201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50ADFFA52020D75100D50D53 /* Capacitor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Capacitor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		50E1A94720377CB70090CE1A /* MapLibrePlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLibrePlugin.swift; sourceTree = "<group>"; };
+		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
+		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
+		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
+		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
+		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF0000000000000000000001 /* MapLibreHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapLibreHelper.swift; sourceTree = "<group>"; };
+		CF0000000000000000000003 /* Bounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bounds.swift; sourceTree = "<group>"; };
+		CF0000000000000000000005 /* Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		CF0000000000000000000007 /* GeoJsonManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeoJsonManager.swift; sourceTree = "<group>"; };
+		CF0000000000000000000009 /* GestureSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GestureSettings.swift; sourceTree = "<group>"; };
+		CF000000000000000000000B /* LatLng.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LatLng.swift; sourceTree = "<group>"; };
+		CF000000000000000000000D /* LayerPaint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerPaint.swift; sourceTree = "<group>"; };
+		CF000000000000000000000F /* LocationPermissionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationPermissionManager.swift; sourceTree = "<group>"; };
+		CF0000000000000000000011 /* MapContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapContainer.swift; sourceTree = "<group>"; };
+		CF0000000000000000000013 /* MapContentSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapContentSize.swift; sourceTree = "<group>"; };
+		CF0000000000000000000015 /* MapFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapFrame.swift; sourceTree = "<group>"; };
+		CF0000000000000000000017 /* MapInstance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapInstance.swift; sourceTree = "<group>"; };
+		CF0000000000000000000019 /* Marker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Marker.swift; sourceTree = "<group>"; };
+		CF000000000000000000001B /* MarkerAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerAnimation.swift; sourceTree = "<group>"; };
+		CF000000000000000000001D /* MarkerIconLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerIconLoader.swift; sourceTree = "<group>"; };
+		CF000000000000000000001F /* MarkerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerManager.swift; sourceTree = "<group>"; };
+		CF0000000000000000000021 /* Padding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Padding.swift; sourceTree = "<group>"; };
+		CF0000000000000000000023 /* Polyline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Polyline.swift; sourceTree = "<group>"; };
+		CF0000000000000000000025 /* PolylineManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolylineManager.swift; sourceTree = "<group>"; };
+		CF0000000000000000000027 /* CameraIdleEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraIdleEvent.swift; sourceTree = "<group>"; };
+		CF0000000000000000000029 /* CameraMoveStartedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMoveStartedEvent.swift; sourceTree = "<group>"; };
+		CF000000000000000000002B /* MapClickEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapClickEvent.swift; sourceTree = "<group>"; };
+		CF000000000000000000002D /* MarkerClickEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerClickEvent.swift; sourceTree = "<group>"; };
+		CF000000000000000000002F /* UserLocationChangeEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserLocationChangeEvent.swift; sourceTree = "<group>"; };
+		CF0000000000000000000031 /* AddGeoJsonSourceOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddGeoJsonSourceOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000033 /* AddLayerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddLayerOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000035 /* AddMarkerOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMarkerOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000037 /* AddMarkersOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMarkersOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000039 /* AddPolylineOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPolylineOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000003B /* AddPolylinesOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddPolylinesOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000003D /* CreateMapOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateMapOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000003F /* DestroyMapOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestroyMapOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000041 /* DisableUserLocationOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisableUserLocationOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000043 /* EnableUserLocationOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnableUserLocationOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000045 /* FitBoundsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FitBoundsOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000047 /* GetCameraOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCameraOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000049 /* RemoveAllMarkersOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAllMarkersOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000004B /* RemoveAllPolylinesOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveAllPolylinesOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000004D /* RemoveGeoJsonSourceByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveGeoJsonSourceByIdOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000004F /* RemoveLayerByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveLayerByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000051 /* RemoveMarkerByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveMarkerByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000053 /* RemoveMarkersByIdsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoveMarkersByIdsOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000055 /* RemovePolylineByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemovePolylineByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000057 /* RemovePolylinesByIdsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemovePolylinesByIdsOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000059 /* SetCameraOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetCameraOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000005B /* SetFrameOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetFrameOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000005D /* SetGesturesEnabledOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetGesturesEnabledOptions.swift; sourceTree = "<group>"; };
+		CF000000000000000000005F /* SetStyleOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetStyleOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000061 /* UpdateGeoJsonSourceByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateGeoJsonSourceByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000063 /* UpdateMarkerByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateMarkerByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000065 /* UpdatePolylineByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatePolylineByIdOptions.swift; sourceTree = "<group>"; };
+		CF0000000000000000000067 /* GetCameraResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetCameraResult.swift; sourceTree = "<group>"; };
+		CF0000000000000000000069 /* PermissionStatusResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PermissionStatusResult.swift; sourceTree = "<group>"; };
+		CF000000000000000000006B /* CameraMoveReason.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMoveReason.swift; sourceTree = "<group>"; };
+		CF000000000000000000006D /* CustomError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
+		CF000000000000000000006F /* LayerType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayerType.swift; sourceTree = "<group>"; };
+		CF0000000000000000000071 /* MarkerIconAnchor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerIconAnchor.swift; sourceTree = "<group>"; };
+		CF0000000000000000000073 /* UserTrackingMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTrackingMode.swift; sourceTree = "<group>"; };
+		CF0000000000000000000075 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		50ADFF84201F53D600D50D53 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */,
+				03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50ADFF8E201F53D600D50D53 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */,
+				20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		50ADFF7E201F53D600D50D53 = {
+			isa = PBXGroup;
+			children = (
+				50ADFF8A201F53D600D50D53 /* Plugin */,
+				50ADFF95201F53D600D50D53 /* PluginTests */,
+				50ADFF89201F53D600D50D53 /* Products */,
+				8C8E7744173064A9F6D438E3 /* Pods */,
+				A797B9EFA3DCEFEA1FBB66A9 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		50ADFF89201F53D600D50D53 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				50ADFF88201F53D600D50D53 /* Plugin.framework */,
+				50ADFF91201F53D600D50D53 /* PluginTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		50ADFF8A201F53D600D50D53 /* Plugin */ = {
+			isa = PBXGroup;
+			children = (
+				CG0000000000000000000001 /* Classes */,
+				CG0000000000000000000005 /* Enums */,
+				CG0000000000000000000006 /* Protocols */,
+				2F98D68124C9AAE400613A4C /* MapLibre.swift */,
+				CF0000000000000000000001 /* MapLibreHelper.swift */,
+				50E1A94720377CB70090CE1A /* MapLibrePlugin.swift */,
+				50ADFF8C201F53D600D50D53 /* Info.plist */,
+			);
+			path = Plugin;
+			sourceTree = "<group>";
+		};
+		50ADFF95201F53D600D50D53 /* PluginTests */ = {
+			isa = PBXGroup;
+			children = (
+				50ADFF96201F53D600D50D53 /* MapLibreTests.swift */,
+				50ADFF98201F53D600D50D53 /* Info.plist */,
+			);
+			path = PluginTests;
+			sourceTree = "<group>";
+		};
+		8C8E7744173064A9F6D438E3 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */,
+				91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */,
+				96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */,
+				F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A797B9EFA3DCEFEA1FBB66A9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				50ADFFA52020D75100D50D53 /* Capacitor.framework */,
+				3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */,
+				F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				CG0000000000000000000002 /* Events */,
+				CG0000000000000000000003 /* Options */,
+				CG0000000000000000000004 /* Results */,
+				CF0000000000000000000003 /* Bounds.swift */,
+				CF0000000000000000000005 /* Camera.swift */,
+				CF0000000000000000000007 /* GeoJsonManager.swift */,
+				CF0000000000000000000009 /* GestureSettings.swift */,
+				CF000000000000000000000B /* LatLng.swift */,
+				CF000000000000000000000D /* LayerPaint.swift */,
+				CF000000000000000000000F /* LocationPermissionManager.swift */,
+				CF0000000000000000000011 /* MapContainer.swift */,
+				CF0000000000000000000013 /* MapContentSize.swift */,
+				CF0000000000000000000015 /* MapFrame.swift */,
+				CF0000000000000000000017 /* MapInstance.swift */,
+				CF0000000000000000000019 /* Marker.swift */,
+				CF000000000000000000001B /* MarkerAnimation.swift */,
+				CF000000000000000000001D /* MarkerIconLoader.swift */,
+				CF000000000000000000001F /* MarkerManager.swift */,
+				CF0000000000000000000021 /* Padding.swift */,
+				CF0000000000000000000023 /* Polyline.swift */,
+				CF0000000000000000000025 /* PolylineManager.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000002 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				CF0000000000000000000027 /* CameraIdleEvent.swift */,
+				CF0000000000000000000029 /* CameraMoveStartedEvent.swift */,
+				CF000000000000000000002B /* MapClickEvent.swift */,
+				CF000000000000000000002D /* MarkerClickEvent.swift */,
+				CF000000000000000000002F /* UserLocationChangeEvent.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000003 /* Options */ = {
+			isa = PBXGroup;
+			children = (
+				CF0000000000000000000031 /* AddGeoJsonSourceOptions.swift */,
+				CF0000000000000000000033 /* AddLayerOptions.swift */,
+				CF0000000000000000000035 /* AddMarkerOptions.swift */,
+				CF0000000000000000000037 /* AddMarkersOptions.swift */,
+				CF0000000000000000000039 /* AddPolylineOptions.swift */,
+				CF000000000000000000003B /* AddPolylinesOptions.swift */,
+				CF000000000000000000003D /* CreateMapOptions.swift */,
+				CF000000000000000000003F /* DestroyMapOptions.swift */,
+				CF0000000000000000000041 /* DisableUserLocationOptions.swift */,
+				CF0000000000000000000043 /* EnableUserLocationOptions.swift */,
+				CF0000000000000000000045 /* FitBoundsOptions.swift */,
+				CF0000000000000000000047 /* GetCameraOptions.swift */,
+				CF0000000000000000000049 /* RemoveAllMarkersOptions.swift */,
+				CF000000000000000000004B /* RemoveAllPolylinesOptions.swift */,
+				CF000000000000000000004D /* RemoveGeoJsonSourceByIdOptions.swift */,
+				CF000000000000000000004F /* RemoveLayerByIdOptions.swift */,
+				CF0000000000000000000051 /* RemoveMarkerByIdOptions.swift */,
+				CF0000000000000000000053 /* RemoveMarkersByIdsOptions.swift */,
+				CF0000000000000000000055 /* RemovePolylineByIdOptions.swift */,
+				CF0000000000000000000057 /* RemovePolylinesByIdsOptions.swift */,
+				CF0000000000000000000059 /* SetCameraOptions.swift */,
+				CF000000000000000000005B /* SetFrameOptions.swift */,
+				CF000000000000000000005D /* SetGesturesEnabledOptions.swift */,
+				CF000000000000000000005F /* SetStyleOptions.swift */,
+				CF0000000000000000000061 /* UpdateGeoJsonSourceByIdOptions.swift */,
+				CF0000000000000000000063 /* UpdateMarkerByIdOptions.swift */,
+				CF0000000000000000000065 /* UpdatePolylineByIdOptions.swift */,
+			);
+			path = Options;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000004 /* Results */ = {
+			isa = PBXGroup;
+			children = (
+				CF0000000000000000000067 /* GetCameraResult.swift */,
+				CF0000000000000000000069 /* PermissionStatusResult.swift */,
+			);
+			path = Results;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000005 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				CF000000000000000000006B /* CameraMoveReason.swift */,
+				CF000000000000000000006D /* CustomError.swift */,
+				CF000000000000000000006F /* LayerType.swift */,
+				CF0000000000000000000071 /* MarkerIconAnchor.swift */,
+				CF0000000000000000000073 /* UserTrackingMode.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		CG0000000000000000000006 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				CF0000000000000000000075 /* Result.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		50ADFF85201F53D600D50D53 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		50ADFF87201F53D600D50D53 /* Plugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50ADFF9C201F53D600D50D53 /* Build configuration list for PBXNativeTarget "Plugin" */;
+			buildPhases = (
+				AB5B3E54B4E897F32C2279DA /* [CP] Check Pods Manifest.lock */,
+				50ADFF83201F53D600D50D53 /* Sources */,
+				50ADFF84201F53D600D50D53 /* Frameworks */,
+				50ADFF85201F53D600D50D53 /* Headers */,
+				50ADFF86201F53D600D50D53 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Plugin;
+			productName = Plugin;
+			productReference = 50ADFF88201F53D600D50D53 /* Plugin.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		50ADFF90201F53D600D50D53 /* PluginTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50ADFF9F201F53D600D50D53 /* Build configuration list for PBXNativeTarget "PluginTests" */;
+			buildPhases = (
+				0596884F929ED6F1DE134961 /* [CP] Check Pods Manifest.lock */,
+				50ADFF8D201F53D600D50D53 /* Sources */,
+				50ADFF8E201F53D600D50D53 /* Frameworks */,
+				50ADFF8F201F53D600D50D53 /* Resources */,
+				8E97F58B69A94C6503FC9C85 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				50ADFF94201F53D600D50D53 /* PBXTargetDependency */,
+			);
+			name = PluginTests;
+			productName = PluginTests;
+			productReference = 50ADFF91201F53D600D50D53 /* PluginTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		50ADFF7F201F53D600D50D53 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0920;
+				LastUpgradeCheck = 1160;
+				ORGANIZATIONNAME = "Max Lynch";
+				TargetAttributes = {
+					50ADFF87201F53D600D50D53 = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+					50ADFF90201F53D600D50D53 = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 50ADFF82201F53D600D50D53 /* Build configuration list for PBXProject "Plugin" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 50ADFF7E201F53D600D50D53;
+			productRefGroup = 50ADFF89201F53D600D50D53 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				50ADFF87201F53D600D50D53 /* Plugin */,
+				50ADFF90201F53D600D50D53 /* PluginTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		50ADFF86201F53D600D50D53 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50ADFF8F201F53D600D50D53 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0596884F929ED6F1DE134961 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PluginTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E97F58B69A94C6503FC9C85 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
+				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/MapLibre/MapLibre.framework/MapLibre",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MapLibre.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AB5B3E54B4E897F32C2279DA /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Plugin-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		50ADFF83201F53D600D50D53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2F98D68224C9AAE500613A4C /* MapLibre.swift in Sources */,
+				50E1A94820377CB70090CE1A /* MapLibrePlugin.swift in Sources */,
+				CF0000000000000000000002 /* MapLibreHelper.swift in Sources */,
+				CF0000000000000000000004 /* Bounds.swift in Sources */,
+				CF0000000000000000000006 /* Camera.swift in Sources */,
+				CF0000000000000000000008 /* GeoJsonManager.swift in Sources */,
+				CF000000000000000000000A /* GestureSettings.swift in Sources */,
+				CF000000000000000000000C /* LatLng.swift in Sources */,
+				CF000000000000000000000E /* LayerPaint.swift in Sources */,
+				CF0000000000000000000010 /* LocationPermissionManager.swift in Sources */,
+				CF0000000000000000000012 /* MapContainer.swift in Sources */,
+				CF0000000000000000000014 /* MapContentSize.swift in Sources */,
+				CF0000000000000000000016 /* MapFrame.swift in Sources */,
+				CF0000000000000000000018 /* MapInstance.swift in Sources */,
+				CF000000000000000000001A /* Marker.swift in Sources */,
+				CF000000000000000000001C /* MarkerAnimation.swift in Sources */,
+				CF000000000000000000001E /* MarkerIconLoader.swift in Sources */,
+				CF0000000000000000000020 /* MarkerManager.swift in Sources */,
+				CF0000000000000000000022 /* Padding.swift in Sources */,
+				CF0000000000000000000024 /* Polyline.swift in Sources */,
+				CF0000000000000000000026 /* PolylineManager.swift in Sources */,
+				CF0000000000000000000028 /* CameraIdleEvent.swift in Sources */,
+				CF000000000000000000002A /* CameraMoveStartedEvent.swift in Sources */,
+				CF000000000000000000002C /* MapClickEvent.swift in Sources */,
+				CF000000000000000000002E /* MarkerClickEvent.swift in Sources */,
+				CF0000000000000000000030 /* UserLocationChangeEvent.swift in Sources */,
+				CF0000000000000000000032 /* AddGeoJsonSourceOptions.swift in Sources */,
+				CF0000000000000000000034 /* AddLayerOptions.swift in Sources */,
+				CF0000000000000000000036 /* AddMarkerOptions.swift in Sources */,
+				CF0000000000000000000038 /* AddMarkersOptions.swift in Sources */,
+				CF000000000000000000003A /* AddPolylineOptions.swift in Sources */,
+				CF000000000000000000003C /* AddPolylinesOptions.swift in Sources */,
+				CF000000000000000000003E /* CreateMapOptions.swift in Sources */,
+				CF0000000000000000000040 /* DestroyMapOptions.swift in Sources */,
+				CF0000000000000000000042 /* DisableUserLocationOptions.swift in Sources */,
+				CF0000000000000000000044 /* EnableUserLocationOptions.swift in Sources */,
+				CF0000000000000000000046 /* FitBoundsOptions.swift in Sources */,
+				CF0000000000000000000048 /* GetCameraOptions.swift in Sources */,
+				CF000000000000000000004A /* RemoveAllMarkersOptions.swift in Sources */,
+				CF000000000000000000004C /* RemoveAllPolylinesOptions.swift in Sources */,
+				CF000000000000000000004E /* RemoveGeoJsonSourceByIdOptions.swift in Sources */,
+				CF0000000000000000000050 /* RemoveLayerByIdOptions.swift in Sources */,
+				CF0000000000000000000052 /* RemoveMarkerByIdOptions.swift in Sources */,
+				CF0000000000000000000054 /* RemoveMarkersByIdsOptions.swift in Sources */,
+				CF0000000000000000000056 /* RemovePolylineByIdOptions.swift in Sources */,
+				CF0000000000000000000058 /* RemovePolylinesByIdsOptions.swift in Sources */,
+				CF000000000000000000005A /* SetCameraOptions.swift in Sources */,
+				CF000000000000000000005C /* SetFrameOptions.swift in Sources */,
+				CF000000000000000000005E /* SetGesturesEnabledOptions.swift in Sources */,
+				CF0000000000000000000060 /* SetStyleOptions.swift in Sources */,
+				CF0000000000000000000062 /* UpdateGeoJsonSourceByIdOptions.swift in Sources */,
+				CF0000000000000000000064 /* UpdateMarkerByIdOptions.swift in Sources */,
+				CF0000000000000000000066 /* UpdatePolylineByIdOptions.swift in Sources */,
+				CF0000000000000000000068 /* GetCameraResult.swift in Sources */,
+				CF000000000000000000006A /* PermissionStatusResult.swift in Sources */,
+				CF000000000000000000006C /* CameraMoveReason.swift in Sources */,
+				CF000000000000000000006E /* CustomError.swift in Sources */,
+				CF0000000000000000000070 /* LayerType.swift in Sources */,
+				CF0000000000000000000072 /* MarkerIconAnchor.swift in Sources */,
+				CF0000000000000000000074 /* UserTrackingMode.swift in Sources */,
+				CF0000000000000000000076 /* Result.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50ADFF8D201F53D600D50D53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50ADFF97201F53D600D50D53 /* MapLibreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		50ADFF94201F53D600D50D53 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 50ADFF87201F53D600D50D53 /* Plugin */;
+			targetProxy = 50ADFF93201F53D600D50D53 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		50ADFF9A201F53D600D50D53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"${BUILT_PRODUCTS_DIR}/Capacitor\"",
+					"\"${BUILT_PRODUCTS_DIR}/CapacitorCordova\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		50ADFF9B201F53D600D50D53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"\"${BUILT_PRODUCTS_DIR}/Capacitor\"",
+					"\"${BUILT_PRODUCTS_DIR}/CapacitorCordova\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		50ADFF9D201F53D600D50D53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Plugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)\n$(FRAMEWORK_SEARCH_PATHS)";
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		50ADFF9E201F53D600D50D53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Plugin/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks $(FRAMEWORK_SEARCH_PATHS)";
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.Plugin;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		50ADFFA0201F53D600D50D53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = PluginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.PluginTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		50ADFFA1201F53D600D50D53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = PluginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.getcapacitor.PluginTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		50ADFF82201F53D600D50D53 /* Build configuration list for PBXProject "Plugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50ADFF9A201F53D600D50D53 /* Debug */,
+				50ADFF9B201F53D600D50D53 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50ADFF9C201F53D600D50D53 /* Build configuration list for PBXNativeTarget "Plugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50ADFF9D201F53D600D50D53 /* Debug */,
+				50ADFF9E201F53D600D50D53 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50ADFF9F201F53D600D50D53 /* Build configuration list for PBXNativeTarget "PluginTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				50ADFFA0201F53D600D50D53 /* Debug */,
+				50ADFFA1201F53D600D50D53 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 50ADFF7F201F53D600D50D53 /* Project object */;
+}
