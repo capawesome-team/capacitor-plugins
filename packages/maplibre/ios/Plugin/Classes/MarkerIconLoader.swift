@@ -77,15 +77,18 @@ public class MarkerIconLoader {
                 completion(image)
             }
         }
-        guard url.scheme == "https" else {
+        switch url.scheme?.lowercased() {
+        case "data":
             DispatchQueue.global(qos: .userInitiated).async {
                 handleData(try? Data(contentsOf: url))
             }
-            return
+        case "http", "https":
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                handleData(data)
+            }
+            .resume()
+        default:
+            handleData(nil)
         }
-        URLSession.shared.dataTask(with: url) { data, _, _ in
-            handleData(data)
-        }
-        .resume()
     }
 }
