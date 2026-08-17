@@ -22,7 +22,7 @@ The Capacitor Audio Player plugin is one of the most complete audio playback sol
 - 🔊 **Volume Control**: Precise volume control from 0-100.
 - ⏩ **Playback Speed**: Adjustable playback rate with pitch preservation.
 - 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
-- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
+- 🤝 **Compatibility**: Compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -1164,7 +1164,7 @@ This can happen when `play()` is called shortly after `stop()`, because the audi
 
 ### Can I use this plugin together with other audio plugins?
 
-Yes, the plugin is compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins. For example, you can play back a recording created with the Audio Recorder plugin.
+Yes, the plugin is compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins. For example, you can play back a recording created with the Audio Recorder plugin. However, combining it with the [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/) plugin is not recommended. Use the built-in media session integration (see the `metadata` option of the `play(...)` method) instead, which handles the media controls natively, even when the web view is suspended while the app is in the background.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
