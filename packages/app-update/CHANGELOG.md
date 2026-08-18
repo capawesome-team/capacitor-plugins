@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`f01a68db2b220e1a1f31b3d9a114682bebcdaaec`](https://github.com/capawesome-team/capacitor-plugins/commit/f01a68db2b220e1a1f31b3d9a114682bebcdaaec) ([#987](https://github.com/capawesome-team/capacitor-plugins/pull/987)): fix(android): resolve the version code via `PackageInfoCompat` to avoid a deprecation warning
+
 ## 8.0.3
 
 ### Patch Changes
