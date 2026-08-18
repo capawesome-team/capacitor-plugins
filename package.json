@@ -33,6 +33,7 @@
     "affected:ios:pod:install": "turbo run ios:pod:install --affected --concurrency=1 --no-cache",
     "affected:ios:spm:install": "turbo run ios:spm:install --affected --concurrency=1 --no-cache",
     "changeset": "changeset",
+    "changeset:version": "changeset version && npm run version",
     "release": "npm run build && changeset publish",
     "release:preview": "pkg-pr-new publish './packages/*'",
     "postinstall": "patch-package",
