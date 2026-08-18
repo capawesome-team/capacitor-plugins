@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -92,7 +93,7 @@ public class AppUpdatePlugin extends Plugin {
                 }
                 JSObject ret = new JSObject();
                 ret.put("currentVersionName", pInfo.versionName);
-                ret.put("currentVersionCode", String.valueOf(pInfo.versionCode));
+                ret.put("currentVersionCode", String.valueOf(PackageInfoCompat.getLongVersionCode(pInfo)));
                 ret.put("availableVersionCode", String.valueOf(appUpdateInfo.availableVersionCode()));
                 ret.put("updateAvailability", appUpdateInfo.updateAvailability());
                 ret.put("updatePriority", appUpdateInfo.updatePriority());
