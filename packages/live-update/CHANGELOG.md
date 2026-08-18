@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.1
+
+### Patch Changes
+
+- [`1b6109e6f4e1ed54551edcebaa9439923db6a78b`](https://github.com/capawesome-team/capacitor-plugins/commit/1b6109e6f4e1ed54551edcebaa9439923db6a78b) ([#989](https://github.com/capawesome-team/capacitor-plugins/pull/989)): fix: report the actual plugin version instead of a stale one on Android and iOS
+
 ## 8.4.0
 
 ### Minor Changes
