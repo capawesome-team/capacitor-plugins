@@ -122,8 +122,8 @@ public class GoogleSignInPlugin extends Plugin {
                     result.getData()
                 );
                 implementation.handleAuthorizationResult(authResult);
-            } catch (Exception e) {
-                implementation.handleAuthorizationCanceled();
+            } catch (Exception exception) {
+                implementation.handleAuthorizationFailed(exception);
             }
         } else {
             implementation.handleAuthorizationCanceled();
@@ -139,12 +139,13 @@ public class GoogleSignInPlugin extends Plugin {
         if (message == null) {
             message = ERROR_UNKNOWN_ERROR;
         }
-        String code = null;
-        if (exception instanceof CustomException) {
-            code = ((CustomException) exception).getCode();
-        }
         Logger.error(TAG, message, exception);
-        call.reject(message, code);
+        String code = exception instanceof CustomException ? ((CustomException) exception).getCode() : null;
+        if (code == null) {
+            call.reject(message);
+        } else {
+            call.reject(message, code);
+        }
     }
 
     private void resolveCall(@NonNull PluginCall call) {

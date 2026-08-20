@@ -21,6 +21,7 @@ import com.google.android.gms.auth.api.identity.AuthorizationResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.InitializeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.SignInOptions;
@@ -105,7 +106,7 @@ public class GoogleSignIn {
                 @Override
                 public void onError(@NonNull GetCredentialException exception) {
                     if (exception instanceof GetCredentialCancellationException) {
-                        callback.error(CustomExceptions.SIGN_IN_CANCELED);
+                        callback.error(createSignInCanceledException(exception));
                     } else if (exception instanceof NoCredentialException) {
                         callback.error(CustomExceptions.NO_CREDENTIAL_AVAILABLE);
                     } else if (exception instanceof GetCredentialProviderConfigurationException) {
@@ -168,6 +169,15 @@ public class GoogleSignIn {
         NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
         clearPendingState();
         callback.error(CustomExceptions.SIGN_IN_CANCELED);
+    }
+
+    public void handleAuthorizationFailed(@NonNull Exception exception) {
+        if (pendingSignInCallback == null) {
+            return;
+        }
+        NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
+        clearPendingState();
+        callback.error(exception);
     }
 
     private void handleCredentialResponse(@NonNull GetCredentialResponse response, @NonNull NonEmptyResultCallback<SignInResult> callback) {
@@ -268,6 +278,21 @@ public class GoogleSignIn {
             return new Exception(type, cause);
         }
         return new Exception(type + ": " + errorMessage, cause);
+    }
+
+    /**
+     * Creates an exception for a canceled sign-in flow.
+     *
+     * Google Play services also reports configuration errors (e.g. a missing Android OAuth client)
+     * as a cancellation, so the original error message must be preserved to stay diagnosable.
+     */
+    @NonNull
+    private CustomException createSignInCanceledException(@NonNull GetCredentialException exception) {
+        CharSequence errorMessage = exception.getErrorMessage();
+        if (errorMessage == null || errorMessage.length() == 0) {
+            return CustomExceptions.SIGN_IN_CANCELED;
+        }
+        return new CustomException(CustomExceptions.SIGN_IN_CANCELED.getCode(), errorMessage.toString());
     }
 
     @Nullable
