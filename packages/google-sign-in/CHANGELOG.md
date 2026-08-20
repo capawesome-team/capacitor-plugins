@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`bd9c3bc9bde613fa85344086763cb644c644dab3`](https://github.com/capawesome-team/capacitor-plugins/commit/bd9c3bc9bde613fa85344086763cb644c644dab3) ([#994](https://github.com/capawesome-team/capacitor-plugins/pull/994)): fix(ios): expose the `SIGN_IN_CANCELED` error code and report a missing sign-in result with its own message
+
+- [`bd9c3bc9bde613fa85344086763cb644c644dab3`](https://github.com/capawesome-team/capacitor-plugins/commit/bd9c3bc9bde613fa85344086763cb644c644dab3) ([#994](https://github.com/capawesome-team/capacitor-plugins/pull/994)): fix(android): preserve Credential Manager error details and add the `NO_CREDENTIAL_AVAILABLE` and `PROVIDER_CONFIGURATION_ERROR` error codes
+
 ## 0.1.2
 
 ### Patch Changes
