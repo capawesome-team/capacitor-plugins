@@ -67,7 +67,23 @@ npm install @capawesome/capacitor-google-sign-in
 npx cap sync
 ```
 
+On all platforms, your brand must be [verified](https://support.google.com/cloud/answer/13463073) for your app name to be shown on the Sign in with Google consent screen.
+
 ### Android
+
+Create an **Android** OAuth client in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials) in the same project as your web client:
+
+- **Package name**: the application ID of your app (e.g. `com.example.app`), as defined in `android/app/build.gradle`.
+- **SHA-1 certificate fingerprint**: the fingerprint of the certificate that signs the app.
+
+**Attention**: The Android client ID is never passed to the plugin, because `initialize(...)` always receives the **web** client ID. The Android client must still exist and match the app, otherwise the sign-in flow fails.
+
+Which SHA-1 fingerprint to use depends on how the app is signed:
+
+- **Local debug builds**: the fingerprint of the debug keystore. Print it with `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`.
+- **Builds distributed via Google Play**: the fingerprint of the **app signing key**, not the upload key. Find it in the Google Play Console under `Test and release` › `Setup` › `App signing`.
+
+Add an OAuth client for every fingerprint you want to support. A missing fingerprint is the most common cause of a failing sign-in flow.
 
 #### Variables
 
@@ -130,16 +146,28 @@ const initialize = async () => {
 Start the Google Sign-In flow and retrieve the ID token (JWT) and the user's profile. Note that on Web, this redirects to the Google OAuth authorization page and the promise never resolves:
 
 ```typescript
-import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+import { ErrorCode, GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
 
 const signIn = async () => {
-  const result = await GoogleSignIn.signIn();
-  console.log(result.idToken);
-  console.log(result.userId);
-  console.log(result.email);
-  console.log(result.displayName);
-  console.log(result.accessToken);
-  console.log(result.serverAuthCode);
+  try {
+    const result = await GoogleSignIn.signIn();
+    console.log(result.idToken);
+    console.log(result.userId);
+    console.log(result.email);
+    console.log(result.displayName);
+    console.log(result.accessToken);
+    console.log(result.serverAuthCode);
+  } catch (error) {
+    if (error.code === ErrorCode.SignInCanceled) {
+      console.log('The user canceled the sign-in flow.');
+    } else if (error.code === ErrorCode.NoCredentialAvailable) {
+      console.log('No Google account is available on this device.');
+    } else if (error.code === ErrorCode.ProviderConfigurationError) {
+      console.log('Google Play services is not available or not up to date.');
+    } else {
+      console.log('Another error occurred:', error);
+    }
+  }
 };
 ```
 
@@ -338,6 +366,17 @@ On Web, the plugin uses a redirect-based OAuth flow. The `signIn(...)` method re
 ### How do I get an access token for Google APIs?
 
 Configure the `scopes` option in the `initialize(...)` method. The plugin then requests authorization in addition to authentication, which enables the `accessToken` and `serverAuthCode` properties in the sign-in result. If you need access and refresh tokens on your backend, exchange the `serverAuthCode` there, never client-side, as described in the [Security](#security) section.
+
+### Why does the sign-in flow fail on Android right after picking an account?
+
+If the account picker opens but the flow fails as soon as an account is picked, the app is most likely missing a matching Android OAuth client. Look for one of the following entries in the logcat output:
+
+```
+Auth.Api.Credentials: colz: [8] Unknown error [status=UNREGISTERED_ON_API_CONSOLE].
+Auth.Api.Credentials: colz: [16] Account reauth failed.
+```
+
+Google Play services reports this as a cancellation, so the plugin rejects the call with the `SIGN_IN_CANCELED` error code and `Account reauth failed` as the error message. Make sure that an Android OAuth client exists for the package name and the SHA-1 fingerprint of the certificate that signs the app, as described in the [Installation](#android) section. Builds distributed via Google Play must use the fingerprint of the app signing key, not the upload key.
 
 ## Related Plugins
 

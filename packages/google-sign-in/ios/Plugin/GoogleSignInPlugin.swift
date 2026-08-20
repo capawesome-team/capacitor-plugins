@@ -64,7 +64,11 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", self.tag, "] ", error)
-        call.reject(error.localizedDescription)
+        if let error = error as? CustomError {
+            call.reject(error.localizedDescription, error.code)
+        } else {
+            call.reject(error.localizedDescription)
+        }
     }
 
     private func resolveCall(_ call: CAPPluginCall) {

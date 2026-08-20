@@ -7,14 +7,21 @@ import androidx.annotation.Nullable;
 import androidx.credentials.ClearCredentialStateRequest;
 import androidx.credentials.Credential;
 import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
 import androidx.credentials.CustomCredential;
 import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.ClearCredentialException;
+import androidx.credentials.exceptions.GetCredentialCancellationException;
+import androidx.credentials.exceptions.GetCredentialException;
+import androidx.credentials.exceptions.GetCredentialProviderConfigurationException;
+import androidx.credentials.exceptions.NoCredentialException;
 import com.google.android.gms.auth.api.identity.AuthorizationRequest;
 import com.google.android.gms.auth.api.identity.AuthorizationResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.InitializeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.SignInOptions;
@@ -90,21 +97,22 @@ public class GoogleSignIn {
             request,
             null,
             Runnable::run,
-            new androidx.credentials.CredentialManagerCallback<
-                GetCredentialResponse,
-                androidx.credentials.exceptions.GetCredentialException
-            >() {
+            new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
                 @Override
                 public void onResult(@NonNull GetCredentialResponse response) {
                     handleCredentialResponse(response, callback);
                 }
 
                 @Override
-                public void onError(@NonNull androidx.credentials.exceptions.GetCredentialException e) {
-                    if (e instanceof androidx.credentials.exceptions.GetCredentialCancellationException) {
-                        callback.error(CustomExceptions.SIGN_IN_CANCELED);
+                public void onError(@NonNull GetCredentialException exception) {
+                    if (exception instanceof GetCredentialCancellationException) {
+                        callback.error(createSignInCanceledException(exception));
+                    } else if (exception instanceof NoCredentialException) {
+                        callback.error(CustomExceptions.NO_CREDENTIAL_AVAILABLE);
+                    } else if (exception instanceof GetCredentialProviderConfigurationException) {
+                        callback.error(CustomExceptions.PROVIDER_CONFIGURATION_ERROR);
                     } else {
-                        callback.error(new Exception(e.getMessage()));
+                        callback.error(createCredentialException(exception.getType(), exception.getErrorMessage(), exception));
                     }
                 }
             }
@@ -118,15 +126,15 @@ public class GoogleSignIn {
             request,
             null,
             Runnable::run,
-            new androidx.credentials.CredentialManagerCallback<Void, androidx.credentials.exceptions.ClearCredentialException>() {
+            new CredentialManagerCallback<Void, ClearCredentialException>() {
                 @Override
                 public void onResult(@NonNull Void result) {
                     callback.success();
                 }
 
                 @Override
-                public void onError(@NonNull androidx.credentials.exceptions.ClearCredentialException e) {
-                    callback.error(new Exception(e.getMessage()));
+                public void onError(@NonNull ClearCredentialException exception) {
+                    callback.error(createCredentialException(exception.getType(), exception.getErrorMessage(), exception));
                 }
             }
         );
@@ -161,6 +169,15 @@ public class GoogleSignIn {
         NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
         clearPendingState();
         callback.error(CustomExceptions.SIGN_IN_CANCELED);
+    }
+
+    public void handleAuthorizationFailed(@NonNull Exception exception) {
+        if (pendingSignInCallback == null) {
+            return;
+        }
+        NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
+        clearPendingState();
+        callback.error(exception);
     }
 
     private void handleCredentialResponse(@NonNull GetCredentialResponse response, @NonNull NonEmptyResultCallback<SignInResult> callback) {
@@ -246,9 +263,36 @@ public class GoogleSignIn {
                     callback.success(result);
                 }
             })
-            .addOnFailureListener(e -> {
-                callback.error(new Exception(e.getMessage()));
+            .addOnFailureListener(exception -> {
+                callback.error(new Exception(exception.getMessage(), exception));
             });
+    }
+
+    /**
+     * Creates an exception that always exposes the Credential Manager error type,
+     * because the error message alone may be absent or too generic to act on.
+     */
+    @NonNull
+    private Exception createCredentialException(@NonNull String type, @Nullable CharSequence errorMessage, @NonNull Exception cause) {
+        if (errorMessage == null || errorMessage.length() == 0) {
+            return new Exception(type, cause);
+        }
+        return new Exception(type + ": " + errorMessage, cause);
+    }
+
+    /**
+     * Creates an exception for a canceled sign-in flow.
+     *
+     * Google Play services also reports configuration errors (e.g. a missing Android OAuth client)
+     * as a cancellation, so the original error message must be preserved to stay diagnosable.
+     */
+    @NonNull
+    private CustomException createSignInCanceledException(@NonNull GetCredentialException exception) {
+        CharSequence errorMessage = exception.getErrorMessage();
+        if (errorMessage == null || errorMessage.length() == 0) {
+            return CustomExceptions.SIGN_IN_CANCELED;
+        }
+        return new CustomException(CustomExceptions.SIGN_IN_CANCELED.getCode(), errorMessage.toString());
     }
 
     @Nullable
