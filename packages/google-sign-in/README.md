@@ -69,6 +69,20 @@ npx cap sync
 
 ### Android
 
+Create an **Android** OAuth client in the [Google Cloud Console](https://console.cloud.google.com/apis/credentials) in the same project as your web client:
+
+- **Package name**: the application ID of your app (e.g. `com.example.app`), as defined in `android/app/build.gradle`.
+- **SHA-1 certificate fingerprint**: the fingerprint of the certificate that signs the app.
+
+**Attention**: The Android client ID is never passed to the plugin, because `initialize(...)` always receives the **web** client ID. The Android client must still exist and match the app, otherwise the sign-in flow fails.
+
+Which SHA-1 fingerprint to use depends on how the app is signed:
+
+- **Local debug builds**: the fingerprint of the debug keystore. Print it with `keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android`.
+- **Builds distributed via Google Play**: the fingerprint of the **app signing key**, not the upload key. Find it in the Google Play Console under `Test and release` › `Setup` › `App signing`.
+
+Add an OAuth client for every fingerprint you want to support. A missing fingerprint is the most common cause of a failing sign-in flow.
+
 #### Variables
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
@@ -130,16 +144,28 @@ const initialize = async () => {
 Start the Google Sign-In flow and retrieve the ID token (JWT) and the user's profile. Note that on Web, this redirects to the Google OAuth authorization page and the promise never resolves:
 
 ```typescript
-import { GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+import { ErrorCode, GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
 
 const signIn = async () => {
-  const result = await GoogleSignIn.signIn();
-  console.log(result.idToken);
-  console.log(result.userId);
-  console.log(result.email);
-  console.log(result.displayName);
-  console.log(result.accessToken);
-  console.log(result.serverAuthCode);
+  try {
+    const result = await GoogleSignIn.signIn();
+    console.log(result.idToken);
+    console.log(result.userId);
+    console.log(result.email);
+    console.log(result.displayName);
+    console.log(result.accessToken);
+    console.log(result.serverAuthCode);
+  } catch (error) {
+    if (error.code === ErrorCode.SignInCanceled) {
+      console.log('The user canceled the sign-in flow.');
+    } else if (error.code === ErrorCode.NoCredentialAvailable) {
+      console.log('No Google account is available on this device.');
+    } else if (error.code === ErrorCode.ProviderConfigurationError) {
+      console.log('Google Play services is not available or not up to date.');
+    } else {
+      console.log('Another error occurred:', error);
+    }
+  }
 };
 ```
 

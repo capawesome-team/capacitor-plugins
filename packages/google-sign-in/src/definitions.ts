@@ -169,6 +169,22 @@ export interface SignInResult {
  */
 export enum ErrorCode {
   /**
+   * No Google account is available on the device.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.3
+   */
+  NoCredentialAvailable = 'NO_CREDENTIAL_AVAILABLE',
+  /**
+   * The credential provider is not configured correctly.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.3
+   */
+  ProviderConfigurationError = 'PROVIDER_CONFIGURATION_ERROR',
+  /**
    * The user canceled the sign-in flow.
    *
    * @since 0.1.0
