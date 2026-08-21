@@ -106,6 +106,7 @@ public class AssetManager {
 
     private boolean isDirectory(String path) throws IOException {
         String[] files = plugin.getContext().getAssets().list(path);
+        // Only file entries are packaged, so an empty listing means the path is a file or does not exist.
         return files != null && files.length > 0;
     }
 
