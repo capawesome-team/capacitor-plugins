@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.2
+
+### Patch Changes
+
+- [`aef3813e9c927482002efff04d9c86c91b8f1f5c`](https://github.com/capawesome-team/capacitor-plugins/commit/aef3813e9c927482002efff04d9c86c91b8f1f5c) ([#998](https://github.com/capawesome-team/capacitor-plugins/pull/998)): fix(android): detect whether an asset is a file or a directory instead of guessing from the file name
+
 ## 8.0.1
 
 ### Patch Changes
