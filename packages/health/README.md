@@ -20,7 +20,7 @@ The Capacitor Health plugin connects your app to Apple Health (HealthKit) on iOS
 - 🧭 **Availability Handling**: Explicitly models the Health Connect installation states and provides an install helper.
 - 📋 **Policy Documentation**: Detailed guidance for the Google Play Health apps declaration and Apple's App Review Guideline 5.1.3.
 - 🛡️ **Typed Errors**: Invalid queries reject with clear error codes instead of resolving with silently empty results.
-- 🤝 **Compatibility**: Works hand in hand with the [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/), [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/) and [Local Notifications](https://capawesome.io/docs/sdks/capacitor/local-notifications/) plugins.
+- 🤝 **Compatibility**: Works hand in hand with the [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/), [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/) and [Local Notifications](https://capacitorjs.com/docs/apis/local-notifications) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -43,6 +43,10 @@ The Health plugin is typically used whenever an app works with health and fitnes
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [Migrating from Google Fit to Health Connect in Capacitor](https://capawesome.io/blog/google-fit-to-health-connect-migration-in-capacitor/): Data type mapping and migration steps before the Google Fit APIs shut down at the end of 2026.
 
 ## Installation
 
@@ -954,7 +958,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [Pedometer](https://capawesome.io/docs/sdks/capacitor/pedometer/): Live step counting from the device's motion sensors.
 - [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/): Track workout routes in the background.
-- [Local Notifications](https://capawesome.io/docs/sdks/capacitor/local-notifications/): Remind users to log their health data.
+- [Local Notifications](https://capacitorjs.com/docs/apis/local-notifications): Remind users to log their health data.
 
 ## Newsletter
 

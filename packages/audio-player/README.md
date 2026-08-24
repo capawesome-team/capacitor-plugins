@@ -46,6 +46,10 @@ The Audio Player plugin is typically used whenever an app needs to play audio, f
 | 8.x.x          | >=8.x.x           | Active support |
 | 0.2.x          | 7.x.x             | Deprecated     |
 
+## Guides
+
+- [How to Play Audio in the Background in a Capacitor App](https://capawesome.io/blog/how-to-play-audio-in-the-background-in-capacitor/): Native playback, lock screen media controls, and playlists that keep running.
+
 ## Demo
 
 | Android                                                                                                                                                                        | iOS                                                                                                                                                                        |

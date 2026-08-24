@@ -43,6 +43,10 @@ The Geofences plugin is typically used whenever an app needs to react when a dev
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [Announcing the Capacitor Geofences Plugin](https://capawesome.io/blog/announcing-the-capacitor-geofences-plugin/): Monitor OS-managed regions on Android and iOS and get enter, exit, and dwell events, even after the app is killed.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

@@ -42,6 +42,10 @@ The Watch plugin is typically used whenever an app wants to extend its experienc
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [How to Build a Wear OS App for Your Capacitor App](https://capawesome.io/blog/how-to-build-a-wear-os-app-for-your-capacitor-app/): Add a native Kotlin watch module and exchange messages, state, and transfers with this plugin.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

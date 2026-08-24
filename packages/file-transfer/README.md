@@ -45,6 +45,10 @@ The File Transfer plugin is typically used whenever an app needs to move large f
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [An Alternative to cordova-plugin-file-transfer](https://capawesome.io/blog/alternative-to-cordova-plugin-file-transfer/): Compares the XHR advice, this plugin, and its background transfer API.
+
 ## Demo
 
 | Android                                                                                                                                                                          | iOS                                                                                                                                                                          |

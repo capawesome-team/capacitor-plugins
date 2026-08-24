@@ -52,7 +52,7 @@ The Contacts plugin is typically used whenever an app needs to work with the dev
 - [Alternative to the Capacitor Community Contacts plugin](https://capawesome.io/blog/alternative-to-capacitor-community-contacts-plugin/)
 - [Announcing the Capacitor Contacts Plugin](https://capawesome.io/blog/announcing-the-capacitor-contacts-plugin/)
 - [Exploring the Capacitor Contacts API](https://capawesome.io/blog/exploring-the-capacitor-contacts-api/)
-- [Google Play Contacts Policy 2027 for Capacitor](https://capawesome.io/blog/capacitor-google-play-contacts-policy-2027.md/)
+- [Google Play Contacts Policy 2027 for Capacitor](https://capawesome.io/blog/capacitor-google-play-contacts-policy-2027/)
 
 ## Installation
 
