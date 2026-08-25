@@ -47,6 +47,10 @@ The MapLibre plugin is typically used wherever you want to show geographical dat
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [A Google Maps Alternative for Capacitor Apps](https://capawesome.io/blog/alternative-to-the-capacitor-google-maps-plugin/): Compares `@capacitor/google-maps` with this plugin — no billing account, no API key, and Web support.
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
