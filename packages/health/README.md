@@ -46,6 +46,7 @@ The Health plugin is typically used whenever an app works with health and fitnes
 
 ## Guides
 
+- [Announcing the Capacitor Health Plugin](https://capawesome.io/blog/announcing-the-capacitor-health-plugin/): A tour of the plugin's aggregation-first API, permission model, and app review guidance.
 - [Migrating from Google Fit to Health Connect in Capacitor](https://capawesome.io/blog/google-fit-to-health-connect-migration-in-capacitor/): Data type mapping and migration steps before the Google Fit APIs shut down at the end of 2026.
 
 ## Installation
