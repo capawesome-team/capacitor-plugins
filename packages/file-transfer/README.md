@@ -47,6 +47,7 @@ The File Transfer plugin is typically used whenever an app needs to move large f
 
 ## Guides
 
+- [Announcing the Capacitor File Transfer Plugin](https://capawesome.io/blog/announcing-the-capacitor-file-transfer-plugin/): Task-based background transfers with pause and resume, retries, and a persisted task store.
 - [An Alternative to cordova-plugin-file-transfer](https://capawesome.io/blog/alternative-to-cordova-plugin-file-transfer/): Compares the XHR advice, this plugin, and its background transfer API.
 
 ## Demo
