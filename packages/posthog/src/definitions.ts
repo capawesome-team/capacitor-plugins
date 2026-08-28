@@ -1,5 +1,7 @@
 /// <reference types="@capacitor/cli" />
 
+import type { PostHogConfig } from 'posthog-js';
+
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     Posthog?: {
@@ -117,6 +119,12 @@ export interface PosthogPlugin {
     options: GetFeatureFlagPayloadOptions,
   ): Promise<GetFeatureFlagPayloadResult>;
   /**
+   * Get the current session ID.
+   *
+   * @since 8.6.0
+   */
+  getSessionId(): Promise<GetSessionIdResult>;
+  /**
    * Associate the events for that user with a group.
    *
    * @since 6.0.0
@@ -183,6 +191,12 @@ export interface PosthogPlugin {
    * @since 6.0.0
    */
   screen(options: ScreenOptions): Promise<void>;
+  /**
+   * Set properties on the person associated with the current user.
+   *
+   * @since 8.6.0
+   */
+  setPersonProperties(options: SetPersonPropertiesOptions): Promise<void>;
   /**
    * Setup the PostHog SDK with the provided options.
    *
@@ -360,6 +374,17 @@ export interface GetFeatureFlagPayloadResult {
   value: JsonType;
 }
 
+export interface GetSessionIdResult {
+  /**
+   * The current session ID.
+   *
+   * If no session is active, the value will be `null`.
+   *
+   * @since 8.6.0
+   */
+  sessionId: string | null;
+}
+
 /**
  * @since 6.0.0
  */
@@ -479,6 +504,26 @@ export interface ScreenOptions {
 }
 
 /**
+ * @since 8.6.0
+ */
+export interface SetPersonPropertiesOptions {
+  /**
+   * The person properties to set.
+   *
+   * @since 8.6.0
+   */
+  properties?: Record<string, any>;
+  /**
+   * The person properties to set only once.
+   *
+   * Existing values will not be overwritten.
+   *
+   * @since 8.6.0
+   */
+  setOnceProperties?: Record<string, any>;
+}
+
+/**
  * @since 6.0.0
  */
 export interface SetupOptions {
@@ -569,6 +614,34 @@ export interface SetupOptions {
    * @default false
    */
   autoCaptureExceptions?: boolean;
+  /**
+   * Whether to preload feature flags on startup.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.6.0
+   * @default true
+   */
+  preloadFeatureFlags?: boolean;
+  /**
+   * Whether to enable surveys.
+   *
+   * Only available on iOS and Web.
+   *
+   * @since 8.6.0
+   * @default true
+   */
+  surveys?: boolean;
+  /**
+   * Additional [posthog-js configuration options](https://posthog.com/docs/libraries/js/config)
+   * that are merged into the configuration passed to `posthog.init`.
+   * Options set here take precedence over the other setup options.
+   *
+   * Only available on Web.
+   *
+   * @since 8.6.0
+   */
+  webConfig?: Partial<PostHogConfig>;
 }
 
 /**

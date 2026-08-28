@@ -276,6 +276,7 @@ const flush = async () => {
 * [`getDistinctId()`](#getdistinctid)
 * [`getFeatureFlag(...)`](#getfeatureflag)
 * [`getFeatureFlagPayload(...)`](#getfeatureflagpayload)
+* [`getSessionId()`](#getsessionid)
 * [`group(...)`](#group)
 * [`identify(...)`](#identify)
 * [`isFeatureEnabled(...)`](#isfeatureenabled)
@@ -286,6 +287,7 @@ const flush = async () => {
 * [`reloadFeatureFlags()`](#reloadfeatureflags)
 * [`reset()`](#reset)
 * [`screen(...)`](#screen)
+* [`setPersonProperties(...)`](#setpersonproperties)
 * [`setup(...)`](#setup)
 * [`startSessionRecording()`](#startsessionrecording)
 * [`stopSessionRecording()`](#stopsessionrecording)
@@ -413,6 +415,21 @@ Get the payload of a feature flag.
 **Returns:** <code>Promise&lt;<a href="#getfeatureflagpayloadresult">GetFeatureFlagPayloadResult</a>&gt;</code>
 
 **Since:** 7.1.0
+
+--------------------
+
+
+### getSessionId()
+
+```typescript
+getSessionId() => Promise<GetSessionIdResult>
+```
+
+Get the current session ID.
+
+**Returns:** <code>Promise&lt;<a href="#getsessionidresult">GetSessionIdResult</a>&gt;</code>
+
+**Since:** 8.6.0
 
 --------------------
 
@@ -576,6 +593,23 @@ Only available on Android and iOS.
 --------------------
 
 
+### setPersonProperties(...)
+
+```typescript
+setPersonProperties(options: SetPersonPropertiesOptions) => Promise<void>
+```
+
+Set properties on the person associated with the current user.
+
+| Param         | Type                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setpersonpropertiesoptions">SetPersonPropertiesOptions</a></code> |
+
+**Since:** 8.6.0
+
+--------------------
+
+
 ### setup(...)
 
 ```typescript
@@ -713,6 +747,13 @@ Remove a super property.
 | **`key`** | <code>string</code> | The key of the feature flag. | 7.1.0 |
 
 
+#### GetSessionIdResult
+
+| Prop            | Type                        | Description                                                                | Since |
+| --------------- | --------------------------- | -------------------------------------------------------------------------- | ----- |
+| **`sessionId`** | <code>string \| null</code> | The current session ID. If no session is active, the value will be `null`. | 8.6.0 |
+
+
 #### GroupOptions
 
 | Prop                  | Type                                   | Description                                  | Since |
@@ -767,6 +808,14 @@ Remove a super property.
 | **`properties`**  | <code>Record&lt;string, any&gt;</code> | The properties to send with the screen event. | 6.0.0 |
 
 
+#### SetPersonPropertiesOptions
+
+| Prop                    | Type                                   | Description                                                                      | Since |
+| ----------------------- | -------------------------------------- | -------------------------------------------------------------------------------- | ----- |
+| **`properties`**        | <code>Record&lt;string, any&gt;</code> | The person properties to set.                                                    | 8.6.0 |
+| **`setOnceProperties`** | <code>Record&lt;string, any&gt;</code> | The person properties to set only once. Existing values will not be overwritten. | 8.6.0 |
+
+
 #### SetupOptions
 
 | Prop                                    | Type                                                                  | Description                                                                                                                                                                                                                                                                                  | Default                                 | Since |
@@ -781,6 +830,9 @@ Remove a super property.
 | **`sessionReplayConfig`**               | <code><a href="#sessionreplayoptions">SessionReplayOptions</a></code> | Session replay configuration options.                                                                                                                                                                                                                                                        |                                         | 7.3.0 |
 | **`captureApplicationLifecycleEvents`** | <code>boolean</code>                                                  | Whether to capture application lifecycle events. Only available on iOS and Android.                                                                                                                                                                                                          | <code>true</code>                       | 8.3.0 |
 | **`autoCaptureExceptions`**             | <code>boolean</code>                                                  | Whether to automatically capture unhandled exceptions.                                                                                                                                                                                                                                       | <code>false</code>                      | 8.5.0 |
+| **`preloadFeatureFlags`**               | <code>boolean</code>                                                  | Whether to preload feature flags on startup. Only available on Android and iOS.                                                                                                                                                                                                              | <code>true</code>                       | 8.6.0 |
+| **`surveys`**                           | <code>boolean</code>                                                  | Whether to enable surveys. Only available on iOS and Web.                                                                                                                                                                                                                                    | <code>true</code>                       | 8.6.0 |
+| **`webConfig`**                         | <code>Partial&lt;PostHogConfig&gt;</code>                             | Additional [posthog-js configuration options](https://posthog.com/docs/libraries/js/config) that are merged into the configuration passed to `posthog.init`. Options set here take precedence over the other setup options. Only available on Web.                                           |                                         | 8.6.0 |
 
 
 #### SessionReplayOptions

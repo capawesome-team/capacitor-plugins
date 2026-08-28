@@ -16,11 +16,13 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.GetFeatureFlagP
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.GroupOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnabledOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetPersonPropertiesOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.StackFrame
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetDistinctIdResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagPayloadResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetFeatureFlagResult
+import io.capawesome.capacitorjs.plugins.posthog.classes.results.GetSessionIdResult
 import io.capawesome.capacitorjs.plugins.posthog.classes.results.IsFeatureEnabledResult
 
 class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlugin) {
@@ -35,6 +37,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
                 false,
                 config.getCaptureApplicationLifecycleEvents(),
                 config.getAutoCaptureExceptions(),
+                true,
                 config.getSessionReplayConfig()
             )
         }
@@ -106,6 +109,11 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         return GetFeatureFlagPayloadResult(value)
     }
 
+    fun getSessionId(): GetSessionIdResult {
+        val sessionId = com.posthog.PostHog.getSessionId()
+        return GetSessionIdResult(sessionId?.toString())
+    }
+
     fun group(options: GroupOptions) {
         val type = options.type
         val key = options.key
@@ -162,6 +170,13 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         com.posthog.PostHog.screen(screenTitle = name, properties = properties)
     }
 
+    fun setPersonProperties(options: SetPersonPropertiesOptions) {
+        val properties = options.properties
+        val setOnceProperties = options.setOnceProperties
+
+        com.posthog.PostHog.capture(event = "\$set", userProperties = properties, userPropertiesSetOnce = setOnceProperties)
+    }
+
     fun setup(options: SetupOptions) {
         val apiKey = options.apiKey
         val apiHost = options.apiHost
@@ -169,6 +184,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         val optOut = options.optOut
         val captureApplicationLifecycleEvents = options.captureApplicationLifecycleEvents
         val autoCaptureExceptions = options.autoCaptureExceptions
+        val preloadFeatureFlags = options.preloadFeatureFlags
         val sessionReplayConfig = options.sessionReplayConfig
 
         setup(
@@ -178,6 +194,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
             optOut,
             captureApplicationLifecycleEvents,
             autoCaptureExceptions,
+            preloadFeatureFlags,
             sessionReplayConfig
         )
     }
@@ -223,6 +240,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         optOut: Boolean = false,
         captureApplicationLifecycleEvents: Boolean = true,
         autoCaptureExceptions: Boolean = false,
+        preloadFeatureFlags: Boolean = true,
         sessionReplayConfig: SessionReplayOptions? = null
     ) {
         val posthogConfig = PostHogAndroidConfig(
@@ -232,6 +250,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
         posthogConfig.captureScreenViews = false
         posthogConfig.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         posthogConfig.optOut = optOut
+        posthogConfig.preloadFeatureFlags = preloadFeatureFlags
         posthogConfig.sessionReplay = enableSessionReplay
         posthogConfig.errorTrackingConfig.autoCapture = autoCaptureExceptions
 
@@ -247,7 +266,7 @@ class Posthog(private val config: PosthogConfig, private val plugin: PosthogPlug
             posthogConfig.sessionReplayConfig.maskAllImages = replayConfig.getMaskAllImages() ?: true
 
             // Network telemetry capture
-            posthogConfig.sessionReplayConfig.captureLogcat = replayConfig.getCaptureNetworkTelemetry() ?: true
+            posthogConfig.sessionReplayConfig.captureLogcat = replayConfig.getCaptureNetworkTelemetry() ?: false
 
             // Debounce delay for performance (convert seconds to milliseconds)
             val debouncerDelaySeconds = replayConfig.getDebouncerDelay() ?: 1.0

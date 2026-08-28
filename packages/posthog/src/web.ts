@@ -11,6 +11,7 @@ import type {
   GetFeatureFlagPayloadOptions,
   GetFeatureFlagPayloadResult,
   GetFeatureFlagResult,
+  GetSessionIdResult,
   GroupOptions,
   IdentifyOptions,
   IsFeatureEnabledOptions,
@@ -19,6 +20,7 @@ import type {
   PosthogPlugin,
   RegisterOptions,
   ScreenOptions,
+  SetPersonPropertiesOptions,
   SetupOptions,
   StackFrame,
   UnregisterOptions,
@@ -70,6 +72,11 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     return { value: value as GetFeatureFlagPayloadResult['value'] };
   }
 
+  async getSessionId(): Promise<GetSessionIdResult> {
+    const sessionId = posthog.get_session_id();
+    return { sessionId: sessionId || null };
+  }
+
   async group(options: GroupOptions): Promise<void> {
     posthog.group(options.type, options.key, options.groupProperties);
   }
@@ -116,6 +123,12 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     this.throwUnimplementedError();
   }
 
+  async setPersonProperties(
+    options: SetPersonPropertiesOptions,
+  ): Promise<void> {
+    posthog.setPersonProperties(options.properties, options.setOnceProperties);
+  }
+
   async setup(options: SetupOptions): Promise<void> {
     const apiHost = this.getApiHost(options.apiHost, options.host);
     const config: Partial<PostHogConfig> & {
@@ -137,8 +150,12 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
     if (options.autoCaptureExceptions) {
       config.capture_exceptions = true;
     }
+    if (options.surveys !== undefined) {
+      config.disable_surveys = !options.surveys;
+    }
 
     // Configure session recording if enabled
+    config.disable_session_recording = !options.enableSessionReplay;
     if (options.enableSessionReplay) {
       config.session_recording = {
         recordCrossOriginIframes: true,
@@ -152,7 +169,7 @@ export class PosthogWeb extends WebPlugin implements PosthogPlugin {
       }
     }
 
-    posthog.init(options.apiKey, config);
+    posthog.init(options.apiKey, { ...config, ...options.webConfig });
   }
 
   async startSessionRecording(): Promise<void> {
