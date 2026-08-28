@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.6.0
+
+### Minor Changes
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `getSessionId()` method
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `setPersonProperties()` method
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `surveys` and `preloadFeatureFlags` options
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat(web): add `webConfig` option to forward additional posthog-js configuration options
+
+### Patch Changes
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(android): `setup()` no longer rejects when `sessionReplayConfig` omits `debouncerDelay`
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix: `captureNetworkTelemetry` now defaults to `false` as documented
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(ios): start session recording when `enableSessionReplay` is set via `setup()`
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(web): disable session recording when `enableSessionReplay` is `false` or not set
+
 ## 8.5.1
 
 ### Patch Changes
