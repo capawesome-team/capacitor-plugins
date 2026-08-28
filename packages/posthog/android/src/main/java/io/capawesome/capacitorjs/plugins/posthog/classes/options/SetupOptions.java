@@ -24,6 +24,9 @@ public class SetupOptions {
     private Boolean autoCaptureExceptions;
 
     @Nullable
+    private Boolean preloadFeatureFlags;
+
+    @Nullable
     private SessionReplayOptions sessionReplayConfig;
 
     public SetupOptions(@NonNull String apiKey, @NonNull String apiHost) {
@@ -71,6 +74,14 @@ public class SetupOptions {
 
     public void setAutoCaptureExceptions(boolean autoCaptureExceptions) {
         this.autoCaptureExceptions = autoCaptureExceptions;
+    }
+
+    public boolean getPreloadFeatureFlags() {
+        return preloadFeatureFlags != null ? preloadFeatureFlags : true;
+    }
+
+    public void setPreloadFeatureFlags(boolean preloadFeatureFlags) {
+        this.preloadFeatureFlags = preloadFeatureFlags;
     }
 
     @Nullable

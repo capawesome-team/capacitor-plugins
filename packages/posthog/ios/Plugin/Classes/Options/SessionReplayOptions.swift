@@ -8,7 +8,7 @@ import Foundation
     private var captureNetworkTelemetry: Bool?
     private var debouncerDelay: Double?
 
-    init(screenshotMode: Bool? = false, maskAllTextInputs: Bool? = true, maskAllImages: Bool? = true, maskAllSandboxedViews: Bool? = true, captureNetworkTelemetry: Bool? = true, debouncerDelay: Double? = 1.0) {
+    init(screenshotMode: Bool? = false, maskAllTextInputs: Bool? = true, maskAllImages: Bool? = true, maskAllSandboxedViews: Bool? = true, captureNetworkTelemetry: Bool? = false, debouncerDelay: Double? = 1.0) {
         self.screenshotMode = screenshotMode
         self.maskAllTextInputs = maskAllTextInputs
         self.maskAllImages = maskAllImages
