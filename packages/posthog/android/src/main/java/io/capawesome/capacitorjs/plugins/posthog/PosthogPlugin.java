@@ -413,8 +413,10 @@ public class PosthogPlugin extends Plugin {
         config.setApiHost(apiHost);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
-        boolean captureApplicationLifecycleEvents = getConfig()
-            .getBoolean("captureApplicationLifecycleEvents", config.getCaptureApplicationLifecycleEvents());
+        boolean captureApplicationLifecycleEvents = getConfig().getBoolean(
+            "captureApplicationLifecycleEvents",
+            config.getCaptureApplicationLifecycleEvents()
+        );
         config.setCaptureApplicationLifecycleEvents(captureApplicationLifecycleEvents);
         boolean autoCaptureExceptions = getConfig().getBoolean("autoCaptureExceptions", config.getAutoCaptureExceptions());
         config.setAutoCaptureExceptions(autoCaptureExceptions);

@@ -1,7 +1,5 @@
 /// <reference types="@capacitor/cli" />
 
-import type { PostHogConfig } from 'posthog-js';
-
 declare module '@capacitor/cli' {
   export interface PluginsConfig {
     Posthog?: {
@@ -641,7 +639,7 @@ export interface SetupOptions {
    *
    * @since 8.6.0
    */
-  webConfig?: Partial<PostHogConfig>;
+  webConfig?: Record<string, any>;
 }
 
 /**
