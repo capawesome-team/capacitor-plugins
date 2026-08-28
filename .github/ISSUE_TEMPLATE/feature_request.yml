@@ -59,6 +59,7 @@ body:
         - label: File Opener
         - label: File Picker
         - label: File Transfer
+        - label: Flic
         - label: Formbricks
         - label: Geocoder
         - label: Geofences
