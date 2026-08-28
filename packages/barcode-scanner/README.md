@@ -157,6 +157,23 @@ const requestPermissions = async () => {
 };
 ```
 
+Get the cameras available on the device, for example to hide or disable a camera flip button if the device has only one camera:
+
+```typescript
+import {
+  BarcodeScanner,
+  LensFacing,
+} from '@capawesome-team/capacitor-barcode-scanner';
+
+const canFlipCamera = async () => {
+  const { lensFacings } = await BarcodeScanner.getAvailableCameras();
+  return (
+    lensFacings.includes(LensFacing.Back) &&
+    lensFacings.includes(LensFacing.Front)
+  );
+};
+```
+
 If the user has denied the camera permission, open the native app settings page so that the user can grant it:
 
 ```typescript
@@ -299,6 +316,7 @@ const readBarcodesFromImage = async (path: string) => {
 <docgen-index>
 
 * [`checkPermissions()`](#checkpermissions)
+* [`getAvailableCameras()`](#getavailablecameras)
 * [`getZoomRatioRange()`](#getzoomratiorange)
 * [`isAvailable()`](#isavailable)
 * [`openSettings()`](#opensettings)
@@ -339,6 +357,26 @@ return `prompt`.
 **Returns:** <code>Promise&lt;<a href="#permissionstatus">PermissionStatus</a>&gt;</code>
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### getAvailableCameras()
+
+```typescript
+getAvailableCameras() => Promise<GetAvailableCamerasResult>
+```
+
+Get the cameras available on the device.
+
+Use this, for example, to hide or disable a camera flip button
+if the device has only one camera.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getavailablecamerasresult">GetAvailableCamerasResult</a>&gt;</code>
+
+**Since:** 0.1.1
 
 --------------------
 
@@ -679,6 +717,13 @@ Remove all listeners for this plugin.
 | **`camera`** | <code><a href="#permissionstate">PermissionState</a></code> | The camera permission state. | 0.0.1 |
 
 
+#### GetAvailableCamerasResult
+
+| Prop              | Type                      | Description                                              | Since |
+| ----------------- | ------------------------- | -------------------------------------------------------- | ----- |
+| **`lensFacings`** | <code>LensFacing[]</code> | The lens facings of the cameras available on the device. | 0.1.1 |
+
+
 #### GetZoomRatioRangeResult
 
 | Prop      | Type                | Description             | Since |
@@ -835,6 +880,14 @@ Remove all listeners for this plugin.
 ### Enums
 
 
+#### LensFacing
+
+| Members     | Value                | Description       | Since |
+| ----------- | -------------------- | ----------------- | ----- |
+| **`Back`**  | <code>'BACK'</code>  | The back camera.  | 0.0.1 |
+| **`Front`** | <code>'FRONT'</code> | The front camera. | 0.0.1 |
+
+
 #### BarcodeFormat
 
 | Members          | Value                      | Description                                                                           | Since |
@@ -852,14 +905,6 @@ Remove all listeners for this plugin.
 | **`QrCode`**     | <code>'QR_CODE'</code>     | QR code.                                                                              | 0.0.1 |
 | **`UpcA`**       | <code>'UPC_A'</code>       | UPC-A barcode.                                                                        | 0.0.1 |
 | **`UpcE`**       | <code>'UPC_E'</code>       | UPC-E barcode.                                                                        | 0.0.1 |
-
-
-#### LensFacing
-
-| Members     | Value                | Description       | Since |
-| ----------- | -------------------- | ----------------- | ----- |
-| **`Back`**  | <code>'BACK'</code>  | The back camera.  | 0.0.1 |
-| **`Front`** | <code>'FRONT'</code> | The front camera. | 0.0.1 |
 
 
 #### PreviewPlacement
