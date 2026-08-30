@@ -183,7 +183,7 @@ import { AppShortcuts } from '@capawesome/capacitor-app-shortcuts';
 
 const addListener = async () => {
   AppShortcuts.addListener('click', (event) => {
-    console.log('Shortcut clicked:', event.id);
+    console.log('Shortcut clicked:', event.shortcutId);
   });
 };
 ```
