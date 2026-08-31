@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-flic",
   "version": "0.0.1",
-  "description": "Capacitor plugin to connect and interact with Flic smart buttons.",
+  "description": "Unofficial Capacitor plugin for Flic smart buttons on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",

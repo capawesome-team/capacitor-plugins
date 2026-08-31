@@ -1,6 +1,6 @@
 # Capacitor Flic Plugin
 
-Capacitor plugin to connect and interact with [Flic](https://flic.io/) smart buttons.
+Unofficial Capacitor plugin for [Flic](https://flic.io/) smart buttons.[^1]
 
 <div class="capawesome-z29o10a">
   <a href="https://cloud.capawesome.io/" target="_blank">
@@ -873,4 +873,6 @@ See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/mai
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/flic/LICENSE).
 
-The bundled [flic2lib](https://github.com/50ButtonsEach/flic2lib-ios) binary is licensed under the terms of Shortcut Labs AB (see [flic2lib-LICENCE.txt](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/flic/ios/flic2lib-LICENCE.txt)).
+The bundled [flic2lib](https://github.com/50ButtonsEach/flic2lib-ios) binary is distributed under its own license from Shortcut Labs AB (see [flic2lib-LICENCE.txt](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/flic/ios/flic2lib-LICENCE.txt)).
+
+[^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Shortcut Labs AB or any of its affiliates or subsidiaries. "Flic" is a trademark of Shortcut Labs AB.
