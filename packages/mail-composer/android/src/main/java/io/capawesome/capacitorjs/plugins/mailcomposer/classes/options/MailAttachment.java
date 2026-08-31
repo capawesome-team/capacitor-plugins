@@ -4,6 +4,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.capawesome.capacitorjs.plugins.mailcomposer.classes.CustomExceptions;
+import java.io.File;
 import org.json.JSONObject;
 
 public class MailAttachment {
@@ -18,19 +19,19 @@ public class MailAttachment {
     private final String path;
 
     public MailAttachment(@NonNull JSONObject object) throws Exception {
-        String data = getStringFromObject(object, "data");
-        this.name = getStringFromObject(object, "name");
+        this.name = getNameFromObject(object);
         this.path = getStringFromObject(object, "path");
-        if (data == null && this.path == null) {
-            throw CustomExceptions.ATTACHMENT_DATA_OR_PATH_MISSING;
-        }
-        if (data == null) {
-            this.data = null;
-        } else {
+        if (this.path == null) {
+            String data = getStringFromObject(object, "data");
+            if (data == null) {
+                throw CustomExceptions.ATTACHMENT_DATA_OR_PATH_MISSING;
+            }
             if (this.name == null) {
                 throw CustomExceptions.ATTACHMENT_NAME_MISSING;
             }
             this.data = decodeData(data);
+        } else {
+            this.data = null;
         }
     }
 
@@ -56,6 +57,13 @@ public class MailAttachment {
         } catch (IllegalArgumentException exception) {
             throw CustomExceptions.ATTACHMENT_DATA_INVALID;
         }
+    }
+
+    @Nullable
+    private static String getNameFromObject(@NonNull JSONObject object) {
+        String name = getStringFromObject(object, "name");
+        // Strip directory components so that the name cannot escape the attachments directory.
+        return name == null ? null : new File(name).getName();
     }
 
     @Nullable

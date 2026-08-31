@@ -7,13 +7,12 @@ import Capacitor
     let path: String?
 
     init(_ object: JSObject) throws {
-        let data = object["data"] as? String
-        self.name = object["name"] as? String
+        self.name = MailAttachment.getName(from: object)
         self.path = object["path"] as? String
-        if data == nil && self.path == nil {
-            throw CustomError.attachmentDataOrPathMissing
-        }
-        if let data = data {
+        if self.path == nil {
+            guard let data = object["data"] as? String else {
+                throw CustomError.attachmentDataOrPathMissing
+            }
             if self.name == nil {
                 throw CustomError.attachmentNameMissing
             }
@@ -28,5 +27,13 @@ import Capacitor
             throw CustomError.attachmentDataInvalid
         }
         return decodedData
+    }
+
+    private static func getName(from object: JSObject) -> String? {
+        guard let name = object["name"] as? String else {
+            return nil
+        }
+        // Strip directory components so that the attachment file name matches the one used on Android.
+        return (name as NSString).lastPathComponent
     }
 }
