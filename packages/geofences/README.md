@@ -14,8 +14,9 @@ The Capacitor Geofences plugin lets your app react when a device enters or leave
 
 - 🌍 **OS-Managed Regions**: Uses `GeofencingClient` on Android and `CLLocationManager` region monitoring on iOS, so transitions are detected by the system with minimal battery impact.
 - 🔔 **Transition Events**: Get notified about enter, exit and (on Android) dwell transitions.
-- 💀 **Killed-App Delivery**: Transitions that occur while the app is terminated are queued and replayed on the next launch, and can trigger a native local notification.
-- ☁️ **HTTP Sync**: Upload transitions to your own server with an on-device queue, automatic retries and at-least-once delivery — even while the app is in the background or terminated.
+- 💀 **Killed-App Delivery**: Transitions that occur while the app is terminated are stored in a durable on-device queue and can trigger a native local notification.
+- 📥 **Durable Queue**: Read the queue from JavaScript with keyset pagination and acknowledge what you processed, so nothing is lost between two app starts.
+- ☁️ **HTTP Upload**: Upload transitions to your own server with automatic retries and at-least-once delivery — even while the app is in the background or terminated.
 - 🔁 **Auto Re-Registration**: On Android, geofences are automatically re-registered after a device reboot or an app update.
 - 🔒 **Public APIs Only**: Built exclusively on public platform APIs, so it is safe for App Review and resilient to OS updates.
 - 🤝 **Compatibility**: Works hand in hand with the [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/) plugin for continuous location tracking.
@@ -132,108 +133,59 @@ No configuration required for this plugin.
 
 ## Usage
 
-The following examples show how to add, retrieve, and remove geofences, listen for transitions, sync transitions to a server, and check and request permissions.
+The following examples are grouped into permissions, geofences, transitions and upload.
 
-### Add geofences
+### Getting started
 
-Add one or more circular regions to be monitored by the operating system. Optionally, provide a `notification` that is displayed natively when a transition is detected, which is especially useful while the app is terminated. On Android, an enter transition is triggered immediately if the device is already inside a geofence that was just added, while iOS only reports a transition once the device crosses the boundary. Only available on Android and iOS:
+Request the required permissions, register a geofence and drain the transition queue whenever your app becomes active. The `geofenceTransition` event is a live feed that only fires while your app is running — the **queue is the durable record** of every transition, including the ones that were detected while the app was terminated. Only available on Android and iOS:
 
 ```typescript
 import { Geofences } from '@capawesome-team/capacitor-geofences';
 
-const addGeofences = async () => {
-  const { ids } = await Geofences.addGeofences({
-    geofences: [
-      {
-        latitude: 37.33182,
-        longitude: -122.03118,
-        radius: 200,
-        notification: {
-          title: 'Welcome',
-          text: 'You have entered the area.',
-        },
-      },
-    ],
+const start = async () => {
+  // 1. Request the foreground and afterwards the background location permission.
+  let status = await Geofences.requestPermissions({ permissions: ['location'] });
+  if (status.location !== 'granted') {
+    return;
+  }
+  status = await Geofences.requestPermissions({
+    permissions: ['backgroundLocation'],
   });
-  return ids;
-};
-```
-
-### Retrieve geofences
-
-Retrieve all geofences that are currently being monitored. Only available on Android and iOS:
-
-```typescript
-import { Geofences } from '@capawesome-team/capacitor-geofences';
-
-const getGeofences = async () => {
-  const { geofences } = await Geofences.getGeofences();
-  return geofences;
-};
-```
-
-### Remove geofences
-
-Remove specific geofences by their identifier or remove all of them at once. Only available on Android and iOS:
-
-```typescript
-import { Geofences } from '@capawesome-team/capacitor-geofences';
-
-const removeGeofences = async (ids: string[]) => {
-  await Geofences.removeGeofences({ ids });
-};
-
-const removeAllGeofences = async () => {
-  await Geofences.removeAllGeofences();
-};
-```
-
-### Listen for geofence transitions
-
-Get notified when the device enters, exits, or (on Android) dwells inside a geofence. Transitions that occurred while the app was in the background or terminated are queued and replayed once the first listener is registered, so register it as early as possible. The replay buffer holds at most `100` transitions. Only available on Android and iOS:
-
-```typescript
-import { Geofences, TransitionType } from '@capawesome-team/capacitor-geofences';
-
-const addListener = async () => {
-  await Geofences.addListener('geofenceTransition', (event) => {
-    if (event.transitionType === TransitionType.Enter) {
-      console.log(`Entered the geofence ${event.id}.`);
+  if (status.backgroundLocation !== 'granted') {
+    return;
+  }
+  // 2. Add the geofence to monitor.
+  await Geofences.addGeofences({
+    geofences: [{ latitude: 37.33182, longitude: -122.03118, radius: 200 }],
+  });
+  // 3. Drain the queue now and whenever the app becomes active again.
+  await drainQueue();
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      drainQueue();
     }
   });
 };
-```
 
-### Sync transitions to a server
-
-Configure the plugin to upload every transition to your own server, even while the app is in the background or terminated. The configuration is persisted natively, so it only needs to be set once (e.g. after sign-in). Failed upload attempts are reported via the `syncFailed` event. Only available on Android and iOS:
-
-```typescript
-import { Geofences } from '@capawesome-team/capacitor-geofences';
-
-const configureSync = async () => {
-  await Geofences.addListener('syncFailed', (event) => {
-    console.error('Upload failed: ', event.statusCode, event.message);
-  });
-  await Geofences.configureSync({
-    url: 'https://api.example.com/transitions',
-    headers: {
-      Authorization: 'Bearer eyJhbGciOi...',
-    },
-    extras: {
-      userId: 'abc',
-    },
-  });
-};
-
-const disableSync = async () => {
-  await Geofences.disableSync();
+const drainQueue = async () => {
+  let hasMore = true;
+  while (hasMore) {
+    const result = await Geofences.getQueuedTransitions({ limit: 1000 });
+    if (!result.transitions.length) {
+      break;
+    }
+    await persist(result.transitions);
+    await Geofences.deleteQueuedTransitions({
+      upToId: result.transitions[result.transitions.length - 1].id,
+    });
+    hasMore = result.hasMore;
+  }
 };
 ```
 
-See [HTTP Sync](#http-sync) for the server contract, response handling and queue behavior.
+### Permissions
 
-### Check and request permissions
+#### Check and request permissions
 
 Geofencing requires the **Always** location authorization on iOS and the **background location** permission on Android. Because of the platform restrictions described in the [Installation](#installation) section, the permissions must be requested in two steps:
 
@@ -261,6 +213,8 @@ const requestPermissions = async () => {
 };
 ```
 
+#### Open the app settings
+
 If a permission was permanently denied, send the user to the native app settings:
 
 ```typescript
@@ -271,7 +225,138 @@ const openSettings = async () => {
 };
 ```
 
-### Remove all listeners
+### Geofences
+
+#### Add geofences
+
+Add one or more circular regions to be monitored by the operating system. Optionally, provide a `notification` that is displayed natively when a transition is detected, which is especially useful while the app is terminated. On Android, an enter transition is triggered immediately if the device is already inside a geofence that was just added, while iOS only reports a transition once the device crosses the boundary. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const addGeofences = async () => {
+  const { ids } = await Geofences.addGeofences({
+    geofences: [
+      {
+        latitude: 37.33182,
+        longitude: -122.03118,
+        radius: 200,
+        notification: {
+          title: 'Welcome',
+          text: 'You have entered the area.',
+        },
+      },
+    ],
+  });
+  return ids;
+};
+```
+
+#### Retrieve geofences
+
+Retrieve all geofences that are currently being monitored. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const getGeofences = async () => {
+  const { geofences } = await Geofences.getGeofences();
+  return geofences;
+};
+```
+
+#### Remove geofences
+
+Remove specific geofences by their identifier or remove all of them at once. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const removeGeofences = async (ids: string[]) => {
+  await Geofences.removeGeofences({ ids });
+};
+
+const removeAllGeofences = async () => {
+  await Geofences.removeAllGeofences();
+};
+```
+
+### Transitions
+
+#### Listen for geofence transitions
+
+Get notified when the device enters, exits, or (on Android) dwells inside a geofence. The event is a **live feed**: it is only delivered while your app is running and a listener is registered. Transitions that were detected while the app was in the background or terminated are **not** replayed — read them from the [queue](#read-the-queue) instead. Only available on Android and iOS:
+
+```typescript
+import { Geofences, TransitionType } from '@capawesome-team/capacitor-geofences';
+
+const addListener = async () => {
+  await Geofences.addListener('geofenceTransition', (event) => {
+    if (event.transition.type === TransitionType.Enter) {
+      console.log(`Entered the geofence ${event.transition.geofenceId}.`);
+    }
+  });
+};
+```
+
+#### Read the queue
+
+Every transition is appended to a durable on-device queue, whether or not your app is running. Read the queue in pages, process the transitions and delete the ones you processed. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const drainQueue = async () => {
+  let hasMore = true;
+  while (hasMore) {
+    const result = await Geofences.getQueuedTransitions({ limit: 1000 });
+    if (!result.transitions.length) {
+      break;
+    }
+    await persist(result.transitions);
+    await Geofences.deleteQueuedTransitions({
+      upToId: result.transitions[result.transitions.length - 1].id,
+    });
+    hasMore = result.hasMore;
+  }
+};
+```
+
+See [Queue](#queue) for the capacity, the identifiers and the delivery guarantees.
+
+#### Configure the queue
+
+The queue is disabled until you configure it and then holds `1000` transitions by default. Pass `null` to disable it again. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const configureQueue = async () => {
+  await Geofences.setConfig({ maxSize: 5000 });
+};
+```
+
+#### Inspect and clear the queue
+
+Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const getQueueStatus = async () => {
+  const { pendingCount, droppedCount, lastUploadedAt } =
+    await Geofences.getQueueStatus();
+  console.log(
+    `${pendingCount} transitions pending, ${droppedCount} dropped, last upload: ${lastUploadedAt}`,
+  );
+};
+
+const clearQueue = async () => {
+  await Geofences.clearQueue();
+};
+```
+
+#### Remove all listeners
 
 Remove all listeners for this plugin when they are no longer needed:
 
@@ -283,24 +368,72 @@ const removeAllListeners = async () => {
 };
 ```
 
+### Upload
+
+#### Configure the upload
+
+Configure the plugin to upload every queued transition to your own server, even while the app is in the background or terminated. The configuration is persisted natively, so it only needs to be set once (e.g. after sign-in). Failed upload attempts are reported via the `uploadFailed` event. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const configureUpload = async () => {
+  await Geofences.addListener('uploadFailed', (event) => {
+    console.error('Upload failed: ', event.statusCode, event.message);
+  });
+  await Geofences.setConfig({
+    url: 'https://api.example.com/transitions',
+    headers: {
+      Authorization: 'Bearer eyJhbGciOi...',
+    },
+    extras: {
+      userId: 'abc',
+    },
+  });
+};
+
+const disableUpload = async () => {
+  await Geofences.resetConfig();
+};
+```
+
+**Attention**: `setConfig(...)` replaces the stored configuration entirely, so always pass every property you want to keep.
+
+See [HTTP Upload](#http-upload) for the server contract and the response handling.
+
+#### Trigger the upload
+
+Upload the queued transitions right away instead of waiting for the next retry. Only available on Android and iOS:
+
+```typescript
+import { Geofences } from '@capawesome-team/capacitor-geofences';
+
+const triggerUpload = async () => {
+  await Geofences.triggerUpload();
+};
+```
+
 ## API
 
 <docgen-index>
 
 * [`addGeofences(...)`](#addgeofences)
 * [`checkPermissions()`](#checkpermissions)
-* [`clearSyncQueue()`](#clearsyncqueue)
-* [`configureSync(...)`](#configuresync)
-* [`disableSync()`](#disablesync)
+* [`clearQueue()`](#clearqueue)
+* [`deleteQueuedTransitions(...)`](#deletequeuedtransitions)
+* [`getConfig()`](#getconfig)
 * [`getGeofences()`](#getgeofences)
-* [`getSyncStatus()`](#getsyncstatus)
+* [`getQueuedTransitions(...)`](#getqueuedtransitions)
+* [`getQueueStatus()`](#getqueuestatus)
 * [`openSettings()`](#opensettings)
 * [`removeAllGeofences()`](#removeallgeofences)
 * [`removeGeofences(...)`](#removegeofences)
 * [`requestPermissions(...)`](#requestpermissions)
-* [`triggerSync()`](#triggersync)
+* [`resetConfig()`](#resetconfig)
+* [`setConfig(...)`](#setconfig)
+* [`triggerUpload()`](#triggerupload)
 * [`addListener('geofenceTransition', ...)`](#addlistenergeofencetransition-)
-* [`addListener('syncFailed', ...)`](#addlistenersyncfailed-)
+* [`addListener('uploadFailed', ...)`](#addlisteneruploadfailed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -351,66 +484,70 @@ Check permissions for the plugin.
 --------------------
 
 
-### clearSyncQueue()
+### clearQueue()
 
 ```typescript
-clearSyncQueue() => Promise<void>
+clearQueue() => Promise<void>
 ```
 
-Delete all buffered transitions from the sync queue.
+Delete all transitions from the queue.
 
-This method can be called with or without a sync configuration, for
-example to discard pending transitions when the user signs out.
+Use `deleteQueuedTransitions(...)` to only delete the transitions that
+have already been read.
 
 Only available on Android and iOS.
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
 
-### configureSync(...)
+### deleteQueuedTransitions(...)
 
 ```typescript
-configureSync(options: ConfigureSyncOptions) => Promise<void>
+deleteQueuedTransitions(options: DeleteQueuedTransitionsOptions) => Promise<void>
 ```
 
-Configure the upload of geofence transitions to a server.
+Delete all transitions from the queue up to and including the given
+identifier.
 
-The configuration is persisted natively. Once configured, every
-geofence transition is buffered in a local queue and uploaded to the
-configured URL, even while the app is in the background or terminated.
-
-Call this method again to update the configuration, for example with a
-new authorization header, or `disableSync()` to stop uploading
-transitions.
+Call this method after the transitions returned by
+`getQueuedTransitions(...)` have been processed successfully.
 
 Only available on Android and iOS.
 
-| Param         | Type                                                                  |
-| ------------- | --------------------------------------------------------------------- |
-| **`options`** | <code><a href="#configuresyncoptions">ConfigureSyncOptions</a></code> |
+| Param         | Type                                                                                      |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletequeuedtransitionsoptions">DeleteQueuedTransitionsOptions</a></code> |
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
 
-### disableSync()
+### getConfig()
 
 ```typescript
-disableSync() => Promise<void>
+getConfig() => Promise<GetConfigResult>
 ```
 
-Remove the persisted sync configuration so that no more transitions
-are buffered or uploaded.
+Get the configuration that was last set via `setConfig(...)`.
 
-Transitions that are already buffered remain in the sync queue until
-they are deleted via `clearSyncQueue()`.
+Only the properties that were provided are returned, so the result can be
+spread into `setConfig(...)` to change a single property:
+
+```typescript
+const config = await Geofences.getConfig();
+await Geofences.setConfig({ ...config, maxSize: 5000 });
+```
+
+An empty object is returned if `setConfig(...)` has not been called yet.
 
 Only available on Android and iOS.
 
-**Since:** 0.0.1
+**Returns:** <code>Promise&lt;<a href="#setconfigoptions">SetConfigOptions</a>&gt;</code>
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -432,21 +569,43 @@ Only available on Android and iOS.
 --------------------
 
 
-### getSyncStatus()
+### getQueuedTransitions(...)
 
 ```typescript
-getSyncStatus() => Promise<GetSyncStatusResult>
+getQueuedTransitions(options?: GetQueuedTransitionsOptions | undefined) => Promise<GetQueuedTransitionsResult>
 ```
 
-Get the current status of the sync queue.
+Get the transitions that are currently stored in the queue, oldest first.
 
-This method can be called with or without a sync configuration.
+The transitions remain in the queue until they are deleted via
+`deleteQueuedTransitions(...)` or `clearQueue()`.
 
 Only available on Android and iOS.
 
-**Returns:** <code>Promise&lt;<a href="#getsyncstatusresult">GetSyncStatusResult</a>&gt;</code>
+| Param         | Type                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getqueuedtransitionsoptions">GetQueuedTransitionsOptions</a></code> |
 
-**Since:** 0.0.1
+**Returns:** <code>Promise&lt;<a href="#getqueuedtransitionsresult">GetQueuedTransitionsResult</a>&gt;</code>
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### getQueueStatus()
+
+```typescript
+getQueueStatus() => Promise<GetQueueStatusResult>
+```
+
+Get the current status of the queue.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#getqueuestatusresult">GetQueueStatusResult</a>&gt;</code>
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -528,23 +687,75 @@ separate call after the `location` permission has been granted:
 --------------------
 
 
-### triggerSync()
+### resetConfig()
 
 ```typescript
-triggerSync() => Promise<void>
+resetConfig() => Promise<void>
 ```
 
-Immediately attempt to upload all buffered transitions.
+Discard the configuration so that no transitions are stored or uploaded.
+
+Transitions that are already queued are kept, use `clearQueue()` to discard them.
+
+Only available on Android and iOS.
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### setConfig(...)
+
+```typescript
+setConfig(options: SetConfigOptions) => Promise<void>
+```
+
+Set the configuration of the transition queue and of the upload.
+
+The configuration is persisted natively so that it keeps working when the
+operating system wakes your app without a web view.
+
+Transitions are stored in the queue if `maxSize` or `url` is provided, and
+they are uploaded if `url` is provided. Use `resetConfig()` to stop
+storing and uploading transitions.
+
+**This method replaces the whole configuration**, so every property you
+omit falls back to its default. `setConfig({ maxSize: 5000 })` therefore
+also stops the upload, because `url` is no longer set. Keep your
+configuration in one place and pass it whole:
+
+```typescript
+await Geofences.setConfig({ maxSize: 5000, url });
+```
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#setconfigoptions">SetConfigOptions</a></code> |
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### triggerUpload()
+
+```typescript
+triggerUpload() => Promise<void>
+```
+
+Immediately attempt to upload all queued transitions.
 
 Any pending retry backoff is cancelled and a new upload attempt is
 started right away. The promise resolves as soon as the attempt has
 been scheduled, not when the transitions have been delivered.
 
-The promise rejects if no sync configuration exists.
+The promise rejects if no `url` has been set via `setConfig(...)`.
 
 Only available on Android and iOS.
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
@@ -557,9 +768,10 @@ addListener(eventName: 'geofenceTransition', listenerFunc: (event: GeofenceTrans
 
 Called when a geofence transition (enter, exit or dwell) is detected.
 
-Transitions that occurred while the app was terminated are queued and
-replayed in order once the first listener for this event is registered.
-Register the listener as early as possible to avoid missing them.
+This event is a live feed that is only delivered while a listener is
+registered. Transitions that occurred while the app was in the background
+or terminated are **not** replayed. Read them from the queue via
+`getQueuedTransitions(...)` instead.
 
 Only available on Android and iOS.
 
@@ -575,27 +787,27 @@ Only available on Android and iOS.
 --------------------
 
 
-### addListener('syncFailed', ...)
+### addListener('uploadFailed', ...)
 
 ```typescript
-addListener(eventName: 'syncFailed', listenerFunc: (event: SyncFailedEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'uploadFailed', listenerFunc: (event: UploadFailedEvent) => void) => Promise<PluginListenerHandle>
 ```
 
-Called when an upload attempt of buffered transitions fails.
+Called when an upload attempt of queued transitions fails.
 
 The affected transitions remain in the queue and are retried
 automatically unless the server rejected them permanently.
 
 Only available on Android and iOS.
 
-| Param              | Type                                                                            |
-| ------------------ | ------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'syncFailed'</code>                                                       |
-| **`listenerFunc`** | <code>(event: <a href="#syncfailedevent">SyncFailedEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'uploadFailed'</code>                                                         |
+| **`listenerFunc`** | <code>(event: <a href="#uploadfailedevent">UploadFailedEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
@@ -663,13 +875,21 @@ Remove all listeners for this plugin.
 | **`notifications`**      | <code><a href="#permissionstate">PermissionState</a></code> | The permission state for displaying local notifications on a transition.                                                                                                           | 0.0.1 |
 
 
-#### ConfigureSyncOptions
+#### DeleteQueuedTransitionsOptions
 
-| Prop          | Type                                                         | Description                                                                                            | Since |
-| ------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ----- |
-| **`extras`**  | <code>{ [key: string]: string \| number \| boolean; }</code> | Static metadata that is attached to every upload request as the `extras` property of the request body. | 0.0.1 |
-| **`headers`** | <code>{ [key: string]: string; }</code>                      | Static HTTP headers that are sent with every upload request, for example for authorization.            | 0.0.1 |
-| **`url`**     | <code>string</code>                                          | The URL the transitions are uploaded to via HTTP `POST`.                                               | 0.0.1 |
+| Prop         | Type                | Description                                                                                                         | Since |
+| ------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`upToId`** | <code>number</code> | The identifier of the newest transition to delete. All transitions with this identifier or a lower one are deleted. | 0.2.0 |
+
+
+#### SetConfigOptions
+
+| Prop          | Type                                                         | Description                                                                                                                                                                                                                                        | Default           | Since |
+| ------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
+| **`extras`**  | <code>{ [key: string]: string \| number \| boolean; }</code> | Static metadata that is attached to every upload request as the `extras` property of the request body.                                                                                                                                             |                   | 0.2.0 |
+| **`headers`** | <code>{ [key: string]: string; }</code>                      | Static HTTP headers that are sent with every upload request, for example for authorization.                                                                                                                                                        |                   | 0.2.0 |
+| **`maxSize`** | <code>number</code>                                          | The maximum number of transitions that are stored in the queue. When the queue is full, the oldest transitions are dropped first. A stored transition occupies about `140` bytes, so the default of `1000` needs about `140` KB. Must be positive. | <code>1000</code> | 0.2.0 |
+| **`url`**     | <code>string</code>                                          | The URL the transitions are uploaded to via HTTP `POST`. Providing this property enables the upload. Omit it to keep the transitions on the device only.                                                                                           |                   | 0.2.0 |
 
 
 #### GetGeofencesResult
@@ -679,13 +899,36 @@ Remove all listeners for this plugin.
 | **`geofences`** | <code>Geofence[]</code> | The geofences that are currently being monitored. | 0.0.1 |
 
 
-#### GetSyncStatusResult
+#### GetQueuedTransitionsResult
 
-| Prop               | Type                        | Description                                                                                                                                                                                                                                  | Since |
-| ------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`droppedCount`** | <code>number</code>         | The number of transitions that were dropped without being uploaded since the queue was last empty or cleared, for example because the queue was full or the server rejected them permanently. This counter is persisted across app restarts. | 0.0.1 |
-| **`lastSyncedAt`** | <code>number \| null</code> | The time at which the last batch of transitions was uploaded successfully in milliseconds since the Unix epoch or `null` if no batch has been uploaded successfully yet. This value is persisted across app restarts.                        | 0.0.1 |
-| **`pendingCount`** | <code>number</code>         | The number of transitions that are currently buffered in the sync queue.                                                                                                                                                                     | 0.0.1 |
+| Prop              | Type                            | Description                                                          | Since |
+| ----------------- | ------------------------------- | -------------------------------------------------------------------- | ----- |
+| **`hasMore`**     | <code>boolean</code>            | Whether more transitions are stored in the queue than were returned. | 0.2.0 |
+| **`transitions`** | <code>QueuedTransition[]</code> | The queued transitions, oldest first.                                | 0.2.0 |
+
+
+#### QueuedTransition
+
+| Prop     | Type                | Description                                                                                                | Since |
+| -------- | ------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`** | <code>number</code> | The identifier of the transition in the queue. The identifier increases monotonically and is never reused. | 0.2.0 |
+
+
+#### GetQueuedTransitionsOptions
+
+| Prop          | Type                | Description                                                                                                                                    | Default          | Since |
+| ------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`afterId`** | <code>number</code> | Only return transitions with an identifier greater than this value. If not provided, the transitions are returned from the start of the queue. |                  | 0.2.0 |
+| **`limit`**   | <code>number</code> | The maximum number of transitions to return. Must be greater than `0`.                                                                         | <code>100</code> | 0.2.0 |
+
+
+#### GetQueueStatusResult
+
+| Prop                 | Type                        | Description                                                                                                                                                                                                           | Since |
+| -------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`droppedCount`**   | <code>number</code>         | The number of transitions that were dropped without being read since the queue was last cleared, for example because the queue was full. This counter is persisted across app restarts.                               | 0.2.0 |
+| **`lastUploadedAt`** | <code>number \| null</code> | The time at which the last batch of transitions was uploaded successfully in milliseconds since the Unix epoch or `null` if no batch has been uploaded successfully yet. This value is persisted across app restarts. | 0.2.0 |
+| **`pendingCount`**   | <code>number</code>         | The number of transitions that are currently stored in the queue.                                                                                                                                                     | 0.2.0 |
 
 
 #### RemoveGeofencesOptions
@@ -711,16 +954,23 @@ Remove all listeners for this plugin.
 
 #### GeofenceTransitionEvent
 
-| Prop                 | Type                                                      | Description                                                                                                                                                | Since |
-| -------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**             | <code>string</code>                                       | The identifier of the geofence that triggered the transition.                                                                                              | 0.0.1 |
-| **`transitionType`** | <code><a href="#transitiontype">TransitionType</a></code> | The type of the transition.                                                                                                                                | 0.0.1 |
-| **`timestamp`**      | <code>number</code>                                       | The time the transition was detected in milliseconds since epoch.                                                                                          | 0.0.1 |
-| **`latitude`**       | <code>number \| null</code>                               | The latitude of the location that triggered the transition in degrees. On **iOS**, this is always `null` because the triggering location is not provided.  | 0.0.1 |
-| **`longitude`**      | <code>number \| null</code>                               | The longitude of the location that triggered the transition in degrees. On **iOS**, this is always `null` because the triggering location is not provided. | 0.0.1 |
+| Prop             | Type                                                              | Description              | Since |
+| ---------------- | ----------------------------------------------------------------- | ------------------------ | ----- |
+| **`transition`** | <code><a href="#geofencetransition">GeofenceTransition</a></code> | The detected transition. | 0.2.0 |
 
 
-#### SyncFailedEvent
+#### GeofenceTransition
+
+| Prop             | Type                                                      | Description                                                                                                                                                | Since |
+| ---------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`geofenceId`** | <code>string</code>                                       | The identifier of the geofence that triggered the transition.                                                                                              | 0.2.0 |
+| **`latitude`**   | <code>number \| null</code>                               | The latitude of the location that triggered the transition in degrees. On **iOS**, this is always `null` because the triggering location is not provided.  | 0.2.0 |
+| **`longitude`**  | <code>number \| null</code>                               | The longitude of the location that triggered the transition in degrees. On **iOS**, this is always `null` because the triggering location is not provided. | 0.2.0 |
+| **`timestamp`**  | <code>number</code>                                       | The time the transition was detected in milliseconds since epoch.                                                                                          | 0.2.0 |
+| **`type`**       | <code><a href="#transitiontype">TransitionType</a></code> | The type of the transition.                                                                                                                                | 0.2.0 |
+
+
+#### UploadFailedEvent
 
 | Prop             | Type                | Description                                                       | Since |
 | ---------------- | ------------------- | ----------------------------------------------------------------- | ----- |
@@ -734,6 +984,11 @@ Remove all listeners for this plugin.
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### GetConfigResult
+
+<code><a href="#setconfigoptions">SetConfigOptions</a></code>
 
 
 #### PermissionType
@@ -754,19 +1009,39 @@ Remove all listeners for this plugin.
 
 </docgen-api>
 
-## HTTP Sync
+## Queue
 
-The plugin can upload every geofence transition to your own server without involving JavaScript. Transitions are buffered in a local queue, uploaded to the configured URL and only deleted from the queue after the server has acknowledged them. Since the whole pipeline runs natively, it keeps working while the web view is suspended — and, unlike a watch session of the [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/) plugin, even while the app is terminated.
+Once the queue is enabled, every geofence transition is appended to it, whether or not your app is running. The queue is then the **single source of truth**: the `geofenceTransition` event is an ephemeral live feed that only fires while your app is running, so an app that only listens to the event misses every transition that was detected while it was terminated.
+
+Read the queue with `getQueuedTransitions(...)` and acknowledge the transitions you processed with `deleteQueuedTransitions(...)`. Reading and deleting are two separate steps on purpose: a crash between reading and persisting must not lose a transition.
+
+### Identifiers
+
+Every queued transition carries a numeric `id` that increases monotonically and is never reused, even after the queue was cleared or the app was restarted. This makes it usable both for keyset pagination via `afterId` and for the inclusive prefix delete via `upToId`.
+
+### Behavior
+
+- **Persistence**: The queue is stored in the sandboxed app storage and survives app restarts, force-quits and device reboots.
+- **Opt-in**: Nothing is stored until you call `setConfig(...)` with `maxSize` or `url`, and transitions detected before that are not stored. Call `resetConfig()` to disable it again; transitions that are already queued are kept until `clearQueue()`.
+- **Capacity**: The queue holds at most `1000` transitions by default, which can be changed via `setConfig({ maxSize })`. If the queue is full, the **oldest** transitions are dropped first. 
+- **Observability**: The `droppedCount` property of `getQueueStatus()` counts the transitions that were dropped since the queue was last cleared. The counter is persisted across app restarts.
+- **Duplicates**: A transition that is delivered via the `geofenceTransition` event while your app is running is also stored in the queue. Treat the queue as the source of truth to avoid processing it twice.
+
+## HTTP Upload
+
+The plugin can upload every queued transition to your own server without involving JavaScript. Transitions are uploaded to the configured URL and only deleted from the queue after the server has acknowledged them. Since the whole pipeline runs natively, it keeps working while the web view is suspended — and, unlike a watch session of the [Background Geolocation](https://capawesome.io/docs/sdks/capacitor/background-geolocation/) plugin, even while the app is terminated.
+
+**Attention**: The upload drains the same queue that `getQueuedTransitions(...)` reads. Transitions are stored once and deleted once, so a transition your app deletes with `deleteQueuedTransitions(...)` is never uploaded, and a transition the server acknowledged is no longer readable. Use either the upload or your own drain loop, not both.
 
 ### Options
 
-Call `configureSync(...)` once to enable the upload pipeline. The configuration is persisted natively and applies to every future transition until `disableSync()` is called. Failed upload attempts are reported via the `syncFailed` event:
+Call `setConfig({ url })` to enable the upload pipeline. The configuration is persisted natively so that transitions can be uploaded when the operating system wakes your app without a web view, and it applies to every future transition until `resetConfig()` is called. Call it on every app start anyway: the stored copy is only a cache of your last call, and it is discarded whenever the plugin's configuration format changes in a future version. Queued transitions are never discarded with it:
 
 ```typescript
 import { Geofences } from '@capawesome-team/capacitor-geofences';
 
-const configureSync = async () => {
-  await Geofences.configureSync({
+const configureUpload = async () => {
+  await Geofences.setConfig({
     url: 'https://api.example.com/transitions',
     headers: {
       Authorization: 'Bearer eyJhbGciOi...',
@@ -778,23 +1053,13 @@ const configureSync = async () => {
 };
 ```
 
-The queue itself can be inspected and controlled with or without a sync configuration:
+**Attention**: The configuration you pass replaces the stored one entirely. Every property you omit falls back to its default, so read the stored configuration with `getConfig()` first if you only want to change a single property.
+
+To stop the upload but keep storing transitions, call `setConfig(...)` again without `url`:
 
 ```typescript
-import { Geofences } from '@capawesome-team/capacitor-geofences';
-
-const getSyncStatus = async () => {
-  const { pendingCount, droppedCount, lastSyncedAt } = await Geofences.getSyncStatus();
-  console.log(`${pendingCount} transitions pending, ${droppedCount} dropped, last upload: ${lastSyncedAt}`);
-};
-
-const triggerSync = async () => {
-  await Geofences.triggerSync();
-};
-
-const clearSyncQueue = async () => {
-  await Geofences.clearSyncQueue();
-};
+const { url, ...config } = await Geofences.getConfig();
+await Geofences.setConfig(config);
 ```
 
 ### Server Contract
@@ -805,9 +1070,9 @@ Transitions are uploaded with an HTTP `POST` request and the `Content-Type: appl
 {
   "transitions": [
     {
-      "id": "1b8935d6-27b4-4a5c-9f0f-4a5c9f0f1b89",
+      "id": 42,
       "geofenceId": "2ca23ff9-b95d-4962-b64f-3e1efe6f2e7d",
-      "transitionType": "ENTER",
+      "type": "ENTER",
       "timestamp": 1723291200000,
       "latitude": 52.52,
       "longitude": 13.405
@@ -817,9 +1082,9 @@ Transitions are uploaded with an HTTP `POST` request and the `Content-Type: appl
 }
 ```
 
-Every entry of the `transitions` array is a [`GeofenceTransitionEvent`](#geofencetransitionevent) object whose `id` property is the identifier of the transition and whose `geofenceId` property is the identifier of the geofence. On iOS, `latitude` and `longitude` are always `null`. The `extras` property is omitted entirely if the `extras` option was not provided.
+Every entry of the `transitions` array is a [`QueuedTransition`](#queuedtransition) object whose `id` property is the identifier of the transition in the queue and whose `geofenceId` property is the identifier of the geofence. On iOS, `latitude` and `longitude` are always `null`. The `extras` property is omitted entirely if the `extras` option was not provided.
 
-**Idempotency**: The `id` is unique per transition. Transitions are delivered **at least once**, so the same transition may be uploaded more than once, for example if the acknowledgment of the server is lost on the way back. Deduplicate the transitions on the server by `id` to make the upload idempotent.
+**Idempotency**: The `id` is unique per app installation, not globally. Transitions are delivered **at least once**, so the same transition may be uploaded more than once, for example if the acknowledgment of the server is lost on the way back. Deduplicate the transitions on the server by the `id` together with a device or user identifier from `extras` to make the upload idempotent.
 
 ### Response Handling
 
@@ -827,25 +1092,17 @@ The response body is always ignored. Only the status code decides what happens t
 
 | Status Code                                 | Behavior                                                                                                                              |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `2xx`                                       | The transitions are acknowledged and deleted from the queue.                                                                          |
-| `408`, `429`, `5xx`, network error, timeout | The transitions stay in the queue and are retried with an exponential backoff. A `syncFailed` event is emitted.                       |
-| Any other status code                       | The transitions are **dropped permanently without being uploaded again** and a `syncFailed` event is emitted.                         |
+| `2xx`                                       | The transitions are acknowledged and deleted from the queue.                                                                         |
+| `401`, `408`, `429`, `5xx`, network error, timeout | The transitions stay in the queue and are retried with an exponential backoff. A `uploadFailed` event is emitted.               |
+| Any other status code                       | The transitions are **dropped permanently without being uploaded again** and a `uploadFailed` event is emitted.                         |
 
-**Attention**: Transitions that the server rejects with any status code other than `2xx`, `408`, `429` or `5xx` (for example `400 Bad Request` or `422 Unprocessable Entity`) are deleted from the queue and **lost**. This is intentional: a permanently rejected upload must never block the queue forever. Make sure your endpoint answers with a retryable status code (e.g. `503`) if it is temporarily unable to accept transitions, and listen to the `syncFailed` event to detect such drops. Dropped transitions are also counted in the `droppedCount` property of `getSyncStatus()`.
+**Attention**: Transitions that the server rejects with any status code other than `2xx`, `401`, `408`, `429` or `5xx` (for example `400 Bad Request` or `422 Unprocessable Entity`) are deleted from the queue and **lost**. This is intentional: a permanently rejected upload must never block the queue forever. `401` is treated as retryable, because it usually means an expired token rather than an unacceptable upload — refresh the credentials with `setConfig(...)` and the queued transitions are uploaded afterwards. Make sure your endpoint answers with a retryable status code (e.g. `503`) if it is temporarily unable to accept transitions, and listen to the `uploadFailed` event to detect such drops. Dropped transitions are also counted in the `droppedCount` property of `getQueueStatus()`.
 
-The request timeout is 30 seconds. On Android, retries are scheduled via WorkManager with an exponential backoff starting at 10 seconds, so they survive a process death and even a device reboot. On iOS, retries start with a delay of 5 seconds and double after every attempt up to a maximum of 10 minutes while the app is alive; pending transitions are also uploaded on the next app launch and whenever a new transition is detected. The backoff is reset whenever `configureSync(...)` or `triggerSync()` is called.
-
-### Queue Behavior
-
-- **Persistence**: The queue is stored in the sandboxed app storage and survives app restarts, force-quits and device reboots. Transitions are only deleted after the server has acknowledged them or they were dropped.
-- **Capacity**: The queue holds at most `1000` transitions. If the queue is full, the **oldest** transitions are dropped first.
-- **Observability**: The `droppedCount` property of `getSyncStatus()` counts the transitions that were dropped since the queue was last empty or cleared. The counter is persisted across app restarts.
-- **Delivery window**: As long as a sync configuration exists, transitions are uploaded as soon as they are detected — including while the app is in the background or terminated. On iOS, the upload while terminated happens during the short background wake-up in which the operating system delivers the region event.
-- **After `disableSync()`**: No more transitions are buffered or uploaded. Transitions that are already buffered stay in the queue until they are deleted via `clearSyncQueue()` or a new sync configuration uploads them.
+The request timeout is 30 seconds. On Android, retries are scheduled via WorkManager with an exponential backoff starting at 10 seconds, so they survive a process death and even a device reboot. On iOS, retries start with a delay of 5 seconds and double after every attempt up to a maximum of 10 minutes while the app is alive; pending transitions are also uploaded on the next app launch and whenever a new transition is detected. The backoff is reset whenever `setConfig({ url })` or `triggerUpload()` is called.
 
 ### Deliberately Not Supported
 
-The following features are intentionally not part of the sync pipeline:
+The following features are intentionally not part of the upload pipeline:
 
 - **Network constraints**: Uploads cannot be restricted to Wi-Fi or unmetered networks.
 - **Response processing**: The response body of the server is always ignored, so the server cannot send commands back to the device.
@@ -859,7 +1116,7 @@ Both plugins solve different problems and complement each other. The [Background
 
 ### How is this plugin different from other similar plugins?
 
-It uses the operating system's own region monitoring — `GeofencingClient` on Android and Core Location on iOS — so enter, exit and dwell transitions are detected with minimal battery impact, even while your app is in the background or terminated. Transitions that occur while the app is killed are queued and replayed on the next launch and can trigger a native local notification, and on Android geofences are automatically re-registered after a reboot or app update. It's all exposed through one fully typed, actively maintained API with dedicated support; if you need the full location trail rather than boundary crossings, continuous tracking fits better, but for reacting to specific areas efficiently, this plugin is purpose-built.
+It uses the operating system's own region monitoring — `GeofencingClient` on Android and Core Location on iOS — so enter, exit and dwell transitions are detected with minimal battery impact, even while your app is in the background or terminated. Transitions that occur while the app is killed are stored in a durable queue your app drains on the next launch and can trigger a native local notification, and on Android geofences are automatically re-registered after a reboot or app update. It's all exposed through one fully typed, actively maintained API with dedicated support; if you need the full location trail rather than boundary crossings, continuous tracking fits better, but for reacting to specific areas efficiently, this plugin is purpose-built.
 
 ### Is geofencing available on the web?
 
@@ -879,7 +1136,7 @@ Geofencing requires the **Always** location authorization on iOS and the **backg
 
 ### What happens to transitions that occur while my app is in the background or terminated?
 
-Transitions detected while the app is in the background or terminated are queued and replayed in order once the first `geofenceTransition` listener is registered, so register the listener as early as possible after your app starts. The replay buffer holds at most `100` transitions. If more transitions are detected before your app registers a listener again, the **oldest** ones are dropped. If a geofence defines a `notification`, it is displayed natively regardless of the app state. If your server needs to know about transitions right away instead of on the next launch, configure [HTTP Sync](#http-sync), which uploads them natively at the moment they are detected. On Android, geofences are automatically re-registered after a device reboot or an app update, while on iOS the monitored regions are persisted by the operating system.
+If the queue is enabled, they are appended to it. It holds `1000` transitions by default and drops the **oldest** ones when it is full. Read them with `getQueuedTransitions(...)` when your app becomes active again — the `geofenceTransition` event only fires while your app is running and does not replay them. If a geofence defines a `notification`, it is displayed natively regardless of the app state. If your server needs to know about transitions right away instead of on the next launch, configure [HTTP Upload](#http-upload), which uploads them natively at the moment they are detected. On Android, geofences are automatically re-registered after a device reboot or an app update, while on iOS the monitored regions are persisted by the operating system.
 
 ### Why don't I receive dwell transitions on iOS?
 
@@ -887,7 +1144,7 @@ Dwell transitions are only supported on Android. On iOS, the `androidNotifyOnDwe
 
 ### Why are `latitude` and `longitude` `null` on iOS?
 
-Core Location does not provide the triggering location for a region transition. If you need the geofence's coordinates, look them up by its `id` (you already know them because you added the geofence).
+Core Location does not provide the triggering location for a region transition. If you need the geofence's coordinates, look them up by its `geofenceId` (you already know them because you added the geofence).
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 

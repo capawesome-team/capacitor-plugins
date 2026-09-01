@@ -15,8 +15,9 @@ The Capacitor Background Geolocation plugin provides everything you need for rel
 - 🛰️ **Background Tracking**: Keeps receiving position updates while the app is in the background.
 - 🔐 **Granular Permissions**: First-class permissions API including the two-step background location upgrade flow.
 - 📍 **One-Shot Position**: Get the current position with configurable accuracy, timeout and maximum age.
-- ☁️ **HTTP Sync**: Upload positions to your own server in batches with an on-device SQLite queue, automatic retries and at-least-once delivery.
-- 🧪 **Sync Testing**: Test the sync engine without your own server using the free [Background Geolocation Playground](https://background-geolocation-playground.capawesome.io) webpage.
+- 🗄️ **Local Queue**: Persist every position in an on-device SQLite queue and read it out later, so nothing is lost while the web view is suspended.
+- ☁️ **HTTP Upload**: Upload queued positions to your own server in batches with automatic retries and at-least-once delivery.
+- 🧪 **Upload Testing**: Test the upload pipeline without your own server using the free [Background Geolocation Playground](https://background-geolocation-playground.capawesome.io) webpage.
 - 🛠️ **Real Tuning Knobs**: Configure accuracy, distance filter and update interval.
 - 🤖 **Foreground Service**: Correct Android 14+ foreground service with a fully configurable notification.
 - 📡 **Provider Choice**: Fused location provider by default with an escape hatch to the platform location manager for devices without Google Play services.
@@ -94,7 +95,7 @@ If you want to receive position updates while the app is in the **background**, 
 
 **Attention**: This permission is deliberately **not** declared by the plugin because Google Play requires a policy declaration and review for every app that requests background location access. Only declare it if your app really needs background tracking and make sure to complete the [location permissions declaration](https://support.google.com/googleplay/android-developer/answer/9799150) in the Google Play Console.
 
-The `INTERNET` permission that the [HTTP Sync](#http-sync) feature requires is already declared by every Capacitor app template, so no additional configuration is needed for it.
+The `INTERNET` permission that the [HTTP Upload](#http-upload) feature requires is already declared by every Capacitor app template, so no additional configuration is needed for it.
 
 #### Proguard
 
@@ -148,7 +149,7 @@ No configuration required for this plugin.
 
 ## Usage
 
-The following examples show how to get the current position, watch the position of the device, request temporary full accuracy, and check and request permissions.
+The following examples show how to get the current position, watch the position of the device, read queued positions, upload positions to a server, request temporary full accuracy, and check and request permissions.
 
 ### Get the current position
 
@@ -174,6 +175,8 @@ Start a watch session to receive position updates via the `positionChange` event
 import { Accuracy, ActivityType, BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
 
 const startWatching = async () => {
+  // Enable the queue so that no position is lost while the web view is suspended.
+  await BackgroundGeolocation.setConfig({ maxSize: 50000 });
   await BackgroundGeolocation.addListener('positionChange', event => {
     console.log('New position: ', event.position);
   });
@@ -202,30 +205,55 @@ const isWatching = async () => {
 };
 ```
 
-### Sync positions to a server
+### Read queued positions
 
-The plugin can upload every position of a watch session to your own server without involving JavaScript, buffered in a local queue so that no position is lost while the device is offline. Provide the `sync` option when you start the watch session to enable it. Only available on Android and iOS:
+The plugin can store every position of a watch session in a local queue that survives app restarts, so your app can read the positions it missed while the web view was suspended. Enable the queue with `setConfig(...)` and drain it whenever your app is in the foreground again. Only available on Android and iOS:
 
 ```typescript
 import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
 
-const startWatchingWithSync = async () => {
-  await BackgroundGeolocation.startWatching({
-    androidNotification: {
-      title: 'Location Tracking',
-      text: 'Your location is being tracked.',
-    },
-    sync: {
-      url: 'https://api.example.com/positions',
-      headers: {
-        Authorization: 'Bearer eyJhbGciOi...',
-      },
+const enableQueue = async () => {
+  await BackgroundGeolocation.setConfig({ maxSize: 50000 });
+};
+
+const drainQueue = async () => {
+  let hasMore = true;
+  while (hasMore) {
+    const result = await BackgroundGeolocation.getQueuedPositions({
+      limit: 1000,
+    });
+    if (!result.positions.length) {
+      break;
+    }
+    await persist(result.positions);
+    await BackgroundGeolocation.deleteQueuedPositions({
+      upToId: result.positions[result.positions.length - 1].id,
+    });
+    hasMore = result.hasMore;
+  }
+};
+```
+
+See [Queue](#queue) for all options, the drain loop and the queue behavior.
+
+### Upload positions to a server
+
+The plugin can upload every queued position to your own server without involving JavaScript, so that no position is lost while the device is offline. Provide the `url` option to enable it. Only available on Android and iOS:
+
+```typescript
+import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
+
+const enableUpload = async () => {
+  await BackgroundGeolocation.setConfig({
+    url: 'https://api.example.com/positions',
+    headers: {
+      Authorization: 'Bearer eyJhbGciOi...',
     },
   });
 };
 ```
 
-See [HTTP Sync](#http-sync) for all options, the server contract, response handling and queue behavior.
+See [HTTP Upload](#http-upload) for all options, the server contract and the response handling.
 
 ### Request temporary full accuracy
 
@@ -285,19 +313,24 @@ const openSettings = async () => {
 <docgen-index>
 
 * [`checkPermissions()`](#checkpermissions)
-* [`clearSyncQueue()`](#clearsyncqueue)
+* [`clearQueue()`](#clearqueue)
+* [`deleteQueuedPositions(...)`](#deletequeuedpositions)
+* [`getConfig()`](#getconfig)
 * [`getCurrentPosition(...)`](#getcurrentposition)
-* [`getSyncStatus()`](#getsyncstatus)
+* [`getQueuedPositions(...)`](#getqueuedpositions)
+* [`getQueueStatus()`](#getqueuestatus)
 * [`isWatching()`](#iswatching)
 * [`openSettings()`](#opensettings)
 * [`requestPermissions(...)`](#requestpermissions)
 * [`requestTemporaryFullAccuracy(...)`](#requesttemporaryfullaccuracy)
+* [`resetConfig()`](#resetconfig)
+* [`setConfig(...)`](#setconfig)
 * [`startWatching(...)`](#startwatching)
 * [`stopWatching()`](#stopwatching)
-* [`triggerSync()`](#triggersync)
+* [`triggerUpload()`](#triggerupload)
 * [`addListener('positionChange', ...)`](#addlistenerpositionchange-)
 * [`addListener('positionError', ...)`](#addlistenerpositionerror-)
-* [`addListener('syncFailed', ...)`](#addlistenersyncfailed-)
+* [`addListener('uploadFailed', ...)`](#addlisteneruploadfailed-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
@@ -325,20 +358,69 @@ Only available on Android and iOS.
 --------------------
 
 
-### clearSyncQueue()
+### clearQueue()
 
 ```typescript
-clearSyncQueue() => Promise<void>
+clearQueue() => Promise<void>
 ```
 
-Delete all buffered positions from the sync queue.
+Delete all positions from the queue and reset the dropped counter.
 
 This method can be called with or without an active watch session, for
 example to discard pending positions when the user signs out.
 
 Only available on Android and iOS.
 
-**Since:** 0.0.1
+**Since:** 0.2.0
+
+--------------------
+
+
+### deleteQueuedPositions(...)
+
+```typescript
+deleteQueuedPositions(options: DeleteQueuedPositionsOptions) => Promise<void>
+```
+
+Delete all queued positions up to and including the given id.
+
+Call this method after the positions returned by `getQueuedPositions()`
+have been persisted by your app.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#deletequeuedpositionsoptions">DeleteQueuedPositionsOptions</a></code> |
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### getConfig()
+
+```typescript
+getConfig() => Promise<GetConfigResult>
+```
+
+Get the configuration that was last set via `setConfig(...)`.
+
+Only the properties that were provided are returned, so the result can be
+spread into `setConfig(...)` to change a single property:
+
+```typescript
+const config = await BackgroundGeolocation.getConfig();
+await BackgroundGeolocation.setConfig({ ...config, maxSize: 5000 });
+```
+
+An empty object is returned if `setConfig(...)` has not been called yet.
+
+Only available on Android and iOS.
+
+**Returns:** <code>Promise&lt;<a href="#setconfigoptions">SetConfigOptions</a>&gt;</code>
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -367,21 +449,46 @@ Only available on Android and iOS.
 --------------------
 
 
-### getSyncStatus()
+### getQueuedPositions(...)
 
 ```typescript
-getSyncStatus() => Promise<GetSyncStatusResult>
+getQueuedPositions(options?: GetQueuedPositionsOptions | undefined) => Promise<GetQueuedPositionsResult>
 ```
 
-Get the current status of the sync queue.
+Get the positions that are currently stored in the queue, oldest first.
+
+The positions are **not** deleted from the queue. Call
+`deleteQueuedPositions(...)` after the positions have been persisted by
+your app.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                            |
+| ------------- | ------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#getqueuedpositionsoptions">GetQueuedPositionsOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#getqueuedpositionsresult">GetQueuedPositionsResult</a>&gt;</code>
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### getQueueStatus()
+
+```typescript
+getQueueStatus() => Promise<GetQueueStatusResult>
+```
+
+Get the current status of the queue.
 
 This method can be called with or without an active watch session.
 
 Only available on Android and iOS.
 
-**Returns:** <code>Promise&lt;<a href="#getsyncstatusresult">GetSyncStatusResult</a>&gt;</code>
+**Returns:** <code>Promise&lt;<a href="#getqueuestatusresult">GetQueueStatusResult</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
@@ -475,6 +582,58 @@ Only available on iOS.
 --------------------
 
 
+### resetConfig()
+
+```typescript
+resetConfig() => Promise<void>
+```
+
+Discard the configuration so that no positions are stored or uploaded.
+
+Positions that are already queued are kept, use `clearQueue()` to discard them.
+
+Only available on Android and iOS.
+
+**Since:** 0.2.0
+
+--------------------
+
+
+### setConfig(...)
+
+```typescript
+setConfig(options: SetConfigOptions) => Promise<void>
+```
+
+Set the configuration of the position queue and of the upload.
+
+The configuration is persisted natively so that it keeps working when the
+operating system wakes your app without a web view.
+
+Positions are stored in the queue if `maxSize` or `url` is provided, and
+they are uploaded if `url` is provided. Use `resetConfig()` to stop
+storing and uploading positions.
+
+**This method replaces the whole configuration**, so every property you
+omit falls back to its default. `setConfig({ maxSize: 5000 })` therefore
+also stops the upload, because `url` is no longer set. Keep your
+configuration in one place and pass it whole:
+
+```typescript
+await BackgroundGeolocation.setConfig({ maxSize: 5000, url });
+```
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#setconfigoptions">SetConfigOptions</a></code> |
+
+**Since:** 0.2.0
+
+--------------------
+
+
 ### startWatching(...)
 
 ```typescript
@@ -500,9 +659,8 @@ has not been granted yet.
 On **iOS**, position updates are delivered while the app is in the
 background if the `location` background mode is enabled in the app.
 
-If the `sync` option is provided, every position of the watch session is
-additionally buffered in a local queue and uploaded in batches to the
-configured server while the watch session is active.
+If the queue is enabled via `setConfig(...)`, every position of the
+watch session is additionally stored in the local queue.
 
 Without the `backgroundLocation` permission, the watch session keeps
 working but position updates may be suspended while the app is in the
@@ -537,24 +695,23 @@ Only available on Android and iOS.
 --------------------
 
 
-### triggerSync()
+### triggerUpload()
 
 ```typescript
-triggerSync() => Promise<void>
+triggerUpload() => Promise<void>
 ```
 
-Immediately attempt to upload all buffered positions.
+Immediately attempt to upload all queued positions.
 
 Any pending retry backoff is cancelled and a new upload attempt is
 started right away. The promise resolves as soon as the attempt has
 been scheduled, not when the positions have been delivered.
 
-The promise rejects if no watch session with a `sync` configuration is
-active.
+The promise rejects if no `url` has been set via `setConfig(...)`.
 
 Only available on Android and iOS.
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
@@ -566,6 +723,9 @@ addListener(eventName: 'positionChange', listenerFunc: (event: PositionChangeEve
 ```
 
 Called when a new position is available during an active watch session.
+
+This event is only delivered while the web view is alive. If the queue
+is enabled, treat the queue as the single source of truth instead.
 
 Only available on Android and iOS.
 
@@ -605,27 +765,27 @@ Only available on Android and iOS.
 --------------------
 
 
-### addListener('syncFailed', ...)
+### addListener('uploadFailed', ...)
 
 ```typescript
-addListener(eventName: 'syncFailed', listenerFunc: (event: SyncFailedEvent) => void) => Promise<PluginListenerHandle>
+addListener(eventName: 'uploadFailed', listenerFunc: (event: UploadFailedEvent) => void) => Promise<PluginListenerHandle>
 ```
 
-Called when an upload attempt of buffered positions fails.
+Called when an upload attempt of queued positions fails.
 
 The affected positions remain in the queue and are retried
 automatically unless the server rejected them permanently.
 
 Only available on Android and iOS.
 
-| Param              | Type                                                                            |
-| ------------------ | ------------------------------------------------------------------------------- |
-| **`eventName`**    | <code>'syncFailed'</code>                                                       |
-| **`listenerFunc`** | <code>(event: <a href="#syncfailedevent">SyncFailedEvent</a>) =&gt; void</code> |
+| Param              | Type                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'uploadFailed'</code>                                                         |
+| **`listenerFunc`** | <code>(event: <a href="#uploadfailedevent">UploadFailedEvent</a>) =&gt; void</code> |
 
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
-**Since:** 0.0.1
+**Since:** 0.2.0
 
 --------------------
 
@@ -655,6 +815,25 @@ Remove all listeners for this plugin.
 | **`notifications`**      | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for posting notifications. On **Android 12 and older** and on **iOS**, this is always `granted` since no notification permission is required.                                                                | 0.0.1 |
 
 
+#### DeleteQueuedPositionsOptions
+
+| Prop         | Type                | Description                                                                                           | Since |
+| ------------ | ------------------- | ----------------------------------------------------------------------------------------------------- | ----- |
+| **`upToId`** | <code>number</code> | The id of the newest position to delete. All queued positions with this id or a lower id are deleted. | 0.2.0 |
+
+
+#### SetConfigOptions
+
+| Prop                | Type                                                         | Description                                                                                                                                                                                                                                                                                                                                                                                        | Default            | Since |
+| ------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`batchSize`**     | <code>number</code>                                          | The maximum number of positions that are uploaded in a single request. Must be positive and must not be greater than `maxSize`. Set this option to `1` to upload each position immediately.                                                                                                                                                                                                        | <code>100</code>   | 0.2.0 |
+| **`extras`**        | <code>{ [key: string]: string \| number \| boolean; }</code> | Static metadata that is attached to every upload request as the `extras` property of the request body.                                                                                                                                                                                                                                                                                             |                    | 0.2.0 |
+| **`flushInterval`** | <code>number</code>                                          | The maximum time in milliseconds before queued positions are uploaded, even if the batch size has not been reached yet. Must be positive.                                                                                                                                                                                                                                                          | <code>60000</code> | 0.2.0 |
+| **`headers`**       | <code>{ [key: string]: string; }</code>                      | Static HTTP headers that are sent with every upload request, for example for authorization.                                                                                                                                                                                                                                                                                                        |                    | 0.2.0 |
+| **`maxSize`**       | <code>number</code>                                          | The maximum number of positions that are stored in the queue. When the queue is full, the oldest positions are dropped first. A stored position occupies about `210` bytes, so the default of `50000` needs about `10` MB. Must be positive. Set this option to `1` to keep only the most recent position, for example when you upload every position immediately and only the latest one matters. | <code>50000</code> | 0.2.0 |
+| **`url`**           | <code>string</code>                                          | The URL the positions are uploaded to via HTTP `POST`. Providing this property enables the upload. Omit it to keep the positions on the device only.                                                                                                                                                                                                                                               |                    | 0.2.0 |
+
+
 #### GetCurrentPositionResult
 
 | Prop           | Type                                          | Description                         | Since |
@@ -679,20 +858,44 @@ Remove all listeners for this plugin.
 
 #### GetCurrentPositionOptions
 
-| Prop             | Type                                          | Description                                                                                                                                              | Default                    | Since |
-| ---------------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ----- |
-| **`accuracy`**   | <code><a href="#accuracy">Accuracy</a></code> | The desired accuracy of the position.                                                                                                                    | <code>Accuracy.High</code> | 0.0.1 |
-| **`maximumAge`** | <code>number</code>                           | The maximum age in milliseconds of a cached position that is accepted as the current position. If set to `0`, a fresh position is always fetched.        | <code>0</code>             | 0.0.1 |
-| **`timeout`**    | <code>number</code>                           | The maximum time in milliseconds to wait for a position. The promise rejects with the `TIMEOUT` error code if no position is available within this time. | <code>10000</code>         | 0.0.1 |
+| Prop                              | Type                                          | Description                                                                                                                                                                                                                                                                   | Default                    | Since |
+| --------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | ----- |
+| **`accuracy`**                    | <code><a href="#accuracy">Accuracy</a></code> | The desired accuracy of the position.                                                                                                                                                                                                                                         | <code>Accuracy.High</code> | 0.0.1 |
+| **`androidForceLocationManager`** | <code>boolean</code>                          | Whether or not to force the use of the platform location manager instead of the fused location provider, even if Google Play services is available. See the option of the same name of `startWatching(...)` for the cases in which this is useful. Only available on Android. | <code>false</code>         | 0.2.0 |
+| **`maximumAge`**                  | <code>number</code>                           | The maximum age in milliseconds of a cached position that is accepted as the current position. If set to `0`, a fresh position is always fetched.                                                                                                                             | <code>0</code>             | 0.0.1 |
+| **`timeout`**                     | <code>number</code>                           | The maximum time in milliseconds to wait for a position. The promise rejects with the `TIMEOUT` error code if no position is available within this time.                                                                                                                      | <code>10000</code>         | 0.0.1 |
 
 
-#### GetSyncStatusResult
+#### GetQueuedPositionsResult
 
-| Prop               | Type                        | Description                                                                                                                                                                                                                                                                               | Since |
-| ------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`droppedCount`** | <code>number</code>         | The number of positions that were dropped without being uploaded since the queue was last empty or cleared, for example because the queue was full, the positions expired or the server rejected them permanently. This counter is kept in memory and is reset when the app is restarted. | 0.0.1 |
-| **`lastSyncedAt`** | <code>number \| null</code> | The time at which the last batch of positions was uploaded successfully in milliseconds since the Unix epoch or `null` if no batch has been uploaded successfully yet. This value is kept in memory and is reset when the app is restarted.                                               | 0.0.1 |
-| **`pendingCount`** | <code>number</code>         | The number of positions that are currently buffered in the sync queue.                                                                                                                                                                                                                    | 0.0.1 |
+| Prop            | Type                          | Description                                                     | Since |
+| --------------- | ----------------------------- | --------------------------------------------------------------- | ----- |
+| **`hasMore`**   | <code>boolean</code>          | Whether or not more positions are available than were returned. | 0.2.0 |
+| **`positions`** | <code>QueuedPosition[]</code> | The queued positions, oldest first.                             | 0.2.0 |
+
+
+#### QueuedPosition
+
+| Prop     | Type                | Description                                                                                         | Since |
+| -------- | ------------------- | --------------------------------------------------------------------------------------------------- | ----- |
+| **`id`** | <code>number</code> | The id of the position in the queue. The id is unique per app installation and strictly increasing. | 0.2.0 |
+
+
+#### GetQueuedPositionsOptions
+
+| Prop          | Type                | Description                                                                                                                                                              | Default          | Since |
+| ------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------- | ----- |
+| **`afterId`** | <code>number</code> | The id of the newest position that has already been read. Only positions with a higher id are returned. If not provided, the oldest positions in the queue are returned. |                  | 0.2.0 |
+| **`limit`**   | <code>number</code> | The maximum number of positions to return.                                                                                                                               | <code>100</code> | 0.2.0 |
+
+
+#### GetQueueStatusResult
+
+| Prop                 | Type                        | Description                                                                                                                                                            | Since |
+| -------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`droppedCount`**   | <code>number</code>         | The number of positions that were dropped without being read since the queue was last cleared, for example because the queue was full or the positions expired.        | 0.2.0 |
+| **`lastUploadedAt`** | <code>number \| null</code> | The time at which the last batch of positions was uploaded successfully in milliseconds since the Unix epoch or `null` if no batch has been uploaded successfully yet. | 0.2.0 |
+| **`pendingCount`**   | <code>number</code>         | The number of positions that are currently stored in the queue.                                                                                                        | 0.2.0 |
 
 
 #### IsWatchingResult
@@ -718,17 +921,16 @@ Remove all listeners for this plugin.
 
 #### StartWatchingOptions
 
-| Prop                              | Type                                                                              | Description                                                                                                                                                                                                                                                                     | Default                         | Since |
-| --------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ----- |
-| **`accuracy`**                    | <code><a href="#accuracy">Accuracy</a></code>                                     | The desired accuracy of the position updates.                                                                                                                                                                                                                                   | <code>Accuracy.High</code>      | 0.0.1 |
-| **`androidForceLocationManager`** | <code>boolean</code>                                                              | Whether or not to force the use of the platform location manager instead of the fused location provider, even if Google Play services is available. Set this option to `true` on devices without Google Play services (e.g. certain Huawei devices). Only available on Android. | <code>false</code>              | 0.0.1 |
-| **`androidInterval`**             | <code>number</code>                                                               | The interval in milliseconds at which position updates are requested. Only available on Android.                                                                                                                                                                                | <code>1000</code>               | 0.0.1 |
-| **`androidNotification`**         | <code><a href="#androidnotificationoptions">AndroidNotificationOptions</a></code> | The configuration of the notification that is displayed while the watch session is active. This option must be provided on Android. Only available on Android.                                                                                                                  |                                 | 0.0.1 |
-| **`distanceFilter`**              | <code>number</code>                                                               | The minimum distance in meters that the device must move before a new position update is delivered.                                                                                                                                                                             | <code>0</code>                  | 0.0.1 |
-| **`iosActivityType`**             | <code><a href="#activitytype">ActivityType</a></code>                             | The type of activity for which the position updates are used. This helps the operating system to decide when position updates may be paused automatically. Only available on iOS.                                                                                               | <code>ActivityType.Other</code> | 0.0.1 |
-| **`iosPausesAutomatically`**      | <code>boolean</code>                                                              | Whether or not the operating system is allowed to pause position updates automatically when the device is unlikely to move (e.g. when the user is stationary for a longer period of time). This can significantly improve battery life. Only available on iOS.                  | <code>false</code>              | 0.0.1 |
-| **`iosShowBackgroundIndicator`**  | <code>boolean</code>                                                              | Whether or not the status bar indicator is displayed when the app uses the location services in the background. Only available on iOS.                                                                                                                                          | <code>true</code>               | 0.0.1 |
-| **`sync`**                        | <code><a href="#syncoptions">SyncOptions</a></code>                               | The configuration for uploading positions to a server. If provided, every position is buffered in a local queue and uploaded in batches to the configured URL while the watch session is active.                                                                                |                                 | 0.0.1 |
+| Prop                              | Type                                                                              | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Default                         | Since |
+| --------------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- | ----- |
+| **`accuracy`**                    | <code><a href="#accuracy">Accuracy</a></code>                                     | The desired accuracy of the position updates.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | <code>Accuracy.High</code>      | 0.0.1 |
+| **`androidForceLocationManager`** | <code>boolean</code>                                                              | Whether or not to force the use of the platform location manager instead of the fused location provider, even if Google Play services is available. Devices without Google Play services use the platform location manager anyway, so this option is not needed for them. Set it to `true` to receive the unmodified positions of a single provider instead of the fused ones, or if the fused location provider is unreliable on a device that reports Google Play services as available. This consumes more battery. Only available on Android. | <code>false</code>              | 0.0.1 |
+| **`androidInterval`**             | <code>number</code>                                                               | The interval in milliseconds at which position updates are requested. A position is requested on every interval, whether or not the device has moved, so use `distanceFilter` to skip the positions of a device that stands still. iOS has no equivalent option: the operating system decides how often it reports a position, which is far less often while the device is stationary. Only available on Android.                                                                                                                                 | <code>5000</code>               | 0.0.1 |
+| **`androidNotification`**         | <code><a href="#androidnotificationoptions">AndroidNotificationOptions</a></code> | The configuration of the notification that is displayed while the watch session is active. This option must be provided on Android. Only available on Android.                                                                                                                                                                                                                                                                                                                                                                                    |                                 | 0.0.1 |
+| **`distanceFilter`**              | <code>number</code>                                                               | The minimum distance in meters that the device must move before a new position update is delivered. Set this option to `0` to receive every position, which also means that a device that stands still keeps reporting the same position.                                                                                                                                                                                                                                                                                                         | <code>10</code>                 | 0.0.1 |
+| **`iosActivityType`**             | <code><a href="#activitytype">ActivityType</a></code>                             | The type of activity for which the position updates are used. This helps the operating system to decide when position updates may be paused automatically. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                 | <code>ActivityType.Other</code> | 0.0.1 |
+| **`iosPausesAutomatically`**      | <code>boolean</code>                                                              | Whether or not the operating system is allowed to pause position updates automatically when the device is unlikely to move (e.g. when the user is stationary for a longer period of time). This can significantly improve battery life. Only available on iOS.                                                                                                                                                                                                                                                                                    | <code>false</code>              | 0.0.1 |
+| **`iosShowBackgroundIndicator`**  | <code>boolean</code>                                                              | Whether or not the status bar indicator is displayed when the app uses the location services in the background. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                                                            | <code>true</code>               | 0.0.1 |
 
 
 #### AndroidNotificationOptions
@@ -740,19 +942,6 @@ Remove all listeners for this plugin.
 | **`icon`**        | <code>string</code> | The name of the drawable resource that is displayed as the small icon of the notification (e.g. `ic_stat_location`). If not provided, the launcher icon of the app is used. |                                       | 0.0.1 |
 | **`text`**        | <code>string</code> | The body text of the notification.                                                                                                                                          |                                       | 0.0.1 |
 | **`title`**       | <code>string</code> | The title of the notification.                                                                                                                                              |                                       | 0.0.1 |
-
-
-#### SyncOptions
-
-| Prop                | Type                                                         | Description                                                                                                                                                                                                                              | Default            | Since |
-| ------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`batchSize`**     | <code>number</code>                                          | The maximum number of positions that are uploaded in a single request. Set this option to `1` to upload each position immediately.                                                                                                       | <code>100</code>   | 0.0.1 |
-| **`extras`**        | <code>{ [key: string]: string \| number \| boolean; }</code> | Static metadata that is attached to every upload request as the `extras` property of the request body.                                                                                                                                   |                    | 0.0.1 |
-| **`flushInterval`** | <code>number</code>                                          | The maximum time in milliseconds before buffered positions are uploaded, even if the batch size has not been reached yet.                                                                                                                | <code>60000</code> | 0.0.1 |
-| **`headers`**       | <code>{ [key: string]: string; }</code>                      | Static HTTP headers that are sent with every upload request, for example for authorization.                                                                                                                                              |                    | 0.0.1 |
-| **`maxAge`**        | <code>number</code>                                          | The maximum age in milliseconds of a buffered position. Older positions are deleted from the queue without being uploaded. Must be positive. If not provided, positions are kept until they are uploaded or evicted from the full queue. |                    | 0.0.1 |
-| **`maxQueueSize`**  | <code>number</code>                                          | The maximum number of buffered positions. When the queue is full, the oldest positions are dropped first.                                                                                                                                | <code>10000</code> | 0.0.1 |
-| **`url`**           | <code>string</code>                                          | The URL the positions are uploaded to via HTTP `POST`.                                                                                                                                                                                   |                    | 0.0.1 |
 
 
 #### PluginListenerHandle
@@ -777,7 +966,7 @@ Remove all listeners for this plugin.
 | **`message`** | <code>string</code>                             | The error message. | 0.0.1 |
 
 
-#### SyncFailedEvent
+#### UploadFailedEvent
 
 | Prop             | Type                | Description                                                       | Since |
 | ---------------- | ------------------- | ----------------------------------------------------------------- | ----- |
@@ -791,6 +980,11 @@ Remove all listeners for this plugin.
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
+
+
+#### GetConfigResult
+
+<code><a href="#setconfigoptions">SetConfigOptions</a></code>
 
 
 #### PermissionType
@@ -835,61 +1029,156 @@ The permissions that can be requested.
 
 </docgen-api>
 
-## HTTP Sync
+## Queue
 
-The plugin can upload every position of a watch session to your own server without involving JavaScript. Positions are buffered in a local SQLite queue, uploaded in batches and only deleted from the queue after the server has acknowledged them. Since the whole pipeline runs natively, it keeps working while the web view is suspended.
+The plugin can store every position of a watch session in a local SQLite queue. The queue is the durable record of a watch session: it is written natively, survives app restarts and does not depend on a running web view. The [`positionChange`](#addlistenerpositionchange-) event is only an ephemeral live feed on top of it.
+
+### Enabling the queue
+
+The queue is **opt-in** because precise location history at rest is sensitive data. Enable it with `setConfig(...)`:
+
+```typescript
+import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
+
+const enableQueue = async () => {
+  await BackgroundGeolocation.setConfig({
+    maxSize: 50000,
+  });
+};
+```
+
+The configuration is persisted natively so that the plugin keeps working when the operating system runs your app without a web view. Call `setConfig(...)` on every app start anyway: the stored copy is only a cache of your last call, and it is discarded whenever the plugin's configuration format changes in a future version. Queued positions are never discarded with it.
+
+**Attention**: The configuration you pass replaces the stored one entirely. Every property you omit falls back to its default, so read the stored configuration with `getConfig()` first if you only want to change a single property:
+
+```typescript
+const config = await BackgroundGeolocation.getConfig();
+await BackgroundGeolocation.setConfig({ ...config, maxSize: 10000 });
+```
+
+Call `resetConfig()` to discard the configuration again. Positions that are already queued are kept, use `clearQueue()` to discard them:
+
+```typescript
+await BackgroundGeolocation.resetConfig();
+```
+
+
+### Queue Options
+
+| Option    | Default | Description                                                                                                |
+| --------- | ------- | ---------------------------------------------------------------------------------------------------------- |
+| `maxSize` | `50000` | The maximum number of queued positions. When the queue is full, the **oldest** positions are dropped first. |
+
+The default `maxSize` of `50000` records is about 10 MB on disk and about 100 hours of walking at the default `distanceFilter` of `10` meters, at which a device that stands still records nothing. It is a disaster ceiling, not a working set: an app that drains the queue whenever it is in the foreground sits close to zero.
+
+### Draining the queue
+
+Reading and deleting are two separate operations, because the watch session keeps recording between them. Read a page of positions, persist them in your app, then delete everything up to the id of the last position you persisted:
+
+```typescript
+import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
+
+const drainQueue = async () => {
+  let hasMore = true;
+  while (hasMore) {
+    const result = await BackgroundGeolocation.getQueuedPositions({
+      limit: 1000,
+    });
+    if (!result.positions.length) {
+      break;
+    }
+    await persist(result.positions);
+    await BackgroundGeolocation.deleteQueuedPositions({
+      upToId: result.positions[result.positions.length - 1].id,
+    });
+    hasMore = result.hasMore;
+  }
+};
+```
+
+Every queued position is a [`Position`](#position) object with an additional `id` property. Ids are unique per app installation and strictly increasing, so `deleteQueuedPositions(...)` can never delete a position that is newer than the one you read. The `limit` option defaults to `100`, so a completely full queue is about 50 calls at `limit: 1000`.
+
+Use `getQueueStatus()` to inspect the queue and `clearQueue()` to discard everything, for example when the user signs out:
+
+```typescript
+import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
+
+const getQueueStatus = async () => {
+  const { pendingCount, droppedCount, lastUploadedAt } = await BackgroundGeolocation.getQueueStatus();
+  console.log(`${pendingCount} positions pending, ${droppedCount} dropped, last upload: ${lastUploadedAt}`);
+};
+
+const clearQueue = async () => {
+  await BackgroundGeolocation.clearQueue();
+};
+```
+
+### Queue Behavior
+
+- **Persistence**: The queue is stored in a local SQLite database and survives app restarts and force-quits. Positions are only deleted when your app deletes them, the server acknowledged them or they were evicted.
+- **Capacity**: The queue holds at most `maxSize` positions. If the queue is full, the **oldest** positions are dropped first.
+- **Observability**: The `droppedCount` property of `getQueueStatus()` counts the positions that were dropped since the queue was last cleared. It is persisted and only reset by `clearQueue()`.
+- **Ordering**: Positions are returned oldest first and their ids are strictly increasing.
+- **Encryption at rest**: The queue database is not encrypted. It is stored in the sandboxed app storage of the operating system.
+
+### Caveats
+
+- **Positions arrive twice**: While the web view is alive, every position is delivered via the `positionChange` event **and** stored in the queue. With the queue enabled, treat the queue as the single source of truth and use the event for live UI only, otherwise you process every position twice.
+- **The queue only fills while the watch session is alive**: If the user force-quits the app, the watch session ends and no further positions are recorded until it is started again. The already queued positions are not lost, but the gap in between cannot be filled.
+
+## HTTP Upload
+
+The plugin can upload every queued position to your own server without involving JavaScript. Positions are uploaded in batches and only deleted from the [queue](#queue) after the server has acknowledged them. Since the whole pipeline runs natively, it keeps working while the web view is suspended.
+
+**Attention**: The upload drains the same queue that `getQueuedPositions(...)` reads. Positions are stored once and deleted once, so a position your app deletes with `deleteQueuedPositions(...)` is never uploaded, and a position the server acknowledged is no longer readable. Use either the upload or your own drain loop, not both.
 
 ### Options
 
-Provide the `sync` option when you start the watch session to enable the upload pipeline for that session. Failed upload attempts are reported via the `syncFailed` event:
+Provide the `url` option to enable the upload pipeline. It is persisted, so it stays active across app restarts until it is changed or discarded. Failed upload attempts are reported via the `uploadFailed` event:
 
 ```typescript
-import { Accuracy, BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
+import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
 
-const startWatchingWithSync = async () => {
-  await BackgroundGeolocation.addListener('syncFailed', event => {
+const enableUpload = async () => {
+  await BackgroundGeolocation.addListener('uploadFailed', event => {
     console.error('Upload failed: ', event.statusCode, event.message);
   });
-  await BackgroundGeolocation.startWatching({
-    accuracy: Accuracy.High,
-    distanceFilter: 10,
-    androidNotification: {
-      title: 'Location Tracking',
-      text: 'Your location is being tracked.',
+  await BackgroundGeolocation.setConfig({
+    url: 'https://api.example.com/positions',
+    batchSize: 100,
+    flushInterval: 60000,
+    headers: {
+      Authorization: 'Bearer eyJhbGciOi...',
     },
-    sync: {
-      url: 'https://api.example.com/positions',
-      batchSize: 100,
-      flushInterval: 60000,
-      maxAge: 86400000,
-      maxQueueSize: 10000,
-      headers: {
-        Authorization: 'Bearer eyJhbGciOi...',
-      },
-      extras: {
-        userId: 'abc',
-      },
+    extras: {
+      userId: 'abc',
     },
   });
 };
 ```
 
-The queue itself can be inspected and controlled with or without an active watch session:
+Providing `url` also enables the queue, because the upload drains it. A rotated authorization header can be applied without stopping the watch session by calling `setConfig(...)` again with the updated configuration.
+
+Call `resetConfig()` to discard the configuration again. Queued positions are kept and are uploaded as soon as the upload is enabled again:
+
+```typescript
+await BackgroundGeolocation.resetConfig();
+```
+
+To stop the upload but keep storing positions, call `setConfig(...)` again without `url`:
+
+```typescript
+const { url, ...config } = await BackgroundGeolocation.getConfig();
+await BackgroundGeolocation.setConfig(config);
+```
+
+An upload attempt can be triggered manually at any time:
 
 ```typescript
 import { BackgroundGeolocation } from '@capawesome-team/capacitor-background-geolocation';
 
-const getSyncStatus = async () => {
-  const { pendingCount, droppedCount, lastSyncedAt } = await BackgroundGeolocation.getSyncStatus();
-  console.log(`${pendingCount} positions pending, ${droppedCount} dropped, last upload: ${lastSyncedAt}`);
-};
-
-const triggerSync = async () => {
-  await BackgroundGeolocation.triggerSync();
-};
-
-const clearSyncQueue = async () => {
-  await BackgroundGeolocation.clearSyncQueue();
+const triggerUpload = async () => {
+  await BackgroundGeolocation.triggerUpload();
 };
 ```
 
@@ -927,33 +1216,31 @@ The response body is always ignored. Only the status code decides what happens t
 
 | Status Code                                 | Behavior                                                                                                                                         |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `2xx`                                       | The batch is acknowledged and deleted from the queue. The next batch is uploaded immediately if more positions are pending.                      |
-| `408`, `429`, `5xx`, network error, timeout | The batch stays at the head of the queue and is retried with an exponential backoff. A `syncFailed` event is emitted.                            |
-| Any other status code                       | The batch is **dropped permanently without being uploaded again** and a `syncFailed` event is emitted. The upload continues with the next batch. |
+| `2xx`                                       | The batch is acknowledged and deleted from the queue. The next batch is uploaded immediately if more positions are pending.                     |
+| `401`, `408`, `429`, `5xx`, network error, timeout | The batch stays at the head of the queue and is retried with an exponential backoff. A `uploadFailed` event is emitted.                    |
+| Any other status code                       | The batch is **dropped permanently without being uploaded again** and a `uploadFailed` event is emitted. The upload continues with the next batch. |
 
-**Attention**: A batch that the server rejects with any status code other than `2xx`, `408`, `429` or `5xx` (for example `400 Bad Request` or `422 Unprocessable Entity`) is deleted from the queue and **lost**. This is intentional: a permanently rejected batch must never block the head of the queue forever. Make sure your endpoint answers with a retryable status code (e.g. `503`) if it is temporarily unable to accept positions, and listen to the `syncFailed` event to detect such drops. Dropped positions are also counted in the `droppedCount` property of `getSyncStatus()`.
+**Attention**: A batch that the server rejects with any status code other than `2xx`, `401`, `408`, `429` or `5xx` (for example `400 Bad Request` or `422 Unprocessable Entity`) is deleted from the queue and **lost**. This is intentional: a permanently rejected batch must never block the head of the queue forever. `401` is treated as retryable, because it usually means an expired token rather than an unacceptable batch — refresh the credentials with `setConfig(...)` and the queued positions are uploaded afterwards. Make sure your endpoint answers with a retryable status code (e.g. `503`) if it is temporarily unable to accept positions, and listen to the `uploadFailed` event to detect such drops. Dropped positions are also counted in the `droppedCount` property of `getQueueStatus()`.
 
-The request timeout is 30 seconds. Retries start with a delay of 5 seconds and double after every attempt up to a maximum of 10 minutes. The backoff is reset after every successful upload, whenever a new watch session is started and whenever `triggerSync()` is called.
+The request timeout is 30 seconds. Retries start with a delay of 5 seconds and double after every attempt up to a maximum of 10 minutes. The backoff is reset after every successful upload, whenever `setConfig(...)` is called with a `url` and whenever `triggerUpload()` is called.
 
-### Queue Behavior
+### Upload Behavior
 
-- **Persistence**: The queue is stored in a local SQLite database and survives app restarts and force-quits. Positions are only deleted after the server has acknowledged them, they expired or they were evicted.
-- **Capacity**: The queue holds at most `maxQueueSize` positions (default: `10000`). If the queue is full, the **oldest** positions are dropped first.
-- **Expiry**: If the `maxAge` option is provided, positions older than this age are deleted from the queue without being uploaded. Without the option, positions are kept until they are uploaded or evicted.
-- **Observability**: The `droppedCount` property of `getSyncStatus()` counts the positions that were dropped since the queue was last empty or cleared. The counter is kept in memory and is reset when the queue becomes empty, when `clearSyncQueue()` is called or when the app is restarted.
-- **Delivery window**: Positions are only uploaded while a watch session **with** a `sync` configuration is active. Starting such a session first deletes expired positions and then immediately uploads everything that is left over from previous sessions.
-- **Without a sync configuration**: If you start a watch session without the `sync` option, the queue is left untouched. It is neither uploaded nor cleared.
-- **After `stopWatching()`**: The flush timer and any pending retry are cancelled and no further requests are started. A request that is already in flight is allowed to finish, so its positions may still be acknowledged and deleted. Everything else stays in the queue until the next watch session with a `sync` configuration.
+- **Delivery window**: Positions are uploaded whenever the app process is alive and a `url` is configured, with or without an active watch session. Enabling the upload first deletes expired positions and then immediately uploads everything that is left over from previous sessions.
+- **Acknowledgment**: Positions are only deleted from the queue after the server acknowledged them or rejected them permanently.
+- **Shared queue**: The uploader and `getQueuedPositions(...)` drain the same queue. If your app reads and deletes positions itself, the uploader only sees what is left.
+- **Without a `url`**: The queue is left untouched. It is neither uploaded nor cleared.
+- **Observability**: Permanently rejected batches are counted in the `droppedCount` property of `getQueueStatus()` and `lastUploadedAt` reports the time of the last successful upload. Both values are persisted.
 
 ### Instant Upload
 
 There is no dedicated mode for uploading each position on its own. Set the `batchSize` option to `1` instead to upload every position as soon as it arrives:
 
 ```typescript
-sync: {
+await BackgroundGeolocation.setConfig({
   url: 'https://api.example.com/positions',
   batchSize: 1,
-},
+});
 ```
 
 ### Battery Consumption
@@ -962,29 +1249,28 @@ Every upload wakes up the cellular radio, which is one of the most expensive ope
 
 ### Testing
 
-The free [Background Geolocation Playground](https://background-geolocation-playground.capawesome.io) webpage is a ready-to-use sync target, so you can verify the upload pipeline before your own endpoint exists. Generate a session key on the webpage, use it as bearer token and every uploaded position appears in a table and on a map:
+The free [Background Geolocation Playground](https://background-geolocation-playground.capawesome.io) webpage is a ready-to-use upload target, so you can verify the upload pipeline before your own endpoint exists. Generate a session key on the webpage, use it as bearer token and every uploaded position appears in a table and on a map:
 
 ```typescript
-sync: {
+await BackgroundGeolocation.setConfig({
   url: 'https://background-geolocation-playground.capawesome.io/v1/positions',
   headers: {
     Authorization: 'Bearer <YOUR_SESSION_KEY>',
   },
-},
+});
 ```
 
-![Background Geolocation Playground webpage showing the synced positions of a session in a table and on a map](https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/background-geolocation/assets/background-geolocation-playground.png)
+![Background Geolocation Playground webpage showing the uploaded positions of a session in a table and on a map](https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/background-geolocation/assets/background-geolocation-playground.png)
 
 **Attention**: Session keys and recorded positions are deleted after 14 days and everyone who knows the session key can view its positions, so use the webpage for debugging and testing only and never in production.
 
 ### Deliberately Not Supported
 
-The following features are intentionally not part of the sync pipeline:
+The following features are intentionally not part of the upload pipeline:
 
 - **Network constraints**: Uploads cannot be restricted to Wi-Fi or unmetered networks.
 - **Response processing**: The response body of the server is always ignored, so the server cannot send commands back to the device.
-- **Upload after a force-quit**: Buffered positions are not uploaded while the app is terminated. They are delivered with the next watch session that has a `sync` configuration.
-- **Encryption at rest**: The queue database is not encrypted. It is stored in the sandboxed app storage of the operating system.
+- **Upload after a force-quit**: Queued positions are not uploaded while the app is terminated. They are uploaded the next time the app is started.
 
 ## FAQ
 
@@ -1014,7 +1300,7 @@ No. Only one watch session can be active at a time. The native location engine d
 
 ### How can I reduce the battery consumption?
 
-The plugin deliberately does not include a motion-detection state machine that turns the GPS on and off based on accelerometer data. Instead, it exposes real tuning knobs: use a lower `accuracy` (e.g. `Accuracy.Balanced` instead of `Accuracy.High`), use a `distanceFilter` to reduce the number of position updates and increase the `androidInterval` option on Android.
+The plugin deliberately does not include a motion-detection state machine that turns the GPS on and off based on accelerometer data. Instead, it exposes real tuning knobs: use a lower `accuracy` (e.g. `Accuracy.Balanced` instead of `Accuracy.High`), increase the `distanceFilter` to reduce the number of position updates and increase the `androidInterval` option on Android.
 
 On iOS, you can additionally enable the `iosPausesAutomatically` option so that the operating system pauses the position updates when the device is unlikely to move. Be aware of the trade-off: the operating system decides on its own when to pause and only resumes the position updates once the device has moved significantly again, so a watch session can stay silent for a long time. The plugin logs both the pause and the resume, but keeps the watch session active, which means that `isWatching()` still returns `true` while the position updates are paused.
 
@@ -1024,13 +1310,13 @@ On Android, the user can grant approximate instead of precise location. This is 
 
 ### Why are queued positions not uploaded after force-quit?
 
-Uploading requires a running app process. When the user force-quits (terminates) the app, the watch session ends and no more requests can be sent. The buffered positions are **not** lost though: they stay in the local queue and are uploaded as soon as the next watch session with a `sync` configuration is started. See [Queue Behavior](#queue-behavior) for details.
+Uploading requires a running app process. When the user force-quits (terminates) the app, no more requests can be sent. The queued positions are **not** lost though: they stay in the local queue and are uploaded as soon as the app is started again. See [Queue Behavior](#queue-behavior) for details.
 
-### How do I secure the sync endpoint?
+### How do I secure the upload endpoint?
 
-Use the `headers` option of the `sync` configuration to send a static credential (e.g. `Authorization: Bearer ...`) with every upload request and always use an `https://` URL, since the credential is otherwise sent in plain text. On iOS, App Transport Security blocks plain `http://` requests by default anyway. Since the headers are static for the duration of the watch session, use a long-lived token and restart the watch session whenever the token is rotated.
+Use the `headers` option to send a static credential (e.g. `Authorization: Bearer ...`) with every upload request and always use an `https://` URL, since the credential is otherwise sent in plain text. On iOS, App Transport Security blocks plain `http://` requests by default anyway. Call `setConfig(...)` again with the full configuration whenever the token is rotated, which applies the new header without interrupting the watch session.
 
-### How can I test the sync endpoint locally?
+### How can I test the upload endpoint locally?
 
 Point the `url` option to a local HTTP endpoint that logs the request body. A few lines of Node.js are enough:
 
