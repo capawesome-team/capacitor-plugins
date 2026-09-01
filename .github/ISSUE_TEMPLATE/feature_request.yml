@@ -99,7 +99,7 @@ body:
         - label: Photo Editor
         - label: Photo Manipulator
         - label: PixLive
-        - label: Posthog
+        - label: PostHog
         - label: Privacy Screen
         - label: Proximity Sensor
         - label: Purchases
@@ -134,6 +134,7 @@ body:
         - label: Watch
         - label: Wifi
         - label: YouTube Player
+        - label: Zeroconf
         - label: Zip
   - type: textarea
     attributes:
