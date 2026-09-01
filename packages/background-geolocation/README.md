@@ -48,6 +48,10 @@ The Background Geolocation plugin is typically used whenever an app needs to kno
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [Announcing the Capacitor Background Geolocation Plugin](https://capawesome.io/blog/announcing-the-capacitor-background-geolocation-plugin/): A tour of watch sessions, the native SQLite queue, and the HTTP upload pipeline.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

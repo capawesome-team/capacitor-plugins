@@ -54,6 +54,10 @@ The Barcode Scanner plugin is typically used whenever an app needs to capture ba
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/barcode-scanner/assets/barcode-scanner-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/barcode-scanner/assets/barcode-scanner-demo-ios.mp4" width="266" controls></video> |
 
+## Guides
+
+- [Embedded Barcode Scanner with Camera Preview in Capacitor](https://capawesome.io/blog/capacitor-embedded-barcode-scanner/): Render the camera preview natively inside your app layout, without transparent web view hacks.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

@@ -47,6 +47,10 @@ The Document Scanner plugin is typically used whenever an app needs to digitize 
 | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/document-scanner/assets/document-scanner-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/document-scanner/assets/document-scanner-demo-ios.mp4" width="266" controls></video> |
 
+## Guides
+
+- [Announcing the Capacitor Document Scanner Plugin](https://capawesome.io/blog/announcing-the-capacitor-document-scanner-plugin/): Scan documents with the native scanner UIs and get perspective-corrected pages and a combined PDF in two API calls.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).
