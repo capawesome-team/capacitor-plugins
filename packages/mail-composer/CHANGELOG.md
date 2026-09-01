@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`348c5cc5a7d6bcef4cfc3b956e43d6325aa24157`](https://github.com/capawesome-team/capacitor-plugins/commit/348c5cc5a7d6bcef4cfc3b956e43d6325aa24157) ([#1018](https://github.com/capawesome-team/capacitor-plugins/pull/1018)): feat!: allow attaching base64 strings as files (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`b85858eff5351e1bf252d7e1853bd42f38cc486a`](https://github.com/capawesome-team/capacitor-plugins/commit/b85858eff5351e1bf252d7e1853bd42f38cc486a) ([#1020](https://github.com/capawesome-team/capacitor-plugins/pull/1020)): fix(android): only offer mail apps in the chooser when composing a mail with attachments
+
 ## 0.1.1
 
 ### Patch Changes
