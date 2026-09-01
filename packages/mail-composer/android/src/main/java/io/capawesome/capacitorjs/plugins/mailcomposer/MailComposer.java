@@ -1,7 +1,10 @@
 package io.capawesome.capacitorjs.plugins.mailcomposer;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.text.Html;
 import androidx.annotation.NonNull;
@@ -15,7 +18,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MailComposer {
 
@@ -28,13 +33,12 @@ public class MailComposer {
         this.plugin = plugin;
     }
 
-    public void canComposeMail(@NonNull NonEmptyResultCallback<CanComposeMailResult> callback) {
-        boolean canCompose = canResolveIntent(createMailtoIntent());
-        callback.success(new CanComposeMailResult(canCompose));
+    public boolean canComposeMail() {
+        return createMailtoIntent().resolveActivity(getContext().getPackageManager()) != null;
     }
 
-    public boolean canResolveIntent(@NonNull Intent intent) {
-        return intent.resolveActivity(getContext().getPackageManager()) != null;
+    public void canComposeMail(@NonNull NonEmptyResultCallback<CanComposeMailResult> callback) {
+        callback.success(new CanComposeMailResult(canComposeMail()));
     }
 
     @NonNull
@@ -56,7 +60,10 @@ public class MailComposer {
         }
         applyRecipients(intent, options);
         applyContent(intent, options);
-        return intent;
+        if (attachmentUris.isEmpty()) {
+            return intent;
+        }
+        return createMailAppChooserIntent(intent);
     }
 
     private void applyContent(@NonNull Intent intent, @NonNull ComposeMailOptions options) {
@@ -126,6 +133,15 @@ public class MailComposer {
         return new File(path);
     }
 
+    // ACTION_SEND(_MULTIPLE) also matches generic share targets, so exclude every app that cannot handle mailto:
+    @NonNull
+    private Intent createMailAppChooserIntent(@NonNull Intent intent) {
+        List<ComponentName> nonMailAppComponents = getNonMailAppComponents(intent);
+        Intent chooserIntent = Intent.createChooser(intent, null);
+        chooserIntent.putExtra(Intent.EXTRA_EXCLUDE_COMPONENTS, nonMailAppComponents.toArray(new ComponentName[0]));
+        return chooserIntent;
+    }
+
     @NonNull
     private Intent createMailtoIntent() {
         return new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
@@ -159,5 +175,21 @@ public class MailComposer {
     @NonNull
     private Context getContext() {
         return plugin.getContext();
+    }
+
+    @NonNull
+    private List<ComponentName> getNonMailAppComponents(@NonNull Intent intent) {
+        PackageManager packageManager = getContext().getPackageManager();
+        Set<String> mailAppPackageNames = new HashSet<>();
+        for (ResolveInfo resolveInfo : packageManager.queryIntentActivities(createMailtoIntent(), 0)) {
+            mailAppPackageNames.add(resolveInfo.activityInfo.packageName);
+        }
+        List<ComponentName> components = new ArrayList<>();
+        for (ResolveInfo resolveInfo : packageManager.queryIntentActivities(intent, PackageManager.MATCH_ALL)) {
+            if (!mailAppPackageNames.contains(resolveInfo.activityInfo.packageName)) {
+                components.add(new ComponentName(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+            }
+        }
+        return components;
     }
 }
