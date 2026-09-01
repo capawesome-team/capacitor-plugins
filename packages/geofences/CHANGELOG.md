@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`49627f959ebc811974cfec03fbbf5b01bcb12974`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/49627f959ebc811974cfec03fbbf5b01bcb12974) ([#542](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/542)): feat!: add a durable transition queue that survives app termination (see `BREAKING.md`)
+
 ## 0.1.0
 
 ### Minor Changes
