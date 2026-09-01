@@ -8,13 +8,18 @@ import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
 import io.capawesome.capacitorjs.plugins.mailcomposer.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.mailcomposer.classes.options.ComposeMailOptions;
+import io.capawesome.capacitorjs.plugins.mailcomposer.classes.options.MailAttachment;
 import io.capawesome.capacitorjs.plugins.mailcomposer.classes.results.CanComposeMailResult;
 import io.capawesome.capacitorjs.plugins.mailcomposer.interfaces.NonEmptyResultCallback;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MailComposer {
+
+    private static final String ATTACHMENTS_DIRECTORY_NAME = "capawesome_capacitor_mail_composer_attachments";
 
     @NonNull
     private final MailComposerPlugin plugin;
@@ -82,19 +87,32 @@ public class MailComposer {
     }
 
     @NonNull
-    private List<Uri> createAttachmentUris(@NonNull List<String> attachments) throws Exception {
+    private File createAttachmentFile(@NonNull MailAttachment attachment) throws IOException {
+        File directory = getAttachmentsDirectory();
+        directory.mkdirs();
+        File file = new File(directory, attachment.getName());
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            outputStream.write(attachment.getData());
+        }
+        return file;
+    }
+
+    @NonNull
+    private List<Uri> createAttachmentUris(@NonNull List<MailAttachment> attachments) throws Exception {
+        deleteAttachmentFiles();
         List<Uri> uris = new ArrayList<>();
-        for (String attachment : attachments) {
-            File file = createFile(attachment);
-            if (!file.exists()) {
-                throw CustomExceptions.ATTACHMENT_NOT_FOUND;
+        for (MailAttachment attachment : attachments) {
+            String path = attachment.getPath();
+            File file;
+            if (path == null) {
+                file = createAttachmentFile(attachment);
+            } else {
+                file = createFile(path);
+                if (!file.exists()) {
+                    throw CustomExceptions.ATTACHMENT_NOT_FOUND;
+                }
             }
-            try {
-                String authority = getContext().getPackageName() + ".fileprovider";
-                uris.add(FileProvider.getUriForFile(getContext(), authority, file));
-            } catch (IllegalArgumentException exception) {
-                throw CustomExceptions.ATTACHMENT_NOT_FOUND;
-            }
+            uris.add(createUriForFile(file));
         }
         return uris;
     }
@@ -111,6 +129,31 @@ public class MailComposer {
     @NonNull
     private Intent createMailtoIntent() {
         return new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"));
+    }
+
+    @NonNull
+    private Uri createUriForFile(@NonNull File file) throws Exception {
+        try {
+            String authority = getContext().getPackageName() + ".fileprovider";
+            return FileProvider.getUriForFile(getContext(), authority, file);
+        } catch (IllegalArgumentException exception) {
+            throw CustomExceptions.ATTACHMENT_NOT_FOUND;
+        }
+    }
+
+    private void deleteAttachmentFiles() {
+        File[] files = getAttachmentsDirectory().listFiles();
+        if (files == null) {
+            return;
+        }
+        for (File file : files) {
+            file.delete();
+        }
+    }
+
+    @NonNull
+    private File getAttachmentsDirectory() {
+        return new File(getContext().getCacheDir(), ATTACHMENTS_DIRECTORY_NAME);
     }
 
     @NonNull

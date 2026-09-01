@@ -28,17 +28,22 @@ public class MailComposerPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func composeMail(_ call: CAPPluginCall) {
-        let options = ComposeMailOptions(call)
-        implementation?.composeMail(options) { result, error in
-            if let error = error {
-                if case CustomError.mailServicesUnavailable = error {
-                    self.rejectCallAsUnavailable(call)
-                } else {
-                    self.rejectCall(call, error)
+        do {
+            let options = try ComposeMailOptions(call)
+
+            implementation?.composeMail(options) { result, error in
+                if let error = error {
+                    if case CustomError.mailServicesUnavailable = error {
+                        self.rejectCallAsUnavailable(call)
+                    } else {
+                        self.rejectCall(call, error)
+                    }
+                    return
                 }
-                return
+                self.resolveCall(call, result)
             }
-            self.resolveCall(call, result)
+        } catch {
+            self.rejectCall(call, error)
         }
     }
 

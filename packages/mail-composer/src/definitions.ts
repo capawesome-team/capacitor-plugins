@@ -37,14 +37,13 @@ export interface CanComposeMailResult {
  */
 export interface ComposeMailOptions {
   /**
-   * The absolute file paths or `file://` URIs of the files to attach.
+   * The files to attach to the email.
    *
    * Attachments are not supported on the web.
    *
-   * @example ['/path/to/file.pdf']
    * @since 0.1.0
    */
-  attachments?: string[];
+  attachments?: MailAttachment[];
   /**
    * The email addresses of the blind carbon copy (BCC) recipients.
    *
@@ -90,6 +89,41 @@ export interface ComposeMailOptions {
    * @since 0.1.0
    */
   to?: string[];
+}
+
+/**
+ * @since 0.2.0
+ */
+export interface MailAttachment {
+  /**
+   * The content of the file to attach, encoded as a base64 string.
+   *
+   * Either `data` or `path` must be provided. If both are provided, `path` is
+   * used.
+   *
+   * @example 'SGVsbG8gV29ybGQ='
+   * @since 0.2.0
+   */
+  data?: string;
+  /**
+   * The file name of the attachment, including the file extension.
+   *
+   * Must be provided if `data` is provided. Ignored if `path` is provided,
+   * because the file name is then derived from the path.
+   *
+   * @example 'log.txt'
+   * @since 0.2.0
+   */
+  name?: string;
+  /**
+   * The absolute file path or `file://` URI of the file to attach.
+   *
+   * Either `data` or `path` must be provided.
+   *
+   * @example '/path/to/file.pdf'
+   * @since 0.2.0
+   */
+  path?: string;
 }
 
 /**

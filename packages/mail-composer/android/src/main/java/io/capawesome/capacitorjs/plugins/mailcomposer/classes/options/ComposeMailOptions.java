@@ -6,12 +6,12 @@ import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONException;
+import org.json.JSONObject;
 
 public class ComposeMailOptions {
 
     @NonNull
-    private final List<String> attachments;
+    private final List<MailAttachment> attachments;
 
     @NonNull
     private final List<String> bcc;
@@ -30,18 +30,18 @@ public class ComposeMailOptions {
     @NonNull
     private final List<String> to;
 
-    public ComposeMailOptions(@NonNull PluginCall call) throws JSONException {
+    public ComposeMailOptions(@NonNull PluginCall call) throws Exception {
         this.to = getStringListFromCall(call, "to");
         this.cc = getStringListFromCall(call, "cc");
         this.bcc = getStringListFromCall(call, "bcc");
         this.subject = call.getString("subject");
         this.body = call.getString("body");
         this.isHtml = call.getBoolean("isHtml", false);
-        this.attachments = getStringListFromCall(call, "attachments");
+        this.attachments = getAttachmentsFromCall(call);
     }
 
     @NonNull
-    public List<String> getAttachments() {
+    public List<MailAttachment> getAttachments() {
         return attachments;
     }
 
@@ -75,7 +75,20 @@ public class ComposeMailOptions {
     }
 
     @NonNull
-    private static List<String> getStringListFromCall(@NonNull PluginCall call, @NonNull String key) throws JSONException {
+    private static List<MailAttachment> getAttachmentsFromCall(@NonNull PluginCall call) throws Exception {
+        List<MailAttachment> attachments = new ArrayList<>();
+        JSArray array = call.getArray("attachments");
+        if (array != null) {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject object = array.getJSONObject(i);
+                attachments.add(new MailAttachment(object));
+            }
+        }
+        return attachments;
+    }
+
+    @NonNull
+    private static List<String> getStringListFromCall(@NonNull PluginCall call, @NonNull String key) throws Exception {
         List<String> values = new ArrayList<>();
         JSArray array = call.getArray(key);
         if (array != null) {
