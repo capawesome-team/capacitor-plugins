@@ -326,7 +326,7 @@ See [Queue](#queue) for the capacity, the identifiers and the delivery guarantee
 
 #### Configure the queue
 
-The queue is disabled until you configure it and then holds `1000` transitions by default. Pass `null` to disable it again. Only available on Android and iOS:
+The queue is disabled until you configure it and then holds `1000` transitions by default. Call `resetConfig()` to disable it again. Only available on Android and iOS:
 
 ```typescript
 import { Geofences } from '@capawesome-team/capacitor-geofences';
