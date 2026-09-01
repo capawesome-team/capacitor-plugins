@@ -55,8 +55,8 @@ public class MailComposerPlugin extends Plugin {
     public void composeMail(PluginCall call) {
         try {
             ComposeMailOptions options = new ComposeMailOptions(call);
-            Intent intent = implementation.createComposeIntent(options);
-            if (implementation.canResolveIntent(intent)) {
+            if (implementation.canComposeMail()) {
+                Intent intent = implementation.createComposeIntent(options);
                 startActivityForResult(call, intent, "handleComposeMailResult");
             } else {
                 rejectCallAsUnavailable(call);
