@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-badge",
-  "version": "8.0.2",
+  "version": "8.0.3",
   "description": "Capacitor plugin to access and update the badge number of the app icon on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-cloudinary",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Unofficial Capacitor plugin for integrating with Cloudinary on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
