@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-torch",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Capacitor plugin for switching the flashlight on and off on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

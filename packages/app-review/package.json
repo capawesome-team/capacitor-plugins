@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-app-review",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Capacitor plugin that allows users to submit app store reviews and ratings on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-google-sign-in",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Capacitor plugin to sign-in with Google on Android, iOS, and Web.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

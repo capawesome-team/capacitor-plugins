@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-age-signals",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Capacitor plugin to retrieve age-related signals for users via the Play Age Signals API on Android and the Declared Age Range framework on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

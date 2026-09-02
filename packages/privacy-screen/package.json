@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-privacy-screen",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Capacitor plugin to hide sensitive app content and detect screenshots on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
