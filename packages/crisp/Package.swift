@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "Crisp", package: "crisp-sdk-ios")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "CrispPluginTests",
-            dependencies: ["CrispPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

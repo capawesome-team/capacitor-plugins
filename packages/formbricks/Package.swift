@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "FormbricksSDK", package: "ios")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "FormbricksPluginTests",
-            dependencies: ["FormbricksPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

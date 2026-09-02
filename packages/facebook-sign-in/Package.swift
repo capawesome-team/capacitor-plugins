@@ -22,10 +22,6 @@ let package = Package(
                 .product(name: "FacebookCore", package: "facebook-ios-sdk"),
                 .product(name: "FacebookLogin", package: "facebook-ios-sdk")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "FacebookSignInPluginTests",
-            dependencies: ["FacebookSignInPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

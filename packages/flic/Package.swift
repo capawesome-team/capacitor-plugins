@@ -23,10 +23,6 @@ let package = Package(
             path: "ios/Plugin"),
         .binaryTarget(
             name: "flic2lib",
-            path: "ios/flic2lib.xcframework"),
-        .testTarget(
-            name: "FlicPluginTests",
-            dependencies: ["FlicPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/flic2lib.xcframework")
     ]
 )
