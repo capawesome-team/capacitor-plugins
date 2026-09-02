@@ -183,10 +183,11 @@ export interface OpenAppStoreOptions {
    * You can find the ID in the URL of your app store entry
    * (e.g. `https://apps.apple.com/app/id123456789`).
    *
+   * **Attention**: This option is required on iOS.
+   *
    * Only available on iOS.
    *
    * @since 6.1.0
-   * @example "com.example.app"
    * @example "123456789"
    */
   appId?: string;
