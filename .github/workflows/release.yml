@@ -46,4 +46,6 @@ jobs:
         run: npm config set //npm.pkg.github.com/:_authToken ${{ secrets.PAT }}
       - name: Publish Sponsorware to GitHub Packages
         if: steps.changesets.outputs.published == 'true'
-        run: node ./scripts/publish-sponsorware.mjs --packages='${{ steps.changesets.outputs['published-packages'] }}'
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs['published-packages'] }}
+        run: node ./scripts/publish-sponsorware.mjs --packages="$PUBLISHED_PACKAGES"
