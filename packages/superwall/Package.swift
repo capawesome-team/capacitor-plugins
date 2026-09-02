@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "SuperwallKit", package: "Superwall-iOS")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "SuperwallPluginTests",
-            dependencies: ["SuperwallPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

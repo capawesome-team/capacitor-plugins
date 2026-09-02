@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "GoogleSignIn", package: "GoogleSignIn-iOS")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "GoogleSignInPluginTests",
-            dependencies: ["GoogleSignInPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

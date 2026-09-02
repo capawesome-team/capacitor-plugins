@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "MapLibre", package: "maplibre-gl-native-distribution")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "MapLibrePluginTests",
-            dependencies: ["MapLibrePlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

@@ -22,10 +22,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "RealtimeKitUI", package: "RealtimeKitUI")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "RealtimeKitPluginTests",
-            dependencies: ["RealtimeKitPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

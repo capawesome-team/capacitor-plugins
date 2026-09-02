@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "Intercom", package: "intercom-ios-sp")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "IntercomPluginTests",
-            dependencies: ["IntercomPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

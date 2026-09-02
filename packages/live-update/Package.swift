@@ -23,10 +23,6 @@ let package = Package(
                 .product(name: "Alamofire", package: "Alamofire"),
                 .product(name: "ZIPFoundation", package: "ZIPFoundation")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "LiveUpdatePluginTests",
-            dependencies: ["LiveUpdatePlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

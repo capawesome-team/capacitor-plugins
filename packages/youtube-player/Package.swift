@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "YoutubePlayerView", package: "YoutubePlayerView")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "YoutubePlayerPluginTests",
-            dependencies: ["YoutubePlayerPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

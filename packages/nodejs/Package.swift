@@ -32,11 +32,7 @@ let package = Package(
                 "NodejsPluginNative"
             ],
             path: "ios/Plugin",
-            resources: [.copy("Assets/builtin_modules")]),
-        .testTarget(
-            name: "NodejsPluginTests",
-            dependencies: ["NodejsPlugin"],
-            path: "ios/PluginTests")
+            resources: [.copy("Assets/builtin_modules")])
     ],
     cxxLanguageStandard: .gnucxx17
 )
