@@ -54,12 +54,12 @@ import MobileCoreServices
         return targetUrl
     }
 
-    public func openDocumentPicker(limit: Int, documentTypes: [String]) {
+    public func openDocumentPicker(_ options: PickFilesOptions) {
         invokedMethod = "pickFiles"
         DispatchQueue.main.async {
-            let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: options.getContentTypes(), asCopy: true)
             picker.delegate = self
-            picker.allowsMultipleSelection = limit == 0
+            picker.allowsMultipleSelection = options.getLimit() == 0
             picker.modalPresentationStyle = .fullScreen
             self.presentViewController(picker)
         }
