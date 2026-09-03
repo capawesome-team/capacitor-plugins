@@ -1,7 +1,7 @@
 import Foundation
 import Capacitor
 import UIKit
-import MobileCoreServices
+import UniformTypeIdentifiers
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -81,10 +81,9 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
 
         let limit = call.getInt("limit", 0)
         let types = call.getArray("types", String.self) ?? []
-        let parsedTypes = parseTypesOption(types)
-        let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
+        let contentTypes = FilePickerPlugin.parseTypesOption(types)
 
-        implementation?.openDocumentPicker(limit: limit, documentTypes: documentTypes)
+        implementation?.openDocumentPicker(limit: limit, contentTypes: contentTypes)
     }
 
     @objc func pickDirectory(_ call: CAPPluginCall) {
@@ -192,14 +191,20 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         savedCall.resolve(result)
     }
 
-    private func parseTypesOption(_ types: [String]) -> [String] {
-        var parsedTypes: [String] = []
-        for (_, type) in types.enumerated() {
-            guard let utType: String = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, type as CFString, nil)?.takeRetainedValue() as String? else {
-                continue
+    static func parseTypesOption(_ types: [String]) -> [UTType] {
+        let contentTypes = types.compactMap { (mimeType: String) -> UTType? in
+            switch mimeType {
+            case "image/*":
+                return .image
+            case "video/*":
+                return .movie
+            default:
+                guard let contentType = UTType(mimeType: mimeType), contentType.isDeclared else {
+                    return nil
+                }
+                return contentType
             }
-            parsedTypes.append(utType)
         }
-        return parsedTypes
+        return contentTypes.isEmpty ? [.data] : contentTypes
     }
 }

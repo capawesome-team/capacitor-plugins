@@ -1,16 +1,29 @@
+import UniformTypeIdentifiers
 import XCTest
 @testable import Plugin
 
-class FilePickerTests: XCTestCase {
+class FilePickerPluginTests: XCTestCase {
 
-    func testEcho() {
-        // This is an example of a functional test case for a plugin.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testParseTypesOptionWithExactMimeType() {
+        XCTAssertEqual(FilePickerPlugin.parseTypesOption(["application/pdf"]), [.pdf])
+    }
 
-        let implementation = FilePicker()
-        let value = "Hello, World!"
-        let result = implementation.echo(value)
+    func testParseTypesOptionWithWildcardMimeTypes() {
+        XCTAssertEqual(FilePickerPlugin.parseTypesOption(["image/*", "video/*"]), [.image, .movie])
+    }
 
-        XCTAssertEqual(value, result)
+    func testParseTypesOptionIgnoresUnsupportedMimeTypes() {
+        XCTAssertEqual(
+            FilePickerPlugin.parseTypesOption(["application/pdf", "application/x-capawesome-unknown", "image/*"]),
+            [.pdf, .image]
+        )
+    }
+
+    func testParseTypesOptionFallsBackForEmptyInput() {
+        XCTAssertEqual(FilePickerPlugin.parseTypesOption([]), [.data])
+    }
+
+    func testParseTypesOptionFallsBackForUnsupportedMimeTypes() {
+        XCTAssertEqual(FilePickerPlugin.parseTypesOption(["application/x-capawesome-unknown"]), [.data])
     }
 }

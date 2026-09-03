@@ -4,6 +4,7 @@ import Photos
 import Capacitor
 import UIKit
 import MobileCoreServices
+import UniformTypeIdentifiers
 
 @objc public class FilePicker: NSObject {
     private var plugin: FilePickerPlugin?
@@ -54,10 +55,10 @@ import MobileCoreServices
         return targetUrl
     }
 
-    public func openDocumentPicker(limit: Int, documentTypes: [String]) {
+    public func openDocumentPicker(limit: Int, contentTypes: [UTType]) {
         invokedMethod = "pickFiles"
         DispatchQueue.main.async {
-            let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
             picker.delegate = self
             picker.allowsMultipleSelection = limit == 0
             picker.modalPresentationStyle = .fullScreen
