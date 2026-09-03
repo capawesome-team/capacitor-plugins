@@ -212,6 +212,8 @@ Returns transaction details for currently owned items bought within your app.
 
 Only active subscriptions and non-consumed one-time purchases are returned.
 
+On **iOS**, transactions that could not be verified by the App Store are not included.
+
 Only available on Android and iOS (15.0+).
 
 **Returns:** <code>Promise&lt;<a href="#getcurrenttransactionsresult">GetCurrentTransactionsResult</a>&gt;</code>
@@ -336,6 +338,9 @@ Purchase a product by its ID.
 
 Make sure to call `finishTransaction(...)` after the purchase is complete
 and the content has been delivered or the service has been enabled.
+
+On **iOS**, the call is rejected with the `VERIFICATION_FAILED` error code
+if the App Store could not verify the transaction.
 
 Only available on Android and iOS (15.0+).
 
