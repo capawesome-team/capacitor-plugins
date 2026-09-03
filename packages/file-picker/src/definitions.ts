@@ -176,6 +176,7 @@ export interface PickFilesOptions {
   /**
    * List of accepted file types.
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
+   * Wildcards such as `image/*` are supported.
    *
    * This option is ignored if `limit` is set.
    *
