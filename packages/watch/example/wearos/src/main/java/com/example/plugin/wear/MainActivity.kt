@@ -3,6 +3,8 @@ package com.example.plugin.wear
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -26,9 +28,15 @@ class MainActivity : Activity() {
 
         val layout = LinearLayout(this)
         layout.orientation = LinearLayout.VERTICAL
+        // Keep the content inside the round display and let the first and last item scroll fully into view.
+        val screenWidth = resources.displayMetrics.widthPixels
+        val horizontalInset = (screenWidth * HORIZONTAL_INSET_FRACTION).toInt()
+        val verticalInset = (screenWidth * VERTICAL_INSET_FRACTION).toInt()
+        layout.setPadding(horizontalInset, verticalInset, horizontalInset, verticalInset)
 
         val statusTextView = TextView(this)
         statusTextView.text = "Ready"
+        statusTextView.gravity = Gravity.CENTER_HORIZONTAL
         layout.addView(statusTextView)
 
         layout.addView(createButton("Send Message") {
@@ -48,6 +56,8 @@ class MainActivity : Activity() {
         val scrollView = ScrollView(this)
         scrollView.addView(layout)
         setContentView(scrollView)
+        // The rotary crown only scrolls the focused view.
+        scrollView.requestFocus()
     }
 
     override fun onDestroy() {
@@ -58,6 +68,12 @@ class MainActivity : Activity() {
     private fun createButton(text: String, onClick: suspend () -> Unit): Button {
         val button = Button(this)
         button.text = text
+        val layoutParams = LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.topMargin = (BUTTON_SPACING_DP * resources.displayMetrics.density).toInt()
+        button.layoutParams = layoutParams
         button.setOnClickListener {
             scope.launch {
                 try {
@@ -72,5 +88,8 @@ class MainActivity : Activity() {
 
     companion object {
         private const val TAG = "MainActivity"
+        private const val HORIZONTAL_INSET_FRACTION = 0.1f
+        private const val VERTICAL_INSET_FRACTION = 0.2f
+        private const val BUTTON_SPACING_DP = 8
     }
 }
