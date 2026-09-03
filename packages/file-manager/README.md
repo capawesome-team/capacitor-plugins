@@ -361,6 +361,10 @@ Copy a directory recursively.
 Reports progress via the `operationProgress` event and can be
 canceled with `cancelOperationById(...)`.
 
+On **Android**, the operation fails with the `WRITE_FAILED` error code if a
+document provider returns an entry name that cannot be used as a file name
+(e.g. a name containing `/`).
+
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
 | **`options`** | <code><a href="#copydirectoryoptions">CopyDirectoryOptions</a></code> |
@@ -614,6 +618,10 @@ Move a directory.
 
 Reports progress via the `operationProgress` event and can be
 canceled with `cancelOperationById(...)`.
+
+On **Android**, the operation fails with the `WRITE_FAILED` error code if a
+document provider returns an entry name that cannot be used as a file name
+(e.g. a name containing `/`).
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
