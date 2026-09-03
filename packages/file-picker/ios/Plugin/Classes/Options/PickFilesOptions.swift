@@ -28,7 +28,7 @@ import UniformTypeIdentifiers
     }
 
     private static func contentType(forMimeType mimeType: String) -> UTType? {
-        if let wildcardContentType = wildcardContentTypes[mimeType] {
+        if let wildcardContentType = wildcardContentTypes[mimeType.lowercased()] {
             return wildcardContentType
         }
         guard let contentType = UTType(mimeType: mimeType), !contentType.isDynamic else {
