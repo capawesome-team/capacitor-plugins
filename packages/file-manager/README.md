@@ -572,7 +572,8 @@ getPersistedDirectories() => Promise<GetPersistedDirectoriesResult>
 
 Get all directories with persisted access.
 
-Stale entries are refreshed or pruned when this method is called.
+Stale entries are refreshed and directories whose document no longer
+exists are released automatically.
 Call this method on app start and use the returned URIs instead of
 storing them yourself, since they may change between app launches.
 
