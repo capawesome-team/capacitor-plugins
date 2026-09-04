@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.datetimepicker;
 
+import android.content.res.Configuration;
 import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -160,6 +161,22 @@ public class DatetimePickerPlugin extends Plugin {
             String message = ex.getLocalizedMessage();
             Log.e(TAG, message);
             call.reject(message);
+        }
+    }
+
+    @Override
+    protected void handleOnConfigurationChanged(Configuration newConfig) {
+        super.handleOnConfigurationChanged(newConfig);
+        if (implementation != null) {
+            implementation.handleConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        super.handleOnDestroy();
+        if (implementation != null) {
+            implementation.handleDestroy();
         }
     }
 

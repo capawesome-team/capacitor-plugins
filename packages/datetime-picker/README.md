@@ -148,6 +148,8 @@ Open the datetime picker.
 
 An error is thrown if the input is canceled or dismissed by the user.
 
+On Android, the picker is dismissed (the promise rejects with the `dismissed` error code) if the system language, font size or layout direction changes while it is open.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                      |
