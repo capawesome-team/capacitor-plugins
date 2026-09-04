@@ -185,7 +185,7 @@ const pickDirectory = async () => {
 
 ### Upload a picked file to a server
 
-On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's path. You can then append the blob to a `FormData` object and upload it:
+On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's `webPath`. You can then append the blob to a `FormData` object and upload it:
 
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
