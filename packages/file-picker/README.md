@@ -156,6 +156,21 @@ const pickMedia = async () => {
 };
 ```
 
+### Display a picked image in the web view
+
+On Android and iOS, the `path` of a picked file cannot be loaded directly in the web view. Use the `webPath` property instead:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const displayImage = async () => {
+  const { files } = await FilePicker.pickImages({ limit: 1 });
+  const image = document.createElement('img');
+  image.src = files[0].webPath!;
+  document.body.appendChild(image);
+};
+```
+
 ### Pick a directory
 
 Let the user select a directory, for example to import all files it contains. Only available on Android and iOS:
@@ -174,7 +189,6 @@ On the Web, the picked file contains a `Blob` instance. On Android and iOS, load
 
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
-import { Capacitor } from '@capacitor/core';
 
 const uploadFile = async () => {
   const result = await FilePicker.pickFiles({ limit: 1 });
@@ -186,7 +200,7 @@ const uploadFile = async () => {
     blob = file.blob;
   } else {
     // Android and iOS
-    const response = await fetch(Capacitor.convertFileSrc(file.path!));
+    const response = await fetch(file.webPath!);
     blob = await response.blob();
   }
 
@@ -540,18 +554,19 @@ Remove all listeners for this plugin.
 
 #### PickedFile
 
-| Prop             | Type                | Description                                                                                                          | Since |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`**       | <code>Blob</code>   | The Blob instance of the file. Only available on Web.                                                                |       |
-| **`data`**       | <code>string</code> | The Base64 string representation of the data contained in the file. Is only provided if `readData` is set to `true`. |       |
-| **`duration`**   | <code>number</code> | The duration of the video in seconds. Only available on Android and iOS.                                             | 0.5.3 |
-| **`height`**     | <code>number</code> | The height of the image or video in pixels. Only available on Android and iOS.                                       | 0.5.3 |
-| **`mimeType`**   | <code>string</code> | The mime type of the file.                                                                                           |       |
-| **`modifiedAt`** | <code>number</code> | The last modified timestamp of the file in milliseconds.                                                             | 0.5.9 |
-| **`name`**       | <code>string</code> | The name of the file.                                                                                                |       |
-| **`path`**       | <code>string</code> | The path of the file. Only available on Android and iOS.                                                             |       |
-| **`size`**       | <code>number</code> | The size of the file in bytes.                                                                                       |       |
-| **`width`**      | <code>number</code> | The width of the image or video in pixels. Only available on Android and iOS.                                        | 0.5.3 |
+| Prop             | Type                | Description                                                                                                                                                | Since |
+| ---------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`**       | <code>Blob</code>   | The Blob instance of the file. Only available on Web.                                                                                                      |       |
+| **`data`**       | <code>string</code> | The Base64 string representation of the data contained in the file. Is only provided if `readData` is set to `true`.                                       |       |
+| **`duration`**   | <code>number</code> | The duration of the video in seconds. Only available on Android and iOS.                                                                                   | 0.5.3 |
+| **`height`**     | <code>number</code> | The height of the image or video in pixels. Only available on Android and iOS.                                                                             | 0.5.3 |
+| **`mimeType`**   | <code>string</code> | The mime type of the file.                                                                                                                                 |       |
+| **`modifiedAt`** | <code>number</code> | The last modified timestamp of the file in milliseconds.                                                                                                   | 0.5.9 |
+| **`name`**       | <code>string</code> | The name of the file.                                                                                                                                      |       |
+| **`path`**       | <code>string</code> | The path of the file. Only available on Android and iOS.                                                                                                   |       |
+| **`size`**       | <code>number</code> | The size of the file in bytes.                                                                                                                             |       |
+| **`webPath`**    | <code>string</code> | The path of the file that can be used to load it in the web view, for example as the `src` of an `&lt;img&gt;` element. Only available on Android and iOS. | 8.1.0 |
+| **`width`**      | <code>number</code> | The width of the image or video in pixels. Only available on Android and iOS.                                                                              | 0.5.3 |
 
 
 #### PickFilesOptions

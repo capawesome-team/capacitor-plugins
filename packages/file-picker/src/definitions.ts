@@ -265,6 +265,14 @@ export interface PickedFile {
    */
   size: number;
   /**
+   * The path of the file that can be used to load it in the web view, for example as the `src` of an `<img>` element.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.1.0
+   */
+  webPath?: string;
+  /**
    * The width of the image or video in pixels.
    *
    * Only available on Android and iOS.

@@ -17,8 +17,8 @@ const displayFile = file => {
     image.src = '';
   } else if (Capacitor.getPlatform() === 'web' && file.blob) {
     image.src = URL.createObjectURL(file.blob);
-  } else if (file.path) {
-    image.src = Capacitor.convertFileSrc(file.path);
+  } else if (file.webPath) {
+    image.src = file.webPath;
   } else {
     image.src = '';
   }

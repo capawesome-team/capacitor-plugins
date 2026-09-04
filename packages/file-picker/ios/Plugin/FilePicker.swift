@@ -164,6 +164,10 @@ import MobileCoreServices
         return url.absoluteString
     }
 
+    public func getWebPathFromUrl(_ url: URL) -> String? {
+        return plugin?.bridge?.portablePath(fromLocalURL: url)?.absoluteString
+    }
+
     public func getNameFromUrl(_ url: URL) -> String {
         return url.lastPathComponent
     }
