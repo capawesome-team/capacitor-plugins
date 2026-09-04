@@ -246,15 +246,14 @@ import MobileCoreServices
     }
 
     private func convertImageToJpeg(_ sourceUrl: URL) throws -> URL? {
-        guard let image = UIImage(contentsOfFile: sourceUrl.path) else {
+        guard let image = UIImage(contentsOfFile: sourceUrl.path), let jpegImageData = image.jpegData(compressionQuality: 0.9) else {
             return nil
         }
-        let jpegImageData = image.jpegData(compressionQuality: 0.9)
         let directory = try self.createUniqueTemporaryDirectory()
         let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
         let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
         try deleteFile(targetUrl)
-        try jpegImageData?.write(to: targetUrl)
+        try jpegImageData.write(to: targetUrl)
         return targetUrl
     }
 
