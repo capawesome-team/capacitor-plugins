@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-google-play-services",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to check the availability of Google Play Services on Android and prompt the user to install or update it.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

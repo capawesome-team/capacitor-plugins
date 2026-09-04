@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`3b8be91d3c2afbbc534c3ba458272edaa4cd4e52`](https://github.com/capawesome-team/capacitor-plugins/commit/3b8be91d3c2afbbc534c3ba458272edaa4cd4e52) ([#1033](https://github.com/capawesome-team/capacitor-plugins/pull/1033)): feat(web): add `setLocale(...)` method to override the locale of the chatbox
+
 ## 0.1.1
 
 ### Patch Changes
