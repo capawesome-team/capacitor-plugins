@@ -39,19 +39,11 @@ import MobileCoreServices
     }
 
     public func convertHeicToJpeg(_ sourceUrl: URL) throws -> URL? {
-        let heicImage = UIImage(named: sourceUrl.path)
-        guard let heicImage = heicImage else {
-            return nil
-        }
-        let jpegImageData = heicImage.jpegData(compressionQuality: 0.9)
-        let directory = try self.createUniqueTemporaryDirectory()
-        let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
-        let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
-        do {
-            try deleteFile(targetUrl)
-        }
-        try jpegImageData?.write(to: targetUrl)
-        return targetUrl
+        return try convertImageToJpeg(sourceUrl)
+    }
+
+    public func convertRawToJpeg(_ sourceUrl: URL) throws -> URL? {
+        return try convertImageToJpeg(sourceUrl)
     }
 
     public func openDocumentPicker(_ options: PickFilesOptions) {
@@ -255,6 +247,18 @@ import MobileCoreServices
         } else {
             return nil
         }
+    }
+
+    private func convertImageToJpeg(_ sourceUrl: URL) throws -> URL? {
+        guard let image = UIImage(contentsOfFile: sourceUrl.path), let jpegImageData = image.jpegData(compressionQuality: 0.9) else {
+            return nil
+        }
+        let directory = try self.createUniqueTemporaryDirectory()
+        let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
+        let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
+        try deleteFile(targetUrl)
+        try jpegImageData.write(to: targetUrl)
+        return targetUrl
     }
 
     private func presentViewController(_ viewControllerToPresent: UIViewController) {

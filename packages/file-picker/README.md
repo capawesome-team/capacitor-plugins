@@ -231,6 +231,20 @@ const convertHeicToJpeg = async () => {
 };
 ```
 
+### Convert a RAW image to JPEG
+
+RAW images (e.g. DNG) are not transcoded when they are picked. Use `convertRawToJpeg(...)` to convert them. Only available on iOS:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const convertRawToJpeg = async () => {
+  const { path } = await FilePicker.convertRawToJpeg({
+    path: 'path/to/image.dng',
+  });
+};
+```
+
 ### Check and request permissions
 
 Picking files does not require any permissions since the operating system presents the picker. However, if you need the `ACCESS_MEDIA_LOCATION` or `READ_EXTERNAL_STORAGE` permission on Android (see [Installation](#installation)), you can check and request them:
@@ -282,6 +296,7 @@ const copyFile = async () => {
 
 * [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
+* [`convertRawToJpeg(...)`](#convertrawtojpeg)
 * [`copyFile(...)`](#copyfile)
 * [`pickFiles(...)`](#pickfiles)
 * [`pickDirectory()`](#pickdirectory)
@@ -333,6 +348,27 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#convertheictojpegresult">ConvertHeicToJpegResult</a>&gt;</code>
 
 **Since:** 0.6.0
+
+--------------------
+
+
+### convertRawToJpeg(...)
+
+```typescript
+convertRawToJpeg(options: ConvertRawToJpegOptions) => Promise<ConvertRawToJpegResult>
+```
+
+Convert a RAW image to JPEG.
+
+Only available on iOS.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#convertrawtojpegoptions">ConvertRawToJpegOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#convertrawtojpegresult">ConvertRawToJpegResult</a>&gt;</code>
+
+**Since:** 8.1.0
 
 --------------------
 
@@ -536,6 +572,20 @@ Remove all listeners for this plugin.
 | Prop       | Type                | Description                 | Since |
 | ---------- | ------------------- | --------------------------- | ----- |
 | **`path`** | <code>string</code> | The path of the HEIC image. | 0.6.0 |
+
+
+#### ConvertRawToJpegResult
+
+| Prop       | Type                | Description                           | Since |
+| ---------- | ------------------- | ------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path of the converted JPEG image. | 8.1.0 |
+
+
+#### ConvertRawToJpegOptions
+
+| Prop       | Type                | Description                | Since |
+| ---------- | ------------------- | -------------------------- | ----- |
+| **`path`** | <code>string</code> | The path of the RAW image. | 8.1.0 |
 
 
 #### CopyFileOptions
