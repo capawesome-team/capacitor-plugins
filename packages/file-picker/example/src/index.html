@@ -49,6 +49,21 @@
       <ion-content class="ion-padding">
         <ion-list>
           <ion-button id="copy-file" expand="block">Copy File</ion-button>
+          <ion-item>
+            <ion-select id="types-select" label="Types" multiple>
+              <ion-select-option value="image/*">image/*</ion-select-option>
+              <ion-select-option value="IMAGE/*">IMAGE/*</ion-select-option>
+              <ion-select-option value="video/*">video/*</ion-select-option>
+              <ion-select-option value="audio/*">audio/*</ion-select-option>
+              <ion-select-option value="text/*">text/*</ion-select-option>
+              <ion-select-option value="application/pdf"
+                >application/pdf</ion-select-option
+              >
+              <ion-select-option value="application/x-unknown"
+                >application/x-unknown</ion-select-option
+              >
+            </ion-select>
+          </ion-item>
           <ion-button id="pick-files" expand="block">Pick Files</ion-button>
           <ion-button id="pick-images" expand="block">Pick Images</ion-button>
           <ion-button id="pick-media" expand="block">Pick Media</ion-button>

@@ -36,7 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     await FilePicker.copyFile({ from, to: uri });
   });
   document.querySelector('#pick-files').addEventListener('click', async () => {
-    const { files } = await FilePicker.pickFiles();
+    const types = document.querySelector('#types-select').value;
+    const { files } = await FilePicker.pickFiles({
+      types: types && types.length > 0 ? types : undefined,
+    });
     displayFile(files[0]);
   });
   document.querySelector('#pick-images').addEventListener('click', async () => {
