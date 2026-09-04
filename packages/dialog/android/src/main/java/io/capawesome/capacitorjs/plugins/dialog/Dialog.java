@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import io.capawesome.capacitorjs.plugins.dialog.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.dialog.classes.options.AlertOptions;
 import io.capawesome.capacitorjs.plugins.dialog.classes.options.ConfirmOptions;
 import io.capawesome.capacitorjs.plugins.dialog.classes.options.PromptOptions;
@@ -63,12 +64,10 @@ public class Dialog {
             builder.setMessage(options.getMessage());
             builder.setView(input);
             builder.setPositiveButton(options.getOkButtonTitle(), (dialog, which) ->
-                callback.success(new PromptResult(input.getText().toString(), false))
+                callback.success(new PromptResult(input.getText().toString()))
             );
-            builder.setNegativeButton(options.getCancelButtonTitle(), (dialog, which) ->
-                callback.success(new PromptResult(input.getText().toString(), true))
-            );
-            builder.setOnCancelListener(dialog -> callback.success(new PromptResult("", true)));
+            builder.setNegativeButton(options.getCancelButtonTitle(), (dialog, which) -> callback.error(CustomExceptions.CANCELED));
+            builder.setOnCancelListener(dialog -> callback.error(CustomExceptions.CANCELED));
             builder.create().show();
         });
     }

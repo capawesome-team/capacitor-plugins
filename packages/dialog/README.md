@@ -107,18 +107,24 @@ const confirm = async () => {
 
 ### Request text input from the user
 
-Show a prompt dialog with a text input, a confirm and a cancel button. The result contains the entered value and whether the user canceled the dialog:
+Show a prompt dialog with a text input, a confirm and a cancel button. The result contains the entered value. If the user cancels the dialog, the promise is rejected with the `CANCELED` error code:
 
 ```typescript
-import { Dialog } from '@capawesome/capacitor-dialog';
+import { Dialog, ErrorCode } from '@capawesome/capacitor-dialog';
 
 const prompt = async () => {
-  const { value, canceled } = await Dialog.prompt({
-    title: 'Name',
-    message: 'What is your name?',
-    inputPlaceholder: 'Enter your name',
-  });
-  console.log('Value:', value, 'Canceled:', canceled);
+  try {
+    const { value } = await Dialog.prompt({
+      title: 'Name',
+      message: 'What is your name?',
+      inputPlaceholder: 'Enter your name',
+    });
+    console.log('Value:', value);
+  } catch (error) {
+    if (error.code === ErrorCode.Canceled) {
+      console.log('The user canceled the dialog.');
+    }
+  }
 };
 ```
 
@@ -180,6 +186,9 @@ prompt(options: PromptOptions) => Promise<PromptResult>
 
 Display a prompt dialog with a text input, a confirm and a cancel button.
 
+If the user selects the cancel button or dismisses the dialog, the promise
+is rejected with the `CANCELED` error code.
+
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#promptoptions">PromptOptions</a></code> |
@@ -222,10 +231,9 @@ Display a prompt dialog with a text input, a confirm and a cancel button.
 
 #### PromptResult
 
-| Prop           | Type                 | Description                           | Since |
-| -------------- | -------------------- | ------------------------------------- | ----- |
-| **`canceled`** | <code>boolean</code> | Whether the user canceled the dialog. | 0.1.0 |
-| **`value`**    | <code>string</code>  | The value of the text input.          | 0.1.0 |
+| Prop        | Type                | Description                  | Since |
+| ----------- | ------------------- | ---------------------------- | ----- |
+| **`value`** | <code>string</code> | The value of the text input. | 0.1.0 |
 
 
 #### PromptOptions
@@ -243,13 +251,13 @@ Display a prompt dialog with a text input, a confirm and a cancel button.
 
 ## Migrating from `@capacitor/dialog`
 
-This plugin is API-compatible with the official [`@capacitor/dialog`](https://github.com/ionic-team/capacitor-plugins/tree/main/dialog) plugin, with a single difference: the `prompt(...)` result uses the property `canceled` (one `l`) instead of `cancelled` (two `l`s).
+This plugin is largely API-compatible with the official [`@capacitor/dialog`](https://github.com/ionic-team/capacitor-plugins/tree/main/dialog) plugin, with a single difference: if the user cancels a prompt dialog, `prompt(...)` rejects with the `CANCELED` error code instead of resolving with a `cancelled` flag.
 
-| `@capacitor/dialog`                | `@capawesome/capacitor-dialog`     |
-| ---------------------------------- | ---------------------------------- |
-| `alert({ title, message, buttonTitle })` | `alert({ title, message, buttonTitle })` |
-| `confirm({ ... }) → { value }`     | `confirm({ ... }) → { value }`     |
-| `prompt({ ... }) → { value, cancelled }` | `prompt({ ... }) → { value, canceled }` |
+| `@capacitor/dialog`                      | `@capawesome/capacitor-dialog`                                   |
+| ---------------------------------------- | ---------------------------------------------------------------- |
+| `alert({ title, message, buttonTitle })` | `alert({ title, message, buttonTitle })`                         |
+| `confirm({ ... }) → { value }`           | `confirm({ ... }) → { value }`                                   |
+| `prompt({ ... }) → { value, cancelled }` | `prompt({ ... }) → { value }`, rejects with `CANCELED` on cancel |
 
 ## FAQ
 
@@ -259,7 +267,7 @@ It brings native alert, confirm, and prompt dialogs to Android, iOS, and the web
 
 ### How is this plugin different from the official `@capacitor/dialog` plugin?
 
-This plugin is API-compatible with the official `@capacitor/dialog` plugin, with a single difference: the `prompt(...)` result uses the property `canceled` (one `l`) instead of `cancelled` (two `l`s). See the [migration table](#migrating-from-capacitordialog) above for the complete method mapping.
+This plugin is largely API-compatible with the official `@capacitor/dialog` plugin, with a single difference: if the user cancels a prompt dialog, `prompt(...)` rejects with the `CANCELED` error code instead of resolving with a `cancelled` flag. See the [migration table](#migrating-from-capacitordialog) above for the complete method mapping.
 
 ### Can I customize the dialog buttons?
 
@@ -267,7 +275,7 @@ Yes, on Android and iOS you can customize the button titles using the `buttonTit
 
 ### How do I know whether the user canceled a prompt?
 
-The result of the `prompt(...)` method contains a `canceled` property that is `true` if the user canceled the dialog, in addition to the `value` property with the text input. For confirmation dialogs, the `value` property of the `confirm(...)` result tells you whether the user confirmed the dialog.
+If the user cancels the dialog, the `prompt(...)` method rejects with the `CANCELED` error code, so catch the error and compare `error.code` with `ErrorCode.Canceled`. Otherwise, the result contains the entered text in the `value` property. For confirmation dialogs, the `value` property of the `confirm(...)` result tells you whether the user confirmed the dialog.
 
 ### Why is the dialog title not displayed on the web?
 
