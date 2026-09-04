@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 
@@ -13,12 +12,8 @@ const displayFile = file => {
   document.querySelector('#height-input').value = file.height ?? '';
 
   const image = document.querySelector('#image');
-  if (!file.mimeType?.startsWith('image/')) {
-    image.src = '';
-  } else if (Capacitor.getPlatform() === 'web' && file.blob) {
-    image.src = URL.createObjectURL(file.blob);
-  } else if (file.path) {
-    image.src = Capacitor.convertFileSrc(file.path);
+  if (file.mimeType?.startsWith('image/') && file.webPath) {
+    image.src = file.webPath;
   } else {
     image.src = '';
   }

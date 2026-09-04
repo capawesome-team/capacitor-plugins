@@ -157,6 +157,9 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
                 file["mimeType"] = implementation?.getMimeTypeFromUrl(url) ?? ""
                 file["name"] = implementation?.getNameFromUrl(url) ?? ""
                 file["path"] = implementation?.getPathFromUrl(url) ?? ""
+                if let webPath = implementation?.getWebPathFromUrl(url) {
+                    file["webPath"] = webPath
+                }
                 file["size"] = try implementation?.getSizeFromUrl(url) ?? -1
                 return file
             }

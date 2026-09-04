@@ -307,6 +307,7 @@ public class FilePickerPlugin extends Plugin {
             }
             fileResult.put("name", implementation.getNameFromUri(uri));
             fileResult.put("path", implementation.getPathFromUri(uri));
+            fileResult.put("webPath", implementation.getWebPathFromUri(uri));
             fileResult.put("size", implementation.getSizeFromUri(uri));
             filesResultList.add(fileResult);
         }
