@@ -178,7 +178,9 @@ export interface PickFilesOptions {
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
    * Wildcards such as `image/*` are supported.
    *
-   * This option is ignored if `limit` is set.
+   * On Android, the system file picker can only offer files whose media type the device derives from the file extension.
+   * On Android 9 and older, `.json` files are not mapped to `application/json` and are reported as `application/octet-stream`. Third-party document providers may behave the same on any version.
+   * Add `application/octet-stream` to `types` if such files must be selectable.
    *
    * @example ['image/png', 'application/pdf']
    */
