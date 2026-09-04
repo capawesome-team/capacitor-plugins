@@ -91,6 +91,7 @@ body:
         - label: OAuth
         - label: Passkeys
         - label: Password Autofill
+        - label: PDF Annotator
         - label: PDF Generator
         - label: PDF Viewer
         - label: Pedometer

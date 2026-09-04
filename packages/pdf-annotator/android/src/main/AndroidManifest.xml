@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- The androidx.pdf libraries declare minSdk 28. The plugin gates their use at runtime via `isAvailable()`. -->
+    <uses-sdk tools:overrideLibrary="androidx.pdf.ink, androidx.pdf.viewer.fragment, androidx.pdf, androidx.pdf.core, androidx.pdf.document.service" />
+    <application>
+        <activity
+            android:name=".classes.PdfAnnotatorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.CapawesomePdfAnnotator" />
+    </application>
+</manifest>
