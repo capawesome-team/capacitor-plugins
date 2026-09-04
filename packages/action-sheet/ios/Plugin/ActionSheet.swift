@@ -16,7 +16,11 @@ import UIKit
             let alertController = UIAlertController(title: options.title, message: options.message, preferredStyle: .actionSheet)
             for (index, button) in options.buttons.enumerated() {
                 let action = UIAlertAction(title: button.title, style: self.alertActionStyle(for: button.style)) { _ in
-                    self.resolve(index: index, canceled: button.style == ActionSheetButton.styleCancel)
+                    if button.style == ActionSheetButton.styleCancel {
+                        self.complete(nil, CustomError.canceled)
+                    } else {
+                        self.complete(ShowActionsResult(index: index), nil)
+                    }
                 }
                 alertController.addAction(action)
             }
@@ -31,7 +35,7 @@ import UIKit
     }
 
     public func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
-        resolve(index: -1, canceled: true)
+        complete(nil, CustomError.canceled)
     }
 
     private func alertActionStyle(for style: String) -> UIAlertAction.Style {
@@ -45,15 +49,15 @@ import UIKit
         }
     }
 
-    private func present(_ alertController: UIAlertController) {
-        plugin.bridge?.viewController?.present(alertController, animated: true)
-    }
-
-    private func resolve(index: Int, canceled: Bool) {
+    private func complete(_ result: ShowActionsResult?, _ error: Error?) {
         guard let completion = pendingCompletion else {
             return
         }
         pendingCompletion = nil
-        completion(ShowActionsResult(index: index, canceled: canceled), nil)
+        completion(result, error)
+    }
+
+    private func present(_ alertController: UIAlertController) {
+        plugin.bridge?.viewController?.present(alertController, animated: true)
     }
 }

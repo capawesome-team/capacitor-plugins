@@ -80,23 +80,29 @@ The following example shows how to present a native action sheet and read the se
 
 ### Show an action sheet
 
-Present a native action sheet with a title, a message, and a list of buttons. Use `ActionSheetButtonStyle.Destructive` to highlight irreversible actions and `ActionSheetButtonStyle.Cancel` to pin a cancel button. The result contains the zero-based index of the selected button and whether the sheet was canceled. Only available on Android and iOS:
+Present a native action sheet with a title, a message, and a list of buttons. Use `ActionSheetButtonStyle.Destructive` to highlight irreversible actions and `ActionSheetButtonStyle.Cancel` to pin a cancel button. The result contains the zero-based index of the selected button. If the user selects the cancel button or dismisses the action sheet, the promise is rejected with the `CANCELED` error code. Only available on Android and iOS:
 
 ```typescript
-import { ActionSheet, ActionSheetButtonStyle } from '@capawesome/capacitor-action-sheet';
+import { ActionSheet, ActionSheetButtonStyle, ErrorCode } from '@capawesome/capacitor-action-sheet';
 
 const showActions = async () => {
-  const { index, canceled } = await ActionSheet.showActions({
-    title: 'Photo Options',
-    message: 'Select an option to perform.',
-    options: [
-      { title: 'Upload' },
-      { title: 'Share' },
-      { title: 'Delete', style: ActionSheetButtonStyle.Destructive },
-      { title: 'Cancel', style: ActionSheetButtonStyle.Cancel },
-    ],
-  });
-  console.log('Index:', index, 'Canceled:', canceled);
+  try {
+    const { index } = await ActionSheet.showActions({
+      title: 'Photo Options',
+      message: 'Select an option to perform.',
+      options: [
+        { title: 'Upload' },
+        { title: 'Share' },
+        { title: 'Delete', style: ActionSheetButtonStyle.Destructive },
+        { title: 'Cancel', style: ActionSheetButtonStyle.Cancel },
+      ],
+    });
+    console.log('Index:', index);
+  } catch (error) {
+    if (error.code === ErrorCode.Canceled) {
+      console.log('The user canceled the action sheet.');
+    }
+  }
 };
 ```
 
@@ -121,6 +127,10 @@ showActions(options: ShowActionsOptions) => Promise<ShowActionsResult>
 
 Show an action sheet with a list of buttons.
 
+If the user selects a button with the <a href="#actionsheetbuttonstyle">`ActionSheetButtonStyle.Cancel`</a> style
+or dismisses the action sheet, the promise is rejected with the `CANCELED`
+error code.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                              |
@@ -139,10 +149,9 @@ Only available on Android and iOS.
 
 #### ShowActionsResult
 
-| Prop           | Type                 | Description                                                                                                                                        | Since |
-| -------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`canceled`** | <code>boolean</code> | Whether the action sheet was canceled by selecting a cancel button or by dismissing the action sheet.                                              | 0.1.0 |
-| **`index`**    | <code>number</code>  | The index of the selected button in the `options` array (zero-based). If the action sheet was canceled without a cancel button, the index is `-1`. | 0.1.0 |
+| Prop        | Type                | Description                                                           | Since |
+| ----------- | ------------------- | --------------------------------------------------------------------- | ----- |
+| **`index`** | <code>number</code> | The index of the selected button in the `options` array (zero-based). | 0.1.0 |
 
 
 #### ShowActionsOptions
@@ -178,12 +187,12 @@ Only available on Android and iOS.
 
 ## Migrating from `@capacitor/action-sheet`
 
-This plugin is API-compatible with the official [`@capacitor/action-sheet`](https://github.com/ionic-team/capacitor-plugins/tree/main/action-sheet) plugin. The `ActionSheetButtonStyle` enum uses the same values (`DEFAULT`, `DESTRUCTIVE`, `CANCEL`), so no enum changes are required. The following differences apply:
+This plugin is largely API-compatible with the official [`@capacitor/action-sheet`](https://github.com/ionic-team/capacitor-plugins/tree/main/action-sheet) plugin. The `ActionSheetButtonStyle` enum uses the same values (`DEFAULT`, `DESTRUCTIVE`, `CANCEL`), so no enum changes are required. The following differences apply:
 
 | `@capacitor/action-sheet`                       | `@capawesome/capacitor-action-sheet`                   |
 | ----------------------------------------------- | ------------------------------------------------------ |
 | `showActions({ title, message, options })`      | `showActions({ title, message, options, cancelable })` |
-| `showActions(...) → { index }`                  | `showActions(...) → { index, canceled }`               |
+| Cancel button resolves with its `index`         | Cancel button rejects with the `CANCELED` error code   |
 | `message` and button styles ignored on Android  | `message` and button styles rendered on Android        |
 | `cancelable` not available                      | `cancelable` (default `true`)                          |
 
@@ -191,7 +200,7 @@ This plugin is API-compatible with the official [`@capacitor/action-sheet`](http
 
 ### How is this plugin different from other similar plugins?
 
-It presents the platform's own native action sheet on Android and iOS through a fully typed API, rendering the title, message, and button styles — including destructive and cancel styles — consistently on both platforms, and automatically anchoring as a popover on iPad. The result reports the selected button index along with a `canceled` flag, and the `cancelable` option controls dismissal, all using only official platform APIs. Actively maintained against the latest Capacitor version, it lets a single dependency cover the whole action-sheet story.
+It presents the platform's own native action sheet on Android and iOS through a fully typed API, rendering the title, message, and button styles — including destructive and cancel styles — consistently on both platforms, and automatically anchoring as a popover on iPad. The result reports the selected button index, a cancellation rejects the promise with the `CANCELED` error code, and the `cancelable` option controls dismissal, all using only official platform APIs. Actively maintained against the latest Capacitor version, it lets a single dependency cover the whole action-sheet story.
 
 ### On which platforms can I show an action sheet?
 
@@ -199,15 +208,15 @@ The `showActions(...)` method is only available on Android and iOS, where it pre
 
 ### How do I know which button the user selected?
 
-The result of `showActions(...)` contains the zero-based `index` of the selected button in the `options` array and a `canceled` flag. If the action sheet was canceled without a cancel button, the index is `-1`.
+The result of `showActions(...)` contains the zero-based `index` of the selected button in the `options` array. If the user selects a button with the `ActionSheetButtonStyle.Cancel` style or dismisses the action sheet, the promise is rejected with the `CANCELED` error code instead.
 
 ### Can the user dismiss the action sheet without selecting a button?
 
-Yes. On Android, the action sheet can be dismissed by tapping outside of it or pressing the back button unless you set the `cancelable` option to `false`. On iOS, the action sheet can always be dismissed by tapping outside of it, which is a system behavior.
+Yes. On Android, the action sheet can be dismissed by tapping outside of it or pressing the back button unless you set the `cancelable` option to `false`. On iOS, the action sheet can always be dismissed by tapping outside of it, which is a system behavior. If the action sheet is dismissed, the promise is rejected with the `CANCELED` error code.
 
 ### How is this plugin different from the official Capacitor Action Sheet plugin?
 
-This plugin is API-compatible with the official `@capacitor/action-sheet` plugin and uses the same `ActionSheetButtonStyle` enum values. In addition, it renders the message and button styles on Android, returns a `canceled` flag, and supports the `cancelable` option. See the [migration section](#migrating-from-capacitoraction-sheet) for a detailed comparison.
+This plugin is largely API-compatible with the official `@capacitor/action-sheet` plugin and uses the same `ActionSheetButtonStyle` enum values. In addition, it renders the message and button styles on Android, rejects with the `CANCELED` error code when the user cancels, and supports the `cancelable` option. See the [migration section](#migrating-from-capacitoraction-sheet) for a detailed comparison.
 
 ### Can I use this plugin together with the Capawesome Dialog plugin?
 
