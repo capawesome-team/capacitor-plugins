@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- [`04c8f0d12a067cdefb6576dc1fa114a2c4ff1e9e`](https://github.com/capawesome-team/capacitor-plugins/commit/04c8f0d12a067cdefb6576dc1fa114a2c4ff1e9e): docs: document that large attachments provided via `data` can cause out of memory (OOM) crashes
+
 ## 0.2.1
 
 ### Patch Changes

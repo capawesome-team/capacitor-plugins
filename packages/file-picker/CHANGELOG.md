@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.6
+
+### Patch Changes
+
+- [`02e548c0c0ffe8e9d5562d53eeb9b8be328b2b13`](https://github.com/capawesome-team/capacitor-plugins/commit/02e548c0c0ffe8e9d5562d53eeb9b8be328b2b13) ([#1028](https://github.com/capawesome-team/capacitor-plugins/pull/1028)): fix(ios): `pickFiles` did not allow selecting any file when `types` contained wildcard (e.g. `image/*`) or unknown MIME types
+
 ## 8.0.5
 
 ### Patch Changes
