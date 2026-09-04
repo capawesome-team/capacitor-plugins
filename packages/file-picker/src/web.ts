@@ -52,6 +52,7 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
         name: this.getNameFromUrl(pickedFile),
         path: undefined,
         size: this.getSizeFromUrl(pickedFile),
+        webPath: URL.createObjectURL(pickedFile),
       };
       if (options?.readData) {
         file.data = await this.getDataFromFile(pickedFile);
