@@ -42,10 +42,10 @@ jobs:
           commit-message: "chore(release): publish"
           pr-title: "chore(release): publish"
       - name: Set npm token for GitHub Packages
-        if: steps.changesets.outputs.published == 'true'
+        if: ${{ !cancelled() && steps.changesets.outputs.published == 'true' }}
         run: npm config set //npm.pkg.github.com/:_authToken ${{ secrets.PAT }}
       - name: Publish Sponsorware to GitHub Packages
-        if: steps.changesets.outputs.published == 'true'
+        if: ${{ !cancelled() && steps.changesets.outputs.published == 'true' }}
         env:
           PUBLISHED_PACKAGES: ${{ steps.changesets.outputs['published-packages'] }}
         run: node ./scripts/publish-sponsorware.mjs --packages="$PUBLISHED_PACKAGES"
