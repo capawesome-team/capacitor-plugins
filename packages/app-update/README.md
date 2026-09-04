@@ -436,6 +436,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [Google Play Services](https://capawesome.io/docs/sdks/capacitor/google-play-services/): Check whether Google Play Services is available on the device and prompt the user to install or update it.
 - [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
 
 ## Newsletter

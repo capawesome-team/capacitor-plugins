@@ -63,6 +63,7 @@ body:
         - label: Formbricks
         - label: Geocoder
         - label: Geofences
+        - label: Google Play Services
         - label: Google Sign-In
         - label: Grafana Faro
         - label: Gyroscope
