@@ -102,7 +102,7 @@ public class FilePickerPlugin extends Plugin {
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            if (limit == 1 && parsedTypes != null && parsedTypes.length > 0) {
+            if (parsedTypes != null && parsedTypes.length > 0) {
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, parsedTypes);
             }
 
