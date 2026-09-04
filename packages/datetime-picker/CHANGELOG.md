@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.4
+
+### Patch Changes
+
+- [`3df3e8ccc10dcc360925530c73bedc25ff81d4b4`](https://github.com/capawesome-team/capacitor-plugins/commit/3df3e8ccc10dcc360925530c73bedc25ff81d4b4) ([#1037](https://github.com/capawesome-team/capacitor-plugins/pull/1037)): fix: republish the package because the previous version was missing the `dist/` folder on the Capawesome npm registry
+
 ## 8.1.3
 
 ### Patch Changes
