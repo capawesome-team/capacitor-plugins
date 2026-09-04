@@ -167,13 +167,17 @@ public class DatetimePickerPlugin extends Plugin {
     @Override
     protected void handleOnConfigurationChanged(Configuration newConfig) {
         super.handleOnConfigurationChanged(newConfig);
-        implementation.handleConfigurationChanged(newConfig);
+        if (implementation != null) {
+            implementation.handleConfigurationChanged(newConfig);
+        }
     }
 
     @Override
     protected void handleOnDestroy() {
         super.handleOnDestroy();
-        implementation.handleDestroy();
+        if (implementation != null) {
+            implementation.handleDestroy();
+        }
     }
 
     private DatetimePickerConfig getDatetimePickerConfig() {
