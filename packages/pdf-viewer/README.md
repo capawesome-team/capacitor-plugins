@@ -343,6 +343,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application instead of an in-app viewer.
 - [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a PDF file from the device's file system.
+- [PDF Annotator](https://capawesome.io/docs/sdks/capacitor/pdf-annotator/): Let the user annotate PDF documents with the native markup tools.
 - [PDF Generator](https://capawesome.io/docs/sdks/capacitor/pdf-generator/): Generate paginated PDF files from HTML content or URLs.
 - [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print PDF documents on Android and iOS.
 
