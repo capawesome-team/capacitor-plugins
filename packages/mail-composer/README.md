@@ -218,11 +218,11 @@ never sends the email itself.
 
 #### MailAttachment
 
-| Prop       | Type                | Description                                                                                                                                                                                | Since |
-| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`data`** | <code>string</code> | The content of the file to attach, encoded as a base64 string. Either `data` or `path` must be provided. If both are provided, `path` is used.                                             | 0.2.0 |
-| **`name`** | <code>string</code> | The file name of the attachment, including the file extension. Must be provided if `data` is provided. Ignored if `path` is provided, because the file name is then derived from the path. | 0.2.0 |
-| **`path`** | <code>string</code> | The absolute file path or `file://` URI of the file to attach. Either `data` or `path` must be provided.                                                                                   | 0.2.0 |
+| Prop       | Type                | Description                                                                                                                                                                                                                                                                                                  | Since |
+| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`data`** | <code>string</code> | The content of the file to attach, encoded as a base64 string. Either `data` or `path` must be provided. If both are provided, `path` is used. **Attention**: The entire file is loaded into memory as a base64 string, which can lead to app crashes for large files. Use `path` instead whenever possible. | 0.2.0 |
+| **`name`** | <code>string</code> | The file name of the attachment, including the file extension. Must be provided if `data` is provided. Ignored if `path` is provided, because the file name is then derived from the path.                                                                                                                   | 0.2.0 |
+| **`path`** | <code>string</code> | The absolute file path or `file://` URI of the file to attach. Either `data` or `path` must be provided.                                                                                                                                                                                                     | 0.2.0 |
 
 
 ### Type Aliases
@@ -274,6 +274,10 @@ On Android, the plugin shares attachments through the [`FileProvider`](https://d
 ### How do I attach a file that is not stored on the file system?
 
 Provide the content of the file as a base64 string using the `data` property of an attachment and set the `name` property to the file name including the file extension. This is useful for files that only exist in memory, for example a log file that you keep in IndexedDB. The plugin takes care of handing the content over to the mail app, so you do not need to write the file to the file system yourself.
+
+### Why does my app crash when attaching large files?
+
+Attachments provided via the `data` property are loaded into memory as a base64 string, which can lead to out of memory (OOM) crashes for large files. Whenever the file is available on the file system, use the `path` property instead.
 
 ### Are attachments supported on the web?
 

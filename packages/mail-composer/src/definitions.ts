@@ -101,6 +101,10 @@ export interface MailAttachment {
    * Either `data` or `path` must be provided. If both are provided, `path` is
    * used.
    *
+   * **Attention**: The entire file is loaded into memory as a base64 string,
+   * which can lead to app crashes for large files. Use `path` instead whenever
+   * possible.
+   *
    * @example 'SGVsbG8gV29ybGQ='
    * @since 0.2.0
    */
