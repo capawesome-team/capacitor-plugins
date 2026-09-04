@@ -168,6 +168,11 @@ public class CrispPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setLocale(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @PluginMethod
     public void setNotificationsEnabled(PluginCall call) {
         try {
             SetNotificationsEnabledOptions options = new SetNotificationsEnabledOptions(call);

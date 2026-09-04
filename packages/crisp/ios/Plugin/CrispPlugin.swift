@@ -15,6 +15,7 @@ public class CrispPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "resetSession", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "searchHelpdesk", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setCompany", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setLocale", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNotificationsEnabled", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setSessionBool", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setSessionInt", returnType: CAPPluginReturnPromise),
@@ -125,6 +126,10 @@ public class CrispPlugin: CAPPlugin, CAPBridgedPlugin {
         } catch {
             rejectCall(call, error)
         }
+    }
+
+    @objc func setLocale(_ call: CAPPluginCall) {
+        rejectCallAsUnimplemented(call)
     }
 
     @objc func setNotificationsEnabled(_ call: CAPPluginCall) {

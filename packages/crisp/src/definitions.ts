@@ -70,6 +70,16 @@ export interface CrispPlugin {
    */
   setCompany(options: SetCompanyOptions): Promise<void>;
   /**
+   * Set the locale of the chatbox.
+   *
+   * On Android and iOS, the chatbox follows the language of the app.
+   *
+   * Only available on Web.
+   *
+   * @since 0.1.2
+   */
+  setLocale(options: SetLocaleOptions): Promise<void>;
+  /**
    * Enable or disable push notifications.
    *
    * Only available on Android.
@@ -389,6 +399,19 @@ export interface SetCompanyGeolocation {
    * @since 0.1.0
    */
   country: string;
+}
+
+/**
+ * @since 0.1.2
+ */
+export interface SetLocaleOptions {
+  /**
+   * The locale of the chatbox as an ISO 639-1 code.
+   *
+   * @since 0.1.2
+   * @example 'de'
+   */
+  locale: string;
 }
 
 /**

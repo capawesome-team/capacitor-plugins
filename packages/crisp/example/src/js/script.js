@@ -53,6 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
       await Crisp.setSessionSegment({ segment: 'checkout' });
     });
   document
+    .querySelector('#set-locale-button')
+    .addEventListener('click', async () => {
+      await Crisp.setLocale({ locale: 'de' });
+    });
+  document
     .querySelector('#push-session-event-button')
     .addEventListener('click', async () => {
       await Crisp.pushSessionEvent({

@@ -7,6 +7,7 @@ import type {
   OpenHelpdeskArticleOptions,
   PushSessionEventOptions,
   SetCompanyOptions,
+  SetLocaleOptions,
   SetSessionBoolOptions,
   SetSessionIntOptions,
   SetSessionSegmentOptions,
@@ -82,6 +83,11 @@ export class CrispWeb extends WebPlugin implements CrispPlugin {
       geolocation: options.geolocation,
       url: options.url,
     });
+  }
+
+  async setLocale(options: SetLocaleOptions): Promise<void> {
+    this.throwIfNotConfigured();
+    window.$crisp.push(['config', 'locale', [options.locale]]);
   }
 
   async setNotificationsEnabled(): Promise<void> {
