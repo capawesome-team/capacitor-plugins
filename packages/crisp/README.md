@@ -260,6 +260,7 @@ const addListeners = async () => {
 * [`resetSession()`](#resetsession)
 * [`searchHelpdesk()`](#searchhelpdesk)
 * [`setCompany(...)`](#setcompany)
+* [`setLocale(...)`](#setlocale)
 * [`setNotificationsEnabled(...)`](#setnotificationsenabled)
 * [`setSessionBool(...)`](#setsessionbool)
 * [`setSessionInt(...)`](#setsessionint)
@@ -433,6 +434,27 @@ Set the company of the current user.
 | **`options`** | <code><a href="#setcompanyoptions">SetCompanyOptions</a></code> |
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### setLocale(...)
+
+```typescript
+setLocale(options: SetLocaleOptions) => Promise<void>
+```
+
+Set the locale of the chatbox.
+
+On Android and iOS, the chatbox follows the language of the app.
+
+Only available on Web.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#setlocaleoptions">SetLocaleOptions</a></code> |
+
+**Since:** 0.1.2
 
 --------------------
 
@@ -772,6 +794,13 @@ Remove all listeners for this plugin.
 | **`country`** | <code>string</code> | The country of the company. | 0.1.0 |
 
 
+#### SetLocaleOptions
+
+| Prop         | Type                | Description                                     | Since |
+| ------------ | ------------------- | ----------------------------------------------- | ----- |
+| **`locale`** | <code>string</code> | The locale of the chatbox as an ISO 639-1 code. | 0.1.2 |
+
+
 #### SetNotificationsEnabledOptions
 
 | Prop          | Type                 | Description                                   | Since |
@@ -894,10 +923,13 @@ Not every Crisp SDK feature is available on all platforms. The following table l
 | `handlePushNotification(...)`                |   ✅    | ❌  | ❌  |
 | `setNotificationsEnabled(...)`               |   ✅    | ❌  | ❌  |
 | `setShouldPromptForNotificationPermission(...)` |   ❌    | ✅  | ❌  |
+| `setLocale(...)`                             |   ❌    | ❌  | ✅  |
 
 On iOS, the Crisp SDK detects and handles its own push notifications internally once the APNs device token has been forwarded, so the JavaScript `isCrispPushNotification(...)` and `handlePushNotification(...)` methods are not available there.
 
-The following features of the Crisp SDKs are intentionally not part of this plugin's initial release: unread message count, bot scenarios, runtime locale override, and audio/video calls. [Open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) if you need any of them.
+The Crisp Android and iOS SDKs do not provide a locale override, so the `setLocale(...)` method is only available on the web. The native chatbox follows the language of the app. To change it at runtime, change the language of the app, e.g. with the [App Language](https://capawesome.io/docs/sdks/capacitor/app-language/) plugin.
+
+The following features of the Crisp SDKs are intentionally not part of this plugin's initial release: unread message count, bot scenarios, and audio/video calls. [Open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) if you need any of them.
 
 ## Licensing
 
