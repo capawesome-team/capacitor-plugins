@@ -65,6 +65,11 @@ public class FilePickerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void convertRawToJpeg(PluginCall call) {
+        call.unimplemented("Not implemented on Android.");
+    }
+
+    @PluginMethod
     public void copyFile(PluginCall call) {
         try {
             String from = call.getString("from");

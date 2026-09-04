@@ -12,6 +12,7 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "FilePicker"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "convertHeicToJpeg", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "convertRawToJpeg", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "copyFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "pickFiles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "pickImages", returnType: CAPPluginReturnPromise),
@@ -57,6 +58,24 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
             call.resolve(result)
         } catch let error as NSError {
             call.reject(error.localizedDescription, nil, error)
+        }
+    }
+
+    @objc func convertRawToJpeg(_ call: CAPPluginCall) {
+        do {
+            let options = try ConvertRawToJpegOptions(call)
+
+            let jpegUrl = try implementation?.convertRawToJpeg(options.getUrl())
+            guard let jpegUrl = jpegUrl else {
+                call.reject(errorConvertFailed)
+                return
+            }
+
+            var result = JSObject()
+            result["path"] = jpegUrl.absoluteString
+            call.resolve(result)
+        } catch {
+            call.reject(error.localizedDescription)
         }
     }
 

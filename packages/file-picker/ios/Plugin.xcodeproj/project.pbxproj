@@ -17,6 +17,7 @@
 		7C7AC98E2E0A8D620080ABBC /* CopyFileOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7AC98D2E0A8D5C0080ABBC /* CopyFileOptions.swift */; };
 		7C7AC9912E0A8D700080ABBC /* PickFilesOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7AC9902E0A8D700080ABBC /* PickFilesOptions.swift */; };
 		7C7AC9942E0A974D0080ABBC /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7AC9932E0A974D0080ABBC /* CustomError.swift */; };
+		7CB4D1022F2B0A010080ABBC /* ConvertRawToJpegOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB4D1012F2B0A010080ABBC /* ConvertRawToJpegOptions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,7 @@
 		7C7AC98D2E0A8D5C0080ABBC /* CopyFileOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopyFileOptions.swift; sourceTree = "<group>"; };
 		7C7AC9902E0A8D700080ABBC /* PickFilesOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickFilesOptions.swift; sourceTree = "<group>"; };
 		7C7AC9932E0A974D0080ABBC /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
+		7CB4D1012F2B0A010080ABBC /* ConvertRawToJpegOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvertRawToJpegOptions.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 		7C7AC98C2E0A8D560080ABBC /* Options */ = {
 			isa = PBXGroup;
 			children = (
+				7CB4D1012F2B0A010080ABBC /* ConvertRawToJpegOptions.swift */,
 				7C7AC98D2E0A8D5C0080ABBC /* CopyFileOptions.swift */,
 				7C7AC9902E0A8D700080ABBC /* PickFilesOptions.swift */,
 			);
@@ -334,6 +337,7 @@
 			files = (
 				50E1A94820377CB70090CE1A /* FilePickerPlugin.swift in Sources */,
 				7C7AC9942E0A974D0080ABBC /* CustomError.swift in Sources */,
+				7CB4D1022F2B0A010080ABBC /* ConvertRawToJpegOptions.swift in Sources */,
 				7C7AC98E2E0A8D620080ABBC /* CopyFileOptions.swift in Sources */,
 				7C7AC9912E0A8D700080ABBC /* PickFilesOptions.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* FilePicker.swift in Sources */,

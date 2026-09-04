@@ -20,6 +20,16 @@ export interface FilePickerPlugin {
     options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult>;
   /**
+   * Convert a RAW image to JPEG.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  convertRawToJpeg(
+    options: ConvertRawToJpegOptions,
+  ): Promise<ConvertRawToJpegResult>;
+  /**
    * Copy a file to a new location.
    *
    * @since 7.1.0
@@ -118,6 +128,32 @@ export interface ConvertHeicToJpegResult {
    *
    * @example '/path/to/image.jpeg'
    * @since 0.6.0
+   */
+  path: string;
+}
+
+/**
+ * @since 8.1.0
+ */
+export interface ConvertRawToJpegOptions {
+  /**
+   * The path of the RAW image.
+   *
+   * @example '/path/to/image.dng'
+   * @since 8.1.0
+   */
+  path: string;
+}
+
+/**
+ * @since 8.1.0
+ */
+export interface ConvertRawToJpegResult {
+  /**
+   * The path of the converted JPEG image.
+   *
+   * @example '/path/to/image.jpeg'
+   * @since 8.1.0
    */
   path: string;
 }
