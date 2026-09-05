@@ -197,8 +197,27 @@ end
 
 No additional setup is required for SPM.
 
-If you want to use encryption, you must enable the `SQLCipher` package trait.
+By default, this plugin uses the system SQLite version provided by iOS. If you want to use a newer, consistent SQLite version across all iOS versions, you can opt in to bundling [CSQLite](https://github.com/stephencelis/CSQLite) (with FTS5 enabled) by enabling the `BundledSQLite` package trait.
 Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
+
+```json
+{
+  "experimental": {
+    "ios": {
+      "spm": {
+        "swiftToolsVersion": "6.1",
+        "packageTraits": {
+          "@capawesome-team/capacitor-sqlite": ["BundledSQLite"]
+        }
+      }
+    }
+  }
+}
+```
+
+**Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+
+If you want to use encryption, you must enable the `SQLCipher` package trait instead:
 
 ```json
 {
@@ -215,7 +234,7 @@ Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
 }
 ```
 
-**Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+**Attention**: This trait cannot be combined with `BundledSQLite`. SQLCipher already bundles its own SQLite version.
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
@@ -1159,6 +1178,10 @@ Yes. Check out the blog post [Alternative to the Capacitor Community SQLite plug
 ### Is database encryption supported on all platforms?
 
 No, encryption is only available on Android and iOS, where the plugin provides 256 bit AES encryption via SQLCipher. On both platforms, SQLCipher is opt-in and requires additional setup, as described in the [Installation](#installation) section. On Electron, database encryption is not supported.
+
+### Why does a changed SPM package trait have no effect?
+
+After changing the package traits in your Capacitor configuration, run `npx cap sync ios`, let Xcode re-resolve the packages (File → Packages → Resolve Package Versions, or Reset Package Caches) and clean the build folder (Product → Clean Build Folder) before building again. You can check which SQLite version is active with `getVersion()`.
 
 ### Can I execute multiple SQL statements in a single call?
 
