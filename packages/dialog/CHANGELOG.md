@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`12215f9e1ae689a23bab3dcde9211f37e33dfb21`](https://github.com/capawesome-team/capacitor-plugins/commit/12215f9e1ae689a23bab3dcde9211f37e33dfb21) ([#1046](https://github.com/capawesome-team/capacitor-plugins/pull/1046)): refactor!: reject `prompt(...)` with the `CANCELED` error code instead of resolving with a `canceled` flag (see `BREAKING.md`)
+
 ## 0.1.2
 
 ### Patch Changes
