@@ -43,7 +43,8 @@ The Vault plugin is typically used whenever access to stored data should require
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.1.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Active support |
+| 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Demo
 
@@ -147,17 +148,31 @@ The following examples show how to initialize a vault, check whether one exists,
 Initialize the vault with the desired configuration once per session before calling any other method. The `lockAfterBackgrounded` option automatically locks the vault after the app has been backgrounded for the given duration in milliseconds:
 
 ```typescript
-import { Vault, VaultType } from '@capawesome-team/capacitor-vault';
+import { Vault, VaultType, ErrorCode } from '@capawesome-team/capacitor-vault';
+
+const options = {
+  type: VaultType.Biometric,
+  title: 'Unlock vault',
+  cancelButtonText: 'Cancel',
+  iosFallbackButtonText: 'Use Passcode',
+  lockAfterBackgrounded: 30000,
+};
 
 // Call once per session before any other method.
 const initialize = async () => {
-  await Vault.initialize({
-    type: VaultType.Biometric,
-    title: 'Unlock vault',
-    cancelButtonText: 'Cancel',
-    iosFallbackButtonText: 'Use Passcode',
-    lockAfterBackgrounded: 30000,
-  });
+  try {
+    await Vault.initialize(options);
+  } catch (error) {
+    if (error.code === ErrorCode.AuthenticatorUnavailable) {
+      // No passcode or biometrics set up.
+    } else if (error.code === ErrorCode.KeyInvalidated) {
+      // All values are lost; start over.
+      await Vault.destroy();
+      await Vault.initialize(options);
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -190,9 +205,11 @@ const unlock = async () => {
     if (error.code === ErrorCode.UnlockCanceled) {
       console.log('The user canceled the authentication prompt.');
     } else if (error.code === ErrorCode.KeyInvalidated) {
-      console.log('The encryption key was invalidated.');
+      // All values are lost; start over.
+      await Vault.destroy();
+      await initialize(); // See "Initialize the vault".
     } else {
-      console.log('Another error occurred:', error);
+      throw error;
     }
   }
 };
@@ -214,7 +231,7 @@ const lock = async () => {
 Store, retrieve, and remove key/value pairs. The vault must be unlocked before calling these methods:
 
 ```typescript
-import { Vault } from '@capawesome-team/capacitor-vault';
+import { Vault, ErrorCode } from '@capawesome-team/capacitor-vault';
 
 // Store a value.
 const setValue = async () => {
@@ -223,8 +240,19 @@ const setValue = async () => {
 
 // Retrieve a value.
 const getValue = async () => {
-  const { value } = await Vault.getValue({ key: 'token' });
-  return value;
+  try {
+    const { value } = await Vault.getValue({ key: 'token' });
+    return value;
+  } catch (error) {
+    if (error.code === ErrorCode.VaultLocked) {
+      // Unlock the vault first.
+    } else if (error.code === ErrorCode.DecryptionFailed) {
+      // The value is unreadable; remove it.
+      await Vault.removeValue({ key: 'token' });
+      return null;
+    }
+    throw error;
+  }
 };
 
 // Remove a single value.
@@ -333,6 +361,8 @@ Destroy the vault, removing all values and its configuration.
 
 After calling this method, the vault must be reinitialized before use.
 
+Everything that could be deleted is removed, even if the call rejects.
+
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
 | **`options`** | <code><a href="#destroyoptions">DestroyOptions</a></code> |
@@ -350,10 +380,11 @@ exists(options?: ExistsOptions | undefined) => Promise<ExistsResult>
 
 Check whether a vault with the given identifier exists on the device.
 
-Returns `true` for any vault that was previously created and has
-not been destroyed, even if `initialize()` has not been called in
-the current session. Useful for detecting whether a fresh setup or
-an unlock flow is required.
+Returns `true` as long as the vault's encryption key or any stored
+values exist, even if `initialize()` has not been called in the
+current session. Useful for detecting whether a fresh setup or an
+unlock flow is required. If the key is gone while values are still
+stored, `initialize()` rejects with `KEY_INVALIDATED`.
 
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
@@ -374,7 +405,9 @@ exportData(options?: ExportDataOptions | undefined) => Promise<ExportDataResult>
 
 Export all values from the vault as a key/value map.
 
-The vault must be unlocked before calling this method.
+The vault must be unlocked before calling this method. Values that
+cannot be decrypted are left out of the map and reported in the
+`skippedCount` property.
 
 **Note**: Designed for small datasets such as backup/restore flows.
 The entire set of values is loaded into memory and serialized across
@@ -422,6 +455,9 @@ getValue(options: GetValueOptions) => Promise<GetValueResult>
 Get the value associated with a key.
 
 The vault must be unlocked before calling this method.
+
+Rejects with `DECRYPTION_FAILED` if the stored value cannot be
+decrypted.
 
 | Param         | Type                                                        |
 | ------------- | ----------------------------------------------------------- |
@@ -475,6 +511,10 @@ Must be called once per session before any other method.
 The `type` and `invalidateOnBiometricEnrollment` options are baked
 into the encryption key at vault creation and cannot be changed
 afterwards; values passed for existing vaults are silently ignored.
+
+Rejects with `KEY_INVALIDATED` if the encryption key is gone while
+encrypted values are still stored. No new key is created in that case,
+because it could not decrypt them.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -598,6 +638,10 @@ Unlock the vault.
 Prompts the user for biometric authentication or device credential,
 depending on the vault's `type`.
 
+Rejects with `KEY_INVALIDATED` if the encryption key can no longer be
+used, for example because the device's biometric set changed or the key
+was lost while encrypted values are still stored.
+
 | Param         | Type                                                    |
 | ------------- | ------------------------------------------------------- |
 | **`options`** | <code><a href="#unlockoptions">UnlockOptions</a></code> |
@@ -693,9 +737,10 @@ Remove all listeners registered for this plugin.
 
 #### ExportDataResult
 
-| Prop       | Type                                    | Description                 | Since |
-| ---------- | --------------------------------------- | --------------------------- | ----- |
-| **`data`** | <code>{ [key: string]: string; }</code> | The exported key/value map. | 0.1.0 |
+| Prop               | Type                                    | Description                                                                          | Since |
+| ------------------ | --------------------------------------- | ------------------------------------------------------------------------------------ | ----- |
+| **`data`**         | <code>{ [key: string]: string; }</code> | The exported key/value map.                                                          | 0.1.0 |
+| **`skippedCount`** | <code>number</code>                     | The number of stored values that could not be decrypted and were therefore left out. | 0.2.0 |
 
 
 #### ExportDataOptions
@@ -744,16 +789,16 @@ Remove all listeners registered for this plugin.
 
 #### InitializeOptions
 
-| Prop                                  | Type                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Default                | Since |
-| ------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
-| **`cancelButtonText`**                | <code>string</code>                             | The text displayed on the cancel button of the authentication prompt. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |                        | 0.1.0 |
-| **`invalidateOnBiometricEnrollment`** | <code>boolean</code>                            | Whether the encryption key should be invalidated when the device's biometric set changes (e.g., a new fingerprint or face is enrolled). If `true` and the biometric set changes, the next `unlock()` call rejects with `KEY_INVALIDATED`. The app must call `destroy()` and reinitialize. Per-platform behavior: - **Android**: when biometric is involved, invalidates the entire encryption key. For `BIOMETRIC_OR_DEVICE_PASSCODE` vaults, the device passcode path is also rendered unusable. - **iOS**: when biometric is involved, invalidates the biometric branch only. For `BIOMETRIC_OR_DEVICE_PASSCODE` vaults, the user can still unlock with the device passcode. Only applies to vault types that use biometric authentication. **Note**: This option is baked into the encryption key at vault creation time. The value passed when reinitializing an existing vault is silently ignored. | <code>false</code>     | 0.1.0 |
-| **`iosFallbackButtonText`**           | <code>string</code>                             | The text displayed on the fallback button of the authentication prompt. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                        | 0.1.0 |
-| **`lockAfterBackgrounded`**           | <code>number</code>                             | The duration in milliseconds the app must be backgrounded before the vault is automatically locked. If omitted, the vault is never automatically locked. The duration is measured with a monotonic clock, so changing the device time does not affect it. It is evaluated when the app returns to the foreground.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                        | 0.1.0 |
-| **`subtitle`**                        | <code>string</code>                             | The subtitle of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |                        | 0.1.0 |
-| **`title`**                           | <code>string</code>                             | The title of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |                        | 0.1.0 |
-| **`type`**                            | <code><a href="#vaulttype">VaultType</a></code> | The type of the vault.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |                        | 0.1.0 |
-| **`vaultId`**                         | <code>string</code>                             | The identifier of the vault.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | <code>'default'</code> | 0.1.0 |
+| Prop                                  | Type                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Default                | Since |
+| ------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
+| **`cancelButtonText`**                | <code>string</code>                             | The text displayed on the cancel button of the authentication prompt. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |                        | 0.1.0 |
+| **`invalidateOnBiometricEnrollment`** | <code>boolean</code>                            | Whether the encryption key should be invalidated when the device's biometric set changes (e.g., a new fingerprint or face is enrolled). If `true` and the biometric set changes, the next `unlock()` call rejects with `KEY_INVALIDATED`. The app must call `destroy()` and reinitialize. Per-platform behavior: - **Android**: when biometric is involved, invalidates the entire encryption key. For `BIOMETRIC_OR_DEVICE_PASSCODE` vaults, the device passcode path is also rendered unusable. - **iOS**: when biometric is involved, invalidates the biometric branch only. For `BIOMETRIC_OR_DEVICE_PASSCODE` vaults, the user can still unlock with the device passcode. Only applies to vault types that use biometric authentication. This option only controls whether adding or changing biometric enrollments invalidates the key. On **iOS**, resetting Face ID or Touch ID invalidates a `BIOMETRIC` vault regardless of this option, and the key does not come back after re-enrollment; `unlock(...)` and `initialize(...)` then reject with `KEY_INVALIDATED`. On **Android**, the key survives the removal of all biometrics and `unlock(...)` rejects with `AUTHENTICATOR_UNAVAILABLE` until a biometric is enrolled again. **Note**: This option is baked into the encryption key at vault creation time. The value passed when reinitializing an existing vault is silently ignored. | <code>false</code>     | 0.1.0 |
+| **`iosFallbackButtonText`**           | <code>string</code>                             | The text displayed on the fallback button of the authentication prompt. Only available on iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                        | 0.1.0 |
+| **`lockAfterBackgrounded`**           | <code>number</code>                             | The duration in milliseconds the app must be backgrounded before the vault is automatically locked. If omitted, the vault is never automatically locked. The duration is measured with a monotonic clock, so changing the device time does not affect it. It is evaluated when the app returns to the foreground.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                        | 0.1.0 |
+| **`subtitle`**                        | <code>string</code>                             | The subtitle of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |                        | 0.1.0 |
+| **`title`**                           | <code>string</code>                             | The title of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |                        | 0.1.0 |
+| **`type`**                            | <code><a href="#vaulttype">VaultType</a></code> | The type of the vault.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |                        | 0.1.0 |
+| **`vaultId`**                         | <code>string</code>                             | The identifier of the vault.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | <code>'default'</code> | 0.1.0 |
 
 
 #### IsEmptyResult
@@ -866,6 +911,27 @@ On Android, the encryption key is stored in the [Android Keystore](https://devel
 
 The encryption key is never included in cloud backups on either platform. On Android, the encrypted values in `SharedPreferences` are part of [Android Auto Backup](https://developer.android.com/identity/data/autobackup) by default, but the backed-up ciphertext is unusable on another device without the Keystore key; to exclude the preference files (`capawesome_capacitor_vault_key_<vaultId>.xml` and `capawesome_capacitor_vault_data_<vaultId>.xml`) from backup, see the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles). On iOS, the Keychain items use the `*ThisDeviceOnly` accessibility classes, so they are never synced to iCloud Keychain or included in device backups.
 
+### Is the data removed when the app is uninstalled?
+
+On Android, yes: both `SharedPreferences` files and the Keystore key of every vault are deleted. On iOS, no: Keychain items survive an uninstall and are available again after a reinstall with the same bundle identifier. Apple does not document or guarantee this behavior.
+
+To start with empty vaults after a reinstall, keep a marker in `UserDefaults`, which is removed with the app, and call `destroy()` for every vault your app uses on the first launch when it is missing:
+
+```typescript
+import { Preferences } from '@capacitor/preferences';
+import { Vault } from '@capawesome-team/capacitor-vault';
+
+const destroyAfterReinstall = async () => {
+  const { value } = await Preferences.get({ key: 'installed' });
+  if (value === null) {
+    for (const vaultId of ['default', 'settings']) {
+      await Vault.destroy({ vaultId });
+    }
+    await Preferences.set({ key: 'installed', value: 'true' });
+  }
+};
+```
+
 ### When should I use Vault instead of Secure Preferences or SQLite?
 
 All three plugins protect data on the device, but they target different problems:
@@ -903,6 +969,12 @@ The stored data needs to be migrated at runtime while **both** plugins are still
 ### What happens when the user enrolls a new fingerprint or face?
 
 If the vault was created with the `invalidateOnBiometricEnrollment` option set to `true`, the encryption key is invalidated when the device's biometric set changes, and the next `unlock()` call rejects with the `KEY_INVALIDATED` error code. The app must then call `destroy()` and reinitialize the vault. On Android, the entire encryption key is invalidated, while on iOS only the biometric branch is invalidated, so users of `BIOMETRIC_OR_DEVICE_PASSCODE` vaults can still unlock with the device passcode. Note that this option is baked into the encryption key at vault creation time and cannot be changed afterwards.
+
+The `invalidateOnBiometricEnrollment` option only controls whether adding or changing biometric enrollments invalidates the key. Resetting the biometric enrollment entirely is a separate case: on iOS, removing all enrolled biometrics invalidates a `BIOMETRIC` vault regardless of this option, and the key does not come back after re-enrollment, so `unlock()` and `initialize()` reject with the `KEY_INVALIDATED` error code. On Android, the key survives the removal of all biometrics and `unlock()` rejects with `AUTHENTICATOR_UNAVAILABLE` until a biometric is enrolled again.
+
+The same error code is reported whenever the encryption key is gone while encrypted values are still stored, for example after the device passcode was removed on iOS. `initialize()` and `unlock()` reject in that case instead of creating a new key, because a new key could not decrypt the existing values. The recovery is always the same: call `destroy()` and initialize the vault again.
+
+On iOS, each vault consists of two kinds of Keychain items: the key item holding the encryption key and one data item per stored value.
 
 ### Can I use this plugin on the Web?
 

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.12
+
+### Patch Changes
+
+- [`fb867cc328d7e6287a87a05f62c207141cbb4b5c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/fb867cc328d7e6287a87a05f62c207141cbb4b5c) ([#559](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/559)): fix(ios): omit `verificationResult` for unverified transactions, exclude them from `getCurrentTransactions()` and reject `purchaseProduct(...)` with `VERIFICATION_FAILED`
+
 ## 0.3.11
 
 ### Patch Changes

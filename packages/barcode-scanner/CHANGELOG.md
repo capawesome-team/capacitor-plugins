@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`c2b1f69295ae237d9845c0af3a7c12c765acedf7`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c2b1f69295ae237d9845c0af3a7c12c765acedf7) ([#574](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/574)): fix(ios): fix a crash when the scan is stopped while the capture session is still shutting down
+
 ## 0.1.2
 
 ### Patch Changes

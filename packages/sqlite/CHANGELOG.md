@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.16
+
+### Patch Changes
+
+- [`3361fd91a5a70a83cb11e7a584b8b758a2a1061d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3361fd91a5a70a83cb11e7a584b8b758a2a1061d) ([#576](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/576)): fix(electron): remove a database from the registry even when closing it fails and close every database in `closeAll()` before rethrowing the first error
+
+- [`06213a64eddc49b39f89f78d6fc0a853816d9a26`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/06213a64eddc49b39f89f78d6fc0a853816d9a26) ([#575](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/575)): feat(ios): add the `BundledSQLite` SPM package trait to bundle a current SQLite version instead of the system-provided one
+
+- [`3803f402577ad74ad993ce0abc1ddee125e58328`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3803f402577ad74ad993ce0abc1ddee125e58328): fix: close the database handle when `open(...)` fails on Electron and Web
+
+- [`ced2c8a61897b61dddd1ecd11cabb4cd4ce1f017`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ced2c8a61897b61dddd1ecd11cabb4cd4ce1f017) ([#568](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/568)): fix: reject a `version` that is not an integer between 1 and 2147483647 on Electron and Web
+
 ## 0.3.15
 
 ### Patch Changes
