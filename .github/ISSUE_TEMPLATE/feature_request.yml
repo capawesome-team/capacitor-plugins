@@ -90,6 +90,7 @@ body:
         - label: NFC
         - label: Node.js
         - label: OAuth
+        - label: Option Picker
         - label: Passkeys
         - label: Password Autofill
         - label: PDF Annotator

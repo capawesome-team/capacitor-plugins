@@ -240,6 +240,7 @@ No, this plugin is only available on Android and iOS, where it uses platform-spe
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
 - [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
 - [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's preferred locales to localize the picker.
+- [Option Picker](https://capawesome.io/docs/sdks/capacitor/option-picker/): Let the user pick an option from a list with a native picker.
 
 ## Credits
 
