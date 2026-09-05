@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`27a093c9178b21b5afe07639839d49bea333ea99`](https://github.com/capawesome-team/capacitor-plugins/commit/27a093c9178b21b5afe07639839d49bea333ea99) ([#1041](https://github.com/capawesome-team/capacitor-plugins/pull/1041)): feat(ios): add `convertRawToJpeg(...)` method
+
+- [`0529e06aa3f9f2d06578c7bce3a494386db3dd0b`](https://github.com/capawesome-team/capacitor-plugins/commit/0529e06aa3f9f2d06578c7bce3a494386db3dd0b) ([#1040](https://github.com/capawesome-team/capacitor-plugins/pull/1040)): feat(android, ios): add `webPath` property to picked files
+
+### Patch Changes
+
+- [`c8006a2493a50d0b1bdac9539e3a215fdb27e028`](https://github.com/capawesome-team/capacitor-plugins/commit/c8006a2493a50d0b1bdac9539e3a215fdb27e028) ([#1039](https://github.com/capawesome-team/capacitor-plugins/pull/1039)): fix(android): apply the `types` option in `pickFiles(...)` regardless of `limit`
+
 ## 8.0.6
 
 ### Patch Changes

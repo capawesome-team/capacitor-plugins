@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-option-picker",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin that lets the user pick an option from a list using a native picker on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",

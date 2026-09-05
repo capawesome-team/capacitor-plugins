@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.5
+
+### Patch Changes
+
+- [`1a1b5e3cd24d8e3a924250411356ae7b2cee9bbf`](https://github.com/capawesome-team/capacitor-plugins/commit/1a1b5e3cd24d8e3a924250411356ae7b2cee9bbf) ([#1042](https://github.com/capawesome-team/capacitor-plugins/pull/1042)): fix(android): dismiss the picker when the system language, font scale or layout direction changes to avoid an unresponsive dialog
+
 ## 8.1.4
 
 ### Patch Changes
