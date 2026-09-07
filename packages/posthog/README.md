@@ -901,6 +901,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [Crisp](https://capawesome.io/docs/sdks/capacitor/crisp/): Unofficial Capacitor plugin for the Crisp live chat and customer support platform.
 - [Formbricks](https://capawesome.io/docs/sdks/capacitor/formbricks/): Unofficial Capacitor plugin for Formbricks to run in-app surveys.
 - [Grafana Faro](https://capawesome.io/docs/sdks/capacitor/grafana-faro/): Unofficial Capacitor plugin for Grafana Faro to monitor your app.
+- [TikTok App Events](https://capawesome.io/docs/sdks/capacitor/tiktok-app-events/): Unofficial Capacitor plugin for the TikTok App Events SDK.
 
 ## Newsletter
 

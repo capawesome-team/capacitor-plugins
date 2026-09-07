@@ -69,7 +69,7 @@ npx cap sync
 This plugin requires a [Microsoft Intune](https://www.microsoft.com/en-us/security/business/microsoft-intune) tenant with Intune licenses and an app registration in [Microsoft Entra ID](https://entra.microsoft.com/). Create the app registration in the Microsoft Entra admin center, note its **Application (client) ID** and configure the platform-specific redirect URIs (see below). The `acquireToken(...)` scopes you request must be exposed or granted on this app registration.
 
 > [!IMPORTANT]
-> The Intune App SDKs are developed and licensed by Microsoft (see [Licensing](#licensing)). This plugin declares them as dependencies and downloads them from Microsoft's official repositories at build or install time. It does not bundle or modify them.
+> The Intune App SDKs are developed and licensed by Microsoft (see [Third-Party Notices](#third-party-notices)). This plugin declares them as dependencies and downloads them from Microsoft's official repositories at build or install time. It does not bundle or modify them.
 
 ### Android
 
@@ -1020,12 +1020,6 @@ Exercising Mobile Application Management (MAM) requires infrastructure that cann
 
 Without a tenant, the plugin compiles and loads, but enrollment fails with `AccountNotLicensed`-style errors and no policy is applied. Building this plugin (e.g. via `npm run verify`) only proves that the code compiles — it does not exercise any MAM functionality.
 
-## Licensing
-
-The Microsoft Intune App SDKs for Android and iOS are proprietary software, licensed by Microsoft under the [Microsoft License Terms Intune App SDK](https://github.com/msintuneappsdk/ms-intune-app-sdk-ios/blob/master/Microsoft%20License%20Terms%20Intune%20App%20SDK%20for%20iOS.pdf). This plugin does **not** bundle or modify the Intune App SDKs — it declares them as dependencies and downloads them from Microsoft's official repositories at build or install time. By building an app with this plugin, you accept Microsoft's license terms for the Intune App SDK. The Microsoft Authentication Library (MSAL) is licensed under the MIT license. Using the plugin requires a Microsoft Intune tenant with appropriate licenses. The MIT license of this plugin covers the wrapper code only, not the Microsoft SDKs.
-
-Note that Microsoft's license terms also place obligations on **your app** as the distributor of the Intune App SDK binaries — among other things regarding your app's own functionality and copyright notice, license compatibility, and indemnification. Review the license terms linked above before shipping your app.
-
 ## FAQ
 
 ### How is this plugin different from other similar plugins?
@@ -1069,5 +1063,11 @@ See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/mai
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/intune/LICENSE).
+
+## Third-Party Notices
+
+The Microsoft Intune App SDKs for Android and iOS are proprietary software, licensed by Microsoft under the [Microsoft License Terms Intune App SDK](https://github.com/msintuneappsdk/ms-intune-app-sdk-ios/blob/master/Microsoft%20License%20Terms%20Intune%20App%20SDK%20for%20iOS.pdf). This plugin does **not** bundle or modify the Intune App SDKs — it declares them as dependencies and downloads them from Microsoft's official repositories at build or install time. By building an app with this plugin, you accept Microsoft's license terms for the Intune App SDK. The Microsoft Authentication Library (MSAL) is licensed under the MIT license. Using the plugin requires a Microsoft Intune tenant with appropriate licenses. The MIT license of this plugin covers the wrapper code only, not the Microsoft SDKs.
+
+Note that Microsoft's license terms also place obligations on **your app** as the distributor of the Intune App SDK binaries — among other things regarding your app's own functionality and copyright notice, license compatibility, and indemnification. Review the license terms linked above before shipping your app.
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Microsoft Corporation or any of its affiliates or subsidiaries. "Microsoft" and "Microsoft Intune" are trademarks of the Microsoft group of companies.
