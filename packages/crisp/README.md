@@ -931,10 +931,6 @@ The Crisp Android and iOS SDKs do not provide a locale override, so the `setLoca
 
 The following features of the Crisp SDKs are intentionally not part of this plugin's initial release: unread message count, bot scenarios, and audio/video calls. [Open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) if you need any of them.
 
-## Licensing
-
-The Crisp Android and iOS SDKs are proprietary, closed-source binaries provided by Crisp IM SAS. This plugin only declares them as dependencies (via Maven, CocoaPods, and Swift Package Manager) and does not bundle or modify them. Using the plugin requires an active Crisp account and website ID. The MIT license of this plugin covers the wrapper code only, not the Crisp SDKs.
-
 ## FAQ
 
 ### Do I need a Crisp account to use this plugin?
@@ -974,5 +970,9 @@ See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/mai
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/crisp/LICENSE).
+
+## Third-Party Notices
+
+The Crisp Android and iOS SDKs are proprietary, closed-source binaries provided by Crisp IM SAS. This plugin only declares them as dependencies (via Maven, CocoaPods, and Swift Package Manager) and does not bundle or modify them. Using the plugin requires an active Crisp account and website ID. The MIT license of this plugin covers the wrapper code only, not the Crisp SDKs.
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Crisp IM SAS or any of its affiliates or subsidiaries. "Crisp" is a trademark of Crisp IM SAS.

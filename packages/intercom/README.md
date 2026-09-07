@@ -891,10 +891,6 @@ Additional notes:
 - The `messengerShown` and `messengerHidden` events are not available on Android because the Intercom Android SDK does not expose a window visibility hook.
 - `setBottomPadding(...)` uses pixels on Android and points on iOS, matching the respective native SDK.
 
-## Licensing
-
-The Intercom Android and iOS SDKs are licensed under the Apache License 2.0 and are distributed via Maven Central, CocoaPods, and Swift Package Manager. The web SDK is licensed under the MIT license. This plugin only declares these SDKs as dependencies and does not bundle or modify them. Using the plugin requires an active Intercom account. The MIT license of this plugin covers the wrapper code only, not the Intercom SDKs.
-
 ## FAQ
 
 ### Do I need an Intercom account to use this plugin?
@@ -934,5 +930,9 @@ See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/mai
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/intercom/LICENSE).
+
+## Third-Party Notices
+
+The Intercom Android and iOS SDKs are licensed under the Apache License 2.0 and are distributed via Maven Central, CocoaPods, and Swift Package Manager. The web SDK is licensed under the MIT license. This plugin only declares these SDKs as dependencies and does not bundle or modify them. Using the plugin requires an active Intercom account. The MIT license of this plugin covers the wrapper code only, not the Intercom SDKs.
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by Intercom Inc. or any of its affiliates or subsidiaries. "Intercom" is a trademark of Intercom Inc.
