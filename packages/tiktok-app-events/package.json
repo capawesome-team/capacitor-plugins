@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-tiktok-app-events",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Unofficial Capacitor plugin for the TikTok App Events SDK on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
