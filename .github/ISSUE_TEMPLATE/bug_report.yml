@@ -129,6 +129,7 @@ body:
         - label: Text Interaction
         - label: Text Zoom
         - label: Thermal State
+        - label: TikTok App Events
         - label: Toast
         - label: Torch
         - label: Vault
