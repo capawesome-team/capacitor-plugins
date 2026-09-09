@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android)!: acknowledge one-time purchases in `finishTransaction(...)` instead of consuming them and add the `isConsumable` option for consumables
+
+### Patch Changes
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android): reject `finishTransaction(...)` with `PENDING` for a purchase that is still pending
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android): fall back to the purchase token as `Transaction.id` when Google Play assigns no order ID and accept the purchase token in `finishTransaction(...)`
+
 ## 0.3.12
 
 ### Patch Changes
