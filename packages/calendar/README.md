@@ -926,11 +926,11 @@ Remove all listeners for this plugin.
 
 #### GetEventsOptions
 
-| Prop             | Type                | Description                                                                                                       | Since |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| **`calendarId`** | <code>string</code> | The identifier of the calendar to get the events from. If not provided, the events of all calendars are returned. | 0.0.1 |
-| **`from`**       | <code>number</code> | The start of the time range as a timestamp in milliseconds.                                                       | 0.0.1 |
-| **`to`**         | <code>number</code> | The end of the time range as a timestamp in milliseconds.                                                         | 0.0.1 |
+| Prop             | Type                | Description                                                                                                           | Since |
+| ---------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`calendarId`** | <code>string</code> | The identifier of the calendar to get the events from. If not provided, the events of all calendars are returned.     | 0.0.1 |
+| **`from`**       | <code>number</code> | The start of the time range as a timestamp in milliseconds.                                                           | 0.0.1 |
+| **`to`**         | <code>number</code> | The end of the time range as a timestamp in milliseconds. On iOS, only the first 100 years after `from` are searched. | 0.0.1 |
 
 
 #### OpenCalendarOptions
