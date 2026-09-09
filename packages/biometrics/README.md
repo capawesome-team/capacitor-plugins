@@ -249,6 +249,8 @@ using their biometrics (e.g., fingerprint, face recognition). If the user
 successfully authenticates, the promise resolves. If the user cancels
 the authentication or if an error occurs, the promise rejects.
 
+Rejects if another authentication is already in progress.
+
 It is recommended to check if biometrics is available and enrolled
 using the `isAvailable()` and `isEnrolled()` methods before calling
 this method.
