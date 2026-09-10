@@ -212,9 +212,9 @@ Only available on Android and iOS.
 
 #### ListResult
 
-| Prop        | Type                  | Description                         | Since |
-| ----------- | --------------------- | ----------------------------------- | ----- |
-| **`files`** | <code>string[]</code> | The list of files in the directory. | 7.0.0 |
+| Prop        | Type                  | Description                                                                                    | Since |
+| ----------- | --------------------- | ---------------------------------------------------------------------------------------------- | ----- |
+| **`files`** | <code>string[]</code> | The names of the files in the directory. The names are relative to the `path` that was listed. | 7.0.0 |
 
 
 #### ListOptions
