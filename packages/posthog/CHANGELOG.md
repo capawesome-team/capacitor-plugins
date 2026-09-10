@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.6.2
+
+### Patch Changes
+
+- [`30775ca1aec066ddba0efd8ca980cb8591b37963`](https://github.com/capawesome-team/capacitor-plugins/commit/30775ca1aec066ddba0efd8ca980cb8591b37963) ([#1056](https://github.com/capawesome-team/capacitor-plugins/pull/1056)): fix: reference the SDK by its real global name in the IIFE bundle
+
 ## 8.6.1
 
 ### Patch Changes

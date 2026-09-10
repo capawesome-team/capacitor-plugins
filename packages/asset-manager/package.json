@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-asset-manager",
-  "version": "8.0.3",
+  "version": "8.0.4",
   "description": "Capacitor plugin to access native asset files on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
