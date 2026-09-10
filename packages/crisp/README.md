@@ -61,7 +61,7 @@ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `
 If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
-npm install @capawesome/capacitor-crisp
+npm install @capawesome/capacitor-crisp crisp-sdk-web
 npx cap sync
 ```
 

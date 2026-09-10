@@ -69,7 +69,7 @@ Use the `capacitor-plugins` skill from `capawesome-team/skills` to install the `
 If you prefer **Manual Setup**, install the plugin by running the following commands and follow the platform-specific instructions below:
 
 ```bash
-npm install @capawesome/capacitor-maplibre
+npm install @capawesome/capacitor-maplibre maplibre-gl
 npx cap sync
 ```
 
@@ -109,13 +109,7 @@ Without this key, `checkPermissions()`, `requestPermissions()` and `enableUserLo
 
 ### Web
 
-The web implementation uses [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/), which is not bundled with the plugin, so you must install it yourself:
-
-```bash
-npm i maplibre-gl
-```
-
-Its stylesheet is not bundled either, so you must import it once in your app:
+The web implementation uses [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/), which is not bundled with the plugin. Its stylesheet is not bundled either, so you must import it once in your app:
 
 ```typescript
 import 'maplibre-gl/dist/maplibre-gl.css';
