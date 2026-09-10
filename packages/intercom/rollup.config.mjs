@@ -4,9 +4,10 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorFacebookSignIn',
+      name: 'capacitorIntercom',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        '@intercom/messenger-js-sdk': 'intercomMessengerJsSdk',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', '@intercom/messenger-js-sdk'],
 };

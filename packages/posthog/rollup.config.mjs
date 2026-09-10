@@ -7,6 +7,7 @@ export default {
       name: 'capacitorPosthog',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        'posthog-js': 'posthog',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', 'posthog-js'],
 };
