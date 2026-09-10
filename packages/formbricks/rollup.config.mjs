@@ -7,6 +7,7 @@ export default {
       name: 'capacitorFormbricks',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        '@formbricks/js': 'formbricks',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', '@formbricks/js'],
 };

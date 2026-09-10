@@ -53,14 +53,8 @@ Then use the following prompt:
 If you prefer **Manual Setup**, install the plugin by running the following commands:
 
 ```bash
-npm install @capawesome/capacitor-screenshot
+npm install @capawesome/capacitor-screenshot html2canvas
 npx cap sync
-```
-
-If you are using the Web platform, you must also install the `html2canvas` package:
-
-```bash
-npm i html2canvas
 ```
 
 ## Usage

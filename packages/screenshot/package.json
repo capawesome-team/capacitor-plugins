@@ -86,6 +86,11 @@
     "@capacitor/core": ">=8.0.0",
     "html2canvas": "^1.4.1"
   },
+  "peerDependenciesMeta": {
+    "html2canvas": {
+      "optional": true
+    }
+  },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
   },

@@ -4,9 +4,10 @@ export default {
     {
       file: 'dist/plugin.js',
       format: 'iife',
-      name: 'capacitorFacebookSignIn',
+      name: 'capacitorCrisp',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        'crisp-sdk-web': 'crispSdkWeb',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', 'crisp-sdk-web'],
 };

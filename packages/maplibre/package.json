@@ -61,9 +61,6 @@
     "ios:spm:install": "cd ios && swift package resolve && cd ..",
     "prepublishOnly": "npm run build"
   },
-  "dependencies": {
-    "maplibre-gl": "6.4.1"
-  },
   "devDependencies": {
     "@capacitor/android": "8.0.0",
     "@capacitor/cli": "8.4.2",
@@ -72,6 +69,7 @@
     "@capacitor/ios": "8.0.0",
     "@ionic/eslint-config": "0.4.0",
     "eslint": "8.57.0",
+    "maplibre-gl": "6.4.1",
     "prettier-plugin-java": "2.9.7",
     "rimraf": "6.1.2",
     "rollup": "4.62.3",
@@ -79,7 +77,13 @@
     "typescript": "5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": ">=8.0.0",
+    "maplibre-gl": "^6.4.1"
+  },
+  "peerDependenciesMeta": {
+    "maplibre-gl": {
+      "optional": true
+    }
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
