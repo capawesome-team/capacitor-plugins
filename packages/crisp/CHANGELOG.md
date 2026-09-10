@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`30775ca1aec066ddba0efd8ca980cb8591b37963`](https://github.com/capawesome-team/capacitor-plugins/commit/30775ca1aec066ddba0efd8ca980cb8591b37963) ([#1056](https://github.com/capawesome-team/capacitor-plugins/pull/1056)): fix: use the correct global name for the IIFE bundle
+
 ## 0.1.2
 
 ### Patch Changes

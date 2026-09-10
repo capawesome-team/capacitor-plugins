@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`40e38769169b394dbe1cd88c1f965f4f90278710`](https://github.com/capawesome-team/capacitor-plugins/commit/40e38769169b394dbe1cd88c1f965f4f90278710) ([#1053](https://github.com/capawesome-team/capacitor-plugins/pull/1053)): fix(ios): return the file names instead of the full paths from `list(...)`
+
 ## 8.0.3
 
 ### Patch Changes
