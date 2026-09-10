@@ -7,6 +7,7 @@ export default {
       name: 'capacitorScreenshot',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        html2canvas: 'html2canvas',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +19,5 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: ['@capacitor/core', 'html2canvas'],
 };
