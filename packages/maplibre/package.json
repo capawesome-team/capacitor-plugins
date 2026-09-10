@@ -62,7 +62,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "maplibre-gl": "6.3.0"
+    "maplibre-gl": "6.4.1"
   },
   "devDependencies": {
     "@capacitor/android": "8.0.0",
