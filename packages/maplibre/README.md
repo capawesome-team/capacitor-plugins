@@ -109,13 +109,21 @@ Without this key, `checkPermissions()`, `requestPermissions()` and `enableUserLo
 
 ### Web
 
-The web implementation uses [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/), which is installed automatically as a dependency of the plugin. Its stylesheet is not bundled with the plugin, so you must import it once in your app:
+The web implementation uses [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/), which is not bundled with the plugin, so you must install it yourself:
+
+```bash
+npm i maplibre-gl
+```
+
+Its stylesheet is not bundled either, so you must import it once in your app:
 
 ```typescript
 import 'maplibre-gl/dist/maplibre-gl.css';
 ```
 
 Without the stylesheet, the map canvas and the markers are mispositioned.
+
+The `maplibre-gl` package is only required on the Web platform. On Android and iOS, the map is rendered by the native MapLibre SDKs.
 
 ## Configuration
 
