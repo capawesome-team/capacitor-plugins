@@ -28,6 +28,10 @@ export class SuperwallWeb extends WebPlugin implements SuperwallPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
+  async restorePurchases(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   async getPresentationResult(
     _options: GetPresentationResultOptions,
   ): Promise<GetPresentationResultResult> {

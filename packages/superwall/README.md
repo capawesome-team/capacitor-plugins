@@ -275,6 +275,7 @@ const logout = async () => {
 * [`configure(...)`](#configure)
 * [`register(...)`](#register)
 * [`dismiss()`](#dismiss)
+* [`restorePurchases()`](#restorepurchases)
 * [`getPresentationResult(...)`](#getpresentationresult)
 * [`identify(...)`](#identify)
 * [`reset()`](#reset)
@@ -359,6 +360,25 @@ If no paywall is presented, the method resolves immediately.
 Only available on Android and iOS.
 
 **Since:** 0.1.3
+
+--------------------
+
+
+### restorePurchases()
+
+```typescript
+restorePurchases() => Promise<void>
+```
+
+Restore purchases made by the user.
+
+Rejects if the SDK has not been configured or the restore fails.
+A successful restore does not necessarily mean the user has an active subscription.
+Use `getSubscriptionStatus()` to check the subscription status after restoring.
+
+Only available on Android and iOS.
+
+**Since:** 0.2.0
 
 --------------------
 

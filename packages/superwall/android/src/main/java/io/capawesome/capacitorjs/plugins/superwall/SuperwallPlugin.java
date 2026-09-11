@@ -105,6 +105,28 @@ public class SuperwallPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void restorePurchases(PluginCall call) {
+        try {
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(@NonNull Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+
+            assert implementation != null;
+            implementation.restorePurchases(callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void getPresentationResult(PluginCall call) {
         try {
             GetPresentationResultOptions options = new GetPresentationResultOptions(call);
