@@ -102,7 +102,7 @@ if (notifications !== 'granted') {
 }
 ```
 
-The foreground service notification itself is shown while a transfer runs — Android requires a foreground service to have one. On Android 12+, a transfer that starts while the app is in the background (e.g. after waiting for an unmetered network) runs without the foreground service, since Android does not allow starting one from the background. The per-transfer progress notification is opt-in and off by default:
+The foreground service notification itself is always shown while a transfer runs — Android requires a foreground service to have one. The per-transfer progress notification is opt-in and off by default:
 
 ```typescript
 await FileTransfer.startDownload({
@@ -443,10 +443,7 @@ without prompting since no notification permission is required.
 resumeTransferById(options: ResumeTransferByIdOptions) => Promise<void>
 ```
 
-Resume a paused or failed transfer.
-
-Only transfers in the `paused` or `failed` state are resumed. For a transfer
-in any other state, this resolves without effect.
+Resume a paused transfer.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
@@ -674,18 +671,14 @@ Remove all listeners for this plugin.
 
 The configuration of the Android foreground service notification.
 
-On **Android 12+**, a transfer that starts while the app is in the background
-(e.g. after waiting for an unmetered network) runs without the foreground service
-and its notification, since Android does not allow starting one from the background.
-
 Only available on Android.
 
-| Prop              | Type                 | Description                                                                                                                                                                                                                                   | Default                      | Since |
-| ----------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----- |
-| **`title`**       | <code>string</code>  | The title of the notification.                                                                                                                                                                                                                |                              | 0.0.1 |
-| **`progress`**    | <code>boolean</code> | Whether to show a separate notification with a progress bar for this transfer. The foreground service notification is shown while a transfer runs, because Android requires it. This option only adds the per-transfer progress notification. | <code>false</code>           | 0.0.1 |
-| **`text`**        | <code>string</code>  | The text of the notification.                                                                                                                                                                                                                 |                              | 0.0.1 |
-| **`channelName`** | <code>string</code>  | The name of the notification channel.                                                                                                                                                                                                         | <code>'File Transfer'</code> | 0.0.1 |
+| Prop              | Type                 | Description                                                                                                                                                                                                                                          | Default                      | Since |
+| ----------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----- |
+| **`title`**       | <code>string</code>  | The title of the notification.                                                                                                                                                                                                                       |                              | 0.0.1 |
+| **`progress`**    | <code>boolean</code> | Whether to show a separate notification with a progress bar for this transfer. The foreground service notification is always shown while a transfer runs, because Android requires it. This option only adds the per-transfer progress notification. | <code>false</code>           | 0.0.1 |
+| **`text`**        | <code>string</code>  | The text of the notification.                                                                                                                                                                                                                        |                              | 0.0.1 |
+| **`channelName`** | <code>string</code>  | The name of the notification channel.                                                                                                                                                                                                                | <code>'File Transfer'</code> | 0.0.1 |
 
 
 #### StartUploadResult
@@ -804,12 +797,12 @@ Transfers are asynchronous: `startDownload(...)` and `startUpload(...)` resolve 
 
 Yes. On Android, transfers keep running in a `dataSync` foreground service, and on iOS, in a background `URLSession`. The following table summarizes what happens to a transfer in each app state:
 
-| App State                     | Android                                                 | iOS                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Foreground                    | Runs.                                                   | Runs.                                                                                                                                                 |
-| Backgrounded                  | Runs (via the `dataSync` foreground service).           | Runs (via the background `URLSession`).                                                                                                               |
-| Killed by the OS (low memory) | Interrupted; restored as `failed`, downloads resumable. | Continued by the OS and delivered on relaunch.                                                                                                        |
-| Force-quit by the user        | Interrupted; restored as `failed`, downloads resumable. | Canceled by the OS (documented OS behavior); on relaunch retried when `maxRetries > 0`, otherwise restored as `failed` with a `transferFailed` event. |
+| App State                     | Android                                                 | iOS                                            |
+| ----------------------------- | ------------------------------------------------------- | ---------------------------------------------- |
+| Foreground                    | Runs.                                                   | Runs.                                          |
+| Backgrounded                  | Runs (via the `dataSync` foreground service).           | Runs (via the background `URLSession`).        |
+| Killed by the OS (low memory) | Interrupted; restored as `failed`, downloads resumable. | Continued by the OS and delivered on relaunch. |
+| Force-quit by the user        | Interrupted; restored as `failed`, downloads resumable. | Canceled by the OS (documented OS behavior).   |
 
 Resuming an interrupted download requires the server to support the HTTP `Range` header.
 

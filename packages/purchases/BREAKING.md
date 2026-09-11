@@ -4,14 +4,7 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
-- [Version 0.4.x](#version-04x)
 - [Version 0.3.x](#version-03x)
-
-## Version 0.4.x
-
-### Finish Transaction
-
-On Android, `finishTransaction(...)` now acknowledges one-time purchases instead of consuming them. Apps that sell consumables must pass `isConsumable: true`, otherwise the next purchase of the same product fails because the product is still owned. An already acknowledged consumable can still be consumed later by calling `finishTransaction({ transactionId, isConsumable: true })`.
 
 ## Version 0.3.x
 

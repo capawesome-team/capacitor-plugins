@@ -333,17 +333,17 @@ Remove all listeners for this plugin.
 
 #### Measurement
 
-| Prop                    | Type                | Description                                                                                                                | Since |
-| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`averageActivePace`** | <code>number</code> | The average pace of the user, measured in seconds per meter. Only available on iOS.                                        | 7.0.0 |
-| **`currentCadence`**    | <code>number</code> | The rate at which steps are taken, measured in steps per second. Only available on iOS.                                    | 7.0.0 |
-| **`currentPace`**       | <code>number</code> | The current pace of the user, measured in seconds per meter. Only available on iOS.                                        | 7.0.0 |
-| **`distance`**          | <code>number</code> | The estimated distance traveled by the user, measured in meters. Only available on iOS.                                    | 7.0.0 |
-| **`end`**               | <code>number</code> | The end date of the data in milliseconds since epoch.                                                                      | 7.0.0 |
-| **`floorsAscended`**    | <code>number</code> | The number of floors ascended by the user. Only available on iOS.                                                          | 7.0.0 |
-| **`floorsDescended`**   | <code>number</code> | The number of floors descended by the user. Only available on iOS.                                                         | 7.0.0 |
-| **`numberOfSteps`**     | <code>number</code> | The number of steps taken by the user.                                                                                     | 7.0.0 |
-| **`start`**             | <code>number</code> | The start date of the data in milliseconds since epoch. On **Android**, this is always set to the boot time of the device. | 7.0.0 |
+| Prop                    | Type                | Description                                                                             | Since |
+| ----------------------- | ------------------- | --------------------------------------------------------------------------------------- | ----- |
+| **`averageActivePace`** | <code>number</code> | The average pace of the user, measured in seconds per meter. Only available on iOS.     | 7.0.0 |
+| **`currentCadence`**    | <code>number</code> | The rate at which steps are taken, measured in steps per second. Only available on iOS. | 7.0.0 |
+| **`currentPace`**       | <code>number</code> | The current pace of the user, measured in seconds per meter. Only available on iOS.     | 7.0.0 |
+| **`distance`**          | <code>number</code> | The estimated distance traveled by the user, measured in meters. Only available on iOS. | 7.0.0 |
+| **`end`**               | <code>number</code> | The end date of the data in milliseconds since epoch.                                   | 7.0.0 |
+| **`floorsAscended`**    | <code>number</code> | The number of floors ascended by the user. Only available on iOS.                       | 7.0.0 |
+| **`floorsDescended`**   | <code>number</code> | The number of floors descended by the user. Only available on iOS.                      | 7.0.0 |
+| **`numberOfSteps`**     | <code>number</code> | The number of steps taken by the user.                                                  | 7.0.0 |
+| **`start`**             | <code>number</code> | The start date of the data in milliseconds since epoch.                                 | 7.0.0 |
 
 
 #### GetMeasurementOptions

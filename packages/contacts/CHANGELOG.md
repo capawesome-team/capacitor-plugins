@@ -1,17 +1,5 @@
 # Changelog
 
-## 8.2.0
-
-### Minor Changes
-
-- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): feat(android,ios): support the `multiple` option in `pickContacts(...)`
-
-- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): feat(android): use the system contacts picker in `pickContacts(...)` on Android 17 and newer, which never requires the `READ_CONTACTS` permission
-
-### Patch Changes
-
-- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): fix(ios): resolve `pickContacts(...)` with an empty list when the picker is canceled
-
 ## 8.1.1
 
 ### Patch Changes

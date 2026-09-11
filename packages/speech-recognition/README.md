@@ -688,11 +688,11 @@ Remove all listeners for this plugin.
 
 #### PermissionStatus
 
-| Prop                    | Type                                                        | Description                                                                 | Since |
-| ----------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------- | ----- |
-| **`audioRecording`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for recording audio.                                       | 7.1.0 |
-| **`recordAudio`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition.                                    | 6.0.0 |
-| **`speechRecognition`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition. Only available on Android and iOS. | 7.1.0 |
+| Prop                    | Type                                                        | Description                                                     | Since |
+| ----------------------- | ----------------------------------------------------------- | --------------------------------------------------------------- | ----- |
+| **`audioRecording`**    | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for recording audio.                           | 7.1.0 |
+| **`recordAudio`**       | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition.                        | 6.0.0 |
+| **`speechRecognition`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for speech recognition. Only available on iOS. | 7.1.0 |
 
 
 #### SpeechRecognitionPluginPermission

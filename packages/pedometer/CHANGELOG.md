@@ -1,11 +1,5 @@
 # Changelog
 
-## 8.0.4
-
-### Patch Changes
-
-- [`613afc8c7c0b60728e2357479744eb5357137d15`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/613afc8c7c0b60728e2357479744eb5357137d15) ([#599](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/599)): fix(android): return the device boot time as `start` instead of a value derived from mixed millisecond and nanosecond clocks
-
 ## 8.0.3
 
 ### Patch Changes
