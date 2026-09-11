@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`06c9294f41c81486155602735004040e8fa7ea34`](https://github.com/capawesome-team/capacitor-plugins/commit/06c9294f41c81486155602735004040e8fa7ea34) ([#1058](https://github.com/capawesome-team/capacitor-plugins/pull/1058)): feat: add `restorePurchases()` method for Android and iOS.
+
 ## 0.1.4
 
 ### Patch Changes
