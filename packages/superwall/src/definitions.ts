@@ -44,7 +44,7 @@ export interface SuperwallPlugin {
    *
    * Only available on Android and iOS.
    *
-   * @since 0.2.0
+   * @since 0.1.5
    */
   restorePurchases(): Promise<void>;
   /**

@@ -378,7 +378,7 @@ Use `getSubscriptionStatus()` to check the subscription status after restoring.
 
 Only available on Android and iOS.
 
-**Since:** 0.2.0
+**Since:** 0.1.5
 
 --------------------
 
