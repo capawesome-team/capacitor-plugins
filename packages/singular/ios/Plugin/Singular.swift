@@ -72,10 +72,12 @@ import Singular
             Singular.limitDataSharing(limitDataSharing)
         }
         Singular.setSessionTimeout(Int32(options.sessionTimeout))
-        guard let config = createConfig(options, url: ApplicationDelegateProxy.shared.lastURL), Singular.start(config) else {
+        guard let config = createConfig(options, url: ApplicationDelegateProxy.shared.lastURL) else {
             completion(CustomError.initializationFailed)
             return
         }
+        // The return value of `start` reports whether a Singular Link was resolved, not whether the SDK was started.
+        _ = Singular.start(config)
         initialized = true
         completion(nil)
     }
