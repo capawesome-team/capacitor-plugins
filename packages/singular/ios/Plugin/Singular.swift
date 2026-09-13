@@ -267,6 +267,9 @@ import Singular
         if let brandedDomains = options.brandedDomains {
             config.brandedDomains = brandedDomains
         }
+        if let customSdid = options.customSdid {
+            config.customSdid = customSdid
+        }
         if let espDomains = options.espDomains {
             config.espDomains = espDomains
         }
@@ -281,23 +284,7 @@ import Singular
         for (key, value) in options.globalProperties ?? [:] {
             config.setGlobalProperty(key, withValue: value, overrideExisting: true)
         }
-        config.deviceAttributionCallback = { [weak self] info in
-            guard let info = info else {
-                return
-            }
-            self?.plugin.notifyDeviceAttributionInfoReceivedListeners(DeviceAttributionInfoReceivedEvent(info: info))
-        }
-        config.singularLinksHandler = { [weak self] params in
-            guard let params = params else {
-                return
-            }
-            self?.plugin.notifySingularLinkResolvedListeners(SingularLinkResolvedEvent(params: params))
-        }
-        config.conversionValuesUpdatedCallback = { [weak self] value, coarseValue, lockWindow in
-            self?.plugin.notifySkanConversionValueUpdatedListeners(
-                SkanConversionValueUpdatedEvent(value: value, coarseValue: coarseValue, lockWindow: lockWindow)
-            )
-        }
+        setHandlers(config)
         return config
     }
 
@@ -317,6 +304,38 @@ import Singular
     private func requireInitialized() throws {
         guard initialized else {
             throw CustomError.notInitialized
+        }
+    }
+
+    private func setHandlers(_ config: SingularConfig) {
+        config.deviceAttributionCallback = { [weak self] info in
+            guard let info = info else {
+                return
+            }
+            self?.plugin.notifyDeviceAttributionInfoReceivedListeners(DeviceAttributionInfoReceivedEvent(info: info))
+        }
+        config.sdidReceivedHandler = { [weak self] sdid in
+            guard let sdid = sdid else {
+                return
+            }
+            self?.plugin.notifySdidReceivedListeners(SdidReceivedEvent(sdid: sdid))
+        }
+        config.didSetSdidHandler = { [weak self] sdid in
+            guard let sdid = sdid else {
+                return
+            }
+            self?.plugin.notifySdidSetListeners(SdidSetEvent(sdid: sdid))
+        }
+        config.singularLinksHandler = { [weak self] params in
+            guard let params = params else {
+                return
+            }
+            self?.plugin.notifySingularLinkResolvedListeners(SingularLinkResolvedEvent(params: params))
+        }
+        config.conversionValuesUpdatedCallback = { [weak self] value, coarseValue, lockWindow in
+            self?.plugin.notifySkanConversionValueUpdatedListeners(
+                SkanConversionValueUpdatedEvent(value: value, coarseValue: coarseValue, lockWindow: lockWindow)
+            )
         }
     }
 }

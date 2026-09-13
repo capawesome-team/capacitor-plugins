@@ -38,6 +38,8 @@
 		A1000016000000000000000A /* DeviceAttributionInfoReceivedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000016000000000000000A /* DeviceAttributionInfoReceivedEvent.swift */; };
 		A1000017000000000000000A /* SingularLinkResolvedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000017000000000000000A /* SingularLinkResolvedEvent.swift */; };
 		A1000018000000000000000A /* SkanConversionValueUpdatedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000018000000000000000A /* SkanConversionValueUpdatedEvent.swift */; };
+		A1000019000000000000000A /* SdidReceivedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1000019000000000000000A /* SdidReceivedEvent.swift */; };
+		A100001A000000000000000A /* SdidSetEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B100001A000000000000000A /* SdidSetEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +91,8 @@
 		B1000016000000000000000A /* DeviceAttributionInfoReceivedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceAttributionInfoReceivedEvent.swift; sourceTree = "<group>"; };
 		B1000017000000000000000A /* SingularLinkResolvedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingularLinkResolvedEvent.swift; sourceTree = "<group>"; };
 		B1000018000000000000000A /* SkanConversionValueUpdatedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkanConversionValueUpdatedEvent.swift; sourceTree = "<group>"; };
+		B1000019000000000000000A /* SdidReceivedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SdidReceivedEvent.swift; sourceTree = "<group>"; };
+		B100001A000000000000000A /* SdidSetEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SdidSetEvent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -209,6 +213,8 @@
 			isa = PBXGroup;
 			children = (
 				B1000016000000000000000A /* DeviceAttributionInfoReceivedEvent.swift */,
+				B1000019000000000000000A /* SdidReceivedEvent.swift */,
+				B100001A000000000000000A /* SdidSetEvent.swift */,
 				B1000017000000000000000A /* SingularLinkResolvedEvent.swift */,
 				B1000018000000000000000A /* SkanConversionValueUpdatedEvent.swift */,
 			);
@@ -462,6 +468,8 @@
 				A1000014000000000000000A /* IsAllTrackingStoppedResult.swift in Sources */,
 				A1000015000000000000000A /* SkanGetConversionValueResult.swift in Sources */,
 				A1000016000000000000000A /* DeviceAttributionInfoReceivedEvent.swift in Sources */,
+				A1000019000000000000000A /* SdidReceivedEvent.swift in Sources */,
+				A100001A000000000000000A /* SdidSetEvent.swift in Sources */,
 				A1000017000000000000000A /* SingularLinkResolvedEvent.swift in Sources */,
 				A1000018000000000000000A /* SkanConversionValueUpdatedEvent.swift in Sources */,
 			);

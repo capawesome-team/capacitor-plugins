@@ -4,6 +4,7 @@ import Capacitor
 @objc public class InitializeOptions: NSObject {
     let apiKey: String
     let brandedDomains: [String]?
+    let customSdid: String?
     let customUserId: String?
     let espDomains: [String]?
     let globalProperties: [String: String]?
@@ -27,6 +28,7 @@ import Capacitor
         self.apiKey = apiKey
         self.secret = secret
         self.brandedDomains = call.getArray("brandedDomains", String.self)
+        self.customSdid = call.getString("customSdid")
         self.customUserId = call.getString("customUserId")
         self.espDomains = call.getArray("espDomains", String.self)
         self.globalProperties = SingularHelper.createStringHashMapFromJSObject(call.getObject("globalProperties"))

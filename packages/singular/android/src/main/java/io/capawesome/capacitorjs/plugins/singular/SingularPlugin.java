@@ -10,6 +10,8 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.singular.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.singular.classes.events.DeviceAttributionInfoReceivedEvent;
+import io.capawesome.capacitorjs.plugins.singular.classes.events.SdidReceivedEvent;
+import io.capawesome.capacitorjs.plugins.singular.classes.events.SdidSetEvent;
 import io.capawesome.capacitorjs.plugins.singular.classes.events.SingularLinkResolvedEvent;
 import io.capawesome.capacitorjs.plugins.singular.classes.options.CreateReferrerShortLinkOptions;
 import io.capawesome.capacitorjs.plugins.singular.classes.options.InitializeOptions;
@@ -30,6 +32,8 @@ import io.capawesome.capacitorjs.plugins.singular.interfaces.Result;
 public class SingularPlugin extends Plugin {
 
     public static final String EVENT_DEVICE_ATTRIBUTION_INFO_RECEIVED = "deviceAttributionInfoReceived";
+    public static final String EVENT_SDID_RECEIVED = "sdidReceived";
+    public static final String EVENT_SDID_SET = "sdidSet";
     public static final String EVENT_SINGULAR_LINK_RESOLVED = "singularLinkResolved";
     public static final String TAG = "SingularPlugin";
 
@@ -101,6 +105,14 @@ public class SingularPlugin extends Plugin {
 
     public void notifyDeviceAttributionInfoReceivedListeners(@NonNull DeviceAttributionInfoReceivedEvent event) {
         notifyListeners(EVENT_DEVICE_ATTRIBUTION_INFO_RECEIVED, event.toJSObject());
+    }
+
+    public void notifySdidReceivedListeners(@NonNull SdidReceivedEvent event) {
+        notifyListeners(EVENT_SDID_RECEIVED, event.toJSObject());
+    }
+
+    public void notifySdidSetListeners(@NonNull SdidSetEvent event) {
+        notifyListeners(EVENT_SDID_SET, event.toJSObject());
     }
 
     public void notifySingularLinkResolvedListeners(@NonNull SingularLinkResolvedEvent event) {

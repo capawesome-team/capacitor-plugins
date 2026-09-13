@@ -24,6 +24,9 @@ public class InitializeOptions {
     private final List<String> brandedDomains;
 
     @Nullable
+    private final String customSdid;
+
+    @Nullable
     private final String customUserId;
 
     @Nullable
@@ -58,6 +61,7 @@ public class InitializeOptions {
         this.androidFacebookAppId = call.getString("androidFacebookAppId");
         this.apiKey = apiKey;
         this.brandedDomains = createStringList(call.getArray("brandedDomains"));
+        this.customSdid = call.getString("customSdid");
         this.customUserId = call.getString("customUserId");
         this.espDomains = createStringList(call.getArray("espDomains"));
         this.globalProperties = createStringMap(call.getObject("globalProperties"));
@@ -82,6 +86,11 @@ public class InitializeOptions {
     @Nullable
     public List<String> getBrandedDomains() {
         return brandedDomains;
+    }
+
+    @Nullable
+    public String getCustomSdid() {
+        return customSdid;
     }
 
     @Nullable

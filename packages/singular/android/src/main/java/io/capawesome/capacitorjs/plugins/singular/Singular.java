@@ -5,11 +5,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
+import com.singular.sdk.SDIDAccessorHandler;
 import com.singular.sdk.ShortLinkHandler;
 import com.singular.sdk.SingularAdData;
 import com.singular.sdk.SingularConfig;
 import io.capawesome.capacitorjs.plugins.singular.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.singular.classes.events.DeviceAttributionInfoReceivedEvent;
+import io.capawesome.capacitorjs.plugins.singular.classes.events.SdidReceivedEvent;
+import io.capawesome.capacitorjs.plugins.singular.classes.events.SdidSetEvent;
 import io.capawesome.capacitorjs.plugins.singular.classes.events.SingularLinkResolvedEvent;
 import io.capawesome.capacitorjs.plugins.singular.classes.options.CreateReferrerShortLinkOptions;
 import io.capawesome.capacitorjs.plugins.singular.classes.options.InitializeOptions;
@@ -383,6 +386,13 @@ public class Singular {
         if (brandedDomains != null) {
             config.withBrandedDomains(brandedDomains);
         }
+        SDIDAccessorHandler sdidAccessorHandler = createSdidAccessorHandler();
+        String customSdid = options.getCustomSdid();
+        if (customSdid == null) {
+            config.withSdidAccessorHandler(sdidAccessorHandler);
+        } else {
+            config.withCustomSdid(customSdid, sdidAccessorHandler);
+        }
         String customUserId = options.getCustomUserId();
         if (customUserId != null) {
             config.withCustomUserId(customUserId);
@@ -408,6 +418,21 @@ public class Singular {
             config.withLoggingEnabled().withLogLevel(Log.DEBUG);
         }
         return config;
+    }
+
+    @NonNull
+    private SDIDAccessorHandler createSdidAccessorHandler() {
+        return new SDIDAccessorHandler() {
+            @Override
+            public void didSetSdid(String sdid) {
+                plugin.notifySdidSetListeners(new SdidSetEvent(sdid));
+            }
+
+            @Override
+            public void sdidReceived(String sdid) {
+                plugin.notifySdidReceivedListeners(new SdidReceivedEvent(sdid));
+            }
+        };
     }
 
     private void requireInitialized() throws Exception {

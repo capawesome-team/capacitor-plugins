@@ -31,6 +31,8 @@ public class SingularPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "unsetGlobalProperty", returnType: CAPPluginReturnPromise)
     ]
     public static let eventDeviceAttributionInfoReceived = "deviceAttributionInfoReceived"
+    public static let eventSdidReceived = "sdidReceived"
+    public static let eventSdidSet = "sdidSet"
     public static let eventSingularLinkResolved = "singularLinkResolved"
     public static let eventSkanConversionValueUpdated = "skanConversionValueUpdated"
     public let tag = "Singular"
@@ -105,6 +107,14 @@ public class SingularPlugin: CAPPlugin, CAPBridgedPlugin {
 
     public func notifyDeviceAttributionInfoReceivedListeners(_ event: DeviceAttributionInfoReceivedEvent) {
         notifyListeners(Self.eventDeviceAttributionInfoReceived, data: event.toJSObject() as? [String: Any])
+    }
+
+    public func notifySdidReceivedListeners(_ event: SdidReceivedEvent) {
+        notifyListeners(Self.eventSdidReceived, data: event.toJSObject() as? [String: Any])
+    }
+
+    public func notifySdidSetListeners(_ event: SdidSetEvent) {
+        notifyListeners(Self.eventSdidSet, data: event.toJSObject() as? [String: Any])
     }
 
     public func notifySingularLinkResolvedListeners(_ event: SingularLinkResolvedEvent) {

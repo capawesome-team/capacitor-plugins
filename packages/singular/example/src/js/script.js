@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   Singular.addListener('deviceAttributionInfoReceived', event => {
     console.log('deviceAttributionInfoReceived', event);
   });
+  Singular.addListener('sdidReceived', event => {
+    console.log('sdidReceived', event);
+  });
+  Singular.addListener('sdidSet', event => {
+    console.log('sdidSet', event);
+  });
   Singular.addListener('singularLinkResolved', event => {
     console.log('singularLinkResolved', event);
   });
