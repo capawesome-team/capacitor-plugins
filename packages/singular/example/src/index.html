@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Singular</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Singular</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-button id="initialize-button" expand="block"
+            >Initialize</ion-button
+          >
+          <ion-button id="track-event-button" expand="block"
+            >Track Event</ion-button
+          >
+          <ion-button id="track-revenue-button" expand="block"
+            >Track Revenue</ion-button
+          >
+          <ion-button id="track-ad-revenue-button" expand="block"
+            >Track Ad Revenue</ion-button
+          >
+          <ion-button id="set-custom-user-id-button" expand="block"
+            >Set Custom User ID</ion-button
+          >
+          <ion-button id="unset-custom-user-id-button" expand="block"
+            >Unset Custom User ID</ion-button
+          >
+          <ion-button id="set-global-property-button" expand="block"
+            >Set Global Property</ion-button
+          >
+          <ion-button id="get-global-properties-button" expand="block"
+            >Get Global Properties</ion-button
+          >
+          <ion-button id="clear-global-properties-button" expand="block"
+            >Clear Global Properties</ion-button
+          >
+          <ion-button id="stop-all-tracking-button" expand="block"
+            >Stop All Tracking</ion-button
+          >
+          <ion-button id="resume-all-tracking-button" expand="block"
+            >Resume All Tracking</ion-button
+          >
+          <ion-button id="is-all-tracking-stopped-button" expand="block"
+            >Is All Tracking Stopped</ion-button
+          >
+          <ion-button id="create-referrer-short-link-button" expand="block"
+            >Create Referrer Short Link</ion-button
+          >
+          <ion-button id="skan-get-conversion-value-button" expand="block"
+            >Skan Get Conversion Value</ion-button
+          >
+        </ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

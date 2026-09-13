@@ -347,6 +347,7 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 - [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request the tracking permission required to collect the IDFA on iOS.
 - [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Unofficial Capacitor plugin for Firebase Analytics.
 - [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
+- [Singular](https://capawesome.io/docs/sdks/capacitor/singular/): Unofficial Capacitor plugin for the Singular Mobile SDK.
 
 ## Newsletter
 
