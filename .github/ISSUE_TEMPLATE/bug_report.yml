@@ -118,6 +118,7 @@ body:
         - label: Shake
         - label: Silent Mode
         - label: SIM
+        - label: Singular
         - label: SMS Composer
         - label: Speech Recognition
         - label: Speech Synthesis
