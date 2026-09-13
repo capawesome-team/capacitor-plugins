@@ -26,7 +26,7 @@ public class SingularHelper {
     }
 
     public static Object createObjectFromJSValue(Object value) throws JSONException {
-        if (value.toString().equals("null")) {
+        if (value == JSONObject.NULL) {
             return null;
         } else if (value instanceof JSONObject) {
             return createHashMapFromJSONObject((JSONObject) value);

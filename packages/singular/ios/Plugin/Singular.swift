@@ -68,13 +68,13 @@ import Singular
         if let customUserId = options.customUserId {
             Singular.setCustomUserId(customUserId)
         }
+        if let limitDataSharing = options.limitDataSharing {
+            Singular.limitDataSharing(limitDataSharing)
+        }
+        Singular.setSessionTimeout(Int32(options.sessionTimeout))
         guard let config = createConfig(options, url: ApplicationDelegateProxy.shared.lastURL), Singular.start(config) else {
             completion(CustomError.initializationFailed)
             return
-        }
-        Singular.setSessionTimeout(Int32(options.sessionTimeout))
-        if let limitDataSharing = options.limitDataSharing {
-            Singular.limitDataSharing(limitDataSharing)
         }
         initialized = true
         completion(nil)
