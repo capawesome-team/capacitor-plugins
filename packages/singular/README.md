@@ -70,15 +70,19 @@ This plugin requires a [Singular](https://www.singular.net/) account. You can fi
 
 ### Android
 
-The [Singular SDK for Android](https://support.singular.net/hc/en-us/articles/360037581952-Android-SDK-Basic-Integration) is not published on Maven Central. It is resolved from Singular's own Maven repository, which the plugin already declares in its `build.gradle` file. If your project declares its repositories centrally in the `settings.gradle` file (via `dependencyResolutionManagement` with `RepositoriesMode.PREFER_SETTINGS`), the repositories declared by plugins are ignored and you must add the repository yourself:
+The [Singular SDK for Android](https://support.singular.net/hc/en-us/articles/360037581952-Android-SDK-Basic-Integration) is not published on Maven Central. Add Singular's Maven repository to the `allprojects` section of your `android/build.gradle` file:
 
 ```groovy
-dependencyResolutionManagement {
+allprojects {
     repositories {
+        google()
+        mavenCentral()
         maven { url 'https://maven.singular.net/' }
     }
 }
 ```
+
+If your project declares its repositories in the `android/settings.gradle` file instead (via `dependencyResolutionManagement`), add the repository there.
 
 #### Permissions
 
