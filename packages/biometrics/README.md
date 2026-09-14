@@ -46,6 +46,10 @@ The Biometrics plugin is typically used whenever an app needs to verify the iden
 - [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
 - [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
 
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-biometrics-demo](https://github.com/capawesome-team/capacitor-biometrics-demo)
+
 ## Videos
 
 - [How to use Biometrics in a Capacitor Mobile App](https://youtu.be/ixUvTX6n7x8?si=27_X3KiLGAkI9-vJ)

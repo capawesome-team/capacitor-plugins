@@ -55,6 +55,13 @@ The SQLite plugin is typically used whenever an app needs a robust local databas
 | 0.2.x          | >=8.x.x           | Deprecated     |
 | 0.1.x          | 7.x.x             | Deprecated     |
 
+## Demo
+
+Working examples can be found here:
+
+- [capawesome-team/capacitor-sqlite-angular-demo](https://github.com/capawesome-team/capacitor-sqlite-angular-demo)
+- [capawesome-team/capacitor-sqlite-react-demo](https://github.com/capawesome-team/capacitor-sqlite-react-demo)
+
 ## Guides
 
 - [Alternative to the Capacitor Community SQLite plugin](https://capawesome.io/blog/alternative-to-capacitor-community-sqlite-plugin/)
