@@ -1,5 +1,37 @@
 # Changelog
 
+## 8.2.1
+
+### Patch Changes
+
+- [`c5b010d971df920f7e8fdb9e4d94d3b2652c537c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c5b010d971df920f7e8fdb9e4d94d3b2652c537c) ([#640](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/640)): fix(android): return the contacts from `getContacts(...)` when `fields` does not include `id`
+
+- [`4e388843eadc2c78cfe2e61bd4e26d3f775bc0da`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4e388843eadc2c78cfe2e61bd4e26d3f775bc0da) ([#580](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/580)): fix(android): always filter by contact id in `getContactById(...)`
+
+- [`75d03e25c54828f40afa7a70cb9863dcee4f8072`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/75d03e25c54828f40afa7a70cb9863dcee4f8072) ([#581](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/581)): fix(ios): persist the `type` and `label` of url addresses in `updateContactById(...)`
+
+- [`75d03e25c54828f40afa7a70cb9863dcee4f8072`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/75d03e25c54828f40afa7a70cb9863dcee4f8072) ([#581](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/581)): fix(android): reject a malformed `emailAddresses`, `phoneNumbers`, `postalAddresses` or `urlAddresses` value instead of clearing the list
+
+- [`4e388843eadc2c78cfe2e61bd4e26d3f775bc0da`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4e388843eadc2c78cfe2e61bd4e26d3f775bc0da) ([#580](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/580)): fix(ios): resolve `pickContacts(...)` when the contact picker is cancelled and present the picker directly instead of inside a navigation controller
+
+- [`75d03e25c54828f40afa7a70cb9863dcee4f8072`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/75d03e25c54828f40afa7a70cb9863dcee4f8072) ([#581](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/581)): fix(android): write the data rows in `updateContactById(...)` to a raw contact of the given contact instead of the raw contact with the same id
+
+- [`75d03e25c54828f40afa7a70cb9863dcee4f8072`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/75d03e25c54828f40afa7a70cb9863dcee4f8072) ([#581](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/581)): fix(android): persist the `type` and `label` of url addresses in `updateContactById(...)`
+
+- [`4e388843eadc2c78cfe2e61bd4e26d3f775bc0da`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4e388843eadc2c78cfe2e61bd4e26d3f775bc0da) ([#580](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/580)): fix(android): add the missing website columns to the `urlAddresses` projection
+
+## 8.2.0
+
+### Minor Changes
+
+- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): feat(android,ios): support the `multiple` option in `pickContacts(...)`
+
+- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): feat(android): use the system contacts picker in `pickContacts(...)` on Android 17 and newer, which never requires the `READ_CONTACTS` permission
+
+### Patch Changes
+
+- [`94431e9cb29206056b4e153a5163acee682cc28a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94431e9cb29206056b4e153a5163acee682cc28a) ([#606](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/606)): fix(ios): resolve `pickContacts(...)` with an empty list when the picker is canceled
+
 ## 8.1.1
 
 ### Patch Changes

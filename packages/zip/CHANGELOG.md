@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`5709c088abb7508e8c0f4e1896a913425bb36563`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5709c088abb7508e8c0f4e1896a913425bb36563) ([#597](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/597)): fix(ios): `unzip(...)` now overwrites existing files in the destination directory
+
 ## 8.0.3
 
 ### Patch Changes

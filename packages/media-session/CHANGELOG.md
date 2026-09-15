@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.4.3
+
+### Patch Changes
+
+- [`1b6943a6d11668b62125b98c533840ac417d9c41`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1b6943a6d11668b62125b98c533840ac417d9c41) ([#625](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/625)): docs: document that the `artwork` metadata is also supported on Android
+
+- [`5c10ccd5aa175edaeb071f745f58586cdfaa2f01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5c10ccd5aa175edaeb071f745f58586cdfaa2f01) ([#617](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/617)): fix(android): load the artwork of `setMetadata(...)` on a background thread with a timeout
+
+- [`b3d2b7da7ed0d57fa98b2436986dc8dc76fa2751`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b3d2b7da7ed0d57fa98b2436986dc8dc76fa2751) ([#616](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/616)): fix(android): stop the media playback service and remove its notification when the plugin is destroyed
+
 ## 8.4.2
 
 ### Patch Changes

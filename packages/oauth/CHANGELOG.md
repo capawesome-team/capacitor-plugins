@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.12
+
+### Patch Changes
+
+- [`aaf4d15ca43e6dd2fb549dea192e963a4c33098c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aaf4d15ca43e6dd2fb549dea192e963a4c33098c) ([#586](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/586)): fix(ios): `login()` and `logout()` now present the browser session on the main thread
+
 ## 0.1.11
 
 ### Patch Changes

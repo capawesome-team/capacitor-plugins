@@ -4,7 +4,20 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 0.3.x](#version-03x)
 - [Version 0.2.x](#version-02x)
+
+## Version 0.3.x
+
+### `androidExpirationDuration` option
+
+The `androidExpirationDuration` option of the `Geofence` interface has been removed. Geofences never expire automatically anymore, so remove them yourself as soon as they are no longer needed, for example on app start or when a transition for them arrives:
+
+```typescript
+await Geofences.removeGeofences({ ids: ['ee2b1a2b'] });
+```
+
+Geofences that were added with an expiration duration are re-registered without one on the next app start and therefore no longer expire.
 
 ## Version 0.2.x
 

@@ -895,11 +895,11 @@ Remove all listeners for this plugin.
 
 #### ShareReceivedEvent
 
-| Prop        | Type                      | Description                       | Since |
-| ----------- | ------------------------- | --------------------------------- | ----- |
-| **`title`** | <code>string</code>       | The title of the shared content.  | 0.1.0 |
-| **`texts`** | <code>string[]</code>     | The text content that was shared. | 0.1.0 |
-| **`files`** | <code>SharedFile[]</code> | The files that were shared.       | 0.2.0 |
+| Prop        | Type                      | Description                                                                                                                                                          | Since |
+| ----------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`title`** | <code>string</code>       | The title of the shared content.                                                                                                                                     | 0.1.0 |
+| **`texts`** | <code>string[]</code>     | The text content that was shared.                                                                                                                                    | 0.1.0 |
+| **`files`** | <code>SharedFile[]</code> | The files that were shared. On **Android**, only files provided through a `content://` URI of another app are included. Other URIs are ignored for security reasons. | 0.2.0 |
 
 
 #### SharedFile

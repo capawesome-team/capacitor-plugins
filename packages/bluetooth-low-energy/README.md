@@ -648,6 +648,8 @@ connect(options: ConnectOptions) => Promise<void>
 
 Connect to a BLE device.
 
+If the device is already connected, the promise resolves without reconnecting.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                      |
@@ -927,6 +929,8 @@ readCharacteristic(options: ReadCharacteristicOptions) => Promise<ReadCharacteri
 ```
 
 Read the value of a characteristic.
+
+On iOS, reading a characteristic that is notifying also emits a `characteristicChanged` event.
 
 Only available on Android and iOS.
 
@@ -1868,7 +1872,7 @@ Remove all listeners for this plugin.
 This plugin provides a utility class `BluetoothLowEnergyUtils` that can be used for various Bluetooth Low Energy related operations, for example, converting byte arrays to hexadecimal strings:
 
 ```ts
-import { BluetoothLowEnergyUtils } from '@capacitor-community/bluetooth-low-energy';
+import { BluetoothLowEnergyUtils } from '@capawesome-team/capacitor-bluetooth-low-energy';
 
 const convertBytesToHex = (bytes: number[]) => {
   return BluetoothLowEnergyUtils.convertBytesToHex({ bytes });

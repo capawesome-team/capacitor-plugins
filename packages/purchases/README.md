@@ -39,7 +39,9 @@ The Purchases plugin is typically used whenever an app wants to monetize with in
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.3.x          | >=8.x.x           | Active support |
+| 0.4.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Deprecated     |
+| 0.2.x          | >=8.x.x           | Deprecated     |
 
 ## Prerequisites
 
@@ -109,7 +111,7 @@ The following examples show how to purchase a product and restore previous purch
 
 ### Purchase a product
 
-Purchase a product by its ID and finish the transaction after the content has been delivered or the service has been enabled. On Android, this is the product ID configured in the Google Play Console. On iOS, this is the product ID configured in App Store Connect. Only available on Android, and on iOS 15.0 and later:
+Purchase a product by its ID and finish the transaction after the content has been delivered or the service has been enabled. On Android, this is the product ID configured in the Google Play Console. On iOS, this is the product ID configured in App Store Connect. On Android, set `isConsumable` to `true` when finishing the purchase of a consumable so that it can be purchased again. Only available on Android, and on iOS 15.0 and later:
 
 ```typescript
 import { Purchases } from '@capawesome-team/capacitor-purchases';
@@ -120,6 +122,8 @@ const purchaseProduct = async (productId: string) => {
   // ...
   // Finish the transaction
   await Purchases.finishTransaction({ transactionId: transaction.id });
+  // On Android, pass `isConsumable: true` for consumable products only:
+  // await Purchases.finishTransaction({ transactionId: transaction.id, isConsumable: true });
 };
 ```
 
@@ -170,8 +174,12 @@ finishTransaction(options: FinishTransactionOptions) => Promise<void>
 
 Finish a transaction.
 
-Indicates to the App Store that the app delivered the purchased content
+Indicates to the store that the app delivered the purchased content
 or enabled the service to finish the transaction.
+
+On **Android**, the purchase is acknowledged, or consumed if `isConsumable`
+is set to `true`. A consumed purchase can be purchased again and is no
+longer returned by `getCurrentTransactions()`.
 
 Only available on Android and iOS (15.0+).
 
@@ -211,6 +219,8 @@ getCurrentTransactions() => Promise<GetCurrentTransactionsResult>
 Returns transaction details for currently owned items bought within your app.
 
 Only active subscriptions and non-consumed one-time purchases are returned.
+
+On **iOS**, transactions that could not be verified by the App Store are not included.
 
 Only available on Android and iOS (15.0+).
 
@@ -271,8 +281,9 @@ getUnfinishedTransactions() => Promise<GetUnfinishedTransactionsResult>
 
 Returns transaction details for all transactions that are not yet finished.
 
-Check for unfinished transactions at least once every app launch to ensure
-that all transactions are processed correctly.
+Check for unfinished transactions at least once every app launch and
+whenever the app returns to the foreground to pick up purchases that
+were completed in the meantime, for example pending purchases.
 
 Only available on Android and iOS (15.0+).
 
@@ -337,6 +348,18 @@ Purchase a product by its ID.
 Make sure to call `finishTransaction(...)` after the purchase is complete
 and the content has been delivered or the service has been enabled.
 
+The call is rejected with the `PENDING` error code if the purchase requires
+further action from the user, for example an additional payment step.
+The transaction is returned by `getUnfinishedTransactions()` once the
+purchase is complete.
+
+On **Android**, the call is rejected with the `PRODUCT_ALREADY_OWNED` error
+code if the product is already owned and with the `PRODUCT_UNAVAILABLE` error
+code if the product is not available for purchase.
+
+On **iOS**, the call is rejected with the `VERIFICATION_FAILED` error code
+if the App Store could not verify the transaction.
+
 Only available on Android and iOS (15.0+).
 
 | Param         | Type                                                                      |
@@ -380,9 +403,10 @@ Only available on Android and iOS (15.0+).
 
 #### FinishTransactionOptions
 
-| Prop                | Type                | Description                          | Since |
-| ------------------- | ------------------- | ------------------------------------ | ----- |
-| **`transactionId`** | <code>string</code> | The ID of the transaction to finish. | 0.1.0 |
+| Prop                | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          | Default            | Since |
+| ------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`isConsumable`**  | <code>boolean</code> | Whether the purchased product is a consumable. Google Play cannot distinguish consumables from non-consumables, so set this to `true` to consume the purchase instead of acknowledging it. Only set this for consumable one-time products and never for subscriptions, which are acknowledged and never consumed. Non-consumables must be acknowledged as well. On **iOS**, the App Store already knows the product type. Only available on Android. | <code>false</code> | 0.4.0 |
+| **`transactionId`** | <code>string</code>  | The ID of the transaction to finish. On **Android**, the purchase token (see <a href="#transaction">`Transaction.token`</a>) is accepted as well.                                                                                                                                                                                                                                                                                                    |                    | 0.1.0 |
 
 
 #### GetAllTransactionsResult
@@ -394,16 +418,16 @@ Only available on Android and iOS (15.0+).
 
 #### Transaction
 
-| Prop                     | Type                                                                            | Description                                                                                                                                                                                                                       | Since |
-| ------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`id`**                 | <code>string</code>                                                             | The unique identifier for the transaction.                                                                                                                                                                                        | 0.1.0 |
-| **`verificationResult`** | <code>string</code>                                                             | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS. | 0.1.0 |
-| **`token`**              | <code>string</code>                                                             | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                              | 0.2.1 |
-| **`productId`**          | <code>string</code>                                                             | The product identifier associated with the transaction.                                                                                                                                                                           | 0.3.2 |
-| **`originalJson`**       | <code>string</code>                                                             | The original JSON purchase data. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                    | 0.3.2 |
-| **`signature`**          | <code>string</code>                                                             | The RSA signature for purchase verification. Pass this to your server to validate the purchase. Only available on Android.                                                                                                        | 0.3.2 |
-| **`planType`**           | <code><a href="#billingplantype">BillingPlanType</a></code>                     | The billing plan type the user committed to when this transaction was made. Only available on iOS (26.4+).                                                                                                                        | 0.3.8 |
-| **`commitmentInfo`**     | <code><a href="#transactioncommitmentinfo">TransactionCommitmentInfo</a></code> | The commitment details for transactions made under a billing plan that includes a commitment (e.g. monthly with 12-month commitment). Only available on iOS (26.4+).                                                              | 0.3.8 |
+| Prop                     | Type                                                                            | Description                                                                                                                                                                                                                                                                                                                            | Since |
+| ------------------------ | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`id`**                 | <code>string</code>                                                             | The unique identifier for the transaction. On **Android**, this is the purchase token as long as Google Play has not assigned an order ID yet (e.g. for pending purchases), and the Google Play order ID afterwards. Use `token` as the stable key to correlate a purchase over time. On **iOS**, this is the StoreKit transaction ID. | 0.1.0 |
+| **`verificationResult`** | <code>string</code>                                                             | The JWS (JSON Web Signature) representation of the transaction verification result. Pass this to your server to validate the purchase. If the transaction could not be verified, this will not be present. Only available on iOS.                                                                                                      | 0.1.0 |
+| **`token`**              | <code>string</code>                                                             | A unique identifier that represents the user and the product ID for the in-app product they purchased. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                                                   | 0.2.1 |
+| **`productId`**          | <code>string</code>                                                             | The product identifier associated with the transaction.                                                                                                                                                                                                                                                                                | 0.3.2 |
+| **`originalJson`**       | <code>string</code>                                                             | The original JSON purchase data. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                                                                                                                         | 0.3.2 |
+| **`signature`**          | <code>string</code>                                                             | The RSA signature for purchase verification. Pass this to your server to validate the purchase. Only available on Android.                                                                                                                                                                                                             | 0.3.2 |
+| **`planType`**           | <code><a href="#billingplantype">BillingPlanType</a></code>                     | The billing plan type the user committed to when this transaction was made. Only available on iOS (26.4+).                                                                                                                                                                                                                             | 0.3.8 |
+| **`commitmentInfo`**     | <code><a href="#transactioncommitmentinfo">TransactionCommitmentInfo</a></code> | The commitment details for transactions made under a billing plan that includes a commitment (e.g. monthly with 12-month commitment). Only available on iOS (26.4+).                                                                                                                                                                   | 0.3.8 |
 
 
 #### TransactionCommitmentInfo
@@ -664,7 +688,7 @@ No, the plugin uses the native store APIs directly, namely StoreKit 2 on iOS and
 
 ### Why do I need to call `finishTransaction` after a purchase?
 
-Calling `finishTransaction(...)` indicates to the store that your app has delivered the purchased content or enabled the service. Make sure to call it after every purchase, and check for unfinished transactions with `getUnfinishedTransactions()` at least once every app launch to ensure that all transactions are processed correctly.
+Calling `finishTransaction(...)` indicates to the store that your app has delivered the purchased content or enabled the service. Make sure to call it after every purchase, and check for unfinished transactions with `getUnfinishedTransactions()` at least once every app launch and whenever the app returns to the foreground. This ensures that all transactions are processed correctly, including pending purchases that were completed while the app was in the background.
 
 ### How do I validate purchases on my server?
 

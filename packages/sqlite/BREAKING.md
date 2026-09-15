@@ -14,6 +14,18 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 The minimum required version of `SQLite.swift` on iOS has been updated from `0.15.4` to `0.15.5`.
 
+### `SQLiteDBConnection.getVersion()`
+
+The method now returns `{ version }` with the schema version of the database (`PRAGMA user_version`) instead of the version string of the SQLite library.
+
+### `SQLiteDBConnection.execute(...)`
+
+Every statement of the script is executed. Previously only the first statement ran on Android and iOS. A script with more than one statement runs in a transaction unless `transaction: false` is passed, so a script that is executed inside an explicit transaction, or that contains its own `BEGIN` and `COMMIT`, must pass `transaction: false`. `run(...)` rejects on a read-only connection, and the transaction methods reject on a closed connection.
+
+### Read-only connections with a `version` (Android)
+
+`open({ readOnly: true, version })` and a read-only `SQLiteDBConnection` now reject when the stored `user_version` of the database is lower than `version`, because the upgrade cannot be written. Previously Android ignored `readOnly` in this case, ran the upgrade and returned a writable connection. Open the database writable once to apply the upgrade, then open it read-only. `SQLiteDBConnection.open()` always sends its `version` (default `1`), so a read-only connection to a database that has never been opened with a version must be opened writable once.
+
 ## Version 0.3.x
 
 ### Electron Native Support

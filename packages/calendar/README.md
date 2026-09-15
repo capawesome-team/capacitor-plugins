@@ -51,6 +51,10 @@ The Calendar plugin is typically used whenever an app needs to read from or writ
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/calendar/assets/calendar-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/calendar/assets/calendar-demo-ios.mp4" width="266" controls></video> |
 
+## Guides
+
+- [Announcing the Capacitor Calendar Plugin](https://capawesome.io/blog/announcing-the-capacitor-calendar-plugin/): Create, read, and update events with recurrence rules and a calendarChange listener.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).
@@ -926,11 +930,11 @@ Remove all listeners for this plugin.
 
 #### GetEventsOptions
 
-| Prop             | Type                | Description                                                                                                       | Since |
-| ---------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| **`calendarId`** | <code>string</code> | The identifier of the calendar to get the events from. If not provided, the events of all calendars are returned. | 0.0.1 |
-| **`from`**       | <code>number</code> | The start of the time range as a timestamp in milliseconds.                                                       | 0.0.1 |
-| **`to`**         | <code>number</code> | The end of the time range as a timestamp in milliseconds.                                                         | 0.0.1 |
+| Prop             | Type                | Description                                                                                                           | Since |
+| ---------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`calendarId`** | <code>string</code> | The identifier of the calendar to get the events from. If not provided, the events of all calendars are returned.     | 0.0.1 |
+| **`from`**       | <code>number</code> | The start of the time range as a timestamp in milliseconds.                                                           | 0.0.1 |
+| **`to`**         | <code>number</code> | The end of the time range as a timestamp in milliseconds. On iOS, only the first 100 years after `from` are searched. | 0.0.1 |
 
 
 #### OpenCalendarOptions

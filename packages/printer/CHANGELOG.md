@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`b6c9145337c31ad4b1b3cee123fc36d4975f08aa`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b6c9145337c31ad4b1b3cee123fc36d4975f08aa) ([#643](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/643)): fix(android): reject `printFile(...)` and `printPdf(...)` with `File does not exist.` before opening the print dialog when the file is missing
+
+- [`3d7a76468fe447e82d871f4e63dfe526d365477c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3d7a76468fe447e82d871f4e63dfe526d365477c) ([#600](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/600)): fix(android): `printBase64(...)`, `printFile(...)` and `printPdf(...)` resolved even if the document could not be written
+
 ## 8.0.4
 
 ### Patch Changes

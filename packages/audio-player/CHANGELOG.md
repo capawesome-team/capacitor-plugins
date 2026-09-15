@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.2
+
+### Patch Changes
+
+- [`cb76e8d11b0cd8dd33263581bdd1308f72483d9d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb76e8d11b0cd8dd33263581bdd1308f72483d9d) ([#595](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/595)): fix: reject a `rate` option that is not greater than `0`
+
 ## 8.4.1
 
 ### Patch Changes

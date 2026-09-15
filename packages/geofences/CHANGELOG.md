@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`c62a0866be52f16e4badac0c35297ce837439b63`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c62a0866be52f16e4badac0c35297ce837439b63) ([#629](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/629)): feat!: remove the `androidExpirationDuration` option; geofences no longer expire automatically (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`f92b2a280362c0b802531818f10f03edecf8b642`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f92b2a280362c0b802531818f10f03edecf8b642) ([#611](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/611)): fix(ios): reject `addGeofences(...)` if a geofence could not be registered, settle the call on every failure and keep previously monitored regions
+
+- [`18cfa11e390b4a822a271d056fa65f7080f44fb1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/18cfa11e390b4a822a271d056fa65f7080f44fb1) ([#610](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/610)): fix(android): make `removeAllGeofences()` remove every registered geofence even when the store is unreadable
+
+- [`18cfa11e390b4a822a271d056fa65f7080f44fb1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/18cfa11e390b4a822a271d056fa65f7080f44fb1) ([#610](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/610)): fix(android): skip unreadable geofences instead of failing every read of the store
+
 ## 0.2.1
 
 ### Patch Changes

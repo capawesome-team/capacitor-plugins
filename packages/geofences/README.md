@@ -42,7 +42,9 @@ The Geofences plugin is typically used whenever an app needs to react when a dev
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.x.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Deprecated     |
+| 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Guides
 
@@ -844,18 +846,17 @@ Remove all listeners for this plugin.
 
 #### Geofence
 
-| Prop                            | Type                                                                  | Description                                                                                                                                                         | Default            | Since |
-| ------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`androidExpirationDuration`** | <code>number</code>                                                   | The time in milliseconds after which the geofence is automatically removed. Only available on Android.                                                              |                    | 0.0.1 |
-| **`androidLoiteringDelay`**     | <code>number</code>                                                   | The time in milliseconds the device must dwell inside the geofence before a dwell transition event is triggered. Only available on Android.                         |                    | 0.0.1 |
-| **`androidNotifyOnDwell`**      | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device dwells inside the geofence. Only available on Android.                                               | <code>false</code> | 0.0.1 |
-| **`id`**                        | <code>string</code>                                                   | A unique identifier for the geofence. If not provided, a random identifier (UUID) is generated and returned in the result of the `addGeofences(...)` method.        |                    | 0.0.1 |
-| **`latitude`**                  | <code>number</code>                                                   | The latitude of the center of the geofence in degrees.                                                                                                              |                    | 0.0.1 |
-| **`longitude`**                 | <code>number</code>                                                   | The longitude of the center of the geofence in degrees.                                                                                                             |                    | 0.0.1 |
-| **`radius`**                    | <code>number</code>                                                   | The radius of the geofence in meters. Apple recommends a radius of at least 200 meters, as smaller radii may not trigger transitions reliably.                      |                    | 0.0.1 |
-| **`notifyOnEnter`**             | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device enters the geofence.                                                                                 | <code>true</code>  | 0.0.1 |
-| **`notifyOnExit`**              | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device exits the geofence.                                                                                  | <code>true</code>  | 0.0.1 |
-| **`notification`**              | <code><a href="#geofencenotification">GeofenceNotification</a></code> | A local notification to display natively when a transition for this geofence is detected. This is especially useful to notify the user while the app is terminated. |                    | 0.0.1 |
+| Prop                        | Type                                                                  | Description                                                                                                                                                         | Default            | Since |
+| --------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`androidLoiteringDelay`** | <code>number</code>                                                   | The time in milliseconds the device must dwell inside the geofence before a dwell transition event is triggered. Only available on Android.                         |                    | 0.0.1 |
+| **`androidNotifyOnDwell`**  | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device dwells inside the geofence. Only available on Android.                                               | <code>false</code> | 0.0.1 |
+| **`id`**                    | <code>string</code>                                                   | A unique identifier for the geofence. If not provided, a random identifier (UUID) is generated and returned in the result of the `addGeofences(...)` method.        |                    | 0.0.1 |
+| **`latitude`**              | <code>number</code>                                                   | The latitude of the center of the geofence in degrees.                                                                                                              |                    | 0.0.1 |
+| **`longitude`**             | <code>number</code>                                                   | The longitude of the center of the geofence in degrees.                                                                                                             |                    | 0.0.1 |
+| **`radius`**                | <code>number</code>                                                   | The radius of the geofence in meters. Apple recommends a radius of at least 200 meters, as smaller radii may not trigger transitions reliably.                      |                    | 0.0.1 |
+| **`notifyOnEnter`**         | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device enters the geofence.                                                                                 | <code>true</code>  | 0.0.1 |
+| **`notifyOnExit`**          | <code>boolean</code>                                                  | Whether a transition event should be triggered when the device exits the geofence.                                                                                  | <code>true</code>  | 0.0.1 |
+| **`notification`**          | <code><a href="#geofencenotification">GeofenceNotification</a></code> | A local notification to display natively when a transition for this geofence is detected. This is especially useful to notify the user while the app is terminated. |                    | 0.0.1 |
 
 
 #### GeofenceNotification

@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`4680800487e7454561d58423adfe5d8cb80846d1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4680800487e7454561d58423adfe5d8cb80846d1) ([#567](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/567)): fix(android): deliver styled text, multiple texts of `ACTION_SEND_MULTIPLE` and an empty `title` instead of dropping them
+
+- [`4fe36d387a0f02d6d2562362cb284213ab781362`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4fe36d387a0f02d6d2562362cb284213ab781362) ([#560](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/560)): fix(android): ignore shared files that are not provided through a `content://` URI of another app
+
+- [`4680800487e7454561d58423adfe5d8cb80846d1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4680800487e7454561d58423adfe5d8cb80846d1) ([#567](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/567)): fix(ios): deliver shares that only contain a title
+
 ## 8.0.3
 
 ### Patch Changes

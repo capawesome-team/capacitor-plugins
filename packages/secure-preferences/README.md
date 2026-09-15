@@ -1,6 +1,6 @@
 # Capacitor Secure Preferences Plugin
 
-Capacitor plugin to securely store key/value pairs such as passwords, tokens or other sensitive information.
+Capacitor plugin to securely store key/value pairs such as tokens, API keys or other app-managed secrets.
 
 <div class="capawesome-z29o10a">
   <a href="https://capawesome.io/" target="_blank">
@@ -13,7 +13,7 @@ Capacitor plugin to securely store key/value pairs such as passwords, tokens or 
 The Capacitor Secure Preferences plugin is one of the most complete secure storage solutions for Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Native secure storage on Android and iOS, with a `localStorage`-backed web implementation for development.
-- 🔒 **Secure**: Store sensitive information such as passwords securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
+- 🔒 **Secure**: Store sensitive information such as tokens securely using the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and [iOS Keychain](https://developer.apple.com/documentation/security/keychain-services).
 - 🔍 **Detailed Error Messages**: Get actionable error messages with specific failure reasons and error codes on iOS, making debugging keychain issues straightforward.
 - 🤝 **Compatibility**: Compatible with the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/), [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/), and [Vault](https://capawesome.io/docs/sdks/capacitor/vault/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
@@ -29,14 +29,14 @@ The Secure Preferences plugin is typically used whenever an app needs to keep sm
 
 - **Authentication tokens**: Store OAuth refresh tokens or session tokens that the app reads in the background.
 - **API keys**: Keep server-issued API keys encrypted at rest instead of in plain text.
-- **Credentials**: Securely store passwords using the Android Keystore and iOS Keychain.
 - **Sensitive settings**: Persist preference flags that contain personal information.
 
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.3.x          | >=8.x.x           | Active support |
+| 0.4.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Deprecated     |
 | 0.2.x          | >=8.x.x           | Deprecated     |
 
 ## Guides
@@ -110,8 +110,8 @@ import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences
 
 const set = async () => {
   await SecurePreferences.set({
-    key: 'password',
-    value: '123456',
+    key: 'refreshToken',
+    value: 'eyJhbGciOi...',
   });
 };
 ```
@@ -121,13 +121,25 @@ const set = async () => {
 Get the value associated with a key:
 
 ```typescript
-import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
+import { SecurePreferences, ErrorCode } from '@capawesome-team/capacitor-secure-preferences';
 
 const get = async () => {
-  const { value } = await SecurePreferences.get({
-    key: 'password',
-  });
-  console.log(value);
+  try {
+    const { value } = await SecurePreferences.get({
+      key: 'refreshToken',
+    });
+    console.log(value);
+  } catch (error) {
+    if (error.code === ErrorCode.DecryptionFailed) {
+      // The value is unreadable; remove it.
+      await SecurePreferences.remove({ key: 'refreshToken' });
+    } else if (error.code === ErrorCode.KeyInvalidated) {
+      // All values are lost; reset the store.
+      await SecurePreferences.clear();
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -153,7 +165,7 @@ import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences
 
 const remove = async () => {
   await SecurePreferences.remove({
-    key: 'password',
+    key: 'refreshToken',
   });
 };
 ```
@@ -194,6 +206,9 @@ clear() => Promise<void>
 
 Clear all stored keys and values.
 
+On **Android**, this also resets the encryption key, so the next call to
+`set(...)` generates a new one.
+
 **Since:** 0.1.0
 
 --------------------
@@ -206,6 +221,14 @@ get(options: GetOptions) => Promise<GetResult>
 ```
 
 Get the value associated with a key.
+
+On **Android**, this method rejects with the error code `DECRYPTION_FAILED`
+if the stored value cannot be decrypted and with `KEY_INVALIDATED` if the
+encryption key can no longer be used.
+
+On **iOS**, this method rejects if the Keychain item cannot be read, for
+example because the device is locked. The value is only `null` if the key
+does not exist.
 
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
@@ -257,6 +280,9 @@ set(options: SetOptions) => Promise<void>
 ```
 
 Set a value given its key.
+
+On **Android**, this method rejects with the error code `KEY_INVALIDATED`
+if the encryption key can no longer be used.
 
 On **Web**, the value is stored unencrypted in `localStorage`.
 This is for development purposes only and should NOT be used in production.
@@ -317,6 +343,37 @@ This is for development purposes only and should NOT be used in production.
 On Android, the encryption key is stored in the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and the encrypted values are stored in a `SharedPreferences` file (`CAPAWESOME_SECURE_PREFERENCES.xml`). On iOS, the encrypted values are stored as [Keychain](https://developer.apple.com/documentation/security/keychain-services) items.
 
 On Android, the encryption key in the Keystore is never backed up. The encrypted values in `SharedPreferences` are part of [Android Auto Backup](https://developer.android.com/identity/data/autobackup) by default, but the backed-up ciphertext is unusable on another device without the Keystore key; to exclude the preferences file (`CAPAWESOME_SECURE_PREFERENCES.xml`) from backup, see the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles). On iOS, the Keychain items are not synced to iCloud, but they may be included in encrypted local device backups and restored on a new device.
+
+### Is the data removed when the app is uninstalled?
+
+On Android, yes: the `SharedPreferences` file and the Keystore key are deleted. On iOS, no: Keychain items survive an uninstall and are available again after a reinstall with the same bundle identifier. Apple does not document or guarantee this behavior.
+
+To start with an empty store after a reinstall, keep a marker in `UserDefaults`, which is removed with the app, and call `clear()` on the first launch when it is missing:
+
+```typescript
+import { Preferences } from '@capacitor/preferences';
+import { SecurePreferences } from '@capawesome-team/capacitor-secure-preferences';
+
+const clearAfterReinstall = async () => {
+  const { value } = await Preferences.get({ key: 'installed' });
+  if (value === null) {
+    await SecurePreferences.clear();
+    await Preferences.set({ key: 'installed', value: 'true' });
+  }
+};
+```
+
+### How are values encrypted on Android?
+
+Values are encrypted with AES-256-GCM. The 256-bit key is generated on first use and stored in the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) under a dedicated alias, so the key material never leaves the Keystore. Installations that already use a 128-bit key from an earlier plugin version keep using it, also for new values; call `clear()` to switch the store to a 256-bit key. Every value is encrypted with a fresh random IV that is stored together with the ciphertext. There is no fallback to a smaller key size: if a 256-bit key cannot be generated, the call fails with an error instead of silently using weaker encryption.
+
+### What happens when the encryption key is invalidated?
+
+On Android, the plugin never replaces an existing Keystore key on its own. If the key exists but can no longer be loaded, `get(...)` and `set(...)` reject with the error code `KEY_INVALIDATED`. If a stored value cannot be decrypted, for example because the ciphertext was modified or was written with a different key, `get(...)` rejects with the error code `DECRYPTION_FAILED`. The stored values cannot be recovered in either case. Call `clear()` to reset the store: it removes all stored values and deletes the Keystore key so that the next `set(...)` starts over with a new key. The plugin cannot distinguish a corrupt key from a rare transient Keystore failure, so an app that wants to rule out the latter can retry the call once before clearing.
+
+### When can the stored values be read on iOS?
+
+The Keychain items are stored with the default accessibility `kSecAttrAccessibleWhenUnlocked`, which means they can only be read while the device is unlocked. A read from a background task on a locked device therefore fails, and `get(...)` rejects with the reported Keychain error instead of resolving `null`. A `null` value means that the key does not exist.
 
 ### When should I use Secure Preferences instead of Vault or SQLite?
 

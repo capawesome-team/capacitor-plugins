@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.1.5
+
+### Patch Changes
+
+- [`efc1b19c3a11ccbb5d20f481b35ec0532ca14cad`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/efc1b19c3a11ccbb5d20f481b35ec0532ca14cad) ([#587](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/587)): fix: reject `write(...)` if a record of the message has an invalid `tnf` value
+
+- [`c7f5bc4f2fa74e506cd02050ce6c7826c4864295`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c7f5bc4f2fa74e506cd02050ce6c7826c4864295) ([#645](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/645)): fix(ios): reject `write(...)` if a record has a `tnf` value greater than 6
+
+- [`efc1b19c3a11ccbb5d20f481b35ec0532ca14cad`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/efc1b19c3a11ccbb5d20f481b35ec0532ca14cad) ([#587](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/587)): fix(ios): reject `transceive(...)` if the `data` value cannot be split into the requested number of blocks
+
+- [`efc1b19c3a11ccbb5d20f481b35ec0532ca14cad`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/efc1b19c3a11ccbb5d20f481b35ec0532ca14cad) ([#587](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/587)): fix(android): read `systemCode` of an NFC F tag from `NfcF.getSystemCode()`
+
 ## 8.1.4
 
 ### Patch Changes

@@ -46,6 +46,10 @@ The File Manager plugin is typically used whenever an app needs durable access t
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [Android Scoped Storage in Capacitor Apps, Explained](https://capawesome.io/blog/android-scoped-storage-in-capacitor-apps/): Which directories still work without permissions, and how this plugin wraps the Storage Access Framework in persisted folder access.
+
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).
@@ -361,6 +365,10 @@ Copy a directory recursively.
 Reports progress via the `operationProgress` event and can be
 canceled with `cancelOperationById(...)`.
 
+On **Android**, the operation fails with the `WRITE_FAILED` error code if a
+document provider returns an entry name that cannot be used as a file name
+(e.g. a name containing `/`).
+
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
 | **`options`** | <code><a href="#copydirectoryoptions">CopyDirectoryOptions</a></code> |
@@ -568,7 +576,8 @@ getPersistedDirectories() => Promise<GetPersistedDirectoriesResult>
 
 Get all directories with persisted access.
 
-Stale entries are refreshed or pruned when this method is called.
+Stale entries are refreshed and directories whose document no longer
+exists are released automatically.
 Call this method on app start and use the returned URIs instead of
 storing them yourself, since they may change between app launches.
 
@@ -614,6 +623,10 @@ Move a directory.
 
 Reports progress via the `operationProgress` event and can be
 canceled with `cancelOperationById(...)`.
+
+On **Android**, the operation fails with the `WRITE_FAILED` error code if a
+document provider returns an entry name that cannot be used as a file name
+(e.g. a name containing `/`).
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |

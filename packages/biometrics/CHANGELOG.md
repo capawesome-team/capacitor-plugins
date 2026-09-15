@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.6
+
+### Patch Changes
+
+- [`3a5729f6fb3f5dcea94289211f689eaac39c6adb`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3a5729f6fb3f5dcea94289211f689eaac39c6adb) ([#614](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/614)): fix(android): fall back to `BiometricStrength.WEAK` on Android 9 and 10 when `allowDeviceCredential` is `true` instead of rejecting `authenticate(...)`
+
+- [`67ce3bb01feffd9bca30658da13f68021cbce734`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/67ce3bb01feffd9bca30658da13f68021cbce734) ([#615](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/615)): fix: reject `authenticate(...)` while another authentication is in progress instead of replacing the active prompt
+
+- [`676ed9102c638937837ba29a09a8f1d01482b574`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/676ed9102c638937837ba29a09a8f1d01482b574) ([#623](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/623)): fix(android): include the `ENROLLMENT_EXISTS` and `NOT_ACTIVE` error codes in rejections
+
 ## 0.5.5
 
 ### Patch Changes

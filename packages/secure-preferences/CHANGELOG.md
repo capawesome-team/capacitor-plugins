@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- [`3803f402577ad74ad993ce0abc1ddee125e58328`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3803f402577ad74ad993ce0abc1ddee125e58328): fix(android)!: reject `get(...)` with `DECRYPTION_FAILED` or `KEY_INVALIDATED` instead of resolving `null` when a value cannot be read
+
+- [`3803f402577ad74ad993ce0abc1ddee125e58328`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3803f402577ad74ad993ce0abc1ddee125e58328): fix(android)!: remove the AES-128 key-size fallback and reset the encryption key in `clear()`
+
+- [`6c0cf50339918c7c2d6bbd1e770afb1700e2cd8f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6c0cf50339918c7c2d6bbd1e770afb1700e2cd8f) ([#569](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/569)): fix(ios)!: reject `get(...)` when the Keychain read fails
+
+### Patch Changes
+
+- [`3361fd91a5a70a83cb11e7a584b8b758a2a1061d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3361fd91a5a70a83cb11e7a584b8b758a2a1061d) ([#576](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/576)): fix(android): look up the encryption key with a single Keystore call
+
+- [`3361fd91a5a70a83cb11e7a584b8b758a2a1061d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3361fd91a5a70a83cb11e7a584b8b758a2a1061d) ([#576](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/576)): fix(ios): only delete the plugin's own Keychain items in `clear()` and resolve `remove(...)` when the key does not exist
+
 ## 0.3.3
 
 ### Patch Changes

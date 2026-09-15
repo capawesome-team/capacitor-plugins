@@ -551,12 +551,12 @@ Remove all listeners for this plugin.
 
 #### SetMetadataOptions
 
-| Prop          | Type                                | Description                    | Since |
-| ------------- | ----------------------------------- | ------------------------------ | ----- |
-| **`album`**   | <code>string</code>                 |                                | 0.0.1 |
-| **`artist`**  | <code>string</code>                 |                                | 0.0.1 |
-| **`artwork`** | <code>MediaMetadataArtwork[]</code> | Only available on iOS and Web. | 0.0.1 |
-| **`title`**   | <code>string</code>                 |                                | 0.0.1 |
+| Prop          | Type                                | Description                                        | Since |
+| ------------- | ----------------------------------- | -------------------------------------------------- | ----- |
+| **`album`**   | <code>string</code>                 |                                                    | 0.0.1 |
+| **`artist`**  | <code>string</code>                 |                                                    | 0.0.1 |
+| **`artwork`** | <code>MediaMetadataArtwork[]</code> | Only the first artwork is used on Android and iOS. | 0.0.1 |
+| **`title`**   | <code>string</code>                 |                                                    | 0.0.1 |
 
 
 #### MediaMetadataArtwork

@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`d3be9f7a39c570e7fe62728f8a88f52353c1f120`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d3be9f7a39c570e7fe62728f8a88f52353c1f120) ([#598](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/598)): fix(ios): invoke each location permission callback only once
+
 ## 8.0.3
 
 ### Patch Changes

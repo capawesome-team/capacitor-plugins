@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.3
+
+### Patch Changes
+
+- [`c8757e23b52365b837c6fa4f15e01b14ab7c19e2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c8757e23b52365b837c6fa4f15e01b14ab7c19e2) ([#601](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/601)): fix(android): settle `requestPermissions(...)` when the `speechRecognition` permission or an empty array is requested
+
 ## 8.1.2
 
 ### Patch Changes

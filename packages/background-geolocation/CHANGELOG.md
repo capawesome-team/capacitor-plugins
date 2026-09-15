@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- [`6f52d428b5d8ccb888162bb942fa02ba47371a87`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6f52d428b5d8ccb888162bb942fa02ba47371a87) ([#579](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/579)): fix(android): no longer count a position that could not be stored, which caused queued positions to be deleted
+
+- [`6f52d428b5d8ccb888162bb942fa02ba47371a87`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6f52d428b5d8ccb888162bb942fa02ba47371a87) ([#579](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/579)): fix(android): fix a crash when an upload completes after the service has been destroyed
+
+- [`6f52d428b5d8ccb888162bb942fa02ba47371a87`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6f52d428b5d8ccb888162bb942fa02ba47371a87) ([#579](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/579)): fix(ios): fix a crash when `extras` contains a value that cannot be persisted
+
 ## 0.2.1
 
 ### Patch Changes

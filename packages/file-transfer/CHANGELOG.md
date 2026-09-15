@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`199280c219b257841100e6d323d828c684ce35ef`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/199280c219b257841100e6d323d828c684ce35ef) ([#613](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/613)): fix(android): run a transfer that starts while the app is in the background without the foreground service instead of failing it
+
+- [`42e8df2f26bfb79e16e222a81a30ade24f29028d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/42e8df2f26bfb79e16e222a81a30ade24f29028d) ([#612](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/612)): fix(android): send an empty body for `POST` downloads instead of failing with `NETWORK_ERROR`
+
+- [`199280c219b257841100e6d323d828c684ce35ef`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/199280c219b257841100e6d323d828c684ce35ef) ([#613](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/613)): fix(android): prevent `resumeTransferById(...)` from starting a second worker for a transfer whose resume is still queued
+
+- [`199280c219b257841100e6d323d828c684ce35ef`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/199280c219b257841100e6d323d828c684ce35ef) ([#613](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/613)): fix(ios): mark a transfer whose task was canceled by the OS as `failed` instead of leaving it `running`
+
 ## 0.1.1
 
 ### Patch Changes
