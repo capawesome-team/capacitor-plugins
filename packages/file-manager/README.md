@@ -46,10 +46,6 @@ The File Manager plugin is typically used whenever an app needs durable access t
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
-## Guides
-
-- [Android Scoped Storage in Capacitor Apps, Explained](https://capawesome.io/blog/android-scoped-storage-in-capacitor-apps/): Which directories still work without permissions, and how this plugin wraps the Storage Access Framework in persisted folder access.
-
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

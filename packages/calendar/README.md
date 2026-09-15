@@ -51,10 +51,6 @@ The Calendar plugin is typically used whenever an app needs to read from or writ
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/calendar/assets/calendar-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/calendar/assets/calendar-demo-ios.mp4" width="266" controls></video> |
 
-## Guides
-
-- [Announcing the Capacitor Calendar Plugin](https://capawesome.io/blog/announcing-the-capacitor-calendar-plugin/): Create, read, and update events with recurrence rules and a calendarChange listener.
-
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

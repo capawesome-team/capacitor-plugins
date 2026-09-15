@@ -47,11 +47,6 @@ The AdMob plugin is typically used to monetize free apps, for example:
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
-## Guides
-
-- [Announcing the Capacitor AdMob Plugin](https://capawesome.io/blog/announcing-the-capacitor-admob-plugin/): A tour of the five ad formats on the Google Mobile Ads Next-Gen SDK.
-- [How to Handle AdMob GDPR Consent (UMP) in a Capacitor App](https://capawesome.io/blog/how-to-handle-admob-gdpr-consent-in-a-capacitor-app/): The consent flow required before serving ads to EEA users.
-
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).

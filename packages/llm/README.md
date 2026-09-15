@@ -49,11 +49,6 @@ The LLM plugin is typically used whenever an app needs AI text generation withou
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/llm/assets/llm-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/llm/assets/llm-demo-ios.mp4" width="266" controls></video> |
 
-## Guides
-
-- [Announcing the Capacitor LLM Plugin](https://capawesome.io/blog/announcing-the-capacitor-llm-plugin/): Run on-device language models with Apple Intelligence on iOS and Gemini Nano on Android, fully offline.
-- [How to Use Apple Intelligence in a Capacitor App](https://capawesome.io/blog/how-to-use-apple-intelligence-in-a-capacitor-app/): Gate on availability, generate and stream text, and manage the context window on iOS 26.
-
 ## Installation
 
 This plugin is only available to [Capawesome Insiders](https://capawesome.io/insiders/).
