@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`5bfa400346f51925636bf104622fb6a028d2d77a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5bfa400346f51925636bf104622fb6a028d2d77a) ([#648](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/648)): fix(ios): detect barcodes in the whole detection area on iPads with the front camera on the landscape edge
+
 ## 0.1.4
 
 ### Patch Changes
