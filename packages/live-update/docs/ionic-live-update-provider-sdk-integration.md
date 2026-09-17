@@ -6,7 +6,7 @@ There is no registry and no separate provider id: Federated Capacitor resolves t
 
 The SDK integration is **optional** on both platforms, in different ways:
 
-- **Android** — zero configuration. The SDK is a compile-time-only dependency of the plugin; Federated Capacitor and Ionic Portals bring it at runtime. The plugin deliberately does not implement the SDK's `LiveUpdateProvider` interface — instead it exposes `createManager` with the exact interface signature, which Federated Capacitor invokes via its reflection fallback. Apps that don't use Portals/FedCap ship zero extra bytes.
+- **Android** — zero configuration. The SDK is a compile-time-only dependency of the plugin; Federated Capacitor and Ionic Portals bring it at runtime. The plugin deliberately does not implement the SDK's `LiveUpdateProvider` interface — instead it exposes a `createManager(Context, Map)` method that Federated Capacitor resolves reflectively and invokes. Apps that don't use Portals/FedCap ship zero extra bytes.
 - **iOS** — opt-in at build time via the `IonicProvider` CocoaPods subspec or SPM package trait (see below), which links the SDK and compiles in the provider classes.
 
 > **Real-world example:** [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) is a complete Ionic Portals app that delivers live updates to multiple portals via Capawesome Cloud.
