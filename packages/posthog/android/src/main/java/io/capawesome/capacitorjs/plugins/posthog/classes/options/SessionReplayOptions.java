@@ -17,7 +17,7 @@ public class SessionReplayOptions {
     private Boolean maskAllSandboxedViews = true;
 
     @Nullable
-    private Boolean captureNetworkTelemetry = true;
+    private Boolean captureNetworkTelemetry = false;
 
     @Nullable
     private Double debouncerDelay = 1.0;

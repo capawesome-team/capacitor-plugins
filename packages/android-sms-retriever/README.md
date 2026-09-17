@@ -13,6 +13,7 @@ Capacitor plugin for OTP autofill on Android via the SMS User Consent and Phone 
 - 💬 **SMS User Consent**: Read an incoming verification SMS after a one-tap system consent dialog.
 - 📞 **Phone Number Hint**: Prefill the user's phone number via the system bottom sheet.
 - 🔒 **No SMS permissions**: Uses Play-policy-safe APIs that require no SMS permissions.
+- 🤝 **Compatibility**: Works alongside the [Password Autofill](https://capawesome.io/docs/sdks/capacitor/password-autofill/), [SIM](https://capawesome.io/docs/sdks/capacitor/sim/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -217,6 +218,10 @@ The underlying broadcast waits up to 5 minutes for a matching SMS. If no message
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It implements OTP autofill on Android through the SMS User Consent and Phone Number Hint APIs, so you can read a verification SMS and prefill the user's phone number without requesting any SMS permissions and while staying within Google Play policy. It's a focused, fully typed API that handles the system consent dialog and bottom sheet for you, and it's actively maintained against the latest Capacitor and Android versions. On iOS you don't need it at all — the WebView already autofills one-time codes — and the README explains exactly how.
+
 ### Does this plugin require any SMS permissions?
 
 No, the plugin uses the SMS User Consent and Phone Number Hint APIs, which are Play-policy-safe and require no SMS permissions. Instead of reading SMS messages silently, the user explicitly consents via a one-tap system dialog before your app receives the message.
@@ -243,9 +248,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 - [Password Autofill](https://capawesome.io/docs/sdks/capacitor/password-autofill/): Save passwords to the platform credential store.
 - [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

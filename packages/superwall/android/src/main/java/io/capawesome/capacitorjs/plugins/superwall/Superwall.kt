@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.superwall
 
+import android.app.Activity
 import android.app.Application
 import android.net.Uri
 import com.getcapacitor.JSObject
@@ -10,14 +11,17 @@ import com.superwall.sdk.config.options.PaywallOptions
 import com.superwall.sdk.identity.IdentityOptions
 import com.superwall.sdk.identity.identify
 import com.superwall.sdk.identity.setUserAttributes
+import com.superwall.sdk.delegate.RestorationResult
 import com.superwall.sdk.delegate.SuperwallDelegate
 import com.superwall.sdk.analytics.superwall.SuperwallEventInfo
 import com.superwall.sdk.paywall.presentation.PaywallInfo
 import com.superwall.sdk.paywall.presentation.PaywallPresentationHandler
+import com.superwall.sdk.paywall.presentation.dismiss
 import com.superwall.sdk.paywall.presentation.internal.state.PaywallResult
 import com.superwall.sdk.paywall.presentation.result.PresentationResult
 import com.superwall.sdk.paywall.presentation.register
 import com.superwall.sdk.paywall.presentation.get_presentation_result.getPresentationResultSync
+import com.superwall.sdk.misc.ActivityProvider
 import com.superwall.sdk.models.entitlements.SubscriptionStatus
 import com.superwall.sdk.logger.LogLevel
 import com.superwall.sdk.logger.LogScope
@@ -50,7 +54,9 @@ class Superwall(private val plugin: SuperwallPlugin) : SuperwallDelegate {
             apiKey = options.getApiKey(),
             purchaseController = null,
             options = options.getSuperwallOptions(),
-            activityProvider = null
+            activityProvider = object : ActivityProvider {
+                override fun getCurrentActivity(): Activity? = plugin.activity
+            }
         )
 
         isConfigured = true
@@ -93,6 +99,39 @@ class Superwall(private val plugin: SuperwallPlugin) : SuperwallDelegate {
             params = params,
             handler = handler
         )
+    }
+
+    fun dismiss(callback: EmptyCallback) {
+        if (!isConfigured) {
+            callback.error(CustomExceptions.NOT_CONFIGURED)
+            return
+        }
+
+        coroutineScope.launch {
+            SuperwallSDK.instance.dismiss()
+            callback.success()
+        }
+    }
+
+    fun restorePurchases(callback: EmptyCallback) {
+        if (!isConfigured) {
+            callback.error(CustomExceptions.NOT_CONFIGURED)
+            return
+        }
+
+        coroutineScope.launch {
+            try {
+                when (val result = SuperwallSDK.instance.restorePurchases().getOrThrow()) {
+                    is RestorationResult.Restored -> callback.success()
+                    is RestorationResult.Failed -> callback.error(
+                        result.error?.let { Exception(it.message, it) }
+                            ?: CustomExceptions.FAILED_TO_RESTORE_PURCHASES
+                    )
+                }
+            } catch (exception: Exception) {
+                callback.error(exception)
+            }
+        }
     }
 
     fun getPresentationResult(

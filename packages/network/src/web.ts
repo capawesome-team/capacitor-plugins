@@ -8,6 +8,7 @@ import type {
 import { ConnectionType } from './definitions';
 
 interface NetworkInformation extends EventTarget {
+  readonly saveData?: boolean;
   readonly type?: string;
 }
 
@@ -36,12 +37,16 @@ export class NetworkWeb extends WebPlugin implements NetworkPlugin {
 
   private createStatus(): GetStatusResult {
     const connected = navigator.onLine;
+    const connection = this.getConnection();
     return {
       connected,
       connectionType: connected
-        ? this.mapConnectionType(this.getConnection()?.type)
+        ? this.mapConnectionType(connection?.type)
         : ConnectionType.None,
       internetReachable: null,
+      constrained: connected ? (connection?.saveData ?? null) : false,
+      expensive: connected ? null : false,
+      ultraConstrained: connected ? null : false,
     };
   }
 

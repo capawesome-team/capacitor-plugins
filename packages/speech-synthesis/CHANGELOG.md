@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.4
+
+### Patch Changes
+
+- [`6546cdb3bf791eb0be02e075b540537ad54e2977`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6546cdb3bf791eb0be02e075b540537ad54e2977): fix(android): `isAvailable()` and `isSpeaking()` now resolve with their result instead of `undefined`
+
+- [`3ed0fd23c4f3e73854103ed439a1143ec1f7ed4a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3ed0fd23c4f3e73854103ed439a1143ec1f7ed4a) ([#545](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/545)): fix(ios): only apply the `duckOthers` audio session category option for categories that support it (`PLAYBACK`, `PLAY_AND_RECORD`, `MULTI_ROUTE`)
+
+- [`3ed0fd23c4f3e73854103ed439a1143ec1f7ed4a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3ed0fd23c4f3e73854103ed439a1143ec1f7ed4a) ([#545](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/545)): fix(ios): audio from other apps now resumes after speech ends instead of remaining stopped
+
+## 8.0.3
+
+### Patch Changes
+
+- [`8af0d3ac6802dd6bf29b2d5a42a147174e9ca102`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8af0d3ac6802dd6bf29b2d5a42a147174e9ca102) ([#517](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/517)): fix(ios): restoring the audio session no longer blocks the main thread when an utterance finishes or is cancelled
+
 ## 8.0.2
 
 ### Patch Changes

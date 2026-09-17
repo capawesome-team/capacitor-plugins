@@ -1,5 +1,61 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): fix(android): share one billing connection between concurrent calls
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): fix(android): report Google Play billing errors with their response code and debug message, and add the `PRODUCT_ALREADY_OWNED` and `PRODUCT_UNAVAILABLE` error codes
+
+- [`b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9) ([#635](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/635)): fix(android): keep purchases delivered while no `purchaseProduct(...)` call is pending
+
+- [`b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9) ([#635](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/635)): fix(android): look up the purchase again before `finishTransaction(...)` rejects with `TRANSACTION_NOT_FOUND` or `PENDING`
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): fix(android): forget a purchase after `finishTransaction(...)` so a repeated call re-checks it with Google Play
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): fix(android): reject `getProductsByIds(...)` when every product query fails instead of resolving with an empty list
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): fix(android): reject a pending `purchaseProduct(...)` call when the billing connection is lost instead of blocking later purchases
+
+- [`b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9) ([#635](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/635)): fix(android): reject `purchaseProduct(...)` with `PENDING` for a pending purchase instead of resolving with it
+
+- [`b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b4e078f8310a42a93ab28ba6f7954b64ee1cd9a9) ([#635](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/635)): fix(android): reject `purchaseProduct(...)` while another purchase is in progress instead of leaving the first call pending
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): docs: state that `isConsumable` must not be set for subscriptions
+
+- [`ba70d4867168d4e1c81d57ce0b887de82e6daaa1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ba70d4867168d4e1c81d57ce0b887de82e6daaa1) ([#636](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/636)): docs: correct the description of the `UNAVAILABLE` error code
+
+## 0.4.0
+
+### Minor Changes
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android)!: acknowledge one-time purchases in `finishTransaction(...)` instead of consuming them and add the `isConsumable` option for consumables
+
+### Patch Changes
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android): reject `finishTransaction(...)` with `PENDING` for a purchase that is still pending
+
+- [`90ade7da6544c47384c0e3b7f5b121695bd4c79d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/90ade7da6544c47384c0e3b7f5b121695bd4c79d) ([#584](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/584)): fix(android): fall back to the purchase token as `Transaction.id` when Google Play assigns no order ID and accept the purchase token in `finishTransaction(...)`
+
+## 0.3.12
+
+### Patch Changes
+
+- [`fb867cc328d7e6287a87a05f62c207141cbb4b5c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/fb867cc328d7e6287a87a05f62c207141cbb4b5c) ([#559](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/559)): fix(ios): omit `verificationResult` for unverified transactions, exclude them from `getCurrentTransactions()` and reject `purchaseProduct(...)` with `VERIFICATION_FAILED`
+
+## 0.3.11
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.3.10
+
+### Patch Changes
+
+- [`7a0038d8bdfa0d87e89d2f0db578dffa47164a6b`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7a0038d8bdfa0d87e89d2f0db578dffa47164a6b) ([#499](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/499)): feat: add `subscriptionOffers` and `subscriptionGroupId` to `Product`
+
 ## 0.3.9
 
 ### Patch Changes

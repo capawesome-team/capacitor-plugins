@@ -8,6 +8,8 @@ public class SuperwallPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "configure", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "register", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "dismiss", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "restorePurchases", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPresentationResult", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
@@ -58,6 +60,34 @@ public class SuperwallPlugin: CAPPlugin, CAPBridgedPlugin {
                     self.rejectCall(call, error)
                 } else {
                     self.resolveCall(call, result)
+                }
+            }
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func dismiss(_ call: CAPPluginCall) {
+        do {
+            try implementation?.dismiss { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
+                }
+            }
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func restorePurchases(_ call: CAPPluginCall) {
+        do {
+            try implementation?.restorePurchases { error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call)
                 }
             }
         } catch {

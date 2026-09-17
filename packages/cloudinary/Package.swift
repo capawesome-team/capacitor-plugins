@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "Cloudinary", package: "cloudinary_ios")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "CloudinaryPluginTests",
-            dependencies: ["CloudinaryPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

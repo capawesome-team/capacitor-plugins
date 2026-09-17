@@ -14,6 +14,7 @@ Capacitor plugin for reading SIM card and carrier information.
 - 🔀 **Multi-SIM**: Supports devices with multiple SIM slots.
 - 🌐 **Carrier details**: Read carrier name, country code, MCC and MNC.
 - 🔒 **Permissions**: Built-in handling of the required runtime permission.
+- 🤝 **Compatibility**: Works alongside the [Device Info](https://capawesome.io/docs/sdks/capacitor/device-info/), [Network](https://capawesome.io/docs/sdks/capacitor/network/) and [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -213,6 +214,10 @@ Only available on Android.
 </docgen-api>
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It reads the full picture of the device's SIM cards in a single call — carrier name, ISO country code, MCC and MNC, eSIM status, and the slot index for every active card on multi-SIM devices — through a fully typed API that handles the required Android runtime permission for you. It's honest about platform reality, too: SIM data is well supported on Android, while iOS no longer exposes it reliably, so the plugin focuses where the information is actually available. If you only need a rough country hint, a lighter approach may be enough; if you need dependable multi-SIM and carrier details, this plugin is built for exactly that.
 
 ### Why is the SIM plugin not available on iOS?
 

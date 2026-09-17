@@ -19,6 +19,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getDistinctId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlag", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getFeatureFlagPayload", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getSessionId", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "group", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "identify", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isFeatureEnabled", returnType: CAPPluginReturnPromise),
@@ -29,6 +30,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "reloadFeatureFlags", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "reset", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "screen", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setPersonProperties", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setup", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "startSessionRecording", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "stopSessionRecording", returnType: CAPPluginReturnPromise),
@@ -114,6 +116,13 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             }
         } catch let error {
             rejectCall(call, error)
+        }
+    }
+
+    @objc func getSessionId(_ call: CAPPluginCall) {
+        let result = implementation?.getSessionId()
+        if let result = result?.toJSObject() as? JSObject {
+            self.resolveCall(call, result)
         }
     }
 
@@ -213,6 +222,13 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         call.resolve()
     }
 
+    @objc func setPersonProperties(_ call: CAPPluginCall) {
+        let options = SetPersonPropertiesOptions(call: call)
+
+        implementation?.setPersonProperties(options)
+        call.resolve()
+    }
+
     @objc func setup(_ call: CAPPluginCall) {
         guard let apiKey = call.getString("apiKey") else {
             call.reject(CustomError.apiKeyMissing.localizedDescription)
@@ -223,6 +239,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
         let optOut = call.getBool("optOut", false)
         let captureApplicationLifecycleEvents = call.getBool("captureApplicationLifecycleEvents", true)
         let autoCaptureExceptions = call.getBool("autoCaptureExceptions", false)
+        let preloadFeatureFlags = call.getBool("preloadFeatureFlags", true)
+        let surveys = call.getBool("surveys", true)
         let sessionReplayConfig = call.getObject("sessionReplayConfig")
 
         let options = SetupOptions(
@@ -232,6 +250,8 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
             optOut: optOut,
             captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
             autoCaptureExceptions: autoCaptureExceptions,
+            preloadFeatureFlags: preloadFeatureFlags,
+            surveys: surveys,
             sessionReplayConfig: sessionReplayConfig
         )
 
@@ -279,7 +299,7 @@ public class PosthogPlugin: CAPPlugin, CAPBridgedPlugin {
                 maskAllTextInputs: sessionReplayConfigDict["maskAllTextInputs"] as? Bool ?? true,
                 maskAllImages: sessionReplayConfigDict["maskAllImages"] as? Bool ?? true,
                 maskAllSandboxedViews: sessionReplayConfigDict["maskAllSandboxedViews"] as? Bool ?? true,
-                captureNetworkTelemetry: sessionReplayConfigDict["captureNetworkTelemetry"] as? Bool ?? true,
+                captureNetworkTelemetry: sessionReplayConfigDict["captureNetworkTelemetry"] as? Bool ?? false,
                 debouncerDelay: sessionReplayConfigDict["debouncerDelay"] as? Double ?? 1.0
             )
         }

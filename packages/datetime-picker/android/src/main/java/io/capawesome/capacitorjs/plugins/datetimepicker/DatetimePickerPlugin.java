@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.datetimepicker;
 
+import android.content.res.Configuration;
 import android.util.Log;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -29,17 +30,16 @@ public class DatetimePickerPlugin extends Plugin {
 
     @PluginMethod
     public void cancel(PluginCall call) {
-        getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    implementation.cancel();
-                    call.resolve();
-                } catch (Exception ex) {
-                    String message = ex.getLocalizedMessage();
-                    Log.e(TAG, message);
-                    call.reject(message);
-                }
-            });
+        getActivity().runOnUiThread(() -> {
+            try {
+                implementation.cancel();
+                call.resolve();
+            } catch (Exception ex) {
+                String message = ex.getLocalizedMessage();
+                Log.e(TAG, message);
+                call.reject(message);
+            }
+        });
     }
 
     @PluginMethod
@@ -98,70 +98,85 @@ public class DatetimePickerPlugin extends Plugin {
             final AndroidDatePickerMode finalAndroidDatePickerMode = androidDatePickerMode;
             final AndroidTimePickerMode finalAndroidTimePickerMode = androidTimePickerMode;
 
-            getActivity()
-                .runOnUiThread(() -> {
-                    try {
-                        if (mode.equals("datetime")) {
-                            implementation.presentDateTimePicker(
-                                finalDate,
-                                finalMinDate,
-                                finalMaxDate,
-                                finalLocale,
-                                cancelButtonText,
-                                doneButtonText,
-                                theme,
-                                resultCallback,
-                                finalAndroidDatePickerMode,
-                                finalAndroidTimePickerMode
-                            );
-                        } else if (mode.equals("date")) {
-                            implementation.presentDatePicker(
-                                finalDate,
-                                finalMinDate,
-                                finalMaxDate,
-                                finalLocale,
-                                cancelButtonText,
-                                doneButtonText,
-                                theme,
-                                resultCallback,
-                                finalAndroidDatePickerMode,
-                                finalAndroidTimePickerMode
-                            );
-                        } else if (mode.equals("time")) {
-                            implementation.presentTimePicker(
-                                finalDate,
-                                finalLocale,
-                                cancelButtonText,
-                                doneButtonText,
-                                theme,
-                                resultCallback,
-                                finalAndroidDatePickerMode,
-                                finalAndroidTimePickerMode
-                            );
-                        } else if (mode.equals("month")) {
-                            implementation.presentMonthPicker(
-                                finalDate,
-                                finalMinDate,
-                                finalMaxDate,
-                                finalLocale,
-                                cancelButtonText,
-                                doneButtonText,
-                                theme,
-                                resultCallback
-                            );
-                        } else {
-                            call.reject(ERROR_MODE_INVALID);
-                        }
-                    } catch (Exception ex) {
-                        String message = ex.getLocalizedMessage();
-                        Log.e(TAG, message);
-                        call.reject(message);
+            getActivity().runOnUiThread(() -> {
+                try {
+                    if (mode.equals("datetime")) {
+                        implementation.presentDateTimePicker(
+                            finalDate,
+                            finalMinDate,
+                            finalMaxDate,
+                            finalLocale,
+                            cancelButtonText,
+                            doneButtonText,
+                            theme,
+                            resultCallback,
+                            finalAndroidDatePickerMode,
+                            finalAndroidTimePickerMode
+                        );
+                    } else if (mode.equals("date")) {
+                        implementation.presentDatePicker(
+                            finalDate,
+                            finalMinDate,
+                            finalMaxDate,
+                            finalLocale,
+                            cancelButtonText,
+                            doneButtonText,
+                            theme,
+                            resultCallback,
+                            finalAndroidDatePickerMode,
+                            finalAndroidTimePickerMode
+                        );
+                    } else if (mode.equals("time")) {
+                        implementation.presentTimePicker(
+                            finalDate,
+                            finalLocale,
+                            cancelButtonText,
+                            doneButtonText,
+                            theme,
+                            resultCallback,
+                            finalAndroidDatePickerMode,
+                            finalAndroidTimePickerMode
+                        );
+                    } else if (mode.equals("month")) {
+                        implementation.presentMonthPicker(
+                            finalDate,
+                            finalMinDate,
+                            finalMaxDate,
+                            finalLocale,
+                            cancelButtonText,
+                            doneButtonText,
+                            theme,
+                            resultCallback
+                        );
+                    } else {
+                        call.reject(ERROR_MODE_INVALID);
                     }
-                });
+                } catch (Exception ex) {
+                    String message = ex.getLocalizedMessage();
+                    Log.e(TAG, message);
+                    call.reject(message);
+                }
+            });
         } catch (Exception ex) {
             String message = ex.getLocalizedMessage();
             Log.e(TAG, message);
             call.reject(message);
+        }
+    }
+
+    @Override
+    protected void handleOnConfigurationChanged(Configuration newConfig) {
+        super.handleOnConfigurationChanged(newConfig);
+        if (implementation != null) {
+            implementation.handleConfigurationChanged(newConfig);
+        }
+    }
+
+    @Override
+    protected void handleOnDestroy() {
+        super.handleOnDestroy();
+        if (implementation != null) {
+            implementation.handleDestroy();
         }
     }
 

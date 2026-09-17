@@ -290,6 +290,7 @@ export interface LiveUpdatePlugin {
    *
    * **Attention**: This method should be called as soon as the app is ready to use
    * to prevent the app from being reset to the default bundle.
+   * It must always be called before `sync(...)` or any other method that changes the bundle.
    *
    * Only available on Android and iOS.
    *
@@ -298,6 +299,14 @@ export interface LiveUpdatePlugin {
   ready(): Promise<ReadyResult>;
   /**
    * Reload the app to apply the new bundle.
+   *
+   * This method reloads the web view only, the native process is **not** restarted.
+   * Resources of the web layer that hold an exclusive lock (e.g. IndexedDB or WebSockets)
+   * are therefore not released automatically and may prevent the new bundle from starting.
+   * Release these resources before calling this method or apply the new bundle
+   * on the next app start instead.
+   *
+   * **Attention**: The in-memory state of the app (e.g. unsaved user input) is lost.
    *
    * Only available on Android and iOS.
    *

@@ -14,8 +14,8 @@ Capacitor plugin to interact with screen readers.
 - 📣 **Announcements**: Post accessibility announcements that are read out by the active screen reader.
 - 🔔 **State changes**: Listen for changes to the enabled state of the screen reader.
 - 🖥️ **Cross-platform**: Supports Android, iOS and the web.
-- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - 🤝 **Compatibility**: Works alongside the [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -264,6 +264,10 @@ This plugin is a drop-in replacement for the official `@capacitor/screen-reader`
 The `speak(...)` method has been renamed to `announce(...)` to make it clear that it posts an accessibility announcement to the active screen reader and does **not** perform text-to-speech. For real text-to-speech, use the [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugin instead.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It focuses on real accessibility work with VoiceOver and TalkBack: you can post announcements, check whether a screen reader is enabled, and listen for state changes, with the device observed only while a listener is attached. Announcements work on Android, iOS, and the web, where they use a visually hidden `aria-live` region, and on Android you can provide the announcement language so it is pronounced correctly. The API is fully typed, is actively maintained against the latest Capacitor version, and pairs naturally with the Accessibility Preferences and Speech Synthesis plugins for a complete accessibility toolkit.
 
 ### Does the announce method perform text-to-speech?
 

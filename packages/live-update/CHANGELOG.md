@@ -1,5 +1,29 @@
 # Changelog
 
+## 8.4.2
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.4.1
+
+### Patch Changes
+
+- [`1b6109e6f4e1ed54551edcebaa9439923db6a78b`](https://github.com/capawesome-team/capacitor-plugins/commit/1b6109e6f4e1ed54551edcebaa9439923db6a78b) ([#989](https://github.com/capawesome-team/capacitor-plugins/pull/989)): fix: report the actual plugin version instead of a stale one on Android and iOS
+
+## 8.4.0
+
+### Minor Changes
+
+- [`a24563f3c888d8f36498384faca71084a047abe4`](https://github.com/capawesome-team/capacitor-plugins/commit/a24563f3c888d8f36498384faca71084a047abe4) ([#826](https://github.com/capawesome-team/capacitor-plugins/pull/826)): feat(android): add brotli compression support to OkHttp client
+
+### Patch Changes
+
+- [`268e1cb5d6ee569c9edc0f35a9ffe8f2a3f4d07e`](https://github.com/capawesome-team/capacitor-plugins/commit/268e1cb5d6ee569c9edc0f35a9ffe8f2a3f4d07e) ([#971](https://github.com/capawesome-team/capacitor-plugins/pull/971)): fix: validate HTTP status of file downloads, ignore the URL cache and overwrite leftover files from failed download attempts on iOS
+
+- [`cc44c67331599f6930f5b3a74f1844d30af2d6d9`](https://github.com/capawesome-team/capacitor-plugins/commit/cc44c67331599f6930f5b3a74f1844d30af2d6d9) ([#825](https://github.com/capawesome-team/capacitor-plugins/pull/825)): fix(android): replace deprecated Android APIs with AndroidX compat alternatives
+
 ## 8.3.0
 
 ### Minor Changes

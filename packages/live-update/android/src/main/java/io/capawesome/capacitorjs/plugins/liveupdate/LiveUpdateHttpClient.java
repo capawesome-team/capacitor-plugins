@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okhttp3.brotli.BrotliInterceptor;
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
@@ -58,6 +59,7 @@ public class LiveUpdateHttpClient {
         dispatcher.setMaxRequestsPerHost(30);
 
         this.okHttpClient = new OkHttpClient.Builder()
+            .addInterceptor(BrotliInterceptor.INSTANCE)
             .dispatcher(dispatcher)
             .connectTimeout(httpTimeout, TimeUnit.MILLISECONDS)
             .readTimeout(httpTimeout, TimeUnit.MILLISECONDS)
@@ -101,7 +103,7 @@ public class LiveUpdateHttpClient {
         Buffer sinkBuffer = sink.getBuffer();
         long totalBytesRead = 0;
         int bufferSize = 8 * 1024;
-        for (long bytesRead; (bytesRead = source.read(sinkBuffer, bufferSize)) != -1;) {
+        for (long bytesRead; (bytesRead = source.read(sinkBuffer, bufferSize)) != -1; ) {
             sink.emit();
             totalBytesRead += bytesRead;
             if (callback != null) {

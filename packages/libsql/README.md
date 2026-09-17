@@ -483,8 +483,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords or tokens.
+- [SQLite](https://capawesome.io/docs/sdks/capacitor/sqlite/): Access SQLite databases with support for encryption, transactions, and schema migrations.
 
 ## Newsletter
 

@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.2.5
+
+### Patch Changes
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix(android): log instead of throw when stopping the recording fails on destroy
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix(android): do not request the `recordAudio` permission in `getRecordingStatus()`
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix(android): release the `MediaRecorder` and delete the output file when `startRecording(...)` or `stopRecording()` fails
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix(ios): do not emit `recordingPaused` again when the recording is already paused
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix(ios): reject `pauseRecording()` when no recording is active and always settle `stopRecording()`
+
+- [`621537d11b4b29fcfbec9ddb3be0bc05f9dbde01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/621537d11b4b29fcfbec9ddb3be0bc05f9dbde01) ([#588](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/588)): fix: percent-decode the `uri` option of `startRecording(...)`
+
+## 8.2.4
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
 ## 8.2.3
 
 ### Patch Changes

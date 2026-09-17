@@ -38,11 +38,7 @@ let package = Package(
             path: "ios/Plugin",
             swiftSettings: [
                 .define("CAPAWESOME_INCLUDE_IONIC_PROVIDER", .when(traits: ["IonicProvider"]))
-            ]),
-        .testTarget(
-            name: "LiveUpdatePluginTests",
-            dependencies: ["LiveUpdatePlugin"],
-            path: "ios/PluginTests")
+            ])
     ],
     swiftLanguageModes: [.v5]
 )

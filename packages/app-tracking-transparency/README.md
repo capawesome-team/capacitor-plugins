@@ -15,6 +15,7 @@ The Capacitor App Tracking Transparency plugin is one of the most complete track
 - 🔒 **Authorization status**: Read the current tracking authorization status.
 - 🙋 **Permission request**: Present the system tracking authorization prompt.
 - 🆔 **Advertising identifier**: Read the advertising identifier (IDFA) when authorized.
+- 🤝 **Compatibility**: Works alongside the [Permissions](https://capawesome.io/docs/sdks/capacitor/permissions/) plugin.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -248,6 +249,10 @@ Apple requires that any app that tracks users requests permission via the App Tr
 - **Simulator**: The iOS Simulator never provides an advertising identifier, so `getAdvertisingIdentifier(...)` always returns `null` there, even if the status is `authorized`. Use a real device to test the advertising identifier.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It wraps Apple's App Tracking Transparency framework in a small, fully typed API: read the current authorization status, present the system prompt, and read the advertising identifier (IDFA) once the user has authorized tracking. It also ships focused App Review guidance on prompt timing, purpose strings, and simulator behavior — the details that most often decide whether a tracking-enabled app is approved. It supports CocoaPods and Swift Package Manager and is actively maintained against the latest Capacitor version.
 
 ### Does this plugin work on Android or Web?
 

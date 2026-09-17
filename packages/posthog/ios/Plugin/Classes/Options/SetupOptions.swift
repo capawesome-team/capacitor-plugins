@@ -7,6 +7,8 @@ import Foundation
     private var optOut: Bool
     private var captureApplicationLifecycleEvents: Bool
     private var autoCaptureExceptions: Bool
+    private var preloadFeatureFlags: Bool
+    private var surveys: Bool
     private var sessionReplayConfig: SessionReplayOptions?
 
     init(
@@ -16,6 +18,8 @@ import Foundation
         optOut: Bool,
         captureApplicationLifecycleEvents: Bool,
         autoCaptureExceptions: Bool,
+        preloadFeatureFlags: Bool,
+        surveys: Bool,
         sessionReplayConfig: [String: Any]?
     ) {
         self.apiKey = apiKey
@@ -24,6 +28,8 @@ import Foundation
         self.optOut = optOut
         self.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         self.autoCaptureExceptions = autoCaptureExceptions
+        self.preloadFeatureFlags = preloadFeatureFlags
+        self.surveys = surveys
 
         if let config = sessionReplayConfig {
             self.sessionReplayConfig = SessionReplayOptions(
@@ -31,7 +37,7 @@ import Foundation
                 maskAllTextInputs: config["maskAllTextInputs"] as? Bool ?? true,
                 maskAllImages: config["maskAllImages"] as? Bool ?? true,
                 maskAllSandboxedViews: config["maskAllSandboxedViews"] as? Bool ?? true,
-                captureNetworkTelemetry: config["captureNetworkTelemetry"] as? Bool ?? true,
+                captureNetworkTelemetry: config["captureNetworkTelemetry"] as? Bool ?? false,
                 debouncerDelay: config["debouncerDelay"] as? Double ?? 1.0
             )
         }
@@ -59,6 +65,14 @@ import Foundation
 
     func getAutoCaptureExceptions() -> Bool {
         return autoCaptureExceptions
+    }
+
+    func getPreloadFeatureFlags() -> Bool {
+        return preloadFeatureFlags
+    }
+
+    func getSurveys() -> Bool {
+        return surveys
     }
 
     func getSessionReplayConfig() -> SessionReplayOptions? {

@@ -13,6 +13,7 @@ Capacitor plugin to enable and disable text interaction (selection, magnifier, c
 - ✋ **Text interaction**: Enable and disable text interaction at runtime.
 - 🔍 **State**: Read whether text interaction is currently enabled.
 - 🧩 **Zero-config**: No changes to your native project required.
+- 🤝 **Compatibility**: Works alongside the [Clipboard](https://capawesome.io/docs/sdks/capacitor/clipboard/), [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/) and [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -193,6 +194,10 @@ Text interaction covers the system gestures that let a user work with text in th
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It disables the system text-interaction gestures — text selection, the selection magnifier, and the callout (copy/paste) menu — as a whole at runtime, which is exactly what app-like UIs need when accidental selection breaks the experience. It requires no native setup, exposes a fully typed API with a state check so you can keep an in-app toggle in sync, and ships for both CocoaPods and Swift Package Manager. If the CSS `user-select: none` property on specific elements covers your case, that is perfectly fine; if you want to control the WebView's text gestures as a whole, this plugin is built for it.
+
 ### Why is this plugin only available on iOS?
 
 The plugin controls the system text-interaction gestures of the iOS WebView. On Android and Web, all methods reject as unimplemented. On Web, you can use the CSS `user-select` property to prevent text selection instead.
@@ -215,9 +220,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
+- [Clipboard](https://capawesome.io/docs/sdks/capacitor/clipboard/): Read from and write to the system clipboard.
 - [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher and block screenshots.
 - [System WebView](https://capawesome.io/docs/sdks/capacitor/system-webview/): Detect an outdated Android System WebView and guide users to update it.
+- [Text Zoom](https://capawesome.io/docs/sdks/capacitor/text-zoom/): Read and control the WebView text zoom.
 
 ## Newsletter
 

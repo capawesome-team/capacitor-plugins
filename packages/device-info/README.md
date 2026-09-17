@@ -15,9 +15,9 @@ Capacitor plugin to read device information, such as the model, manufacturer, op
 - 🧠 **Memory**: Read the total memory of the device and the memory used by the app.
 - ⏱️ **Uptime**: Read how long the device has been running since its last boot.
 - 🖥️ **Cross-platform**: Support for Android, iOS, and Web.
+- 🤝 **Compatibility**: Works alongside the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) and [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/) and [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -284,6 +284,10 @@ This plugin can be used as a replacement for the official [`@capacitor/device`](
 | `getLanguageTag()`  | Use the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin |
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It gathers a wide range of device details through one fully typed API — model, manufacturer, operating system, a per-install identifier, total and used memory, device type, virtual-device detection, WebView version, and uptime — with consistent behavior across Android, iOS, and the Web. Fields a platform cannot determine are returned as `null`, and the package is actively maintained against the latest Capacitor and OS versions. If you only need the platform name, a minimal setup is enough; if you want a complete, honest picture of the device, this plugin is built for exactly that.
 
 ### How stable is the identifier returned by `getId`?
 

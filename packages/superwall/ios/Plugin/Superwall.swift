@@ -56,6 +56,34 @@ import SuperwallKit
         )
     }
 
+    @objc public func dismiss(completion: @escaping (_ error: Error?) -> Void) throws {
+        guard isConfigured else {
+            completion(CustomError.notConfigured)
+            return
+        }
+
+        SuperwallKit.Superwall.shared.dismiss {
+            completion(nil)
+        }
+    }
+
+    @objc public func restorePurchases(completion: @escaping (_ error: Error?) -> Void) throws {
+        guard isConfigured else {
+            completion(CustomError.notConfigured)
+            return
+        }
+
+        Task { @MainActor in
+            let result = await SuperwallKit.Superwall.shared.restorePurchases()
+            switch result {
+            case .restored:
+                completion(nil)
+            case .failed(let error):
+                completion(error ?? CustomError.failedToRestorePurchases)
+            }
+        }
+    }
+
     @objc public func getPresentationResult(_ options: GetPresentationResultOptions, completion: @escaping (_ result: GetPresentationResultResult?, _ error: Error?) -> Void) throws {
         guard isConfigured else {
             completion(nil, CustomError.notConfigured)

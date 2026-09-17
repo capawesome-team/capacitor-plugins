@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('icon:', icon);
     });
   document.querySelector('#setIcon').addEventListener('click', async () => {
-    await AppIcon.setIcon({ icon: 'AppIconAlternate' });
+    await AppIcon.setIcon({ icon: 'Alternate' });
     console.log('Icon changed.');
   });
   document.querySelector('#resetIcon').addEventListener('click', async () => {

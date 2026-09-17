@@ -1,5 +1,85 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix!: return `{ version }` with the schema version from `SQLiteDBConnection.getVersion()` instead of the SQLite library version string
+
+### Patch Changes
+
+- [`aaab30ac1b4093576ac3fb2a712cedf487936405`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aaab30ac1b4093576ac3fb2a712cedf487936405) ([#646](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/646)): docs: document the behavior changes of `SQLiteDBConnection` and of read-only connections with a `version` on Android
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix: clear the database id on `SQLiteDBConnection.close()` and reject transaction methods on a closed connection
+
+  `beginTransaction()`, `commitTransaction()` and `rollbackTransaction()` now reject with "Database is not open." on a closed connection.
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix: run every statement passed to `SQLiteDBConnection.execute(...)` and wrap a multi-statement script in a transaction unless `transaction` is `false`
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix: retrieve and close `SQLiteConnection` connections that were created with a `.db` suffix
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix: reject `SQLiteDBConnection.run(...)` on a read-only connection
+
+- [`0c77e370d16f1c747453c552d74415335bf95760`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/0c77e370d16f1c747453c552d74415335bf95760) ([#626](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/626)): fix: replace the upgrade statements of a version when `addUpgradeStatement(...)` registers it again
+
+- [`07d2920e208aa6b989a40db6fbaf3943d1064b5a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/07d2920e208aa6b989a40db6fbaf3943d1064b5a) ([#585](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/585)): fix: apply the upgrade statements registered via `SQLiteConnection.addUpgradeStatement(...)`
+
+- [`a66ac4180f09b267fcd7512513eda1d7560c0d81`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a66ac4180f09b267fcd7512513eda1d7560c0d81) ([#582](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/582)): fix: never lower `user_version` in `open(...)`
+
+- [`a66ac4180f09b267fcd7512513eda1d7560c0d81`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a66ac4180f09b267fcd7512513eda1d7560c0d81) ([#582](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/582)): fix: run the upgrade statements of `open(...)` in a single transaction
+
+- [`a66ac4180f09b267fcd7512513eda1d7560c0d81`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a66ac4180f09b267fcd7512513eda1d7560c0d81) ([#582](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/582)): fix(android,ios): reject `open(...)` if `version` is not an integer between 1 and 2147483647
+
+- [`74c945b3ffb4dce34c772b0660390a23d5d4cc7a`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/74c945b3ffb4dce34c772b0660390a23d5d4cc7a) ([#621](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/621)): fix(web): reject a call with the SQLite error instead of never settling when a statement fails
+
+## 0.3.16
+
+### Patch Changes
+
+- [`3361fd91a5a70a83cb11e7a584b8b758a2a1061d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3361fd91a5a70a83cb11e7a584b8b758a2a1061d) ([#576](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/576)): fix(electron): remove a database from the registry even when closing it fails and close every database in `closeAll()` before rethrowing the first error
+
+- [`06213a64eddc49b39f89f78d6fc0a853816d9a26`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/06213a64eddc49b39f89f78d6fc0a853816d9a26) ([#575](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/575)): feat(ios): add the `BundledSQLite` SPM package trait to bundle a current SQLite version instead of the system-provided one
+
+- [`3803f402577ad74ad993ce0abc1ddee125e58328`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3803f402577ad74ad993ce0abc1ddee125e58328): fix: close the database handle when `open(...)` fails on Electron and Web
+
+- [`ced2c8a61897b61dddd1ecd11cabb4cd4ce1f017`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ced2c8a61897b61dddd1ecd11cabb4cd4ce1f017) ([#568](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/568)): fix: reject a `version` that is not an integer between 1 and 2147483647 on Electron and Web
+
+## 0.3.15
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.3.14
+
+### Patch Changes
+
+- [`44d90911cb8e67af8f4b0404a5a36766794424f5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/44d90911cb8e67af8f4b0404a5a36766794424f5) ([#530](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/530)): fix(android): close databases on the plugin thread on destroy so an open transaction no longer leaves the database file locked (`database is locked (code 5)`) when the bridge is recreated
+
+## 0.3.13
+
+### Patch Changes
+
+- [`abbcdc11efc79461f6a3997dff8821d170282f95`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/abbcdc11efc79461f6a3997dff8821d170282f95) ([#515](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/515)): fix(ios): `query(...)` now rejects with the SQLite error instead of crashing the app when a statement fails while its rows are read
+
+## 0.3.12
+
+### Patch Changes
+
+- [`6d990fee8f51559f5453ed205c9c6e979a71a2a2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6d990fee8f51559f5453ed205c9c6e979a71a2a2) ([#513](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/513)): fix(android): databases are now closed when `open(...)` fails after opening the connection and when the plugin is destroyed
+
+## 0.3.11
+
+### Patch Changes
+
+- [`42ca11e0ba383af117b0f1db3e25708442555be3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/42ca11e0ba383af117b0f1db3e25708442555be3) ([#501](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/501)): fix: roll back open transactions in `close()` and `closeAll()` so a dangling transaction no longer keeps the database locked
+
+## 0.3.10
+
+### Patch Changes
+
+- [`c8ff47dc84589f90ef2591da15279324303b7ea1`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c8ff47dc84589f90ef2591da15279324303b7ea1) ([#497](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/497)): feat: add `closeAll()` method to close all open databases
+
 ## 0.3.9
 
 ### Patch Changes

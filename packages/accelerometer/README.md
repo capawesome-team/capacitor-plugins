@@ -16,6 +16,7 @@ The Capacitor Accelerometer plugin is one of the most complete motion sensing so
 - ⚡ **Real-time measurements**: Continuous accelerometer data with event listeners.
 - 📊 **High precision**: Accurate x, y, and z-axis acceleration measurements in G's.
 - 🔒 **Permission handling**: Built-in permission management for sensor access.
+- 🤝 **Compatibility**: Works alongside the [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) and [Shake](https://capawesome.io/docs/sdks/capacitor/shake/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -38,6 +39,10 @@ The Accelerometer plugin is typically used whenever an app needs to react to dev
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 | 0.1.x          | 7.x.x             | Deprecated     |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How this plugin pairs with the Pedometer for fitness tracking and the Gyroscope for motion-based games.
 
 ## Installation
 
@@ -389,9 +394,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
-- [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device's compass heading.
 - [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure, measured in hectopascals (hPa).
+- [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device's compass heading.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
 - [Shake](https://capawesome.io/docs/sdks/capacitor/shake/): Detect shake gestures on the device.
 
 ## Newsletter

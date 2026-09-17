@@ -20,6 +20,7 @@ The Capacitor Datetime Picker plugin is one of the most feature-rich date and ti
 - 🔒 **Min/Max constraints**: Set minimum and maximum selectable dates/times.
 - 📱 **Native UI**: Uses platform-specific picker components.
 - ⚙️ **Flexible configuration**: Customizable button texts and picker modes.
+- 🤝 **Compatibility**: Works alongside the [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/), [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) and [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -147,6 +148,8 @@ Open the datetime picker.
 
 An error is thrown if the input is canceled or dismissed by the user.
 
+On Android, the picker is dismissed (the promise rejects with the `dismissed` error code) if the system language, font size or layout direction changes while it is open.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                      |
@@ -193,7 +196,7 @@ Only available on Android and iOS.
 | --------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- | ----- |
 | **`cancelButtonText`**      | <code>string</code>                                    | The cancel button text.                                                                                                                                                                                                                                                                                                                                               | <code>'Cancel'</code>                       | 0.0.1 |
 | **`doneButtonText`**        | <code>string</code>                                    | The done button text.                                                                                                                                                                                                                                                                                                                                                 | <code>'Ok'</code>                           | 0.0.1 |
-| **`format`**                | <code>string</code>                                    | The format in which values are received and returned.                                                                                                                                                                                                                                                                                                                 | <code>'yyyy-MM-dd'T'HH:mm:ss.sss'Z''</code> | 0.0.1 |
+| **`format`**                | <code>string</code>                                    | The format in which values are received and returned.                                                                                                                                                                                                                                                                                                                 | <code>'yyyy-MM-dd'T'HH:​mm:ss.sss'Z''</code> | 0.0.1 |
 | **`locale`**                | <code>string</code>                                    | BCP 47 language tag to define the language of the UI.                                                                                                                                                                                                                                                                                                                 |                                             | 0.0.2 |
 | **`max`**                   | <code>string</code>                                    | The latest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string later than or equal to the one specified by the `min` attribute.                                                                                                                                                   |                                             | 0.0.1 |
 | **`min`**                   | <code>string</code>                                    | The earliest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string earlier than or equal to the one specified by the `max` attribute.                                                                                                                                               |                                             | 0.0.1 |
@@ -234,9 +237,10 @@ No, this plugin is only available on Android and iOS, where it uses platform-spe
 
 ## Related Plugins
 
-- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Display native alert, confirm, and prompt dialogs.
 - [Localization](https://capawesome.io/docs/sdks/capacitor/localization/): Read the user's preferred locales to localize the picker.
+- [Option Picker](https://capawesome.io/docs/sdks/capacitor/option-picker/): Let the user pick an option from a list with a native picker.
 
 ## Credits
 

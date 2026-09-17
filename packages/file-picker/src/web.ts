@@ -3,6 +3,8 @@ import { WebPlugin } from '@capacitor/core';
 import type {
   ConvertHeicToJpegOptions,
   ConvertHeicToJpegResult,
+  ConvertRawToJpegOptions,
+  ConvertRawToJpegResult,
   CopyFileOptions,
   FilePickerPlugin,
   PermissionStatus,
@@ -32,6 +34,12 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
+  public async convertRawToJpeg(
+    _options: ConvertRawToJpegOptions,
+  ): Promise<ConvertRawToJpegResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   public async copyFile(_options: CopyFileOptions): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
@@ -52,6 +60,7 @@ export class FilePickerWeb extends WebPlugin implements FilePickerPlugin {
         name: this.getNameFromUrl(pickedFile),
         path: undefined,
         size: this.getSizeFromUrl(pickedFile),
+        webPath: URL.createObjectURL(pickedFile),
       };
       if (options?.readData) {
         file.data = await this.getDataFromFile(pickedFile);

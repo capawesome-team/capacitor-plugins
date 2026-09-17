@@ -68,12 +68,7 @@ public class AssetManager {
     }
 
     private void copy(String from, String to) throws IOException {
-        android.content.res.AssetManager assets = plugin.getContext().getAssets();
-
-        String fromLastSegment = from.substring(from.lastIndexOf("/") + 1);
-        boolean isFromDirectory = !fromLastSegment.contains(".");
-
-        if (isFromDirectory) {
+        if (isDirectory(from)) {
             copyDirectory(from, to);
         } else {
             copyFile(from, to);
@@ -107,6 +102,12 @@ public class AssetManager {
         }
         out.close();
         input.close();
+    }
+
+    private boolean isDirectory(String path) throws IOException {
+        String[] files = plugin.getContext().getAssets().list(path);
+        // Only file entries are packaged, so an empty listing means the path is a file or does not exist.
+        return files != null && files.length > 0;
     }
 
     private String readFileAsBase64EncodedData(InputStream inputStream) throws IOException {

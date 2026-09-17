@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The androidx.pdf annotation toolbar requires Material 3 theme attributes. -->
+    <style name="Theme.CapawesomePdfAnnotator" parent="Theme.Material3.DayNight.NoActionBar" />
+</resources>

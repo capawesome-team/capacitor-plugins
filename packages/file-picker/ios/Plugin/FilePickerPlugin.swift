@@ -1,7 +1,6 @@
 import Foundation
 import Capacitor
 import UIKit
-import MobileCoreServices
 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
@@ -13,6 +12,7 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "FilePicker"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "convertHeicToJpeg", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "convertRawToJpeg", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "copyFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "pickFiles", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "pickImages", returnType: CAPPluginReturnPromise),
@@ -61,6 +61,24 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func convertRawToJpeg(_ call: CAPPluginCall) {
+        do {
+            let options = try ConvertRawToJpegOptions(call)
+
+            let jpegUrl = try implementation?.convertRawToJpeg(options.getUrl())
+            guard let jpegUrl = jpegUrl else {
+                call.reject(errorConvertFailed)
+                return
+            }
+
+            var result = JSObject()
+            result["path"] = jpegUrl.absoluteString
+            call.resolve(result)
+        } catch {
+            call.reject(error.localizedDescription)
+        }
+    }
+
     @objc func copyFile(_ call: CAPPluginCall) {
         do {
             let options = try CopyFileOptions(call)
@@ -79,12 +97,9 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func pickFiles(_ call: CAPPluginCall) {
         savedCall = call
 
-        let limit = call.getInt("limit", 0)
-        let types = call.getArray("types", String.self) ?? []
-        let parsedTypes = parseTypesOption(types)
-        let documentTypes = parsedTypes.isEmpty ? ["public.data"] : parsedTypes
+        let options = PickFilesOptions(call)
 
-        implementation?.openDocumentPicker(limit: limit, documentTypes: documentTypes)
+        implementation?.openDocumentPicker(options)
     }
 
     @objc func pickDirectory(_ call: CAPPluginCall) {
@@ -161,6 +176,9 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
                 file["mimeType"] = implementation?.getMimeTypeFromUrl(url) ?? ""
                 file["name"] = implementation?.getNameFromUrl(url) ?? ""
                 file["path"] = implementation?.getPathFromUrl(url) ?? ""
+                if let webPath = implementation?.getWebPathFromUrl(url) {
+                    file["webPath"] = webPath
+                }
                 file["size"] = try implementation?.getSizeFromUrl(url) ?? -1
                 return file
             }
@@ -172,7 +190,7 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc func handleDirectoryPickerResult(path: String?, error: String?) {
+    @objc func handleDirectoryPickerResult(path: String?, bookmark: String?, error: String?) {
         guard let savedCall = savedCall else {
             return
         }
@@ -185,18 +203,10 @@ public class FilePickerPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         var result = JSObject()
+        if let bookmark = bookmark {
+            result["bookmark"] = bookmark
+        }
         result["path"] = path
         savedCall.resolve(result)
-    }
-
-    private func parseTypesOption(_ types: [String]) -> [String] {
-        var parsedTypes: [String] = []
-        for (_, type) in types.enumerated() {
-            guard let utType: String = UTTypeCreatePreferredIdentifierForTag(kUTTagClassMIMEType, type as CFString, nil)?.takeRetainedValue() as String? else {
-                continue
-            }
-            parsedTypes.append(utType)
-        }
-        return parsedTypes
     }
 }

@@ -32,7 +32,7 @@ import GoogleSignIn
                 return
             }
             guard let result = result else {
-                completion(nil, CustomError.idTokenMissing)
+                completion(nil, CustomError.signInResultMissing)
                 return
             }
             let user = result.user

@@ -1,5 +1,33 @@
 # Changelog
 
+## 8.4.3
+
+### Patch Changes
+
+- [`1b6943a6d11668b62125b98c533840ac417d9c41`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1b6943a6d11668b62125b98c533840ac417d9c41) ([#625](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/625)): docs: document that the `artwork` metadata is also supported on Android
+
+- [`5c10ccd5aa175edaeb071f745f58586cdfaa2f01`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5c10ccd5aa175edaeb071f745f58586cdfaa2f01) ([#617](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/617)): fix(android): load the artwork of `setMetadata(...)` on a background thread with a timeout
+
+- [`b3d2b7da7ed0d57fa98b2436986dc8dc76fa2751`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b3d2b7da7ed0d57fa98b2436986dc8dc76fa2751) ([#616](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/616)): fix(android): stop the media playback service and remove its notification when the plugin is destroyed
+
+## 8.4.2
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.4.1
+
+### Patch Changes
+
+- [`7b95f6535c3af617e6f3628d3c3e871fb32458b8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7b95f6535c3af617e6f3628d3c3e871fb32458b8) ([#529](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/529)): docs: clarify that this plugin is designed for playback that runs inside the web view and recommend the built-in media session integration of the Audio Player plugin for native audio playback
+
+## 8.4.0
+
+### Minor Changes
+
+- [`aad79bcb73641013bee17ec8ca2e995b3d6a04fd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aad79bcb73641013bee17ec8ca2e995b3d6a04fd): feat(android): support custom notification action icons via the new `playIcon`, `pauseIcon`, `previousTrackIcon`, `nextTrackIcon`, `seekBackwardIcon`, `seekForwardIcon` and `stopIcon` configuration options
+
 ## 8.3.1
 
 ### Patch Changes

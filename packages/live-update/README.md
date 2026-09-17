@@ -30,6 +30,7 @@ The Capacitor Live Update plugin is one of the most feature-rich Over-the-Air (O
 - 🔒 **Security**: Verify the authenticity and integrity of the bundle using a public key.
 - ⚔️ **Battle-Tested**: Used in more than 1,000 projects to update apps on more than 20,000,000 devices.
 - 🌐 **Open Source**: Licensed under the MIT License.
+- 🤝 **Compatibility**: Works alongside the [App Update](https://capawesome.io/docs/sdks/capacitor/app-update/) and [Firebase Remote Config](https://capawesome.io/docs/sdks/capacitor/firebase/remote-config/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -55,8 +56,14 @@ The Live Update plugin is typically used to ship changes to users without going 
 ## Guides
 
 - [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/docs/cloud/live-updates/setup/)
+- [Capacitor Live Updates: The Complete OTA Guide](https://capawesome.io/blog/capacitor-live-updates-guide/)
+- [Best OTA Update Tools for Capacitor (2026)](https://capawesome.io/blog/best-ota-update-tools-for-capacitor/)
+- [Capacitor Live Updates: Signing vs Encryption](https://capawesome.io/blog/capacitor-live-updates-end-to-end-encryption/)
+- [Capacitor Live Updates: Reliability & Uptime](https://capawesome.io/blog/capacitor-live-updates-reliability-and-uptime/)
+- [Capawesome vs. Capgo: Which Is More Reliable?](https://capawesome.io/blog/capawesome-cloud-vs-capgo-reliability/)
 - [Migrating from Ionic Appflow to Capawesome Cloud](https://capawesome.io/blog/migrating-from-ionic-appflow-to-capawesome-cloud/)
 - [Migrating from App Center to Capawesome Cloud](https://capawesome.io/blog/migrating-from-app-center-to-capawesome-cloud/)
+- [Live Updates for Nuxt Capacitor Apps](https://capawesome.io/blog/live-updates-for-nuxt-capacitor/)
 
 ## Installation
 
@@ -84,7 +91,7 @@ npx cap sync
 
 #### Channel
 
-If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a string resource.
+If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels), you can set a default channel directly in your native project by adding a string resource.
 This allows you to tie the channel to the version code at build time.
 
 Add the following to your app's `build.gradle` file:
@@ -102,7 +109,7 @@ android {
 If needed, you can define the following project variable in your app’s `variables.gradle` file to change the default version of the dependency:
 
 - `$ionicLiveUpdateProviderVersion` version of `io.ionic:liveupdateprovider` (default: `1.0.0`)
-- `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` (default: `5.3.2`)
+- `$okhttp3Version` version of `com.squareup.okhttp3:okhttp` and `com.squareup.okhttp3:okhttp-brotli` (default: `5.3.2`)
 - `$zip4jVersion` version of `net.lingala.zip4j:zip4j` (default: `2.11.5`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
@@ -111,7 +118,7 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 
 #### Channel
 
-If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels), you can set a default channel directly in your native project by adding a key to your `Info.plist` file.
+If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels), you can set a default channel directly in your native project by adding a key to your `Info.plist` file.
 This allows you to tie the channel to the build version at build time.
 
 Add the following to your `Info.plist` file:
@@ -814,6 +821,7 @@ Notify the plugin that the app is ready to use and no rollback is needed.
 
 **Attention**: This method should be called as soon as the app is ready to use
 to prevent the app from being reset to the default bundle.
+It must always be called before `sync(...)` or any other method that changes the bundle.
 
 Only available on Android and iOS.
 
@@ -831,6 +839,14 @@ reload() => Promise<void>
 ```
 
 Reload the app to apply the new bundle.
+
+This method reloads the web view only, the native process is **not** restarted.
+Resources of the web layer that hold an exclusive lock (e.g. IndexedDB or WebSockets)
+are therefore not released automatically and may prevent the new bundle from starting.
+Release these resources before calling this method or apply the new bundle
+on the next app start instead.
+
+**Attention**: The in-memory state of the app (e.g. unsaved user input) is lost.
 
 Only available on Android and iOS.
 
@@ -1347,6 +1363,23 @@ const sync = async () => {
 
 This way, the app will check for updates, but no updates will be found.
 
+### Check which bundle is running
+
+If an update does not seem to be applied, log the identifier of the current bundle and the path that the web view is serving as early as possible at app start:
+
+```typescript
+import { WebView } from '@capacitor/core';
+import { LiveUpdate } from '@capawesome/capacitor-live-update';
+
+const logCurrentBundle = async () => {
+  const { bundleId } = await LiveUpdate.getCurrentBundle();
+  const { path } = await WebView.getServerBasePath();
+  console.log(`Bundle: ${bundleId ?? 'default'} (${path})`);
+};
+```
+
+Because [`reload()`](#reload) restarts the web layer, this also logs both values after a reload. If they change after the reload, the new bundle was applied and any remaining problem is in the web layer of your app (see [Why does my app hang after calling `reload()`?](#why-does-my-app-hang-after-calling-reload)).
+
 ## Limitations
 
 Live updates are only supported for [binary-compatible changes](https://capawesome.io/docs/cloud/live-updates/faq/#what-are-binary-compatible-changes) (e.g. HTML, CSS, JavaScript).
@@ -1367,7 +1400,7 @@ On Capawesome Cloud, the bundle ID corresponds to the ID of the app build artifa
 There are four ways to set a channel, listed from lowest to highest priority:
 
 1. **Capacitor config**: Set the `defaultChannel` property in the [plugin configuration](#configuration). This is the simplest way to set a static default channel.
-2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/guides/best-practices/#versioned-channels) where the channel is tied to the build version.
+2. **Native config**: Set `CapawesomeLiveUpdateDefaultChannel` in `Info.plist` (iOS) or `capawesome_live_update_default_channel` in `strings.xml` (Android). This is useful for [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels) where the channel is tied to the build version.
 3. **[`setChannel(...)`](#setchannel)**: Set the channel at runtime. The value is persisted across app restarts.
 4. **[`sync(...)`](#sync)**: Pass a `channel` option to override the channel for a single sync call. This does **not** persist the channel.
 
@@ -1395,9 +1428,32 @@ No, the plugin also supports self-hosted bundles. You can download a bundle from
 
 Live updates are only supported for [binary-compatible changes](https://capawesome.io/docs/cloud/live-updates/faq/#what-are-binary-compatible-changes) such as HTML, CSS, and JavaScript. If you change native code, for example by adding a new plugin, you need to resubmit your app to the app stores. You should therefore [restrict live updates to compatible native versions](https://capawesome.io/blog/how-to-restrict-capacitor-live-updates-to-native-versions/) of your app, as described in the [Limitations](#limitations) section.
 
+### In which order should I call `ready()` and `sync()`?
+
+Always call [`ready()`](#ready) first, as early as possible after the app has started, and only then [`sync()`](#sync) or any other method that changes the bundle. `ready()` confirms that the current bundle works and stops the rollback timer. If you call `sync()` first, the `readyTimeout` keeps running while the next bundle is being downloaded, which can roll back a bundle that actually works.
+
 ### How does the rollback mechanism work?
 
 If the `readyTimeout` configuration option is set, the plugin waits for the app to call the [`ready()`](#ready) method after a new bundle has been applied. If the method is not called within the configured timeout, the plugin assumes the bundle is faulty and resets the app to the default bundle. It is strongly recommended to configure `readyTimeout` (e.g. `10000` ms). Additionally, with the `autoBlockRolledBackBundles` option enabled, bundles that caused a rollback are automatically blocked and skipped in future sync operations.
+
+### Why does my app hang after calling `reload()`?
+
+If your app shows a blank or loading screen after calling [`reload()`](#reload) but works after a force quit, the new bundle was most likely applied correctly. You can verify this by logging the [current bundle](#check-which-bundle-is-running) at app start.
+
+`reload()` reloads the web view without restarting the native process. Resources of the web layer that hold an exclusive lock are therefore not released automatically and can block the new bundle from starting. A force quit starts a new process and releases these resources, which is why the update seems to be applied only after a restart.
+
+The most common cause is IndexedDB. The Firebase JS SDK, for example, holds an IndexedDB lease as long as Firestore offline persistence is enabled. Terminate the client before reloading the app:
+
+```typescript
+import { getFirestore, terminate } from 'firebase/firestore';
+
+await terminate(getFirestore());
+await LiveUpdate.reload();
+```
+
+Keep in mind that offline persistence may be active even if you try to exclude web views, because guards that detect the browser by user agent usually also match the `WKWebView` on iOS. On Android, the problem is less likely to occur because Chromium recovers from a stale lease.
+
+Other candidates are WebSockets, Web Locks and service workers. If you cannot release these resources, apply the new bundle on the next app start instead of reloading the app.
 
 ## Related Plugins
 

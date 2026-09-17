@@ -24,11 +24,30 @@ import WebKit
         }
     }
 
-    @objc public func clearSessionData(completion: @escaping (_ error: Error?) -> Void) {
+    @objc public func clearCookies(_ options: ClearCookiesOptions, completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
-            let types: Set<String> = [WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage]
-            WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {
-                completion(nil)
+            let dataStore = WKWebsiteDataStore.default()
+            guard let url = options.url else {
+                dataStore.removeData(ofTypes: [WKWebsiteDataTypeCookies], modifiedSince: .distantPast) {
+                    completion(nil)
+                }
+                return
+            }
+            let cookieStore = dataStore.httpCookieStore
+            cookieStore.getAllCookies { cookies in
+                let cookiesToDelete = cookies.filter { cookie in
+                    InAppBrowserHelper.isCookie(cookie, matchingURL: url)
+                }
+                let dispatchGroup = DispatchGroup()
+                for cookie in cookiesToDelete {
+                    dispatchGroup.enter()
+                    cookieStore.delete(cookie) {
+                        dispatchGroup.leave()
+                    }
+                }
+                dispatchGroup.notify(queue: .main) {
+                    completion(nil)
+                }
             }
         }
     }

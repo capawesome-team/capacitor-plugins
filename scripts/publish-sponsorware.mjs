@@ -22,19 +22,23 @@ execute(async () => {
 
   for (const pkg of packagesToPublish) {
     const dirName = pkg.name.split('/')[1].replace('capacitor-', '');
+    const cwd = `./packages/${dirName}`;
     console.log(`Publishing ${pkg.name}@${pkg.version}...`);
     await exec(
       `npm pkg set repository.url=git+https://github.com/capawesome-team/sponsorware.git`,
-      {
-        cwd: `./packages/${dirName}`,
-      },
+      { cwd },
     );
     await exec(
       `npm pkg set publishConfig.registry=https://npm.pkg.github.com`,
-      { cwd: `./packages/${dirName}` },
+      { cwd },
     );
+    // Build explicitly: `prepublishOnly` is skipped when npm is configured with `ignore-scripts=true`.
+    await exec(`npm run build`, { cwd });
+    if (!fs.existsSync(`${cwd}/dist`)) {
+      throw new Error(`${pkg.name}: dist folder is missing after build.`);
+    }
     if (process.env.CI) {
-      await exec(`npm publish`, { cwd: `./packages/${dirName}` });
+      await exec(`npm publish`, { cwd });
     }
   }
   console.log(`${packagesToPublish.length} package(s) published.`);

@@ -160,9 +160,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, flip and format conversion, including HEIC to JPEG.
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the photo to edit from the gallery or file system.
 - [Exif](https://capawesome.io/docs/sdks/capacitor/exif/): Read, write and remove EXIF metadata from image files.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the photo to edit from the gallery or file system.
+- [Photo Manipulator](https://capawesome.io/docs/sdks/capacitor/photo-manipulator/): Headless image transforms like crop, resize, rotate, flip and format conversion, including HEIC to JPEG.
 
 ## Newsletter
 

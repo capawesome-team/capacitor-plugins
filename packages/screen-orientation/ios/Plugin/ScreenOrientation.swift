@@ -8,6 +8,10 @@ import Capacitor
     private var currentOrientationType: String?
     private var lastOrientationType: String?
 
+    private var windowScene: UIWindowScene? {
+        return plugin.bridge?.viewController?.view.window?.windowScene
+    }
+
     init(plugin: ScreenOrientationPlugin) {
         self.plugin = plugin
         super.init()
@@ -70,7 +74,7 @@ import Capacitor
 
     @objc private func requestGeometryUpdate(orientationValue: Int, orientationMask: UIInterfaceOrientationMask) {
         if #available(iOS 16, *) {
-            let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+            let windowScene = self.windowScene
             windowScene?.keyWindow?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
             windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: orientationMask)) { error in
                 CAPLog.print("requestGeometryUpdate failed.", error)
@@ -122,7 +126,7 @@ import Capacitor
         case UIInterfaceOrientation.portraitUpsideDown.rawValue:
             return UIInterfaceOrientationMask.portraitUpsideDown
         default:
-            let isPortrait = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isPortrait ?? false
+            let isPortrait = windowScene?.interfaceOrientation.isPortrait ?? false
             return isPortrait ? UIInterfaceOrientationMask.portrait : UIInterfaceOrientationMask.landscape
         }
     }
@@ -176,7 +180,7 @@ import Capacitor
         case UIInterfaceOrientation.portraitUpsideDown.rawValue:
             return "portrait-secondary"
         default:
-            let isPortrait = UIApplication.shared.windows.first?.windowScene?.interfaceOrientation.isPortrait ?? false
+            let isPortrait = windowScene?.interfaceOrientation.isPortrait ?? false
             return isPortrait ? "portrait-primary" : "landscape-primary"
         }
     }

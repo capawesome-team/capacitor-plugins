@@ -1,0 +1,35 @@
+platform :ios, '17.0'
+
+# The Microsoft Intune App SDK for iOS is not available via CocoaPods.
+# It is downloaded from the official Microsoft repository at install time
+# (see https://github.com/msintuneappsdk/ms-intune-app-sdk-ios).
+def download_intune_app_sdk
+  intune_mam_sdk_version = '21.7.1'
+  sdk_dir = File.join(__dir__, 'IntuneAppSDK')
+  return if File.exist?(File.join(sdk_dir, 'IntuneMAMSwift.xcframework'))
+  system(
+    "rm -rf '#{sdk_dir}' && " \
+    "git clone --depth 1 --branch #{intune_mam_sdk_version} --filter=blob:none --sparse https://github.com/msintuneappsdk/ms-intune-app-sdk-ios.git '#{sdk_dir}' && " \
+    "cd '#{sdk_dir}' && git sparse-checkout set IntuneMAMSwift.xcframework IntuneMAMSwiftStub.xcframework"
+  ) || raise('Failed to download the Microsoft Intune App SDK for iOS.')
+end
+
+def capacitor_pods
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  pod 'Capacitor', :path => '../../../node_modules/@capacitor/ios'
+  pod 'CapacitorCordova', :path => '../../../node_modules/@capacitor/ios'
+end
+
+target 'Plugin' do
+  capacitor_pods
+  pod 'MSAL', '~> 2.13'
+end
+
+target 'PluginTests' do
+  capacitor_pods
+end
+
+pre_install do |installer|
+  download_intune_app_sdk
+end

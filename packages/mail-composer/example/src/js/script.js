@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cc: ['john@example.com'],
       subject: 'Hello World',
       body: 'This is the body of the email.',
+      attachments: [{ data: btoa('Hello World'), name: 'log.txt' }],
     });
     console.log('status:', status);
   });

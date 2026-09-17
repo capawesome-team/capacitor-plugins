@@ -1,5 +1,35 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`27a093c9178b21b5afe07639839d49bea333ea99`](https://github.com/capawesome-team/capacitor-plugins/commit/27a093c9178b21b5afe07639839d49bea333ea99) ([#1041](https://github.com/capawesome-team/capacitor-plugins/pull/1041)): feat(ios): add `convertRawToJpeg(...)` method
+
+- [`0529e06aa3f9f2d06578c7bce3a494386db3dd0b`](https://github.com/capawesome-team/capacitor-plugins/commit/0529e06aa3f9f2d06578c7bce3a494386db3dd0b) ([#1040](https://github.com/capawesome-team/capacitor-plugins/pull/1040)): feat(android, ios): add `webPath` property to picked files
+
+### Patch Changes
+
+- [`c8006a2493a50d0b1bdac9539e3a215fdb27e028`](https://github.com/capawesome-team/capacitor-plugins/commit/c8006a2493a50d0b1bdac9539e3a215fdb27e028) ([#1039](https://github.com/capawesome-team/capacitor-plugins/pull/1039)): fix(android): apply the `types` option in `pickFiles(...)` regardless of `limit`
+
+## 8.0.6
+
+### Patch Changes
+
+- [`02e548c0c0ffe8e9d5562d53eeb9b8be328b2b13`](https://github.com/capawesome-team/capacitor-plugins/commit/02e548c0c0ffe8e9d5562d53eeb9b8be328b2b13) ([#1028](https://github.com/capawesome-team/capacitor-plugins/pull/1028)): fix(ios): `pickFiles` did not allow selecting any file when `types` contained wildcard (e.g. `image/*`) or unknown MIME types
+
+## 8.0.5
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.4
+
+### Patch Changes
+
+- [`38e9913d1d3f8cb1a68ea1714997696c5908c0af`](https://github.com/capawesome-team/capacitor-plugins/commit/38e9913d1d3f8cb1a68ea1714997696c5908c0af) ([#952](https://github.com/capawesome-team/capacitor-plugins/pull/952)): fix(android): handle missing `COLUMN_LAST_MODIFIED` column
+
 ## 8.0.3
 
 ### Patch Changes

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Capacitor Intune</title>
+    <meta
+      name="viewport"
+      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+
+    <script
+      type="module"
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/@ionic/pwa-elements@latest/dist/ionicpwaelements/ionicpwaelements.js"
+    ></script>
+
+    <link rel="icon" type="image/x-icon" href="./assets/icon/favicon.ico" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <meta name="theme-color" content="#31d53d" />
+
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"
+    />
+
+    <script type="module" src="./js/script.js"></script>
+  </head>
+  <body>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Capacitor Intune</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-list>
+          <ion-button id="acquire-token-button" expand="block"
+            >Acquire Token</ion-button
+          >
+          <ion-button id="acquire-token-silent-button" expand="block"
+            >Acquire Token Silent</ion-button
+          >
+          <ion-button id="register-and-enroll-account-button" expand="block"
+            >Register And Enroll Account</ion-button
+          >
+          <ion-button id="login-and-enroll-account-button" expand="block"
+            >Login And Enroll Account (iOS)</ion-button
+          >
+          <ion-button id="get-enrolled-account-button" expand="block"
+            >Get Enrolled Account</ion-button
+          >
+          <ion-button id="get-app-config-button" expand="block"
+            >Get App Config</ion-button
+          >
+          <ion-button id="get-policy-button" expand="block"
+            >Get Policy</ion-button
+          >
+          <ion-button id="get-sdk-version-button" expand="block"
+            >Get SDK Version</ion-button
+          >
+          <ion-button id="show-diagnostic-console-button" expand="block"
+            >Show Diagnostic Console</ion-button
+          >
+          <ion-button id="unenroll-account-button" expand="block"
+            >Unenroll Account</ion-button
+          >
+        </ion-list>
+      </ion-content>
+    </ion-app>
+  </body>
+</html>

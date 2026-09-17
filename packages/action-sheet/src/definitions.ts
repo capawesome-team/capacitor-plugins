@@ -2,6 +2,10 @@ export interface ActionSheetPlugin {
   /**
    * Show an action sheet with a list of buttons.
    *
+   * If the user selects a button with the `ActionSheetButtonStyle.Cancel` style
+   * or dismisses the action sheet, the promise is rejected with the `CANCELED`
+   * error code.
+   *
    * Only available on Android and iOS.
    *
    * @since 0.1.0
@@ -73,17 +77,7 @@ export interface ActionSheetButton {
  */
 export interface ShowActionsResult {
   /**
-   * Whether the action sheet was canceled by selecting a cancel button or by
-   * dismissing the action sheet.
-   *
-   * @since 0.1.0
-   * @example false
-   */
-  canceled: boolean;
-  /**
    * The index of the selected button in the `options` array (zero-based).
-   *
-   * If the action sheet was canceled without a cancel button, the index is `-1`.
    *
    * @since 0.1.0
    * @example 0
@@ -117,4 +111,17 @@ export enum ActionSheetButtonStyle {
    * @since 0.1.0
    */
   Destructive = 'DESTRUCTIVE',
+}
+
+/**
+ * @since 0.2.0
+ */
+export enum ErrorCode {
+  /**
+   * The user canceled the action sheet by selecting a cancel button or by
+   * dismissing the action sheet.
+   *
+   * @since 0.2.0
+   */
+  Canceled = 'CANCELED',
 }

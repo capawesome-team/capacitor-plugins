@@ -39,27 +39,19 @@ import MobileCoreServices
     }
 
     public func convertHeicToJpeg(_ sourceUrl: URL) throws -> URL? {
-        let heicImage = UIImage(named: sourceUrl.path)
-        guard let heicImage = heicImage else {
-            return nil
-        }
-        let jpegImageData = heicImage.jpegData(compressionQuality: 0.9)
-        let directory = try self.createUniqueTemporaryDirectory()
-        let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
-        let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
-        do {
-            try deleteFile(targetUrl)
-        }
-        try jpegImageData?.write(to: targetUrl)
-        return targetUrl
+        return try convertImageToJpeg(sourceUrl)
     }
 
-    public func openDocumentPicker(limit: Int, documentTypes: [String]) {
+    public func convertRawToJpeg(_ sourceUrl: URL) throws -> URL? {
+        return try convertImageToJpeg(sourceUrl)
+    }
+
+    public func openDocumentPicker(_ options: PickFilesOptions) {
         invokedMethod = "pickFiles"
         DispatchQueue.main.async {
-            let picker = UIDocumentPickerViewController(documentTypes: documentTypes, in: .import)
+            let picker = UIDocumentPickerViewController(forOpeningContentTypes: options.getContentTypes(), asCopy: true)
             picker.delegate = self
-            picker.allowsMultipleSelection = limit == 0
+            picker.allowsMultipleSelection = options.getLimit() == 0
             picker.modalPresentationStyle = .fullScreen
             self.presentViewController(picker)
         }
@@ -164,6 +156,10 @@ import MobileCoreServices
         return url.absoluteString
     }
 
+    public func getWebPathFromUrl(_ url: URL) -> String? {
+        return plugin?.bridge?.portablePath(fromLocalURL: url)?.absoluteString
+    }
+
     public func getNameFromUrl(_ url: URL) -> String {
         return url.lastPathComponent
     }
@@ -253,6 +249,18 @@ import MobileCoreServices
         }
     }
 
+    private func convertImageToJpeg(_ sourceUrl: URL) throws -> URL? {
+        guard let image = UIImage(contentsOfFile: sourceUrl.path), let jpegImageData = image.jpegData(compressionQuality: 0.9) else {
+            return nil
+        }
+        let directory = try self.createUniqueTemporaryDirectory()
+        let filenameWithoutExtension = sourceUrl.deletingPathExtension().lastPathComponent
+        let targetUrl = directory.appendingPathComponent("\(filenameWithoutExtension).jpeg")
+        try deleteFile(targetUrl)
+        try jpegImageData.write(to: targetUrl)
+        return targetUrl
+    }
+
     private func presentViewController(_ viewControllerToPresent: UIViewController) {
         self.plugin?.bridge?.viewController?.present(viewControllerToPresent, animated: true, completion: nil)
     }
@@ -309,7 +317,15 @@ extension FilePicker: UIDocumentPickerDelegate {
                 plugin?.handleDocumentPickerResult(urls: nil, error: self.plugin?.errorTemporaryCopyFailed)
             }
         } else if invokedMethod == "pickDirectory" {
-            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, error: nil)
+            var bookmark: String?
+            if let url = urls.first {
+                let isSecurityScoped = url.startAccessingSecurityScopedResource()
+                bookmark = (try? url.bookmarkData())?.base64EncodedString()
+                if isSecurityScoped {
+                    url.stopAccessingSecurityScopedResource()
+                }
+            }
+            plugin?.handleDirectoryPickerResult(path: urls.first?.absoluteString, bookmark: bookmark, error: nil)
         } else {
             return
         }
@@ -320,7 +336,7 @@ extension FilePicker: UIDocumentPickerDelegate {
         if invokedMethod == "pickFiles" {
             plugin?.handleDocumentPickerResult(urls: nil, error: nil)
         } else if invokedMethod == "pickDirectory" {
-            plugin?.handleDirectoryPickerResult(path: nil, error: nil)
+            plugin?.handleDirectoryPickerResult(path: nil, bookmark: nil, error: nil)
         } else {
             return
         }

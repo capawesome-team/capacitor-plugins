@@ -1,5 +1,45 @@
 # Changelog
 
+## 8.6.2
+
+### Patch Changes
+
+- [`30775ca1aec066ddba0efd8ca980cb8591b37963`](https://github.com/capawesome-team/capacitor-plugins/commit/30775ca1aec066ddba0efd8ca980cb8591b37963) ([#1056](https://github.com/capawesome-team/capacitor-plugins/pull/1056)): fix: reference the SDK by its real global name in the IIFE bundle
+
+## 8.6.1
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.6.0
+
+### Minor Changes
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `getSessionId()` method
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `setPersonProperties()` method
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat: add `surveys` and `preloadFeatureFlags` options
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): feat(web): add `webConfig` option to forward additional posthog-js configuration options
+
+### Patch Changes
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(android): `setup()` no longer rejects when `sessionReplayConfig` omits `debouncerDelay`
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix: `captureNetworkTelemetry` now defaults to `false` as documented
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(ios): start session recording when `enableSessionReplay` is set via `setup()`
+
+- [`7f10190199117f724a54dd89a8ba3228899a6189`](https://github.com/capawesome-team/capacitor-plugins/commit/7f10190199117f724a54dd89a8ba3228899a6189) ([#1011](https://github.com/capawesome-team/capacitor-plugins/pull/1011)): fix(web): disable session recording when `enableSessionReplay` is `false` or not set
+
+## 8.5.1
+
+### Patch Changes
+
+- [`a84a011d0af745476991caaa9748424c0ac37482`](https://github.com/capawesome-team/capacitor-plugins/commit/a84a011d0af745476991caaa9748424c0ac37482) ([#975](https://github.com/capawesome-team/capacitor-plugins/pull/975)): fix(android): implement `startSessionRecording()` and `stopSessionRecording()`
+
 ## 8.5.0
 
 ### Minor Changes

@@ -19,6 +19,7 @@ The Capacitor Geocoder plugin is one of the most complete geocoding solutions fo
 - 🌍 **Localization**: Customize the locale for geocoding requests.
 - 🔢 **Configurable Results**: Limit the number of addresses returned in reverse geocoding operations.
 - 🛠️ **Native APIs**: Uses platform-native geocoding services on Android and iOS for reliable and accurate results.
+- 🤝 **Compatibility**: Works alongside the [Compass](https://capawesome.io/docs/sdks/capacitor/compass/) and [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -255,8 +256,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
 - [Compass](https://capawesome.io/docs/sdks/capacitor/compass/): Read the device compass heading.
+- [Maps Launcher](https://capawesome.io/docs/sdks/capacitor/maps-launcher/): Launch navigation apps with turn-by-turn directions.
 
 ## Newsletter
 

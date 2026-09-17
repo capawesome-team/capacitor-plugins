@@ -25,6 +25,7 @@ The Capacitor Grafana Faro plugin is one of the most complete frontend observabi
 - 🌐 **Web Auto-Instrumentation**: Automatically capture uncaught errors, console output, Core Web Vitals, route changes and network performance on Web.
 - ⏯️ **Pause and Resume**: Pause and resume telemetry on demand.
 - 🎯 **Session Sampling**: Sample sessions with a configurable rate to control data volume.
+- 🤝 **Compatibility**: Works alongside the [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/) and [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/) plugins.
 
 ## Use Cases
 
@@ -717,10 +718,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
+- [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Unofficial Capacitor plugin for Firebase Analytics.
 - [Firebase Crashlytics](https://capawesome.io/docs/sdks/capacitor/firebase/crashlytics/): Unofficial Capacitor plugin for Firebase Crashlytics crash reporting.
 - [Firebase Performance Monitoring](https://capawesome.io/docs/sdks/capacitor/firebase/performance-monitoring/): Unofficial Capacitor plugin for Firebase Performance Monitoring.
-- [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Unofficial Capacitor plugin for Firebase Analytics.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Unofficial Capacitor plugin for the PostHog product analytics platform.
 
 ## Newsletter
 

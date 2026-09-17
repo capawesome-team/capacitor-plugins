@@ -14,6 +14,7 @@ Capacitor plugin to keep the screen awake.
 - 💤 **Allow sleep**: Restore the default screen sleep behavior at any time.
 - 🔍 **State**: Read whether the screen is currently kept awake.
 - 🌐 **Cross-platform**: Supports Android, iOS and Web (via the Screen Wake Lock API).
+- 🤝 **Compatibility**: Works alongside the [Battery](https://capawesome.io/docs/sdks/capacitor/battery/), [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/) and [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -232,6 +233,10 @@ Keep the following in mind when using this plugin:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It keeps the screen awake on Android, iOS, and the Web from one fully typed API, and lets you check both whether the feature is available and whether the screen is currently kept awake. On the Web it uses the Screen Wake Lock API and automatically re-acquires the lock when a hidden tab becomes visible again, so the behavior stays predictable across platforms. It needs no permissions or configuration and is actively maintained against the latest Capacitor version.
+
 ### Which platforms does this plugin support?
 
 The plugin supports Android, iOS and Web. On the Web, it relies on the Screen Wake Lock API, so availability depends on the browser. You can check this at runtime with the `isAvailable()` method, which always returns `true` on Android and iOS.
@@ -258,9 +263,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
 - [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 - [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/): Lock and unlock the screen orientation.
-- [Battery](https://capawesome.io/docs/sdks/capacitor/battery/): Access battery information of the device.
 
 ## Newsletter
 

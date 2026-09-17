@@ -14,6 +14,7 @@ Capacitor plugin to detect shake gestures.
 - 🎚️ **Sensitivity**: Configure how strong a shake must be to trigger an event.
 - 🔋 **Battery-friendly**: The sensor is only active while you are watching for shakes.
 - 📱 **Cross-platform**: One consistent API for Android and iOS.
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) and [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -32,6 +33,10 @@ The Shake plugin is typically used to trigger an action when the user shakes the
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How shake gestures relate to the Accelerometer and Gyroscope for shake-to-undo and shake-to-reroll interactions.
 
 ## Installation
 
@@ -215,6 +220,10 @@ The `sensitivity` option controls how strong a shake must be to emit a `shake` e
 - `hard`: Only a strong shake triggers an event.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It focuses on doing one thing well: detecting physical shake gestures on Android and iOS through a single, fully typed API. You can tune how strong a shake must be with three sensitivity levels, and the motion sensor only runs between `startWatching(...)` and `stopWatching()`, so it stays battery-friendly. It is actively maintained against the latest Capacitor version, giving you consistent shake behavior on both platforms from one dependency.
 
 ### Which platforms are supported by the Shake plugin?
 

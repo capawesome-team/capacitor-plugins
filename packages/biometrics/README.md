@@ -46,6 +46,10 @@ The Biometrics plugin is typically used whenever an app needs to verify the iden
 - [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
 - [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
 
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-biometrics-demo](https://github.com/capawesome-team/capacitor-biometrics-demo)
+
 ## Videos
 
 - [How to use Biometrics in a Capacitor Mobile App](https://youtu.be/ixUvTX6n7x8?si=27_X3KiLGAkI9-vJ)
@@ -248,6 +252,8 @@ This method will show a prompt to the user asking them to authenticate
 using their biometrics (e.g., fingerprint, face recognition). If the user
 successfully authenticates, the promise resolves. If the user cancels
 the authentication or if an error occurs, the promise rejects.
+
+Rejects if another authentication is already in progress.
 
 It is recommended to check if biometrics is available and enrolled
 using the `isAvailable()` and `isEnrolled()` methods before calling
@@ -482,14 +488,14 @@ Only available on Android and iOS.
 
 #### AuthenticateOptions
 
-| Prop                           | Type                                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                             | Default                                    | Since |
-| ------------------------------ | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----- |
-| **`allowDeviceCredential`**    | <code>boolean</code>                                            | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails. You can check if the device's credential is set up using the `hasDeviceCredential()` method.                                                                                                                                                              | <code>false</code>                         | 0.1.0 |
-| **`androidBiometricStrength`** | <code><a href="#biometricstrength">BiometricStrength</a></code> | The Android biometric strength to use for authentication. You can check the supported biometric strength level of the device using the `getBiometricStrengthLevel()` method. **Note**: On Android API Level 28 and 29, this will always be set to `AndroidBiometricStrength.WEAK` regardless of the value passed in if `allowDeviceCredential` is set to `true`. This is a known limitation. Only available on Android. | <code>AndroidBiometricStrength.WEAK</code> | 0.1.0 |
-| **`cancelButtonText`**         | <code>string</code>                                             | The negative button text of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                  |                                            | 0.1.0 |
-| **`iosFallbackButtonText`**    | <code>string</code>                                             | The fallback button text of the authentication prompt. Only available on iOS.                                                                                                                                                                                                                                                                                                                                           |                                            | 0.1.0 |
-| **`subtitle`**                 | <code>string</code>                                             | The subtitle of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                              |                                            | 0.1.0 |
-| **`title`**                    | <code>string</code>                                             | The title of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                                 |                                            | 0.1.0 |
+| Prop                           | Type                                                            | Description                                                                                                                                                                                                                                                                                                                                                                                                      | Default                             | Since |
+| ------------------------------ | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- | ----- |
+| **`allowDeviceCredential`**    | <code>boolean</code>                                            | Whether or not to allow the user to authenticate using their device's credential (e.g., PIN, password) if biometric authentication is not available or fails. You can check if the device's credential is set up using the `hasDeviceCredential()` method.                                                                                                                                                       | <code>false</code>                  | 0.1.0 |
+| **`androidBiometricStrength`** | <code><a href="#biometricstrength">BiometricStrength</a></code> | The Android biometric strength to use for authentication. You can check the supported biometric strength level of the device using the `getBiometricStrengthLevel()` method. **Note**: On Android API Level 28 and 29, this will always be set to `BiometricStrength.Weak` regardless of the value passed in if `allowDeviceCredential` is set to `true`. This is a known limitation. Only available on Android. | <code>BiometricStrength.Weak</code> | 0.1.0 |
+| **`cancelButtonText`**         | <code>string</code>                                             | The negative button text of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                           |                                     | 0.1.0 |
+| **`iosFallbackButtonText`**    | <code>string</code>                                             | The fallback button text of the authentication prompt. Only available on iOS.                                                                                                                                                                                                                                                                                                                                    |                                     | 0.1.0 |
+| **`subtitle`**                 | <code>string</code>                                             | The subtitle of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                       |                                     | 0.1.0 |
+| **`title`**                    | <code>string</code>                                             | The title of the authentication prompt.                                                                                                                                                                                                                                                                                                                                                                          |                                     | 0.1.0 |
 
 
 #### GetAuthenticationTypeResult
@@ -614,10 +620,10 @@ The plugin is compatible with the [Secure Preferences](https://capawesome.io/doc
 
 ## Related Plugins
 
+- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
-- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
-- [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with OAuth 2.0 and OpenID Connect providers.
 
 ## Newsletter
 

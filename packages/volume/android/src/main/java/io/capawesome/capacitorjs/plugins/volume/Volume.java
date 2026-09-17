@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.capawesome.capacitorjs.plugins.volume.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeButtonPressedEvent;
+import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeButtonReleasedEvent;
 import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeChangeEvent;
 import io.capawesome.capacitorjs.plugins.volume.classes.options.GetVolumeOptions;
 import io.capawesome.capacitorjs.plugins.volume.classes.options.SetVolumeOptions;
@@ -80,14 +81,12 @@ public class Volume {
         lastVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         registerVolumeObserver();
         watching = true;
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                View webView = plugin.getBridge().getWebView();
-                webView.setOnKeyListener(onKeyListener);
-                webView.requestFocus();
-                callback.success();
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            View webView = plugin.getBridge().getWebView();
+            webView.setOnKeyListener(onKeyListener);
+            webView.requestFocus();
+            callback.success();
+        });
     }
 
     public void stopWatching(@Nullable EmptyCallback callback) {
@@ -100,14 +99,12 @@ public class Volume {
         unregisterVolumeObserver();
         suppressVolumeChange = false;
         watching = false;
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                plugin.getBridge().getWebView().setOnKeyListener(null);
-                if (callback != null) {
-                    callback.success();
-                }
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            plugin.getBridge().getWebView().setOnKeyListener(null);
+            if (callback != null) {
+                callback.success();
+            }
+        });
     }
 
     private double getNormalizedVolume(int streamType) {
@@ -120,9 +117,11 @@ public class Volume {
         if (keyCode != KeyEvent.KEYCODE_VOLUME_UP && keyCode != KeyEvent.KEYCODE_VOLUME_DOWN) {
             return false;
         }
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            String direction = keyCode == KeyEvent.KEYCODE_VOLUME_UP ? DIRECTION_UP : DIRECTION_DOWN;
+        String direction = keyCode == KeyEvent.KEYCODE_VOLUME_UP ? DIRECTION_UP : DIRECTION_DOWN;
+        if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
             plugin.notifyVolumeButtonPressedListeners(new VolumeButtonPressedEvent(direction));
+        } else if (event.getAction() == KeyEvent.ACTION_UP) {
+            plugin.notifyVolumeButtonReleasedListeners(new VolumeButtonReleasedEvent(direction));
         }
         return suppressVolumeChange;
     }

@@ -6,19 +6,16 @@ import io.capawesome.capacitorjs.plugins.actionsheet.interfaces.Result;
 
 public class ShowActionsResult implements Result {
 
-    private final boolean canceled;
     private final int index;
 
-    public ShowActionsResult(int index, boolean canceled) {
+    public ShowActionsResult(int index) {
         this.index = index;
-        this.canceled = canceled;
     }
 
     @Override
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        result.put("canceled", canceled);
         result.put("index", index);
         return result;
     }

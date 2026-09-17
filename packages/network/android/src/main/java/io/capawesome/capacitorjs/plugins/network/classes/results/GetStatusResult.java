@@ -13,10 +13,26 @@ public class GetStatusResult implements Result {
 
     private final boolean internetReachable;
 
-    public GetStatusResult(boolean connected, @NonNull String connectionType, boolean internetReachable) {
+    private final boolean constrained;
+
+    private final boolean expensive;
+
+    private final boolean ultraConstrained;
+
+    public GetStatusResult(
+        boolean connected,
+        @NonNull String connectionType,
+        boolean internetReachable,
+        boolean constrained,
+        boolean expensive,
+        boolean ultraConstrained
+    ) {
         this.connected = connected;
         this.connectionType = connectionType;
         this.internetReachable = internetReachable;
+        this.constrained = constrained;
+        this.expensive = expensive;
+        this.ultraConstrained = ultraConstrained;
     }
 
     @Override
@@ -26,6 +42,9 @@ public class GetStatusResult implements Result {
         result.put("connected", connected);
         result.put("connectionType", connectionType);
         result.put("internetReachable", internetReachable);
+        result.put("constrained", constrained);
+        result.put("expensive", expensive);
+        result.put("ultraConstrained", ultraConstrained);
         return result;
     }
 }

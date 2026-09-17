@@ -13,6 +13,7 @@ Capacitor plugin for reading and controlling the screen brightness.
 - ☀️ **Read brightness**: Read the current screen brightness.
 - 🔆 **Set brightness**: Set the screen brightness, e.g. to boost it for barcode or ticket display.
 - 🔄 **Reset brightness**: Hand the brightness control back to the operating system.
+- 🤝 **Compatibility**: Works alongside the [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/) and [Screen Orientation](https://capawesome.io/docs/sdks/capacitor/screen-orientation/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -204,6 +205,10 @@ Setting the brightness only affects the **current app window** and does not requ
 Setting the brightness changes the **system** brightness and the change **persists** after the app is closed. There is no system API to hand the brightness control back to the operating system, so `resetBrightness()` is not available on iOS and rejects as unimplemented.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It reads, sets, and (on Android) resets the screen brightness through a small, fully typed API, using a normalized `0.0`–`1.0` range on both platforms. On Android it changes only the current app window, so no `WRITE_SETTINGS` permission is required and the change reverts automatically when the app closes, which makes use cases like boosting brightness to display a barcode or ticket straightforward. It supports CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor version.
 
 ### Why does the brightness stay changed after closing my app on iOS?
 

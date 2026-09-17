@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.widget.NestedScrollView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import io.capawesome.capacitorjs.plugins.actionsheet.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.actionsheet.classes.options.ActionSheetButton;
 import io.capawesome.capacitorjs.plugins.actionsheet.classes.options.ShowActionsOptions;
 import io.capawesome.capacitorjs.plugins.actionsheet.classes.results.ShowActionsResult;
@@ -62,25 +63,24 @@ public class ActionSheet {
                 final int index = i;
                 TextView buttonView = createButtonView(activity, button.getTitle(), button.isDestructive());
                 buttonView.setOnClickListener(view -> {
-                    callback.success(new ShowActionsResult(index, false));
+                    callback.success(new ShowActionsResult(index));
                     dialog.dismiss();
                 });
                 container.addView(buttonView);
             }
 
-            final int resolvedCancelIndex = cancelIndex;
             if (cancelIndex != -1) {
                 container.addView(createDividerView(activity));
                 TextView cancelButtonView = createButtonView(activity, buttons.get(cancelIndex).getTitle(), false);
                 cancelButtonView.setOnClickListener(view -> {
-                    callback.success(new ShowActionsResult(resolvedCancelIndex, true));
+                    callback.error(CustomExceptions.CANCELED);
                     dialog.dismiss();
                 });
                 container.addView(cancelButtonView);
             }
 
             dialog.setCancelable(options.isCancelable());
-            dialog.setOnCancelListener(dialogInterface -> callback.success(new ShowActionsResult(resolvedCancelIndex, true)));
+            dialog.setOnCancelListener(dialogInterface -> callback.error(CustomExceptions.CANCELED));
 
             NestedScrollView scrollView = new NestedScrollView(activity);
             scrollView.addView(container);

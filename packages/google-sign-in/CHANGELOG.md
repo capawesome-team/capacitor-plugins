@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.1.3
+
+### Patch Changes
+
+- [`bd9c3bc9bde613fa85344086763cb644c644dab3`](https://github.com/capawesome-team/capacitor-plugins/commit/bd9c3bc9bde613fa85344086763cb644c644dab3) ([#994](https://github.com/capawesome-team/capacitor-plugins/pull/994)): fix(ios): expose the `SIGN_IN_CANCELED` error code and report a missing sign-in result with its own message
+
+- [`bd9c3bc9bde613fa85344086763cb644c644dab3`](https://github.com/capawesome-team/capacitor-plugins/commit/bd9c3bc9bde613fa85344086763cb644c644dab3) ([#994](https://github.com/capawesome-team/capacitor-plugins/pull/994)): fix(android): preserve Credential Manager error details and add the `NO_CREDENTIAL_AVAILABLE` and `PROVIDER_CONFIGURATION_ERROR` error codes
+
 ## 0.1.2
 
 ### Patch Changes

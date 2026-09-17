@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.2
+
+### Patch Changes
+
+- [`54939415c68095b7c47f9c98f0bf8fb4030d5f40`](https://github.com/capawesome-team/capacitor-plugins/commit/54939415c68095b7c47f9c98f0bf8fb4030d5f40) ([#983](https://github.com/capawesome-team/capacitor-plugins/pull/983)): fix(ios): resolve the window scene via the Capacitor bridge to support scene-based apps
+
 ## 8.0.1
 
 ### Patch Changes

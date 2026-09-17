@@ -2,16 +2,15 @@ package io.capawesome.capacitorjs.plugins.agesignals;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsAccessResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsExceptionOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetUseFakeManagerOptions;
-import io.capawesome.capacitorjs.plugins.agesignals.classes.results.CheckAgeSignalsResult;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.NonEmptyResultCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.Result;
@@ -33,73 +32,47 @@ public class AgeSignalsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void checkAgeSignals(PluginCall call) {
+    public void getAgeRange(PluginCall call) {
         try {
-            NonEmptyResultCallback<CheckAgeSignalsResult> callback = new NonEmptyResultCallback<>() {
-                @Override
-                public void success(@NonNull CheckAgeSignalsResult result) {
-                    resolveCall(call, result);
-                }
-
-                @Override
-                public void error(@NonNull Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
-
             assert implementation != null;
-            implementation.checkAgeSignals(callback);
+            implementation.getAgeRange(createResultCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
     }
 
     @PluginMethod
-    public void checkEligibility(PluginCall call) {
+    public void getRegulatoryRequirements(PluginCall call) {
         rejectCallAsUnimplemented(call);
     }
 
     @PluginMethod
-    public void setUseFakeManager(PluginCall call) {
+    public void isAvailable(PluginCall call) {
         try {
-            SetUseFakeManagerOptions options = new SetUseFakeManagerOptions(call);
-            EmptyCallback callback = new EmptyCallback() {
-                @Override
-                public void success() {
-                    resolveCall(call);
-                }
-
-                @Override
-                public void error(@NonNull Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
-
             assert implementation != null;
-            implementation.setUseFakeManager(options, callback);
+            implementation.isAvailable(createResultCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
     }
 
     @PluginMethod
-    public void setNextAgeSignalsResult(PluginCall call) {
+    public void requestAgeRange(PluginCall call) {
         try {
-            SetNextAgeSignalsResultOptions options = new SetNextAgeSignalsResultOptions(call);
-            EmptyCallback callback = new EmptyCallback() {
-                @Override
-                public void success() {
-                    resolveCall(call);
-                }
+            assert implementation != null;
+            implementation.requestAgeRange(createResultCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
 
-                @Override
-                public void error(@NonNull Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
+    @PluginMethod
+    public void setNextAgeSignalsAccessResult(PluginCall call) {
+        try {
+            SetNextAgeSignalsAccessResultOptions options = new SetNextAgeSignalsAccessResultOptions(call);
 
             assert implementation != null;
-            implementation.setNextAgeSignalsResult(options, callback);
+            implementation.setNextAgeSignalsAccessResult(options, createEmptyCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -109,23 +82,83 @@ public class AgeSignalsPlugin extends Plugin {
     public void setNextAgeSignalsException(PluginCall call) {
         try {
             SetNextAgeSignalsExceptionOptions options = new SetNextAgeSignalsExceptionOptions(call);
-            EmptyCallback callback = new EmptyCallback() {
-                @Override
-                public void success() {
-                    resolveCall(call);
-                }
-
-                @Override
-                public void error(@NonNull Exception exception) {
-                    rejectCall(call, exception);
-                }
-            };
 
             assert implementation != null;
-            implementation.setNextAgeSignalsException(options, callback);
+            implementation.setNextAgeSignalsException(options, createEmptyCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
+    }
+
+    @PluginMethod
+    public void setNextAgeSignalsResult(PluginCall call) {
+        try {
+            SetNextAgeSignalsResultOptions options = new SetNextAgeSignalsResultOptions(call);
+
+            assert implementation != null;
+            implementation.setNextAgeSignalsResult(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextRequestAgeSignalsAccessException(PluginCall call) {
+        try {
+            SetNextAgeSignalsExceptionOptions options = new SetNextAgeSignalsExceptionOptions(call);
+
+            assert implementation != null;
+            implementation.setNextRequestAgeSignalsAccessException(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setUseFakeManager(PluginCall call) {
+        try {
+            SetUseFakeManagerOptions options = new SetUseFakeManagerOptions(call);
+
+            assert implementation != null;
+            implementation.setUseFakeManager(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void showSignificantUpdateAcknowledgment(PluginCall call) {
+        rejectCallAsUnimplemented(call);
+    }
+
+    @NonNull
+    private EmptyCallback createEmptyCallback(@NonNull PluginCall call) {
+        return new EmptyCallback() {
+            @Override
+            public void success() {
+                resolveCall(call);
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                rejectCall(call, exception);
+            }
+        };
+    }
+
+    @NonNull
+    private <T extends Result> NonEmptyResultCallback<T> createResultCallback(@NonNull PluginCall call) {
+        return new NonEmptyResultCallback<T>() {
+            @Override
+            public void success(@NonNull T result) {
+                resolveCall(call, result);
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                rejectCall(call, exception);
+            }
+        };
     }
 
     private void rejectCall(@NonNull PluginCall call, @NonNull Exception exception) {

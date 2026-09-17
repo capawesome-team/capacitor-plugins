@@ -84,11 +84,11 @@ The following examples show how to prompt the user to update the WebView and rea
 The recommended pattern is to check whether an update is required on app start, prompt the user with the [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) plugin, and then open the Play Store. Only available on Android:
 
 ```typescript
-import { SystemWebView } from '@capawesome/capacitor-system-webview';
+import { SystemWebview } from '@capawesome/capacitor-system-webview';
 import { Dialog } from '@capacitor/dialog';
 
 const promptForUpdateIfRequired = async () => {
-  const { required } = await SystemWebView.isUpdateRequired({
+  const { required } = await SystemWebview.isUpdateRequired({
     minMajorVersion: 105,
   });
   if (!required) {
@@ -101,7 +101,7 @@ const promptForUpdateIfRequired = async () => {
     okButtonTitle: 'Update',
   });
   if (value) {
-    await SystemWebView.openAppStore();
+    await SystemWebview.openAppStore();
   }
 };
 ```
@@ -114,10 +114,10 @@ const promptForUpdateIfRequired = async () => {
 Get the package name, version name and Chromium major version of the active WebView provider, for example to attach it to your support diagnostics. Only available on Android:
 
 ```typescript
-import { SystemWebView } from '@capawesome/capacitor-system-webview';
+import { SystemWebview } from '@capawesome/capacitor-system-webview';
 
 const getInfo = async () => {
-  const info = await SystemWebView.getInfo();
+  const info = await SystemWebview.getInfo();
   return info;
 };
 ```
@@ -236,6 +236,10 @@ The following table gives a rough idea of when some popular web features became 
 Pick the minimum version based on the features your app uses and pass it as `minMajorVersion`.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It turns a hard-to-diagnose class of Android bugs into something you can detect and fix: read the active WebView provider's package name, version, and Chromium major version, compare it against the minimum your app's bundle needs, and send users straight to the Play Store entry of their own WebView provider to update it. Your app declares the minimum Chromium version it requires, so the check always matches the web features your bundle actually uses. The API is fully typed and kept current with the latest Capacitor version.
 
 ### Why is this plugin not available on iOS?
 

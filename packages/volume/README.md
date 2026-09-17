@@ -15,6 +15,7 @@ Capacitor plugin to control the volume and observe hardware volume button presse
 - 🔘 **Volume buttons**: Listen for hardware volume button presses.
 - 🤫 **Suppression**: Keep the volume unchanged and hide the system volume indicator while watching.
 - 👂 **Change events**: Listen for changes to the volume level.
+- 🤝 **Compatibility**: Works alongside the [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/), [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/) and [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -168,6 +169,7 @@ const removeAllListeners = async () => {
 * [`startWatching(...)`](#startwatching)
 * [`stopWatching()`](#stopwatching)
 * [`addListener('volumeButtonPressed', ...)`](#addlistenervolumebuttonpressed-)
+* [`addListener('volumeButtonReleased', ...)`](#addlistenervolumebuttonreleased-)
 * [`addListener('volumeChange', ...)`](#addlistenervolumechange-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
@@ -248,8 +250,8 @@ startWatching(options?: StartWatchingOptions | undefined) => Promise<void>
 
 Start watching the hardware volume buttons.
 
-The `volumeButtonPressed` and `volumeChange` events are only
-emitted while watching.
+The `volumeButtonPressed`, `volumeButtonReleased` and `volumeChange`
+events are only emitted while watching.
 
 If the volume buttons are already being watched, this call has
 no effect. Call `stopWatching()` first to change the options.
@@ -301,6 +303,28 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### addListener('volumeButtonReleased', ...)
+
+```typescript
+addListener(eventName: 'volumeButtonReleased', listenerFunc: (event: VolumeButtonReleasedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when a hardware volume button is released while watching.
+
+Only available on Android.
+
+| Param              | Type                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'volumeButtonReleased'</code>                                                                 |
+| **`listenerFunc`** | <code>(event: <a href="#volumebuttonreleasedevent">VolumeButtonReleasedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -397,6 +421,13 @@ Remove all listeners for this plugin.
 | **`direction`** | <code><a href="#direction">Direction</a></code> | The direction of the pressed hardware volume button. | 0.1.0 |
 
 
+#### VolumeButtonReleasedEvent
+
+| Prop            | Type                                            | Description                                           | Since |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------- | ----- |
+| **`direction`** | <code><a href="#direction">Direction</a></code> | The direction of the released hardware volume button. | 0.2.0 |
+
+
 #### VolumeChangeEvent
 
 | Prop         | Type                | Description                                          | Since |
@@ -449,6 +480,10 @@ Keep the following platform differences in mind when watching the hardware volum
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It combines volume control and hardware button events in one unified API — a natural fit on iOS, where both rely on the same underlying system machinery. It adds per-stream control on Android and handles iOS volume-indicator suppression, all through a fully typed, actively maintained package, so a single dependency covers the whole volume story.
+
 ### Which platforms are supported by this plugin?
 
 The plugin is available on Android and iOS. On the Web, all methods reject as unimplemented.
@@ -475,9 +510,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 - [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/): Interact with media controllers, volume keys and media buttons.
 - [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
-- [Audio Session](https://capawesome.io/docs/sdks/capacitor/audio-session/): Configure and observe the iOS audio session.
 
 ## Newsletter
 

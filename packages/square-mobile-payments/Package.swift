@@ -22,10 +22,6 @@ let package = Package(
                 .product(name: "SquareMobilePaymentsSDK", package: "mobile-payments-sdk-ios"),
                 .product(name: "MockReaderUI", package: "mobile-payments-sdk-ios")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "SquareMobilePaymentsPluginTests",
-            dependencies: ["SquareMobilePaymentsPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

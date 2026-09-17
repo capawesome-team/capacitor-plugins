@@ -34,12 +34,15 @@ import UniformTypeIdentifiers
                 controller.setMessageBody(body, isHTML: options.isHtml)
             }
             for attachment in options.attachments {
-                let url = Self.createFileUrl(from: attachment)
-                guard let data = try? Data(contentsOf: url) else {
+                guard let resolvedAttachment = Self.resolveAttachment(attachment) else {
                     completion(nil, CustomError.attachmentNotFound)
                     return
                 }
-                controller.addAttachmentData(data, mimeType: Self.mimeType(for: url), fileName: url.lastPathComponent)
+                controller.addAttachmentData(
+                    resolvedAttachment.data,
+                    mimeType: Self.mimeType(forFileName: resolvedAttachment.fileName),
+                    fileName: resolvedAttachment.fileName
+                )
             }
             self.composeCompletion = completion
             self.plugin.bridge?.viewController?.present(controller, animated: true)
@@ -66,11 +69,26 @@ import UniformTypeIdentifiers
         }
     }
 
-    private static func mimeType(for url: URL) -> String {
-        if let type = UTType(filenameExtension: url.pathExtension), let mimeType = type.preferredMIMEType {
+    private static func mimeType(forFileName fileName: String) -> String {
+        let fileExtension = (fileName as NSString).pathExtension
+        if let type = UTType(filenameExtension: fileExtension), let mimeType = type.preferredMIMEType {
             return mimeType
         }
         return "application/octet-stream"
+    }
+
+    private static func resolveAttachment(_ attachment: MailAttachment) -> (data: Data, fileName: String)? {
+        if let path = attachment.path {
+            let url = createFileUrl(from: path)
+            guard let data = try? Data(contentsOf: url) else {
+                return nil
+            }
+            return (data, url.lastPathComponent)
+        }
+        guard let data = attachment.data, let name = attachment.name else {
+            return nil
+        }
+        return (data, name)
     }
 }
 

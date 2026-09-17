@@ -581,8 +581,8 @@ No, this plugin only provides an Android implementation, as the name suggests. F
 
 ## Related Plugins
 
-- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your Capacitor app.
 - [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/): Manage battery optimization settings and request exemptions on Android.
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your Capacitor app.
 - [Keep Awake](https://capawesome.io/docs/sdks/capacitor/keep-awake/): Keep the screen awake while your app is in use.
 
 ## Newsletter

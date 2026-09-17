@@ -1,5 +1,51 @@
 # Changelog
 
+## 8.3.2
+
+### Patch Changes
+
+- [`1ee39058f7192569420eb67020840942cea91500`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1ee39058f7192569420eb67020840942cea91500) ([#602](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/602)): fix(android): reject `startAdvertising(...)` while Bluetooth is off instead of caching an advertiser without a GATT server
+
+- [`1ee39058f7192569420eb67020840942cea91500`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1ee39058f7192569420eb67020840942cea91500) ([#602](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/602)): fix(android): close the previous GATT client when `connect(...)` is called again for the same device
+
+- [`1ee39058f7192569420eb67020840942cea91500`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1ee39058f7192569420eb67020840942cea91500) ([#602](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/602)): fix(android): keep the existing connection when `connect(...)` is called for a connected device
+
+- [`1ee39058f7192569420eb67020840942cea91500`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1ee39058f7192569420eb67020840942cea91500) ([#602](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/602)): fix: export `BluetoothLowEnergyUtils` from the package
+
+- [`1ee39058f7192569420eb67020840942cea91500`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1ee39058f7192569420eb67020840942cea91500) ([#602](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/602)): fix(ios): normalize 32-bit UUIDs without truncating them
+
+- [`8cabf0a524e2853b0d3032f03d537baaf188061e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8cabf0a524e2853b0d3032f03d537baaf188061e) ([#608](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/608)): fix(ios): invoke the saved `initialize(...)` callback only once instead of on every Bluetooth state change
+
+- [`8cabf0a524e2853b0d3032f03d537baaf188061e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8cabf0a524e2853b0d3032f03d537baaf188061e) ([#608](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/608)): fix(ios): keep emitting `characteristicChanged` after `readCharacteristic(...)` and settle each pending call only once
+
+- [`8cabf0a524e2853b0d3032f03d537baaf188061e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8cabf0a524e2853b0d3032f03d537baaf188061e) ([#608](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/608)): fix(ios): respond to characteristic read requests from the requested offset
+
+- [`8cabf0a524e2853b0d3032f03d537baaf188061e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/8cabf0a524e2853b0d3032f03d537baaf188061e) ([#608](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/608)): fix(ios): return the same normalized UUID format from `getServices(...)` and the `characteristicWriteRequest` event as from all other events, which now return lowercase 128-bit UUIDs instead of the short uppercase form
+
+## 8.3.1
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.3.0
+
+### Minor Changes
+
+- [`04d3494196c9bf6fde39e930220a00b681b8809f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/04d3494196c9bf6fde39e930220a00b681b8809f) ([#379](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/379)): feat(android): add BLE 5 extended advertising support
+
+## 8.2.0
+
+### Minor Changes
+
+- [`34dfe7e39c90fff8eb6d3d5cdb7bf0f2ec6eb84f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/34dfe7e39c90fff8eb6d3d5cdb7bf0f2ec6eb84f) ([#436](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/436)): feat: expose advertisement data in `deviceScanned` event and add `allowDuplicates` option to `startScan(...)`
+
+### Patch Changes
+
+- [`b278d98c18cc8d6e9508657a4a76ce2795ece746`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b278d98c18cc8d6e9508657a4a76ce2795ece746) ([#520](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/520)): fix(android): create the CCCD descriptor manually if the peripheral does not expose it
+
+- [`b278d98c18cc8d6e9508657a4a76ce2795ece746`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b278d98c18cc8d6e9508657a4a76ce2795ece746) ([#520](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/520)): fix(android): enable indications for indication-only characteristics when starting characteristic notifications
+
 ## 8.1.0
 
 ### Minor Changes

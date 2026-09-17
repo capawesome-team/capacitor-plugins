@@ -70,10 +70,12 @@ export interface ListOptions {
  */
 export interface ListResult {
   /**
-   * The list of files in the directory.
+   * The names of the files in the directory.
+   *
+   * The names are relative to the `path` that was listed.
    *
    * @since 7.0.0
-   * @example ['/private/var/containers/Bundle/Application/D83E2C08-BBA1-4963-8ED8-806FD92E15B3/App.app/public/index.html']
+   * @example ['index.html']
    */
   files: string[];
 }

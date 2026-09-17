@@ -19,6 +19,7 @@ The Capacitor File Picker plugin is one of the most complete file selection solu
 - 📄 **File picking**: Lets users select one or more miscellaneous files from the file system.
 - 📸 **HEIC to JPEG conversion**: Converts HEIC images to JPEG format on iOS.
 - 📜 **File metadata**: Retrieves metadata such as file size, name, mime type, and last modified timestamp.
+- 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/) and [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS. 
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -43,7 +44,7 @@ The File Picker plugin is typically used whenever an app needs the user to hand 
 
 ## Guides
 
-- [The File Handling Guide for Capacitor](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/)
+- [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/)
 
 ## Installation
 
@@ -134,6 +135,8 @@ const pickPdfFiles = async () => {
 };
 ```
 
+On Android, the system file picker can only offer files whose media type the device derives from the file extension. On Android 9 and older, `.json` files are not mapped to `application/json` and are reported as `application/octet-stream`. Third-party document providers may behave the same on any version. Add `application/octet-stream` to `types` if such files must be selectable.
+
 ### Pick images or videos from the gallery
 
 Use `pickImages(...)`, `pickVideos(...)` or `pickMedia(...)` to open the photo gallery instead of the file picker. These methods are only available on Android and iOS:
@@ -155,6 +158,21 @@ const pickMedia = async () => {
 };
 ```
 
+### Display a picked image in the web view
+
+Use the `webPath` property to load a picked file in the web view, for example as the `src` of an `<img>` element:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const displayImage = async () => {
+  const { files } = await FilePicker.pickImages({ limit: 1 });
+  const image = document.createElement('img');
+  image.src = files[0].webPath!;
+  document.body.appendChild(image);
+};
+```
+
 ### Pick a directory
 
 Let the user select a directory, for example to import all files it contains. Only available on Android and iOS:
@@ -169,11 +187,10 @@ const pickDirectory = async () => {
 
 ### Upload a picked file to a server
 
-On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's path. You can then append the blob to a `FormData` object and upload it:
+On the Web, the picked file contains a `Blob` instance. On Android and iOS, load the file as a blob using the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) and the file's `webPath`. You can then append the blob to a `FormData` object and upload it:
 
 ```typescript
 import { FilePicker } from '@capawesome/capacitor-file-picker';
-import { Capacitor } from '@capacitor/core';
 
 const uploadFile = async () => {
   const result = await FilePicker.pickFiles({ limit: 1 });
@@ -185,7 +202,7 @@ const uploadFile = async () => {
     blob = file.blob;
   } else {
     // Android and iOS
-    const response = await fetch(Capacitor.convertFileSrc(file.path!));
+    const response = await fetch(file.webPath!);
     blob = await response.blob();
   }
 
@@ -210,6 +227,20 @@ import { FilePicker } from '@capawesome/capacitor-file-picker';
 const convertHeicToJpeg = async () => {
   const { path } = await FilePicker.convertHeicToJpeg({
     path: 'path/to/image.heic',
+  });
+};
+```
+
+### Convert a RAW image to JPEG
+
+RAW images (e.g. DNG) are not transcoded when they are picked. Use `convertRawToJpeg(...)` to convert them. Only available on iOS:
+
+```typescript
+import { FilePicker } from '@capawesome/capacitor-file-picker';
+
+const convertRawToJpeg = async () => {
+  const { path } = await FilePicker.convertRawToJpeg({
+    path: 'path/to/image.dng',
   });
 };
 ```
@@ -265,6 +296,7 @@ const copyFile = async () => {
 
 * [`checkPermissions()`](#checkpermissions)
 * [`convertHeicToJpeg(...)`](#convertheictojpeg)
+* [`convertRawToJpeg(...)`](#convertrawtojpeg)
 * [`copyFile(...)`](#copyfile)
 * [`pickFiles(...)`](#pickfiles)
 * [`pickDirectory()`](#pickdirectory)
@@ -316,6 +348,27 @@ Only available on iOS.
 **Returns:** <code>Promise&lt;<a href="#convertheictojpegresult">ConvertHeicToJpegResult</a>&gt;</code>
 
 **Since:** 0.6.0
+
+--------------------
+
+
+### convertRawToJpeg(...)
+
+```typescript
+convertRawToJpeg(options: ConvertRawToJpegOptions) => Promise<ConvertRawToJpegResult>
+```
+
+Convert a RAW image to JPEG.
+
+Only available on iOS.
+
+| Param         | Type                                                                        |
+| ------------- | --------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#convertrawtojpegoptions">ConvertRawToJpegOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#convertrawtojpegresult">ConvertRawToJpegResult</a>&gt;</code>
+
+**Since:** 8.1.0
 
 --------------------
 
@@ -521,6 +574,20 @@ Remove all listeners for this plugin.
 | **`path`** | <code>string</code> | The path of the HEIC image. | 0.6.0 |
 
 
+#### ConvertRawToJpegResult
+
+| Prop       | Type                | Description                           | Since |
+| ---------- | ------------------- | ------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The path of the converted JPEG image. | 8.1.0 |
+
+
+#### ConvertRawToJpegOptions
+
+| Prop       | Type                | Description                | Since |
+| ---------- | ------------------- | -------------------------- | ----- |
+| **`path`** | <code>string</code> | The path of the RAW image. | 8.1.0 |
+
+
 #### CopyFileOptions
 
 | Prop            | Type                 | Description                                                     | Default           | Since |
@@ -539,34 +606,36 @@ Remove all listeners for this plugin.
 
 #### PickedFile
 
-| Prop             | Type                | Description                                                                                                          | Since |
-| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`**       | <code>Blob</code>   | The Blob instance of the file. Only available on Web.                                                                |       |
-| **`data`**       | <code>string</code> | The Base64 string representation of the data contained in the file. Is only provided if `readData` is set to `true`. |       |
-| **`duration`**   | <code>number</code> | The duration of the video in seconds. Only available on Android and iOS.                                             | 0.5.3 |
-| **`height`**     | <code>number</code> | The height of the image or video in pixels. Only available on Android and iOS.                                       | 0.5.3 |
-| **`mimeType`**   | <code>string</code> | The mime type of the file.                                                                                           |       |
-| **`modifiedAt`** | <code>number</code> | The last modified timestamp of the file in milliseconds.                                                             | 0.5.9 |
-| **`name`**       | <code>string</code> | The name of the file.                                                                                                |       |
-| **`path`**       | <code>string</code> | The path of the file. Only available on Android and iOS.                                                             |       |
-| **`size`**       | <code>number</code> | The size of the file in bytes.                                                                                       |       |
-| **`width`**      | <code>number</code> | The width of the image or video in pixels. Only available on Android and iOS.                                        | 0.5.3 |
+| Prop             | Type                | Description                                                                                                                                                                                                             | Since |
+| ---------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`blob`**       | <code>Blob</code>   | The Blob instance of the file. Only available on Web.                                                                                                                                                                   |       |
+| **`data`**       | <code>string</code> | The Base64 string representation of the data contained in the file. Is only provided if `readData` is set to `true`.                                                                                                    |       |
+| **`duration`**   | <code>number</code> | The duration of the video in seconds. Only available on Android and iOS.                                                                                                                                                | 0.5.3 |
+| **`height`**     | <code>number</code> | The height of the image or video in pixels. Only available on Android and iOS.                                                                                                                                          | 0.5.3 |
+| **`mimeType`**   | <code>string</code> | The mime type of the file.                                                                                                                                                                                              |       |
+| **`modifiedAt`** | <code>number</code> | The last modified timestamp of the file in milliseconds.                                                                                                                                                                | 0.5.9 |
+| **`name`**       | <code>string</code> | The name of the file.                                                                                                                                                                                                   |       |
+| **`path`**       | <code>string</code> | The path of the file. Only available on Android and iOS.                                                                                                                                                                |       |
+| **`size`**       | <code>number</code> | The size of the file in bytes.                                                                                                                                                                                          |       |
+| **`webPath`**    | <code>string</code> | The path of the file that can be used to load it in the web view, for example as the `src` of an `&lt;img&gt;` element. On the web, this is an object URL. Call `URL.revokeObjectURL(...)` when it is no longer needed. | 8.1.0 |
+| **`width`**      | <code>number</code> | The width of the image or video in pixels. Only available on Android and iOS.                                                                                                                                           | 0.5.3 |
 
 
 #### PickFilesOptions
 
-| Prop           | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                       | Default            | Since |
-| -------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. This option is ignored if `limit` is set.                                                                                                                                                                    |                    |       |
-| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                                       | <code>0</code>     | 6.0.0 |
-| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file). | <code>false</code> |       |
+| Prop           | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Default            | Since |
+| -------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`types`**    | <code>string[]</code> | List of accepted file types. Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types. Wildcards such as `image/*` are supported. On Android, the system file picker can only offer files whose media type the device derives from the file extension. On Android 9 and older, `.json` files are not mapped to `application/json` and are reported as `application/octet-stream`. Third-party document providers may behave the same on any version. Add `application/octet-stream` to `types` if such files must be selectable. |                    |       |
+| **`limit`**    | <code>number</code>   | The maximum number of files that the user can select. Setting this to `0` sets the selection limit to unlimited. Currently, only `0` and `1` are supported.                                                                                                                                                                                                                                                                                                                                                                                                                                                    | <code>0</code>     | 6.0.0 |
+| **`readData`** | <code>boolean</code>  | Whether to read the file data. **Attention**: Reading large files can lead to app crashes. It's therefore not recommended to use this option. Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch) to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file).                                                                                                                                                                                                                                      | <code>false</code> |       |
 
 
 #### PickDirectoryResult
 
-| Prop       | Type                | Description                         | Since |
-| ---------- | ------------------- | ----------------------------------- | ----- |
-| **`path`** | <code>string</code> | The path to the selected directory. | 6.2.0 |
+| Prop           | Type                | Description                                                                                                                                                         | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`bookmark`** | <code>string</code> | The base64-encoded security-scoped bookmark of the selected directory. It can be used to retain access to the directory across app launches. Only available on iOS. | 8.1.0 |
+| **`path`**     | <code>string</code> | The path to the selected directory.                                                                                                                                 | 6.2.0 |
 
 
 #### PickMediaOptions
@@ -636,7 +705,7 @@ Remove all listeners for this plugin.
 
 ### How do I upload a picked file to a server?
 
-On the Web, the picked file already contains a `Blob` instance that you can append to a `FormData` object. On Android and iOS, load the file as a blob using the Fetch API and the file's path, then upload it the same way. See the [usage example](#upload-a-picked-file-to-a-server) above and [The File Handling Guide for Capacitor](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/) for a complete walkthrough.
+On the Web, the picked file already contains a `Blob` instance that you can append to a `FormData` object. On Android and iOS, load the file as a blob using the Fetch API and the file's path, then upload it the same way. See the [usage example](#upload-a-picked-file-to-a-server) above and [The File Handling Guide for Capacitor](https://capawesome.io/blog/capacitor-file-handling-guide/) for a complete walkthrough.
 
 ### Why does my app crash when picking large files?
 
@@ -660,10 +729,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a picked file with the default application.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress images before uploading them.
-- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
+- [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a picked file with the default application.
 - [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive files shared from other apps.
+- [Zip](https://capawesome.io/docs/sdks/capacitor/zip/): Zip and unzip files and directories.
 
 ## Newsletter
 

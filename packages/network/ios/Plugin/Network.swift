@@ -46,20 +46,26 @@ import Network
         lastStatusKey = nil
     }
 
-    private func createStatusKey(connected: Bool, connectionType: String) -> String {
-        return "\(connected)|\(connectionType)"
+    private func createStatusKey(_ path: NWPath) -> String {
+        let connected = path.status == .satisfied
+        let ultraConstrained = mapUltraConstrained(path)?.boolValue.description ?? "null"
+        return "\(connected)|\(mapConnectionType(path))|\(connected && path.isConstrained)|\(connected && path.isExpensive)|\(ultraConstrained)"
     }
 
     private func createStatusResult(_ path: NWPath) -> GetStatusResult {
         let connected = path.status == .satisfied
-        let connectionType = mapConnectionType(path)
-        return GetStatusResult(connected: connected, connectionType: connectionType, internetReachable: nil)
+        return GetStatusResult(
+            connected: connected,
+            connectionType: mapConnectionType(path),
+            internetReachable: nil,
+            constrained: connected && path.isConstrained,
+            expensive: connected && path.isExpensive,
+            ultraConstrained: mapUltraConstrained(path)
+        )
     }
 
     private func handlePathUpdate(_ path: NWPath) {
-        let connected = path.status == .satisfied
-        let connectionType = mapConnectionType(path)
-        let statusKey = createStatusKey(connected: connected, connectionType: connectionType)
+        let statusKey = createStatusKey(path)
         if statusKey == lastStatusKey {
             return
         }
@@ -68,7 +74,7 @@ import Network
         if isInitial {
             return
         }
-        plugin.notifyNetworkStatusChangeListeners(GetStatusResult(connected: connected, connectionType: connectionType, internetReachable: nil))
+        plugin.notifyNetworkStatusChangeListeners(createStatusResult(path))
     }
 
     private func mapConnectionType(_ path: NWPath) -> String {
@@ -85,5 +91,15 @@ import Network
             return Network.connectionTypeEthernet
         }
         return Network.connectionTypeUnknown
+    }
+
+    private func mapUltraConstrained(_ path: NWPath) -> NSNumber? {
+        if path.status != .satisfied {
+            return NSNumber(value: false)
+        }
+        guard #available(iOS 26.0, *) else {
+            return nil
+        }
+        return NSNumber(value: path.isUltraConstrained)
     }
 }

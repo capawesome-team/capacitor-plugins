@@ -22,6 +22,7 @@ The Capacitor App Update plugin is one of the most complete native app update so
 - 📈 **Update priority**: Supports update priority levels on Android.
 - 🏪 **App store navigation**: Opens the app store entry for manual updates.
 - 📊 **Update state tracking**: Monitors flexible update progress with listeners.
+- 🤝 **Compatibility**: Works alongside the [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/) plugin.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -333,10 +334,10 @@ Remove all listeners for this plugin.
 
 #### OpenAppStoreOptions
 
-| Prop                     | Type                | Description                                                                                                                                                                                                                                                                                  | Since |
-| ------------------------ | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`androidPackageName`** | <code>string</code> | The package name of the app to open in the Play Store. On **Android**, this is the application ID of your app (e.g. `com.example.app`). You can find the ID in the `android/app/build.gradle` file. If not provided, the current app's package name will be used. Only available on Android. | 7.2.0 |
-| **`appId`**              | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). You can find the ID in the URL of your app store entry (e.g. `https://apps.apple.com/app/id123456789`). Only available on iOS.                                              | 6.1.0 |
+| Prop                     | Type                | Description                                                                                                                                                                                                                                                                                    | Since |
+| ------------------------ | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`androidPackageName`** | <code>string</code> | The package name of the app to open in the Play Store. On **Android**, this is the application ID of your app (e.g. `com.example.app`). You can find the ID in the `android/app/build.gradle` file. If not provided, the current app's package name will be used. Only available on Android.   | 7.2.0 |
+| **`appId`**              | <code>string</code> | The app ID of the app to open in the App Store. On **iOS**, this is the Apple ID of your app (e.g. `123456789`). You can find the ID in the URL of your app store entry (e.g. `https://apps.apple.com/app/id123456789`). **Attention**: This option is required on iOS. Only available on iOS. | 6.1.0 |
 
 
 #### AppUpdateResult
@@ -434,8 +435,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [Google Play Services](https://capawesome.io/docs/sdks/capacitor/google-play-services/): Check whether Google Play Services is available on the device and prompt the user to install or update it.
+- [Live Update](https://capawesome.io/docs/sdks/capacitor/live-update/): Update your app remotely in real-time without requiring users to download a new version from the app store.
 
 ## Newsletter
 

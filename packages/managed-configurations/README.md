@@ -181,13 +181,27 @@ Only available on Android and iOS.
 
 On **Android**, see [Set up device owner for testing](https://source.android.com/devices/tech/admin/testing-setup#set_up_the_device_owner_for_testing) and follow the instructions to set up a device owner testing environment.
 
-On **iOS**, you need to install the app as a [managed app](https://support.apple.com/de-de/guide/deployment-reference-ios/iorf4d72eded/web) with a MDM solution.
+On **iOS**, you need to install the app as a [managed app](https://support.apple.com/guide/deployment/distribute-managed-apps-dep575bfed86/web) with a MDM solution.
 
 ## FAQ
 
 ### What are managed configurations?
 
 Managed configurations are settings that an organization's EMM or MDM solution pushes to an app, for example a server URL or a feature toggle. This plugin lets your Capacitor app read these settings at runtime using the `getString`, `getNumber`, and `getBoolean` methods.
+
+### Should I use this plugin or the Intune plugin?
+
+Organizations can deliver app configuration through two different channels, and administrators frequently mix them up. This plugin covers the **MDM channel**; the [Intune](https://capawesome.io/docs/sdks/capacitor/intune/) plugin covers the **MAM channel**:
+
+|                            | MDM channel (this plugin)                                 | MAM channel ([Intune](https://capawesome.io/docs/sdks/capacitor/intune/)) |
+| -------------------------- | --------------------------------------------------------- | ------------------------------------------------ |
+| Device enrollment required | Yes                                                        | No                                               |
+| Delivered via              | `RestrictionsManager` / `com.apple.configuration.managed`  | Intune App SDK (Intune service)                  |
+| Targeted at                | The device                                                 | The signed-in account (identity)                 |
+| EMM vendor                 | Any EMM/MDM vendor                                         | Microsoft Intune only                            |
+| Typical scenario           | Corporate-owned, fully managed devices                     | BYOD / app protection without device management  |
+
+If your organization deploys the app configuration policy with **"Managed devices"** as the delivery channel in the Intune admin center, use this plugin. If it is deployed with **"Managed apps"**, use the Intune plugin. Apps that must support both scenarios should read both channels.
 
 ### What happens if a configuration key does not exist?
 
@@ -211,9 +225,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [Intune](https://capawesome.io/docs/sdks/capacitor/intune/): Protect corporate data with Microsoft Intune Mobile Application Management (the MAM channel counterpart to this plugin).
 - [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter
 

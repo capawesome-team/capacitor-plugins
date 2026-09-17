@@ -1,11 +1,17 @@
 package io.capawesome.capacitorjs.plugins.network;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
+import android.os.Build;
+import android.os.ext.SdkExtensions;
 import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import io.capawesome.capacitorjs.plugins.network.classes.results.GetStatusResult;
 import io.capawesome.capacitorjs.plugins.network.classes.results.IsAirplaneModeEnabledResult;
 import io.capawesome.capacitorjs.plugins.network.interfaces.NonEmptyResultCallback;
@@ -15,6 +21,7 @@ public class Network {
     private static final String CONNECTION_TYPE_CELLULAR = "CELLULAR";
     private static final String CONNECTION_TYPE_ETHERNET = "ETHERNET";
     private static final String CONNECTION_TYPE_NONE = "NONE";
+    private static final String CONNECTION_TYPE_SATELLITE = "SATELLITE";
     private static final String CONNECTION_TYPE_UNKNOWN = "UNKNOWN";
     private static final String CONNECTION_TYPE_VPN = "VPN";
     private static final String CONNECTION_TYPE_WIFI = "WIFI";
@@ -47,6 +54,13 @@ public class Network {
         }
     };
 
+    private final BroadcastReceiver restrictBackgroundChangedReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            handleNetworkStatusChange();
+        }
+    };
+
     public Network(@NonNull NetworkPlugin plugin) {
         this.plugin = plugin;
         this.connectivityManager = (ConnectivityManager) plugin.getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -67,6 +81,12 @@ public class Network {
         }
         lastStatusKey = createStatusKey(computeStatus());
         connectivityManager.registerDefaultNetworkCallback(networkCallback);
+        ContextCompat.registerReceiver(
+            plugin.getContext(),
+            restrictBackgroundChangedReceiver,
+            new IntentFilter(ConnectivityManager.ACTION_RESTRICT_BACKGROUND_CHANGED),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        );
         isObserving = true;
     }
 
@@ -75,6 +95,7 @@ public class Network {
             return;
         }
         connectivityManager.unregisterNetworkCallback(networkCallback);
+        plugin.getContext().unregisterReceiver(restrictBackgroundChangedReceiver);
         lastStatusKey = null;
         isObserving = false;
     }
@@ -86,6 +107,9 @@ public class Network {
         }
         if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
             return CONNECTION_TYPE_VPN;
+        }
+        if (isSatellite(capabilities)) {
+            return CONNECTION_TYPE_SATELLITE;
         }
         if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
             return CONNECTION_TYPE_WIFI;
@@ -99,6 +123,14 @@ public class Network {
         return CONNECTION_TYPE_UNKNOWN;
     }
 
+    private boolean computeConstrained(@Nullable NetworkCapabilities capabilities) {
+        return computeExpensive(capabilities) && isDataSaverEnabled();
+    }
+
+    private boolean computeExpensive(@Nullable NetworkCapabilities capabilities) {
+        return capabilities != null && !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED);
+    }
+
     @NonNull
     private GetStatusResult computeStatus() {
         android.net.Network network = connectivityManager.getActiveNetwork();
@@ -109,7 +141,23 @@ public class Network {
             capabilities != null &&
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
             capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
-        return new GetStatusResult(connected, connectionType, internetReachable);
+        boolean constrained = computeConstrained(capabilities);
+        boolean expensive = computeExpensive(capabilities);
+        boolean ultraConstrained = computeUltraConstrained(capabilities);
+        return new GetStatusResult(connected, connectionType, internetReachable, constrained, expensive, ultraConstrained);
+    }
+
+    private boolean computeUltraConstrained(@Nullable NetworkCapabilities capabilities) {
+        if (capabilities == null) {
+            return false;
+        }
+        if (isSatellite(capabilities)) {
+            return true;
+        }
+        return (
+            isBandwidthConstrainedCapabilityAvailable() &&
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_BANDWIDTH_CONSTRAINED)
+        );
     }
 
     @NonNull
@@ -125,5 +173,25 @@ public class Network {
         }
         lastStatusKey = statusKey;
         plugin.notifyNetworkStatusChangeListeners(status);
+    }
+
+    private boolean isBandwidthConstrainedCapabilityAvailable() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            return true;
+        }
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && SdkExtensions.getExtensionVersion(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) >= 16
+        );
+    }
+
+    private boolean isDataSaverEnabled() {
+        return connectivityManager.getRestrictBackgroundStatus() == ConnectivityManager.RESTRICT_BACKGROUND_STATUS_ENABLED;
+    }
+
+    private boolean isSatellite(@NonNull NetworkCapabilities capabilities) {
+        return (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM &&
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_SATELLITE)
+        );
     }
 }

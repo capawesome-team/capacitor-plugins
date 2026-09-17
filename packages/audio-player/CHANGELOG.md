@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.4.2
+
+### Patch Changes
+
+- [`cb76e8d11b0cd8dd33263581bdd1308f72483d9d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb76e8d11b0cd8dd33263581bdd1308f72483d9d) ([#595](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/595)): fix: reject a `rate` option that is not greater than `0`
+
+## 8.4.1
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.4.0
+
+### Minor Changes
+
+- [`7b95f6535c3af617e6f3628d3c3e871fb32458b8`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7b95f6535c3af617e6f3628d3c3e871fb32458b8) ([#529](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/529)): feat: add built-in media session integration via the new `metadata` option so that the playback can be controlled from the system's media controls (e.g. notification and lock screen), even while the app is in the background, and add the new `playbackStateChanged` event
+
+- [`061024556b2fcbecc7ef65deeccac159fb335da4`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/061024556b2fcbecc7ef65deeccac159fb335da4) ([#528](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/528)): feat: add playlist queue management with `addTracks(...)` and `removeTrack(...)`, track navigation with `skipToNextTrack()` and `skipToPreviousTrack()`, repeat modes with `setRepeatMode(...)`, and a `startIndex` option for `play(...)`
+
+- [`5f99457898152f16403dab79176a6ed5e5268155`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5f99457898152f16403dab79176a6ed5e5268155) ([#425](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/425)): feat: add playlist mode for sequential multi-track playback
+
 ## 8.3.1
 
 ### Patch Changes

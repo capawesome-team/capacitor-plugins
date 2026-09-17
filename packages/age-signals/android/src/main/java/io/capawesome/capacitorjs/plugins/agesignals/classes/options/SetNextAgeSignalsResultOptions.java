@@ -4,109 +4,125 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.PluginCall;
 import com.google.android.play.agesignals.AgeSignalsResult;
-import com.google.android.play.agesignals.model.AgeSignalsVerificationStatus;
-import io.capawesome.capacitorjs.plugins.agesignals.classes.CustomExceptions;
-import io.capawesome.capacitorjs.plugins.agesignals.enums.UserStatus;
+import io.capawesome.capacitorjs.plugins.agesignals.enums.AgeRangeSource;
+import io.capawesome.capacitorjs.plugins.agesignals.enums.SignificantChangeStatus;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class SetNextAgeSignalsResultOptions {
-
-    @NonNull
-    private final UserStatus userStatus;
 
     @Nullable
     private final Integer ageLower;
 
     @Nullable
-    private final Integer ageUpper;
+    private final AgeRangeSource ageRangeSource;
 
     @Nullable
-    private final String mostRecentApprovalDate;
+    private final Integer ageUpper;
 
     @Nullable
     private final String installId;
 
+    @Nullable
+    private final String significantChangeApprovalDate;
+
+    @Nullable
+    private final SignificantChangeStatus significantChangeStatus;
+
     public SetNextAgeSignalsResultOptions(@NonNull PluginCall call) throws Exception {
-        this.userStatus = SetNextAgeSignalsResultOptions.getUserStatusFromCall(call);
         this.ageLower = call.getInt("ageLower");
+        this.ageRangeSource = SetNextAgeSignalsResultOptions.getAgeRangeSourceFromCall(call);
         this.ageUpper = call.getInt("ageUpper");
-        this.mostRecentApprovalDate = call.getString("mostRecentApprovalDate");
         this.installId = call.getString("installId");
+        this.significantChangeApprovalDate = call.getString("significantChangeApprovalDate");
+        this.significantChangeStatus = SetNextAgeSignalsResultOptions.getSignificantChangeStatusFromCall(call);
     }
 
     @NonNull
     public AgeSignalsResult buildAgeSignalsResult() throws Exception {
         AgeSignalsResult.Builder builder = AgeSignalsResult.builder();
-
-        // Set user status as integer
-        Integer verificationStatus = mapUserStatusToVerificationStatus(this.userStatus);
-        builder.setUserStatus(verificationStatus);
-
-        // Set optional fields
         if (this.ageLower != null) {
             builder.setAgeLower(this.ageLower);
+        }
+        if (this.ageRangeSource != null) {
+            builder.setAgeRangeSource(mapAgeRangeSource(this.ageRangeSource));
         }
         if (this.ageUpper != null) {
             builder.setAgeUpper(this.ageUpper);
         }
-        if (this.mostRecentApprovalDate != null) {
-            Date date = parseDateString(this.mostRecentApprovalDate);
-            builder.setMostRecentApprovalDate(date);
-        }
         if (this.installId != null) {
             builder.setInstallId(this.installId);
         }
-
+        if (this.significantChangeApprovalDate != null) {
+            builder.setSignificantChangeApprovalDate(parseDate(this.significantChangeApprovalDate));
+        }
+        if (this.significantChangeStatus != null) {
+            builder.setSignificantChangeStatus(mapSignificantChangeStatus(this.significantChangeStatus));
+        }
         return builder.build();
     }
 
-    @NonNull
-    private static UserStatus getUserStatusFromCall(@NonNull PluginCall call) throws Exception {
-        String userStatusString = call.getString("userStatus");
-        if (userStatusString == null) {
-            throw new Exception(CustomExceptions.USER_STATUS_MISSING.getMessage());
+    @Nullable
+    private static AgeRangeSource getAgeRangeSourceFromCall(@NonNull PluginCall call) throws Exception {
+        String ageRangeSource = call.getString("ageRangeSource");
+        if (ageRangeSource == null) {
+            return null;
         }
         try {
-            return UserStatus.valueOf(userStatusString);
+            return AgeRangeSource.valueOf(ageRangeSource);
         } catch (IllegalArgumentException exception) {
-            throw new Exception("Invalid userStatus: " + userStatusString);
+            throw new Exception("Invalid ageRangeSource: " + ageRangeSource);
         }
     }
 
     @Nullable
-    private Integer mapUserStatusToVerificationStatus(@NonNull UserStatus userStatus) {
-        switch (userStatus) {
-            case VERIFIED:
-                return AgeSignalsVerificationStatus.VERIFIED;
-            case SUPERVISED:
-                return AgeSignalsVerificationStatus.SUPERVISED;
-            case SUPERVISED_APPROVAL_PENDING:
-                return AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_PENDING;
-            case SUPERVISED_APPROVAL_DENIED:
-                return AgeSignalsVerificationStatus.SUPERVISED_APPROVAL_DENIED;
-            case UNKNOWN:
-                return AgeSignalsVerificationStatus.UNKNOWN;
-            case DECLARED:
-                return AgeSignalsVerificationStatus.DECLARED;
-            case EMPTY:
+    private static SignificantChangeStatus getSignificantChangeStatusFromCall(@NonNull PluginCall call) throws Exception {
+        String significantChangeStatus = call.getString("significantChangeStatus");
+        if (significantChangeStatus == null) {
+            return null;
+        }
+        try {
+            return SignificantChangeStatus.valueOf(significantChangeStatus);
+        } catch (IllegalArgumentException exception) {
+            throw new Exception("Invalid significantChangeStatus: " + significantChangeStatus);
+        }
+    }
+
+    private static int mapAgeRangeSource(@NonNull AgeRangeSource ageRangeSource) {
+        switch (ageRangeSource) {
+            case TIER_A:
+                return com.google.android.play.agesignals.model.AgeRangeSource.TIER_A;
+            case TIER_B:
+                return com.google.android.play.agesignals.model.AgeRangeSource.TIER_B;
+            case TIER_C:
+                return com.google.android.play.agesignals.model.AgeRangeSource.TIER_C;
             default:
-                return null;
+                return com.google.android.play.agesignals.model.AgeRangeSource.TIER_D;
+        }
+    }
+
+    private static int mapSignificantChangeStatus(@NonNull SignificantChangeStatus significantChangeStatus) {
+        switch (significantChangeStatus) {
+            case APPROVED:
+                return com.google.android.play.agesignals.model.SignificantChangeStatus.APPROVED;
+            case DECLINED:
+                return com.google.android.play.agesignals.model.SignificantChangeStatus.DECLINED;
+            default:
+                return com.google.android.play.agesignals.model.SignificantChangeStatus.PENDING;
         }
     }
 
     @NonNull
-    private Date parseDateString(@NonNull String dateString) throws Exception {
+    private static Date parseDate(@NonNull String date) throws Exception {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            Date date = format.parse(dateString);
-            if (date == null) {
-                throw new Exception("Failed to parse date: " + dateString);
-            }
-            return date;
-        } catch (Exception exception) {
-            throw new Exception("Invalid date format. Expected yyyy-MM-dd, got: " + dateString);
+            return format.parse(date);
+        } catch (ParseException exception) {
+            throw new Exception("Invalid significantChangeApprovalDate: " + date);
         }
     }
 }

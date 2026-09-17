@@ -15,12 +15,17 @@
 		50E1A94820377CB70090CE1A /* AgeSignalsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* AgeSignalsPlugin.swift */; };
 		7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */; };
 		7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC33D2ED36FCB000FC952 /* CustomError.swift */; };
-		7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */; };
-		7C2FC34D2ED37EA0000FC952 /* CheckEligibilityResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */; };
 		7C2FC3452ED3795D000FC952 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3442ED3795A000FC952 /* Result.swift */; };
-		7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC3462ED37997000FC952 /* UserStatus.swift */; };
-		7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */; };
 		7C2FC3502ED4A000000FC952 /* AgeRangeDeclaration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */; };
+		7CB000000000000000000002 /* AgeRangeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000001 /* AgeRangeStatus.swift */; };
+		7CB000000000000000000004 /* ParentalControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000003 /* ParentalControl.swift */; };
+		7CB000000000000000000006 /* RegulatoryFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000005 /* RegulatoryFeature.swift */; };
+		7CB000000000000000000008 /* AgeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000007 /* AgeRange.swift */; };
+		7CB00000000000000000000A /* RequestAgeRangeOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000009 /* RequestAgeRangeOptions.swift */; };
+		7CB00000000000000000000C /* ShowSignificantUpdateAcknowledgmentOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB00000000000000000000B /* ShowSignificantUpdateAcknowledgmentOptions.swift */; };
+		7CB00000000000000000000E /* GetRegulatoryRequirementsResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB00000000000000000000D /* GetRegulatoryRequirementsResult.swift */; };
+		7CB000000000000000000010 /* IsAvailableResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB00000000000000000000F /* IsAvailableResult.swift */; };
+		7CB000000000000000000012 /* RequestAgeRangeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB000000000000000000011 /* RequestAgeRangeResult.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,16 +50,21 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		7C2FC33A2ED36F16000FC952 /* AgeSignals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeSignals.swift; sourceTree = "<group>"; };
 		7C2FC33D2ED36FCB000FC952 /* CustomError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
-		7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsResult.swift; sourceTree = "<group>"; };
-		7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckEligibilityResult.swift; sourceTree = "<group>"; };
 		7C2FC3442ED3795A000FC952 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
-		7C2FC3462ED37997000FC952 /* UserStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStatus.swift; sourceTree = "<group>"; };
-		7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAgeSignalsOptions.swift; sourceTree = "<group>"; };
 		7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeDeclaration.swift; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CB000000000000000000001 /* AgeRangeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRangeStatus.swift; sourceTree = "<group>"; };
+		7CB000000000000000000003 /* ParentalControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParentalControl.swift; sourceTree = "<group>"; };
+		7CB000000000000000000005 /* RegulatoryFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegulatoryFeature.swift; sourceTree = "<group>"; };
+		7CB000000000000000000007 /* AgeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeRange.swift; sourceTree = "<group>"; };
+		7CB000000000000000000009 /* RequestAgeRangeOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAgeRangeOptions.swift; sourceTree = "<group>"; };
+		7CB00000000000000000000B /* ShowSignificantUpdateAcknowledgmentOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSignificantUpdateAcknowledgmentOptions.swift; sourceTree = "<group>"; };
+		7CB00000000000000000000D /* GetRegulatoryRequirementsResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetRegulatoryRequirementsResult.swift; sourceTree = "<group>"; };
+		7CB00000000000000000000F /* IsAvailableResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsAvailableResult.swift; sourceTree = "<group>"; };
+		7CB000000000000000000011 /* RequestAgeRangeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAgeRangeResult.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,8 +134,10 @@
 		7C2FC33C2ED36FC5000FC952 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				7CB000000000000000000001 /* AgeRangeStatus.swift */,
+				7CB000000000000000000003 /* ParentalControl.swift */,
+				7CB000000000000000000005 /* RegulatoryFeature.swift */,
 				7C2FC34F2ED4A000000FC952 /* AgeRangeDeclaration.swift */,
-				7C2FC3462ED37997000FC952 /* UserStatus.swift */,
 				7C2FC33D2ED36FCB000FC952 /* CustomError.swift */,
 			);
 			path = Enums;
@@ -134,6 +146,7 @@
 		7C2FC33F2ED37920000FC952 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				7CB000000000000000000007 /* AgeRange.swift */,
 				7C2FC34A2ED37E7E000FC952 /* Options */,
 				7C2FC3402ED37928000FC952 /* Results */,
 			);
@@ -143,8 +156,9 @@
 		7C2FC3402ED37928000FC952 /* Results */ = {
 			isa = PBXGroup;
 			children = (
-				7C2FC3412ED37930000FC952 /* CheckAgeSignalsResult.swift */,
-				7C2FC34E2ED37EA1000FC952 /* CheckEligibilityResult.swift */,
+				7CB00000000000000000000D /* GetRegulatoryRequirementsResult.swift */,
+				7CB00000000000000000000F /* IsAvailableResult.swift */,
+				7CB000000000000000000011 /* RequestAgeRangeResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -160,7 +174,8 @@
 		7C2FC34A2ED37E7E000FC952 /* Options */ = {
 			isa = PBXGroup;
 			children = (
-				7C2FC34B2ED37E83000FC952 /* CheckAgeSignalsOptions.swift */,
+				7CB000000000000000000009 /* RequestAgeRangeOptions.swift */,
+				7CB00000000000000000000B /* ShowSignificantUpdateAcknowledgmentOptions.swift */,
 			);
 			path = Options;
 			sourceTree = "<group>";
@@ -360,13 +375,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CB000000000000000000002 /* AgeRangeStatus.swift in Sources */,
+				7CB000000000000000000004 /* ParentalControl.swift in Sources */,
+				7CB000000000000000000006 /* RegulatoryFeature.swift in Sources */,
+				7CB000000000000000000008 /* AgeRange.swift in Sources */,
+				7CB00000000000000000000A /* RequestAgeRangeOptions.swift in Sources */,
+				7CB00000000000000000000C /* ShowSignificantUpdateAcknowledgmentOptions.swift in Sources */,
+				7CB00000000000000000000E /* GetRegulatoryRequirementsResult.swift in Sources */,
+				7CB000000000000000000010 /* IsAvailableResult.swift in Sources */,
+				7CB000000000000000000012 /* RequestAgeRangeResult.swift in Sources */,
 				50E1A94820377CB70090CE1A /* AgeSignalsPlugin.swift in Sources */,
 				7C2FC3452ED3795D000FC952 /* Result.swift in Sources */,
-				7C2FC3422ED37938000FC952 /* CheckAgeSignalsResult.swift in Sources */,
-				7C2FC34D2ED37EA0000FC952 /* CheckEligibilityResult.swift in Sources */,
 				7C2FC33B2ED36F1C000FC952 /* AgeSignals.swift in Sources */,
-				7C2FC3472ED3799B000FC952 /* UserStatus.swift in Sources */,
-				7C2FC34C2ED37E89000FC952 /* CheckAgeSignalsOptions.swift in Sources */,
 				7C2FC33E2ED36FCF000FC952 /* CustomError.swift in Sources */,
 				7C2FC3502ED4A000000FC952 /* AgeRangeDeclaration.swift in Sources */,
 			);

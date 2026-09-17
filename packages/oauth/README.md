@@ -45,6 +45,8 @@ The OAuth plugin is typically used whenever an app needs to authenticate users a
 
 ## Demo
 
+A working example can be found here: [capawesome-team/capacitor-oauth-demo](https://github.com/capawesome-team/capacitor-oauth-demo)
+
 | Android                                                                                                                      | iOS                                                                                                                      | Web                                                                                                                      |
 | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | <img src="https://github.com/user-attachments/assets/95ec6fe8-ba1d-4be0-898d-6b63a9170347" width="266" alt="Android Demo" /> | <img src="https://github.com/user-attachments/assets/0f06193f-15c5-4c72-a3dd-ada5163ce3eb" width="266" alt="iOS Demo" /> | <img src="https://github.com/user-attachments/assets/267c8536-2c83-455a-ab8f-76ed99011ba1" width="266" alt="Web Demo" /> |
@@ -490,14 +492,15 @@ Refresh the access token using a refresh token.
 
 #### LoginResult
 
-| Prop                            | Type                | Description                                             | Since |
-| ------------------------------- | ------------------- | ------------------------------------------------------- | ----- |
-| **`accessToken`**               | <code>string</code> | The access token.                                       | 0.1.0 |
-| **`accessTokenExpirationDate`** | <code>number</code> | The access token expiration date in epoch milliseconds. | 0.1.0 |
-| **`idToken`**                   | <code>string</code> | The JWT ID token (OpenID Connect).                      | 0.1.0 |
-| **`refreshToken`**              | <code>string</code> | The refresh token.                                      | 0.1.0 |
-| **`scope`**                     | <code>string</code> | The granted scopes as a space-delimited string.         | 0.1.0 |
-| **`tokenType`**                 | <code>string</code> | The token type.                                         | 0.1.0 |
+| Prop                            | Type                                      | Description                                                                                            | Since |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----- |
+| **`accessToken`**               | <code>string</code>                       | The access token.                                                                                      | 0.1.0 |
+| **`accessTokenExpirationDate`** | <code>number</code>                       | The access token expiration date in epoch milliseconds.                                                | 0.1.0 |
+| **`additionalParameters`**      | <code>Record&lt;string, string&gt;</code> | Additional non-standard parameters returned by the token endpoint. All values are returned as strings. | 0.1.8 |
+| **`idToken`**                   | <code>string</code>                       | The JWT ID token (OpenID Connect).                                                                     | 0.1.0 |
+| **`refreshToken`**              | <code>string</code>                       | The refresh token.                                                                                     | 0.1.0 |
+| **`scope`**                     | <code>string</code>                       | The granted scopes as a space-delimited string.                                                        | 0.1.0 |
+| **`tokenType`**                 | <code>string</code>                       | The token type.                                                                                        | 0.1.0 |
 
 
 #### LoginOptions
@@ -562,6 +565,58 @@ On iOS, `login(...)` may hang forever (while working on Android and Web) if the 
 
 Compare the returned redirect URI (e.g. via a network proxy such as [Proxyman](https://proxyman.io/)) byte-for-byte with your `redirectUrl` and make them match exactly.
 
+##### In-app browser closes when the app is reopened on Android
+
+With the Capacitor default `android:launchMode="singleTask"`, Android destroys all activities on top of the main activity, including the in-app browser, when the app is reopened via the launcher icon, for example after switching to a mail app to look up a one-time password. The plugin detects this and automatically re-opens the in-app browser so the user can complete the flow. Since the identity provider's session cookies are preserved, the user can usually continue where they left off.
+
+If you prefer to keep the in-app browser (including any entered form data) alive while the app is in the background, you can optionally apply one of the following workarounds in your app:
+
+**Launcher activity (recommended)**: Add a launcher activity that receives the launcher intent instead of your main activity. This way, reopening the app via the launcher icon no longer targets the `singleTask` main activity, so Android brings the task to the foreground without destroying the in-app browser, while your main activity keeps its `singleTask` behavior. Create the following activity next to your `MainActivity` (adjust the package name):
+
+```java
+package com.example.app;
+
+import android.content.Intent;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LauncherActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!isTaskRoot()) {
+            // The app is already running, so just bring the existing task
+            // (including any open in-app browser) to the foreground.
+            finish();
+            return;
+        }
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.replaceExtras(getIntent());
+        startActivity(intent);
+        finish();
+    }
+}
+```
+
+Then, in your `AndroidManifest.xml` file, move the `MAIN`/`LAUNCHER` intent filter from your main activity to the new launcher activity:
+
+```xml
+<activity
+    android:name=".LauncherActivity"
+    android:theme="@style/AppTheme.NoActionBarLaunch"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+Everything else on your main activity stays as it is, including `android:launchMode="singleTask"`, `android:exported="true"` and all other intent filters (e.g. for deep links) — only the `MAIN`/`LAUNCHER` intent filter moves.
+
+**`singleTop` launch mode**: Alternatively, set `android:launchMode="singleTop"` on your main activity in the `AndroidManifest.xml` file. Be aware that this may change how Android delivers intents (e.g. deep links) to your app, so make sure to test this change carefully.
+
 ## FAQ
 
 ### Is this plugin an alternative to Ionic Auth Connect?
@@ -590,11 +645,16 @@ Tokens are sensitive data and should not be stored in plain text. The plugin is 
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects.
 
+### How does OAuth compare to Apple, Google, or Facebook Sign-In?
+
+This plugin talks to any OAuth 2.0 / OpenID Connect provider directly, which is the right fit for a custom identity provider or one without a dedicated Capacitor plugin. If you're specifically integrating Apple, Google, or Facebook, their dedicated [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/), [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/), and [Facebook Sign-In](https://capawesome.io/docs/sdks/capacitor/facebook-sign-in/) plugins use each provider's native SDK and are usually simpler to set up than configuring them through generic OAuth.
+
 ## Related Plugins
 
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [In-App Browser](https://capawesome.io/docs/sdks/capacitor/in-app-browser/): Open the OAuth authorization page in an embedded browser instead of the system browser.
 - [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Next steps
 

@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`dfd39b93c2a3e89f3205740a2588457315ab9e7d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/dfd39b93c2a3e89f3205740a2588457315ab9e7d) ([#593](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/593)): fix(ios): `startMeasurementUpdates(...)` never resolved
+
+## 8.0.3
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
 ## 8.0.2
 
 ### Patch Changes

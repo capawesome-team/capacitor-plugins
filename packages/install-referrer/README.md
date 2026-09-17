@@ -12,6 +12,7 @@ Capacitor plugin for reading install attribution data from the [Play Install Ref
 
 - 🤖 **Play Install Referrer**: Read the Play Store install referrer on Android.
 - 🍏 **Apple Ad Services**: Read the Apple Ad Services attribution token on iOS.
+- 🤝 **Compatibility**: Works alongside the [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/), [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/) and [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -193,6 +194,10 @@ The token expires after 24 hours, so it should be exchanged promptly. See the [A
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It brings the Android Play Install Referrer and the iOS Apple Ad Services attribution token together under one fully typed API, so a single dependency covers install attribution across both platforms. It surfaces the complete referrer details — referrer URL, click and install timestamps, and Google Play Instant detection — and documents the Android availability window and the server-side Apple token exchange clearly. It's actively maintained against the latest Capacitor and OS versions, so campaign attribution and deferred deep linking stay reliable as the platforms evolve.
+
 ### Which platforms does this plugin support?
 
 The `getInstallReferrer(...)` method is only available on Android and the `getAttributionToken(...)` method is only available on iOS. On all other platforms, the respective method rejects as unimplemented.
@@ -216,8 +221,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [App Tracking Transparency](https://capawesome.io/docs/sdks/capacitor/app-tracking-transparency/): Request the user's permission to track them via the App Tracking Transparency framework on iOS.
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Capture analytics events with the PostHog platform.
 - [Firebase Analytics](https://capawesome.io/docs/sdks/capacitor/firebase/analytics/): Measure user engagement with Firebase Analytics.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Capture analytics events with the PostHog platform.
 
 ## Newsletter
 

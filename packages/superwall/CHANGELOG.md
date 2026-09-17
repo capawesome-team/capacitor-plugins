@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`06c9294f41c81486155602735004040e8fa7ea34`](https://github.com/capawesome-team/capacitor-plugins/commit/06c9294f41c81486155602735004040e8fa7ea34) ([#1058](https://github.com/capawesome-team/capacitor-plugins/pull/1058)): feat: add `restorePurchases()` method for Android and iOS.
+
+## 0.1.4
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.1.3
+
+### Patch Changes
+
+- [`f1d3d338cc5998d745f3617cbaf9c032beb0f726`](https://github.com/capawesome-team/capacitor-plugins/commit/f1d3d338cc5998d745f3617cbaf9c032beb0f726) ([#954](https://github.com/capawesome-team/capacitor-plugins/pull/954)): feat: add `dismiss()` method
+
+## 0.1.2
+
+### Patch Changes
+
+- [`93f37920e705ba8de35ce6f272ac47f2e41b35da`](https://github.com/capawesome-team/capacitor-plugins/commit/93f37920e705ba8de35ce6f272ac47f2e41b35da) ([#949](https://github.com/capawesome-team/capacitor-plugins/pull/949)): fix(android): pass activity provider to Superwall SDK
+
 ## 0.1.1
 
 ### Patch Changes

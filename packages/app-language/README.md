@@ -14,9 +14,9 @@ Capacitor plugin to manage the app's own language override, independent of the d
 - 🔎 **Read language**: Read the app's current language override.
 - ♻️ **Reset**: Clear the override so the app follows the device language again (Android).
 - ⚙️ **Settings**: Deep-link to the app's system settings page where the user can change the app language.
+- 🤝 **Compatibility**: Works alongside the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin, which reads the user's localization preferences.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Localization](https://capawesome.io/docs/sdks/capacitor/localization/) plugin, which reads the user's localization preferences.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 

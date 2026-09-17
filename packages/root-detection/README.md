@@ -62,7 +62,7 @@ npx cap sync
 
 This plugin will use the following project variables (defined in your app's `variables.gradle` file):
 
-- `$rootbeerVersion` version of `com.scottyab:rootbeer-lib` (default: `0.1.0`)
+- `$rootbeerVersion` version of `com.scottyab:rootbeer-lib` (default: `0.1.2`)
 
 ### iOS
 
@@ -225,6 +225,10 @@ For **server-verifiable** device and app integrity, use the [App Integrity](http
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It combines several device-trust signals in one fully typed API: root and jailbreak detection on Android and iOS, emulator and simulator detection, and a developer-mode check on Android. These are fast, client-side checks that are easy to drop into any app, and the plugin is designed to work alongside the App Integrity plugin when you also need server-verifiable attestation. If a lightweight client-side signal is all you need, this covers it well; when you need a full trust story, the two plugins fit together.
+
 ### Can root detection be bypassed?
 
 Yes. All checks provided by this plugin are performed entirely on the device and are best-effort. A determined attacker with full control over a rooted or jailbroken device can bypass or spoof any client-side detection. You should therefore never rely on this plugin as the sole security measure. See the [Security Considerations](#security-considerations) section for details.
@@ -249,8 +253,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 - [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API (Android) and App Attest (iOS).
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Privacy Screen](https://capawesome.io/docs/sdks/capacitor/privacy-screen/): Hide sensitive app content in the app switcher, block screenshots, and detect when a screenshot is taken.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter
 

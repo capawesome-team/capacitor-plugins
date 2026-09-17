@@ -127,8 +127,8 @@ public class Permissions {
             throw new CustomException(
                 null,
                 "The following permissions are not declared in the AndroidManifest.xml file: " +
-                String.join(", ", undefinedPermissionStrings) +
-                "."
+                    String.join(", ", undefinedPermissionStrings) +
+                    "."
             );
         }
     }

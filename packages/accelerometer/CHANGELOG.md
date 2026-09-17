@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`b2cfed643bded8eadd05431c838aea32e202c842`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b2cfed643bded8eadd05431c838aea32e202c842) ([#590](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/590)): fix(ios): `startMeasurementUpdates(...)` no longer stops working after `removeAllListeners(...)`
+
+## 8.0.3
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
 ## 8.0.2
 
 ### Patch Changes

@@ -11,9 +11,10 @@ Capacitor plugin to open the native email composer.
 ## Features
 
 - ✉️ **Compose**: Open the native email composer prefilled with recipients, subject and body.
-- 📎 **Attachments**: Attach one or more files to the email.
+- 📎 **Attachments**: Attach one or more files from the file system or from base64 strings.
 - ✅ **Availability**: Check whether the device is able to compose and send emails.
 - 🌐 **Cross-platform**: Supports Android, iOS and the web (via `mailto:`).
+- 🤝 **Compatibility**: Works alongside the [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/), [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -24,7 +25,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 The Mail Composer plugin is typically used whenever an app wants the user to send an email, for example:
 
 - **Support and feedback**: Open a prefilled email to your support address with a subject and body so users can reach out with one tap.
-- **Bug reports**: Attach log files or screenshots to a bug report email using the `attachments` option.
+- **Bug reports**: Attach log files or screenshots to a bug report email using the `attachments` option, either from the file system or directly from a base64 string.
 - **Sharing content**: Let users share content from your app via email with prefilled recipients, subject, and body.
 - **Invitations**: Prefill invitation emails with CC and BCC recipients that the user only needs to review and send.
 
@@ -61,6 +62,8 @@ npx cap sync
 #### Attachments
 
 To attach files, the plugin uses the [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider) that Capacitor already registers for your app (authority `${applicationId}.fileprovider`). Make sure that the directories your attachments are stored in are covered by the `res/xml/file_paths.xml` resource of your app. Otherwise, the `composeMail(...)` method will reject with an error.
+
+Attachments that are provided as base64 strings are written to the cache directory of your app, which the default `res/xml/file_paths.xml` resource of a Capacitor app already covers with a `cache-path` entry.
 
 ### Web
 
@@ -106,6 +109,25 @@ const composeMail = async () => {
     body: 'This is the body of the email.',
   });
   return status;
+};
+```
+
+### Compose an email with attachments
+
+Attach a file from the file system using the `path` property, or attach a file that only exists in memory using the `data` and `name` properties. Attachments are not supported on the web:
+
+```typescript
+import { MailComposer } from '@capawesome/capacitor-mail-composer';
+
+const composeMailWithAttachments = async () => {
+  await MailComposer.composeMail({
+    to: ['support@example.com'],
+    subject: 'Bug report',
+    attachments: [
+      { path: '/path/to/screenshot.png' },
+      { data: 'SGVsbG8gV29ybGQ=', name: 'log.txt' },
+    ],
+  });
 };
 ```
 
@@ -183,15 +205,24 @@ never sends the email itself.
 
 #### ComposeMailOptions
 
-| Prop              | Type                  | Description                                                                                                                                                                                         | Default            | Since |
-| ----------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`attachments`** | <code>string[]</code> | The absolute file paths or `file://` URIs of the files to attach. Attachments are not supported on the web.                                                                                         |                    | 0.1.0 |
-| **`bcc`**         | <code>string[]</code> | The email addresses of the blind carbon copy (BCC) recipients.                                                                                                                                      |                    | 0.1.0 |
-| **`body`**        | <code>string</code>   | The body of the email.                                                                                                                                                                              |                    | 0.1.0 |
-| **`cc`**          | <code>string[]</code> | The email addresses of the carbon copy (CC) recipients.                                                                                                                                             |                    | 0.1.0 |
-| **`isHtml`**      | <code>boolean</code>  | Whether the body should be interpreted as HTML. **Note**: On Android, HTML is best-effort as many mail apps ignore it. On the web, HTML is not supported and the body is always sent as plain text. | <code>false</code> | 0.1.0 |
-| **`subject`**     | <code>string</code>   | The subject of the email.                                                                                                                                                                           |                    | 0.1.0 |
-| **`to`**          | <code>string[]</code> | The email addresses of the primary recipients.                                                                                                                                                      |                    | 0.1.0 |
+| Prop              | Type                          | Description                                                                                                                                                                                         | Default            | Since |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`attachments`** | <code>MailAttachment[]</code> | The files to attach to the email. Attachments are not supported on the web.                                                                                                                         |                    | 0.1.0 |
+| **`bcc`**         | <code>string[]</code>         | The email addresses of the blind carbon copy (BCC) recipients.                                                                                                                                      |                    | 0.1.0 |
+| **`body`**        | <code>string</code>           | The body of the email.                                                                                                                                                                              |                    | 0.1.0 |
+| **`cc`**          | <code>string[]</code>         | The email addresses of the carbon copy (CC) recipients.                                                                                                                                             |                    | 0.1.0 |
+| **`isHtml`**      | <code>boolean</code>          | Whether the body should be interpreted as HTML. **Note**: On Android, HTML is best-effort as many mail apps ignore it. On the web, HTML is not supported and the body is always sent as plain text. | <code>false</code> | 0.1.0 |
+| **`subject`**     | <code>string</code>           | The subject of the email.                                                                                                                                                                           |                    | 0.1.0 |
+| **`to`**          | <code>string[]</code>         | The email addresses of the primary recipients.                                                                                                                                                      |                    | 0.1.0 |
+
+
+#### MailAttachment
+
+| Prop       | Type                | Description                                                                                                                                                                                                                                                                                                  | Since |
+| ---------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`data`** | <code>string</code> | The content of the file to attach, encoded as a base64 string. Either `data` or `path` must be provided. If both are provided, `path` is used. **Attention**: The entire file is loaded into memory as a base64 string, which can lead to app crashes for large files. Use `path` instead whenever possible. | 0.2.0 |
+| **`name`** | <code>string</code> | The file name of the attachment, including the file extension. Must be provided if `data` is provided. Ignored if `path` is provided, because the file name is then derived from the path.                                                                                                                   | 0.2.0 |
+| **`path`** | <code>string</code> | The absolute file path or `file://` URI of the file to attach. Either `data` or `path` must be provided.                                                                                                                                                                                                     | 0.2.0 |
 
 
 ### Type Aliases
@@ -220,6 +251,10 @@ Keep the following platform-specific behavior in mind:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens the native email composer prefilled with recipients, subject, body, and CC and BCC, and supports file attachments and HTML bodies through a fully typed API on Android, iOS, and the Web. A `canComposeMail()` check lets you confirm the device can actually send mail before you show the feature, and the user always stays in control of sending. If you only need a plain `mailto:` link, a simpler approach is fine; if you need attachments, rich bodies, and reliable capability detection, this plugin is built for exactly that.
+
 ### Does the plugin send the email itself?
 
 No, the plugin only opens the native email composer prefilled with the provided data. The user reviews the email and decides whether to send it. The email is always sent through the user's own mail app and account.
@@ -236,6 +271,14 @@ On iOS, `composeMail` rejects as unavailable if no mail account is configured on
 
 On Android, the plugin shares attachments through the [`FileProvider`](https://developer.android.com/reference/androidx/core/content/FileProvider) that Capacitor already registers for your app. If the directory a file is stored in is not covered by the `res/xml/file_paths.xml` resource of your app, `composeMail` rejects with an error. See the [Installation](#installation) section for details.
 
+### How do I attach a file that is not stored on the file system?
+
+Provide the content of the file as a base64 string using the `data` property of an attachment and set the `name` property to the file name including the file extension. This is useful for files that only exist in memory, for example a log file that you keep in IndexedDB. The plugin takes care of handing the content over to the mail app, so you do not need to write the file to the file system yourself.
+
+### Why does my app crash when attaching large files?
+
+Attachments provided via the `data` property are loaded into memory as a base64 string, which can lead to out of memory (OOM) crashes for large files. Whenever the file is available on the file system, use the `path` property instead.
+
 ### Are attachments supported on the web?
 
 No, on the web the plugin builds a `mailto:` URL, which cannot carry attachments, so `composeMail` rejects if attachments are provided. Also keep in mind that HTML bodies are not supported on the web and long bodies may be truncated due to the URL length limit.
@@ -246,9 +289,9 @@ Yes, set the `isHtml` option to `true` to have the body interpreted as HTML. On 
 
 ## Related Plugins
 
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
-- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
 - [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select files to attach to an email.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

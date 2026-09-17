@@ -20,8 +20,8 @@ import io.capawesome.capacitorjs.plugins.posthog.classes.options.IsFeatureEnable
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.RegisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.ScreenOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SessionReplayOptions;
+import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetPersonPropertiesOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.SetupOptions;
-import io.capawesome.capacitorjs.plugins.posthog.classes.options.StartSessionRecordingOptions;
 import io.capawesome.capacitorjs.plugins.posthog.classes.options.UnregisterOptions;
 import io.capawesome.capacitorjs.plugins.posthog.interfaces.Result;
 import org.json.JSONObject;
@@ -146,6 +146,16 @@ public class PosthogPlugin extends Plugin {
         try {
             GetFeatureFlagPayloadOptions options = new GetFeatureFlagPayloadOptions(call);
             Result result = implementation.getFeatureFlagPayload(options);
+            resolveCall(call, result.toJSObject());
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void getSessionId(PluginCall call) {
+        try {
+            Result result = implementation.getSessionId();
             resolveCall(call, result.toJSObject());
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -301,6 +311,18 @@ public class PosthogPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setPersonProperties(PluginCall call) {
+        try {
+            SetPersonPropertiesOptions options = new SetPersonPropertiesOptions(call);
+
+            implementation.setPersonProperties(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void setup(PluginCall call) {
         try {
             String apiKey = call.getString("apiKey");
@@ -313,6 +335,7 @@ public class PosthogPlugin extends Plugin {
             Boolean optOut = call.getBoolean("optOut", false);
             Boolean captureApplicationLifecycleEvents = call.getBoolean("captureApplicationLifecycleEvents", true);
             Boolean autoCaptureExceptions = call.getBoolean("autoCaptureExceptions", false);
+            Boolean preloadFeatureFlags = call.getBoolean("preloadFeatureFlags", true);
 
             SetupOptions options = new SetupOptions(apiKey, apiHost);
             options.setEnableSessionReplay(enableSessionReplay != null ? enableSessionReplay : false);
@@ -321,6 +344,7 @@ public class PosthogPlugin extends Plugin {
                 captureApplicationLifecycleEvents != null ? captureApplicationLifecycleEvents : true
             );
             options.setAutoCaptureExceptions(autoCaptureExceptions != null ? autoCaptureExceptions : false);
+            options.setPreloadFeatureFlags(preloadFeatureFlags != null ? preloadFeatureFlags : true);
 
             JSObject sessionReplayConfigObject = call.getObject("sessionReplayConfig");
             if (sessionReplayConfigObject != null) {
@@ -330,12 +354,32 @@ public class PosthogPlugin extends Plugin {
                     sessionReplayConfigObject.getBool("maskAllImages"),
                     sessionReplayConfigObject.getBool("maskAllSandboxedViews"),
                     sessionReplayConfigObject.getBool("captureNetworkTelemetry"),
-                    sessionReplayConfigObject.getDouble("debouncerDelay")
+                    sessionReplayConfigObject.has("debouncerDelay") ? sessionReplayConfigObject.getDouble("debouncerDelay") : null
                 );
                 options.setSessionReplayConfig(sessionReplayOptions);
             }
 
             implementation.setup(options);
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void startSessionRecording(PluginCall call) {
+        try {
+            implementation.startSessionRecording();
+            call.resolve();
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void stopSessionRecording(PluginCall call) {
+        try {
+            implementation.stopSessionRecording();
             call.resolve();
         } catch (Exception exception) {
             rejectCall(call, exception);
@@ -369,8 +413,10 @@ public class PosthogPlugin extends Plugin {
         config.setApiHost(apiHost);
         boolean enableSessionReplay = getConfig().getBoolean("enableSessionReplay", config.getEnableSessionReplay());
         config.setEnableSessionReplay(enableSessionReplay);
-        boolean captureApplicationLifecycleEvents = getConfig()
-            .getBoolean("captureApplicationLifecycleEvents", config.getCaptureApplicationLifecycleEvents());
+        boolean captureApplicationLifecycleEvents = getConfig().getBoolean(
+            "captureApplicationLifecycleEvents",
+            config.getCaptureApplicationLifecycleEvents()
+        );
         config.setCaptureApplicationLifecycleEvents(captureApplicationLifecycleEvents);
         boolean autoCaptureExceptions = getConfig().getBoolean("autoCaptureExceptions", config.getAutoCaptureExceptions());
         config.setAutoCaptureExceptions(autoCaptureExceptions);

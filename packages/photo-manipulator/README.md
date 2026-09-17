@@ -17,8 +17,8 @@ Capacitor plugin for headless image transforms like crop, resize, rotate, flip a
 - 🕵️ **Privacy Friendly**: All metadata (e.g. EXIF, GPS) is stripped from the output by re-encoding.
 - 📂 **File Output**: Results are written to files, so even large images don't exhaust memory.
 - ℹ️ **Image Info**: Read the dimensions and format of an image without decoding the pixel data.
-- 🤝 **Compatibility**: Works alongside the [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/), [Exif](https://capawesome.io/docs/sdks/capacitor/exif/) and [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) plugins.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/), [Exif](https://capawesome.io/docs/sdks/capacitor/exif/) and [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -318,6 +318,10 @@ The EXIF orientation of the source image is applied during decoding so that the 
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It performs headless image transforms — crop, resize, rotate, flip and format conversion, including HEIC and AVIF to JPEG, PNG or WebP — using the native platform decoders, with no UI and no WebView memory spikes. It decodes bounds-aware and downsampled so full-resolution bitmaps are never loaded when resizing, applies the EXIF orientation for always-upright output, writes results to files, and strips metadata on re-encode for privacy-safe sharing. It works on Android, iOS and the Web, uses only official platform APIs, and is fully typed and kept current with the latest Capacitor version.
+
 ### In which order are the transformations applied?
 
 The operations are always applied in the following fixed order: crop → resize → rotate → flip. If you need a different order, chain multiple `transform(...)` calls, passing the output path of one call as the input path of the next.
@@ -344,10 +348,10 @@ The plugin is designed to keep the memory footprint low. When a `resize` target 
 
 ## Related Plugins
 
-- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo in an installed photo editing app.
 - [Exif](https://capawesome.io/docs/sdks/capacitor/exif/): Read, write and remove EXIF metadata from image files.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress files with support for image formats like PNG, JPEG, and WebP.
 - [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select the images to transform from the gallery or file system.
+- [Photo Editor](https://capawesome.io/docs/sdks/capacitor/photo-editor/): Let the user edit a photo in an installed photo editing app.
 
 ## Newsletter
 

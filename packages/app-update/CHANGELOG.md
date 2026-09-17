@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.4
+
+### Patch Changes
+
+- [`f01a68db2b220e1a1f31b3d9a114682bebcdaaec`](https://github.com/capawesome-team/capacitor-plugins/commit/f01a68db2b220e1a1f31b3d9a114682bebcdaaec) ([#987](https://github.com/capawesome-team/capacitor-plugins/pull/987)): fix(android): resolve the version code via `PackageInfoCompat` to avoid a deprecation warning
+
 ## 8.0.3
 
 ### Patch Changes

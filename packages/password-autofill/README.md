@@ -17,6 +17,7 @@ The Capacitor Password Autofill plugin is one of the most complete credential sa
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 🔐 **Credential saving**: Save a username and password to the platform credential store.
 - 🎯 **Deterministic**: Trigger the save prompt explicitly after a successful login, even for non-form flows.
+- 🤝 **Compatibility**: Works alongside the [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/), [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/) and [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -197,6 +198,10 @@ What this plugin does **not** replace:
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It saves credentials into the platform credential store — iCloud Keychain on iOS and Google Password Manager on Android — with an explicit `savePassword(...)` call after a successful login. Because saving is triggered by an explicit call, it reliably covers single-page app logins built on `fetch()` and `preventDefault()` as well as non-form flows such as social signups with generated passwords, all without changing your WebView origin. The API is fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor version.
+
 ### Does this plugin fill login forms with saved credentials?
 
 No, this plugin only saves credentials into the platform autofill system (iCloud Keychain on iOS, Google Password Manager on Android). Filling credentials back into a form is handled by the operating system and still benefits from the `autocomplete` attributes described in the [official Capacitor autofill guide](https://capacitorjs.com/docs/guides/autofill-credentials).
@@ -223,8 +228,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
+- [Passkeys](https://capawesome.io/docs/sdks/capacitor/passkeys/): Create and authenticate with passkeys based on the WebAuthn standard.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter

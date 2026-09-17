@@ -12,6 +12,7 @@ body:
         - label: Accelerometer
         - label: Accessibility Preferences
         - label: Action Sheet
+        - label: AdMob
         - label: Age Signals
         - label: Alarm
         - label: Android Battery Optimization
@@ -33,40 +34,55 @@ body:
         - label: Audio Player
         - label: Audio Recorder
         - label: Audio Session
+        - label: Background Geolocation
         - label: Background Task
         - label: Badge
+        - label: Barcode Scanner
         - label: Barometer
         - label: Battery
         - label: Biometrics
         - label: Bluetooth Low Energy
+        - label: Calendar
         - label: Clipboard
         - label: Cloudinary
         - label: Compass
         - label: Contacts
+        - label: Crisp
         - label: Datetime Picker
         - label: Device Info
         - label: Dialog
+        - label: Document Scanner
         - label: Exif
         - label: Facebook Sign-In
         - label: File Compressor
+        - label: File Manager
         - label: File Opener
         - label: File Picker
+        - label: File Transfer
+        - label: Flic
         - label: Formbricks
         - label: Geocoder
+        - label: Geofences
+        - label: Google Play Services
         - label: Google Sign-In
         - label: Grafana Faro
         - label: Gyroscope
         - label: Haptics
+        - label: Health
         - label: Home Indicator
         - label: In-App Browser
         - label: Install Referrer
+        - label: Intercom
+        - label: Intune
         - label: Keep Awake
         - label: libSQL
         - label: Light Sensor
         - label: Live Update
+        - label: LLM
         - label: Localization
         - label: Mail Composer
         - label: Managed Configurations
+        - label: MapLibre
         - label: Maps Launcher
         - label: Media Session
         - label: Navigation Bar
@@ -74,8 +90,10 @@ body:
         - label: NFC
         - label: Node.js
         - label: OAuth
+        - label: Option Picker
         - label: Passkeys
         - label: Password Autofill
+        - label: PDF Annotator
         - label: PDF Generator
         - label: PDF Viewer
         - label: Pedometer
@@ -84,7 +102,7 @@ body:
         - label: Photo Editor
         - label: Photo Manipulator
         - label: PixLive
-        - label: Posthog
+        - label: PostHog
         - label: Privacy Screen
         - label: Proximity Sensor
         - label: Purchases
@@ -100,6 +118,7 @@ body:
         - label: Shake
         - label: Silent Mode
         - label: SIM
+        - label: Singular
         - label: SMS Composer
         - label: Speech Recognition
         - label: Speech Synthesis
@@ -111,12 +130,16 @@ body:
         - label: Text Interaction
         - label: Text Zoom
         - label: Thermal State
+        - label: TikTok App Events
         - label: Toast
         - label: Torch
         - label: Vault
         - label: Volume
         - label: Wallet
+        - label: Watch
         - label: Wifi
+        - label: YouTube Player
+        - label: Zeroconf
         - label: Zip
   - type: textarea
     attributes:

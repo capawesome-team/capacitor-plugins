@@ -14,6 +14,9 @@ export interface DialogPlugin {
   /**
    * Display a prompt dialog with a text input, a confirm and a cancel button.
    *
+   * If the user selects the cancel button or dismisses the dialog, the promise
+   * is rejected with the `CANCELED` error code.
+   *
    * @since 0.1.0
    */
   prompt(options: PromptOptions): Promise<PromptResult>;
@@ -169,17 +172,23 @@ export interface PromptOptions {
  */
 export interface PromptResult {
   /**
-   * Whether the user canceled the dialog.
-   *
-   * @since 0.1.0
-   * @example false
-   */
-  canceled: boolean;
-  /**
    * The value of the text input.
    *
    * @since 0.1.0
    * @example 'John Doe'
    */
   value: string;
+}
+
+/**
+ * @since 0.2.0
+ */
+export enum ErrorCode {
+  /**
+   * The user canceled the dialog by selecting the cancel button or by
+   * dismissing the dialog.
+   *
+   * @since 0.2.0
+   */
+  Canceled = 'CANCELED',
 }

@@ -1,1 +1,35 @@
 # Changelog
+
+## 0.2.2
+
+### Patch Changes
+
+- [`04c8f0d12a067cdefb6576dc1fa114a2c4ff1e9e`](https://github.com/capawesome-team/capacitor-plugins/commit/04c8f0d12a067cdefb6576dc1fa114a2c4ff1e9e): docs: document that large attachments provided via `data` can cause out of memory (OOM) crashes
+
+## 0.2.1
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.2.0
+
+### Minor Changes
+
+- [`348c5cc5a7d6bcef4cfc3b956e43d6325aa24157`](https://github.com/capawesome-team/capacitor-plugins/commit/348c5cc5a7d6bcef4cfc3b956e43d6325aa24157) ([#1018](https://github.com/capawesome-team/capacitor-plugins/pull/1018)): feat!: allow attaching base64 strings as files (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`b85858eff5351e1bf252d7e1853bd42f38cc486a`](https://github.com/capawesome-team/capacitor-plugins/commit/b85858eff5351e1bf252d7e1853bd42f38cc486a) ([#1020](https://github.com/capawesome-team/capacitor-plugins/pull/1020)): fix(android): only offer mail apps in the chooser when composing a mail with attachments
+
+## 0.1.1
+
+### Patch Changes
+
+- [`6b4f706e965d85274c97506336ab683fd449ff23`](https://github.com/capawesome-team/capacitor-plugins/commit/6b4f706e965d85274c97506336ab683fd449ff23) ([#924](https://github.com/capawesome-team/capacitor-plugins/pull/924)): fix: use `proguard-android-optimize.txt` for AGP 9.3.0 and R8 compatibility
+
+## 0.1.0
+
+### Minor Changes
+
+- [`bfaabdea962b74c3a90f972910a5e5b510e70375`](https://github.com/capawesome-team/capacitor-plugins/commit/bfaabdea962b74c3a90f972910a5e5b510e70375) ([#907](https://github.com/capawesome-team/capacitor-plugins/pull/907)): Initial release 🎉

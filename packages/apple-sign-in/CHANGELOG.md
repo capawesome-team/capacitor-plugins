@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.1.3
+
+### Patch Changes
+
+- [`c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2`](https://github.com/capawesome-team/capacitor-plugins/commit/c8dd2efe6ce65091d23f4e2f5836fecdbc7a07e2) ([#945](https://github.com/capawesome-team/capacitor-plugins/pull/945)): fix(android): remove deprecated status bar color call
+
+## 0.1.2
+
+### Patch Changes
+
+- [`6b4f706e965d85274c97506336ab683fd449ff23`](https://github.com/capawesome-team/capacitor-plugins/commit/6b4f706e965d85274c97506336ab683fd449ff23) ([#924](https://github.com/capawesome-team/capacitor-plugins/pull/924)): fix: use `proguard-android-optimize.txt` for AGP 9.3.0 and R8 compatibility
+
 ## 0.1.1
 
 ### Patch Changes

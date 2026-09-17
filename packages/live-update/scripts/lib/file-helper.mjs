@@ -6,6 +6,19 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 
 /**
+ * Asserts that the given file contains the given expected value.
+ */
+export async function assertInFile(filePath, searchValue, expectedValue) {
+  const data = fs.readFileSync(filePath, 'utf8');
+  const actualValue = data.match(searchValue)?.[0] ?? 'no match';
+  if (actualValue !== expectedValue) {
+    throw new Error(
+      `Expected \`${expectedValue}\` in ${filePath}, but found \`${actualValue}\`. Run \`npm run version\` and commit the result.`,
+    );
+  }
+}
+
+/**
  * Joins the given parts into a path relative to the root of the project.
  */
 export function joinPath(...parts) {

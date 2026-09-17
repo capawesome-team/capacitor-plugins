@@ -17,6 +17,7 @@
 		FE00000000000000000000A2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000A1 /* Result.swift */; };
 		FE00000000000000000000B2 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000B1 /* CustomError.swift */; };
 		FE00000000000000000000C2 /* ComposeMailOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000C1 /* ComposeMailOptions.swift */; };
+		FE00000000000000000000C4 /* MailAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000C3 /* MailAttachment.swift */; };
 		FE00000000000000000000D2 /* CanComposeMailResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000D1 /* CanComposeMailResult.swift */; };
 		FE00000000000000000000E2 /* ComposeMailResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000E1 /* ComposeMailResult.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		FE00000000000000000000A1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		FE00000000000000000000B1 /* CustomError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		FE00000000000000000000C1 /* ComposeMailOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeMailOptions.swift; sourceTree = "<group>"; };
+		FE00000000000000000000C3 /* MailAttachment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MailAttachment.swift; sourceTree = "<group>"; };
 		FE00000000000000000000D1 /* CanComposeMailResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanComposeMailResult.swift; sourceTree = "<group>"; };
 		FE00000000000000000000E1 /* ComposeMailResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComposeMailResult.swift; sourceTree = "<group>"; };
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			isa = PBXGroup;
 			children = (
 				FE00000000000000000000C1 /* ComposeMailOptions.swift */,
+				FE00000000000000000000C3 /* MailAttachment.swift */,
 			);
 			path = Options;
 			sourceTree = "<group>";
@@ -359,6 +362,7 @@
 				FE00000000000000000000A2 /* Result.swift in Sources */,
 				FE00000000000000000000B2 /* CustomError.swift in Sources */,
 				FE00000000000000000000C2 /* ComposeMailOptions.swift in Sources */,
+				FE00000000000000000000C4 /* MailAttachment.swift in Sources */,
 				FE00000000000000000000D2 /* CanComposeMailResult.swift in Sources */,
 				FE00000000000000000000E2 /* ComposeMailResult.swift in Sources */,
 			);

@@ -15,6 +15,7 @@ Capacitor plugin to launch navigation apps with turn-by-turn directions.
 - 📍 **Coordinates & addresses**: Navigate to coordinates or a plain address.
 - 🚗 **Travel modes**: Choose between driving, walking, bicycling and transit (best-effort per app).
 - ✅ **Availability**: Check which navigation apps are installed and can be launched.
+- 🤝 **Compatibility**: Works alongside the [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/), [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/) and [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -320,6 +321,10 @@ Unsupported travel modes fall back to the default behavior of the respective app
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It launches turn-by-turn navigation in Google Maps, Apple Maps, and Waze from a single fully typed API, accepting either coordinates or a plain address and supporting driving, walking, bicycling, and transit modes. It also detects which navigation apps are installed and, on Android, which one is the default handler, so you can let users pick their favorite. Per-app behavior is documented transparently, and the plugin is actively maintained against the latest Capacitor and OS versions across Android and iOS.
+
 ### Why are Google Maps and Waze reported as unavailable on iOS?
 
 To detect and launch Google Maps and Waze on iOS, the `comgooglemaps` and `waze` URL schemes must be added to the `LSApplicationQueriesSchemes` array in the `Info.plist` file of your app. Without them, `getAvailableApps` reports those apps as unavailable and `navigate` rejects with the `APP_NOT_AVAILABLE` error code. See the [Installation](#installation) section for details.
@@ -342,9 +347,9 @@ No, the `getAvailableApps` and `navigate` methods are only available on Android 
 
 ## Related Plugins
 
+- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
 - [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
 - [Geocoder](https://capawesome.io/docs/sdks/capacitor/geocoder/): Convert addresses into coordinates and vice versa.
-- [Android Intent Launcher](https://capawesome.io/docs/sdks/capacitor/android-intent-launcher/): Launch arbitrary Android intents.
 
 ## Newsletter
 

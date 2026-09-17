@@ -29,8 +29,8 @@ import Capacitor
             }
             self.enabled = false
             self.preventScreenshots = false
-            NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
             self.removeOverlay()
             self.removeScreenshotPrevention()
             completion(nil)
@@ -45,18 +45,18 @@ import Capacitor
             }
             self.enabled = true
             self.preventScreenshots = options.preventScreenshots
-            NotificationCenter.default.removeObserver(self, name: UIApplication.willResignActiveNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: UIApplication.didBecomeActiveNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.didEnterBackgroundNotification, object: nil)
+            NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
             NotificationCenter.default.addObserver(
                 self,
-                selector: #selector(self.handleWillResignActive),
-                name: UIApplication.willResignActiveNotification,
+                selector: #selector(self.handleDidEnterBackground),
+                name: UIApplication.didEnterBackgroundNotification,
                 object: nil
             )
             NotificationCenter.default.addObserver(
                 self,
-                selector: #selector(self.handleDidBecomeActive),
-                name: UIApplication.didBecomeActiveNotification,
+                selector: #selector(self.handleWillEnterForeground),
+                name: UIApplication.willEnterForegroundNotification,
                 object: nil
             )
             if options.preventScreenshots {
@@ -119,15 +119,7 @@ import Capacitor
         secureTextField = field
     }
 
-    @objc private func handleDidBecomeActive() {
-        removeOverlay()
-    }
-
-    @objc private func handleScreenshotTaken() {
-        plugin.notifyScreenshotTakenListeners()
-    }
-
-    @objc private func handleWillResignActive() {
+    @objc private func handleDidEnterBackground() {
         guard enabled, let window = keyWindow, overlayView == nil else {
             return
         }
@@ -136,6 +128,14 @@ import Capacitor
         overlay.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         window.addSubview(overlay)
         overlayView = overlay
+    }
+
+    @objc private func handleScreenshotTaken() {
+        plugin.notifyScreenshotTakenListeners()
+    }
+
+    @objc private func handleWillEnterForeground() {
+        removeOverlay()
     }
 
     private var keyWindow: UIWindow? {

@@ -1,5 +1,25 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`b6c9145337c31ad4b1b3cee123fc36d4975f08aa`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b6c9145337c31ad4b1b3cee123fc36d4975f08aa) ([#643](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/643)): fix(android): reject `printFile(...)` and `printPdf(...)` with `File does not exist.` before opening the print dialog when the file is missing
+
+- [`3d7a76468fe447e82d871f4e63dfe526d365477c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3d7a76468fe447e82d871f4e63dfe526d365477c) ([#600](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/600)): fix(android): `printBase64(...)`, `printFile(...)` and `printPdf(...)` resolved even if the document could not be written
+
+## 8.0.4
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.3
+
+### Patch Changes
+
+- [`aad38a314f4082c2eefe7d2b38fa4f30596fe367`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/aad38a314f4082c2eefe7d2b38fa4f30596fe367) ([#538](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/538)): fix(ios): `printHtml(...)` never resolved in apps using the scene-based lifecycle
+
 ## 8.0.2
 
 ### Patch Changes

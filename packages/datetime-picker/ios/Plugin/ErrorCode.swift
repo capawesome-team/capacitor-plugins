@@ -2,4 +2,5 @@
     case none
     case canceled
     case dismissed
+    case unavailable
 }

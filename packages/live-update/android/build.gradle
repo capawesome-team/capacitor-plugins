@@ -69,6 +69,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "net.lingala.zip4j:zip4j:$zip4jVersion"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
+    implementation "com.squareup.okhttp3:okhttp-brotli:$okhttp3Version"
     // The Ionic Live Update Provider SDK is compile-time only: Federated Capacitor
     // and Ionic Portals bring it transitively at runtime, and the provider classes
     // are only loaded when a host actually calls `createManager`.

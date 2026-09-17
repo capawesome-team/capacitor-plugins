@@ -65,6 +65,11 @@ public class FilePickerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void convertRawToJpeg(PluginCall call) {
+        call.unimplemented("Not implemented on Android.");
+    }
+
+    @PluginMethod
     public void copyFile(PluginCall call) {
         try {
             String from = call.getString("from");
@@ -102,7 +107,7 @@ public class FilePickerPlugin extends Plugin {
             intent.setType("*/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, limit == 0);
-            if (limit == 1 && parsedTypes != null && parsedTypes.length > 0) {
+            if (parsedTypes != null && parsedTypes.length > 0) {
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, parsedTypes);
             }
 
@@ -118,6 +123,11 @@ public class FilePickerPlugin extends Plugin {
     public void pickDirectory(PluginCall call) {
         try {
             Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.addFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION |
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION |
+                    Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+            );
             startActivityForResult(call, intent, "pickDirectoryResult");
         } catch (Exception ex) {
             String message = ex.getMessage();
@@ -302,6 +312,7 @@ public class FilePickerPlugin extends Plugin {
             }
             fileResult.put("name", implementation.getNameFromUri(uri));
             fileResult.put("path", implementation.getPathFromUri(uri));
+            fileResult.put("webPath", implementation.getWebPathFromUri(uri));
             fileResult.put("size", implementation.getSizeFromUri(uri));
             filesResultList.add(fileResult);
         }

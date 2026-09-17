@@ -1,4 +1,4 @@
-import { Dialog } from '@capawesome/capacitor-dialog';
+import { Dialog, ErrorCode } from '@capawesome/capacitor-dialog';
 
 const setResult = value => {
   document.querySelector('#result').textContent = `Result: ${value}`;
@@ -20,11 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setResult(`Confirmed: ${value}`);
   });
   document.querySelector('#prompt').addEventListener('click', async () => {
-    const { value, canceled } = await Dialog.prompt({
-      title: 'Name',
-      message: 'What is your name?',
-      inputPlaceholder: 'Enter your name',
-    });
-    setResult(`Value: ${value}, Canceled: ${canceled}`);
+    try {
+      const { value } = await Dialog.prompt({
+        title: 'Name',
+        message: 'What is your name?',
+        inputPlaceholder: 'Enter your name',
+      });
+      setResult(`Value: ${value}`);
+    } catch (error) {
+      if (error.code === ErrorCode.Canceled) {
+        setResult('Canceled');
+      } else {
+        setResult(`Error: ${error.message}`);
+      }
+    }
   });
 });

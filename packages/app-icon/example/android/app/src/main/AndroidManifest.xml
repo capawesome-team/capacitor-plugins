@@ -32,11 +32,11 @@
         </activity-alias>
 
         <activity-alias
-            android:name=".AppIconAlternate"
+            android:name=".Alternate"
             android:enabled="false"
             android:exported="true"
-            android:icon="@mipmap/ic_launcher"
-            android:roundIcon="@mipmap/ic_launcher_round"
+            android:icon="@mipmap/ic_launcher_alternate"
+            android:roundIcon="@mipmap/ic_launcher_alternate_round"
             android:label="@string/title_activity_main"
             android:targetActivity=".MainActivity">
             <intent-filter>

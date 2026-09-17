@@ -40,12 +40,11 @@ import UIKit
                 textField.text = options.inputText
             }
             alertController.addAction(UIAlertAction(title: options.cancelButtonTitle, style: .cancel) { _ in
-                let value = alertController.textFields?.first?.text ?? ""
-                completion(PromptResult(value: value, canceled: true), nil)
+                completion(nil, CustomError.canceled)
             })
             alertController.addAction(UIAlertAction(title: options.okButtonTitle, style: .default) { _ in
                 let value = alertController.textFields?.first?.text ?? ""
-                completion(PromptResult(value: value, canceled: false), nil)
+                completion(PromptResult(value: value), nil)
             })
             self.present(alertController)
         }

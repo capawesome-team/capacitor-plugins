@@ -415,6 +415,10 @@ On Android, Google recommends the **standard request** flow (`prepareIntegrityTo
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It brings both platforms' hardware-backed attestation under one fully typed API — the Play Integrity API on Android with standard and classic requests, and App Attest on iOS with key generation, attestation, and assertions. Every result is meant to be verified server-side via Google and Apple, so integrity decisions can't be spoofed on the device, and an `isAvailable()` check lets you adapt before you request. If client-side root and jailbreak signals are all you need, a lighter check may suffice; if you want tokens and assertions your backend can actually trust, this plugin is built for exactly that.
+
 ### Do I need my own server to use this plugin?
 
 Yes. This plugin only provides the client-side part of the attestation flow. The returned tokens, attestation objects, and assertions are opaque to your app and must be decrypted and verified on your own server via Google (Android) or Apple (iOS). Never make security decisions based on the client-side result alone. See the [How Verification Works](#how-verification-works) section for the typical flow.
@@ -441,8 +445,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices with client-side checks.
 - [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face or fingerprint recognition.
+- [Google Play Services](https://capawesome.io/docs/sdks/capacitor/google-play-services/): Check whether Google Play Services is available on the device and prompt the user to install or update it.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices with client-side checks.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter

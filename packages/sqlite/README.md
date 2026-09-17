@@ -51,9 +51,17 @@ The SQLite plugin is typically used whenever an app needs a robust local databas
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.3.x          | >=8.x.x           | Active support |
+| 0.4.x          | >=8.x.x           | Active support |
+| 0.3.x          | >=8.x.x           | Deprecated     |
 | 0.2.x          | >=8.x.x           | Deprecated     |
 | 0.1.x          | 7.x.x             | Deprecated     |
+
+## Demo
+
+Working examples can be found here:
+
+- [capawesome-team/capacitor-sqlite-angular-demo](https://github.com/capawesome-team/capacitor-sqlite-angular-demo)
+- [capawesome-team/capacitor-sqlite-react-demo](https://github.com/capawesome-team/capacitor-sqlite-react-demo)
 
 ## Guides
 
@@ -197,8 +205,27 @@ end
 
 No additional setup is required for SPM.
 
-If you want to use encryption, you must enable the `SQLCipher` package trait.
+By default, this plugin uses the system SQLite version provided by iOS. If you want to use a newer, consistent SQLite version across all iOS versions, you can opt in to bundling [CSQLite](https://github.com/stephencelis/CSQLite) (with FTS5 enabled) by enabling the `BundledSQLite` package trait.
 Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
+
+```json
+{
+  "experimental": {
+    "ios": {
+      "spm": {
+        "swiftToolsVersion": "6.1",
+        "packageTraits": {
+          "@capawesome-team/capacitor-sqlite": ["BundledSQLite"]
+        }
+      }
+    }
+  }
+}
+```
+
+**Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+
+If you want to use encryption, you must enable the `SQLCipher` package trait instead:
 
 ```json
 {
@@ -215,7 +242,7 @@ Add the following to your `capacitor.config.json` (or `capacitor.config.ts`):
 }
 ```
 
-**Attention**: SPM trait support requires Capacitor CLI 8.3.0+ and Xcode 16.3+ (Swift 6.1+).
+**Attention**: This trait cannot be combined with `BundledSQLite`. SQLCipher already bundles its own SQLite version.
 
 **Attention**: When using SQLCipher you are responsible for compliance with all export, re-export and import restrictions and regulations in all applicable countries. You can find more information about this in this [blog post](https://discuss.zetetic.net/t/export-requirements-for-applications-using-sqlcipher/47).
 
@@ -318,6 +345,27 @@ export default defineConfig({
   },
 });
 ```
+
+#### Data persistence
+
+On the web platform, the database is stored in the [Origin Private File System](https://developer.mozilla.org/en-US/docs/Web/API/File_System_API/Origin_private_file_system), which is subject to the browser's storage eviction rules. By default, storage is granted on a best-effort basis: Chromium-based browsers and Firefox only evict data under storage pressure, but Safari deletes all script-writable storage (including the database) after seven days without user interaction if the app runs in a browser tab. Web apps added to the home screen are exempt from this rule.
+
+To reduce the risk of eviction, request persistent storage with [`navigator.storage.persist()`](https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/persist). The timing of this call matters: browsers grant persistence based on engagement heuristics, and Firefox shows a permission prompt. You should therefore call it at a moment of meaningful user engagement (for example, after sign-in or after the user has saved data for the first time) instead of on the first page load:
+
+```typescript
+import { Capacitor } from '@capacitor/core';
+
+const requestPersistentStorage = async () => {
+  if (Capacitor.getPlatform() === 'web' && navigator.storage?.persist) {
+    const persisted = await navigator.storage.persisted();
+    if (!persisted) {
+      await navigator.storage.persist();
+    }
+  }
+};
+```
+
+Note that persistence is granted at the browser's discretion and applies to the entire origin's storage, not just the database. It reduces the risk of eviction but is not an absolute guarantee. On Android and iOS, the database is stored in the app's sandbox and is not affected by these rules.
 
 #### Debugging
 
@@ -537,6 +585,7 @@ const handleErrors = async () => {
 * [`beginTransaction(...)`](#begintransaction)
 * [`changeEncryptionKey(...)`](#changeencryptionkey)
 * [`close(...)`](#close)
+* [`closeAll()`](#closeall)
 * [`commitTransaction(...)`](#committransaction)
 * [`execute(...)`](#execute)
 * [`getVersion()`](#getversion)
@@ -604,6 +653,22 @@ Close the specified database.
 | **`options`** | <code><a href="#closeoptions">CloseOptions</a></code> |
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### closeAll()
+
+```typescript
+closeAll() => Promise<void>
+```
+
+Close all databases that are currently open.
+
+This is useful if the database identifiers are no longer available,
+for example after the web app has been reloaded.
+
+**Since:** 0.3.10
 
 --------------------
 
@@ -699,6 +764,9 @@ Open a database with the specified options.
 
 This method can be used to open an existing database or create a new one.
 
+If `upgradeStatements` or `version` is provided, the pending upgrade statements
+are applied in a single transaction and `user_version` is never lowered.
+
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
 | **`options`** | <code><a href="#openoptions">OpenOptions</a></code> |
@@ -781,9 +849,9 @@ This command can be used to reclaim unused space and optimize the database file.
 
 #### ChangeEncryptionKeyOptions
 
-| Prop                | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                     | Since |
-| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`databaseId`**    | <code>string</code> | The unique identifier for the database to change the encryption key for.                                                                                                                                                                                                                                                                                                                                                                        | 0.1.0 |
+| Prop                | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Since |
+| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`databaseId`**    | <code>string</code> | The unique identifier for the database to change the encryption key for.                                                                                                                                                                                                                                                                                                                                                                                    | 0.1.0 |
 | **`encryptionKey`** | <code>string</code> | The new encryption key to set for the database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the encryption key. | 0.1.0 |
 
 
@@ -845,12 +913,12 @@ This command can be used to reclaim unused space and optimize the database file.
 
 | Prop                    | Type                            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Default            | Since |
 | ----------------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`encryptionKey`**     | <code>string</code>             | The encryption key to use for the database. If provided, the database will be opened as an encrypted database using the specified key. If not provided, the database will be opened as an unencrypted database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the encryption key. Only available on Android and iOS.                                                                                                                                                                                                                                 |                    | 0.1.0 |
-| **`readOnly`**          | <code>boolean</code>            | Whether the database should be opened in read-only mode. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | <code>false</code> | 0.1.0 |
+| **`encryptionKey`**     | <code>string</code>             | The encryption key to use for the database. If provided, the database will be opened as an encrypted database using the specified key. If not provided, the database will be opened as an unencrypted database. **Attention:** It's recommended to use a strong encryption key to protect sensitive data. This key should be kept secret and not hard-coded in your application. If you lose the encryption key, you will not be able to access the data in the database. **Tip:** Use the [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/) plugin to securely store the encryption key. Only available on Android and iOS.                                                                                                                                                                                                                     |                    | 0.1.0 |
+| **`readOnly`**          | <code>boolean</code>            | Whether the database should be opened in read-only mode. Upgrade statements cannot be applied to a read-only database, so `open(...)` is rejected if the stored `user_version` is lower than `version`. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | <code>false</code> | 0.1.0 |
 | **`path`**              | <code>string</code>             | The path to the database file. If no file exists at the specified path, a new file will be created. If no path or URL is provided, the plugin will create a new in-memory database. On **Android**, the path can either be a simple filename or a file URI. If a simple filename is provided, the plugin will create the database in the default database directory (see [getDatabasePath](https://developer.android.com/reference/android/content/Context#getDatabasePath(java.lang.String))). On **iOS**, the path can either be a simple filename or a file URL. If a simple filename is provided, the plugin will create the database in the default documents directory (see [documentsDirectory](https://developer.apple.com/documentation/foundation/url/documentsdirectory)). On **Web**, the path should be a simple filename without a directory (e.g., `mydb.sqlite3`). |                    | 0.1.0 |
 | **`androidExtensions`** | <code>AndroidExtension[]</code> | App-bundled SQLite extensions to load when opening the database. Only available on Android when the requery SQLite backend is bundled (see `capawesomeCapacitorSqliteIncludeRequery`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |                    | 0.3.9 |
-| **`upgradeStatements`** | <code>UpgradeStatement[]</code> | An array of upgrade statements to apply when opening the database. Each statement should specify the version of the database schema it applies to and the SQL statements to execute for the upgrade. The current version of the database schema can be checked using the `PRAGMA user_version;` command.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |                    | 0.1.0 |
-| **`version`**           | <code>number</code>             | The version of the database schema. If provided, the plugin will check the schema version and apply migrations if necessary. If not provided, the latest version of the upgrade statements will be used, if any. If neither `version` nor `upgradeStatements` are provided, the database version will not be managed by the plugin. **Attention:** The version must be 1 or higher.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |                    | 0.1.0 |
+| **`upgradeStatements`** | <code>UpgradeStatement[]</code> | An array of upgrade statements to apply when opening the database. Each statement should specify the version of the database schema it applies to and the SQL statements to execute for the upgrade. The current version of the database schema can be checked using the `PRAGMA user_version;` command. The statements of all versions greater than the current `user_version` and up to `version` are executed in a single transaction together with the update of `user_version`. If a statement fails, the transaction is rolled back and the call is rejected.                                                                                                                                                                                                                                                                                                                |                    | 0.1.0 |
+| **`version`**           | <code>number</code>             | The version of the database schema. If provided, the plugin will check the schema version and apply migrations if necessary. If not provided, the latest version of the upgrade statements will be used, if any. If neither `version` nor `upgradeStatements` are provided, the database version will not be managed by the plugin. The stored `user_version` is never lowered: if it is already equal to or higher than `version`, no upgrade statements are executed and the database is left untouched. **Attention:** The version must be an integer between 1 and 2147483647. The call is rejected otherwise.                                                                                                                                                                                                                                                                 |                    | 0.1.0 |
 
 
 #### AndroidExtension
@@ -1122,6 +1190,10 @@ Yes. Check out the blog post [Alternative to the Capacitor Community SQLite plug
 
 No, encryption is only available on Android and iOS, where the plugin provides 256 bit AES encryption via SQLCipher. On both platforms, SQLCipher is opt-in and requires additional setup, as described in the [Installation](#installation) section. On Electron, database encryption is not supported.
 
+### Why does a changed SPM package trait have no effect?
+
+After changing the package traits in your Capacitor configuration, run `npx cap sync ios`, let Xcode re-resolve the packages (File → Packages → Resolve Package Versions, or Reset Package Caches) and clean the build folder (Product → Clean Build Folder) before building again. You can check which SQLite version is active with `getVersion()`.
+
 ### Can I execute multiple SQL statements in a single call?
 
 On Android and Electron, only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement, optionally wrapped in a transaction.
@@ -1132,9 +1204,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
 - [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 - [Vault](https://capawesome.io/docs/sdks/capacitor/vault/): Securely store key/value pairs in lockable, biometric-protected vaults.
-- [libSQL](https://capawesome.io/docs/sdks/capacitor/libsql/): Access libSQL databases.
 
 ## Next steps
 

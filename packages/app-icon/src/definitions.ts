@@ -51,7 +51,7 @@ export interface GetCurrentIconResult {
    *
    * Returns `null` if the default icon is in use.
    *
-   * @example 'AppIconChristmas'
+   * @example 'Christmas'
    * @since 0.1.0
    */
   icon: string | null;
@@ -77,9 +77,9 @@ export interface SetIconOptions {
    * The name of the alternate icon to use.
    *
    * On Android, this is the name of the `<activity-alias>` (without the leading dot).
-   * On iOS, this is the key of the icon inside `CFBundleAlternateIcons`.
+   * On iOS, this is the name of the alternate app icon set in the asset catalog.
    *
-   * @example 'AppIconChristmas'
+   * @example 'Christmas'
    * @since 0.1.0
    */
   icon: string;

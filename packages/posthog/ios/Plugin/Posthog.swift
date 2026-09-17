@@ -116,6 +116,11 @@ import PostHog
         return GetFeatureFlagPayloadResult(value: value)
     }
 
+    @objc public func getSessionId() -> GetSessionIdResult {
+        let sessionId = PostHogSDK.shared.getSessionId()
+        return GetSessionIdResult(sessionId: sessionId)
+    }
+
     @objc public func group(_ options: GroupOptions) {
         let type = options.getType()
         let key = options.getKey()
@@ -174,6 +179,13 @@ import PostHog
         PostHogSDK.shared.screen(screenTitle, properties: properties)
     }
 
+    @objc public func setPersonProperties(_ options: SetPersonPropertiesOptions) {
+        let properties = options.getProperties()
+        let setOnceProperties = options.getSetOnceProperties()
+
+        PostHogSDK.shared.capture("$set", userProperties: properties, userPropertiesSetOnce: setOnceProperties)
+    }
+
     @objc public func setup(_ options: SetupOptions) {
         let apiKey = options.getApiKey()
         let apiHost = options.getApiHost()
@@ -181,6 +193,8 @@ import PostHog
         let optOut = options.getOptOut()
         let captureApplicationLifecycleEvents = options.getCaptureApplicationLifecycleEvents()
         let autoCaptureExceptions = options.getAutoCaptureExceptions()
+        let preloadFeatureFlags = options.getPreloadFeatureFlags()
+        let surveys = options.getSurveys()
         let sessionReplayConfig = options.getSessionReplayConfig()
 
         setup(
@@ -190,8 +204,15 @@ import PostHog
             optOut: optOut,
             captureApplicationLifecycleEvents: captureApplicationLifecycleEvents,
             autoCaptureExceptions: autoCaptureExceptions,
+            preloadFeatureFlags: preloadFeatureFlags,
+            surveys: surveys,
             sessionReplayConfig: sessionReplayConfig
         )
+
+        // Start session recording if configured
+        if enableSessionReplay {
+            self.startSessionRecording()
+        }
     }
 
     @objc public func startSessionRecording() {
@@ -202,18 +223,20 @@ import PostHog
         PostHogSDK.shared.stopSessionRecording()
     }
 
-    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, autoCaptureExceptions: Bool = false, sessionReplayConfig: SessionReplayOptions? = nil) {
+    private func setup(apiKey: String, apiHost: String, enableSessionReplay: Bool = false, optOut: Bool = false, captureApplicationLifecycleEvents: Bool = true, autoCaptureExceptions: Bool = false, preloadFeatureFlags: Bool = true, surveys: Bool = true, sessionReplayConfig: SessionReplayOptions? = nil) {
         let config = PostHogConfig(apiKey: apiKey, host: apiHost)
         config.captureScreenViews = false
         config.optOut = optOut
         config.captureApplicationLifecycleEvents = captureApplicationLifecycleEvents
         config.errorTrackingConfig.autoCapture = autoCaptureExceptions
+        config.preloadFeatureFlags = preloadFeatureFlags
+        config.surveys = surveys
         config.sessionReplay = enableSessionReplay
         config.sessionReplayConfig.screenshotMode = sessionReplayConfig?.getScreenshotMode() ?? false
         config.sessionReplayConfig.maskAllImages = sessionReplayConfig?.getMaskAllImages() ?? true
         config.sessionReplayConfig.maskAllTextInputs = sessionReplayConfig?.getMaskAllTextInputs() ?? true
         config.sessionReplayConfig.maskAllSandboxedViews = sessionReplayConfig?.getMaskAllSandboxedViews() ?? true
-        config.sessionReplayConfig.captureNetworkTelemetry = sessionReplayConfig?.getCaptureNetworkTelemetry() ?? true
+        config.sessionReplayConfig.captureNetworkTelemetry = sessionReplayConfig?.getCaptureNetworkTelemetry() ?? false
         config.sessionReplayConfig.debouncerDelay = sessionReplayConfig?.getDebouncerDelay() ?? 1.0
 
         PostHogSDK.shared.setup(config)

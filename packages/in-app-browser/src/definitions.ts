@@ -10,13 +10,16 @@ export interface InAppBrowserPlugin {
    */
   clearCache(): Promise<void>;
   /**
-   * Clear the session data (cookies and web storage) of the web view.
+   * Clear the cookies of the web view.
+   *
+   * Provide the `url` option to clear only the cookies of a specific URL.
+   * Otherwise, all cookies are cleared.
    *
    * Only available on Android and iOS.
    *
-   * @since 0.1.0
+   * @since 0.2.0
    */
-  clearSessionData(): Promise<void>;
+  clearCookies(options?: ClearCookiesOptions): Promise<void>;
   /**
    * Close the currently open browser.
    *
@@ -512,6 +515,21 @@ export interface PostMessageOptions {
    * @since 0.1.0
    */
   data: { [key: string]: unknown };
+}
+
+/**
+ * @since 0.2.0
+ */
+export interface ClearCookiesOptions {
+  /**
+   * The URL to clear the cookies for.
+   *
+   * If not provided, all cookies are cleared.
+   *
+   * @example 'https://capawesome.io'
+   * @since 0.2.0
+   */
+  url?: string;
 }
 
 /**

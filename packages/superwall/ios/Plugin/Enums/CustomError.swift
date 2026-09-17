@@ -3,6 +3,7 @@ import Foundation
 enum CustomError: Error {
     case apiKeyMissing
     case attributesMissing
+    case failedToRestorePurchases
     case failedToGetPresentationResult
     case notConfigured
     case placementMissing
@@ -15,6 +16,8 @@ enum CustomError: Error {
         case .apiKeyMissing:
             return nil
         case .attributesMissing:
+            return nil
+        case .failedToRestorePurchases:
             return nil
         case .failedToGetPresentationResult:
             return nil
@@ -39,6 +42,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("apiKey must be provided.", comment: "apiKeyMissing")
         case .attributesMissing:
             return NSLocalizedString("attributes must be provided.", comment: "attributesMissing")
+        case .failedToRestorePurchases:
+            return NSLocalizedString("Failed to restore purchases.", comment: "failedToRestorePurchases")
         case .failedToGetPresentationResult:
             return NSLocalizedString("Failed to get presentation result.", comment: "failedToGetPresentationResult")
         case .notConfigured:

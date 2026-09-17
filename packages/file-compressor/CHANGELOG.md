@@ -1,5 +1,27 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`826b4aedab906c9f85394f0671dcffcd450b763e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/826b4aedab906c9f85394f0671dcffcd450b763e) ([#596](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/596)): fix(android): reduce the memory needed to compress large images
+
+- [`5f18e58bed1b56d337acb96ab73c79cca1a40e42`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5f18e58bed1b56d337acb96ab73c79cca1a40e42) ([#624](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/624)): fix(android): reject `compressImage(...)` with `File does not exist.` for a content URI whose file is missing
+
+- [`5f18e58bed1b56d337acb96ab73c79cca1a40e42`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5f18e58bed1b56d337acb96ab73c79cca1a40e42) ([#624](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/624)): fix(android): reject `compressImage(...)` with `File does not exist.` when a file path does not exist
+
+- [`5f18e58bed1b56d337acb96ab73c79cca1a40e42`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5f18e58bed1b56d337acb96ab73c79cca1a40e42) ([#624](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/624)): fix(android): reject with `The file could not be read.` when the image stream cannot be opened
+
+- [`5f18e58bed1b56d337acb96ab73c79cca1a40e42`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5f18e58bed1b56d337acb96ab73c79cca1a40e42) ([#624](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/624)): fix(android): reject `compressImage(...)` with `The image could not be encoded.` when the bitmap cannot be compressed
+
+- [`eec7032990abb27916582c4a1eda71f15dd6f11e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/eec7032990abb27916582c4a1eda71f15dd6f11e) ([#627](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/627)): fix(ios): reject `compressImage(...)` when the image cannot be decoded or written instead of resolving with a missing file
+
+## 8.0.3
+
+### Patch Changes
+
+- [`d31e7c2b33eeabfaf0635b84b39d069c549bf50c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d31e7c2b33eeabfaf0635b84b39d069c549bf50c) ([#555](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/555)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
 ## 8.0.2
 
 ### Patch Changes

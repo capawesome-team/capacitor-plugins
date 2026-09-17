@@ -29,4 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .addEventListener('click', async () => {
       await PrivacyScreen.removeAllListeners();
     });
+  document.querySelector('#openSystemDialog').addEventListener('click', () => {
+    window.location.href = 'tel:+15555550100';
+  });
 });

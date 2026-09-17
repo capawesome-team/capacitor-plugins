@@ -11,6 +11,7 @@ import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +52,17 @@ public class FilePicker {
     }
 
     public String getPathFromUri(@NonNull Uri uri) {
+        return uri.toString();
+    }
+
+    public String getWebPathFromUri(@NonNull Uri uri) {
+        String scheme = uri.getScheme();
+        if (ContentResolver.SCHEME_CONTENT.equals(scheme)) {
+            return plugin.getBridge().getLocalUrl() + uri.toString().replaceFirst("content:/", Bridge.CAPACITOR_CONTENT_START);
+        }
+        if (ContentResolver.SCHEME_FILE.equals(scheme)) {
+            return plugin.getBridge().getLocalUrl() + uri.toString().replaceFirst("file://", Bridge.CAPACITOR_FILE_START);
+        }
         return uri.toString();
     }
 
@@ -105,16 +117,16 @@ public class FilePicker {
 
     @Nullable
     public Long getModifiedAtFromUri(@NonNull Uri uri) {
-        try {
-            long modifiedAt = 0;
-            Cursor cursor = plugin.getBridge().getContext().getContentResolver().query(uri, null, null, null, null);
-            if (cursor != null) {
-                cursor.moveToFirst();
-                int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
-                modifiedAt = cursor.getLong(columnIdx);
-                cursor.close();
+        try (Cursor cursor = plugin.getBridge().getContext().getContentResolver().query(uri, null, null, null, null)) {
+            if (cursor == null || !cursor.moveToFirst()) {
+                return null;
             }
-            return modifiedAt;
+            int columnIdx = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_LAST_MODIFIED);
+            if (columnIdx < 0) {
+                Logger.warn(TAG, "The column " + DocumentsContract.Document.COLUMN_LAST_MODIFIED + " is not available.");
+                return null;
+            }
+            return cursor.getLong(columnIdx);
         } catch (Exception e) {
             Logger.error(TAG, "getModifiedAtFromUri failed.", e);
             return null;

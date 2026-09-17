@@ -13,9 +13,9 @@ Capacitor plugin for reading and controlling the WebView text zoom.
 - 🔍 **Read zoom**: Read the current text zoom of the WebView.
 - 🔠 **Set zoom**: Set the text zoom, e.g. to offer your own text-size setting.
 - ♿ **Preferred zoom**: Read the device's preferred text zoom to respect the operating system's font size settings.
+- 🤝 **Compatibility**: Works alongside the [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/) plugin, whose font scale is a natural input for the text zoom.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/) plugin, whose font scale is a natural input for the text zoom.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -233,6 +233,10 @@ The text zoom is **not** persisted across app restarts. Persist the value with a
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It lets you read and set the WebView text zoom on Android and iOS, and it can also read the device's preferred zoom so your app can respect the operating system's font size settings for better accessibility. The API is explicit and fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor and OS versions, with clear platform notes for cases like iPad content mode. If you only need a fixed text size, you may not need it at all; if you want an adjustable, accessibility-aware text size, it is built for exactly that.
+
 ### How is this plugin different from the official `@capacitor/text-zoom` plugin?
 
 This plugin is a drop-in alternative to the official `@capacitor/text-zoom` plugin with a slightly more explicit API: `get()` becomes `getZoom()`, `getPreferred()` becomes `getPreferredZoom()`, and `set({ value })` becomes `setZoom({ zoom })`. See the [migration table](#migration-from-capacitortext-zoom) above for a side-by-side comparison.
@@ -260,8 +264,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Accessibility Preferences](https://capawesome.io/docs/sdks/capacitor/accessibility-preferences/): Read the user's system accessibility preferences, such as the font scale.
-- [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/): Enable and disable text interaction (selection, magnifier, callout menu) in the app's WebView.
 - [Screen Reader](https://capawesome.io/docs/sdks/capacitor/screen-reader/): Interact with screen readers.
+- [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/): Enable and disable text interaction (selection, magnifier, callout menu) in the app's WebView.
 
 ## Newsletter
 

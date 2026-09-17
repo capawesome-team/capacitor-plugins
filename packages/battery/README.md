@@ -17,8 +17,8 @@ The Capacitor Battery plugin is one of the most complete battery monitoring solu
 - 🪫 **Low power mode**: Read whether the low power mode is enabled.
 - 👂 **Change events**: Listen for changes to the battery level, state and low power mode.
 - 🌐 **Web support**: Read the battery level and state on supported browsers.
-- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🤝 **Compatibility**: Works alongside the [Android Battery Optimization](https://capawesome.io/docs/sdks/capacitor/android-battery-optimization/) plugin.
+- 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -38,6 +38,10 @@ The Battery plugin is typically used whenever an app should adapt its behavior t
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How battery state pairs with the Thermal State plugin to gate background work.
 
 ## Installation
 
@@ -402,6 +406,10 @@ Keep the following platform differences in mind when accessing battery informati
 - **Web**: The battery level and state are only available in browsers that implement the [Battery Status API](https://developer.mozilla.org/en-US/docs/Web/API/Battery_Status_API) (Chromium-based browsers). The low power mode is not available on the Web.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It reports the full battery picture — level, charging state, and low power mode — plus change events that observe the device only while a listener is attached, all through a fully typed API that works across Android, iOS, and supported browsers on the Web. If you just need a one-off battery reading, that's a quick call; if you want to react to charging and low-power changes over time without wasting energy, this plugin is built for exactly that.
 
 ### Why does `getBatteryLevel` fail on the iOS Simulator?
 

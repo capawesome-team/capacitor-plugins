@@ -4,3 +4,6 @@ project(':capacitor-android').projectDir = new File('../node_modules/@capacitor/
 
 include ':capawesome-capacitor-pdf-generator'
 project(':capawesome-capacitor-pdf-generator').projectDir = new File('../../android')
+
+include ':capawesome-capacitor-pdf-viewer'
+project(':capawesome-capacitor-pdf-viewer').projectDir = new File('../../../pdf-viewer/android')

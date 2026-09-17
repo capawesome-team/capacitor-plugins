@@ -2,15 +2,15 @@ import XCTest
 @testable import Plugin
 
 class SuperwallTests: XCTestCase {
+    func testRestorePurchasesBeforeConfigureFails() throws {
+        let implementation = Superwall(plugin: SuperwallPlugin())
+        var completionCalled = false
 
-    func testEcho() {
-        // This is an example of a functional test case for a plugin.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        try implementation.restorePurchases { error in
+            completionCalled = true
+            XCTAssertEqual(error?.localizedDescription, CustomError.notConfigured.localizedDescription)
+        }
 
-        let implementation = Superwall()
-        let value = "Hello, World!"
-        let result = implementation.echo(value)
-
-        XCTAssertEqual(value, result)
+        XCTAssertTrue(completionCalled)
     }
 }

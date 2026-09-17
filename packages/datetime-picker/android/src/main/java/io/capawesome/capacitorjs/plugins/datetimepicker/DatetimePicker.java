@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.text.format.DateFormat;
 import android.view.ContextThemeWrapper;
@@ -23,13 +24,30 @@ import java.util.Locale;
 
 public class DatetimePicker {
 
+    private static final int CONFIGURATION_CHANGES_REQUIRING_DISMISS =
+        ActivityInfo.CONFIG_LOCALE | ActivityInfo.CONFIG_FONT_SCALE | ActivityInfo.CONFIG_LAYOUT_DIRECTION;
+
     private final DatetimePickerPlugin plugin;
     private final DatetimePickerConfig config;
     private Dialog activeDialog;
+    private Configuration lastConfiguration;
 
     public DatetimePicker(DatetimePickerPlugin plugin, DatetimePickerConfig config) {
         this.plugin = plugin;
         this.config = config;
+        this.lastConfiguration = new Configuration(plugin.getContext().getResources().getConfiguration());
+    }
+
+    public void handleConfigurationChanged(@NonNull Configuration newConfiguration) {
+        int diff = lastConfiguration.diff(newConfiguration);
+        lastConfiguration = new Configuration(newConfiguration);
+        if ((diff & CONFIGURATION_CHANGES_REQUIRING_DISMISS) != 0) {
+            cancel();
+        }
+    }
+
+    public void handleDestroy() {
+        cancel();
     }
 
     public void presentDateTimePicker(

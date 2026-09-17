@@ -19,15 +19,14 @@ public class Toast {
     public void show(@NonNull ShowOptions options, @NonNull EmptyCallback callback) {
         int duration = getDurationForValue(options.getDuration());
         int gravity = getGravityForPosition(options.getPosition());
-        getActivity()
-            .runOnUiThread(() -> {
-                android.widget.Toast toast = android.widget.Toast.makeText(getContext(), options.getText(), duration);
-                if (gravity != Gravity.NO_GRAVITY) {
-                    toast.setGravity(gravity, 0, 0);
-                }
-                toast.show();
-                callback.success();
-            });
+        getActivity().runOnUiThread(() -> {
+            android.widget.Toast toast = android.widget.Toast.makeText(getContext(), options.getText(), duration);
+            if (gravity != Gravity.NO_GRAVITY) {
+                toast.setGravity(gravity, 0, 0);
+            }
+            toast.show();
+            callback.success();
+        });
     }
 
     private int getDurationForValue(@NonNull String value) {

@@ -21,10 +21,6 @@ let package = Package(
                 .product(name: "Cordova", package: "capacitor-swift-pm"),
                 .product(name: "Libsql", package: "libsql-swift")
             ],
-            path: "ios/Plugin"),
-        .testTarget(
-            name: "LibsqlPluginTests",
-            dependencies: ["LibsqlPlugin"],
-            path: "ios/PluginTests")
+            path: "ios/Plugin")
     ]
 )

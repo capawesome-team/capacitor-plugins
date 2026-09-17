@@ -34,6 +34,10 @@ The Privacy Screen plugin is typically used in apps that display sensitive infor
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [Capacitor Privacy Screen: Hide Sensitive App Content](https://capawesome.io/blog/capacitor-privacy-screen-hide-app-content/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -67,6 +71,10 @@ The plugin declares the `android.permission.DETECT_SCREEN_CAPTURE` permission in
 ## Configuration
 
 No configuration required for this plugin.
+
+## Demo
+
+A working example can be found here [capawesome-team/capacitor-privacy-screen-demo](https://github.com/capawesome-team/capacitor-privacy-screen-demo).
 
 ## Usage
 
@@ -294,6 +302,10 @@ The capabilities of this plugin differ between platforms. The following table gi
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It combines three protections in one fully typed API — hiding sensitive content in the app switcher, blocking screenshots and screen recordings, and detecting when a screenshot is taken — across both Android and iOS. It's honest about what each platform can actually guarantee, with a clear capability table and opt-in handling for the areas where iOS has no official API, so you always know the real behavior you're getting. The API is actively maintained against the latest Capacitor and OS versions.
+
 ### Can this plugin block screenshots on iOS?
 
 Yes, but only as an opt-in. There is no official iOS API to prevent screenshots, so the plugin uses an unofficial secure text field technique that may stop working in future iOS versions. You can enable it via the `ios.preventScreenshots` option of the `enable(...)` method. On Android, screenshots are blocked reliably via the `FLAG_SECURE` window flag.
@@ -301,6 +313,10 @@ Yes, but only as an opt-in. There is no official iOS API to prevent screenshots,
 ### Can I prevent a screenshot instead of just detecting it?
 
 On Android, yes: calling `enable(...)` sets the `FLAG_SECURE` window flag, which blocks both screenshots and screen recordings. On iOS, the `screenshotTaken` event can only be observed after the screenshot has been taken and therefore cannot be prevented; blocking is only possible via the opt-in `ios.preventScreenshots` option.
+
+### Does the privacy screen appear during permission or biometric prompts on iOS?
+
+No. On iOS, the overlay is only installed when the app actually enters the background, not when it merely becomes inactive. System dialogs such as permission prompts, Face ID or Touch ID prompts, incoming calls, the Control Center and the Notification Center therefore leave the app content visible.
 
 ### Why is the `screenshotTaken` event never emitted on my Android device?
 
@@ -320,10 +336,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
-- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
-- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
 - [App Integrity](https://capawesome.io/docs/sdks/capacitor/app-integrity/): Verify app and device integrity using the Play Integrity API and App Attest.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication, such as face recognition or fingerprint recognition.
+- [Root Detection](https://capawesome.io/docs/sdks/capacitor/root-detection/): Detect rooted and jailbroken devices.
+- [Secure Preferences](https://capawesome.io/docs/sdks/capacitor/secure-preferences/): Securely store key/value pairs such as passwords, tokens or other sensitive information.
 
 ## Newsletter
 

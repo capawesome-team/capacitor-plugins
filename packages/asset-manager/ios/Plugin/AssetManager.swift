@@ -23,7 +23,8 @@ import Foundation
     @objc public func list(_ options: ListOptions, completion: @escaping (Result?, Error?) -> Void) throws {
         let bundle = Bundle.main
         let paths = bundle.paths(forResourcesOfType: nil, inDirectory: options.path)
-        let result = ListResult(files: paths)
+        let files = paths.map { URL(fileURLWithPath: $0).lastPathComponent }
+        let result = ListResult(files: files)
         completion(result, nil)
     }
 

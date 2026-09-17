@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public class DatetimePickerHelper {
     public static func convertStringToDate(_ format: String, _ value: String) -> Date? {
@@ -28,5 +29,24 @@ public class DatetimePickerHelper {
 
     public static func convertStringToLocale(_ value: String) -> Locale {
         return Locale(identifier: value)
+    }
+}
+
+extension UIViewController {
+
+    var topMostViewController: UIViewController {
+        if let nc = self as? UINavigationController {
+            if let last = nc.viewControllers.last {
+                return last.topMostViewController
+            }
+            return nc
+        }
+        if let tabController = self as? UITabBarController, let selected = tabController.selectedViewController {
+            return selected.topMostViewController
+        }
+        if let presented = presentedViewController {
+            return presented.topMostViewController
+        }
+        return self
     }
 }

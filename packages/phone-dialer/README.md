@@ -13,9 +13,9 @@ Capacitor plugin to open the native phone dialer prefilled with a phone number.
 - 📞 **Dial**: Open the native phone dialer prefilled with a phone number.
 - ✅ **Capability check**: Check whether the device is able to open the phone dialer.
 - 🔒 **Privacy-friendly**: The user always reviews the number and places the call. The plugin never calls on its own.
+- 🤝 **Compatibility**: Works alongside the [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -195,6 +195,10 @@ Before opening the dialer, the phone number is sanitized: all characters except 
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It opens the native phone dialer prefilled with a number on Android and iOS, and adds a `canDial()` capability check so you can hide or disable call buttons on devices without telephony, such as Wi-Fi-only tablets. It is privacy-friendly by design: the user always reviews the number and places the call, so on Android it needs no runtime permission by using `Intent.ACTION_DIAL`, and it sanitizes the number for you before dialing. The API is fully typed, supports both CocoaPods and Swift Package Manager on iOS, and is actively maintained against the latest Capacitor and OS versions.
+
 ### Can the plugin place a phone call directly without user confirmation?
 
 No, this is a deliberate design decision. On Android, direct calling would require the `CALL_PHONE` runtime permission and comes with additional Google Play policy requirements, so the plugin uses `Intent.ACTION_DIAL` instead. On iOS, there is no public API to place a call without user confirmation. The plugin always opens the dialer prefilled with the number and the user decides whether to place the call.
@@ -221,9 +225,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
-- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
 - [Contacts](https://capawesome.io/docs/sdks/capacitor/contacts/): Read, write, or select device contacts, for example to look up a phone number before dialing.
+- [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

@@ -12,6 +12,7 @@ import io.capawesome.capacitorjs.plugins.inappbrowser.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserMessageReceivedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserNavigationCompletedEvent;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.events.BrowserUrlChangedEvent;
+import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ClearCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.ExecuteScriptOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.GetCookiesOptions;
 import io.capawesome.capacitorjs.plugins.inappbrowser.classes.options.OpenInExternalBrowserOptions;
@@ -60,8 +61,9 @@ public class InAppBrowserPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void clearSessionData(PluginCall call) {
+    public void clearCookies(PluginCall call) {
         try {
+            ClearCookiesOptions options = new ClearCookiesOptions(call);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
@@ -74,7 +76,7 @@ public class InAppBrowserPlugin extends Plugin {
                 }
             };
 
-            implementation.clearSessionData(callback);
+            implementation.clearCookies(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

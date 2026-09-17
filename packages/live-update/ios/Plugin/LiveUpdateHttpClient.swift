@@ -27,13 +27,16 @@ public class LiveUpdateHttpClient: NSObject {
 
     public func download(url: URL, destination: @escaping DownloadRequest.Destination, callback: ((Progress) -> Void)?) async throws -> AFDownloadResponse<Data> {
         var request = URLRequest(url: url)
+        // Ignore the URL cache so that a cached response is never replayed for a deterministic request URL
+        request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         if let deviceId = deviceId, !deviceId.isEmpty {
             request.setValue(deviceId, forHTTPHeaderField: "X-Capawesome-Device-Id")
         }
         return try await withCheckedThrowingContinuation { continuation in
-            AF.download(request, to: destination).downloadProgress { progress in
+            // `validate()` treats non-2xx responses as errors so that an error body is never saved as a bundle file
+            AF.download(request, to: destination).validate().downloadProgress { progress in
                 if let callback = callback {
                     callback(progress)
                 }
@@ -45,6 +48,8 @@ public class LiveUpdateHttpClient: NSObject {
 
     public func request<T: Decodable>(url: URL, type: T.Type) async throws -> AFDataResponse<T> {
         var request = URLRequest(url: url)
+        // Ignore the URL cache so that a cached response is never replayed for a deterministic request URL
+        request.cachePolicy = .reloadIgnoringLocalCacheData
         request.httpMethod = HTTPMethod.get.rawValue
         request.timeoutInterval = Double(config.httpTimeout) / 1000.0
         if let deviceId = deviceId, !deviceId.isEmpty {

@@ -14,8 +14,8 @@ Capacitor plugin to launch arbitrary Android intents.
 - 🔍 **Resolve activities**: Check whether an activity can handle an intent before launching it.
 - 🎯 **Explicit & implicit intents**: Target a specific component or let the system pick a handler.
 - 📦 **Extras & flags**: Attach primitive extras and intent flags.
-- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - 🤝 **Compatibility**: Works alongside the [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/) and [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/) plugins.
+- 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -254,6 +254,10 @@ If you launch or resolve intents that target other apps, declare the intents you
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It launches arbitrary Android intents — explicit or implicit — so you can open system screens or hand off to other apps even when no dedicated plugin covers them, and read the activity result back. You can attach primitive extras and intent flags, and resolve whether an activity can handle an intent before launching it, all through a fully typed API kept current with the latest Capacitor version. When a focused plugin already exists for your target, such as Settings Launcher or App Launcher, that is a fine choice; when you need full control over the raw intent, this plugin is built for it.
+
 ### Why does `startActivity` reject with the error code `ACTIVITY_NOT_FOUND`?
 
 This happens when no activity exists that can handle the given intent. On Android 11 (API level 30) and higher, this can also be caused by [package visibility](#package-visibility), which limits which other apps your app can see. In that case, declare the intents you query in your app's `AndroidManifest.xml` using `<queries>` entries.
@@ -280,9 +284,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens with a typed API.
 - [App Launcher](https://capawesome.io/docs/sdks/capacitor/app-launcher/): Check if an app can be opened and open it.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [Settings Launcher](https://capawesome.io/docs/sdks/capacitor/settings-launcher/): Open native settings screens with a typed API.
 
 ## Newsletter
 

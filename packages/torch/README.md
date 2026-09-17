@@ -16,6 +16,7 @@ The Capacitor Torch plugin is one of the most complete flashlight control soluti
 - 🔦 **Torch control**: Enable, disable, and toggle torch/flashlight.
 - ✅ **Availability check**: Check if torch is available on the device.
 - 🌐 **Web support**: Uses MediaStream API for web torch control.
+- 🤝 **Compatibility**: Works alongside the [Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/) and [Light Sensor](https://capawesome.io/docs/sdks/capacitor/light-sensor/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -324,8 +325,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Barcode Scanning](https://capawesome.io/docs/sdks/capacitor/mlkit/barcode-scanning/): Scan barcodes and QR codes with ML Kit Barcode Scanning.
-- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 - [Light Sensor](https://capawesome.io/docs/sdks/capacitor/light-sensor/): Read the device's ambient light sensor.
+- [Screen Brightness](https://capawesome.io/docs/sdks/capacitor/screen-brightness/): Read and control the screen brightness.
 
 ## Newsletter
 

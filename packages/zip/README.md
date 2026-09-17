@@ -249,9 +249,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress image files such as PNG, JPEG, and WebP.
 - [File Opener](https://capawesome.io/docs/sdks/capacitor/file-opener/): Open a file with the default application.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
 - [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive files shared from other apps.
 
 ## Newsletter

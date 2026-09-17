@@ -1,10 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
-import type { SystemWebViewPlugin } from './definitions';
+import type { SystemWebviewPlugin } from './definitions';
 
-const SystemWebView = registerPlugin<SystemWebViewPlugin>('SystemWebView', {
-  web: () => import('./web').then(m => new m.SystemWebViewWeb()),
+const SystemWebview = registerPlugin<SystemWebviewPlugin>('SystemWebview', {
+  web: () => import('./web').then(m => new m.SystemWebviewWeb()),
 });
 
 export * from './definitions';
-export { SystemWebView };
+export { SystemWebview };

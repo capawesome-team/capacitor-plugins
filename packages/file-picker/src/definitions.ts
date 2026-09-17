@@ -20,6 +20,16 @@ export interface FilePickerPlugin {
     options: ConvertHeicToJpegOptions,
   ): Promise<ConvertHeicToJpegResult>;
   /**
+   * Convert a RAW image to JPEG.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  convertRawToJpeg(
+    options: ConvertRawToJpegOptions,
+  ): Promise<ConvertRawToJpegResult>;
+  /**
    * Copy a file to a new location.
    *
    * @since 7.1.0
@@ -123,6 +133,32 @@ export interface ConvertHeicToJpegResult {
 }
 
 /**
+ * @since 8.1.0
+ */
+export interface ConvertRawToJpegOptions {
+  /**
+   * The path of the RAW image.
+   *
+   * @example '/path/to/image.dng'
+   * @since 8.1.0
+   */
+  path: string;
+}
+
+/**
+ * @since 8.1.0
+ */
+export interface ConvertRawToJpegResult {
+  /**
+   * The path of the converted JPEG image.
+   *
+   * @example '/path/to/image.jpeg'
+   * @since 8.1.0
+   */
+  path: string;
+}
+
+/**
  * @since 7.1.0
  */
 export interface CopyFileOptions {
@@ -176,8 +212,11 @@ export interface PickFilesOptions {
   /**
    * List of accepted file types.
    * Look at [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml) for a complete list of standard media types.
+   * Wildcards such as `image/*` are supported.
    *
-   * This option is ignored if `limit` is set.
+   * On Android, the system file picker can only offer files whose media type the device derives from the file extension.
+   * On Android 9 and older, `.json` files are not mapped to `application/json` and are reported as `application/octet-stream`. Third-party document providers may behave the same on any version.
+   * Add `application/octet-stream` to `types` if such files must be selectable.
    *
    * @example ['image/png', 'application/pdf']
    */
@@ -199,7 +238,7 @@ export interface PickFilesOptions {
    * **Attention**: Reading large files can lead to app crashes.
    * It's therefore not recommended to use this option.
    * Instead, use the [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch)
-   * to load the file as a blob, see [this example](https://capawesome.io/blog/the-file-handling-guide-for-capacitor/#read-a-file).
+   * to load the file as a blob, see [this example](https://capawesome.io/blog/capacitor-file-handling-guide/#read-a-file).
    *
    * @default false
    */
@@ -264,6 +303,14 @@ export interface PickedFile {
    */
   size: number;
   /**
+   * The path of the file that can be used to load it in the web view, for example as the `src` of an `<img>` element.
+   *
+   * On the web, this is an object URL. Call `URL.revokeObjectURL(...)` when it is no longer needed.
+   *
+   * @since 8.1.0
+   */
+  webPath?: string;
+  /**
    * The width of the image or video in pixels.
    *
    * Only available on Android and iOS.
@@ -317,6 +364,16 @@ export interface PickMediaOptions {
 }
 
 export interface PickDirectoryResult {
+  /**
+   * The base64-encoded security-scoped bookmark of the selected directory.
+   *
+   * It can be used to retain access to the directory across app launches.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  bookmark?: string;
   /**
    * The path to the selected directory.
    *

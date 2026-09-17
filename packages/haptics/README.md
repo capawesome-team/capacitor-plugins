@@ -18,6 +18,7 @@ Capacitor plugin to provide haptic feedback such as impacts, notifications, vibr
 - 📳 **Vibrate**: Vibrate the device with a custom duration.
 - 🔎 **Availability check**: Check if haptic feedback is available on the device.
 - 🌐 **Web support**: Best-effort support for the Web using the Vibration API.
+- 🤝 **Compatibility**: Works alongside the [Shake](https://capawesome.io/docs/sdks/capacitor/shake/), [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) and [Volume](https://capawesome.io/docs/sdks/capacitor/volume/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -504,6 +505,10 @@ The haptic capabilities of the platforms differ. This plugin maps every method t
 Custom haptic patterns are strongest on iOS, where Core Haptics supports per-event intensity and sharpness. On Android, patterns are approximated using vibration effect primitives (Android 11+ with supported hardware) or amplitude-controlled waveforms. On the web, patterns are approximated using the Vibration API, which only supports on/off timings.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It covers the full range of haptic feedback through one fully typed API: impacts with five styles including the modern Rigid and Soft, notification and selection feedback, custom patterns with per-event intensity and sharpness via Core Haptics on iOS, semantic Android effects that respect the user's system settings, and an availability check — consistently across Android, iOS, and best-effort Web. It is actively maintained against the latest Capacitor and OS versions. If you only need a simple vibration, a minimal setup is fine; if you want rich, platform-aware haptics, this plugin is designed for exactly that.
 
 ### How is this plugin different from the official Capacitor Haptics plugin?
 

@@ -1,4 +1,4 @@
-import { WebPlugin } from '@capacitor/core';
+import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import type {
   AlertOptions,
@@ -8,8 +8,10 @@ import type {
   PromptOptions,
   PromptResult,
 } from './definitions';
+import { ErrorCode } from './definitions';
 
 export class DialogWeb extends WebPlugin implements DialogPlugin {
+  private static readonly errorCanceled = 'The user canceled the dialog.';
   private static readonly errorMessageMissing = 'message must be provided.';
 
   async alert(options: AlertOptions): Promise<void> {
@@ -33,8 +35,10 @@ export class DialogWeb extends WebPlugin implements DialogPlugin {
     }
     const value = window.prompt(options.message, options.inputText ?? '');
     if (value === null) {
-      return { canceled: true, value: '' };
+      throw new CapacitorException(DialogWeb.errorCanceled, undefined, {
+        code: ErrorCode.Canceled,
+      });
     }
-    return { canceled: false, value };
+    return { value };
   }
 }

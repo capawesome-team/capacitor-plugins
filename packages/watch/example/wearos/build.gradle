@@ -1,0 +1,37 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.20"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    namespace "com.example.plugin.wear"
+    compileSdk 36
+    defaultConfig {
+        applicationId "com.example.plugin"
+        minSdkVersion 30
+        targetSdkVersion 36
+        versionCode 1
+        versionName "1.0"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+    kotlinOptions {
+        jvmTarget = '21'
+    }
+}
+
+dependencies {
+    implementation project(':capawesome-watch-sdk')
+    implementation "com.google.android.gms:play-services-wearable:20.0.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"
+}

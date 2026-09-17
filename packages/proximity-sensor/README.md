@@ -15,9 +15,9 @@ The Capacitor Proximity Sensor plugin is one of the most complete proximity sens
 - 🖥️ **Cross-platform**: Supports Android and iOS.
 - 📏 **Proximity detection**: Detect whether an object is close to the screen.
 - ⚡ **Real-time updates**: Continuous proximity data with event listeners.
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
-- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) plugins.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
 
@@ -34,6 +34,10 @@ The Proximity Sensor plugin is typically used to react when an object is close t
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): How proximity events pair with the Light Sensor in call and media apps that adapt to the environment.
 
 ## Installation
 
@@ -306,6 +310,10 @@ Only call `startMeasurementUpdates()` when you actually want this behavior.
 On Android, reading the proximity sensor has no effect on the screen.
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It covers the whole proximity story through one fully typed API: a one-time reading, continuous real-time `measurement` events, and an availability check, working consistently across Android and iOS. It surfaces platform specifics honestly — a distance in centimeters on Android and the near/far state on iOS — and documents the iOS screen-dimming behavior so there are no surprises. The package is kept current with the latest Capacitor version and ships for both CocoaPods and Swift Package Manager.
 
 ### Why does the screen turn off on iOS when reading the sensor?
 

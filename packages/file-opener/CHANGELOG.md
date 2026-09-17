@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`3df3e8ccc10dcc360925530c73bedc25ff81d4b4`](https://github.com/capawesome-team/capacitor-plugins/commit/3df3e8ccc10dcc360925530c73bedc25ff81d4b4) ([#1037](https://github.com/capawesome-team/capacitor-plugins/pull/1037)): fix: republish the package because the previous version was missing the `dist/` folder on the Capawesome npm registry
+
+## 8.0.3
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.2
+
+### Patch Changes
+
+- [`b7d27718e783b8f90361495e9425281d48eb26a5`](https://github.com/capawesome-team/capacitor-plugins/commit/b7d27718e783b8f90361495e9425281d48eb26a5) ([#982](https://github.com/capawesome-team/capacitor-plugins/pull/982)): fix(ios): resolve the key window via `UIWindowScene` to support scene-based apps
+
 ## 8.0.1
 
 ### Patch Changes

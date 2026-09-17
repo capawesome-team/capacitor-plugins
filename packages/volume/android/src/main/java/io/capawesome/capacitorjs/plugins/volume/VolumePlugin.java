@@ -8,6 +8,7 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.volume.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeButtonPressedEvent;
+import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeButtonReleasedEvent;
 import io.capawesome.capacitorjs.plugins.volume.classes.events.VolumeChangeEvent;
 import io.capawesome.capacitorjs.plugins.volume.classes.options.GetVolumeOptions;
 import io.capawesome.capacitorjs.plugins.volume.classes.options.SetVolumeOptions;
@@ -22,6 +23,7 @@ import io.capawesome.capacitorjs.plugins.volume.interfaces.Result;
 public class VolumePlugin extends Plugin {
 
     public static final String EVENT_VOLUME_BUTTON_PRESSED = "volumeButtonPressed";
+    public static final String EVENT_VOLUME_BUTTON_RELEASED = "volumeButtonReleased";
     public static final String EVENT_VOLUME_CHANGE = "volumeChange";
     public static final String TAG = "VolumePlugin";
 
@@ -79,6 +81,10 @@ public class VolumePlugin extends Plugin {
 
     public void notifyVolumeButtonPressedListeners(@NonNull VolumeButtonPressedEvent event) {
         notifyListeners(EVENT_VOLUME_BUTTON_PRESSED, event.toJSObject());
+    }
+
+    public void notifyVolumeButtonReleasedListeners(@NonNull VolumeButtonReleasedEvent event) {
+        notifyListeners(EVENT_VOLUME_BUTTON_RELEASED, event.toJSObject());
     }
 
     public void notifyVolumeChangeListeners(@NonNull VolumeChangeEvent event) {

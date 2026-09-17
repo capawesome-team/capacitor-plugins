@@ -15,6 +15,7 @@ Capacitor plugin to create system alarms and timers.
 - 📋 **Alarm management**: List and cancel the alarms created by your app on iOS.
 - 🍏 **AlarmKit**: One of the first plugins to support Apple's new AlarmKit framework on iOS 26.
 - 🔐 **Permissions**: Check and request the alarm authorization with a single call.
+- 🤝 **Compatibility**: Works alongside the [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/), [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/) and [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -493,6 +494,10 @@ The two platforms have fundamentally different alarm models, which this plugin e
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It creates real system alarms that break through Silent Mode and Focus and keep sounding until dismissed — one of the first plugins to adopt Apple's new AlarmKit on iOS 26 — with repeating weekday alarms, permission handling in a single call, timers via the system clock app on Android, and alarm listing and cancellation on iOS. It exposes each platform's fundamentally different alarm model honestly through a fully typed API and stays actively maintained against the latest Capacitor and OS versions. If a normal reminder is enough, a local notification is the simpler choice; if the user must be reliably interrupted at a set time, this plugin is built for that.
+
 ### Why does the plugin require iOS 26 or later?
 
 The plugin uses Apple's [AlarmKit](https://developer.apple.com/documentation/alarmkit) framework, which was introduced with iOS 26. On older iOS versions, all methods except `isAvailable()` reject as unavailable, so you can use `isAvailable()` to check for support at runtime.
@@ -519,9 +524,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
+- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
 - [Datetime Picker](https://capawesome.io/docs/sdks/capacitor/datetime-picker/): Let the user pick the alarm time with a native date and time picker.
 - [Silent Mode](https://capawesome.io/docs/sdks/capacitor/silent-mode/): Detect whether the device is in silent mode.
-- [Background Task](https://capawesome.io/docs/sdks/capacitor/background-task/): Run background tasks in your app.
 
 ## Newsletter
 

@@ -16,6 +16,7 @@ Capacitor plugin to read from and write to the system clipboard.
 - 🔗 **URLs**: Copy URLs as native URL clipboard items.
 - 🌐 **Cross-platform**: Works on Android, iOS, and the web.
 - 🔒 **App Store safe**: Uses only official platform APIs.
+- 🤝 **Compatibility**: Works alongside the [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/) and [Text Interaction](https://capawesome.io/docs/sdks/capacitor/text-interaction/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -255,6 +256,10 @@ This plugin is a drop-in alternative to the official [`@capacitor/clipboard`](ht
 | `read() → { value, type: 'text/plain' }`   | `read() → { value, type: 'TEXT' }`                     |
 
 ## FAQ
+
+### How is this plugin different from other similar plugins?
+
+It supports far more than plain text — copy and paste images, HTML with a plain-text fallback, and native URL items, with reliable real image handling on Android, iOS, and the web. The API is fully typed and actively maintained against the latest OS and framework versions, and it uses only official platform APIs so it stays safe for App Store and Google Play submissions. If you only ever copy plain text, a simpler setup is perfectly fine; if you need rich content and consistent behavior across every platform, this plugin is designed for exactly that.
 
 ### Why is a notification shown when my app reads the clipboard?
 

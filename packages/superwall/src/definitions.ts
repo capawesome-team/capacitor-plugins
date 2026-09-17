@@ -25,6 +25,29 @@ export interface SuperwallPlugin {
    */
   register(options: RegisterOptions): Promise<RegisterResult>;
   /**
+   * Dismiss the currently presented paywall, if one exists.
+   *
+   * Resolves once the paywall has been dismissed.
+   * If no paywall is presented, the method resolves immediately.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.3
+   */
+  dismiss(): Promise<void>;
+  /**
+   * Restore purchases made by the user.
+   *
+   * Rejects if the SDK has not been configured or the restore fails.
+   * A successful restore does not necessarily mean the user has an active subscription.
+   * Use `getSubscriptionStatus()` to check the subscription status after restoring.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.5
+   */
+  restorePurchases(): Promise<void>;
+  /**
    * Check if a paywall would be presented for a placement without actually presenting it.
    *
    * Useful for determining whether to show a feature or paywall before the user interacts.

@@ -366,6 +366,10 @@ This plugin handles the sign-in flow and returns tokens to your app. To keep you
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It covers the full Facebook sign-in flow across Android, iOS, and the Web, returning both the access token for the Graph API and the signed-in user's profile through a fully typed API. On iOS it supports Limited Login with nonce verification, so you can sign users in without tracking and without App Tracking Transparency consent, and it works alongside the Apple and Google Sign-In plugins when you want to offer several options. Detailed error codes and support for the latest Capacitor version round it out. If you only ever need a single provider, a lighter setup can be enough; when you need Facebook handled thoroughly, this plugin is built for exactly that.
+
 ### Do I need a Facebook app to use this plugin?
 
 Yes, this plugin requires a Facebook app. You can create one in the [Meta App Dashboard](https://developers.facebook.com/apps/) and add the **Facebook Login** product to it. The **App ID** and **Client Token** from the app settings are needed for the platform-specific configuration, see the [Installation](#installation) section.
@@ -393,9 +397,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Apple Sign-In](https://capawesome.io/docs/sdks/capacitor/apple-sign-in/): Sign in users with their Apple account.
+- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication such as face or fingerprint recognition.
 - [Google Sign-In](https://capawesome.io/docs/sdks/capacitor/google-sign-in/): Sign in users with their Google account.
 - [OAuth](https://capawesome.io/docs/sdks/capacitor/oauth/): Communicate with any OAuth 2.0 and OpenID Connect provider.
-- [Biometrics](https://capawesome.io/docs/sdks/capacitor/biometrics/): Request biometric authentication such as face or fingerprint recognition.
 
 ## Newsletter
 

@@ -20,6 +20,7 @@ The Capacitor Superwall plugin brings remotely-configured paywalls and paywall e
 - 🧪 **A/B Testing**: Built-in support for paywall experiments and holdout groups.
 - 🔗 **Deep Linking**: Handle deep links for paywall campaigns.
 - 🎨 **Customization**: Configure paywall behavior, logging, and appearance.
+- 🤝 **Compatibility**: Works alongside the [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/) and [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -273,6 +274,8 @@ const logout = async () => {
 
 * [`configure(...)`](#configure)
 * [`register(...)`](#register)
+* [`dismiss()`](#dismiss)
+* [`restorePurchases()`](#restorepurchases)
 * [`getPresentationResult(...)`](#getpresentationresult)
 * [`identify(...)`](#identify)
 * [`reset()`](#reset)
@@ -339,6 +342,43 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#registerresult">RegisterResult</a>&gt;</code>
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### dismiss()
+
+```typescript
+dismiss() => Promise<void>
+```
+
+Dismiss the currently presented paywall, if one exists.
+
+Resolves once the paywall has been dismissed.
+If no paywall is presented, the method resolves immediately.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.3
+
+--------------------
+
+
+### restorePurchases()
+
+```typescript
+restorePurchases() => Promise<void>
+```
+
+Restore purchases made by the user.
+
+Rejects if the SDK has not been configured or the restore fails.
+A successful restore does not necessarily mean the user has an active subscription.
+Use `getSubscriptionStatus()` to check the subscription status after restoring.
+
+Only available on Android and iOS.
+
+**Since:** 0.1.5
 
 --------------------
 
@@ -964,9 +1004,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
-- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Track events and analyze user behavior with PostHog.
 - [App Review](https://capawesome.io/docs/sdks/capacitor/app-review/): Let users submit app store reviews and ratings.
+- [PostHog](https://capawesome.io/docs/sdks/capacitor/posthog/): Track events and analyze user behavior with PostHog.
+- [Purchases](https://capawesome.io/docs/sdks/capacitor/purchases/): Support in-app purchases in your Capacitor app.
 
 ## Newsletter
 

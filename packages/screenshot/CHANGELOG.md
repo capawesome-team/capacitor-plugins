@@ -1,5 +1,17 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`30775ca1aec066ddba0efd8ca980cb8591b37963`](https://github.com/capawesome-team/capacitor-plugins/commit/30775ca1aec066ddba0efd8ca980cb8591b37963) ([#1056](https://github.com/capawesome-team/capacitor-plugins/pull/1056)): fix: mark `html2canvas` as an optional peer dependency
+
+## 8.0.2
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
 ## 8.0.1
 
 ### Patch Changes

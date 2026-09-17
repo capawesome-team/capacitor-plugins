@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`40e38769169b394dbe1cd88c1f965f4f90278710`](https://github.com/capawesome-team/capacitor-plugins/commit/40e38769169b394dbe1cd88c1f965f4f90278710) ([#1053](https://github.com/capawesome-team/capacitor-plugins/pull/1053)): fix(ios): return the file names instead of the full paths from `list(...)`
+
+## 8.0.3
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 8.0.2
+
+### Patch Changes
+
+- [`aef3813e9c927482002efff04d9c86c91b8f1f5c`](https://github.com/capawesome-team/capacitor-plugins/commit/aef3813e9c927482002efff04d9c86c91b8f1f5c) ([#998](https://github.com/capawesome-team/capacitor-plugins/pull/998)): fix(android): detect whether an asset is a file or a directory instead of guessing from the file name
+
 ## 8.0.1
 
 ### Patch Changes

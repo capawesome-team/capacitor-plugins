@@ -7,7 +7,7 @@ const config: CapacitorConfig = {
   webDir: 'dist',
   plugins: {
     LiveUpdate: {
-      appId: '46d641f5-2703-4e99-b498-006192c70484',
+      appId: '5fc57c46-4b64-4209-b924-14fa960ccc88',
       // publicKey:
       //   '-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoMb8yazAm5rY2ys6nQDgsKdGlQiLStdd7VBYjKKaRT2xwKXCPtsmeBtjvVUH//ae3IHbz7w79CoawKPDqKAPtqILWc3VyAR2hQ6ftoGVxYq5NyuV4UdZozEn9v45Se91gvi7Jc+NakZaPYBAG695X1d9iCdktWINqexQjZWZUEnQjdLoKSdlbtyU0GYiDTkPDUruVBx1YF7W7qOIEr5uhbPF2HKtU6VvsoKOHePfIZQa12rn0Q5s69jb0++ro1zHMZSV6eJox6RJg/7uHOKo5Ri8FRhHHZQxxbP/Pp4FTHvpfQyav2yOuq0l9mAAgzi9txWMfB1AXwZbbUceuE7UjwIDAQAB-----END PUBLIC KEY-----',
       // readyTimeout: 10000,

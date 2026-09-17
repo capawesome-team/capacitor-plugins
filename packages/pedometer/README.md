@@ -17,6 +17,7 @@ The Capacitor Pedometer plugin is one of the most complete motion tracking solut
 - 📊 **Real-time Updates**: Stream live pedometer data with event listeners for continuous monitoring.
 - 📅 **Historical Data**: Query pedometer measurements for specific time ranges and periods.
 - 🔍 **Feature Detection**: Check device capability for different pedometer features (steps, distance, floors, etc.).
+- 🤝 **Compatibility**: Works alongside the [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/), [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/) and [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -40,6 +41,10 @@ The Pedometer plugin is typically used whenever an app needs to track the user's
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 | 7.x.x          | 7.x.x             | Deprecated     |
+
+## Guides
+
+- [The Complete Guide to Capacitor Device Sensors](https://capawesome.io/blog/capacitor-device-sensors-guide/): Fitness-tracking use cases and how this plugin compares to the raw Accelerometer.
 
 ## Installation
 
@@ -328,17 +333,17 @@ Remove all listeners for this plugin.
 
 #### Measurement
 
-| Prop                    | Type                | Description                                                                             | Since |
-| ----------------------- | ------------------- | --------------------------------------------------------------------------------------- | ----- |
-| **`averageActivePace`** | <code>number</code> | The average pace of the user, measured in seconds per meter. Only available on iOS.     | 7.0.0 |
-| **`currentCadence`**    | <code>number</code> | The rate at which steps are taken, measured in steps per second. Only available on iOS. | 7.0.0 |
-| **`currentPace`**       | <code>number</code> | The current pace of the user, measured in seconds per meter. Only available on iOS.     | 7.0.0 |
-| **`distance`**          | <code>number</code> | The estimated distance traveled by the user, measured in meters. Only available on iOS. | 7.0.0 |
-| **`end`**               | <code>number</code> | The end date of the data in milliseconds since epoch.                                   | 7.0.0 |
-| **`floorsAscended`**    | <code>number</code> | The number of floors ascended by the user. Only available on iOS.                       | 7.0.0 |
-| **`floorsDescended`**   | <code>number</code> | The number of floors descended by the user. Only available on iOS.                      | 7.0.0 |
-| **`numberOfSteps`**     | <code>number</code> | The number of steps taken by the user.                                                  | 7.0.0 |
-| **`start`**             | <code>number</code> | The start date of the data in milliseconds since epoch.                                 | 7.0.0 |
+| Prop                    | Type                | Description                                                                                                                | Since |
+| ----------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`averageActivePace`** | <code>number</code> | The average pace of the user, measured in seconds per meter. Only available on iOS.                                        | 7.0.0 |
+| **`currentCadence`**    | <code>number</code> | The rate at which steps are taken, measured in steps per second. Only available on iOS.                                    | 7.0.0 |
+| **`currentPace`**       | <code>number</code> | The current pace of the user, measured in seconds per meter. Only available on iOS.                                        | 7.0.0 |
+| **`distance`**          | <code>number</code> | The estimated distance traveled by the user, measured in meters. Only available on iOS.                                    | 7.0.0 |
+| **`end`**               | <code>number</code> | The end date of the data in milliseconds since epoch.                                                                      | 7.0.0 |
+| **`floorsAscended`**    | <code>number</code> | The number of floors ascended by the user. Only available on iOS.                                                          | 7.0.0 |
+| **`floorsDescended`**   | <code>number</code> | The number of floors descended by the user. Only available on iOS.                                                         | 7.0.0 |
+| **`numberOfSteps`**     | <code>number</code> | The number of steps taken by the user.                                                                                     | 7.0.0 |
+| **`start`**             | <code>number</code> | The start date of the data in milliseconds since epoch. On **Android**, this is always set to the boot time of the device. | 7.0.0 |
 
 
 #### GetMeasurementOptions
@@ -422,8 +427,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 ## Related Plugins
 
 - [Accelerometer](https://capawesome.io/docs/sdks/capacitor/accelerometer/): Capture the acceleration force along the x, y, and z axes.
-- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
 - [Barometer](https://capawesome.io/docs/sdks/capacitor/barometer/): Obtain the static air pressure measured in hectopascals.
+- [Gyroscope](https://capawesome.io/docs/sdks/capacitor/gyroscope/): Read the device's gyroscope sensor.
 
 ## Newsletter
 

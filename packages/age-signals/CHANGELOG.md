@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- [`f114a9e6390697418b0ffd11b8db1db2d307b2dd`](https://github.com/capawesome-team/capacitor-plugins/commit/f114a9e6390697418b0ffd11b8db1db2d307b2dd) ([#1023](https://github.com/capawesome-team/capacitor-plugins/pull/1023)): fix(ios): remove the SPM test target that made the published package unresolvable by SwiftPM
+
+## 0.5.0
+
+### Minor Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat!: update to Play Age Signals `0.0.4` (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): fix(android): map the error codes of the Play Age Signals library
+
+- [`1c4321dfea9a4673633d323d2a8d17fb259b7dd6`](https://github.com/capawesome-team/capacitor-plugins/commit/1c4321dfea9a4673633d323d2a8d17fb259b7dd6) ([#938](https://github.com/capawesome-team/capacitor-plugins/pull/938)): feat(ios): add `getRegulatoryRequirements()` and `showSignificantUpdateAcknowledgment(...)` methods
+
 ## 0.4.1
 
 ### Patch Changes

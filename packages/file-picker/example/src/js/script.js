@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FilePicker } from '@capawesome/capacitor-file-picker';
 
@@ -13,12 +12,8 @@ const displayFile = file => {
   document.querySelector('#height-input').value = file.height ?? '';
 
   const image = document.querySelector('#image');
-  if (!file.mimeType?.startsWith('image/')) {
-    image.src = '';
-  } else if (Capacitor.getPlatform() === 'web' && file.blob) {
-    image.src = URL.createObjectURL(file.blob);
-  } else if (file.path) {
-    image.src = Capacitor.convertFileSrc(file.path);
+  if (file.mimeType?.startsWith('image/') && file.webPath) {
+    image.src = file.webPath;
   } else {
     image.src = '';
   }
@@ -36,7 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
     await FilePicker.copyFile({ from, to: uri });
   });
   document.querySelector('#pick-files').addEventListener('click', async () => {
-    const { files } = await FilePicker.pickFiles();
+    const types = document.querySelector('#types-select').value;
+    const { files } = await FilePicker.pickFiles({
+      types: types && types.length > 0 ? types : undefined,
+    });
     displayFile(files[0]);
   });
   document.querySelector('#pick-images').addEventListener('click', async () => {

@@ -3,24 +3,27 @@ import Foundation
 public enum CustomError: Error {
     case apiNotAvailable
     case illegalAgeGates
+    case invalidRequest
+    case notSupported
     case presentationContextUnavailable
-    case declinedSharing
-    case unknown
+    case updateDescriptionMissing
 }
 
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .apiNotAvailable:
-            return NSLocalizedString("Age range service is not available on this device or iOS version.", comment: "apiNotAvailable")
+            return NSLocalizedString("The system was unable to share the age range.", comment: "apiNotAvailable")
         case .illegalAgeGates:
-            return NSLocalizedString("Age gates must contain at least 2 and at most 3 ages.", comment: "illegalAgeGates")
+            return NSLocalizedString("ageGates must contain at least 1 and at most 3 ages.", comment: "illegalAgeGates")
+        case .invalidRequest:
+            return NSLocalizedString("The request contains invalid parameters.", comment: "invalidRequest")
+        case .notSupported:
+            return NSLocalizedString("Age signals are not supported on this device.", comment: "notSupported")
         case .presentationContextUnavailable:
-            return NSLocalizedString("Unable to find a view controller to present the age range dialog.", comment: "presentationContextUnavailable")
-        case .declinedSharing:
-            return NSLocalizedString("The user or guardian declined to share their age range.", comment: "declinedSharing")
-        case .unknown:
-            return NSLocalizedString("An unknown error occurred.", comment: "unknown")
+            return NSLocalizedString("No view controller was found to present the system interface.", comment: "presentationContextUnavailable")
+        case .updateDescriptionMissing:
+            return NSLocalizedString("updateDescription must be provided.", comment: "updateDescriptionMissing")
         }
     }
 }

@@ -18,6 +18,7 @@ The Capacitor File Opener plugin is one of the most complete file opening soluti
 - 📱 **Native integration**: Uses system file associations on mobile platforms.
 - 📁 **Flexible paths**: Support for file paths and content URIs on Android.
 - 🔍 **MIME type detection**: Automatic MIME type detection or manual specification.
+- 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) and [Printer](https://capawesome.io/docs/sdks/capacitor/printer/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
 Missing a feature? Just [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues) and we'll take a look!
@@ -187,8 +188,8 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
 - [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/): Compress files with support for image formats like PNG, JPEG, and WebP.
+- [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/): Let the user select a file, directory, image, or video from the device.
 - [Printer](https://capawesome.io/docs/sdks/capacitor/printer/): Print files, HTML, PDFs, and web views on Android and iOS.
 - [Share Target](https://capawesome.io/docs/sdks/capacitor/share-target/): Receive text, links, and files shared from other apps.
 

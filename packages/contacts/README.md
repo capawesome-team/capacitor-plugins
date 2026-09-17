@@ -22,6 +22,7 @@ The Capacitor Contacts plugin is one of the most complete contact management sol
 - 📱 **Native Modals**: Create, update and display contacts in native modals.
 - 🎯 **Picking**: Let the user select a device contact.
 - 🖼️ **Photos**: Set, update and retrieve contact photos.
+- 🤝 **Compatibility**: Works alongside the [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/), [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/) and [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 - ⭐️ **Support**: Priority support from the Capawesome Team.
@@ -51,6 +52,7 @@ The Contacts plugin is typically used whenever an app needs to work with the dev
 - [Alternative to the Capacitor Community Contacts plugin](https://capawesome.io/blog/alternative-to-capacitor-community-contacts-plugin/)
 - [Announcing the Capacitor Contacts Plugin](https://capawesome.io/blog/announcing-the-capacitor-contacts-plugin/)
 - [Exploring the Capacitor Contacts API](https://capawesome.io/blog/exploring-the-capacitor-contacts-api/)
+- [Google Play Contacts Policy 2027 for Capacitor](https://capawesome.io/blog/capacitor-google-play-contacts-policy-2027/)
 
 ## Installation
 
@@ -97,6 +99,8 @@ This API requires the following elements be added to your `AndroidManifest.xml` 
 <!-- Required if you want to write contacts. -->
 <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 ```
+
+`pickContacts(...)` requires the `READ_CONTACTS` permission below Android 17, because the contact picker grants access to the picked contact URI only, which does not expose any contact details. Pass the `property` option instead to let the user select a single phone number, email address or postal address, which never requires a permission. Apps that only need contact selection should use that option and omit `READ_CONTACTS`, as required by [Google Play's Contacts Permissions policy](https://support.google.com/googleplay/android-developer/answer/16926792).
 
 #### Proguard
 
@@ -204,7 +208,7 @@ const deleteContactById = async (id: string) => {
 
 ### Pick contacts
 
-Open the native contact picker and let the user select one or more contacts. Use the `fields` option to specify which contact properties should be returned:
+Open the native contact picker and let the user select one or more contacts. Use the `fields` option to specify which contact properties should be returned and the `multiple` option to let the user select more than one contact:
 
 ```typescript
 import { Contacts } from '@capawesome-team/capacitor-contacts';
@@ -714,6 +718,10 @@ pickContacts(options?: PickContactsOptions | undefined) => Promise<PickContactsR
 
 Open the contact picker to select a contact from the device.
 
+On Android, reading the selected contact requires the `READ_CONTACTS` permission below
+Android 17. Set the `property` option to select a single contact property instead, which
+never requires a permission.
+
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
 | **`options`** | <code><a href="#pickcontactsoptions">PickContactsOptions</a></code> |
@@ -808,26 +816,27 @@ Only available on Android and iOS.
 
 #### Contact
 
-| Prop                   | Type                                          | Description                                                                     | Since |
-| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- | ----- |
-| **`account`**          | <code><a href="#account">Account</a></code>   | The account associated with the contact. Only available on Android.             | 7.4.0 |
-| **`birthday`**         | <code><a href="#birthday">Birthday</a></code> | The birthday of the contact.                                                    | 7.3.0 |
-| **`emailAddresses`**   | <code>EmailAddress[]</code>                   | The list of email addresses for the contact.                                    | 7.0.0 |
-| **`familyName`**       | <code>string</code>                           | The family name of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`givenName`**        | <code>string</code>                           | The given name of the contact. Only available on Android and iOS.               | 7.0.0 |
-| **`groupIds`**         | <code>string[]</code>                         | The identifier of the groups the contact belongs to. Only available on iOS.     | 7.4.0 |
-| **`id`**               | <code>string</code>                           | The identifier for the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`jobTitle`**         | <code>string</code>                           | The job title of the contact. Only available on Android and iOS.                | 7.0.0 |
-| **`middleName`**       | <code>string</code>                           | The middle name of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`fullName`**         | <code>string</code>                           | The full name of the contact. Only available on Web.                            | 7.0.0 |
-| **`namePrefix`**       | <code>string</code>                           | The name prefix of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`nameSuffix`**       | <code>string</code>                           | The name suffix of the contact. Only available on Android and iOS.              | 7.0.0 |
-| **`note`**             | <code>string</code>                           | A note about the contact. Only available on Android and iOS.                    | 7.0.0 |
-| **`organizationName`** | <code>string</code>                           | The organization name of the contact. Only available on Android and iOS.        | 7.0.0 |
-| **`phoneNumbers`**     | <code>PhoneNumber[]</code>                    | The list of phone numbers for the contact.                                      | 7.0.0 |
-| **`photo`**            | <code>string</code>                           | The photo of the contact as a base64 string. Only available on Android and iOS. | 7.0.0 |
-| **`postalAddresses`**  | <code>PostalAddress[]</code>                  | The list of postal addresses for the contact.                                   | 7.0.0 |
-| **`urlAddresses`**     | <code>UrlAddress[]</code>                     | The list of URL addresses for the contact. Only available on Android and iOS.   | 7.0.0 |
+| Prop                   | Type                                          | Description                                                                                                                                                                     | Since |
+| ---------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`account`**          | <code><a href="#account">Account</a></code>   | The account associated with the contact. Only available on Android.                                                                                                             | 7.4.0 |
+| **`birthday`**         | <code><a href="#birthday">Birthday</a></code> | The birthday of the contact.                                                                                                                                                    | 7.3.0 |
+| **`displayName`**      | <code>string</code>                           | The formatted name of the contact as displayed by the device. This property is read-only and is ignored when creating or updating a contact. Only available on Android and iOS. | 8.1.0 |
+| **`emailAddresses`**   | <code>EmailAddress[]</code>                   | The list of email addresses for the contact.                                                                                                                                    | 7.0.0 |
+| **`familyName`**       | <code>string</code>                           | The family name of the contact. Only available on Android and iOS.                                                                                                              | 7.0.0 |
+| **`givenName`**        | <code>string</code>                           | The given name of the contact. Only available on Android and iOS.                                                                                                               | 7.0.0 |
+| **`groupIds`**         | <code>string[]</code>                         | The identifier of the groups the contact belongs to. Only available on iOS.                                                                                                     | 7.4.0 |
+| **`id`**               | <code>string</code>                           | The identifier for the contact. Only available on Android and iOS.                                                                                                              | 7.0.0 |
+| **`jobTitle`**         | <code>string</code>                           | The job title of the contact. Only available on Android and iOS.                                                                                                                | 7.0.0 |
+| **`middleName`**       | <code>string</code>                           | The middle name of the contact. Only available on Android and iOS.                                                                                                              | 7.0.0 |
+| **`fullName`**         | <code>string</code>                           | The full name of the contact. Only available on Web.                                                                                                                            | 7.0.0 |
+| **`namePrefix`**       | <code>string</code>                           | The name prefix of the contact. Only available on Android and iOS.                                                                                                              | 7.0.0 |
+| **`nameSuffix`**       | <code>string</code>                           | The name suffix of the contact. Only available on Android and iOS.                                                                                                              | 7.0.0 |
+| **`note`**             | <code>string</code>                           | A note about the contact. Only available on Android and iOS.                                                                                                                    | 7.0.0 |
+| **`organizationName`** | <code>string</code>                           | The organization name of the contact. Only available on Android and iOS.                                                                                                        | 7.0.0 |
+| **`phoneNumbers`**     | <code>PhoneNumber[]</code>                    | The list of phone numbers for the contact.                                                                                                                                      | 7.0.0 |
+| **`photo`**            | <code>string</code>                           | The photo of the contact as a base64 string. Only available on Android and iOS.                                                                                                 | 7.0.0 |
+| **`postalAddresses`**  | <code>PostalAddress[]</code>                  | The list of postal addresses for the contact.                                                                                                                                   | 7.0.0 |
+| **`urlAddresses`**     | <code>UrlAddress[]</code>                     | The list of URL addresses for the contact. Only available on Android and iOS.                                                                                                   | 7.0.0 |
 
 
 #### Account
@@ -973,10 +982,10 @@ Only available on Android and iOS.
 
 #### GetContactByIdOptions
 
-| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                                   | Since |
-| ------------ | ----------------------------------------------------- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
-| **`id`**     | <code>string</code>                                   | The identifier for the contact.       |                                                                                                                                                                                                           | 7.0.0 |
+| Prop         | Type                                                  | Description                           | Default                                                                                                                                                                                                                  | Since |
+| ------------ | ----------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`fields`** | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. | <code>['birthday', 'displayName', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.1.0 |
+| **`id`**     | <code>string</code>                                   | The identifier for the contact.       |                                                                                                                                                                                                                          | 7.0.0 |
 
 
 #### GetContactsResult
@@ -1039,10 +1048,11 @@ Only available on Android and iOS.
 
 #### PickContactsOptions
 
-| Prop           | Type                                                  | Description                                                              | Default                                                                                                                                                                                                   | Since |
-| -------------- | ----------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`fields`**   | <code>(keyof <a href="#contact">Contact</a>)[]</code> | The fields to return for the contact. Only available on Android and iOS. | <code>['birthday', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.4.0 |
-| **`multiple`** | <code>boolean</code>                                  | Whether to allow selecting multiple contacts. Only available on Web.     | <code>false</code>                                                                                                                                                                                        | 7.0.0 |
+| Prop           | Type                                                        | Description                                                                                                                                                                                                                                                                | Default                                                                                                                                                                                                                  | Since |
+| -------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`fields`**   | <code>(keyof <a href="#contact">Contact</a>)[]</code>       | The fields to return for the contact. On Android 17 and newer, the contact picker only lists contacts that have at least one of the requested fields and never returns the `account` and `note` fields. Only available on Android and iOS.                                 | <code>['birthday', 'displayName', 'emailAddresses', 'familyName', 'givenName', 'id', 'jobTitle', 'middleName', 'namePrefix', 'nameSuffix', 'organizationName', 'phoneNumbers', 'postalAddresses', 'urlAddresses']</code> | 7.4.0 |
+| **`multiple`** | <code>boolean</code>                                        | Whether to allow selecting multiple contacts. Ignored if the `property` option is set. On Android, only supported on Android 17 and newer, where the user can select at most 100 contacts.                                                                                 | <code>false</code>                                                                                                                                                                                                       | 7.0.0 |
+| **`property`** | <code><a href="#contactproperty">ContactProperty</a></code> | The contact property to select. If set, the user selects a single property instead of a whole contact. The result then only contains the `id`, the `displayName` and the selected property, but no permissions are required to read it. Only available on Android and iOS. |                                                                                                                                                                                                                          | 8.1.0 |
 
 
 #### UpdateContactByIdOptions
@@ -1176,13 +1186,22 @@ Makes all properties of T nullable.
 | **`School`**   | <code>'SCHOOL'</code>   | Only available on iOS.     | 7.5.0 |
 | **`Work`**     | <code>'WORK'</code>     |                            | 7.5.0 |
 
+
+#### ContactProperty
+
+| Members             | Value                        | Description                             | Since |
+| ------------------- | ---------------------------- | --------------------------------------- | ----- |
+| **`EmailAddress`**  | <code>'emailAddress'</code>  | A single email address of the contact.  | 8.1.0 |
+| **`PhoneNumber`**   | <code>'phoneNumber'</code>   | A single phone number of the contact.   | 8.1.0 |
+| **`PostalAddress`** | <code>'postalAddress'</code> | A single postal address of the contact. | 8.1.0 |
+
 </docgen-api>
 
 ## FAQ
 
 ### Do I need any permissions to access contacts?
 
-Yes. On Android, you need to add the `READ_CONTACTS` and/or `WRITE_CONTACTS` permissions to your `AndroidManifest.xml` file (see [Installation](#installation)). On iOS, you must add the `NSContactsUsageDescription` key to your `Info.plist` file. At runtime, use `checkPermissions()` and `requestPermissions()` to manage the permission state, and `openSettings()` to send the user to the native app settings if the permission was denied.
+It depends. `displayCreateContact(...)` never needs a permission, and neither does `pickContacts(...)` on iOS. On Android, `pickContacts(...)` needs the `READ_CONTACTS` permission below Android 17, unless you pass the `property` option to select a single contact property instead. Every other method needs access to the address book: on Android, add the `READ_CONTACTS` and/or `WRITE_CONTACTS` permissions to your `AndroidManifest.xml` file (see [Installation](#installation)); on iOS, add the `NSContactsUsageDescription` key to your `Info.plist` file. At runtime, use `checkPermissions()` and `requestPermissions()` to manage the permission state, and `openSettings()` to send the user to the native app settings if the permission was denied.
 
 ### How do I update only specific fields of a contact?
 
@@ -1206,10 +1225,10 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
-- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 - [Mail Composer](https://capawesome.io/docs/sdks/capacitor/mail-composer/): Open the native email composer.
+- [Phone Dialer](https://capawesome.io/docs/sdks/capacitor/phone-dialer/): Open the native phone dialer prefilled with a phone number.
 - [SIM](https://capawesome.io/docs/sdks/capacitor/sim/): Read SIM card and carrier information.
+- [SMS Composer](https://capawesome.io/docs/sdks/capacitor/sms-composer/): Open the native SMS composer prefilled with recipients and a message body.
 
 ## Newsletter
 

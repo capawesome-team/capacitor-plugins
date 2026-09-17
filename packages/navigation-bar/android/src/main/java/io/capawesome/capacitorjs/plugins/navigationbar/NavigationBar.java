@@ -31,92 +31,78 @@ public class NavigationBar {
     }
 
     public void applyConfig(@NonNull NavigationBarConfig config) {
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                String color = config.getColor();
-                String dividerColor = config.getDividerColor();
-                if (color != null) {
-                    applyColor(color, dividerColor);
-                }
-                String style = config.getStyle();
-                if (style != null) {
-                    applyStyle(style);
-                }
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            String color = config.getColor();
+            String dividerColor = config.getDividerColor();
+            if (color != null) {
+                applyColor(color, dividerColor);
+            }
+            String style = config.getStyle();
+            if (style != null) {
+                applyStyle(style);
+            }
+        });
     }
 
     public void getColor(@NonNull NonEmptyCallback<GetColorResult> callback) {
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                Window window = plugin.getActivity().getWindow();
-                int color = window.getNavigationBarColor();
-                String hex = formatColor(color);
-                callback.success(new GetColorResult(hex));
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            Window window = plugin.getActivity().getWindow();
+            int color = window.getNavigationBarColor();
+            String hex = formatColor(color);
+            callback.success(new GetColorResult(hex));
+        });
     }
 
     public void getStyle(@NonNull NonEmptyCallback<GetStyleResult> callback) {
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                Window window = plugin.getActivity().getWindow();
-                WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
-                boolean isLight = controller.isAppearanceLightNavigationBars();
-                callback.success(new GetStyleResult(isLight ? STYLE_LIGHT : STYLE_DARK));
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            Window window = plugin.getActivity().getWindow();
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+            boolean isLight = controller.isAppearanceLightNavigationBars();
+            callback.success(new GetStyleResult(isLight ? STYLE_LIGHT : STYLE_DARK));
+        });
     }
 
     public void hide(@NonNull EmptyCallback callback) {
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                Window window = plugin.getActivity().getWindow();
-                WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
-                controller.hide(WindowInsetsCompat.Type.navigationBars());
-                callback.success();
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            Window window = plugin.getActivity().getWindow();
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+            controller.hide(WindowInsetsCompat.Type.navigationBars());
+            callback.success();
+        });
     }
 
     public void setColor(@NonNull SetColorOptions options, @NonNull EmptyCallback callback) {
         String color = options.getColor();
         String dividerColor = options.getDividerColor();
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    applyColor(color, dividerColor);
-                    callback.success();
-                } catch (Exception exception) {
-                    callback.error(exception);
-                }
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            try {
+                applyColor(color, dividerColor);
+                callback.success();
+            } catch (Exception exception) {
+                callback.error(exception);
+            }
+        });
     }
 
     public void setStyle(@NonNull SetStyleOptions options, @NonNull EmptyCallback callback) {
         String style = options.getStyle();
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                try {
-                    applyStyle(style);
-                    callback.success();
-                } catch (Exception exception) {
-                    callback.error(exception);
-                }
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            try {
+                applyStyle(style);
+                callback.success();
+            } catch (Exception exception) {
+                callback.error(exception);
+            }
+        });
     }
 
     public void show(@NonNull EmptyCallback callback) {
-        plugin
-            .getActivity()
-            .runOnUiThread(() -> {
-                Window window = plugin.getActivity().getWindow();
-                WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
-                controller.show(WindowInsetsCompat.Type.navigationBars());
-                callback.success();
-            });
+        plugin.getActivity().runOnUiThread(() -> {
+            Window window = plugin.getActivity().getWindow();
+            WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, window.getDecorView());
+            controller.show(WindowInsetsCompat.Type.navigationBars());
+            callback.success();
+        });
     }
 
     private void applyColor(@NonNull String color, @androidx.annotation.Nullable String dividerColor) {

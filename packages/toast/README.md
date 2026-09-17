@@ -14,6 +14,7 @@ Capacitor plugin to show native toast notifications.
 - 🌐 **Zero-dependency web**: A self-contained web implementation with no additional peer dependencies.
 - 🧭 **Positioning**: Show toasts at the top, center or bottom of the screen.
 - ⏱️ **Durations**: Choose between a short and a long display duration.
+- 🤝 **Compatibility**: Works alongside the [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/), [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/) and [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/) plugins.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -163,6 +164,10 @@ This plugin offers an API very similar to the official [`@capacitor/toast`](http
 
 ## FAQ
 
+### How is this plugin different from other similar plugins?
+
+It shows native toast notifications on Android and iOS and ships a self-contained web implementation with no additional peer dependencies, so toasts work out of the box on every platform. You get typed enums for choosing a short or long duration and a top, center, or bottom position, all through a fully typed API that supports both CocoaPods and Swift Package Manager on iOS and is actively maintained against the latest Capacitor version. If you just need brief, non-blocking feedback anywhere your app runs, a single dependency covers the whole story.
+
 ### Why is my toast always shown at the bottom of the screen on Android?
 
 On Android 12 and newer, the operating system ignores the requested position and always shows toasts at the bottom of the screen. This is a system restriction and not a bug of this plugin.
@@ -189,9 +194,9 @@ Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless 
 
 ## Related Plugins
 
-- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
 - [Action Sheet](https://capawesome.io/docs/sdks/capacitor/action-sheet/): Show native action sheets.
 - [Badge](https://capawesome.io/docs/sdks/capacitor/badge/): Access and update the badge number of the app icon.
+- [Dialog](https://capawesome.io/docs/sdks/capacitor/dialog/): Show native alert, confirm, and prompt dialogs.
 - [Haptics](https://capawesome.io/docs/sdks/capacitor/haptics/): Provide haptic feedback such as impacts, notifications, and vibrations.
 
 ## Newsletter
