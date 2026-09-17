@@ -155,6 +155,31 @@ Add the `NSPrivacyAccessedAPICategoryUserDefaults` dictionary key to your [Priva
 
 We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_use_of_required_reason_api#4278401) as the reason for accessing the [`UserDefaults`](https://developer.apple.com/documentation/foundation/userdefaults) API.
 
+#### Swift Package Manager
+
+##### Package traits
+
+The Ionic Live Update Provider SDK is optional and is not included by default. If you use this plugin as a live update provider for Ionic Portals or Federated Capacitor, enable the `IonicProvider` package trait so that the SDK is linked into your app:
+
+```json
+{
+  "experimental": {
+    "ios": {
+      "spm": {
+        "swiftToolsVersion": "6.1",
+        "packageTraits": {
+          "@capawesome/capacitor-live-update": ["IonicProvider"]
+        }
+      }
+    }
+  }
+}
+```
+
+This trait is the Swift Package Manager equivalent of the `CapawesomeCapacitorLiveUpdate/IonicProvider` CocoaPods subspec. See [Ionic Live Update Provider SDK Integration](#ionic-live-update-provider-sdk-integration) for details.
+
+**Attention**: SPM trait support requires Capacitor CLI **8.3.0+** and Xcode **16.3+** (Swift 6.1+).
+
 ## Ionic Live Update Provider SDK Integration
 
 This plugin implements the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk) contract, so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. Federated Capacitor resolves the provider by the plugin name `LiveUpdate`. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
