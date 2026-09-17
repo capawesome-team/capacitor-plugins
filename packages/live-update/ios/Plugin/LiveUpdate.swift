@@ -599,7 +599,7 @@ import CommonCrypto
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
-        parameters["bundleId"] = getCurrentBundleId()
+        parameters["bundleId"] = options.getBundleId() ?? getCurrentBundleId()
         parameters["channelName"] = channel
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()

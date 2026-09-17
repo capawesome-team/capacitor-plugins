@@ -22,6 +22,7 @@ public final class LiveUpdateIonicManager: ProviderManager {
     private let channel: String?
     private let liveUpdate: LiveUpdate
     private let managerKey: String
+    private var syncedBundleId: String?
 
     /// Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
     /// that construct the manager directly and attach it to a Portal via
@@ -39,19 +40,15 @@ public final class LiveUpdateIonicManager: ProviderManager {
         self.appId = configuration["appId"] as? String
         self.channel = configuration["channel"] as? String
         self.liveUpdate = liveUpdate
-
-        // Restore the last synced bundle directory, if any.
-        if let persistedBundleId = UserDefaults.standard.string(forKey: lastSyncedBundleIdKey()) {
-            self.latestAppDirectory = liveUpdate.getBundleDirectory(bundleId: persistedBundleId)
-        }
+        restoreSyncedBundle()
     }
 
     public func sync() async throws -> (any ProviderSyncResult)? {
         do {
-            let result = try await liveUpdate.fetchLatestBundle(FetchLatestBundleOptions(appId: appId, channel: channel))
+            let result = try await liveUpdate.fetchLatestBundle(FetchLatestBundleOptions(appId: appId, bundleId: syncedBundleId, channel: channel))
 
             // No update available; nothing to report.
-            guard let bundleId = result.getBundleId() else {
+            guard let bundleId = result.getBundleId(), bundleId != syncedBundleId else {
                 return nil
             }
 
@@ -86,6 +83,7 @@ public final class LiveUpdateIonicManager: ProviderManager {
     }
 
     private func applySyncedBundle(bundleId: String, directory: URL) {
+        syncedBundleId = bundleId
         latestAppDirectory = directory
         UserDefaults.standard.set(bundleId, forKey: lastSyncedBundleIdKey())
     }
@@ -103,6 +101,17 @@ public final class LiveUpdateIonicManager: ProviderManager {
 
     private func lastSyncedBundleIdKey() -> String {
         return Self.userDefaultsPrefix + managerKey
+    }
+
+    /// Restores the last synced bundle, if it is still on disk, so the host can load it offline
+    /// and the next sync reports it as the bundle in use.
+    private func restoreSyncedBundle() {
+        guard let bundleId = UserDefaults.standard.string(forKey: lastSyncedBundleIdKey()),
+              let directory = liveUpdate.getBundleDirectory(bundleId: bundleId) else {
+            return
+        }
+        syncedBundleId = bundleId
+        latestAppDirectory = directory
     }
 }
 #endif

@@ -59,6 +59,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     private val channel: String?
     private val managerKey: String
     private val sharedPreferences: SharedPreferences
+    private var syncedBundleId: String? = null
 
     init {
         val managerKeyValue = configuration["managerKey"]
@@ -69,12 +70,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         appId = configuration["appId"] as? String
         channel = configuration["channel"] as? String
         sharedPreferences = context.applicationContext.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-        // Restore the last synced bundle directory, if any.
-        val persistedBundleId = sharedPreferences.getString(getLastSyncedBundleIdKey(), null)
-        if (persistedBundleId != null) {
-            latestAppDirectory = liveUpdate.getBundleDirectory(persistedBundleId)
-        }
+        restoreSyncedBundle()
     }
 
     override suspend fun sync(): ProviderSyncResult? {
@@ -82,7 +78,10 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
             val result = fetchLatestBundle()
 
             // No update available; nothing to report.
-            val bundleId = result.bundleId ?: return null
+            val bundleId = result.bundleId
+            if (bundleId == null || bundleId == syncedBundleId) {
+                return null
+            }
 
             // Bundle already on disk — just point latestAppDirectory at it and persist.
             val existingDirectory = liveUpdate.getBundleDirectory(bundleId)
@@ -104,6 +103,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     }
 
     private fun applySyncedBundle(bundleId: String, directory: File) {
+        syncedBundleId = bundleId
         latestAppDirectory = directory
         sharedPreferences.edit().putString(getLastSyncedBundleIdKey(), bundleId).apply()
     }
@@ -141,7 +141,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
 
     private suspend fun fetchLatestBundle(): FetchLatestBundleResult = suspendCoroutine { continuation ->
         liveUpdate.fetchLatestBundle(
-            FetchLatestBundleOptions(appId, channel),
+            FetchLatestBundleOptions(appId, syncedBundleId, channel),
             object : NonEmptyCallback<FetchLatestBundleResult> {
                 override fun success(result: FetchLatestBundleResult) = continuation.resume(result)
 
@@ -165,5 +165,16 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
             }
         }
         return map
+    }
+
+    /**
+     * Restores the last synced bundle, if it is still on disk, so the host can load it offline
+     * and the next sync reports it as the bundle in use.
+     */
+    private fun restoreSyncedBundle() {
+        val bundleId = sharedPreferences.getString(getLastSyncedBundleIdKey(), null) ?: return
+        val directory = liveUpdate.getBundleDirectory(bundleId) ?: return
+        syncedBundleId = bundleId
+        latestAppDirectory = directory
     }
 }

@@ -1013,6 +1013,7 @@ public class LiveUpdate {
             if (appId == null || appId.isEmpty()) {
                 throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
             }
+            String bundleId = options.getBundleId() == null ? getCurrentBundleId() : options.getBundleId();
             String channel = options.getChannel() == null ? getChannel() : options.getChannel();
             String url = new HttpUrl.Builder()
                 .scheme("https")
@@ -1024,7 +1025,7 @@ public class LiveUpdate {
                 .addPathSegment("latest")
                 .addQueryParameter("appVersionCode", getVersionCodeAsString())
                 .addQueryParameter("appVersionName", getVersionName())
-                .addQueryParameter("bundleId", getCurrentBundleId())
+                .addQueryParameter("bundleId", bundleId)
                 .addQueryParameter("channelName", channel)
                 .addQueryParameter("customId", preferences.getCustomId())
                 .addQueryParameter("deviceId", getDeviceId())
