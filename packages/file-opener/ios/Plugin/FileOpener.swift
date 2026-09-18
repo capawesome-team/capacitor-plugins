@@ -67,6 +67,9 @@ extension FileOpener: UIDocumentInteractionControllerDelegate {
         if viewController?.view.window?.isKeyWindow != true {
             viewController = FileOpener.keyWindow?.rootViewController
         }
+        while let presentedViewController = viewController?.presentedViewController, !presentedViewController.isBeingDismissed {
+            viewController = presentedViewController
+        }
         return viewController ?? UIViewController()
     }
 
