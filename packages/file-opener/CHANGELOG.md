@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`3b773d7a0e0029665dc9b2ae5f9bf69a43379439`](https://github.com/capawesome-team/capacitor-plugins/commit/3b773d7a0e0029665dc9b2ae5f9bf69a43379439) ([#1068](https://github.com/capawesome-team/capacitor-plugins/pull/1068)): fix(ios): present the file preview on the top-most presented view controller
+
 ## 8.0.4
 
 ### Patch Changes
