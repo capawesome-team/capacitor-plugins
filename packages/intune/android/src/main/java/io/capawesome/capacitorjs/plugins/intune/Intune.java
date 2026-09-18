@@ -191,13 +191,11 @@ public class Intune {
 
     public void decryptFile(@NonNull DecryptFileOptions options, @NonNull EmptyCallback callback) throws Exception {
         File file = new File(options.getPath());
-        String destination = options.getDestination();
-        if (destination != null) {
-            File destinationFile = new File(destination);
+        File destinationFile = options.getDestination() == null ? file : new File(options.getDestination());
+        if (!destinationFile.getCanonicalFile().equals(file.getCanonicalFile())) {
             copyFile(file, destinationFile);
-            file = destinationFile;
         }
-        MAMFileProtectionManager.protectForOID(file, UNMANAGED_ACCOUNT_ID);
+        MAMFileProtectionManager.protectForOID(destinationFile, UNMANAGED_ACCOUNT_ID);
         callback.success();
     }
 

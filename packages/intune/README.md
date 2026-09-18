@@ -578,11 +578,12 @@ decryptFile(options: DecryptFileOptions) => Promise<void>
 
 Decrypt a file that was encrypted by the Intune App SDK.
 
-Encrypted files can only be read through the Intune App SDK. Call this
-method before handing a file to other consumers such as the Filesystem
-plugin, a media player or an uploader.
+On iOS, encrypted files can only be read through the Intune App SDK.
+Call this method before handing a file to other consumers such as the
+Filesystem plugin, a media player or an uploader.
 
-On Android, the file is tagged with the unmanaged identity, which
+On Android, the app reads encrypted files transparently, so this method
+is rarely needed. The file is tagged with the unmanaged identity, which
 removes the encryption and takes the file out of the scope of a
 selective wipe.
 
@@ -739,14 +740,13 @@ protection policy requires file encryption (see
 `GetPolicyResult.fileEncryptionRequired`). The file is encrypted in
 place if the policy requires it. For a directory, all files it currently
 contains are protected; files added later must be protected separately.
-
-On Android, the Intune App SDK encrypts files automatically. This method
-tags the file or directory with the account so that it is in the scope
-of a selective wipe. Files added to a protected directory later inherit
-the protection.
-
-Encrypted files can only be read through the Intune App SDK. Use
+Encrypted files can only be read through the Intune App SDK, so use
 `decryptFile(...)` before reading them with other plugins.
+
+On Android, the Intune App SDK encrypts files automatically and the app
+reads them transparently. This method tags the file or directory with
+the account so that it is in the scope of a selective wipe. Files added
+to a protected directory later inherit the protection.
 
 Only available on Android and iOS.
 
@@ -1140,7 +1140,7 @@ Additional notes:
 - On Android, `fileEncryptionRequired` reflects whether file encryption is currently **in use** by the Intune App SDK, which is the closest equivalent the SDK exposes.
 - The `wipeRequested` event is persisted and replayed on the next app launch if no listener was registered when the wipe arrived. In rare cases the event may be delivered more than once, so make sure your wipe handler is idempotent.
 - On iOS, the Intune App SDK does not encrypt files on its own. Call `protectFile(...)` for every file that contains organization data. On Android, file encryption is automatic and `protectFile(...)` only tags the file with the account so that it is in the scope of a selective wipe.
-- Encrypted files can only be read through the Intune App SDK. Reading them with the Filesystem plugin or handing them to other native plugins (e.g. media players or uploaders) yields the encrypted content. Call `decryptFile(...)` first.
+- On iOS, encrypted files can only be read through the Intune App SDK. Reading them with the Filesystem plugin or handing them to other native plugins (e.g. media players or uploaders) yields the encrypted content. Call `decryptFile(...)` first. On Android, the app reads encrypted files transparently, so `decryptFile(...)` is rarely needed.
 - On Android, `isFileEncrypted(...)` reflects whether the file is tagged with a managed identity whose policy uses file encryption, since the Intune App SDK does not expose the encryption state of a single file.
 - Policy **enforcement** (PIN, copy/paste and screenshot restrictions, etc.) is performed automatically by the Intune App SDK once the native integration is in place. The JavaScript API exists for the parts that enforcement cannot do: enrolling accounts, reading configuration, adapting your UI to the policy, protecting files on iOS, and cleaning up web storage on selective wipe.
 

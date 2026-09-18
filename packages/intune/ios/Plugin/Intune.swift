@@ -99,12 +99,12 @@ import MSAL
 
     @objc public func decryptFile(_ options: DecryptFileOptions, completion: @escaping (_ error: Error?) -> Void) {
         do {
-            var path = options.path
-            if let destination = options.destination {
+            let path = options.path
+            let destination = options.destination ?? path
+            if (destination as NSString).standardizingPath != (path as NSString).standardizingPath {
                 try copyFile(atPath: path, toPath: destination)
-                path = destination
             }
-            try IntuneMAMFile.decryptFile(atPath: path)
+            try IntuneMAMFile.decryptFile(atPath: destination)
             completion(nil)
         } catch {
             completion(error)

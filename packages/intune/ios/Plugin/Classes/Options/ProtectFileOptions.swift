@@ -11,7 +11,7 @@ import Capacitor
     }
 
     private static func getAccountIdFromCall(_ call: CAPPluginCall) throws -> String {
-        guard let accountId = call.getString("accountId") else {
+        guard let accountId = call.getString("accountId"), !accountId.isEmpty else {
             throw CustomError.accountIdMissing
         }
         return accountId

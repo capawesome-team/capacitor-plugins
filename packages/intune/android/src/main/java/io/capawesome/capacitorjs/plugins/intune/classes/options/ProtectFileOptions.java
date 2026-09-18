@@ -31,7 +31,7 @@ public class ProtectFileOptions {
     @NonNull
     private static String getAccountIdFromCall(@NonNull PluginCall call) throws Exception {
         String accountId = call.getString("accountId");
-        if (accountId == null) {
+        if (accountId == null || accountId.isEmpty()) {
             throw CustomExceptions.ACCOUNT_ID_MISSING;
         }
         return accountId;

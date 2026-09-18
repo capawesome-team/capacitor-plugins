@@ -27,11 +27,12 @@ export interface IntunePlugin {
   /**
    * Decrypt a file that was encrypted by the Intune App SDK.
    *
-   * Encrypted files can only be read through the Intune App SDK. Call this
-   * method before handing a file to other consumers such as the Filesystem
-   * plugin, a media player or an uploader.
+   * On iOS, encrypted files can only be read through the Intune App SDK.
+   * Call this method before handing a file to other consumers such as the
+   * Filesystem plugin, a media player or an uploader.
    *
-   * On Android, the file is tagged with the unmanaged identity, which
+   * On Android, the app reads encrypted files transparently, so this method
+   * is rarely needed. The file is tagged with the unmanaged identity, which
    * removes the encryption and takes the file out of the scope of a
    * selective wipe.
    *
@@ -115,14 +116,13 @@ export interface IntunePlugin {
    * `GetPolicyResult.fileEncryptionRequired`). The file is encrypted in
    * place if the policy requires it. For a directory, all files it currently
    * contains are protected; files added later must be protected separately.
-   *
-   * On Android, the Intune App SDK encrypts files automatically. This method
-   * tags the file or directory with the account so that it is in the scope
-   * of a selective wipe. Files added to a protected directory later inherit
-   * the protection.
-   *
-   * Encrypted files can only be read through the Intune App SDK. Use
+   * Encrypted files can only be read through the Intune App SDK, so use
    * `decryptFile(...)` before reading them with other plugins.
+   *
+   * On Android, the Intune App SDK encrypts files automatically and the app
+   * reads them transparently. This method tags the file or directory with
+   * the account so that it is in the scope of a selective wipe. Files added
+   * to a protected directory later inherit the protection.
    *
    * Only available on Android and iOS.
    *
