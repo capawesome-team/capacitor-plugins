@@ -15,5 +15,6 @@ public class CustomExceptions {
         "NOT_ENROLLED",
         "No account with the given accountId is signed in or enrolled."
     );
+    public static final CustomException PATH_MISSING = new CustomException(null, "path must be provided.");
     public static final CustomException SCOPES_MISSING = new CustomException(null, "scopes must be provided.");
 }

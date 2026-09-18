@@ -97,6 +97,20 @@ import MSAL
         }
     }
 
+    @objc public func decryptFile(_ options: DecryptFileOptions, completion: @escaping (_ error: Error?) -> Void) {
+        do {
+            var path = options.path
+            if let destination = options.destination {
+                try copyFile(atPath: path, toPath: destination)
+                path = destination
+            }
+            try IntuneMAMFile.decryptFile(atPath: path)
+            completion(nil)
+        } catch {
+            completion(error)
+        }
+    }
+
     @objc public func getAppConfig(_ options: GetAppConfigOptions, completion: @escaping (_ result: GetAppConfigResult?, _ error: Error?) -> Void) {
         let appConfig = IntuneMAMAppConfigManager.instance().appConfig(forAccountId: options.accountId)
         var config: [String: [String]] = [:]
@@ -146,10 +160,24 @@ import MSAL
         completion(result, nil)
     }
 
+    @objc public func isFileEncrypted(_ options: IsFileEncryptedOptions, completion: @escaping (_ result: IsFileEncryptedResult?, _ error: Error?) -> Void) {
+        let encrypted = IntuneMAMFile.isFileEncrypted(atPath: options.path)
+        completion(IsFileEncryptedResult(encrypted: encrypted), nil)
+    }
+
     @objc public func loginAndEnrollAccount(completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
             IntuneMAMEnrollmentManager.instance().loginAndEnrollAccount(nil)
             completion(nil)
+        }
+    }
+
+    @objc public func protectFile(_ options: ProtectFileOptions, completion: @escaping (_ error: Error?) -> Void) {
+        do {
+            try protectPath(options.path, accountId: options.accountId)
+            completion(nil)
+        } catch {
+            completion(error)
         }
     }
 
@@ -168,6 +196,14 @@ import MSAL
     @objc public func unenrollAccount(_ options: UnenrollAccountOptions, completion: @escaping (_ error: Error?) -> Void) {
         IntuneMAMEnrollmentManager.instance().deRegisterAndUnenrollAccountId(options.accountId, withWipe: options.wipe)
         completion(nil)
+    }
+
+    private func copyFile(atPath sourcePath: String, toPath destinationPath: String) throws {
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: destinationPath) {
+            try fileManager.removeItem(atPath: destinationPath)
+        }
+        try fileManager.copyItem(atPath: sourcePath, toPath: destinationPath)
     }
 
     private func createAcquireTokenResult(_ result: MSALResult, completion: @escaping (_ result: AcquireTokenResult?, _ error: Error?) -> Void) {
@@ -275,6 +311,19 @@ import MSAL
             accountIds.append(accountIdToPersist)
         }
         userDefaults.set(accountIds, forKey: Intune.pendingWipeAccountIdsKey)
+    }
+
+    private func protectPath(_ path: String, accountId: String) throws {
+        var isDirectory: ObjCBool = false
+        FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory)
+        guard isDirectory.boolValue else {
+            try IntuneMAMFile.protect(atPath: path, forAccountId: accountId)
+            return
+        }
+        IntuneMAMFileProtectionManager.instance().protect(path, accountId: accountId)
+        for name in try FileManager.default.contentsOfDirectory(atPath: path) {
+            try protectPath((path as NSString).appendingPathComponent(name), accountId: accountId)
+        }
     }
 }
 

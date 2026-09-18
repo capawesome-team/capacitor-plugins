@@ -13,7 +13,8 @@ Unofficial Capacitor plugin for [Microsoft Intune](https://www.microsoft.com/en-
 The Capacitor Intune plugin integrates the Microsoft Intune App SDK for Mobile Application Management (MAM) into Capacitor apps. Here are some of the key features:
 
 - 🖥️ **Cross-platform**: Supports Android and iOS.
-- 🛡️ **App Protection Policies**: Automatic enforcement of PIN, encryption, copy/paste and screenshot restrictions after the native integration.
+- 🛡️ **App Protection Policies**: Automatic enforcement of PIN, copy/paste and screenshot restrictions after the native integration.
+- 🔐 **File Protection**: Encrypt, inspect and decrypt files through the Intune App SDK to honor the "Encrypt org data" policy on iOS, where the SDK does not encrypt files on its own.
 - 🔑 **MSAL**: Acquire tokens interactively or silently via the Microsoft Authentication Library.
 - 🧾 **Enrollment**: Register and enroll accounts in Mobile Application Management (MAM) — without device enrollment.
 - 📋 **Typed Policy Introspection**: Read the applied app protection policy as typed booleans to adapt your UI.
@@ -34,6 +35,7 @@ The Intune plugin is typically used in line-of-business apps that are distribute
 - **App protection without device enrollment**: Protect corporate data in your app on personal (BYOD) devices via Mobile Application Management (MAM).
 - **Conditional access**: Combine with Microsoft Entra conditional access policies that require an Intune-protected app.
 - **Policy-aware UI**: Read the applied app protection policy and hide or disable features (e.g. local export) that the policy does not allow.
+- **Encrypt organization data**: Protect recordings, downloads and exports on iOS when the app protection policy requires file encryption.
 - **Per-tenant configuration**: Read the application configuration that the organization's IT administrator has deployed for the signed-in account.
 - **Selective wipe**: Clean up the web layer storage of your app when the organization wipes its corporate data.
 - **Ionic enterprise migration**: Migrate from the discontinued Ionic enterprise Intune integration to a maintained, free plugin.
@@ -430,6 +432,29 @@ const applyPolicy = async () => {
 };
 ```
 
+### Protect files
+
+On iOS, the Intune App SDK does not encrypt files on its own. Protect every file that contains organization data, and decrypt it before handing it to other plugins or native components:
+
+```typescript
+import { Intune } from '@capawesome/capacitor-intune';
+
+const protectFile = async (path: string) => {
+  const { account } = await Intune.getEnrolledAccount();
+  if (!account) {
+    return;
+  }
+  await Intune.protectFile({ path, accountId: account.accountId });
+};
+
+const decryptFile = async (path: string, destination: string) => {
+  const { encrypted } = await Intune.isFileEncrypted({ path });
+  if (encrypted) {
+    await Intune.decryptFile({ path, destination });
+  }
+};
+```
+
 ### Read the app configuration
 
 Read the configuration values that the organization's IT administrator has deployed:
@@ -474,11 +499,14 @@ const registerWipeListener = async () => {
 
 * [`acquireToken(...)`](#acquiretoken)
 * [`acquireTokenSilent(...)`](#acquiretokensilent)
+* [`decryptFile(...)`](#decryptfile)
 * [`getAppConfig(...)`](#getappconfig)
 * [`getEnrolledAccount()`](#getenrolledaccount)
 * [`getPolicy(...)`](#getpolicy)
 * [`getSdkVersion()`](#getsdkversion)
+* [`isFileEncrypted(...)`](#isfileencrypted)
 * [`loginAndEnrollAccount()`](#loginandenrollaccount)
+* [`protectFile(...)`](#protectfile)
 * [`registerAndEnrollAccount(...)`](#registerandenrollaccount)
 * [`showDiagnosticConsole()`](#showdiagnosticconsole)
 * [`unenrollAccount(...)`](#unenrollaccount)
@@ -538,6 +566,33 @@ Only available on Android and iOS.
 **Returns:** <code>Promise&lt;<a href="#acquiretokenresult">AcquireTokenResult</a>&gt;</code>
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### decryptFile(...)
+
+```typescript
+decryptFile(options: DecryptFileOptions) => Promise<void>
+```
+
+Decrypt a file that was encrypted by the Intune App SDK.
+
+Encrypted files can only be read through the Intune App SDK. Call this
+method before handing a file to other consumers such as the Filesystem
+plugin, a media player or an uploader.
+
+On Android, the file is tagged with the unmanaged identity, which
+removes the encryption and takes the file out of the scope of a
+selective wipe.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#decryptfileoptions">DecryptFileOptions</a></code> |
+
+**Since:** 0.1.1
 
 --------------------
 
@@ -625,6 +680,32 @@ Only available on Android and iOS.
 --------------------
 
 
+### isFileEncrypted(...)
+
+```typescript
+isFileEncrypted(options: IsFileEncryptedOptions) => Promise<IsFileEncryptedResult>
+```
+
+Check whether a file is encrypted by the Intune App SDK.
+
+On Android, this reflects whether the file is tagged with a managed
+identity whose app protection policy uses file encryption, since the
+Intune App SDK for Android does not expose the encryption state of a
+single file.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                      |
+| ------------- | ------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#isfileencryptedoptions">IsFileEncryptedOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#isfileencryptedresult">IsFileEncryptedResult</a>&gt;</code>
+
+**Since:** 0.1.1
+
+--------------------
+
+
 ### loginAndEnrollAccount()
 
 ```typescript
@@ -640,6 +721,40 @@ On Android, use `acquireToken(...)` followed by
 Only available on iOS.
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### protectFile(...)
+
+```typescript
+protectFile(options: ProtectFileOptions) => Promise<void>
+```
+
+Protect a file or directory for the given account.
+
+On iOS, the Intune App SDK does not encrypt files on its own. Call this
+method for every file that contains organization data if the app
+protection policy requires file encryption (see
+`GetPolicyResult.fileEncryptionRequired`). The file is encrypted in
+place if the policy requires it. For a directory, all files it currently
+contains are protected; files added later must be protected separately.
+
+On Android, the Intune App SDK encrypts files automatically. This method
+tags the file or directory with the account so that it is in the scope
+of a selective wipe. Files added to a protected directory later inherit
+the protection.
+
+Encrypted files can only be read through the Intune App SDK. Use
+`decryptFile(...)` before reading them with other plugins.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#protectfileoptions">ProtectFileOptions</a></code> |
+
+**Since:** 0.1.1
 
 --------------------
 
@@ -853,6 +968,14 @@ Remove all listeners for this plugin.
 | **`scopes`**       | <code>string[]</code> | The scopes to request the access token for.                                  |                    | 0.1.0 |
 
 
+#### DecryptFileOptions
+
+| Prop              | Type                | Description                                                                                                                                                             | Since |
+| ----------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`destination`** | <code>string</code> | The absolute path or `file://` URI to write the decrypted copy to. If not provided, the file is decrypted in place. An existing file at the destination is overwritten. | 0.1.1 |
+| **`path`**        | <code>string</code> | The absolute path or `file://` URI of the encrypted file.                                                                                                               | 0.1.1 |
+
+
 #### GetAppConfigResult
 
 | Prop            | Type                                      | Description                                                                                                                             | Since |
@@ -916,6 +1039,28 @@ Remove all listeners for this plugin.
 | ---------------------- | --------------------------- | ------------------------------------------------------------------------- | ----- |
 | **`intuneSdkVersion`** | <code>string</code>         | The version of the Intune App SDK.                                        | 0.1.0 |
 | **`msalVersion`**      | <code>string \| null</code> | The version of the Microsoft Authentication Library (MSAL), if available. | 0.1.0 |
+
+
+#### IsFileEncryptedResult
+
+| Prop            | Type                 | Description                                                 | Since |
+| --------------- | -------------------- | ----------------------------------------------------------- | ----- |
+| **`encrypted`** | <code>boolean</code> | Whether or not the file is encrypted by the Intune App SDK. | 0.1.1 |
+
+
+#### IsFileEncryptedOptions
+
+| Prop       | Type                | Description                                              | Since |
+| ---------- | ------------------- | -------------------------------------------------------- | ----- |
+| **`path`** | <code>string</code> | The absolute path or `file://` URI of the file to check. | 0.1.1 |
+
+
+#### ProtectFileOptions
+
+| Prop            | Type                | Description                                                             | Since |
+| --------------- | ------------------- | ----------------------------------------------------------------------- | ----- |
+| **`accountId`** | <code>string</code> | The Microsoft Entra object ID (OID) of the account that owns the file.  | 0.1.1 |
+| **`path`**      | <code>string</code> | The absolute path or `file://` URI of the file or directory to protect. | 0.1.1 |
 
 
 #### RegisterAndEnrollAccountOptions
@@ -994,7 +1139,10 @@ Additional notes:
 - On Android, use `acquireToken(...)` followed by `registerAndEnrollAccount(...)` instead of `loginAndEnrollAccount()`. The Intune App SDK for Android does not provide its own login UI.
 - On Android, `fileEncryptionRequired` reflects whether file encryption is currently **in use** by the Intune App SDK, which is the closest equivalent the SDK exposes.
 - The `wipeRequested` event is persisted and replayed on the next app launch if no listener was registered when the wipe arrived. In rare cases the event may be delivered more than once, so make sure your wipe handler is idempotent.
-- Policy **enforcement** (PIN, encryption, copy/paste and screenshot restrictions, etc.) is performed automatically by the Intune App SDK once the native integration is in place. The JavaScript API exists for the parts that enforcement cannot do: enrolling accounts, reading configuration, adapting your UI to the policy, and cleaning up web storage on selective wipe.
+- On iOS, the Intune App SDK does not encrypt files on its own. Call `protectFile(...)` for every file that contains organization data. On Android, file encryption is automatic and `protectFile(...)` only tags the file with the account so that it is in the scope of a selective wipe.
+- Encrypted files can only be read through the Intune App SDK. Reading them with the Filesystem plugin or handing them to other native plugins (e.g. media players or uploaders) yields the encrypted content. Call `decryptFile(...)` first.
+- On Android, `isFileEncrypted(...)` reflects whether the file is tagged with a managed identity whose policy uses file encryption, since the Intune App SDK does not expose the encryption state of a single file.
+- Policy **enforcement** (PIN, copy/paste and screenshot restrictions, etc.) is performed automatically by the Intune App SDK once the native integration is in place. The JavaScript API exists for the parts that enforcement cannot do: enrolling accounts, reading configuration, adapting your UI to the policy, protecting files on iOS, and cleaning up web storage on selective wipe.
 
 ## Choosing between the MAM and MDM channel
 
@@ -1036,7 +1184,7 @@ The current Microsoft Intune App SDK for iOS requires iOS 17 or later. Microsoft
 
 ### Does this plugin enforce the app protection policies?
 
-Yes, automatically. Once the native integration (MAM build plugin on Android, SDK integration on iOS) is in place, the Intune App SDK enforces PIN, encryption, data transfer and screenshot restrictions itself. The JavaScript API of this plugin is for the parts enforcement cannot do: enrollment, introspection, and cleaning up web storage on selective wipe.
+Mostly, yes. Once the native integration (MAM build plugin on Android, SDK integration on iOS) is in place, the Intune App SDK enforces PIN, data transfer and screenshot restrictions itself. File encryption is automatic on Android, but on iOS the app must protect its files via `protectFile(...)`. The JavaScript API of this plugin is for the parts enforcement cannot do: enrollment, introspection, file protection on iOS, and cleaning up web storage on selective wipe.
 
 ### What is the difference between this plugin and the Managed Configurations plugin?
 
