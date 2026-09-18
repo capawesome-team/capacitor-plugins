@@ -25,6 +25,8 @@ import MobileCoreServices
             strongSelf.interactionController?.url = url
             strongSelf.interactionController?.uti = uti
             strongSelf.interactionController?.delegate = strongSelf
+            // Presenting a preview that is already visible raises an exception.
+            strongSelf.interactionController?.dismissPreview(animated: false)
             let isPresentPreview = strongSelf.interactionController?.presentPreview(animated: true)
             if isPresentPreview == false {
                 completion(false)
@@ -69,6 +71,10 @@ extension FileOpener: UIDocumentInteractionControllerDelegate {
         }
         while let presentedViewController = viewController?.presentedViewController, !presentedViewController.isBeingDismissed {
             viewController = presentedViewController
+        }
+        // A navigation controller would push the preview onto its stack instead of presenting it modally.
+        if let navigationController = viewController as? UINavigationController {
+            viewController = navigationController.topViewController
         }
         return viewController ?? UIViewController()
     }
