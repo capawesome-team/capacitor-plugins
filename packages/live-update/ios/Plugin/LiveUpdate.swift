@@ -436,7 +436,7 @@ import CommonCrypto
         }
     }
 
-    private func createTemporaryDirectory() throws -> URL {
+    private func createTemporaryDownloadDirectory() throws -> URL {
         let temporaryDirectory = buildDownloadsDirectoryUrl().appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
         return temporaryDirectory
@@ -546,7 +546,7 @@ import CommonCrypto
 
     private func downloadBundleOfTypeManifest(bundleId: String, url: String) async throws {
         // Create a temporary directory that is deleted once the download completed or failed
-        let temporaryDirectory = try createTemporaryDirectory()
+        let temporaryDirectory = try createTemporaryDownloadDirectory()
         defer { tryDeleteDirectory(temporaryDirectory) }
         // Download the latest manifest
         let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory, callback: nil)
@@ -579,7 +579,7 @@ import CommonCrypto
 
     private func downloadBundleOfTypeZip(bundleId: String, checksum: String?, signature: String?, url: String) async throws {
         // Create a temporary directory that is deleted once the download completed or failed
-        let temporaryDirectory = try createTemporaryDirectory()
+        let temporaryDirectory = try createTemporaryDownloadDirectory()
         defer { tryDeleteDirectory(temporaryDirectory) }
         let zipFile = temporaryDirectory.appendingPathComponent("bundle.zip")
         // Download the bundle

@@ -653,7 +653,7 @@ public class LiveUpdate {
         }
     }
 
-    private File createTemporaryDirectory() {
+    private File createTemporaryDownloadDirectory() {
         File temporaryDirectory = new File(buildDownloadsDirectory(), UUID.randomUUID().toString());
         temporaryDirectory.mkdirs();
         return temporaryDirectory;
@@ -870,7 +870,7 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         // Create a temporary directory that is deleted once the download completed or failed
-        File temporaryDirectory = createTemporaryDirectory();
+        File temporaryDirectory = createTemporaryDownloadDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
         try {
             // Download the latest manifest
@@ -958,7 +958,7 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         // Create a temporary directory that is deleted once the download completed or failed
-        File temporaryDirectory = createTemporaryDirectory();
+        File temporaryDirectory = createTemporaryDownloadDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
         File zipFile = new File(temporaryDirectory, "bundle.zip");
         try {
