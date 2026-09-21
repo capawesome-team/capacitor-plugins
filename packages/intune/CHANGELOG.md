@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+### Patch Changes
+
+- [`41e4d0bdd0952a5134f282c61c2f39aa3e546d12`](https://github.com/capawesome-team/capacitor-plugins/commit/41e4d0bdd0952a5134f282c61c2f39aa3e546d12) ([#1067](https://github.com/capawesome-team/capacitor-plugins/pull/1067)): feat: add `protectFile(...)`, `isFileEncrypted(...)` and `decryptFile(...)` methods
+
 ## 0.1.0
 
 ### Minor Changes
