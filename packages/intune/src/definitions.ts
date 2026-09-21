@@ -25,6 +25,23 @@ export interface IntunePlugin {
     options: AcquireTokenSilentOptions,
   ): Promise<AcquireTokenResult>;
   /**
+   * Decrypt a file that was encrypted by the Intune App SDK.
+   *
+   * On iOS, encrypted files can only be read through the Intune App SDK.
+   * Call this method before handing a file to other consumers such as the
+   * Filesystem plugin, a media player or an uploader.
+   *
+   * On Android, the app reads encrypted files transparently, so this method
+   * is rarely needed. The file is tagged with the unmanaged identity, which
+   * removes the encryption and takes the file out of the scope of a
+   * selective wipe.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.1
+   */
+  decryptFile(options: DecryptFileOptions): Promise<void>;
+  /**
    * Get the application configuration values that the organization's IT
    * administrator has deployed for the given account via the MAM channel.
    *
@@ -64,6 +81,21 @@ export interface IntunePlugin {
    */
   getSdkVersion(): Promise<GetSdkVersionResult>;
   /**
+   * Check whether a file is encrypted by the Intune App SDK.
+   *
+   * On Android, this reflects whether the file is tagged with a managed
+   * identity whose app protection policy uses file encryption, since the
+   * Intune App SDK for Android does not expose the encryption state of a
+   * single file.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.1
+   */
+  isFileEncrypted(
+    options: IsFileEncryptedOptions,
+  ): Promise<IsFileEncryptedResult>;
+  /**
    * Sign in and enroll an account using the login UI provided by the Intune
    * App SDK.
    *
@@ -75,6 +107,28 @@ export interface IntunePlugin {
    * @since 0.1.0
    */
   loginAndEnrollAccount(): Promise<void>;
+  /**
+   * Protect a file or directory for the given account.
+   *
+   * On iOS, the Intune App SDK does not encrypt files on its own. Call this
+   * method for every file that contains organization data if the app
+   * protection policy requires file encryption (see
+   * `GetPolicyResult.fileEncryptionRequired`). The file is encrypted in
+   * place if the policy requires it. For a directory, all files it currently
+   * contains are protected; files added later must be protected separately.
+   * Encrypted files can only be read through the Intune App SDK, so use
+   * `decryptFile(...)` before reading them with other plugins.
+   *
+   * On Android, the Intune App SDK encrypts files automatically and the app
+   * reads them transparently. This method tags the file or directory with
+   * the account so that it is in the scope of a selective wipe. Files added
+   * to a protected directory later inherit the protection.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.1
+   */
+  protectFile(options: ProtectFileOptions): Promise<void>;
   /**
    * Register an account for Mobile Application Management (MAM) and enroll
    * it in the Intune service.
@@ -305,6 +359,29 @@ export interface AppConfigConflict {
 }
 
 /**
+ * @since 0.1.1
+ */
+export interface DecryptFileOptions {
+  /**
+   * The absolute path or `file://` URI to write the decrypted copy to.
+   *
+   * If not provided, the file is decrypted in place. An existing file at
+   * the destination is overwritten.
+   *
+   * @since 0.1.1
+   * @example "file:///data/user/0/com.example.app/files/recording-plain.m4a"
+   */
+  destination?: string;
+  /**
+   * The absolute path or `file://` URI of the encrypted file.
+   *
+   * @since 0.1.1
+   * @example "file:///data/user/0/com.example.app/files/recording.m4a"
+   */
+  path: string;
+}
+
+/**
  * @since 0.1.0
  */
 export interface EnrolledAccount {
@@ -473,6 +550,31 @@ export interface GetSdkVersionResult {
 }
 
 /**
+ * @since 0.1.1
+ */
+export interface IsFileEncryptedOptions {
+  /**
+   * The absolute path or `file://` URI of the file to check.
+   *
+   * @since 0.1.1
+   * @example "file:///data/user/0/com.example.app/files/recording.m4a"
+   */
+  path: string;
+}
+
+/**
+ * @since 0.1.1
+ */
+export interface IsFileEncryptedResult {
+  /**
+   * Whether or not the file is encrypted by the Intune App SDK.
+   *
+   * @since 0.1.1
+   */
+  encrypted: boolean;
+}
+
+/**
  * @since 0.1.0
  */
 export interface PolicyChangeEvent {
@@ -483,6 +585,26 @@ export interface PolicyChangeEvent {
    * @since 0.1.0
    */
   accountId: string | null;
+}
+
+/**
+ * @since 0.1.1
+ */
+export interface ProtectFileOptions {
+  /**
+   * The Microsoft Entra object ID (OID) of the account that owns the file.
+   *
+   * @since 0.1.1
+   * @example "870ba1ef-6d94-4288-9f8e-000c04a92da2"
+   */
+  accountId: string;
+  /**
+   * The absolute path or `file://` URI of the file or directory to protect.
+   *
+   * @since 0.1.1
+   * @example "file:///data/user/0/com.example.app/files/recording.m4a"
+   */
+  path: string;
 }
 
 /**

@@ -7,6 +7,7 @@ import type {
   GetPolicyResult,
   GetSdkVersionResult,
   IntunePlugin,
+  IsFileEncryptedResult,
 } from './definitions';
 
 export class IntuneWeb extends WebPlugin implements IntunePlugin {
@@ -15,6 +16,10 @@ export class IntuneWeb extends WebPlugin implements IntunePlugin {
   }
 
   async acquireTokenSilent(): Promise<AcquireTokenResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async decryptFile(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 
@@ -34,7 +39,15 @@ export class IntuneWeb extends WebPlugin implements IntunePlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
+  async isFileEncrypted(): Promise<IsFileEncryptedResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
   async loginAndEnrollAccount(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async protectFile(): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 

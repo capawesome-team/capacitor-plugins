@@ -6,6 +6,7 @@ public enum CustomError: Error {
     case enrollmentFailed(message: String)
     case interactionCanceled
     case notEnrolled
+    case pathMissing
     case scopesMissing
     case tokenAcquisitionFailed(message: String)
     case unenrollFailed(message: String)
@@ -44,6 +45,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("The user canceled the sign-in interaction.", comment: "interactionCanceled")
         case .notEnrolled:
             return NSLocalizedString("No account with the given accountId is signed in or enrolled.", comment: "notEnrolled")
+        case .pathMissing:
+            return NSLocalizedString("path must be provided.", comment: "pathMissing")
         case .scopesMissing:
             return NSLocalizedString("scopes must be provided.", comment: "scopesMissing")
         case .tokenAcquisitionFailed(let message):
