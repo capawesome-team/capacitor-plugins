@@ -104,6 +104,7 @@ public class LiveUpdate {
     private final SharedPreferences.Editor webViewSettingsEditor;
 
     private final String bundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
+    private final String downloadsDirectory = "capawesome_capacitor_live_update_downloads";
     private final Handler rollbackHandler = new Handler(Looper.getMainLooper());
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
@@ -124,6 +125,9 @@ public class LiveUpdate {
 
         // Set the device ID on the HTTP client (after any potential config reset)
         this.httpClient.setDeviceId(getDeviceId());
+
+        // Delete the leftovers of downloads that were interrupted by a process kill
+        tryDeleteDownloadsDirectory();
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -558,14 +562,8 @@ public class LiveUpdate {
         return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
-    private File buildTemporaryDirectory() {
-        String fileName = UUID.randomUUID().toString();
-        return new File(plugin.getContext().getCacheDir(), fileName);
-    }
-
-    private File buildTemporaryZipFile() {
-        String fileName = UUID.randomUUID().toString() + ".zip";
-        return new File(plugin.getContext().getCacheDir(), fileName);
+    private File buildDownloadsDirectory() {
+        return new File(plugin.getContext().getCacheDir(), downloadsDirectory);
     }
 
     private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
@@ -653,9 +651,9 @@ public class LiveUpdate {
     }
 
     private File createTemporaryDirectory() {
-        File file = buildTemporaryDirectory();
-        file.mkdir();
-        return file;
+        File temporaryDirectory = new File(buildDownloadsDirectory(), UUID.randomUUID().toString());
+        temporaryDirectory.mkdirs();
+        return temporaryDirectory;
     }
 
     private void deleteBundleById(@NonNull String bundleId) {
@@ -679,6 +677,23 @@ public class LiveUpdate {
             }
         }
         file.delete();
+    }
+
+    @NonNull
+    private EmptyCallback deleteTemporaryDirectoryOnCompletion(@NonNull File temporaryDirectory, @NonNull EmptyCallback callback) {
+        return new EmptyCallback() {
+            @Override
+            public void success() {
+                deleteFileRecursively(temporaryDirectory);
+                callback.success();
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                deleteFileRecursively(temporaryDirectory);
+                callback.error(exception);
+            }
+        };
     }
 
     private void deleteUnusedBundles() {
@@ -851,10 +866,10 @@ public class LiveUpdate {
         @NonNull String downloadUrl,
         @NonNull EmptyCallback completionCallback
     ) {
+        // Create a temporary directory that is deleted once the download completed or failed
+        File temporaryDirectory = createTemporaryDirectory();
+        EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
         try {
-            // Create a temporary directory
-            File temporaryDirectory = createTemporaryDirectory();
-
             // Download the latest manifest
             downloadBundleFile(
                 downloadUrl,
@@ -904,31 +919,31 @@ public class LiveUpdate {
                                         try {
                                             // Add the bundle
                                             addBundleOfTypeManifest(bundleId, temporaryDirectory);
-                                            completionCallback.success();
+                                            callback.success();
                                         } catch (Exception e) {
-                                            completionCallback.error(e);
+                                            callback.error(e);
                                         }
                                     }
 
                                     @Override
                                     public void error(@NonNull Exception exception) {
-                                        completionCallback.error(exception);
+                                        callback.error(exception);
                                     }
                                 }
                             );
                         } catch (Exception e) {
-                            completionCallback.error(e);
+                            callback.error(e);
                         }
                     }
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        completionCallback.error(exception);
+                        callback.error(exception);
                     }
                 }
             );
         } catch (Exception e) {
-            completionCallback.error(e);
+            callback.error(e);
         }
     }
 
@@ -939,11 +954,14 @@ public class LiveUpdate {
         @NonNull String downloadUrl,
         @NonNull EmptyCallback completionCallback
     ) {
-        File file = buildTemporaryZipFile();
+        // Create a temporary directory that is deleted once the download completed or failed
+        File temporaryDirectory = createTemporaryDirectory();
+        EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
+        File zipFile = new File(temporaryDirectory, "bundle.zip");
         // Download the bundle
         downloadAndVerifyFile(
             downloadUrl,
-            file,
+            zipFile,
             checksum,
             signature,
             (downloadedBytes, totalBytes) -> {
@@ -955,20 +973,16 @@ public class LiveUpdate {
                 public void success() {
                     try {
                         // Add the bundle
-                        addBundleOfTypeZip(bundleId, file);
-                        // Delete the temporary file
-                        file.delete();
-                        completionCallback.success();
+                        addBundleOfTypeZip(bundleId, zipFile);
+                        callback.success();
                     } catch (Exception e) {
-                        completionCallback.error(e);
+                        callback.error(e);
                     }
                 }
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    // Delete the temporary file on error
-                    file.delete();
-                    completionCallback.error(exception);
+                    callback.error(exception);
                 }
             }
         );
@@ -1437,8 +1451,12 @@ public class LiveUpdate {
         }
     }
 
+    private void tryDeleteDownloadsDirectory() {
+        deleteFileRecursively(buildDownloadsDirectory());
+    }
+
     private File unzipFile(@NonNull File zipFile) throws IOException {
-        File destination = buildTemporaryDirectory();
+        File destination = new File(zipFile.getParentFile(), "bundle");
         String destinationPath = destination.getPath();
         ZipFile zip = new ZipFile(zipFile);
         // Clear stored Unix permissions to prevent EACCES errors on newer Android versions
