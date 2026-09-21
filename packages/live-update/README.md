@@ -55,7 +55,7 @@ The Live Update plugin is typically used to ship changes to users without going 
 
 - [Getting Started with Capawesome Cloud Live Updates](https://capawesome.io/docs/cloud/live-updates/setup/)
 - [Capacitor Live Updates: The Complete OTA Guide](https://capawesome.io/blog/capacitor-live-updates-guide/)
-- [Best OTA Update Tools for Capacitor (2026)](https://capawesome.io/blog/best-ota-update-tools-for-capacitor/)
+- [Best Live Update Tools for Capacitor (2026)](https://capawesome.io/blog/best-ota-update-tools-for-capacitor/)
 - [Capacitor Live Updates: Signing vs Encryption](https://capawesome.io/blog/capacitor-live-updates-end-to-end-encryption/)
 - [Capacitor Live Updates: Reliability & Uptime](https://capawesome.io/blog/capacitor-live-updates-reliability-and-uptime/)
 - [Capawesome vs. Capgo: Which Is More Reliable?](https://capawesome.io/blog/capawesome-cloud-vs-capgo-reliability/)
