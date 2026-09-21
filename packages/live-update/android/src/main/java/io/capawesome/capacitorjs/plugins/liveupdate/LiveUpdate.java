@@ -552,7 +552,7 @@ public class LiveUpdate {
 
     private void addBundleOfTypeZip(@NonNull String bundleId, @NonNull File zipFile) throws Exception {
         // Unzip the file to the bundle directory
-        File unzippedDirectory = unzipFile(zipFile);
+        File unzippedDirectory = unzipDownloadedBundle(zipFile);
         // Add the bundle
         addBundle(bundleId, unzippedDirectory);
     }
@@ -1462,7 +1462,7 @@ public class LiveUpdate {
         deleteFileRecursively(buildDownloadsDirectory());
     }
 
-    private File unzipFile(@NonNull File zipFile) throws IOException {
+    private File unzipDownloadedBundle(@NonNull File zipFile) throws IOException {
         File destination = new File(zipFile.getParentFile(), "bundle");
         String destinationPath = destination.getPath();
         ZipFile zip = new ZipFile(zipFile);

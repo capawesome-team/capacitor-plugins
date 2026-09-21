@@ -359,7 +359,7 @@ import CommonCrypto
 
     private func addBundleOfTypeZip(bundleId: String, zipFile: URL) async throws {
         // Unzip the bundle
-        let unzippedDirectory = try self.unzipFile(zipFile: zipFile)
+        let unzippedDirectory = try self.unzipDownloadedBundle(zipFile: zipFile)
         // Add the bundle
         try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
@@ -989,8 +989,8 @@ import CommonCrypto
         tryDeleteDirectory(buildDownloadsDirectoryUrl())
     }
 
-    private func unzipFile(zipFile: URL) throws -> URL {
-        let destinationDirectory = zipFile.deletingPathExtension()
+    private func unzipDownloadedBundle(zipFile: URL) throws -> URL {
+        let destinationDirectory = zipFile.deletingLastPathComponent().appendingPathComponent("bundle")
         try FileManager.default.createDirectory(at: destinationDirectory, withIntermediateDirectories: true, attributes: nil)
         try FileManager.default.unzipItem(at: zipFile, to: destinationDirectory)
         return destinationDirectory
