@@ -540,7 +540,10 @@ public class LiveUpdate {
 
         // Move the bundle directory to the bundles directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
-        indexHtmlFile.getParentFile().renameTo(bundleDirectory);
+        boolean moved = indexHtmlFile.getParentFile().renameTo(bundleDirectory);
+        if (!moved) {
+            throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_MOVE_FAILED);
+        }
     }
 
     private void addBundleOfTypeManifest(@NonNull String bundleId, @NonNull File directory) throws Exception {
@@ -958,34 +961,38 @@ public class LiveUpdate {
         File temporaryDirectory = createTemporaryDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
         File zipFile = new File(temporaryDirectory, "bundle.zip");
-        // Download the bundle
-        downloadAndVerifyFile(
-            downloadUrl,
-            zipFile,
-            checksum,
-            signature,
-            (downloadedBytes, totalBytes) -> {
-                DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
-                notifyDownloadBundleProgressListeners(event);
-            },
-            new EmptyCallback() {
-                @Override
-                public void success() {
-                    try {
-                        // Add the bundle
-                        addBundleOfTypeZip(bundleId, zipFile);
-                        callback.success();
-                    } catch (Exception e) {
-                        callback.error(e);
+        try {
+            // Download the bundle
+            downloadAndVerifyFile(
+                downloadUrl,
+                zipFile,
+                checksum,
+                signature,
+                (downloadedBytes, totalBytes) -> {
+                    DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
+                    notifyDownloadBundleProgressListeners(event);
+                },
+                new EmptyCallback() {
+                    @Override
+                    public void success() {
+                        try {
+                            // Add the bundle
+                            addBundleOfTypeZip(bundleId, zipFile);
+                            callback.success();
+                        } catch (Exception e) {
+                            callback.error(e);
+                        }
+                    }
+
+                    @Override
+                    public void error(@NonNull Exception exception) {
+                        callback.error(exception);
                     }
                 }
-
-                @Override
-                public void error(@NonNull Exception exception) {
-                    callback.error(exception);
-                }
-            }
-        );
+            );
+        } catch (Exception e) {
+            callback.error(e);
+        }
     }
 
     private void fetchLatestBundleInternal(
