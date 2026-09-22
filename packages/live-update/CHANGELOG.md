@@ -1,5 +1,11 @@
 # Changelog
 
+## 7.5.1
+
+### Patch Changes
+
+- [`29bcc7224a035d9b6cdd193944d892fa7a452ba2`](https://github.com/capawesome-team/capacitor-plugins/commit/29bcc7224a035d9b6cdd193944d892fa7a452ba2) ([#1077](https://github.com/capawesome-team/capacitor-plugins/pull/1077)): fix: delete temporary download files after the bundle was added or the download failed
+
 ## 7.5.0
 
 ### Minor Changes
