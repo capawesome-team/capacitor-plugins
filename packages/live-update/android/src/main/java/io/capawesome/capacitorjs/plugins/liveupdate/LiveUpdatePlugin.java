@@ -45,6 +45,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
+    public static final String ERROR_BUNDLE_MOVE_FAILED = "Bundle could not be moved.";
     public static final String ERROR_BUNDLE_NOT_FOUND = "bundle not found.";
     public static final String ERROR_CHECKSUM_CALCULATION_FAILED = "Failed to calculate checksum.";
     public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
