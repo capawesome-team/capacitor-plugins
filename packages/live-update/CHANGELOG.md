@@ -1,5 +1,13 @@
 # Changelog
 
+## 7.5.2
+
+### Patch Changes
+
+- [`ab3487cd284899bc7f9af106bf2d83aa67bdc9a6`](https://github.com/capawesome-team/capacitor-plugins/commit/ab3487cd284899bc7f9af106bf2d83aa67bdc9a6) ([#1082](https://github.com/capawesome-team/capacitor-plugins/pull/1082)): fix: validate HTTP status of file downloads, ignore the URL cache and overwrite leftover files from failed download attempts on iOS
+
+- [`ab3487cd284899bc7f9af106bf2d83aa67bdc9a6`](https://github.com/capawesome-team/capacitor-plugins/commit/ab3487cd284899bc7f9af106bf2d83aa67bdc9a6) ([#1082](https://github.com/capawesome-team/capacitor-plugins/pull/1082)): fix(android): replace deprecated Android APIs with AndroidX compat alternatives
+
 ## 7.5.1
 
 ### Patch Changes
