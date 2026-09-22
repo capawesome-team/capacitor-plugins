@@ -1,7 +1,5 @@
 appId: com.example.plugin
 name: Sync (clears app state first)
-env:
-  CHANNEL: default
 ---
 - launchApp:
     clearState: true
@@ -9,7 +7,7 @@ env:
     visible: "Capacitor Live Update"
     timeout: 10000
 - tapOn: "Channel"
-- inputText: ${CHANNEL}
+- inputText: "${typeof CHANNEL !== 'undefined' ? CHANNEL : 'default'}"
 - runFlow: _dismiss-keyboard.yaml
 - scrollUntilVisible:
     element:

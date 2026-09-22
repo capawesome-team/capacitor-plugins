@@ -26,7 +26,7 @@ Bring a merged `main` PR to one or more release branches, one PR per branch, and
 git fetch origin
 SQ=$(git log origin/main --grep "#<pr>" --format=%H -1)
 git worktree add -b <type>/<slug>-v<N> ../<repo>-worktrees/<package>-v<N> origin/v<N>.x.x
-cp CLAUDE.md ../<repo>-worktrees/<package>-v<N>/   # gitignored on main, not on every release branch: stage files explicitly there
+[ -f CLAUDE.md ] && cp CLAUDE.md ../<repo>-worktrees/<package>-v<N>/   # developer-local and gitignored on main; not ignored on every release branch, so stage files explicitly there
 cd ../<repo>-worktrees/<package>-v<N> && npm ci && npx patch-package
 ```
 

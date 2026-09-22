@@ -34,13 +34,13 @@ Drive the example app on both platforms through the plugin's download paths and 
 
 ## Flows
 
-Flows live in `flows/` next to this file and take parameters via `-e`:
+Flows live in `flows/` next to this file and take parameters via `-e`. `URL` is required for `download`; the other parameters fall back to sensible defaults inside the flows. Never add `env:` defaults to a flow: Maestro lets them override the `-e` values.
 
 ```
 maestro --device <id> test -e CHANNEL=default flows/sync.yaml
 maestro --device <id> test -e TITLE="Capacitor Live Update v2" flows/reload.yaml
 maestro --device <id> test -e TITLE="Capacitor Live Update v2" flows/kill-restart.yaml
-maestro --device <id> test -e BUNDLE_ID=x -e URL=... -e CHECKSUM=... -e ERROR="Checksum mismatch." flows/download.yaml
+maestro --device <id> test -e BUNDLE_ID=x -e URL=... -e CHECKSUM=... -e ERROR="Checksum mismatch." flows/download.yaml   # omit ERROR for a download that should succeed
 maestro --device <id> test flows/relaunch.yaml
 ```
 
@@ -50,7 +50,7 @@ Sync completes without a visible signal: poll the bundles directory with `script
 
 ## Matrix
 
-The checklist in `packages/live-update/docs/testing.md` is the source of truth for behavior; the rows below add the storage checks. Run each on both platforms and inspect with `scripts/device.sh <platform> inspect` after every step. "Clean" means the plugin-owned downloads folder is empty or absent and no stray files sit in the cache root.
+The checklist in `packages/live-update/docs/testing.md` is the source of truth for behavior; the rows below add the storage checks. Run each on both platforms and inspect with `scripts/device.sh <platform> inspect` after every step; `scripts/device.sh <platform> files` lists every installed bundle's files and title for the rows that assert bundle contents. "Clean" means the plugin-owned downloads folder is empty or absent and no stray files sit in the cache root.
 
 Rows marked "config" need a change to `plugins.LiveUpdate` in the example config and a redeploy of both apps; group them to save deploys.
 
@@ -61,15 +61,15 @@ Rows marked "config" need a change to `plugins.LiveUpdate` in the example config
 | Network failure | | `download` with an unreachable URL, `ERROR="Bundle could not be downloaded."` | toast, clean |
 | Malformed URL (Android) | | `download` with `URL="not a valid url"`, `ERROR=".*scheme.*"` | toast, clean |
 | Checksum mismatch | | `download` with a wrong `CHECKSUM` | "Checksum mismatch.", clean |
-| Nested ZIP | | `download` with the local nested ZIP and its real `CHECKSUM`, `set-next-bundle`, `reload` | bundle root holds `index.html`, clean |
-| Manifest, fresh | | `sync` on a manifest channel, poll, `reload` | manifest file present, clean |
-| Manifest, incremental | | second manifest bundle on the same channel, `sync-keep-state`, poll, `reload` | all assets present, clean |
+| Nested ZIP | | `download` with the local nested ZIP and its real `CHECKSUM` and no `ERROR`, poll, `set-next-bundle`, `reload` | `files` shows `index.html` at the bundle root, clean |
+| Manifest, fresh | | `sync` on a manifest channel, poll, `reload` | `files` shows the manifest file next to `index.html`, clean |
+| Manifest, incremental | | second manifest bundle on the same channel, `sync-keep-state`, poll, `reload` | `files` shows every asset of the new bundle, clean |
 | Signature ok | `publicKey` = key A | `sync` on a channel signed with key A, `reload` | new title, clean |
 | Wrong public key | `publicKey` = key B | `sync` on the channel signed with key A | "Signature verification failed.", no bundle, clean |
 | Invalid signature | `publicKey` set | `download` of the nested ZIP with `SIGNATURE=AAAA`, `ERROR="Signature verification failed."` | toast, clean |
-| Rollback without `ready()` | `readyTimeout: 10000` | `sync`, poll, `reload`, do not tap Ready, `expect-title` with the default title and `TIMEOUT=30000` | back on the default bundle |
+| Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, poll, `reload`, do not tap Ready, `expect-title` with the default title and `TIMEOUT=30000` | back on the default bundle |
 | No rollback with `ready()` | `readyTimeout: 10000` | `sync`, poll, `reload`, `ready`, wait longer than the timeout, `expect-title` with the new title | still on the new bundle, `inspect` agrees |
-| Rolled-back bundle blocked | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | after the rollback row, `sync` again, poll for 30 s | bundle not installed again, "Get Blocked Bundles" lists it |
+| Rolled-back bundle blocked | same deploy as the rollback row | after the rollback row, `ready` on the default bundle (the plugin records the block there), then `sync-keep-state`, poll for 30 s | bundle not installed again, "Get Blocked Bundles" lists it |
 | No error on 404 | `serverDomain: "example.com"` | `sync` | no error toast, no bundle |
 | Timeout error | `serverDomain: "10.255.255.1"`, `httpTimeout: 1000` | `sync` | "Request timed out." |
 | Background auto update | `autoUpdateStrategy: "background"` | `relaunch`, poll without tapping Sync; then send the app to the background and back | bundle appears on start and on resume |
