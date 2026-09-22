@@ -8,11 +8,14 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "acquireToken", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "acquireTokenSilent", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "decryptFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getAppConfig", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getEnrolledAccount", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getPolicy", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getSdkVersion", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "isFileEncrypted", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "loginAndEnrollAccount", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "protectFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "registerAndEnrollAccount", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showDiagnosticConsole", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unenrollAccount", returnType: CAPPluginReturnPromise)
@@ -54,6 +57,17 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
                 } else {
                     self.resolveCall(call, result)
                 }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
+    @objc func decryptFile(_ call: CAPPluginCall) {
+        do {
+            let options = try DecryptFileOptions(call)
+            implementation?.decryptFile(options, completion: { error in
+                self.handleCompletion(call, error)
             })
         } catch {
             rejectCall(call, error)
@@ -114,6 +128,21 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
         return hasListeners(Self.eventWipeRequested)
     }
 
+    @objc func isFileEncrypted(_ call: CAPPluginCall) {
+        do {
+            let options = try IsFileEncryptedOptions(call)
+            implementation?.isFileEncrypted(options, completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
     @objc func loginAndEnrollAccount(_ call: CAPPluginCall) {
         implementation?.loginAndEnrollAccount(completion: { error in
             self.handleCompletion(call, error)
@@ -134,6 +163,17 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
 
     public func notifyWipeRequestedListeners(_ event: WipeRequestedEvent) {
         notifyListeners(Self.eventWipeRequested, data: event.toJSObject() as? [String: Any], retainUntilConsumed: true)
+    }
+
+    @objc func protectFile(_ call: CAPPluginCall) {
+        do {
+            let options = try ProtectFileOptions(call)
+            implementation?.protectFile(options, completion: { error in
+                self.handleCompletion(call, error)
+            })
+        } catch {
+            rejectCall(call, error)
+        }
     }
 
     @objc func registerAndEnrollAccount(_ call: CAPPluginCall) {

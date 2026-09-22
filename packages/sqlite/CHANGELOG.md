@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Patch Changes
+
+- [`3ac8336e1f065372cb567d7d1d5448ebc6497f6e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/3ac8336e1f065372cb567d7d1d5448ebc6497f6e) ([#655](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/655)): feat(web): add the `vfs` option to `initialize(...)` to store databases in the OPFS SyncAccessHandle pool
+
 ## 0.4.0
 
 ### Minor Changes

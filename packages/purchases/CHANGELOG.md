@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2
+
+### Patch Changes
+
+- [`16e89c020813c45b8bcb9b80f2e621276591290e`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/16e89c020813c45b8bcb9b80f2e621276591290e) ([#652](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/652)): feat: add the `obfuscatedAccountId` and `obfuscatedProfileId` (Android) and `appAccountToken` (iOS) options to `purchaseProduct(...)`
+
 ## 0.4.1
 
 ### Patch Changes

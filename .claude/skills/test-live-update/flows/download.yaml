@@ -1,0 +1,47 @@
+appId: com.example.plugin
+name: Download a bundle via the form, optionally expecting an error toast
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Capacitor Live Update"
+    timeout: 10000
+- tapOn: "Bundle ID"
+- inputText: "${typeof BUNDLE_ID !== 'undefined' ? BUNDLE_ID : 'test-bundle'}"
+- runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    when:
+      true: ${typeof CHECKSUM !== 'undefined' && CHECKSUM != ''}
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: "Checksum"
+      - tapOn: "Checksum"
+      - inputText: ${CHECKSUM}
+      - runFlow: _dismiss-keyboard.yaml
+- scrollUntilVisible:
+    element:
+      text: "Download URL"
+- tapOn: "Download URL"
+- inputText: ${URL}
+- runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    when:
+      true: ${typeof SIGNATURE !== 'undefined' && SIGNATURE != ''}
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: "Signature"
+      - tapOn: "Signature"
+      - inputText: ${SIGNATURE}
+      - runFlow: _dismiss-keyboard.yaml
+- scrollUntilVisible:
+    element:
+      text: "Download Bundle"
+- tapOn: "Download Bundle"
+- runFlow:
+    when:
+      true: ${typeof ERROR !== 'undefined' && ERROR != ''}
+    commands:
+      - extendedWaitUntil:
+          visible: ${ERROR}
+          timeout: 30000

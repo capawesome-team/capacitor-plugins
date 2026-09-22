@@ -14,8 +14,11 @@ import io.capawesome.capacitorjs.plugins.intune.classes.events.PolicyChangeEvent
 import io.capawesome.capacitorjs.plugins.intune.classes.events.WipeRequestedEvent;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.AcquireTokenOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.AcquireTokenSilentOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.DecryptFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.GetAppConfigOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.GetPolicyOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.IsFileEncryptedOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.ProtectFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.RegisterAndEnrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.UnenrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.AcquireTokenResult;
@@ -23,6 +26,7 @@ import io.capawesome.capacitorjs.plugins.intune.classes.results.GetAppConfigResu
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetEnrolledAccountResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetPolicyResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetSdkVersionResult;
+import io.capawesome.capacitorjs.plugins.intune.classes.results.IsFileEncryptedResult;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.NonEmptyResultCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.Result;
@@ -83,6 +87,16 @@ public class IntunePlugin extends Plugin {
                 }
             };
             implementation.acquireTokenSilent(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void decryptFile(PluginCall call) {
+        try {
+            DecryptFileOptions options = new DecryptFileOptions(call);
+            implementation.decryptFile(options, createEmptyCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -175,6 +189,27 @@ public class IntunePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void isFileEncrypted(PluginCall call) {
+        try {
+            IsFileEncryptedOptions options = new IsFileEncryptedOptions(call);
+            NonEmptyResultCallback<IsFileEncryptedResult> callback = new NonEmptyResultCallback<>() {
+                @Override
+                public void success(@NonNull IsFileEncryptedResult result) {
+                    resolveCall(call, result);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+            implementation.isFileEncrypted(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void loginAndEnrollAccount(PluginCall call) {
         rejectCallAsUnimplemented(call);
     }
@@ -193,6 +228,16 @@ public class IntunePlugin extends Plugin {
 
     public void notifyWipeRequestedListeners(@NonNull WipeRequestedEvent event) {
         notifyListeners(EVENT_WIPE_REQUESTED, event.toJSObject(), true);
+    }
+
+    @PluginMethod
+    public void protectFile(PluginCall call) {
+        try {
+            ProtectFileOptions options = new ProtectFileOptions(call);
+            implementation.protectFile(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
     }
 
     @PluginMethod

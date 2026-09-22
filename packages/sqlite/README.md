@@ -273,7 +273,7 @@ The entry point name must follow the SQLite naming convention `sqlite3_<name>_in
 
 ### Web
 
-This plugin uses the [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) package to provide SQLite support on the web platform. It will automatically load the SQLite WASM module when needed.
+This plugin uses the [@sqlite.org/sqlite-wasm](https://www.npmjs.com/package/@sqlite.org/sqlite-wasm) package to provide SQLite support on the web platform. It will automatically load the SQLite WASM module when needed. By default, databases are stored via the `opfs` VFS, which requires the page to be cross-origin isolated, so your server must send the COOP/COEP headers shown below. If you cannot send these headers, see [Can I use the plugin on the web without the COOP/COEP headers?](#can-i-use-the-plugin-on-the-web-without-the-coopcoep-headers).
 
 #### Usage with Angular
 
@@ -743,7 +743,8 @@ initialized with default settings on the first call to any other method.
 On **Android** and **iOS**, this method is a no-op.
 
 On **Web**, this method allows you to pass a `Worker` instance
-that will be used for the SQLite WebAssembly initialization.
+that will be used for the SQLite WebAssembly initialization
+and to choose the VFS that stores the databases.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -897,9 +898,10 @@ This command can be used to reclaim unused space and optimize the database file.
 
 #### InitializeOptions
 
-| Prop         | Type                | Description                                                                                                                                                                                                                                | Since |
-| ------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`worker`** | <code>Worker</code> | The Worker to use for the SQLite WebAssembly initialization. If provided, this worker will be passed to the sqlite3Worker1Promiser method for initializing the SQLite WebAssembly module in the web implementation. Only available on Web. | 0.1.3 |
+| Prop         | Type                                | Description                                                                                                                                                                                                                                                                                                                                        | Default             | Since |
+| ------------ | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`worker`** | <code>Worker</code>                 | The Worker to use for the SQLite WebAssembly initialization. If provided, this worker will be passed to the sqlite3Worker1Promiser method for initializing the SQLite WebAssembly module in the web implementation. Only available on Web.                                                                                                         |                     | 0.1.3 |
+| **`vfs`**    | <code><a href="#vfs">Vfs</a></code> | The VFS (virtual file system) that stores the databases. `opfs-sahpool` requires no COOP/COEP headers but only works in a single tab. The provided `worker` must install the pool by calling `sqlite3.installOpfsSAHPoolVfs()` before `sqlite3.initWorker1API()`. Databases stored by one VFS are not visible to the other. Only available on Web. | <code>'opfs'</code> | 0.4.1 |
 
 
 #### OpenResult
@@ -980,6 +982,16 @@ This can include strings, numbers, arrays of numbers (for BLOBs), or `null`.
 **Attention:** On Web, arrays of numbers (BLOBs) are not supported.
 
 <code>string | number | number[] | null</code>
+
+
+#### Vfs
+
+The VFS (virtual file system) that stores the databases on Web.
+
+- `opfs`: Requires the page to be cross-origin isolated (COOP/COEP headers). Supports multiple tabs.
+- `opfs-sahpool`: Requires no COOP/COEP headers. Supports only a single tab.
+
+<code>'opfs' | 'opfs-sahpool'</code>
 
 </docgen-api>
 
@@ -1129,6 +1141,12 @@ This error occurs when OPFS (Origin Private File System) cannot be instantiated.
 'Cross-Origin-Opener-Policy': 'same-origin'
 ```
 
+Alternatively, use the `opfs-sahpool` VFS, which requires no headers (see [Can I use the plugin on the web without the COOP/COEP headers?](#can-i-use-the-plugin-on-the-web-without-the-coopcoep-headers)).
+
+##### `SQLITE_ERROR: sqlite3 result code 1: no such vfs: opfs-sahpool`
+
+This error occurs when `initialize()` was called with `vfs: 'opfs-sahpool'` but the pool is not available in the worker. Either the worker does not call `installOpfsSAHPoolVfs()` before `initWorker1API()`, or another tab of your app already holds the pool (see [Can I use the plugin on the web without the COOP/COEP headers?](#can-i-use-the-plugin-on-the-web-without-the-coopcoep-headers)).
+
 ##### `Sqlite.open()` never resolves in production
 
 If `open()` hangs or never resolves while working in dev mode, this is typically caused by missing COOP/COEP headers in your production deployment. You need to configure your production web server (Netlify, Vercel, Nginx, Apache, etc.) to send these headers:
@@ -1201,6 +1219,48 @@ On Android and Electron, only one SQL statement can be executed per `execute(...
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
 Yes, the plugin is framework-agnostic. It works in any Capacitor app regardless of the web framework, including Ionic with Angular, React, or Vue, as well as plain JavaScript projects. It also works with popular ORMs like Drizzle, Kysely and TypeORM, as described in the [ORMs](#orms) section.
+
+### Can I use the plugin on the web without the COOP/COEP headers?
+
+Yes. By default, the plugin stores databases in the `opfs` VFS, which requires the page to be [cross-origin isolated](https://developer.mozilla.org/en-US/docs/Web/API/Window/crossOriginIsolated) via the COOP/COEP headers shown in the [Installation](#web) section. If your server cannot send these headers, or sends `Cross-Origin-Embedder-Policy: credentialless`, which WebKit does not implement, you can use the [OPFS SyncAccessHandle Pool VFS](https://sqlite.org/wasm/doc/trunk/persistence.md#vfs-opfs-sahpool) instead. It requires no headers and is the fastest OPFS option, but it has the following trade-offs:
+
+- **Single tab**: The pool holds its files exclusively. Only one tab (or window) of your app can use the database at a time. Installing the pool in a second tab fails and `open()` rejects with `no such vfs: opfs-sahpool`.
+- **Separate storage**: Databases stored by the `opfs` VFS are not visible to the pool and vice versa. Switching the VFS does not migrate existing data.
+- **Back/forward cache**: A document restored from the back/forward cache no longer has a working pool. Terminate the worker on `pagehide` and reload the page on `pageshow` (see below).
+
+Create a worker file that is served as a static asset (for example, `src/assets/sqlite3-worker1-sahpool.mjs`) and installs the pool before initializing the Worker API:
+
+```js
+import sqlite3InitModule from '/assets/sqlite-wasm/index.mjs';
+
+const sqlite3 = await sqlite3InitModule();
+await sqlite3.installOpfsSAHPoolVfs();
+sqlite3.initWorker1API();
+```
+
+The pool has a default capacity of six files and each database needs at least two of them (database and journal file). Pass `initialCapacity` to `installOpfsSAHPoolVfs()` if you need more. With Vite, import `@sqlite.org/sqlite-wasm` in the worker instead and create it with `new Worker(new URL('./sqlite3-worker1-sahpool.mjs', import.meta.url), { type: 'module' })`.
+
+Then pass the worker and the VFS to `initialize()`:
+
+```typescript
+import { Capacitor } from '@capacitor/core';
+import { Sqlite } from '@capawesome-team/capacitor-sqlite';
+
+const initialize = async () => {
+  const isWeb = Capacitor.getPlatform() === 'web';
+  if (isWeb) {
+    const worker = new Worker('/assets/sqlite3-worker1-sahpool.mjs', { type: 'module' });
+    // Release the pool when the page is unloaded or enters the back/forward cache
+    window.addEventListener('pagehide', () => worker.terminate());
+    window.addEventListener('pageshow', (event) => {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+    await Sqlite.initialize({ worker, vfs: 'opfs-sahpool' });
+  }
+};
+```
 
 ## Related Plugins
 

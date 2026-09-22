@@ -31,6 +31,11 @@
 		CB000000000000000000000022 /* EnrollmentChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000021 /* EnrollmentChangeEvent.swift */; };
 		CB000000000000000000000024 /* PolicyChangeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000023 /* PolicyChangeEvent.swift */; };
 		CB000000000000000000000026 /* WipeRequestedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000025 /* WipeRequestedEvent.swift */; };
+		CB000000000000000000000028 /* IntuneHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000027 /* IntuneHelper.swift */; };
+		CB00000000000000000000002A /* DecryptFileOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF000000000000000000000029 /* DecryptFileOptions.swift */; };
+		CB00000000000000000000002C /* IsFileEncryptedOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF00000000000000000000002B /* IsFileEncryptedOptions.swift */; };
+		CB00000000000000000000002E /* ProtectFileOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF00000000000000000000002D /* ProtectFileOptions.swift */; };
+		CB000000000000000000000030 /* IsFileEncryptedResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF00000000000000000000002F /* IsFileEncryptedResult.swift */; };
 		CE000000000000000000000101 /* IntuneMAMSwift.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD000000000000000000000101 /* IntuneMAMSwift.xcframework */; };
 		CE000000000000000000000102 /* IntuneMAMSwiftStub.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = CD000000000000000000000102 /* IntuneMAMSwiftStub.xcframework */; };
 /* End PBXBuildFile section */
@@ -77,6 +82,11 @@
 		CF000000000000000000000021 /* EnrollmentChangeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnrollmentChangeEvent.swift; sourceTree = "<group>"; };
 		CF000000000000000000000023 /* PolicyChangeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyChangeEvent.swift; sourceTree = "<group>"; };
 		CF000000000000000000000025 /* WipeRequestedEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WipeRequestedEvent.swift; sourceTree = "<group>"; };
+		CF000000000000000000000027 /* IntuneHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntuneHelper.swift; sourceTree = "<group>"; };
+		CF000000000000000000000029 /* DecryptFileOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecryptFileOptions.swift; sourceTree = "<group>"; };
+		CF00000000000000000000002B /* IsFileEncryptedOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsFileEncryptedOptions.swift; sourceTree = "<group>"; };
+		CF00000000000000000000002D /* ProtectFileOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtectFileOptions.swift; sourceTree = "<group>"; };
+		CF00000000000000000000002F /* IsFileEncryptedResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IsFileEncryptedResult.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -132,6 +142,7 @@
 				CG000000000000000000000033 /* Enums */,
 				CG000000000000000000000034 /* Protocols */,
 				CF000000000000000000000001 /* Intune.swift */,
+				CF000000000000000000000027 /* IntuneHelper.swift */,
 				CF000000000000000000000003 /* IntunePlugin.swift */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
@@ -185,8 +196,11 @@
 			children = (
 				CF000000000000000000000009 /* AcquireTokenOptions.swift */,
 				CF00000000000000000000000B /* AcquireTokenSilentOptions.swift */,
+				CF000000000000000000000029 /* DecryptFileOptions.swift */,
 				CF00000000000000000000000D /* GetAppConfigOptions.swift */,
 				CF00000000000000000000000F /* GetPolicyOptions.swift */,
+				CF00000000000000000000002B /* IsFileEncryptedOptions.swift */,
+				CF00000000000000000000002D /* ProtectFileOptions.swift */,
 				CF000000000000000000000011 /* RegisterAndEnrollAccountOptions.swift */,
 				CF000000000000000000000013 /* UnenrollAccountOptions.swift */,
 			);
@@ -201,6 +215,7 @@
 				CF000000000000000000000019 /* GetEnrolledAccountResult.swift */,
 				CF00000000000000000000001B /* GetPolicyResult.swift */,
 				CF00000000000000000000001D /* GetSdkVersionResult.swift */,
+				CF00000000000000000000002F /* IsFileEncryptedResult.swift */,
 			);
 			path = Results;
 			sourceTree = "<group>";
@@ -427,6 +442,11 @@
 				CB000000000000000000000022 /* EnrollmentChangeEvent.swift in Sources */,
 				CB000000000000000000000024 /* PolicyChangeEvent.swift in Sources */,
 				CB000000000000000000000026 /* WipeRequestedEvent.swift in Sources */,
+				CB000000000000000000000028 /* IntuneHelper.swift in Sources */,
+				CB00000000000000000000002A /* DecryptFileOptions.swift in Sources */,
+				CB00000000000000000000002C /* IsFileEncryptedOptions.swift in Sources */,
+				CB00000000000000000000002E /* ProtectFileOptions.swift in Sources */,
+				CB000000000000000000000030 /* IsFileEncryptedResult.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

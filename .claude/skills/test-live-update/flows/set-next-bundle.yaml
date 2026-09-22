@@ -1,0 +1,7 @@
+appId: com.example.plugin
+name: Set the bundle from the Bundle ID input as next bundle
+---
+- scrollUntilVisible:
+    element:
+      text: "Set Next Bundle"
+- tapOn: "Set Next Bundle"

@@ -19,6 +19,8 @@ import com.microsoft.identity.client.SilentAuthenticationCallback;
 import com.microsoft.identity.client.exception.MsalException;
 import com.microsoft.identity.client.exception.MsalUserCancelException;
 import com.microsoft.intune.mam.client.app.MAMComponents;
+import com.microsoft.intune.mam.client.identity.MAMFileProtectionInfo;
+import com.microsoft.intune.mam.client.identity.MAMFileProtectionManager;
 import com.microsoft.intune.mam.client.identity.MAMPolicyManager;
 import com.microsoft.intune.mam.client.notification.MAMNotificationReceiverRegistry;
 import com.microsoft.intune.mam.policy.AppPolicy;
@@ -40,8 +42,11 @@ import io.capawesome.capacitorjs.plugins.intune.classes.events.PolicyChangeEvent
 import io.capawesome.capacitorjs.plugins.intune.classes.events.WipeRequestedEvent;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.AcquireTokenOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.AcquireTokenSilentOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.DecryptFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.GetAppConfigOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.GetPolicyOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.IsFileEncryptedOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.ProtectFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.RegisterAndEnrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.UnenrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.AcquireTokenResult;
@@ -49,8 +54,15 @@ import io.capawesome.capacitorjs.plugins.intune.classes.results.GetAppConfigResu
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetEnrolledAccountResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetPolicyResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetSdkVersionResult;
+import io.capawesome.capacitorjs.plugins.intune.classes.results.IsFileEncryptedResult;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.NonEmptyResultCallback;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -77,6 +89,8 @@ public class Intune {
     private static IMultipleAccountPublicClientApplication publicClientApplication;
 
     private static final String SHARED_PREFERENCES_NAME = "capawesome_capacitor_intune_events";
+
+    private static final String UNMANAGED_ACCOUNT_ID = "";
 
     @NonNull
     private final IntunePlugin plugin;
@@ -175,6 +189,16 @@ public class Intune {
         );
     }
 
+    public void decryptFile(@NonNull DecryptFileOptions options, @NonNull EmptyCallback callback) throws Exception {
+        File file = new File(options.getPath());
+        File destinationFile = options.getDestination() == null ? file : new File(options.getDestination());
+        if (!destinationFile.getCanonicalFile().equals(file.getCanonicalFile())) {
+            copyFile(file, destinationFile);
+        }
+        MAMFileProtectionManager.protectForOID(destinationFile, UNMANAGED_ACCOUNT_ID);
+        callback.success();
+    }
+
     public void getAppConfig(@NonNull GetAppConfigOptions options, @NonNull NonEmptyResultCallback<GetAppConfigResult> callback)
         throws Exception {
         MAMAppConfigManager appConfigManager = MAMComponents.get(MAMAppConfigManager.class);
@@ -221,6 +245,22 @@ public class Intune {
 
     public void getSdkVersion(@NonNull NonEmptyResultCallback<GetSdkVersionResult> callback) throws Exception {
         callback.success(new GetSdkVersionResult(BuildConfig.INTUNE_MAM_SDK_VERSION, PublicClientApplication.getSdkVersion()));
+    }
+
+    public void isFileEncrypted(@NonNull IsFileEncryptedOptions options, @NonNull NonEmptyResultCallback<IsFileEncryptedResult> callback)
+        throws Exception {
+        MAMFileProtectionInfo protectionInfo = MAMFileProtectionManager.getProtectionInfo(new File(options.getPath()));
+        String accountId = protectionInfo == null ? null : protectionInfo.getIdentityOID();
+        boolean encrypted =
+            accountId != null &&
+            !accountId.isEmpty() &&
+            MAMPolicyManager.getPolicyForIdentityOID(accountId).diagnosticIsFileEncryptionInUse();
+        callback.success(new IsFileEncryptedResult(encrypted));
+    }
+
+    public void protectFile(@NonNull ProtectFileOptions options, @NonNull EmptyCallback callback) throws Exception {
+        MAMFileProtectionManager.protectForOID(new File(options.getPath()), options.getAccountId());
+        callback.success();
     }
 
     public void registerAndEnrollAccount(@NonNull RegisterAndEnrollAccountOptions options, @NonNull EmptyCallback callback)
@@ -300,6 +340,16 @@ public class Intune {
                 }
             }
         );
+    }
+
+    private static void copyFile(@NonNull File source, @NonNull File destination) throws IOException {
+        try (InputStream inputStream = new FileInputStream(source); OutputStream outputStream = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, length);
+            }
+        }
     }
 
     private static void createPublicClientApplication(@NonNull Context context) {
