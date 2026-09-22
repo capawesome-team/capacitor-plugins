@@ -6,7 +6,7 @@
 
 - [`0c7c5e10`](https://github.com/capawesome-team/capacitor-plugins/commit/0c7c5e1082773893a909441b898d0828f55f6a7f) ([#1078](https://github.com/capawesome-team/capacitor-plugins/pull/1078)): fix: delete temporary download files after the bundle was added or the download failed
 
-* [`c28d427b`](https://github.com/capawesome-team/capacitor-plugins/commit/c28d427b3099bbe7734c3bdf1632194ac13ed606): fix(ios): `resetOnUpdate` configuration option only checked the `CFBundleVersion` but not the `CFBundleShortVersionString`
+- [`ad1f4399`](https://github.com/capawesome-team/capacitor-plugins/commit/ad1f43992d69a0b5b7c9c7d94ec9f0454e8d80c9) ([#874](https://github.com/capawesome-team/capacitor-plugins/pull/874)): fix(ios): widen Alamofire dependency range to allow newer 5.x
 
 ## 6.9.0
 
