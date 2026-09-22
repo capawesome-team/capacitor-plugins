@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.4.3
+
+### Patch Changes
+
+- [`2bdfcbe274557c28b9d4ff379edec80eec6765d8`](https://github.com/capawesome-team/capacitor-plugins/commit/2bdfcbe274557c28b9d4ff379edec80eec6765d8) ([#1072](https://github.com/capawesome-team/capacitor-plugins/pull/1072)): fix: delete temporary download files after the bundle was added or the download failed
+
 ## 8.4.2
 
 ### Patch Changes
