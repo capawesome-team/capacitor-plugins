@@ -1,0 +1,6 @@
+appId: com.example.plugin
+name: Wait until the given title is visible (no interaction)
+---
+- extendedWaitUntil:
+    visible: "${typeof TITLE !== 'undefined' ? TITLE : 'Capacitor Live Update'}"
+    timeout: "${typeof TIMEOUT !== 'undefined' ? TIMEOUT : 30000}"

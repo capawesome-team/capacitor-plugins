@@ -1,0 +1,10 @@
+appId: com.example.plugin
+name: Reload and assert the title
+---
+- scrollUntilVisible:
+    element:
+      text: "Reload"
+- tapOn: "Reload"
+- extendedWaitUntil:
+    visible: "${typeof TITLE !== 'undefined' ? TITLE : 'Capacitor Live Update v2'}"
+    timeout: 30000
