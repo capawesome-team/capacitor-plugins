@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.9.1
+
+### Patch Changes
+
+- [`0c7c5e10`](https://github.com/capawesome-team/capacitor-plugins/commit/0c7c5e1082773893a909441b898d0828f55f6a7f) ([#1078](https://github.com/capawesome-team/capacitor-plugins/pull/1078)): fix: delete temporary download files after the bundle was added or the download failed
+
+* [`c28d427b`](https://github.com/capawesome-team/capacitor-plugins/commit/c28d427b3099bbe7734c3bdf1632194ac13ed606): fix(ios): `resetOnUpdate` configuration option only checked the `CFBundleVersion` but not the `CFBundleShortVersionString`
+
 ## 6.9.0
 
 This release backports the Capacitor-6-compatible features and improvements from the 7.x and 8.x release lines. All changes are additive — the existing v6 API (including `enabled`, `location`, `resetOnUpdate`, `getBundle()`, `setBundle()`, and the default `readyTimeout`) is preserved.
