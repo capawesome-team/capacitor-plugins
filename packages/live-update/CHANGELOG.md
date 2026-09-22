@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.9.1
+
+### Patch Changes
+
+- [`0c7c5e10`](https://github.com/capawesome-team/capacitor-plugins/commit/0c7c5e1082773893a909441b898d0828f55f6a7f) ([#1078](https://github.com/capawesome-team/capacitor-plugins/pull/1078)): fix: delete temporary download files after the bundle was added or the download failed
+
+- [`ad1f4399`](https://github.com/capawesome-team/capacitor-plugins/commit/ad1f43992d69a0b5b7c9c7d94ec9f0454e8d80c9) ([#874](https://github.com/capawesome-team/capacitor-plugins/pull/874)): fix(ios): widen Alamofire dependency range to allow newer 5.x
+
 ## 6.9.0
 
 This release backports the Capacitor-6-compatible features and improvements from the 7.x and 8.x release lines. All changes are additive — the existing v6 API (including `enabled`, `location`, `resetOnUpdate`, `getBundle()`, `setBundle()`, and the default `readyTimeout`) is preserved.
