@@ -11,3 +11,11 @@ The following test cases should be covered when testing the plugin:
 - [ ] Verify that the correct timeout error is thrown when the server does not respond within the `timeout` period.
 - [ ] Verify that the `background` auto update strategy performs updates in the background on app start and resumes.
 - [ ] Verify that roll backed bundles are blocked from being applied again if `autoBlockRollBackedBundles` is set to true.
+- [ ] Verify that the live update is applied after calling `reload()`.
+- [ ] Verify that a ZIP bundle whose `index.html` sits in a subfolder is unwrapped and applied.
+- [ ] Verify that a manifest update reuses the unchanged files of the current bundle and the resulting bundle is complete.
+- [ ] Verify that the temporary download files are deleted after the bundle has been added (ZIP and manifest).
+- [ ] Verify that the temporary download files are deleted when a download fails (network error, malformed URL, checksum mismatch, signature verification failure).
+- [ ] Verify that leftovers of interrupted downloads are deleted on plugin load.
+
+The `test-live-update` skill in `.claude/skills/test-live-update` runs these cases with Maestro on the iOS simulator and the Android emulator.

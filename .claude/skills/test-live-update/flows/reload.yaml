@@ -1,0 +1,12 @@
+appId: com.example.plugin
+name: Reload and assert the title
+env:
+  TITLE: Capacitor Live Update v2
+---
+- scrollUntilVisible:
+    element:
+      text: "Reload"
+- tapOn: "Reload"
+- extendedWaitUntil:
+    visible: ${TITLE}
+    timeout: 30000

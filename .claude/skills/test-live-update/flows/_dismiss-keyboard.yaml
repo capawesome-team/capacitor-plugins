@@ -1,0 +1,12 @@
+appId: com.example.plugin
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: "Done"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - hideKeyboard

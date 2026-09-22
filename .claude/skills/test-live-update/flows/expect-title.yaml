@@ -1,0 +1,9 @@
+appId: com.example.plugin
+name: Wait until the given title is visible (no interaction)
+env:
+  TITLE: Capacitor Live Update
+  TIMEOUT: "30000"
+---
+- extendedWaitUntil:
+    visible: ${TITLE}
+    timeout: ${TIMEOUT}

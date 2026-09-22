@@ -1,0 +1,16 @@
+appId: com.example.plugin
+name: Sync (keeps app state)
+env:
+  CHANNEL: default
+---
+- launchApp
+- extendedWaitUntil:
+    visible: "Capacitor Live Update"
+    timeout: 10000
+- tapOn: "Channel"
+- inputText: ${CHANNEL}
+- runFlow: _dismiss-keyboard.yaml
+- scrollUntilVisible:
+    element:
+      text: "Sync"
+- tapOn: "Sync"

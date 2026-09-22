@@ -1,0 +1,10 @@
+appId: com.example.plugin
+name: Force-kill, restart and assert the title
+env:
+  TITLE: Capacitor Live Update v2
+---
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: ${TITLE}
+    timeout: 30000

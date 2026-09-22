@@ -1,0 +1,7 @@
+appId: com.example.plugin
+name: Call ready()
+---
+- scrollUntilVisible:
+    element:
+      text: "Ready"
+- tapOn: "Ready"

@@ -1,0 +1,8 @@
+appId: com.example.plugin
+name: Relaunch the app
+---
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: "Capacitor Live Update"
+    timeout: 10000
