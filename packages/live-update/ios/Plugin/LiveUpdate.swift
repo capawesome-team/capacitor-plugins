@@ -13,6 +13,7 @@ import CommonCrypto
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
+    private let downloadsDirectory = "capawesome_capacitor_live_update_downloads"
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -36,6 +37,9 @@ import CommonCrypto
 
         // Set the device ID on the HTTP client (after any potential config reset)
         self.httpClient.setDeviceId(getDeviceId())
+
+        // Delete the leftovers of downloads that were interrupted by a process kill
+        tryDeleteDownloadsDirectory()
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -355,7 +359,7 @@ import CommonCrypto
 
     private func addBundleOfTypeZip(bundleId: String, zipFile: URL) async throws {
         // Unzip the bundle
-        let unzippedDirectory = try self.unzipFile(zipFile: zipFile)
+        let unzippedDirectory = try self.unzipDownloadedBundle(zipFile: zipFile)
         // Add the bundle
         try self.addBundle(bundleId: bundleId, directory: unzippedDirectory)
     }
@@ -377,6 +381,10 @@ import CommonCrypto
     private func buildBundleURLFor(bundleId: String) -> URL {
         let url = libraryDirectoryUrl.appendingPathComponent(bundlesDirectory).appendingPathComponent(bundleId)
         return url
+    }
+
+    private func buildDownloadsDirectoryUrl() -> URL {
+        return cachesDirectoryUrl.appendingPathComponent(downloadsDirectory)
     }
 
     private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
@@ -428,8 +436,8 @@ import CommonCrypto
         }
     }
 
-    private func createTemporaryDirectory() throws -> URL {
-        let temporaryDirectory = cachesDirectoryUrl.appendingPathComponent(UUID().uuidString)
+    private func createTemporaryDownloadDirectory() throws -> URL {
+        let temporaryDirectory = buildDownloadsDirectoryUrl().appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: temporaryDirectory, withIntermediateDirectories: true, attributes: nil)
         return temporaryDirectory
     }
@@ -537,8 +545,9 @@ import CommonCrypto
     }
 
     private func downloadBundleOfTypeManifest(bundleId: String, url: String) async throws {
-        // Create a temporary directory
-        let temporaryDirectory = try createTemporaryDirectory()
+        // Create a temporary directory that is deleted once the download completed or failed
+        let temporaryDirectory = try createTemporaryDownloadDirectory()
+        defer { tryDeleteDirectory(temporaryDirectory) }
         // Download the latest manifest
         let latestManifestFile = try await downloadBundleFile(baseUrl: url, href: manifestFileName, directory: temporaryDirectory, callback: nil)
         let latestManifest = try loadManifest(file: latestManifestFile)
@@ -569,15 +578,17 @@ import CommonCrypto
     }
 
     private func downloadBundleOfTypeZip(bundleId: String, checksum: String?, signature: String?, url: String) async throws {
-        let timestamp = String(Int(Date().timeIntervalSince1970))
-        let temporaryZipFileUrl = self.cachesDirectoryUrl.appendingPathComponent(timestamp + ".zip")
+        // Create a temporary directory that is deleted once the download completed or failed
+        let temporaryDirectory = try createTemporaryDownloadDirectory()
+        defer { tryDeleteDirectory(temporaryDirectory) }
+        let zipFile = temporaryDirectory.appendingPathComponent("bundle.zip")
         // Download the bundle
-        try await downloadAndVerifyFile(url: url, file: temporaryZipFileUrl, checksum: checksum, signature: signature, callback: { progress in
+        try await downloadAndVerifyFile(url: url, file: zipFile, checksum: checksum, signature: signature, callback: { progress in
             let event = DownloadBundleProgressEvent(bundleId: bundleId, downloadedBytes: progress.completedUnitCount, totalBytes: progress.totalUnitCount)
             self.notifyDownloadBundleProgressListeners(event)
         })
         // Add the bundle
-        try await addBundleOfTypeZip(bundleId: bundleId, zipFile: temporaryZipFileUrl)
+        try await addBundleOfTypeZip(bundleId: bundleId, zipFile: zipFile)
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
@@ -963,8 +974,23 @@ import CommonCrypto
         }
     }
 
-    private func unzipFile(zipFile: URL) throws -> URL {
-        let destinationDirectory = zipFile.deletingPathExtension()
+    private func tryDeleteDirectory(_ url: URL) {
+        guard FileManager.default.fileExists(atPath: url.path) else {
+            return
+        }
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete directory: \(url.path)")
+        }
+    }
+
+    private func tryDeleteDownloadsDirectory() {
+        tryDeleteDirectory(buildDownloadsDirectoryUrl())
+    }
+
+    private func unzipDownloadedBundle(zipFile: URL) throws -> URL {
+        let destinationDirectory = zipFile.deletingLastPathComponent().appendingPathComponent("bundle")
         try FileManager.default.createDirectory(at: destinationDirectory, withIntermediateDirectories: true, attributes: nil)
         try FileManager.default.unzipItem(at: zipFile, to: destinationDirectory)
         return destinationDirectory
