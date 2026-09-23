@@ -221,6 +221,9 @@ The scanner captures one or more pages, applies perspective correction,
 and returns the file paths of the scanned images and, optionally, a
 combined PDF document.
 
+The scanner user interface is provided by the platform (Google's ML Kit
+flow on Android, VisionKit on iOS) and cannot be customized.
+
 The promise rejects with the `SCAN_CANCELED` error code if the user
 cancels the scan.
 
@@ -288,6 +291,10 @@ It brings the platform's native scanning experience to both Android (ML Kit) and
 ### Is document scanning available on the web?
 
 No. The `isAvailable(...)` and `scanDocument(...)` methods are only available on Android and iOS. On the web, both methods reject with an unimplemented error.
+
+### Can I customize the scanner UI?
+
+No. The plugin uses the scanner user interface of the platform (Google's ML Kit flow on Android, VisionKit on iOS) and does not draw any UI itself. Labels, buttons, icons and the scanning flow are defined by Google and Apple and therefore differ between the platforms. On Android, you can change the editing capabilities with the `androidScannerMode` option and allow the user to import an existing image with the `androidGalleryImportAllowed` option. On iOS, no options are available. If you want to suggest changes to the scanner UI, please report them to [Google](https://developers.google.com/ml-kit/community) or [Apple](https://feedbackassistant.apple.com/) directly.
 
 ### Why can't I limit the number of pages on iOS?
 
