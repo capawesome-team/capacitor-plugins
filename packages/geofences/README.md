@@ -49,6 +49,7 @@ The Geofences plugin is typically used whenever an app needs to react when a dev
 ## Guides
 
 - [Announcing the Capacitor Geofences Plugin](https://capawesome.io/blog/announcing-the-capacitor-geofences-plugin/): Monitor OS-managed regions on Android and iOS and get enter, exit, and dwell events, even after the app is killed.
+- [Why Are Your Geofences Not Triggering on iOS?](https://capawesome.io/blog/why-are-your-geofences-not-triggering-on-ios/): The iOS threshold rule, the already-inside case, permission levels, radius and reboot behavior, and how the queue preserves transitions.
 
 ## Installation
 
@@ -1129,7 +1130,7 @@ Android allows up to 100 geofences per app, iOS up to 20 regions (a hard limit o
 
 ### What radius should I use for a geofence?
 
-Apple recommends a radius of at least 200 meters, as smaller radii may not trigger transitions reliably. See the [Apple documentation](https://developer.apple.com/documentation/corelocation/monitoring-the-user-s-proximity-to-geographic-regions) for details. On Android, a radius of at least 100 meters is recommended. There is no fixed maximum radius on Android, while iOS clamps the radius to `maximumRegionMonitoringDistance`.
+Apple recommends a radius of at least 200 meters, as smaller radii may not trigger transitions reliably. See the [Apple documentation](https://developer.apple.com/documentation/corelocation/monitoring-the-user-s-proximity-to-geographic-regions) for details. On Android, a radius of at least 100 meters is recommended. There is no fixed maximum radius on Android, while iOS clamps the radius to `maximumRegionMonitoringDistance`. For the other reasons a geofence can stay silent on iOS, from the threshold rule to the permission level, see [Why Are Your Geofences Not Triggering on iOS?](https://capawesome.io/blog/why-are-your-geofences-not-triggering-on-ios/).
 
 ### Why does `addGeofences(...)` reject with a permission error?
 

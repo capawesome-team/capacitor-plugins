@@ -46,6 +46,7 @@ The Watch plugin is typically used whenever an app wants to extend its experienc
 
 - [Announcing the Capacitor Watch Plugin](https://capawesome.io/blog/announcing-the-capacitor-watch-plugin/): A tour of the three communication channels, the watch-side SDKs, and how the plugin behaves while your app is closed.
 - [How to Build a Wear OS App for Your Capacitor App](https://capawesome.io/blog/how-to-build-a-wear-os-app-for-your-capacitor-app/): Add a native Kotlin watch module and exchange messages, state, and transfers with this plugin.
+- [How to Build an Apple Watch App for Your Capacitor App](https://capawesome.io/blog/how-to-build-an-apple-watch-app-for-your-capacitor-app/): Add a native SwiftUI watch target, wire in the watchOS SDK, and exchange messages, state, and transfers with this plugin.
 
 ## Installation
 

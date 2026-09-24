@@ -51,6 +51,7 @@ The Background Geolocation plugin is typically used whenever an app needs to kno
 ## Guides
 
 - [Announcing the Capacitor Background Geolocation Plugin](https://capawesome.io/blog/announcing-the-capacitor-background-geolocation-plugin/): A tour of watch sessions, the native SQLite queue, and the HTTP upload pipeline.
+- [Why iOS Stops Sending Background Location Updates](https://capawesome.io/blog/why-ios-stops-background-location-updates/): Core Location's background rules mapped to the iOS options of this plugin, from the `location` background mode to automatic pausing.
 
 ## Installation
 
@@ -1306,7 +1307,7 @@ No. Only one watch session can be active at a time. The native location engine d
 
 The plugin deliberately does not include a motion-detection state machine that turns the GPS on and off based on accelerometer data. Instead, it exposes real tuning knobs: use a lower `accuracy` (e.g. `Accuracy.Balanced` instead of `Accuracy.High`), increase the `distanceFilter` to reduce the number of position updates and increase the `androidInterval` option on Android.
 
-On iOS, you can additionally enable the `iosPausesAutomatically` option so that the operating system pauses the position updates when the device is unlikely to move. Be aware of the trade-off: the operating system decides on its own when to pause and only resumes the position updates once the device has moved significantly again, so a watch session can stay silent for a long time. The plugin logs both the pause and the resume, but keeps the watch session active, which means that `isWatching()` still returns `true` while the position updates are paused.
+On iOS, you can additionally enable the `iosPausesAutomatically` option so that the operating system pauses the position updates when the device is unlikely to move. Be aware of the trade-off: the operating system decides on its own when to pause and only resumes the position updates once the device has moved significantly again, so a watch session can stay silent for a long time. The plugin logs both the pause and the resume, but keeps the watch session active, which means that `isWatching()` still returns `true` while the position updates are paused. [Why iOS Stops Sending Background Location Updates](https://capawesome.io/blog/why-ios-stops-background-location-updates/) covers this and the other Core Location rules that stop background updates on iOS.
 
 ### What happens if the user grants only approximate location?
 

@@ -48,6 +48,7 @@ The File Manager plugin is typically used whenever an app needs durable access t
 
 ## Guides
 
+- [Announcing the Capacitor File Manager Plugin](https://capawesome.io/blog/announcing-the-capacitor-file-manager-plugin/): What this plugin adds on top of `@capacitor/filesystem`: persisted folder access, directory operations with progress and cancellation, checksums, and a web implementation on the Origin Private File System.
 - [Android Scoped Storage in Capacitor Apps, Explained](https://capawesome.io/blog/android-scoped-storage-in-capacitor-apps/): Which directories still work without permissions, and how this plugin wraps the Storage Access Framework in persisted folder access.
 
 ## Installation
