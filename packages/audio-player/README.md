@@ -19,6 +19,8 @@ The Capacitor Audio Player plugin is one of the most complete audio playback sol
 - 🔂 **Loop Support**: Loop audio playback for continuous sound.
 - 📋 **Playlist Mode**: Play multiple tracks sequentially with native track advancement, even in the background.
 - 🎛️ **Media Session**: Control the playback from the system's media controls (e.g. notification and lock screen), even while the app is in the background.
+- ⏪ **Seek Buttons**: Display seek backward and seek forward buttons with a configurable offset in the system's media controls.
+- 🎨 **Customizable Icons**: Configure the media notification icons on Android to match your app's branding.
 - 🔊 **Volume Control**: Precise volume control from 0-100.
 - ⏩ **Playback Speed**: Adjustable playback rate with pitch preservation.
 - 🗂️ **Web Assets**: Support for web asset paths alongside file URIs and remote URLs.
@@ -123,12 +125,86 @@ Also, add the following permissions before or after the `application` tag:
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 ```
 
+#### Notification Icons
+
+If you want to use custom icons in the media notification (see [Configuration](#configuration)):
+
+1. Add your icons to `android/app/src/main/res/drawable/` (e.g., `ic_notification.png`)
+   - Icons should be single-color white with transparent background for best display
+   - Can use density-specific folders (`drawable-mdpi`, `drawable-hdpi`, etc.)
+
+2. Configure the plugin in `capacitor.config.ts`:
+   ```ts
+   const config: CapacitorConfig = {
+     plugins: {
+       AudioPlayer: {
+         smallIcon: 'ic_notification', // Matches ic_notification.png
+         seekBackwardIcon: 'ic_seek_backward_20', // Matches ic_seek_backward_20.png
+         seekForwardIcon: 'ic_seek_forward_20', // Matches ic_seek_forward_20.png
+       },
+     },
+   };
+   ```
+
+3. Run: `npx cap sync`
+
+On iOS, the playback controls on the lock screen and in the Control Center are rendered by the operating system and cannot be customized.
+
 ### iOS
 
 #### Capabilities
 
 If you want to play audio in the background, ensure `Background Modes` capability is enabled with `Audio, AirPlay, and Picture in Picture` in your Xcode project.
 See [Add a capability to a target](https://help.apple.com/xcode/mac/current/#/dev88ff319e7) for more information.
+
+## Configuration
+
+<docgen-config>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+| Prop                   | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Default                                                                                                                      | Since |
+| ---------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`seekBackwardIcon`** | <code>string</code> | The name of the drawable resource to use as the icon for the seek backward button in the media notification. The button is only displayed if a seek offset has been provided (see the `seekBackwardOffset` and `seekForwardOffset` options of the `play(...)` method). The resource name should not include the `R.drawable.` prefix or file extension. For example, if you have `res/drawable/ic_seek_backward.png`, set this to `"ic_seek_backward"`. If the resource is not found, the default icon is used. **Attention:** The icon should be white pixels on a transparent background. Otherwise, a white square or circle may be displayed instead of the icon. Only available on Android. | <code>"media3_icon_skip_back" (Media3 built-in icon, with a number badge for an offset of 5, 10, 15 or 30 seconds)</code>    | 8.5.0 |
+| **`seekForwardIcon`**  | <code>string</code> | The name of the drawable resource to use as the icon for the seek forward button in the media notification. The button is only displayed if a seek offset has been provided (see the `seekBackwardOffset` and `seekForwardOffset` options of the `play(...)` method). The resource name should not include the `R.drawable.` prefix or file extension. For example, if you have `res/drawable/ic_seek_forward.png`, set this to `"ic_seek_forward"`. If the resource is not found, the default icon is used. **Attention:** The icon should be white pixels on a transparent background. Otherwise, a white square or circle may be displayed instead of the icon. Only available on Android.    | <code>"media3_icon_skip_forward" (Media3 built-in icon, with a number badge for an offset of 5, 10, 15 or 30 seconds)</code> | 8.5.0 |
+| **`smallIcon`**        | <code>string</code> | The name of the drawable resource to use as the small icon in the media notification. The resource name should not include the `R.drawable.` prefix or file extension. For example, if you have `res/drawable/ic_notification.png`, set this to `"ic_notification"`. If the resource is not found, the default icon is used. **Attention:** The icon should be white pixels on a transparent background. Otherwise, a white square or circle may be displayed instead of the icon. Only available on Android.                                                                                                                                                                                    | <code>"media3_notification_small_icon" (Media3 built-in icon)</code>                                                         | 8.5.0 |
+
+### Examples
+
+In `capacitor.config.json`:
+
+```json
+{
+  "plugins": {
+    "AudioPlayer": {
+      "seekBackwardIcon": "ic_seek_backward",
+      "seekForwardIcon": "ic_seek_forward",
+      "smallIcon": "ic_notification"
+    }
+  }
+}
+```
+
+In `capacitor.config.ts`:
+
+```ts
+/// <reference types="@capawesome-team/capacitor-audio-player" />
+
+import { CapacitorConfig } from '@capacitor/cli';
+
+const config: CapacitorConfig = {
+  plugins: {
+    AudioPlayer: {
+      seekBackwardIcon: "ic_seek_backward",
+      seekForwardIcon: "ic_seek_forward",
+      smallIcon: "ic_notification",
+    },
+  },
+};
+
+export default config;
+```
+
+</docgen-config>
 
 ## Usage
 
@@ -302,6 +378,24 @@ const listenForPlaybackStateChanges = async () => {
 };
 ```
 
+Provide the `seekBackwardOffset` and `seekForwardOffset` options to display seek buttons instead of the previous and next track buttons, for example for podcasts or audiobooks:
+
+```typescript
+import { AudioPlayer } from '@capawesome-team/capacitor-audio-player';
+
+const playWithSeekButtons = async () => {
+  await AudioPlayer.play({
+    src: 'https://example.com/episode.mp3',
+    metadata: {
+      artist: 'Capawesome',
+      title: 'Episode 12',
+    },
+    seekBackwardOffset: 15000,
+    seekForwardOffset: 30000,
+  });
+};
+```
+
 ### Pause, resume and stop the playback
 
 Pause the playback and resume it later, or stop it entirely:
@@ -393,7 +487,6 @@ const isPlaying = async () => {
 * [`addListener('stop', ...)`](#addlistenerstop-)
 * [`addListener('trackChange', ...)`](#addlistenertrackchange-)
 * [Interfaces](#interfaces)
-* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -759,227 +852,10 @@ Called when the current track changes during playlist playback.
 
 | Prop           | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                         | Since |
 | -------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`blob`**     | <code><a href="#blob">Blob</a></code>                   | The audio file to play. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                                      | 8.4.0 |
+| **`blob`**     | <code>Blob</code>                                       | The audio file to play. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                                      | 8.4.0 |
 | **`metadata`** | <code><a href="#trackmetadata">TrackMetadata</a></code> | The metadata of the track, displayed in the system's media controls (e.g. notification and lock screen). Providing metadata activates the media session integration so that the playback can be controlled from the system's media controls, even while the app is in the background. On Android, this requires additional manifest entries. See the [documentation](https://capawesome.io/docs/sdks/capacitor/audio-player/) for more information. | 8.4.0 |
 | **`src`**      | <code>string</code>                                     | The path to the web asset file or a remote URL. Both web assets and remote URLs are supported on all platforms.                                                                                                                                                                                                                                                                                                                                     | 8.4.0 |
 | **`uri`**      | <code>string</code>                                     | The URI or path of the audio file to play. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                                       | 8.4.0 |
-
-
-#### Blob
-
-A file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on <a href="#blob">Blob</a>, inheriting blob functionality and expanding it to support files on the user's system.
-
-| Prop       | Type                |
-| ---------- | ------------------- |
-| **`size`** | <code>number</code> |
-| **`type`** | <code>string</code> |
-
-| Method          | Signature                                                                                                                  |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **arrayBuffer** | () =&gt; Promise&lt;<a href="#arraybuffer">ArrayBuffer</a>&gt;                                                             |
-| **slice**       | (start?: number \| undefined, end?: number \| undefined, contentType?: string \| undefined) =&gt; <a href="#blob">Blob</a> |
-| **stream**      | () =&gt; <a href="#readablestream">ReadableStream</a>                                                                      |
-| **text**        | () =&gt; Promise&lt;string&gt;                                                                                             |
-
-
-#### ArrayBuffer
-
-Represents a raw buffer of binary data, which is used to store data for the
-different typed arrays. ArrayBuffers cannot be read from or written to directly,
-but can be passed to a typed array or DataView Object to interpret the raw
-buffer as needed.
-
-| Prop             | Type                | Description                                                                     |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------- |
-| **`byteLength`** | <code>number</code> | Read-only. The length of the <a href="#arraybuffer">ArrayBuffer</a> (in bytes). |
-
-| Method    | Signature                                                                               | Description                                                     |
-| --------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| **slice** | (begin: number, end?: number \| undefined) =&gt; <a href="#arraybuffer">ArrayBuffer</a> | Returns a section of an <a href="#arraybuffer">ArrayBuffer</a>. |
-
-
-#### ReadableStream
-
-This Streams API interface represents a readable stream of byte data. The Fetch API offers a concrete instance of a <a href="#readablestream">ReadableStream</a> through the body property of a Response object.
-
-| Prop         | Type                 |
-| ------------ | -------------------- |
-| **`locked`** | <code>boolean</code> |
-
-| Method          | Signature                                                                                                                                                                                                                         |
-| --------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **cancel**      | (reason?: any) =&gt; Promise&lt;void&gt;                                                                                                                                                                                          |
-| **getReader**   | () =&gt; <a href="#readablestreamdefaultreader">ReadableStreamDefaultReader</a>&lt;R&gt;                                                                                                                                          |
-| **pipeThrough** | &lt;T&gt;(transform: <a href="#readablewritablepair">ReadableWritablePair</a>&lt;T, R&gt;, options?: <a href="#streampipeoptions">StreamPipeOptions</a> \| undefined) =&gt; <a href="#readablestream">ReadableStream</a>&lt;T&gt; |
-| **pipeTo**      | (dest: <a href="#writablestream">WritableStream</a>&lt;R&gt;, options?: <a href="#streampipeoptions">StreamPipeOptions</a> \| undefined) =&gt; Promise&lt;void&gt;                                                                |
-| **tee**         | () =&gt; [ReadableStream&lt;R&gt;, <a href="#readablestream">ReadableStream</a>&lt;R&gt;]                                                                                                                                         |
-
-
-#### ReadableStreamDefaultReader
-
-| Method          | Signature                                                                                                       |
-| --------------- | --------------------------------------------------------------------------------------------------------------- |
-| **read**        | () =&gt; Promise&lt;<a href="#readablestreamdefaultreadresult">ReadableStreamDefaultReadResult</a>&lt;R&gt;&gt; |
-| **releaseLock** | () =&gt; void                                                                                                   |
-
-
-#### ReadableStreamDefaultReadValueResult
-
-| Prop        | Type               |
-| ----------- | ------------------ |
-| **`done`**  | <code>false</code> |
-| **`value`** | <code>T</code>     |
-
-
-#### ReadableStreamDefaultReadDoneResult
-
-| Prop        | Type              |
-| ----------- | ----------------- |
-| **`done`**  | <code>true</code> |
-| **`value`** |                   |
-
-
-#### ReadableWritablePair
-
-| Prop           | Type                                                               | Description                                                                                                                                                                                                                                                                                                                                                                         |
-| -------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`readable`** | <code><a href="#readablestream">ReadableStream</a>&lt;R&gt;</code> |                                                                                                                                                                                                                                                                                                                                                                                     |
-| **`writable`** | <code><a href="#writablestream">WritableStream</a>&lt;W&gt;</code> | Provides a convenient, chainable way of piping this readable stream through a transform stream (or any other { writable, readable } pair). It simply pipes the stream into the writable side of the supplied pair, and returns the readable side for further use. Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader. |
-
-
-#### WritableStream
-
-This Streams API interface provides a standard abstraction for writing streaming data to a destination, known as a sink. This object comes with built-in backpressure and queuing.
-
-| Prop         | Type                 |
-| ------------ | -------------------- |
-| **`locked`** | <code>boolean</code> |
-
-| Method        | Signature                                                                                |
-| ------------- | ---------------------------------------------------------------------------------------- |
-| **abort**     | (reason?: any) =&gt; Promise&lt;void&gt;                                                 |
-| **getWriter** | () =&gt; <a href="#writablestreamdefaultwriter">WritableStreamDefaultWriter</a>&lt;W&gt; |
-
-
-#### WritableStreamDefaultWriter
-
-This Streams API interface is the object returned by <a href="#writablestream">WritableStream.getWriter</a>() and once created locks the &lt; writer to the <a href="#writablestream">WritableStream</a> ensuring that no other streams can write to the underlying sink.
-
-| Prop              | Type                                  |
-| ----------------- | ------------------------------------- |
-| **`closed`**      | <code>Promise&lt;undefined&gt;</code> |
-| **`desiredSize`** | <code>number \| null</code>           |
-| **`ready`**       | <code>Promise&lt;undefined&gt;</code> |
-
-| Method          | Signature                                |
-| --------------- | ---------------------------------------- |
-| **abort**       | (reason?: any) =&gt; Promise&lt;void&gt; |
-| **close**       | () =&gt; Promise&lt;void&gt;             |
-| **releaseLock** | () =&gt; void                            |
-| **write**       | (chunk: W) =&gt; Promise&lt;void&gt;     |
-
-
-#### StreamPipeOptions
-
-| Prop                | Type                                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------------- | --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`preventAbort`**  | <code>boolean</code>                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **`preventCancel`** | <code>boolean</code>                                |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| **`preventClose`**  | <code>boolean</code>                                | Pipes this readable stream to a given writable stream destination. The way in which the piping process behaves under various error conditions can be customized with a number of passed options. It returns a promise that fulfills when the piping process completes successfully, or rejects if any errors were encountered. Piping a stream will lock it for the duration of the pipe, preventing any other consumer from acquiring a reader. Errors and closures of the source and destination streams propagate as follows: An error in this source readable stream will abort destination, unless preventAbort is truthy. The returned promise will be rejected with the source's error, or with any error that occurs during aborting the destination. An error in destination will cancel this source readable stream, unless preventCancel is truthy. The returned promise will be rejected with the destination's error, or with any error that occurs during canceling the source. When this source readable stream closes, destination will be closed, unless preventClose is truthy. The returned promise will be fulfilled once this process completes, unless an error is encountered while closing the destination, in which case it will be rejected with that error. If destination starts out closed or closing, this source readable stream will be canceled, unless preventCancel is true. The returned promise will be rejected with an error indicating piping to a closed stream failed, or with any error that occurs during canceling the source. The signal option can be set to an <a href="#abortsignal">AbortSignal</a> to allow aborting an ongoing pipe operation via the corresponding AbortController. In this case, this source readable stream will be canceled, and destination aborted, unless the respective options preventCancel or preventAbort are set. |
-| **`signal`**        | <code><a href="#abortsignal">AbortSignal</a></code> |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-
-
-#### AbortSignal
-
-A signal object that allows you to communicate with a DOM request (such as a Fetch) and abort it if required via an AbortController object.
-
-| Prop          | Type                                                                                                            | Description                                                                                                               |
-| ------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| **`aborted`** | <code>boolean</code>                                                                                            | Returns true if this <a href="#abortsignal">AbortSignal</a>'s AbortController has signaled to abort, and false otherwise. |
-| **`onabort`** | <code>((this: <a href="#abortsignal">AbortSignal</a>, ev: <a href="#event">Event</a>) =&gt; any) \| null</code> |                                                                                                                           |
-
-| Method                  | Signature                                                                                                                                                                                                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **addEventListener**    | &lt;K extends "abort"&gt;(type: K, listener: (this: <a href="#abortsignal">AbortSignal</a>, ev: AbortSignalEventMap[K]) =&gt; any, options?: boolean \| <a href="#addeventlisteneroptions">AddEventListenerOptions</a> \| undefined) =&gt; void | Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched. The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture. When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET. When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners. When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed. The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture. |
-| **addEventListener**    | (type: string, listener: <a href="#eventlisteneroreventlistenerobject">EventListenerOrEventListenerObject</a>, options?: boolean \| <a href="#addeventlisteneroptions">AddEventListenerOptions</a> \| undefined) =&gt; void                     | Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched. The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture. When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET. When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners. When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed. The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture. |
-| **removeEventListener** | &lt;K extends "abort"&gt;(type: K, listener: (this: <a href="#abortsignal">AbortSignal</a>, ev: AbortSignalEventMap[K]) =&gt; any, options?: boolean \| <a href="#eventlisteneroptions">EventListenerOptions</a> \| undefined) =&gt; void       | Removes the event listener in target's event listener list with the same type, callback, and options.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **removeEventListener** | (type: string, listener: <a href="#eventlisteneroreventlistenerobject">EventListenerOrEventListenerObject</a>, options?: boolean \| <a href="#eventlisteneroptions">EventListenerOptions</a> \| undefined) =&gt; void                           | Removes the event listener in target's event listener list with the same type, callback, and options.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-
-
-#### AbortSignalEventMap
-
-| Prop          | Type                                    |
-| ------------- | --------------------------------------- |
-| **`"abort"`** | <code><a href="#event">Event</a></code> |
-
-
-#### Event
-
-An event which takes place in the DOM.
-
-| Prop                   | Type                                                        | Description                                                                                                                                                                                                                                                |
-| ---------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`bubbles`**          | <code>boolean</code>                                        | Returns true or false depending on how event was initialized. True if event goes through its target's ancestors in reverse tree order, and false otherwise.                                                                                                |
-| **`cancelBubble`**     | <code>boolean</code>                                        |                                                                                                                                                                                                                                                            |
-| **`cancelable`**       | <code>boolean</code>                                        | Returns true or false depending on how event was initialized. Its return value does not always carry meaning, but true can indicate that part of the operation during which event was dispatched, can be canceled by invoking the preventDefault() method. |
-| **`composed`**         | <code>boolean</code>                                        | Returns true or false depending on how event was initialized. True if event invokes listeners past a ShadowRoot node that is the root of its target, and false otherwise.                                                                                  |
-| **`currentTarget`**    | <code><a href="#eventtarget">EventTarget</a> \| null</code> | Returns the object whose event listener's callback is currently being invoked.                                                                                                                                                                             |
-| **`defaultPrevented`** | <code>boolean</code>                                        | Returns true if preventDefault() was invoked successfully to indicate cancelation, and false otherwise.                                                                                                                                                    |
-| **`eventPhase`**       | <code>number</code>                                         | Returns the event's phase, which is one of NONE, CAPTURING_PHASE, AT_TARGET, and BUBBLING_PHASE.                                                                                                                                                           |
-| **`isTrusted`**        | <code>boolean</code>                                        | Returns true if event was dispatched by the user agent, and false otherwise.                                                                                                                                                                               |
-| **`returnValue`**      | <code>boolean</code>                                        |                                                                                                                                                                                                                                                            |
-| **`srcElement`**       | <code><a href="#eventtarget">EventTarget</a> \| null</code> |                                                                                                                                                                                                                                                            |
-| **`target`**           | <code><a href="#eventtarget">EventTarget</a> \| null</code> | Returns the object to which event is dispatched (its target).                                                                                                                                                                                              |
-| **`timeStamp`**        | <code>number</code>                                         | Returns the event's timestamp as the number of milliseconds measured relative to the time origin.                                                                                                                                                          |
-| **`type`**             | <code>string</code>                                         | Returns the type of event, e.g. "click", "hashchange", or "submit".                                                                                                                                                                                        |
-| **`AT_TARGET`**        | <code>number</code>                                         |                                                                                                                                                                                                                                                            |
-| **`BUBBLING_PHASE`**   | <code>number</code>                                         |                                                                                                                                                                                                                                                            |
-| **`CAPTURING_PHASE`**  | <code>number</code>                                         |                                                                                                                                                                                                                                                            |
-| **`NONE`**             | <code>number</code>                                         |                                                                                                                                                                                                                                                            |
-
-| Method                       | Signature                                                                                    | Description                                                                                                                                                                                                                             |
-| ---------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **composedPath**             | () =&gt; EventTarget[]                                                                       | Returns the invocation target objects of event's path (objects on which listeners will be invoked), except for any nodes in shadow trees of which the shadow root's mode is "closed" that are not reachable from event's currentTarget. |
-| **initEvent**                | (type: string, bubbles?: boolean \| undefined, cancelable?: boolean \| undefined) =&gt; void |                                                                                                                                                                                                                                         |
-| **preventDefault**           | () =&gt; void                                                                                | If invoked when the cancelable attribute value is true, and while executing a listener for the event with passive set to false, signals to the operation that caused event to be dispatched that it needs to be canceled.               |
-| **stopImmediatePropagation** | () =&gt; void                                                                                | Invoking this method prevents event from reaching any registered event listeners after the current one finishes running and, when dispatched in a tree, also prevents event from reaching any other objects.                            |
-| **stopPropagation**          | () =&gt; void                                                                                | When dispatched in a tree, invoking this method prevents event from reaching any objects other than the current object.                                                                                                                 |
-
-
-#### EventTarget
-
-<a href="#eventtarget">EventTarget</a> is a DOM interface implemented by objects that can receive events and may have listeners for them.
-
-| Method                  | Signature                                                                                                                                                                                                                           | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **addEventListener**    | (type: string, listener: <a href="#eventlisteneroreventlistenerobject">EventListenerOrEventListenerObject</a> \| null, options?: boolean \| <a href="#addeventlisteneroptions">AddEventListenerOptions</a> \| undefined) =&gt; void | Appends an event listener for events whose type attribute value is type. The callback argument sets the callback that will be invoked when the event is dispatched. The options argument sets listener-specific options. For compatibility this can be a boolean, in which case the method behaves exactly as if the value was specified as options's capture. When set to true, options's capture prevents callback from being invoked when the event's eventPhase attribute value is BUBBLING_PHASE. When false (or not present), callback will not be invoked when event's eventPhase attribute value is CAPTURING_PHASE. Either way, callback will be invoked if event's eventPhase attribute value is AT_TARGET. When set to true, options's passive indicates that the callback will not cancel the event by invoking preventDefault(). This is used to enable performance optimizations described in § 2.8 Observing event listeners. When set to true, options's once indicates that the callback will only be invoked once after which the event listener will be removed. The event listener is appended to target's event listener list and is not appended if it has the same type, callback, and capture. |
-| **dispatchEvent**       | (event: <a href="#event">Event</a>) =&gt; boolean                                                                                                                                                                                   | Dispatches a synthetic event event to target and returns true if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| **removeEventListener** | (type: string, callback: <a href="#eventlisteneroreventlistenerobject">EventListenerOrEventListenerObject</a> \| null, options?: boolean \| <a href="#eventlisteneroptions">EventListenerOptions</a> \| undefined) =&gt; void       | Removes the event listener in target's event listener list with the same type, callback, and options.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-
-
-#### EventListener
-
-
-#### EventListenerObject
-
-| Method          | Signature                                    |
-| --------------- | -------------------------------------------- |
-| **handleEvent** | (evt: <a href="#event">Event</a>) =&gt; void |
-
-
-#### AddEventListenerOptions
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`once`**    | <code>boolean</code> |
-| **`passive`** | <code>boolean</code> |
-
-
-#### EventListenerOptions
-
-| Prop          | Type                 |
-| ------------- | -------------------- |
-| **`capture`** | <code>boolean</code> |
 
 
 #### TrackMetadata
@@ -1022,18 +898,20 @@ An event which takes place in the DOM.
 
 #### PlayOptions
 
-| Prop             | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Default          | Since |
-| ---------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`blob`**       | <code><a href="#blob">Blob</a></code>                   | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                          |                  | 0.0.1 |
-| **`loop`**       | <code>boolean</code>                                    | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                                 |                  | 0.0.1 |
-| **`metadata`**   | <code><a href="#trackmetadata">TrackMetadata</a></code> | The metadata of the track, displayed in the system's media controls (e.g. notification and lock screen). Providing metadata activates the media session integration so that the playback can be controlled from the system's media controls, even while the app is in the background. On Android, this requires additional manifest entries. See the [documentation](https://capawesome.io/docs/sdks/capacitor/audio-player/) for more information. This option is ignored when `tracks` is provided. |                  | 8.4.0 |
-| **`position`**   | <code>number</code>                                     | The position to start playback from (in milliseconds).                                                                                                                                                                                                                                                                                                                                                                                                                                                |                  | 0.0.1 |
-| **`rate`**       | <code>number</code>                                     | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Must be greater than `0`. Only available on Android, iOS and Web.                                                                                                                                                                                                                                                                                                             | <code>1.0</code> | 8.2.0 |
-| **`startIndex`** | <code>number</code>                                     | The 0-based index of the track to start playback from. Only meaningful when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                     | <code>0</code>   | 8.4.0 |
-| **`tracks`**     | <code>AudioTrack[]</code>                               | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                                                                                                                                                                                                                                                                                     |                  | 8.4.0 |
-| **`src`**        | <code>string</code>                                     | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms.                                                                                                                                                                                                                                                                     |                  | 0.1.2 |
-| **`uri`**        | <code>string</code>                                     | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                             |                  | 0.0.1 |
-| **`volume`**     | <code>number</code>                                     | The volume level to set (0-100).                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>100</code> | 0.0.1 |
+| Prop                     | Type                                                    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Default          | Since |
+| ------------------------ | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`blob`**               | <code>Blob</code>                                       | The audio file to play. If both `blob` and `src` are provided, `blob` takes priority. Only available on Web.                                                                                                                                                                                                                                                                                                                                                                                          |                  | 0.0.1 |
+| **`loop`**               | <code>boolean</code>                                    | Whether to loop the audio playback. This option is ignored when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                                 |                  | 0.0.1 |
+| **`metadata`**           | <code><a href="#trackmetadata">TrackMetadata</a></code> | The metadata of the track, displayed in the system's media controls (e.g. notification and lock screen). Providing metadata activates the media session integration so that the playback can be controlled from the system's media controls, even while the app is in the background. On Android, this requires additional manifest entries. See the [documentation](https://capawesome.io/docs/sdks/capacitor/audio-player/) for more information. This option is ignored when `tracks` is provided. |                  | 8.4.0 |
+| **`position`**           | <code>number</code>                                     | The position to start playback from (in milliseconds).                                                                                                                                                                                                                                                                                                                                                                                                                                                |                  | 0.0.1 |
+| **`rate`**               | <code>number</code>                                     | The playback rate to use. Values between 0.5 and 2.0 are recommended. Other values may not be supported on all devices. Must be greater than `0`. Only available on Android, iOS and Web.                                                                                                                                                                                                                                                                                                             | <code>1.0</code> | 8.2.0 |
+| **`seekBackwardOffset`** | <code>number</code>                                     | The offset in milliseconds for the seek backward button in the system's media controls. If provided, the seek backward button is displayed instead of the previous track button, since the system's media controls only have one slot on each side of the play button. Must be greater than `0`. Only applies if the media session is active (see the `metadata` option).                                                                                                                             |                  | 8.5.0 |
+| **`seekForwardOffset`**  | <code>number</code>                                     | The offset in milliseconds for the seek forward button in the system's media controls. If provided, the seek forward button is displayed instead of the next track button, since the system's media controls only have one slot on each side of the play button. Must be greater than `0`. Only applies if the media session is active (see the `metadata` option).                                                                                                                                   |                  | 8.5.0 |
+| **`startIndex`**         | <code>number</code>                                     | The 0-based index of the track to start playback from. Only meaningful when `tracks` is provided.                                                                                                                                                                                                                                                                                                                                                                                                     | <code>0</code>   | 8.4.0 |
+| **`tracks`**             | <code>AudioTrack[]</code>                               | A list of audio tracks to play sequentially. When provided, `blob`, `src`, and `uri` are ignored.                                                                                                                                                                                                                                                                                                                                                                                                     |                  | 8.4.0 |
+| **`src`**                | <code>string</code>                                     | The path to the web asset file to play. If both `blob` and `src` are provided, `blob` takes priority. If both `uri` and `src` are provided, `uri` takes priority. Both web assets and remote URLs are supported on all platforms.                                                                                                                                                                                                                                                                     |                  | 0.1.2 |
+| **`uri`**                | <code>string</code>                                     | The URI or path of the audio file to play. If both `uri` and `src` are provided, `uri` takes priority. Only available on Android and iOS.                                                                                                                                                                                                                                                                                                                                                             |                  | 0.0.1 |
+| **`volume`**             | <code>number</code>                                     | The volume level to set (0-100).                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | <code>100</code> | 0.0.1 |
 
 
 #### RemoveTrackOptions
@@ -1100,24 +978,6 @@ An event which takes place in the DOM.
 | **`index`** | <code>number</code> | The 0-based index of the new current track. | 8.4.0 |
 
 
-### Type Aliases
-
-
-#### ReadableStreamDefaultReadResult
-
-<code><a href="#readablestreamdefaultreadvalueresult">ReadableStreamDefaultReadValueResult</a>&lt;T&gt; | <a href="#readablestreamdefaultreaddoneresult">ReadableStreamDefaultReadDoneResult</a></code>
-
-
-#### EventListenerOrEventListenerObject
-
-<code><a href="#eventlistener">EventListener</a> | <a href="#eventlistenerobject">EventListenerObject</a></code>
-
-
-#### AbortSignal
-
-<code>unknown</code>
-
-
 ### Enums
 
 
@@ -1171,6 +1031,14 @@ This can happen when `play()` is called shortly after `stop()`, because the audi
 ### Can I use this plugin together with other audio plugins?
 
 Yes, the plugin is compatible with the [Audio Recorder](https://capawesome.io/docs/sdks/capacitor/audio-recorder/), [Speech Recognition](https://capawesome.io/docs/sdks/capacitor/speech-recognition/) and [Speech Synthesis](https://capawesome.io/docs/sdks/capacitor/speech-synthesis/) plugins. For example, you can play back a recording created with the Audio Recorder plugin. However, combining it with the [Media Session](https://capawesome.io/docs/sdks/capacitor/media-session/) plugin is not recommended. Use the built-in media session integration (see the `metadata` option of the `play(...)` method) instead, which handles the media controls natively, even when the web view is suspended while the app is in the background.
+
+### How can I display seek buttons in the system's media controls?
+
+Provide the `seekBackwardOffset` and `seekForwardOffset` options of the `play(...)` method with the desired offsets in milliseconds. The seek buttons are displayed instead of the previous and next track buttons, since the system's media controls only have one slot on each side of the play button. The options belong to the playback, so a playlist started without them displays the previous and next track buttons again. See the [Usage](#usage) section for an example.
+
+### Can I customize the notification icons on Android?
+
+Yes, use the `smallIcon`, `seekBackwardIcon` and `seekForwardIcon` configuration options to set the name of a drawable resource from your app's `res/drawable` directory. The icons should be single-color white with a transparent background for the best display. If a resource is not found, the default icon is used. The play, pause, previous track and next track buttons cannot be customized, as they are rendered by the operating system. See the [Configuration](#configuration) section for details.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
