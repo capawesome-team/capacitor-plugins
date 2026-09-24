@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.5.0
+
+### Minor Changes
+
+- [`7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10) ([#651](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/651)): feat(android): add the `smallIcon`, `seekBackwardIcon` and `seekForwardIcon` configuration options to customize the media notification icons
+
+- [`7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10) ([#651](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/651)): feat: add the `seekBackwardOffset` and `seekForwardOffset` options to `play(...)` to display seek buttons in the system's media controls
+
 ## 8.4.2
 
 ### Patch Changes
