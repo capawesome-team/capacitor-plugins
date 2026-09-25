@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.1
+
+### Patch Changes
+
+- [`26fa1fe708e2461b40c447eccad2b308865f44b3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/26fa1fe708e2461b40c447eccad2b308865f44b3) ([#659](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/659)): fix(ios, web): restart the current track via the previous track button of the media controls after 3 seconds or on the first track, and disable the next track button on the last track
+
 ## 8.5.0
 
 ### Minor Changes
