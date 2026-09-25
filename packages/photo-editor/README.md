@@ -25,6 +25,10 @@ The Photo Editor plugin is typically used whenever an app wants to hand a photo 
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Guides
+
+- [How to Take and Edit Photos in a Capacitor App](https://capawesome.io/blog/how-to-take-and-edit-photos-in-a-capacitor-app/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.

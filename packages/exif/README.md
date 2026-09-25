@@ -38,6 +38,10 @@ The Exif plugin is typically used whenever an app needs to work with photo metad
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Guides
+
+- [How to Take and Edit Photos in a Capacitor App](https://capawesome.io/blog/how-to-take-and-edit-photos-in-a-capacitor-app/)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
