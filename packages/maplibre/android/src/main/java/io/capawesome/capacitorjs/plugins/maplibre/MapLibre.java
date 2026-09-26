@@ -106,8 +106,10 @@ import org.maplibre.android.plugins.annotation.OnSymbolDragListener;
 import org.maplibre.android.plugins.annotation.Symbol;
 import org.maplibre.android.plugins.annotation.SymbolManager;
 import org.maplibre.android.plugins.annotation.SymbolOptions;
+import org.maplibre.android.style.expressions.Expression;
 import org.maplibre.android.style.layers.CircleLayer;
 import org.maplibre.android.style.layers.FillLayer;
+import org.maplibre.android.style.layers.HeatmapLayer;
 import org.maplibre.android.style.layers.Layer;
 import org.maplibre.android.style.layers.LineLayer;
 import org.maplibre.android.style.layers.Property;
@@ -747,55 +749,93 @@ public class MapLibre {
 
     @NonNull
     private Layer createLayer(@NonNull AddLayerOptions options) {
+        Expression filter = options.getFilter();
         LayerPaint paint = options.getPaint();
         List<PropertyValue<?>> properties = new ArrayList<>();
+        Layer layer;
         switch (options.getType()) {
             case "circle":
+                if (paint.getCircleBlur() != null) {
+                    properties.add(PropertyFactory.circleBlur(paint.getCircleBlur()));
+                }
                 if (paint.getCircleColor() != null) {
                     properties.add(PropertyFactory.circleColor(paint.getCircleColor()));
                 }
                 if (paint.getCircleOpacity() != null) {
-                    properties.add(PropertyFactory.circleOpacity(paint.getCircleOpacity().floatValue()));
+                    properties.add(PropertyFactory.circleOpacity(paint.getCircleOpacity()));
                 }
                 if (paint.getCircleRadius() != null) {
-                    properties.add(PropertyFactory.circleRadius(paint.getCircleRadius().floatValue()));
+                    properties.add(PropertyFactory.circleRadius(paint.getCircleRadius()));
                 }
                 if (paint.getCircleStrokeColor() != null) {
                     properties.add(PropertyFactory.circleStrokeColor(paint.getCircleStrokeColor()));
                 }
                 if (paint.getCircleStrokeWidth() != null) {
-                    properties.add(PropertyFactory.circleStrokeWidth(paint.getCircleStrokeWidth().floatValue()));
+                    properties.add(PropertyFactory.circleStrokeWidth(paint.getCircleStrokeWidth()));
                 }
-                return new CircleLayer(options.getLayerId(), options.getSourceId()).withProperties(
-                    properties.toArray(new PropertyValue<?>[0])
-                );
+                CircleLayer circleLayer = new CircleLayer(options.getLayerId(), options.getSourceId());
+                if (filter != null) {
+                    circleLayer.setFilter(filter);
+                }
+                layer = circleLayer;
+                break;
             case "fill":
                 if (paint.getFillColor() != null) {
                     properties.add(PropertyFactory.fillColor(paint.getFillColor()));
                 }
                 if (paint.getFillOpacity() != null) {
-                    properties.add(PropertyFactory.fillOpacity(paint.getFillOpacity().floatValue()));
+                    properties.add(PropertyFactory.fillOpacity(paint.getFillOpacity()));
                 }
                 if (paint.getFillOutlineColor() != null) {
                     properties.add(PropertyFactory.fillOutlineColor(paint.getFillOutlineColor()));
                 }
-                return new FillLayer(options.getLayerId(), options.getSourceId()).withProperties(
-                    properties.toArray(new PropertyValue<?>[0])
-                );
+                FillLayer fillLayer = new FillLayer(options.getLayerId(), options.getSourceId());
+                if (filter != null) {
+                    fillLayer.setFilter(filter);
+                }
+                layer = fillLayer;
+                break;
+            case "heatmap":
+                if (paint.getHeatmapColor() != null) {
+                    properties.add(PropertyFactory.heatmapColor(paint.getHeatmapColor()));
+                }
+                if (paint.getHeatmapIntensity() != null) {
+                    properties.add(PropertyFactory.heatmapIntensity(paint.getHeatmapIntensity()));
+                }
+                if (paint.getHeatmapOpacity() != null) {
+                    properties.add(PropertyFactory.heatmapOpacity(paint.getHeatmapOpacity()));
+                }
+                if (paint.getHeatmapRadius() != null) {
+                    properties.add(PropertyFactory.heatmapRadius(paint.getHeatmapRadius()));
+                }
+                if (paint.getHeatmapWeight() != null) {
+                    properties.add(PropertyFactory.heatmapWeight(paint.getHeatmapWeight()));
+                }
+                HeatmapLayer heatmapLayer = new HeatmapLayer(options.getLayerId(), options.getSourceId());
+                if (filter != null) {
+                    heatmapLayer.setFilter(filter);
+                }
+                layer = heatmapLayer;
+                break;
             default:
                 if (paint.getLineColor() != null) {
                     properties.add(PropertyFactory.lineColor(paint.getLineColor()));
                 }
                 if (paint.getLineOpacity() != null) {
-                    properties.add(PropertyFactory.lineOpacity(paint.getLineOpacity().floatValue()));
+                    properties.add(PropertyFactory.lineOpacity(paint.getLineOpacity()));
                 }
                 if (paint.getLineWidth() != null) {
-                    properties.add(PropertyFactory.lineWidth(paint.getLineWidth().floatValue()));
+                    properties.add(PropertyFactory.lineWidth(paint.getLineWidth()));
                 }
-                return new LineLayer(options.getLayerId(), options.getSourceId()).withProperties(
-                    properties.toArray(new PropertyValue<?>[0])
-                );
+                LineLayer lineLayer = new LineLayer(options.getLayerId(), options.getSourceId());
+                if (filter != null) {
+                    lineLayer.setFilter(filter);
+                }
+                layer = lineLayer;
+                break;
         }
+        layer.setProperties(properties.toArray(new PropertyValue<?>[0]));
+        return layer;
     }
 
     @NonNull

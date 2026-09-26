@@ -18,6 +18,7 @@ public class GeoJsonManager {
             throw CustomError.sourceNotFound
         }
         let layer = Self.createLayer(options, source)
+        layer.predicate = options.filter
         if let maxZoom = options.maxZoom {
             layer.maximumZoomLevel = Float(maxZoom)
         }
@@ -76,35 +77,41 @@ public class GeoJsonManager {
 
     private static func createCircleLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNCircleStyleLayer {
         let layer = MLNCircleStyleLayer(identifier: options.layerId, source: source)
-        layer.circleColor = Self.createExpression(options.paint?.circleColor)
-        layer.circleOpacity = Self.createExpression(options.paint?.circleOpacity)
-        layer.circleRadius = Self.createExpression(options.paint?.circleRadius)
-        layer.circleStrokeColor = Self.createExpression(options.paint?.circleStrokeColor)
-        layer.circleStrokeWidth = Self.createExpression(options.paint?.circleStrokeWidth)
+        layer.circleBlur = options.paint?.circleBlur
+        layer.circleColor = options.paint?.circleColor
+        layer.circleOpacity = options.paint?.circleOpacity
+        layer.circleRadius = options.paint?.circleRadius
+        layer.circleStrokeColor = options.paint?.circleStrokeColor
+        layer.circleStrokeWidth = options.paint?.circleStrokeWidth
         return layer
-    }
-
-    private static func createExpression(_ value: Any?) -> NSExpression? {
-        guard let value = value else {
-            return nil
-        }
-        return NSExpression(forConstantValue: value)
     }
 
     private static func createFillLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNFillStyleLayer {
         let layer = MLNFillStyleLayer(identifier: options.layerId, source: source)
-        layer.fillColor = Self.createExpression(options.paint?.fillColor)
-        layer.fillOpacity = Self.createExpression(options.paint?.fillOpacity)
-        layer.fillOutlineColor = Self.createExpression(options.paint?.fillOutlineColor)
+        layer.fillColor = options.paint?.fillColor
+        layer.fillOpacity = options.paint?.fillOpacity
+        layer.fillOutlineColor = options.paint?.fillOutlineColor
         return layer
     }
 
-    private static func createLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNStyleLayer {
+    private static func createHeatmapLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNHeatmapStyleLayer {
+        let layer = MLNHeatmapStyleLayer(identifier: options.layerId, source: source)
+        layer.heatmapColor = options.paint?.heatmapColor
+        layer.heatmapIntensity = options.paint?.heatmapIntensity
+        layer.heatmapOpacity = options.paint?.heatmapOpacity
+        layer.heatmapRadius = options.paint?.heatmapRadius
+        layer.heatmapWeight = options.paint?.heatmapWeight
+        return layer
+    }
+
+    private static func createLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNVectorStyleLayer {
         switch options.type {
         case .circle:
             return Self.createCircleLayer(options, source)
         case .fill:
             return Self.createFillLayer(options, source)
+        case .heatmap:
+            return Self.createHeatmapLayer(options, source)
         case .line:
             return Self.createLineLayer(options, source)
         }
@@ -113,10 +120,10 @@ public class GeoJsonManager {
     private static func createLineLayer(_ options: AddLayerOptions, _ source: MLNSource) -> MLNLineStyleLayer {
         let layer = MLNLineStyleLayer(identifier: options.layerId, source: source)
         layer.lineCap = NSExpression(forConstantValue: "round")
-        layer.lineColor = Self.createExpression(options.paint?.lineColor)
+        layer.lineColor = options.paint?.lineColor
         layer.lineJoin = NSExpression(forConstantValue: "round")
-        layer.lineOpacity = Self.createExpression(options.paint?.lineOpacity)
-        layer.lineWidth = Self.createExpression(options.paint?.lineWidth)
+        layer.lineOpacity = options.paint?.lineOpacity
+        layer.lineWidth = options.paint?.lineWidth
         return layer
     }
 
