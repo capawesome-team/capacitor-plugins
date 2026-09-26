@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.4.4
+
+### Patch Changes
+
+- [`7ebd0878716a963ea06d03fa3eecd6af13ed2195`](https://github.com/capawesome-team/capacitor-plugins/commit/7ebd0878716a963ea06d03fa3eecd6af13ed2195) ([#1096](https://github.com/capawesome-team/capacitor-plugins/pull/1096)): fix(android): reject with `Request timed out.` on HTTP timeouts and with `Bundle could not be downloaded.` on network errors during a download
+
+- [`cf2223fc618585f57a76fef819cb1c592da8a77b`](https://github.com/capawesome-team/capacitor-plugins/commit/cf2223fc618585f57a76fef819cb1c592da8a77b) ([#1092](https://github.com/capawesome-team/capacitor-plugins/pull/1092)): fix: respect the `appId` set via `setConfig(...)` in `sync(...)`, `fetchLatestBundle(...)` and `fetchChannels(...)`
+
 ## 8.4.3
 
 ### Patch Changes
