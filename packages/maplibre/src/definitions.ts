@@ -373,6 +373,16 @@ export interface AddLayerOptions {
    */
   belowLayerId?: string;
   /**
+   * The expression that selects the features rendered by the layer.
+   *
+   * Only features for which the expression evaluates to `true` are
+   * rendered.
+   *
+   * @since 0.2.1
+   * @example ['==', ['get', 'type'], 'park']
+   */
+  filter?: Expression;
+  /**
    * The unique identifier of the layer.
    *
    * @since 0.1.0
@@ -893,103 +903,162 @@ export interface LatLng {
  */
 export interface LayerPaint {
   /**
+   * The blur of the circles relative to their radius, or an expression.
+   *
+   * A value of `1` blurs the circles so that only their center is fully
+   * opaque.
+   *
+   * Only applies to layers of type `circle`.
+   *
+   * @since 0.2.1
+   */
+  circleBlur?: number | Expression;
+  /**
    * The fill color of the circles as a hexadecimal string in the format
-   * `#RRGGBB` or `#RRGGBBAA`.
+   * `#RRGGBB` or `#RRGGBBAA`, or an expression.
    *
    * Only applies to layers of type `circle`.
    *
    * @since 0.1.0
    * @example '#3887be'
    */
-  circleColor?: string;
+  circleColor?: string | Expression;
   /**
-   * The opacity of the circles as a value between `0` and `1`.
+   * The opacity of the circles as a value between `0` and `1`, or an
+   * expression.
    *
    * Only applies to layers of type `circle`.
    *
    * @since 0.1.0
    */
-  circleOpacity?: number;
+  circleOpacity?: number | Expression;
   /**
-   * The radius of the circles in CSS pixels.
+   * The radius of the circles in CSS pixels, or an expression.
    *
    * Only applies to layers of type `circle`.
    *
    * @since 0.1.0
    */
-  circleRadius?: number;
+  circleRadius?: number | Expression;
   /**
    * The stroke color of the circles as a hexadecimal string in the format
-   * `#RRGGBB` or `#RRGGBBAA`.
+   * `#RRGGBB` or `#RRGGBBAA`, or an expression.
    *
    * Only applies to layers of type `circle`.
    *
    * @since 0.1.0
    * @example '#ffffff'
    */
-  circleStrokeColor?: string;
+  circleStrokeColor?: string | Expression;
   /**
-   * The stroke width of the circles in CSS pixels.
+   * The stroke width of the circles in CSS pixels, or an expression.
    *
    * Only applies to layers of type `circle`.
    *
    * @since 0.1.0
    */
-  circleStrokeWidth?: number;
+  circleStrokeWidth?: number | Expression;
   /**
    * The fill color of the areas as a hexadecimal string in the format
-   * `#RRGGBB` or `#RRGGBBAA`.
+   * `#RRGGBB` or `#RRGGBBAA`, or an expression.
    *
    * Only applies to layers of type `fill`.
    *
    * @since 0.1.0
    * @example '#3887be'
    */
-  fillColor?: string;
+  fillColor?: string | Expression;
   /**
-   * The opacity of the areas as a value between `0` and `1`.
+   * The opacity of the areas as a value between `0` and `1`, or an
+   * expression.
    *
    * Only applies to layers of type `fill`.
    *
    * @since 0.1.0
    */
-  fillOpacity?: number;
+  fillOpacity?: number | Expression;
   /**
    * The outline color of the areas as a hexadecimal string in the format
-   * `#RRGGBB` or `#RRGGBBAA`.
+   * `#RRGGBB` or `#RRGGBBAA`, or an expression.
    *
    * Only applies to layers of type `fill`.
    *
    * @since 0.1.0
    * @example '#ffffff'
    */
-  fillOutlineColor?: string;
+  fillOutlineColor?: string | Expression;
+  /**
+   * The color of each pixel of the heatmap as an expression based on its
+   * density, which is retrieved with `['heatmap-density']`.
+   *
+   * Only applies to layers of type `heatmap`.
+   *
+   * @since 0.2.1
+   * @example ['interpolate', ['linear'], ['heatmap-density'], 0, 'rgba(0,0,0,0)', 1, '#ff0000']
+   */
+  heatmapColor?: Expression;
+  /**
+   * The intensity of the heatmap, which multiplies the weight of each
+   * point, or an expression.
+   *
+   * Only applies to layers of type `heatmap`.
+   *
+   * @since 0.2.1
+   */
+  heatmapIntensity?: number | Expression;
+  /**
+   * The opacity of the heatmap as a value between `0` and `1`, or an
+   * expression.
+   *
+   * Only applies to layers of type `heatmap`.
+   *
+   * @since 0.2.1
+   */
+  heatmapOpacity?: number | Expression;
+  /**
+   * The radius of influence of each point in CSS pixels, or an expression.
+   *
+   * Only applies to layers of type `heatmap`.
+   *
+   * @since 0.2.1
+   */
+  heatmapRadius?: number | Expression;
+  /**
+   * The contribution of each point to the density of the heatmap, or an
+   * expression.
+   *
+   * Only applies to layers of type `heatmap`.
+   *
+   * @since 0.2.1
+   */
+  heatmapWeight?: number | Expression;
   /**
    * The color of the lines as a hexadecimal string in the format `#RRGGBB`
-   * or `#RRGGBBAA`.
+   * or `#RRGGBBAA`, or an expression.
    *
    * Only applies to layers of type `line`.
    *
    * @since 0.1.0
    * @example '#3887be'
    */
-  lineColor?: string;
+  lineColor?: string | Expression;
   /**
-   * The opacity of the lines as a value between `0` and `1`.
+   * The opacity of the lines as a value between `0` and `1`, or an
+   * expression.
    *
    * Only applies to layers of type `line`.
    *
    * @since 0.1.0
    */
-  lineOpacity?: number;
+  lineOpacity?: number | Expression;
   /**
-   * The width of the lines in CSS pixels.
+   * The width of the lines in CSS pixels, or an expression.
    *
    * Only applies to layers of type `line`.
    *
    * @since 0.1.0
    */
-  lineWidth?: number;
+  lineWidth?: number | Expression;
 }
 
 /**
@@ -1843,6 +1912,17 @@ export interface UserLocationChangeEvent {
 }
 
 /**
+ * A [MapLibre style expression](https://maplibre.org/maplibre-style-spec/expressions/),
+ * e.g. `['get', 'color']`.
+ *
+ * Expressions are not validated by the plugin. On iOS, an invalid
+ * expression crashes the app.
+ *
+ * @since 0.2.1
+ */
+export type Expression = unknown[];
+
+/**
  * The reason why the camera of a map started moving.
  *
  * @since 0.1.0
@@ -1880,6 +1960,12 @@ export enum LayerType {
    * @since 0.1.0
    */
   Fill = 'fill',
+  /**
+   * A layer that renders the density of points as a heatmap.
+   *
+   * @since 0.2.1
+   */
+  Heatmap = 'heatmap',
   /**
    * A layer that renders line strings as lines.
    *

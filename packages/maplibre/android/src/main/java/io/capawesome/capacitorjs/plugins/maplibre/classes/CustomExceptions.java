@@ -13,12 +13,19 @@ public class CustomExceptions {
     );
     public static final CustomException COORDINATES_MISSING = new CustomException(null, "coordinates must be provided.");
     public static final CustomException DATA_OR_URL_MISSING = new CustomException(null, "exactly one of data and url must be provided.");
+    public static final CustomException EXPRESSION_INVALID = new CustomException(
+        null,
+        "expression must be an array whose first element is an operator."
+    );
     public static final CustomException FRAME_MISSING = new CustomException(null, "frame must be provided.");
     public static final CustomException ICON_LOAD_FAILED = new CustomException(null, "the icon of the marker could not be loaded.");
     public static final CustomException JSON_OR_URL_MISSING = new CustomException(null, "exactly one of json and url must be provided.");
     public static final CustomException LAYER_ID_MISSING = new CustomException(null, "layerId must be provided.");
     public static final CustomException LAYER_NOT_FOUND = new CustomException("LAYER_NOT_FOUND", "layer not found.");
-    public static final CustomException LAYER_TYPE_INVALID = new CustomException(null, "type must be one of circle, fill or line.");
+    public static final CustomException LAYER_TYPE_INVALID = new CustomException(
+        null,
+        "type must be one of circle, fill, heatmap or line."
+    );
     public static final CustomException LOCATION_PERMISSION_DENIED = new CustomException(
         "LOCATION_PERMISSION_DENIED",
         "location permission denied."
