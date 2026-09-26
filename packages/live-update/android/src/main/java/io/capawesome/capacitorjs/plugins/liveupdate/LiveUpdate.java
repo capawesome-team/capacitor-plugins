@@ -57,6 +57,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
@@ -746,7 +747,12 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    completionCallback.error(exception);
+                    Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+                    if (exception instanceof SocketTimeoutException) {
+                        completionCallback.error(exception);
+                    } else {
+                        completionCallback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+                    }
                 }
             }
         );
