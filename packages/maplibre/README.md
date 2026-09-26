@@ -1598,11 +1598,12 @@ A point on a map in CSS pixels, relative to the map element.
 
 #### MarkerClickEvent
 
-| Prop              | Type                                      | Description                                | Since |
-| ----------------- | ----------------------------------------- | ------------------------------------------ | ----- |
-| **`coordinates`** | <code><a href="#latlng">LatLng</a></code> | The geographical coordinate of the marker. | 0.1.0 |
-| **`mapId`**       | <code>string</code>                       | The unique identifier of the map.          | 0.1.0 |
-| **`markerId`**    | <code>string</code>                       | The unique identifier of the marker.       | 0.1.0 |
+| Prop              | Type                                          | Description                                                                                                                                | Since |
+| ----------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`coordinates`** | <code><a href="#latlng">LatLng</a></code>     | The geographical coordinate of the marker.                                                                                                 | 0.1.0 |
+| **`mapId`**       | <code>string</code>                           | The unique identifier of the map.                                                                                                          | 0.1.0 |
+| **`markerId`**    | <code>string</code>                           | The unique identifier of the marker.                                                                                                       | 0.1.0 |
+| **`point`**       | <code><a href="#mappoint">MapPoint</a></code> | The point of the marker. This is the projected coordinate of the marker where its icon anchor is placed, not the point the user tapped on. | 0.2.1 |
 
 
 #### MarkerDragEvent
