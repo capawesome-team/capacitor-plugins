@@ -8,6 +8,10 @@ export interface IntunePlugin {
    * This presents the Microsoft sign-in UI if necessary. Use the returned
    * `accountId` to enroll the account via `registerAndEnrollAccount(...)`.
    *
+   * If the tenant requires an app protection policy, the call is rejected
+   * with the `PROTECTION_POLICY_REQUIRED` error code. Use
+   * `remediateCompliance(...)` in this case.
+   *
    * Only available on Android and iOS.
    *
    * @since 0.1.0
@@ -16,6 +20,10 @@ export interface IntunePlugin {
   /**
    * Acquire an access token silently via the Microsoft Authentication
    * Library (MSAL) for an already signed-in account.
+   *
+   * If the tenant requires an app protection policy, the call is rejected
+   * with the `PROTECTION_POLICY_REQUIRED` error code. Use
+   * `remediateCompliance(...)` in this case.
    *
    * Only available on Android and iOS.
    *
@@ -144,6 +152,27 @@ export interface IntunePlugin {
   registerAndEnrollAccount(
     options: RegisterAndEnrollAccountOptions,
   ): Promise<void>;
+  /**
+   * Bring the app into compliance with the app protection policy of an
+   * account so that Microsoft Entra ID grants tokens for it.
+   *
+   * Call this when `acquireToken(...)` or `acquireTokenSilent(...)` is
+   * rejected with the `PROTECTION_POLICY_REQUIRED` error code, passing the
+   * `data` of the error as options. The Intune App SDK registers and
+   * enrolls the account as needed. If the returned status is `compliant`,
+   * retry the token acquisition.
+   *
+   * On iOS, the Intune App SDK may restart the app during the remediation if
+   * the account was not enrolled before. In that case, the promise is never
+   * settled and the app should retry the sign-in after the restart.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.2
+   */
+  remediateCompliance(
+    options: RemediateComplianceOptions,
+  ): Promise<RemediateComplianceResult>;
   /**
    * Show the diagnostic console of the Intune App SDK.
    *
@@ -622,6 +651,83 @@ export interface RegisterAndEnrollAccountOptions {
 }
 
 /**
+ * @since 0.1.2
+ */
+export interface RemediateComplianceOptions {
+  /**
+   * The Microsoft Entra object ID (OID) of the account to remediate.
+   *
+   * @since 0.1.2
+   * @example "870ba1ef-6d94-4288-9f8e-000c04a92da2"
+   */
+  accountId: string;
+  /**
+   * The authority URL of the account.
+   *
+   * Only available on Android. Required on Android.
+   *
+   * @since 0.1.2
+   * @example "https://login.microsoftonline.com/b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
+   */
+  authority?: string;
+  /**
+   * Whether or not to remediate without showing any UI of the Intune App
+   * SDK.
+   *
+   * On iOS, the status `interactionRequired` is returned if the remediation
+   * cannot be completed without user interaction.
+   *
+   * @since 0.1.2
+   * @default false
+   */
+  silent?: boolean;
+  /**
+   * The Microsoft Entra tenant ID of the account.
+   *
+   * Only available on Android. Required on Android.
+   *
+   * @since 0.1.2
+   * @example "b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
+   */
+  tenantId?: string;
+  /**
+   * The username (usually the UPN) of the account.
+   *
+   * Only available on Android. Required on Android.
+   *
+   * @since 0.1.2
+   * @example "jane.doe@contoso.com"
+   */
+  username?: string;
+}
+
+/**
+ * @since 0.1.2
+ */
+export interface RemediateComplianceResult {
+  /**
+   * A localized error message that can be displayed to the user if the
+   * account is not compliant, if available.
+   *
+   * @since 0.1.2
+   */
+  errorMessage: string | null;
+  /**
+   * A localized error title that can be displayed to the user if the
+   * account is not compliant, if available.
+   *
+   * @since 0.1.2
+   */
+  errorTitle: string | null;
+  /**
+   * The compliance status of the account after the remediation.
+   *
+   * @since 0.1.2
+   */
+  status: ComplianceStatus;
+}
+
+/**
  * @since 0.1.0
  */
 export interface UnenrollAccountOptions {
@@ -658,6 +764,42 @@ export interface WipeRequestedEvent {
 }
 
 /**
+ * The compliance status of an account.
+ *
+ * - `canceled`: The user canceled the remediation. Only available on iOS.
+ * - `clientError`: The remediation failed due to a client issue, such as a
+ *   missing or invalid token. Only available on Android.
+ * - `companyPortalRequired`: The Company Portal app must be installed. If it
+ *   is already installed, the app must be restarted. Only available on
+ *   Android.
+ * - `compliant`: The account is compliant. Retry the token acquisition.
+ * - `interactionRequired`: The remediation requires user interaction. Call
+ *   `remediateCompliance(...)` again with `silent` set to `false`. Only
+ *   available on iOS.
+ * - `networkFailure`: The Intune service could not be reached. Retry when
+ *   the network connection is restored.
+ * - `notCompliant`: The account is not compliant.
+ * - `pending`: The Intune service did not respond in time. Retry later.
+ *   Only available on Android.
+ * - `serviceFailure`: The compliance data could not be retrieved from the
+ *   Intune service. Retry later.
+ * - `unknown`: The status is unknown. Only available on Android.
+ *
+ * @since 0.1.2
+ */
+export type ComplianceStatus =
+  | 'canceled'
+  | 'clientError'
+  | 'companyPortalRequired'
+  | 'compliant'
+  | 'interactionRequired'
+  | 'networkFailure'
+  | 'notCompliant'
+  | 'pending'
+  | 'serviceFailure'
+  | 'unknown';
+
+/**
  * The enrollment status of an account.
  *
  * @since 0.1.0
@@ -686,6 +828,17 @@ export enum ErrorCode {
    * @since 0.1.0
    */
   NotEnrolled = 'NOT_ENROLLED',
+  /**
+   * The account must be managed by an Intune app protection policy before a
+   * token can be acquired (App Protection Conditional Access).
+   *
+   * The `data` of the error contains the `accountId`, `tenantId` and
+   * `username` of the account and, on Android, the `authority`. Pass it to
+   * `remediateCompliance(...)` and retry the token acquisition afterwards.
+   *
+   * @since 0.1.2
+   */
+  ProtectionPolicyRequired = 'PROTECTION_POLICY_REQUIRED',
   /**
    * The token acquisition failed.
    *

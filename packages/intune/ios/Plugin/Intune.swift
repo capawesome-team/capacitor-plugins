@@ -3,16 +3,20 @@ import Capacitor
 import IntuneMAMSwift
 import MSAL
 
+// swiftlint:disable:next type_body_length
 @objc public class Intune: NSObject {
     private static let pendingWipeAccountIdsKey = "capawesome_capacitor_intune_pending_wipe_account_ids"
     private static let pendingWipeNilAccountId = ""
 
     private var msalApplication: MSALPublicClientApplication?
     private let plugin: IntunePlugin
+    private var remediateComplianceCompletions: [String: [(_ result: RemediateComplianceResult?, _ error: Error?) -> Void]] = [:]
+    private let remediateComplianceCompletionsLock = NSLock()
 
     init(plugin: IntunePlugin) {
         self.plugin = plugin
         super.init()
+        IntuneMAMComplianceManager.instance().delegate = self
         IntuneMAMEnrollmentManager.instance().delegate = self
         IntuneMAMPolicyManager.instance().delegate = self
         NotificationCenter.default.addObserver(
@@ -186,6 +190,14 @@ import MSAL
         completion(nil)
     }
 
+    @objc public func remediateCompliance(_ options: RemediateComplianceOptions, completion: @escaping (_ result: RemediateComplianceResult?, _ error: Error?) -> Void) {
+        // The completion must be added before the remediation starts, because the result may be reported immediately.
+        addRemediateComplianceCompletion(completion, forAccountId: options.accountId)
+        DispatchQueue.main.async {
+            IntuneMAMComplianceManager.instance().remediateCompliance(forAccountId: options.accountId, silent: options.silent)
+        }
+    }
+
     @objc public func showDiagnosticConsole(completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
             IntuneMAMDiagnosticConsole.display()
@@ -196,6 +208,15 @@ import MSAL
     @objc public func unenrollAccount(_ options: UnenrollAccountOptions, completion: @escaping (_ error: Error?) -> Void) {
         IntuneMAMEnrollmentManager.instance().deRegisterAndUnenrollAccountId(options.accountId, withWipe: options.wipe)
         completion(nil)
+    }
+
+    private func addRemediateComplianceCompletion(
+        _ completion: @escaping (_ result: RemediateComplianceResult?, _ error: Error?) -> Void,
+        forAccountId accountId: String
+    ) {
+        remediateComplianceCompletionsLock.lock()
+        defer { remediateComplianceCompletionsLock.unlock() }
+        remediateComplianceCompletions[accountId.lowercased(), default: []].append(completion)
     }
 
     private func copyFile(atPath sourcePath: String, toPath destinationPath: String) throws {
@@ -221,10 +242,30 @@ import MSAL
         completion(acquireTokenResult, nil)
     }
 
+    private func createProtectionPolicyRequiredError(_ error: NSError) -> CustomError? {
+        guard let homeAccountId = error.userInfo[MSALHomeAccountIdKey] as? String else {
+            return nil
+        }
+        // The home account ID has the format `<objectId>.<tenantId>`.
+        let homeAccountIdParts = homeAccountId.split(separator: ".").map(String.init)
+        guard let accountId = homeAccountIdParts.first else {
+            return nil
+        }
+        return CustomError.protectionPolicyRequired(
+            accountId: accountId,
+            tenantId: homeAccountIdParts.count > 1 ? homeAccountIdParts[1] : nil,
+            username: error.userInfo[MSALDisplayableUserIdKey] as? String
+        )
+    }
+
     private func createTokenAcquisitionError(_ error: Error) -> CustomError {
         let nsError = error as NSError
         if nsError.domain == MSALErrorDomain && nsError.code == MSALError.userCanceled.rawValue {
             return CustomError.interactionCanceled
+        }
+        if nsError.domain == MSALErrorDomain && nsError.code == MSALError.serverProtectionPoliciesRequired.rawValue,
+           let protectionPolicyRequiredError = createProtectionPolicyRequiredError(nsError) {
+            return protectionPolicyRequiredError
         }
         return CustomError.tokenAcquisitionFailed(message: error.localizedDescription)
     }
@@ -303,6 +344,25 @@ import MSAL
         plugin.notifyWipeRequestedListeners(event)
     }
 
+    private func mapComplianceStatus(_ status: IntuneMAMComplianceStatus) -> String {
+        switch status {
+        case .compliant:
+            return "compliant"
+        case .interactionRequired:
+            return "interactionRequired"
+        case .networkFailure:
+            return "networkFailure"
+        case .notCompliant:
+            return "notCompliant"
+        case .serviceFailure:
+            return "serviceFailure"
+        case .userCancelled:
+            return "canceled"
+        @unknown default:
+            return "unknown"
+        }
+    }
+
     private func persistPendingWipeAccountId(_ accountId: String?) {
         let userDefaults = UserDefaults.standard
         var accountIds = userDefaults.stringArray(forKey: Intune.pendingWipeAccountIdsKey) ?? []
@@ -324,6 +384,32 @@ import MSAL
         for name in try FileManager.default.contentsOfDirectory(atPath: path) {
             try protectPath((path as NSString).appendingPathComponent(name), accountId: accountId)
         }
+    }
+
+    private func resolveRemediateComplianceCompletions(
+        accountId: String,
+        status: IntuneMAMComplianceStatus,
+        errorMessage: String,
+        errorTitle: String
+    ) {
+        remediateComplianceCompletionsLock.lock()
+        let completions = remediateComplianceCompletions.removeValue(forKey: accountId.lowercased()) ?? []
+        remediateComplianceCompletionsLock.unlock()
+        let result = RemediateComplianceResult(errorMessage: errorMessage, errorTitle: errorTitle, status: mapComplianceStatus(status))
+        for completion in completions {
+            completion(result, nil)
+        }
+    }
+}
+
+extension Intune: IntuneMAMComplianceDelegate {
+    public func accountId(
+        _ accountId: String,
+        hasComplianceStatus status: IntuneMAMComplianceStatus,
+        withErrorMessage errMsg: String,
+        andErrorTitle errTitle: String
+    ) {
+        resolveRemediateComplianceCompletions(accountId: accountId, status: status, errorMessage: errMsg, errorTitle: errTitle)
     }
 }
 
