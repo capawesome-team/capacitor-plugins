@@ -3,6 +3,7 @@ package io.capawesome.capacitorjs.plugins.intune.classes;
 public class CustomExceptions {
 
     public static final CustomException ACCOUNT_ID_MISSING = new CustomException(null, "accountId must be provided.");
+    public static final CustomException AUTHORITY_MISSING = new CustomException(null, "authority must be provided.");
     public static final CustomException INTERACTION_CANCELED = new CustomException(
         "INTERACTION_CANCELED",
         "The user canceled the sign-in interaction."
@@ -17,4 +18,6 @@ public class CustomExceptions {
     );
     public static final CustomException PATH_MISSING = new CustomException(null, "path must be provided.");
     public static final CustomException SCOPES_MISSING = new CustomException(null, "scopes must be provided.");
+    public static final CustomException TENANT_ID_MISSING = new CustomException(null, "tenantId must be provided.");
+    public static final CustomException USERNAME_MISSING = new CustomException(null, "username must be provided.");
 }
