@@ -1,0 +1,20 @@
+appId: com.example.plugin
+name: Scroll to and tap a form input (Android exposes only its HTML id, iOS only its label)
+---
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - scrollUntilVisible:
+          element:
+            id: ${INPUT_ID}
+      - tapOn:
+          id: ${INPUT_ID}
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - scrollUntilVisible:
+          element:
+            text: ${INPUT_LABEL}
+      - tapOn: ${INPUT_LABEL}

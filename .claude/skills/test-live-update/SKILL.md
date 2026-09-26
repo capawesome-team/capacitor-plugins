@@ -28,7 +28,7 @@ Drive the example app on both platforms through the plugin's download paths and 
    - Manifest: `npx @capawesome/cli apps:liveupdates:generatemanifest --path dist` first, then upload with `--artifact-type manifest`.
    - Signed: generate a throwaway RSA key pair outside the repo, put the public key as a single-line PEM into `plugins.LiveUpdate.publicKey`, upload with `--private-key <path>`.
    - Nested `index.html`: the CLI rejects it. Zip a `www/` wrapper yourself, serve it with `python3 -m http.server 8000 --bind 127.0.0.1` from a directory that holds nothing else, and run `adb reverse tcp:8000 tcp:8000` so both devices reach `http://localhost:8000/<file>.zip`.
-4. Deploy: `npx cap run ios --target <udid>` and `npx cap run android --target emulator-5554` from `example`.
+4. Deploy: `npx cap run ios --target <udid>` and `npx cap run android --target emulator-5554` from `example`. If `cap run ios` builds but fails to open the simulator (`Simulator.app does not exist`), install the build yourself: `xcrun simctl install <udid> ios/DerivedData/<udid>/Build/Products/Debug-iphonesimulator/App.app`.
 
 ---
 
@@ -80,6 +80,7 @@ A 500 response from the update server needs a server you control that answers ov
 ## Pitfalls
 
 - Maestro often asserts before the WebView's accessibility tree refreshes after a reload or cold start. Retry once and check `serverBasePath` from `inspect` before blaming the plugin.
+- The Android WebView exposes a form input by its HTML id but not its label, iOS the other way around. Tap inputs through `flows/_tap-input.yaml` with `INPUT_ID` and `INPUT_LABEL`, never with `tapOn: "<label>"`.
 - `clearState` gives the iOS app a new container. Re-resolve the path after any flow that clears state; `scripts/device.sh` does.
 - The example sends empty strings for blank inputs and the plugin verifies an empty checksum. Manual downloads that should succeed need the real checksum.
 - Maestro logs env placeholders unsubstituted, for example `Assert that "${TITLE}" is visible... COMPLETED`. Filter on `COMPLETED` and `FAILED`, never on the expected value.

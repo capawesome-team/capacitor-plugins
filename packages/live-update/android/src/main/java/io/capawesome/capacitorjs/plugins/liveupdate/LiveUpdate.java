@@ -180,7 +180,7 @@ public class LiveUpdate {
                 .host(config.getServerDomain())
                 .addPathSegment("v1")
                 .addPathSegment("apps")
-                .addPathSegment(getAppId())
+                .addPathSegment(requireAppId())
                 .addPathSegment("channels");
             if (options.getLimit() != null) {
                 urlBuilder.addQueryParameter("limit", String.valueOf(options.getLimit()));
@@ -1006,7 +1006,7 @@ public class LiveUpdate {
                 .host(config.getServerDomain())
                 .addPathSegment("v1")
                 .addPathSegment("apps")
-                .addPathSegment(getAppId())
+                .addPathSegment(requireAppId())
                 .addPathSegment("bundles")
                 .addPathSegment("latest")
                 .addQueryParameter("appVersionCode", getVersionCodeAsString())
@@ -1283,6 +1283,15 @@ public class LiveUpdate {
             }
         };
         sync(options, callback);
+    }
+
+    @NonNull
+    private String requireAppId() throws Exception {
+        String appId = getAppId();
+        if (appId == null || appId.isEmpty()) {
+            throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
+        }
+        return appId;
     }
 
     private void rollback() {

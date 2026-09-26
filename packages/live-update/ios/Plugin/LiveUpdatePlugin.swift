@@ -46,12 +46,10 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     private let eventNextBundleSet = "nextBundleSet"
     private let eventReloaded = "reloaded"
 
-    private var config: LiveUpdateConfig?
     private var implementation: LiveUpdate?
 
     override public func load() {
-        self.config = liveUpdateConfig()
-        self.implementation = LiveUpdate(config: config!, plugin: self)
+        self.implementation = LiveUpdate(config: liveUpdateConfig(), plugin: self)
 
         // Notify implementation about load
         implementation?.handleLoad()
@@ -115,11 +113,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func fetchChannels(_ call: CAPPluginCall) {
         Task {
             do {
-                guard let appId = config?.appId, !appId.isEmpty else {
-                    call.reject(CustomError.appIdMissing.localizedDescription)
-                    return
-                }
-
                 let options = FetchChannelsOptions(call)
                 let result = try await implementation?.fetchChannels(options)
                 if let result = result?.toJSObject() as? JSObject {
@@ -134,11 +127,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func fetchLatestBundle(_ call: CAPPluginCall) {
         Task {
             do {
-                guard let appId = config?.appId, !appId.isEmpty else {
-                    call.reject(CustomError.appIdMissing.localizedDescription)
-                    return
-                }
-
                 let options = FetchLatestBundleOptions(call)
                 let result = try await implementation?.fetchLatestBundle(options)
                 if let result = result?.toJSObject() as? JSObject {
@@ -373,11 +361,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func sync(_ call: CAPPluginCall) {
         Task {
             do {
-                guard let appId = config?.appId, !appId.isEmpty else {
-                    call.reject(CustomError.appIdMissing.localizedDescription)
-                    return
-                }
-
                 let options = SyncOptions(call)
                 let result = try await implementation?.sync(options)
                 if let result = result?.toJSObject() as? JSObject {
