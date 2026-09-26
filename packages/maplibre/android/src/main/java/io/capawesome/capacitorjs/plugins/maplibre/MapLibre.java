@@ -741,6 +741,12 @@ public class MapLibre {
         touchRequestId = null;
     }
 
+    @NonNull
+    private PointF convertToCssPixels(@NonNull PointF point) {
+        float density = getDensity();
+        return new PointF(point.x / density, point.y / density);
+    }
+
     private int convertToDevicePixels(double cssPixels) {
         return Math.round((float) cssPixels * getDensity());
     }
@@ -1050,7 +1056,7 @@ public class MapLibre {
             symbolManager.setIconIgnorePlacement(true);
             symbolManager.setIconRotationAlignment(Property.ICON_ROTATION_ALIGNMENT_MAP);
             symbolManager.addClickListener(marker -> {
-                notifyMarkerClickListeners(instance, marker);
+                notifyMarkerClickListeners(instance, map, marker);
                 return true;
             });
             symbolManager.addDragListener(createSymbolDragListener(instance));
@@ -1108,12 +1114,13 @@ public class MapLibre {
         }
     }
 
-    private void notifyMarkerClickListeners(@NonNull MapInstance instance, @NonNull Symbol marker) {
+    private void notifyMarkerClickListeners(@NonNull MapInstance instance, @NonNull MapLibreMap map, @NonNull Symbol marker) {
         String markerId = getMarkerId(marker);
         if (markerId == null) {
             return;
         }
-        plugin.notifyMarkerClickListeners(new MarkerClickEvent(marker.getLatLng(), instance.getMapId(), markerId));
+        PointF point = convertToCssPixels(map.getProjection().toScreenLocation(marker.getLatLng()));
+        plugin.notifyMarkerClickListeners(new MarkerClickEvent(marker.getLatLng(), instance.getMapId(), markerId, point.x, point.y));
     }
 
     private void registerIcon(
@@ -1196,8 +1203,8 @@ public class MapLibre {
             if (hasMarkerAt(instance, map, point)) {
                 return false;
             }
-            float density = getDensity();
-            plugin.notifyMapClickListeners(new MapClickEvent(coordinates, instance.getMapId(), point.x / density, point.y / density));
+            PointF cssPoint = convertToCssPixels(point);
+            plugin.notifyMapClickListeners(new MapClickEvent(coordinates, instance.getMapId(), cssPoint.x, cssPoint.y));
             return false;
         });
     }

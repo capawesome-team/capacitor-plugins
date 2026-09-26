@@ -174,8 +174,9 @@ public class MapInstance: NSObject, MLNMapViewDelegate, UIGestureRecognizerDeleg
         let features = mapView.visibleFeatures(in: hitArea, styleLayerIdentifiers: [MarkerManager.layerIdentifier])
         if let markerId = features.compactMap({ $0.attribute(forKey: "id") as? String }).first,
            let marker = markerManager.findMarker(withIdentifier: markerId) {
+            let markerPoint = mapView.convert(marker.coordinates.toCoordinate(), toPointTo: mapView)
             plugin?.notifyMarkerClickListeners(
-                MarkerClickEvent(coordinates: marker.coordinates, mapId: mapId, markerId: markerId)
+                MarkerClickEvent(coordinates: marker.coordinates, mapId: mapId, markerId: markerId, point: markerPoint)
             )
             return
         }
