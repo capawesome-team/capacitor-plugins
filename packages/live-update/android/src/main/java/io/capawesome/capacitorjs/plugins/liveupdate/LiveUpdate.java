@@ -740,6 +740,8 @@ public class LiveUpdate {
                             Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
                             completionCallback.error(exception);
                         }
+                    } catch (IOException e) {
+                        handleDownloadFailure(e, completionCallback);
                     } catch (Exception e) {
                         completionCallback.error(e);
                     }
@@ -747,12 +749,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-                    if (exception instanceof SocketTimeoutException) {
-                        completionCallback.error(exception);
-                    } else {
-                        completionCallback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
-                    }
+                    handleDownloadFailure(exception, completionCallback);
                 }
             }
         );
@@ -1211,6 +1208,15 @@ public class LiveUpdate {
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
+    }
+
+    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+        if (exception instanceof SocketTimeoutException) {
+            callback.error(exception);
+        } else {
+            callback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+        }
     }
 
     private boolean hasBundleById(@NonNull String bundleId) {
