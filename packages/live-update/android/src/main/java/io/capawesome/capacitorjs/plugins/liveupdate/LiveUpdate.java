@@ -57,6 +57,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
@@ -739,6 +740,8 @@ public class LiveUpdate {
                             Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
                             completionCallback.error(exception);
                         }
+                    } catch (IOException e) {
+                        handleDownloadFailure(e, completionCallback);
                     } catch (Exception e) {
                         completionCallback.error(e);
                     }
@@ -746,7 +749,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    completionCallback.error(exception);
+                    handleDownloadFailure(exception, completionCallback);
                 }
             }
         );
@@ -1205,6 +1208,15 @@ public class LiveUpdate {
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
+    }
+
+    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+        if (exception instanceof SocketTimeoutException) {
+            callback.error(exception);
+        } else {
+            callback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+        }
     }
 
     private boolean hasBundleById(@NonNull String bundleId) {
