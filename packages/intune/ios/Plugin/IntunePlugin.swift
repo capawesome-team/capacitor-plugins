@@ -17,6 +17,7 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "loginAndEnrollAccount", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "protectFile", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "registerAndEnrollAccount", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "remediateCompliance", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showDiagnosticConsole", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "unenrollAccount", returnType: CAPPluginReturnPromise)
     ]
@@ -187,6 +188,21 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    @objc func remediateCompliance(_ call: CAPPluginCall) {
+        do {
+            let options = try RemediateComplianceOptions(call)
+            implementation?.remediateCompliance(options, completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            rejectCall(call, error)
+        }
+    }
+
     @objc func showDiagnosticConsole(_ call: CAPPluginCall) {
         implementation?.showDiagnosticConsole(completion: { error in
             self.handleCompletion(call, error)
@@ -214,7 +230,8 @@ public class IntunePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", self.tag, "] ", error)
-        call.reject(error.localizedDescription, (error as? CustomError)?.code)
+        let customError = error as? CustomError
+        call.reject(error.localizedDescription, customError?.code, nil, customError?.data)
     }
 
     private func resolveCall(_ call: CAPPluginCall) {

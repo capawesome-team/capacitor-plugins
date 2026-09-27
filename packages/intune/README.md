@@ -17,6 +17,7 @@ The Capacitor Intune plugin integrates the Microsoft Intune App SDK for Mobile A
 - 🔐 **File Protection**: Encrypt, inspect and decrypt files through the Intune App SDK to honor the "Encrypt org data" policy on iOS, where the SDK does not encrypt files on its own.
 - 🔑 **MSAL**: Acquire tokens interactively or silently via the Microsoft Authentication Library.
 - 🧾 **Enrollment**: Register and enroll accounts in Mobile Application Management (MAM) — without device enrollment.
+- 🚦 **App Protection Conditional Access**: Remediate compliance when Microsoft Entra ID requires an app protection policy before issuing tokens.
 - 📋 **Typed Policy Introspection**: Read the applied app protection policy as typed booleans to adapt your UI.
 - ⚙️ **App Configuration**: Read the application configuration deployed via the MAM channel, including conflict information.
 - 🧹 **Selective Wipe Events**: Get notified when the Intune service requests a wipe so you can purge the web layer storage (e.g. IndexedDB, Local Storage) that the SDK cannot wipe itself.
@@ -33,7 +34,7 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 The Intune plugin is typically used in line-of-business apps that are distributed to employees of organizations that manage corporate data with Microsoft Intune, for example:
 
 - **App protection without device enrollment**: Protect corporate data in your app on personal (BYOD) devices via Mobile Application Management (MAM).
-- **Conditional access**: Combine with Microsoft Entra conditional access policies that require an Intune-protected app.
+- **Conditional access**: Combine with Microsoft Entra conditional access policies that require an Intune-protected app (see [Handle App Protection Conditional Access](#handle-app-protection-conditional-access)).
 - **Policy-aware UI**: Read the applied app protection policy and hide or disable features (e.g. local export) that the policy does not allow.
 - **Encrypt organization data**: Protect recordings, downloads and exports on iOS when the app protection policy requires file encryption.
 - **Per-tenant configuration**: Read the application configuration that the organization's IT administrator has deployed for the signed-in account.
@@ -159,6 +160,7 @@ Create the file `android/app/src/main/res/raw/auth_config.json` with your MSAL c
   "redirect_uri": "msauth://YOUR_PACKAGE_NAME/YOUR_BASE64_URL_ENCODED_PACKAGE_SIGNATURE",
   "account_mode": "MULTIPLE",
   "broker_redirect_uri_registered": true,
+  "client_capabilities": "protapp",
   "authorities": [
     {
       "type": "AAD",
@@ -169,6 +171,8 @@ Create the file `android/app/src/main/res/raw/auth_config.json` with your MSAL c
   ]
 }
 ```
+
+The `client_capabilities` entry declares that your app supports [App Protection Conditional Access](#handle-app-protection-conditional-access). On iOS, the plugin declares it automatically.
 
 You can generate the base64-encoded signature hash of your signing key with:
 
@@ -341,6 +345,7 @@ platforms:
             "redirect_uri": "msauth://$PACKAGE_NAME/$SIGNATURE_HASH",
             "account_mode": "MULTIPLE",
             "broker_redirect_uri_registered": true,
+            "client_capabilities": "protapp",
             "authorities": [
               {
                 "type": "AAD",
@@ -410,6 +415,29 @@ const signInAndEnroll = async () => {
     scopes: ['https://graph.microsoft.com/.default'],
   });
   await Intune.registerAndEnrollAccount({ accountId });
+};
+```
+
+### Handle App Protection Conditional Access
+
+If your organization requires an app protection policy via Conditional Access, Microsoft Entra ID only issues tokens once Intune manages the app. In this case, the token acquisition is rejected with the `PROTECTION_POLICY_REQUIRED` error code. Remediate the compliance and retry the token acquisition:
+
+```typescript
+import { ErrorCode, Intune } from '@capawesome/capacitor-intune';
+
+const acquireToken = async (scopes: string[]) => {
+  try {
+    return await Intune.acquireToken({ scopes });
+  } catch (error) {
+    if (error.code !== ErrorCode.ProtectionPolicyRequired) {
+      throw error;
+    }
+    const { status } = await Intune.remediateCompliance(error.data);
+    if (status !== 'compliant') {
+      throw error;
+    }
+    return Intune.acquireTokenSilent({ accountId: error.data.accountId, scopes });
+  }
 };
 ```
 
@@ -508,6 +536,7 @@ const registerWipeListener = async () => {
 * [`loginAndEnrollAccount()`](#loginandenrollaccount)
 * [`protectFile(...)`](#protectfile)
 * [`registerAndEnrollAccount(...)`](#registerandenrollaccount)
+* [`remediateCompliance(...)`](#remediatecompliance)
 * [`showDiagnosticConsole()`](#showdiagnosticconsole)
 * [`unenrollAccount(...)`](#unenrollaccount)
 * [`addListener('appConfigChange', ...)`](#addlistenerappconfigchange-)
@@ -535,6 +564,10 @@ Library (MSAL).
 This presents the Microsoft sign-in UI if necessary. Use the returned
 `accountId` to enroll the account via `registerAndEnrollAccount(...)`.
 
+If the tenant requires an app protection policy, the call is rejected
+with the `PROTECTION_POLICY_REQUIRED` error code. Use
+`remediateCompliance(...)` in this case.
+
 Only available on Android and iOS.
 
 | Param         | Type                                                                |
@@ -556,6 +589,10 @@ acquireTokenSilent(options: AcquireTokenSilentOptions) => Promise<AcquireTokenRe
 
 Acquire an access token silently via the Microsoft Authentication
 Library (MSAL) for an already signed-in account.
+
+If the tenant requires an app protection policy, the call is rejected
+with the `PROTECTION_POLICY_REQUIRED` error code. Use
+`remediateCompliance(...)` in this case.
 
 Only available on Android and iOS.
 
@@ -779,6 +816,38 @@ Only available on Android and iOS.
 | **`options`** | <code><a href="#registerandenrollaccountoptions">RegisterAndEnrollAccountOptions</a></code> |
 
 **Since:** 0.1.0
+
+--------------------
+
+
+### remediateCompliance(...)
+
+```typescript
+remediateCompliance(options: RemediateComplianceOptions) => Promise<RemediateComplianceResult>
+```
+
+Bring the app into compliance with the app protection policy of an
+account so that Microsoft Entra ID grants tokens for it.
+
+Call this when `acquireToken(...)` or `acquireTokenSilent(...)` is
+rejected with the `PROTECTION_POLICY_REQUIRED` error code, passing the
+`data` of the error as options. The Intune App SDK registers and
+enrolls the account as needed. If the returned status is `compliant`,
+retry the token acquisition.
+
+On iOS, the Intune App SDK may restart the app during the remediation if
+the account was not enrolled before. In that case, the promise is never
+settled and the app should retry the sign-in after the restart.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                                              |
+| ------------- | --------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#remediatecomplianceoptions">RemediateComplianceOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#remediatecomplianceresult">RemediateComplianceResult</a>&gt;</code>
+
+**Since:** 0.1.2
 
 --------------------
 
@@ -1070,6 +1139,26 @@ Remove all listeners for this plugin.
 | **`accountId`** | <code>string</code> | The Microsoft Entra object ID (OID) of the account to register and enroll, as returned by `acquireToken(...)`. | 0.1.0 |
 
 
+#### RemediateComplianceResult
+
+| Prop               | Type                                                          | Description                                                                                                | Since |
+| ------------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
+| **`errorMessage`** | <code>string \| null</code>                                   | A localized error message that can be displayed to the user if the account is not compliant, if available. | 0.1.2 |
+| **`errorTitle`**   | <code>string \| null</code>                                   | A localized error title that can be displayed to the user if the account is not compliant, if available.   | 0.1.2 |
+| **`status`**       | <code><a href="#compliancestatus">ComplianceStatus</a></code> | The compliance status of the account after the remediation.                                                | 0.1.2 |
+
+
+#### RemediateComplianceOptions
+
+| Prop            | Type                 | Description                                                                                                                                                                                     | Default            | Since |
+| --------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`accountId`** | <code>string</code>  | The Microsoft Entra object ID (OID) of the account to remediate.                                                                                                                                |                    | 0.1.2 |
+| **`authority`** | <code>string</code>  | The authority URL of the account. Only available on Android. Required on Android.                                                                                                               |                    | 0.1.2 |
+| **`silent`**    | <code>boolean</code> | Whether or not to remediate without showing any UI of the Intune App SDK. On iOS, the status `interactionRequired` is returned if the remediation cannot be completed without user interaction. | <code>false</code> | 0.1.2 |
+| **`tenantId`**  | <code>string</code>  | The Microsoft Entra tenant ID of the account. Only available on Android. Required on Android.                                                                                                   |                    | 0.1.2 |
+| **`username`**  | <code>string</code>  | The username (usually the UPN) of the account. Only available on Android. Required on Android.                                                                                                  |                    | 0.1.2 |
+
+
 #### UnenrollAccountOptions
 
 | Prop            | Type                 | Description                                                                                           | Default            | Since |
@@ -1117,6 +1206,32 @@ Remove all listeners for this plugin.
 ### Type Aliases
 
 
+#### ComplianceStatus
+
+The compliance status of an account.
+
+- `canceled`: The user canceled the remediation. Only available on iOS.
+- `clientError`: The remediation failed due to a client issue, such as a
+  missing or invalid token. Only available on Android.
+- `companyPortalRequired`: The Company Portal app must be installed. If it
+  is already installed, the app must be restarted. Only available on
+  Android.
+- `compliant`: The account is compliant. Retry the token acquisition.
+- `interactionRequired`: The remediation requires user interaction. Call
+  `remediateCompliance(...)` again with `silent` set to `false`. Only
+  available on iOS.
+- `networkFailure`: The Intune service could not be reached. Retry when
+  the network connection is restored.
+- `notCompliant`: The account is not compliant.
+- `pending`: The Intune service did not respond in time. Retry later.
+  Only available on Android.
+- `serviceFailure`: The compliance data could not be retrieved from the
+  Intune service. Retry later.
+- `unknown`: The status is unknown. Only available on Android.
+
+<code>'canceled' | 'clientError' | 'companyPortalRequired' | 'compliant' | 'interactionRequired' | 'networkFailure' | 'notCompliant' | 'pending' | 'serviceFailure' | 'unknown'</code>
+
+
 #### EnrollmentStatus
 
 The enrollment status of an account.
@@ -1137,6 +1252,7 @@ Not every feature is available on all platforms. The following table lists the n
 Additional notes:
 
 - On Android, use `acquireToken(...)` followed by `registerAndEnrollAccount(...)` instead of `loginAndEnrollAccount()`. The Intune App SDK for Android does not provide its own login UI.
+- On Android, `remediateCompliance(...)` requires the `authority`, `tenantId` and `username` options. All of them are included in the `data` of the `PROTECTION_POLICY_REQUIRED` error.
 - On Android, `fileEncryptionRequired` reflects whether file encryption is currently **in use** by the Intune App SDK, which is the closest equivalent the SDK exposes.
 - The `wipeRequested` event is persisted and replayed on the next app launch if no listener was registered when the wipe arrived. In rare cases the event may be delivered more than once, so make sure your wipe handler is idempotent.
 - On iOS, the Intune App SDK does not encrypt files on its own. Call `protectFile(...)` for every file that contains organization data. On Android, file encryption is automatic and `protectFile(...)` only tags the file with the account so that it is in the scope of a selective wipe.
