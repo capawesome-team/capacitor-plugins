@@ -13,6 +13,7 @@ import type {
   DestroyMapOptions,
   DisableUserLocationOptions,
   EnableUserLocationOptions,
+  Expression,
   FitBoundsOptions,
   GestureSettings,
   GetCameraOptions,
@@ -138,6 +139,9 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
       source: options.sourceId,
       type: options.type,
     };
+    if (options.filter !== undefined) {
+      layer.filter = options.filter;
+    }
     if (options.maxZoom !== undefined) {
       layer.maxzoom = options.maxZoom;
     }
@@ -687,6 +691,7 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
     }
     switch (type) {
       case LayerType.Circle:
+        this.setPaintProperty(result, 'circle-blur', paint.circleBlur);
         this.setPaintProperty(result, 'circle-color', paint.circleColor);
         this.setPaintProperty(result, 'circle-opacity', paint.circleOpacity);
         this.setPaintProperty(result, 'circle-radius', paint.circleRadius);
@@ -709,6 +714,17 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
           'fill-outline-color',
           paint.fillOutlineColor,
         );
+        break;
+      case LayerType.Heatmap:
+        this.setPaintProperty(result, 'heatmap-color', paint.heatmapColor);
+        this.setPaintProperty(
+          result,
+          'heatmap-intensity',
+          paint.heatmapIntensity,
+        );
+        this.setPaintProperty(result, 'heatmap-opacity', paint.heatmapOpacity);
+        this.setPaintProperty(result, 'heatmap-radius', paint.heatmapRadius);
+        this.setPaintProperty(result, 'heatmap-weight', paint.heatmapWeight);
         break;
       case LayerType.Line:
         this.setPaintProperty(result, 'line-color', paint.lineColor);
@@ -975,7 +991,7 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
   private setPaintProperty(
     paint: Record<string, unknown>,
     name: string,
-    value: number | string | undefined,
+    value: number | string | Expression | undefined,
   ): void {
     if (value !== undefined) {
       paint[name] = value;

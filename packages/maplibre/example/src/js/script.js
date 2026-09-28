@@ -12,6 +12,8 @@ import {
 const elementId = 'map';
 const geoJsonLayerId = 'cities-layer';
 const geoJsonSourceId = 'cities-source';
+const heatmapLayerId = 'heatmap-layer';
+const heatmapSourceId = 'heatmap-source';
 const mapId = 'main-map';
 const markerId = 'munich-marker';
 const polylineId = 'route-polyline';
@@ -38,9 +40,13 @@ const markerIconUrl = `data:image/svg+xml;utf8,${encodeURIComponent(
 )}`;
 
 const citiesGeoJson = {
-  features: [cologne, hamburg, nuremberg].map(city => ({
+  features: [
+    { city: cologne, population: 1084 },
+    { city: hamburg, population: 1892 },
+    { city: nuremberg, population: 523 },
+  ].map(({ city, population }) => ({
     geometry: { coordinates: [city.longitude, city.latitude], type: 'Point' },
-    properties: {},
+    properties: { population },
     type: 'Feature',
   })),
   type: 'FeatureCollection',
@@ -230,7 +236,7 @@ onClick('add-geojson-button', async () => {
     mapId,
     paint: {
       circleColor: '#7b3fe4',
-      circleRadius: 8,
+      circleRadius: ['interpolate', ['linear'], ['zoom'], 4, 6, 12, 16],
       circleStrokeColor: '#ffffff',
       circleStrokeWidth: 2,
     },
@@ -242,6 +248,52 @@ onClick('add-geojson-button', async () => {
 onClick('remove-geojson-button', async () => {
   await MapLibre.removeLayerById({ layerId: geoJsonLayerId, mapId });
   await MapLibre.removeGeoJsonSourceById({ mapId, sourceId: geoJsonSourceId });
+});
+
+onClick('add-heatmap-button', async () => {
+  await MapLibre.addGeoJsonSource({
+    data: citiesGeoJson,
+    mapId,
+    sourceId: heatmapSourceId,
+  });
+  await MapLibre.addLayer({
+    layerId: heatmapLayerId,
+    mapId,
+    paint: {
+      heatmapColor: [
+        'interpolate',
+        ['linear'],
+        ['heatmap-density'],
+        0,
+        'rgba(0,0,0,0)',
+        0.6,
+        'yellow',
+        0.8,
+        'orange',
+        0.9,
+        'red',
+        1,
+        'rgb(180,0,0)',
+      ],
+      heatmapRadius: ['interpolate', ['linear'], ['zoom'], 0, 15, 16, 60],
+      heatmapWeight: [
+        'interpolate',
+        ['linear'],
+        ['get', 'population'],
+        0,
+        0.2,
+        2000,
+        1,
+      ],
+    },
+    sourceId: heatmapSourceId,
+    type: LayerType.Heatmap,
+  });
+});
+
+onClick('remove-heatmap-button', async () => {
+  await MapLibre.removeLayerById({ layerId: heatmapLayerId, mapId });
+  await MapLibre.removeGeoJsonSourceById({ mapId, sourceId: heatmapSourceId });
 });
 
 onClick('enable-user-location-button', () =>

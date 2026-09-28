@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import io.capawesome.capacitorjs.plugins.maplibre.MapLibreHelper;
+import org.maplibre.android.style.expressions.Expression;
 
 /**
  * The paint properties of a layer. Properties that do not apply to the type of the layer are ignored.
@@ -11,110 +12,158 @@ import io.capawesome.capacitorjs.plugins.maplibre.MapLibreHelper;
 public class LayerPaint {
 
     @Nullable
-    private final Integer circleColor;
+    private final Expression circleBlur;
 
     @Nullable
-    private final Double circleOpacity;
+    private final Expression circleColor;
 
     @Nullable
-    private final Double circleRadius;
+    private final Expression circleOpacity;
 
     @Nullable
-    private final Integer circleStrokeColor;
+    private final Expression circleRadius;
 
     @Nullable
-    private final Double circleStrokeWidth;
+    private final Expression circleStrokeColor;
 
     @Nullable
-    private final Integer fillColor;
+    private final Expression circleStrokeWidth;
 
     @Nullable
-    private final Double fillOpacity;
+    private final Expression fillColor;
 
     @Nullable
-    private final Integer fillOutlineColor;
+    private final Expression fillOpacity;
 
     @Nullable
-    private final Integer lineColor;
+    private final Expression fillOutlineColor;
 
     @Nullable
-    private final Double lineOpacity;
+    private final Expression heatmapColor;
 
     @Nullable
-    private final Double lineWidth;
+    private final Expression heatmapIntensity;
+
+    @Nullable
+    private final Expression heatmapOpacity;
+
+    @Nullable
+    private final Expression heatmapRadius;
+
+    @Nullable
+    private final Expression heatmapWeight;
+
+    @Nullable
+    private final Expression lineColor;
+
+    @Nullable
+    private final Expression lineOpacity;
+
+    @Nullable
+    private final Expression lineWidth;
 
     public LayerPaint(@NonNull JSObject object) throws Exception {
-        this.circleColor = LayerPaint.getColor(object, "circleColor");
-        this.circleOpacity = MapLibreHelper.getDouble(object, "circleOpacity");
-        this.circleRadius = MapLibreHelper.getDouble(object, "circleRadius");
-        this.circleStrokeColor = LayerPaint.getColor(object, "circleStrokeColor");
-        this.circleStrokeWidth = MapLibreHelper.getDouble(object, "circleStrokeWidth");
-        this.fillColor = LayerPaint.getColor(object, "fillColor");
-        this.fillOpacity = MapLibreHelper.getDouble(object, "fillOpacity");
-        this.fillOutlineColor = LayerPaint.getColor(object, "fillOutlineColor");
-        this.lineColor = LayerPaint.getColor(object, "lineColor");
-        this.lineOpacity = MapLibreHelper.getDouble(object, "lineOpacity");
-        this.lineWidth = MapLibreHelper.getDouble(object, "lineWidth");
+        this.circleBlur = MapLibreHelper.createExpression(object.opt("circleBlur"));
+        this.circleColor = MapLibreHelper.createExpression(object.opt("circleColor"));
+        this.circleOpacity = MapLibreHelper.createExpression(object.opt("circleOpacity"));
+        this.circleRadius = MapLibreHelper.createExpression(object.opt("circleRadius"));
+        this.circleStrokeColor = MapLibreHelper.createExpression(object.opt("circleStrokeColor"));
+        this.circleStrokeWidth = MapLibreHelper.createExpression(object.opt("circleStrokeWidth"));
+        this.fillColor = MapLibreHelper.createExpression(object.opt("fillColor"));
+        this.fillOpacity = MapLibreHelper.createExpression(object.opt("fillOpacity"));
+        this.fillOutlineColor = MapLibreHelper.createExpression(object.opt("fillOutlineColor"));
+        this.heatmapColor = MapLibreHelper.createExpression(object.opt("heatmapColor"));
+        this.heatmapIntensity = MapLibreHelper.createExpression(object.opt("heatmapIntensity"));
+        this.heatmapOpacity = MapLibreHelper.createExpression(object.opt("heatmapOpacity"));
+        this.heatmapRadius = MapLibreHelper.createExpression(object.opt("heatmapRadius"));
+        this.heatmapWeight = MapLibreHelper.createExpression(object.opt("heatmapWeight"));
+        this.lineColor = MapLibreHelper.createExpression(object.opt("lineColor"));
+        this.lineOpacity = MapLibreHelper.createExpression(object.opt("lineOpacity"));
+        this.lineWidth = MapLibreHelper.createExpression(object.opt("lineWidth"));
     }
 
     @Nullable
-    public Integer getCircleColor() {
+    public Expression getCircleBlur() {
+        return circleBlur;
+    }
+
+    @Nullable
+    public Expression getCircleColor() {
         return circleColor;
     }
 
     @Nullable
-    public Double getCircleOpacity() {
+    public Expression getCircleOpacity() {
         return circleOpacity;
     }
 
     @Nullable
-    public Double getCircleRadius() {
+    public Expression getCircleRadius() {
         return circleRadius;
     }
 
     @Nullable
-    public Integer getCircleStrokeColor() {
+    public Expression getCircleStrokeColor() {
         return circleStrokeColor;
     }
 
     @Nullable
-    public Double getCircleStrokeWidth() {
+    public Expression getCircleStrokeWidth() {
         return circleStrokeWidth;
     }
 
     @Nullable
-    public Integer getFillColor() {
+    public Expression getFillColor() {
         return fillColor;
     }
 
     @Nullable
-    public Double getFillOpacity() {
+    public Expression getFillOpacity() {
         return fillOpacity;
     }
 
     @Nullable
-    public Integer getFillOutlineColor() {
+    public Expression getFillOutlineColor() {
         return fillOutlineColor;
     }
 
     @Nullable
-    public Integer getLineColor() {
+    public Expression getHeatmapColor() {
+        return heatmapColor;
+    }
+
+    @Nullable
+    public Expression getHeatmapIntensity() {
+        return heatmapIntensity;
+    }
+
+    @Nullable
+    public Expression getHeatmapOpacity() {
+        return heatmapOpacity;
+    }
+
+    @Nullable
+    public Expression getHeatmapRadius() {
+        return heatmapRadius;
+    }
+
+    @Nullable
+    public Expression getHeatmapWeight() {
+        return heatmapWeight;
+    }
+
+    @Nullable
+    public Expression getLineColor() {
         return lineColor;
     }
 
     @Nullable
-    public Double getLineOpacity() {
+    public Expression getLineOpacity() {
         return lineOpacity;
     }
 
     @Nullable
-    public Double getLineWidth() {
+    public Expression getLineWidth() {
         return lineWidth;
-    }
-
-    @Nullable
-    private static Integer getColor(@NonNull JSObject object, @NonNull String key) throws Exception {
-        String color = object.getString(key, null);
-        return color == null ? null : MapLibreHelper.parseColor(color);
     }
 }
