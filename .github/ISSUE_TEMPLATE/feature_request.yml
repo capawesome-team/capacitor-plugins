@@ -127,6 +127,7 @@ body:
         - label: SQLite
         - label: Superwall
         - label: System WebView
+        - label: Tab Bar
         - label: Text Interaction
         - label: Text Zoom
         - label: Thermal State

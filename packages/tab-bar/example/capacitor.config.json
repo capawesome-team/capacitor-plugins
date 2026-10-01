@@ -1,0 +1,16 @@
+{
+  "appId": "com.example.plugin",
+  "appName": "example",
+  "webDir": "dist",
+  "plugins": {
+    "TabBar": {
+      "tabs": [
+        { "id": "home", "title": "Home", "systemImage": "house.fill" },
+        { "id": "search", "title": "Search", "systemImage": "magnifyingglass" },
+        { "id": "inbox", "title": "Inbox", "systemImage": "tray.fill", "badge": "3" },
+        { "id": "favorites", "title": "Favorites", "image": "custom-star" }
+      ],
+      "selectedTabId": "home"
+    }
+  }
+}
