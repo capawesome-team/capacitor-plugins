@@ -18,7 +18,7 @@ declare module '@capacitor/cli' {
        * Only available on iOS.
        *
        * @since 0.1.0
-       * @example [{ id: 'home', title: 'Home', systemImage: 'house.fill' }]
+       * @example [{ "id": "home", "title": "Home", "systemImage": "house.fill" }]
        */
       tabs?: Tab[];
       /**
@@ -29,7 +29,7 @@ declare module '@capacitor/cli' {
        * Only available on iOS.
        *
        * @since 0.1.0
-       * @example 'home'
+       * @example "home"
        */
       selectedTabId?: string;
       /**
@@ -40,7 +40,7 @@ declare module '@capacitor/cli' {
        * Only available on iOS.
        *
        * @since 0.1.0
-       * @example '#007AFF'
+       * @example "#007AFF"
        */
       selectedColor?: string;
       /**
@@ -52,7 +52,7 @@ declare module '@capacitor/cli' {
        * Only available on iOS.
        *
        * @since 0.1.0
-       * @example '#8E8E93'
+       * @example "#8E8E93"
        */
       unselectedColor?: string;
     };

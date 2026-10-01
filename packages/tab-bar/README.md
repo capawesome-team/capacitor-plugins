@@ -88,10 +88,10 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "TabBar": {
-      "tabs": [{ id: 'home', title: 'Home', systemImage: 'house.fill' }],
-      "selectedTabId": 'home',
-      "selectedColor": '#007AFF',
-      "unselectedColor": '#8E8E93'
+      "tabs": [{ "id": "home", "title": "Home", "systemImage": "house.fill" }],
+      "selectedTabId": "home",
+      "selectedColor": "#007AFF",
+      "unselectedColor": "#8E8E93"
     }
   }
 }
@@ -107,10 +107,10 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   plugins: {
     TabBar: {
-      tabs: [{ id: 'home', title: 'Home', systemImage: 'house.fill' }],
-      selectedTabId: 'home',
-      selectedColor: '#007AFF',
-      unselectedColor: '#8E8E93',
+      tabs: [{ "id": "home", "title": "Home", "systemImage": "house.fill" }],
+      selectedTabId: "home",
+      selectedColor: "#007AFF",
+      unselectedColor: "#8E8E93",
     },
   },
 };
