@@ -25,6 +25,10 @@ The Managed Configurations plugin is typically used in enterprise apps that are 
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -54,10 +58,6 @@ See [Define managed configurations](https://developer.android.com/work/managed-c
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

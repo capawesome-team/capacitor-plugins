@@ -23,6 +23,14 @@ The App Shortcuts plugin is typically used to give users faster access to key pa
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
+
+| Android                                                                                                     | iOS                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| <image src="https://github.com/user-attachments/assets/58ac7272-de12-457f-a047-8f1f1e08ef52" width="324" /> | <image src="https://github.com/user-attachments/assets/6de8e629-8c31-4383-ba1a-faa921117128" width="324" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -111,14 +119,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 +        completionHandler(true)
 +    }
 ```
-
-## Demo
-
-A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
-
-| Android                                                                                                     | iOS                                                                                                         |
-| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| <image src="https://github.com/user-attachments/assets/58ac7272-de12-457f-a047-8f1f1e08ef52" width="324" /> | <image src="https://github.com/user-attachments/assets/6de8e629-8c31-4383-ba1a-faa921117128" width="324" /> |
 
 ## Usage
 

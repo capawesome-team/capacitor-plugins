@@ -36,6 +36,10 @@ The Torch plugin is typically used whenever an app needs to control the device's
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -80,10 +84,6 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

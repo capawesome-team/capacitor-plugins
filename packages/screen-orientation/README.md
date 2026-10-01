@@ -44,6 +44,10 @@ The Screen Orientation plugin is typically used whenever certain screens of an a
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -101,10 +105,6 @@ On iPad, you must add the following to your app's `Info.plist`:
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

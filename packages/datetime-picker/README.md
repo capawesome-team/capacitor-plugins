@@ -43,6 +43,14 @@ The Datetime Picker plugin is typically used whenever an app needs the user to e
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                            | iOS                                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/13857929/184545710-a837f45f-e335-4903-b3a9-e1f30b42163f.gif" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/datetime-picker/assets/datetime-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -68,14 +76,6 @@ npx cap sync
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                            | iOS                                                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://user-images.githubusercontent.com/13857929/184545710-a837f45f-e335-4903-b3a9-e1f30b42163f.gif" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/datetime-picker/assets/datetime-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Usage
 

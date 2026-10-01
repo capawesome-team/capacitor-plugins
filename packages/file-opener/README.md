@@ -41,6 +41,14 @@ The File Opener plugin is typically used whenever an app hands a file over to an
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                            | iOS                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/185747140-7e59ca70-96c9-4d67-a3b3-8fd9c7eb1546.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/185747133-62a2b5e5-ff6f-4b30-871c-4c3609db7829.gif" width="266" alt="iOS Demo" /> |
+
 ## Guides
 
 - [How to Take and Edit Photos in a Capacitor App](https://capawesome.io/blog/how-to-take-and-edit-photos-in-a-capacitor-app/)
@@ -95,14 +103,6 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                            | iOS                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/185747140-7e59ca70-96c9-4d67-a3b3-8fd9c7eb1546.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/185747133-62a2b5e5-ff6f-4b30-871c-4c3609db7829.gif" width="266" alt="iOS Demo" /> |
 
 ## Usage
 

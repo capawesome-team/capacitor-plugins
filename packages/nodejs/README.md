@@ -38,6 +38,10 @@ The Node.js plugin is typically used whenever an app needs functionality that on
 | -------------- | ----------------- | -------------- |
 | 0.0.x          | >=8.x.x           | Active support |
 
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/nodejs/example).
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -127,10 +131,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/nodejs/example).
 
 ## Usage
 

@@ -36,6 +36,12 @@ The Action Sheet plugin is typically used to let the user choose between several
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+| Android                                                                                                                                                                          | iOS                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -73,12 +79,6 @@ No additional configuration is required for this plugin.
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-| Android                                                                                                                                                                          | iOS                                                                                                                                                                      |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Usage
 
