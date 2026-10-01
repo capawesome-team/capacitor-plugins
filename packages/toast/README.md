@@ -71,6 +71,12 @@ No additional configuration is required for this plugin.
 
 No configuration required for this plugin.
 
+## Demo
+
+| Android                                                                                                                                                            | iOS                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/toast/assets/toast-demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/toast/assets/toast-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Usage
 
 The following example shows how to show a toast.

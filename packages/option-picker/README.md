@@ -75,6 +75,12 @@ No additional configuration is required for this plugin.
 
 No configuration required for this plugin.
 
+## Demo
+
+| iOS                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/option-picker/assets/option-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Usage
 
 The following examples show how to present a native option picker and read the selected value.
@@ -200,7 +206,7 @@ It presents the platform's own single-choice picker on Android and iOS through a
 
 ### Which native UI is used on each platform?
 
-On iOS, the plugin presents a `UIPickerView` in a bottom sheet with a toolbar that contains the cancel button, the title, and the done button. On Android, the plugin presents a Material 3 dialog with a scrollable single-choice list and a done and cancel button. Both follow the system appearance, including dark mode.
+On iOS, the plugin presents a `UIPickerView` in a bottom sheet with a toolbar that contains the cancel button, the title, and the done button. On iOS 26 and later, the bottom sheet uses the system's Liquid Glass design. On Android, the plugin presents a Material 3 dialog with a scrollable single-choice list and a done and cancel button. Both follow the system appearance, including dark mode.
 
 ### Does the Android dialog use my app's theme?
 
@@ -212,7 +218,7 @@ Yes, set the `theme` option to `light` or `dark`. By default (`auto`), the picke
 
 ### What happens when the user cancels the picker?
 
-The returned promise is rejected with the `ErrorCode.Canceled` error code. This happens when the user taps the cancel button, taps outside of the picker, or presses the back button on Android. See the [Handle cancellation](#handle-cancellation) example.
+The returned promise is rejected with the `ErrorCode.Canceled` error code. This happens when the user taps the cancel button, taps outside of the picker, swipes the picker down on iOS 26 and later, or presses the back button on Android. See the [Handle cancellation](#handle-cancellation) example.
 
 ### Which option is selected when the picker opens?
 
