@@ -1,5 +1,11 @@
 # @capawesome/capacitor-in-app-browser
 
+## 0.2.2
+
+### Patch Changes
+
+- [`52954cad0119df1c173960e82089c60c46b774d5`](https://github.com/capawesome-team/capacitor-plugins/commit/52954cad0119df1c173960e82089c60c46b774d5) ([#1104](https://github.com/capawesome-team/capacitor-plugins/pull/1104)): fix(ios): let content scroll under the navigation bar and apply `toolbar.color` to the toolbar buttons on iOS 26
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-tab-bar",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin to display a native tab bar with Liquid Glass on iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
