@@ -41,6 +41,12 @@ The In-App Browser plugin is typically used whenever an app needs to display web
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+| iOS                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/in-app-browser/assets/in-app-browser-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -100,12 +106,6 @@ If web pages opened in the embedded web view should be able to access the camera
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-| iOS                                                                                                                                                                          |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/in-app-browser/assets/in-app-browser-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Usage
 

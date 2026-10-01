@@ -36,6 +36,10 @@ The Cloudinary plugin is typically used whenever an app needs to exchange media 
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -87,10 +91,6 @@ This can be useful if you encounter dependency conflicts with other plugins in y
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

@@ -37,6 +37,12 @@ The Option Picker plugin is typically used as a native replacement for HTML `<se
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+| iOS                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/option-picker/assets/option-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -74,12 +80,6 @@ No additional configuration is required for this plugin.
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-| iOS                                                                                                                                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/option-picker/assets/option-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Usage
 

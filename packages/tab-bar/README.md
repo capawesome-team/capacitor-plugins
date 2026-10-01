@@ -26,6 +26,12 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+| iOS                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/tab-bar/assets/tab-bar-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -119,12 +125,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-| iOS                                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/tab-bar/assets/tab-bar-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Usage
 

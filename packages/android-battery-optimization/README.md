@@ -23,6 +23,14 @@ The Android Battery Optimization plugin is typically used by apps whose core fun
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" alt="Android Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -58,14 +66,6 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" alt="Android Demo" /> |
 
 ## Usage
 

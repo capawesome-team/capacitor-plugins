@@ -25,6 +25,10 @@ The PostHog plugin is typically used to understand how users interact with an ap
 | 8.x.x          | >=8.x.x           | Active support |
 | 7.x.x          | 7.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -121,10 +125,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 
