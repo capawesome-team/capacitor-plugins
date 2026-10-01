@@ -24,7 +24,9 @@ import UIKit
                 }
                 alertController.addAction(action)
             }
-            if let popoverController = alertController.popoverPresentationController, let view = self.plugin.bridge?.viewController?.view {
+            if UIDevice.current.userInterfaceIdiom != .phone,
+               let popoverController = alertController.popoverPresentationController,
+               let view = self.plugin.bridge?.viewController?.view {
                 popoverController.delegate = self
                 popoverController.sourceView = view
                 popoverController.sourceRect = CGRect(x: view.bounds.midX, y: view.bounds.midY, width: 0, height: 0)
