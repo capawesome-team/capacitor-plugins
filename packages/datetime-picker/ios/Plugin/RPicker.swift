@@ -87,8 +87,10 @@ import UIKit
                 let vc = RPickerController(title: title, cancelText: cancelText, doneText: doneText, datePickerMode: datePickerMode,
                                            selectedDate: selectedDate, minDate: minDate, maxDate: maxDate, locale: locale, style: style, theme: theme, minuteInterval: minuteInterval)
 
-                vc.modalPresentationStyle = .overCurrentContext
-                vc.modalTransitionStyle = .crossDissolve
+                if #unavailable(iOS 26) {
+                    vc.modalPresentationStyle = .overCurrentContext
+                    vc.modalTransitionStyle = .crossDissolve
+                }
                 cc.present(vc, animated: true, completion: nil)
 
                 vc.onWillDismiss = {
@@ -204,6 +206,9 @@ class RPickerController: UIViewController {
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         // Trait collection will change. Use this one so you know what the state is changing to.
+        if #available(iOS 26, *) {
+            return
+        }
         if #available(iOS 12.0, *) {
             if newCollection.userInterfaceStyle != traitCollection.userInterfaceStyle {
                 if newCollection.userInterfaceStyle == .dark {
@@ -219,6 +224,10 @@ class RPickerController: UIViewController {
 
     // MARK: - Private functions
     private func initialSetup() {
+        if #available(iOS 26, *) {
+            setUpPickerSheet(picker: datePicker, cancelText: cancelText, doneText: doneText, theme: theme)
+            return
+        }
 
         view.backgroundColor = UIColor.clear
         let bgView = transView
@@ -331,7 +340,9 @@ class RPickerController: UIViewController {
 
     private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
-        picker.pinConstraints(view, width: view.frame.width)
+        if #unavailable(iOS 26) {
+            picker.pinConstraints(view, width: view.frame.width)
+        }
         picker.minimumDate = minDate
         picker.maximumDate = maxDate
         picker.date = selectedDate
@@ -426,3 +437,9 @@ class RPickerController: UIViewController {
     }
 }
 
+extension RPickerController: PickerSheetPresentable {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        onBackdropDismissed?()
+        onWillDismiss?()
+    }
+}
