@@ -93,9 +93,6 @@ declare module '@capacitor/cli' {
        *
        * Set to `0` to disable the timeout.
        *
-       * On **Electron**, the plugin rolls back to the last bundle that successfully
-       * called `ready()` instead of the default bundle.
-       *
        * @since 5.0.0
        * @default 0
        * @example 10000
