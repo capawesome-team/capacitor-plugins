@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-live-update",
-  "version": "8.4.4",
+  "version": "8.5.0",
   "description": "Capacitor plugin to update your app remotely in real-time on Android, iOS and Electron.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
