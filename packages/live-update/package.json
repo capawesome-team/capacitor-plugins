@@ -1,7 +1,7 @@
 {
   "name": "@capawesome/capacitor-live-update",
   "version": "8.4.4",
-  "description": "Capacitor plugin to update your app remotely in real-time on Android and iOS.",
+  "description": "Capacitor plugin to update your app remotely in real-time on Android, iOS and Electron.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -10,6 +10,7 @@
     "android/src/main/",
     "android/build.gradle",
     "dist/",
+    "electron/dist/",
     "ios/Plugin/",
     "CapawesomeCapacitorLiveUpdate.podspec",
     "Package.swift"
@@ -41,6 +42,7 @@
     "ionic",
     "android",
     "ios",
+    "electron",
     "live update",
     "remote update",
     "ota",
@@ -60,19 +62,24 @@
     "verify:web": "npm run build",
     "e2e:android": "npm install --prefix example && npm run build && npm --prefix example run e2e:android",
     "e2e:ios": "npm install --prefix example && npm run build && npm --prefix example run e2e:ios",
+    "e2e:electron": "npm install --prefix example && npm run build && npm --prefix example run e2e:electron",
     "lint": "npm run version:check && npm run eslint && npm run prettier -- --check && npm run swiftlint -- lint",
     "fmt": "npm run eslint -- --fix && npm run prettier -- --write && npm run swiftlint -- --fix --format",
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
     "docgen": "docgen --api LiveUpdatePlugin --output-readme README.md --output-json dist/docs.json",
-    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
-    "clean": "rimraf ./dist",
+    "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs && npm run build:electron",
+    "build:electron": "rollup -c electron/rollup.config.mjs",
+    "clean": "rimraf ./dist ./electron/dist",
     "watch": "tsc --watch",
     "version": "node scripts/sync-plugin-version.mjs",
     "version:check": "node scripts/sync-plugin-version.mjs --check",
     "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
     "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@capawesome/electron-live-update": "^0.1.0"
   },
   "devDependencies": {
     "@capacitor/android": "8.0.0",
@@ -80,16 +87,26 @@
     "@capacitor/core": "8.0.0",
     "@capacitor/docgen": "0.3.1",
     "@capacitor/ios": "8.0.0",
+    "@capawesome/capacitor-electron": "0.2.0",
     "@ionic/eslint-config": "0.4.0",
+    "@rollup/plugin-typescript": "12.3.0",
+    "electron": "44.5.1",
     "eslint": "8.57.0",
     "prettier-plugin-java": "2.9.7",
     "rimraf": "6.1.2",
     "rollup": "4.62.3",
     "swiftlint": "2.0.0",
+    "tslib": "2.8.1",
     "typescript": "5.9.3"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+    "@capacitor/core": ">=8.0.0",
+    "@capawesome/capacitor-electron": ">=0.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@capawesome/capacitor-electron": {
+      "optional": true
+    }
   },
   "eslintConfig": {
     "extends": "@ionic/eslint-config/recommended"
@@ -100,6 +117,9 @@
     },
     "android": {
       "src": "android"
+    },
+    "electron": {
+      "src": "electron"
     }
   }
 }

@@ -10,6 +10,9 @@
     "e2e:ios": {
       "cache": false
     },
+    "e2e:electron": {
+      "cache": false
+    },
     "lint": {},
     "fmt": {},
     "docgen": {},
