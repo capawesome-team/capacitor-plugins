@@ -1154,11 +1154,15 @@ public class LiveUpdate {
 
     @NonNull
     private String getDeviceId() {
-        String deviceId = preferences.getDeviceIdForApp(getAppId());
+        String deviceId = preferences.getDeviceId();
+        if (deviceId != null) {
+            return deviceId;
+        }
+        deviceId = preferences.getLegacyDeviceIdForApp(getAppId());
         if (deviceId == null) {
             deviceId = UUID.randomUUID().toString().toLowerCase();
-            preferences.setDeviceIdForApp(getAppId(), deviceId);
         }
+        preferences.setDeviceId(deviceId);
         return deviceId;
     }
 

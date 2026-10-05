@@ -759,6 +759,9 @@ export interface GetDeviceIdResult {
    * On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used.
    * The value of this property is the same for apps that come from the same vendor running on the same device.
    *
+   * On Android, a random UUID is generated once per installation and stored by the plugin.
+   * The value is shared across all app IDs and changes when the app is reinstalled or its data is cleared.
+   *
    * On Electron, a random UUID is generated on first use and stored in the app's user data directory.
    * The value changes when the user data is cleared.
    *
