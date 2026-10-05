@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.5.0
+
+### Minor Changes
+
+- [`f3b4aaf947e739c2073b4510ff6651a3efeb71f9`](https://github.com/capawesome-team/capacitor-plugins/commit/f3b4aaf947e739c2073b4510ff6651a3efeb71f9) ([#1109](https://github.com/capawesome-team/capacitor-plugins/pull/1109)): feat: add support for the Electron platform via [`@capawesome/capacitor-electron`](https://github.com/capawesome-team/capacitor-electron)
+
 ## 8.4.4
 
 ### Patch Changes
