@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.6.0
+
+### Minor Changes
+
+- [`6bb75918914d53dc2ad75d8e5ff008ca835e8cbb`](https://github.com/capawesome-team/capacitor-plugins/commit/6bb75918914d53dc2ad75d8e5ff008ca835e8cbb) ([#1114](https://github.com/capawesome-team/capacitor-plugins/pull/1114)): feat(android): use one device ID per installation across all app IDs
+
 ## 8.5.0
 
 ### Minor Changes
