@@ -44,16 +44,18 @@ public class LiveUpdatePreferences {
     }
 
     @Nullable
-    public String getDeviceIdForApp(@Nullable String appId) {
+    public String getDeviceId() {
+        return context.getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE).getString(deviceIdKey, null);
+    }
+
+    @Nullable
+    public String getLegacyDeviceIdForApp(@Nullable String appId) {
         if (appId == null) {
-            return context
-                .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-                .getString(deviceIdKey, null);
-        } else {
-            return context
-                .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
-                .getString(deviceIdKey + "_" + appId, null);
+            return null;
         }
+        return context
+            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
+            .getString(deviceIdKey + "_" + appId, null);
     }
 
     public int getLastVersionCode() {
@@ -110,12 +112,8 @@ public class LiveUpdatePreferences {
         settingsEditor.apply();
     }
 
-    public void setDeviceIdForApp(@Nullable String appId, @NonNull String deviceId) {
-        if (appId == null) {
-            settingsEditor.putString(deviceIdKey, deviceId);
-        } else {
-            settingsEditor.putString(deviceIdKey + "_" + appId, deviceId);
-        }
+    public void setDeviceId(@NonNull String deviceId) {
+        settingsEditor.putString(deviceIdKey, deviceId);
         settingsEditor.apply();
     }
 
