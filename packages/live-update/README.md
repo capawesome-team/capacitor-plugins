@@ -162,15 +162,14 @@ We recommend to declare [`CA92.1`](https://developer.apple.com/documentation/bun
 
 ### Electron
 
-This plugin supports the [Capacitor Electron platform](https://github.com/capawesome-team/capacitor-electron) (`@capawesome/capacitor-electron` version `0.2.0` or later). The Electron implementation is registered automatically during `npx cap sync`, so no additional configuration is required.
+This plugin supports the [Capacitor Electron platform](https://github.com/capawesome-team/capacitor-electron) (`@capawesome/capacitor-electron` version `0.2.0` or later). No additional configuration is required.
 
 Please note the following differences on Electron:
 
-- The app version (returned by `getVersionCode()` and `getVersionName()`) is the `version` from your `electron/package.json` file. Make sure to maintain it, otherwise version constraints cannot distinguish your desktop releases.
-- When the app version changes, the plugin resets to the bundle packaged with the app.
-- If `readyTimeout` is configured, the rollback is kill-safe: if the app is closed or crashes before `ready()` is called, the rollback is performed on the next app start.
+- The app version is the `version` from your `electron/package.json` file, so make sure to maintain it.
 - Only the `zip` artifact type is supported.
-- Bundles and state are stored in the `capawesome-live-update` directory inside the app's [`userData`](https://www.electronjs.org/docs/latest/api/app#appgetpathname) directory. The device ID changes when this directory is cleared.
+- Bundles and state are stored in the `capawesome-live-update` directory inside the app's [`userData`](https://www.electronjs.org/docs/latest/api/app#appgetpathname) directory.
+- The rollback is kill-safe: if the app is closed or crashes before `ready()` is called, the rollback is performed on the next app start.
 
 #### Channel
 
