@@ -123,13 +123,8 @@ public class AppUpdatePlugin extends Plugin {
             if (packageName == null) {
                 packageName = this.getContext().getPackageName();
             }
-            Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-            try {
-                this.getBridge().getActivity().startActivity(launchIntent);
-            } catch (ActivityNotFoundException ex) {
-                launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-                this.getBridge().getActivity().startActivity(launchIntent);
-            }
+            String storePackageName = call.getString("androidStorePackageName");
+            startAppStoreActivity(packageName, storePackageName);
             call.resolve();
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
@@ -288,5 +283,26 @@ public class AppUpdatePlugin extends Plugin {
         }
         this.appUpdateManager.unregisterListener(this.listener);
         this.listener = null;
+    }
+
+    private void startAppStoreActivity(String packageName, String storePackageName) {
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+        if (storePackageName != null && tryStartActivity(new Intent(marketIntent).setPackage(storePackageName))) {
+            return;
+        }
+        if (tryStartActivity(marketIntent)) {
+            return;
+        }
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        this.getBridge().getActivity().startActivity(webIntent);
+    }
+
+    private boolean tryStartActivity(Intent intent) {
+        try {
+            this.getBridge().getActivity().startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException exception) {
+            return false;
+        }
     }
 }
