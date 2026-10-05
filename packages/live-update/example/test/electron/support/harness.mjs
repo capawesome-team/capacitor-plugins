@@ -15,11 +15,14 @@ const GENERATED_CONFIG_PATH = join(
 );
 
 /**
- * Minimal Capawesome Cloud API mock that always offers the fixture bundle.
+ * Minimal Capawesome Cloud API mock that always offers the given bundle.
  */
-export const startMockServer = () =>
+export const startMockServer = ({
+  bundleId = BUNDLE_ID,
+  zipPath = BUNDLE_ZIP_PATH,
+} = {}) =>
   new Promise(resolve => {
-    const zip = readFileSync(BUNDLE_ZIP_PATH);
+    const zip = readFileSync(zipPath);
     const checksum = createHash('sha256').update(zip).digest('hex');
     const server = createServer((req, res) => {
       const { port } = server.address();
@@ -31,7 +34,7 @@ export const startMockServer = () =>
         res.end(
           JSON.stringify({
             artifactType: 'zip',
-            bundleId: BUNDLE_ID,
+            bundleId,
             checksum,
             url: `http://localhost:${port}/bundle.zip`,
           }),
@@ -96,11 +99,14 @@ export const activeBundleVersion = page =>
       document.querySelector('meta[name="bundle-version"]')?.content ?? null,
   );
 
-export const reloadToBundle = async (page, bundleId) => {
+export const triggerReload = page =>
   // Fire-and-forget: the window reloads before `reload()` resolves.
-  await page.evaluate(() => {
+  page.evaluate(() => {
     void window.Capacitor.Plugins.LiveUpdate.reload();
   });
+
+export const reloadToBundle = async (page, bundleId) => {
+  await triggerReload(page);
   await page.waitForFunction(
     expected =>
       document.querySelector('meta[name="bundle-version"]')?.content ===

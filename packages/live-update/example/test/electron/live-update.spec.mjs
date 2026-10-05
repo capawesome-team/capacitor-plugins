@@ -7,9 +7,15 @@ import {
   launch,
   reloadToBundle,
   startMockServer,
+  triggerReload,
   writeLiveUpdateConfig,
 } from './support/harness.mjs';
-import { BUNDLE_ID } from './support/paths.mjs';
+import {
+  BROKEN_BUNDLE_ID,
+  BROKEN_BUNDLE_MARKER_ID,
+  BROKEN_BUNDLE_ZIP_PATH,
+  BUNDLE_ID,
+} from './support/paths.mjs';
 
 let mockServer;
 
@@ -54,4 +60,37 @@ test('rolls back on the next start if the app was closed before ready', async ()
   expect(ready.rollback).toBe(true);
 
   await secondRun.app.close();
+});
+
+test('rolls back to the default bundle when the app does not signal readiness', async () => {
+  const readyTimeout = 3000;
+  const brokenBundleServer = await startMockServer({
+    bundleId: BROKEN_BUNDLE_ID,
+    zipPath: BROKEN_BUNDLE_ZIP_PATH,
+  });
+  writeLiveUpdateConfig({
+    autoBlockRolledBackBundles: true,
+    readyTimeout,
+    serverDomain: brokenBundleServer.serverDomain,
+  });
+  const { app, page } = await launch(createUserDataDir());
+  const marker = page.locator(`#${BROKEN_BUNDLE_MARKER_ID}`);
+
+  await callPlugin(page, 'sync');
+  await triggerReload(page);
+  await expect(marker).toBeVisible();
+
+  await expect(marker).toBeHidden({ timeout: readyTimeout + 5000 });
+  // Wait for the rolled back page's scripts to run before checking again.
+  await page.waitForLoadState();
+  await expect(marker).toBeHidden();
+  const ready = await callPlugin(page, 'ready');
+  expect(ready.currentBundleId).toBeNull();
+  expect(ready.rollback).toBe(true);
+  const blocked = await callPlugin(page, 'getBlockedBundles');
+  expect(blocked.bundleIds).toContain(BROKEN_BUNDLE_ID);
+  expect((await callPlugin(page, 'sync')).nextBundleId).toBeNull();
+
+  await app.close();
+  await brokenBundleServer.close();
 });
