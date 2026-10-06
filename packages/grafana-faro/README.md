@@ -5,8 +5,8 @@ Unofficial Capacitor plugin for [Grafana Faro](https://grafana.com/oss/faro/).[^
 > ⚠️ **Experimental:** This plugin is in early development. APIs may change between minor versions. Feedback and bug reports are very welcome — please [open an issue](https://github.com/capawesome-team/capacitor-plugins/issues).
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 

@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for using the [RealtimeKit SDK](https://docs.realtime.cloudflare.com/).[^1]
 
+<div class="capawesome-z29o10a">
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
+  </a>
+</div>
+
 ## Use Cases
 
 The RealtimeKit plugin is typically used to add real-time meetings to an app, for example:
