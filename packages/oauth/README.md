@@ -4,7 +4,7 @@ Capacitor plugin for communicating with OAuth 2.0 and OpenID Connect providers.[
 
 <div class="capawesome-z29o10a">
   <a href="https://capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 

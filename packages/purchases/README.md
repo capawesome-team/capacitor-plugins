@@ -2,6 +2,12 @@
 
 Capacitor plugin to support in-app purchases.
 
+<div class="capawesome-z29o10a">
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
+  </a>
+</div>
+
 ## Features
 
 The Capacitor Purchases plugin is one of the most complete in-app purchase solutions for Capacitor apps. Here are some of the key features:
