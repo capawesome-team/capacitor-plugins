@@ -15,6 +15,10 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 `query(...)` now returns BLOB values as `number[]` instead of `Uint8Array`, matching the `Value` type and the other platforms. Convert the value with `new Uint8Array(value)` if you need a typed array.
 
+### Large integers (Web)
+
+`query(...)` now returns integers outside the safe range of JavaScript numbers (±2^53 - 1) as `number` instead of `bigint`, like on Android and iOS. Such integers lose precision.
+
 ### Parameter types in `query(...)` (Android)
 
 `query(...)` now binds the `values` with their type instead of converting them to strings. This only changes results where the type of a parameter matters, for example in expressions like `SELECT ? + 1` or in comparisons with columns without a type affinity.

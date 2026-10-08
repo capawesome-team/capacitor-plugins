@@ -980,8 +980,6 @@ Represents a value that can be used in SQL statements.
 
 This can include strings, numbers, arrays of numbers (for BLOBs), or `null`.
 
-**Attention:** On Web, arrays of numbers (BLOBs) are not supported.
-
 <code>string | number | number[] | null</code>
 
 
@@ -1117,11 +1115,18 @@ The Android implementation of this plugin has the following limitations:
 - **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
 - **Statements that return data must use `query(...)`**: `execute(...)` cannot run statements that return rows. For example, `PRAGMA journal_mode = WAL` and `PRAGMA journal_size_limit = ...` both return the resulting value and must be run via `query(...)`. `PRAGMA synchronous = ...` does not return a value and can be run via `execute(...)`.
 
+### iOS
+
+The iOS implementation of this plugin has the following limitations:
+
+- **Number of values**: The number of `values` must match the number of parameters in the statement. Otherwise, the app terminates, because `SQLite.swift` cannot report this as an error.
+- **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
+
 ### Web
 
 The web implementation of this plugin has the following limitations:
 
-- **BLOBs**: Arrays of numbers (BLOBs) are not supported. You can only use strings, numbers, and `null` as values in SQL statements.
+- **Large whole numbers**: Whole numbers outside the 64-bit integer range (e.g. `1e300`) cannot be passed as `values` and are rejected.
 
 ### Electron
 
@@ -1215,7 +1220,7 @@ After changing the package traits in your Capacitor configuration, run `npx cap 
 
 ### Can I execute multiple SQL statements in a single call?
 
-On Android and Electron, only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement, optionally wrapped in a transaction.
+On Android, iOS and Electron, only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement, optionally wrapped in a transaction.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
