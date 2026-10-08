@@ -4,9 +4,32 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
+- [Version 0.5.x](#version-05x)
 - [Version 0.4.x](#version-04x)
 - [Version 0.3.x](#version-03x)
 - [Version 0.2.x](#version-02x)
+
+## Version 0.5.x
+
+### BLOB values (Web)
+
+`query(...)` now returns BLOB values as `number[]` instead of `Uint8Array`, matching the `Value` type and the other platforms. Convert the value with `new Uint8Array(value)` if you need a typed array.
+
+### Parameter types in `query(...)` (Android)
+
+`query(...)` now binds the `values` with their type instead of converting them to strings. This only changes results where the type of a parameter matters, for example in expressions like `SELECT ? + 1` or in comparisons with columns without a type affinity.
+
+### Boolean values in `execute(...)` (Android)
+
+`execute(...)` now binds boolean `values` as `1` and `0` instead of `NULL`, like `query(...)` and the other platforms.
+
+### Parameter types in `query(...)` (iOS)
+
+`query(...)` now binds integer `values` as `INTEGER` instead of `REAL`. This only changes results where the type of a parameter matters, for example in `SELECT ? / 2`.
+
+### Unsupported values in `query(...)` (iOS)
+
+`query(...)` now rejects `values` of an unsupported type, like `execute(...)` already did. Previously these values were bound as `NULL`.
 
 ## Version 0.4.x
 

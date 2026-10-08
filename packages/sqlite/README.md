@@ -51,7 +51,8 @@ The SQLite plugin is typically used whenever an app needs a robust local databas
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.4.x          | >=8.x.x           | Active support |
+| 0.5.x          | >=8.x.x           | Active support |
+| 0.4.x          | >=8.x.x           | Deprecated     |
 | 0.3.x          | >=8.x.x           | Deprecated     |
 | 0.2.x          | >=8.x.x           | Deprecated     |
 | 0.1.x          | 7.x.x             | Deprecated     |
