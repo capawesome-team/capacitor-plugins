@@ -13,9 +13,31 @@ import org.json.JSONObject;
 import org.maplibre.android.geometry.LatLng;
 import org.maplibre.android.geometry.LatLngBounds;
 import org.maplibre.android.location.modes.CameraMode;
+import org.maplibre.android.style.expressions.Expression;
 import org.maplibre.android.style.layers.Property;
 
 public class MapLibreHelper {
+
+    @Nullable
+    public static Expression createExpression(@Nullable Object value) throws Exception {
+        if (value instanceof Number number) {
+            return Expression.literal(number.floatValue());
+        }
+        if (value instanceof String color) {
+            return Expression.color(MapLibreHelper.parseColor(color));
+        }
+        if (value instanceof JSONArray array) {
+            if (!(array.opt(0) instanceof String)) {
+                throw CustomExceptions.EXPRESSION_INVALID;
+            }
+            try {
+                return Expression.raw(array.toString());
+            } catch (Exception exception) {
+                throw CustomExceptions.EXPRESSION_INVALID;
+            }
+        }
+        return null;
+    }
 
     @NonNull
     public static LatLng createLatLng(@NonNull JSObject object) throws Exception {

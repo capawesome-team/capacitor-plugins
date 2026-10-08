@@ -19,7 +19,7 @@ The Capacitor MapLibre plugin renders interactive maps with the native MapLibre 
 - 📍 **Markers**: Add markers with custom icons, anchors, sizes, opacity and rotation, and update them with smooth animations.
 - ✋ **Draggable Markers**: Let users drag markers and react to drag events on Android and Web.
 - 〰️ **Polylines**: Draw and update routes and tracks with custom color, width and opacity.
-- 🧬 **GeoJSON**: Add GeoJSON sources from data or URL and render them with styled line, fill and circle layers.
+- 🧬 **GeoJSON**: Add GeoJSON sources from data or URL and render them with line, fill, circle and heatmap layers styled with expressions and filters.
 - 🧭 **User Location**: Display the location of the user and follow it with course or heading tracking modes.
 - 🎛️ **Gesture Controls**: Enable or disable panning, zooming, rotating and tilting at any time.
 - 🧩 **Multi-Instance**: Create and control multiple maps at the same time by ID.
@@ -269,6 +269,42 @@ const addGeoJson = async () => {
     paint: { lineColor: '#3887be', lineWidth: 4 },
     sourceId: 'my-source',
     type: LayerType.Line,
+  });
+};
+```
+
+### Add a heatmap
+
+Paint properties and the `filter` option also accept [expressions](https://maplibre.org/maplibre-style-spec/expressions/) to style features based on their data:
+
+```typescript
+import { LayerType, MapLibre } from '@capawesome/capacitor-maplibre';
+
+const addHeatmap = async () => {
+  await MapLibre.addGeoJsonSource({
+    mapId: 'my-map',
+    sourceId: 'my-heatmap-source',
+    url: 'https://example.com/events.geojson',
+  });
+  await MapLibre.addLayer({
+    layerId: 'my-heatmap-layer',
+    mapId: 'my-map',
+    paint: {
+      heatmapColor: [
+        'interpolate',
+        ['linear'],
+        ['heatmap-density'],
+        0, 'rgba(0,0,0,0)',
+        0.6, 'yellow',
+        0.8, 'orange',
+        0.9, 'red',
+        1, 'rgb(180,0,0)',
+      ],
+      heatmapRadius: ['interpolate', ['linear'], ['zoom'], 0, 15, 16, 60],
+      heatmapWeight: ['interpolate', ['linear'], ['get', 'going'], 0, 0.2, 10, 1],
+    },
+    sourceId: 'my-heatmap-source',
+    type: LayerType.Heatmap,
   });
 };
 ```
@@ -1142,6 +1178,7 @@ Remove all listeners for this plugin.
 | Prop               | Type                                              | Description                                                                                                                               | Since |
 | ------------------ | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`belowLayerId`** | <code>string</code>                               | The unique identifier of the layer below which the new layer is inserted. If not provided, the layer is added on top of all other layers. | 0.1.0 |
+| **`filter`**       | <code><a href="#expression">Expression</a></code> | The expression that selects the features rendered by the layer. Only features for which the expression evaluates to `true` are rendered.  | 0.2.1 |
 | **`layerId`**      | <code>string</code>                               | The unique identifier of the layer.                                                                                                       | 0.1.0 |
 | **`mapId`**        | <code>string</code>                               | The unique identifier of the map.                                                                                                         | 0.1.0 |
 | **`maxZoom`**      | <code>number</code>                               | The maximum zoom level at which the layer is visible.                                                                                     | 0.1.0 |
@@ -1157,19 +1194,25 @@ The paint properties of a layer.
 
 Properties that do not apply to the type of the layer are ignored.
 
-| Prop                    | Type                | Description                                                                                                                              | Since |
-| ----------------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`circleColor`**       | <code>string</code> | The fill color of the circles as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`. Only applies to layers of type `circle`.   | 0.1.0 |
-| **`circleOpacity`**     | <code>number</code> | The opacity of the circles as a value between `0` and `1`. Only applies to layers of type `circle`.                                      | 0.1.0 |
-| **`circleRadius`**      | <code>number</code> | The radius of the circles in CSS pixels. Only applies to layers of type `circle`.                                                        | 0.1.0 |
-| **`circleStrokeColor`** | <code>string</code> | The stroke color of the circles as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`. Only applies to layers of type `circle`. | 0.1.0 |
-| **`circleStrokeWidth`** | <code>number</code> | The stroke width of the circles in CSS pixels. Only applies to layers of type `circle`.                                                  | 0.1.0 |
-| **`fillColor`**         | <code>string</code> | The fill color of the areas as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`. Only applies to layers of type `fill`.       | 0.1.0 |
-| **`fillOpacity`**       | <code>number</code> | The opacity of the areas as a value between `0` and `1`. Only applies to layers of type `fill`.                                          | 0.1.0 |
-| **`fillOutlineColor`**  | <code>string</code> | The outline color of the areas as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`. Only applies to layers of type `fill`.    | 0.1.0 |
-| **`lineColor`**         | <code>string</code> | The color of the lines as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`. Only applies to layers of type `line`.            | 0.1.0 |
-| **`lineOpacity`**       | <code>number</code> | The opacity of the lines as a value between `0` and `1`. Only applies to layers of type `line`.                                          | 0.1.0 |
-| **`lineWidth`**         | <code>number</code> | The width of the lines in CSS pixels. Only applies to layers of type `line`.                                                             | 0.1.0 |
+| Prop                    | Type                                                        | Description                                                                                                                                                                              | Since |
+| ----------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`circleBlur`**        | <code>number \| <a href="#expression">Expression</a></code> | The blur of the circles relative to their radius, or an expression. A value of `1` blurs the circles so that only their center is fully opaque. Only applies to layers of type `circle`. | 0.2.1 |
+| **`circleColor`**       | <code>string \| <a href="#expression">Expression</a></code> | The fill color of the circles as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`, or an expression. Only applies to layers of type `circle`.                                 | 0.1.0 |
+| **`circleOpacity`**     | <code>number \| <a href="#expression">Expression</a></code> | The opacity of the circles as a value between `0` and `1`, or an expression. Only applies to layers of type `circle`.                                                                    | 0.1.0 |
+| **`circleRadius`**      | <code>number \| <a href="#expression">Expression</a></code> | The radius of the circles in CSS pixels, or an expression. Only applies to layers of type `circle`.                                                                                      | 0.1.0 |
+| **`circleStrokeColor`** | <code>string \| <a href="#expression">Expression</a></code> | The stroke color of the circles as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`, or an expression. Only applies to layers of type `circle`.                               | 0.1.0 |
+| **`circleStrokeWidth`** | <code>number \| <a href="#expression">Expression</a></code> | The stroke width of the circles in CSS pixels, or an expression. Only applies to layers of type `circle`.                                                                                | 0.1.0 |
+| **`fillColor`**         | <code>string \| <a href="#expression">Expression</a></code> | The fill color of the areas as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`, or an expression. Only applies to layers of type `fill`.                                     | 0.1.0 |
+| **`fillOpacity`**       | <code>number \| <a href="#expression">Expression</a></code> | The opacity of the areas as a value between `0` and `1`, or an expression. Only applies to layers of type `fill`.                                                                        | 0.1.0 |
+| **`fillOutlineColor`**  | <code>string \| <a href="#expression">Expression</a></code> | The outline color of the areas as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`, or an expression. Only applies to layers of type `fill`.                                  | 0.1.0 |
+| **`heatmapColor`**      | <code><a href="#expression">Expression</a></code>           | The color of each pixel of the heatmap as an expression based on its density, which is retrieved with `['heatmap-density']`. Only applies to layers of type `heatmap`.                   | 0.2.1 |
+| **`heatmapIntensity`**  | <code>number \| <a href="#expression">Expression</a></code> | The intensity of the heatmap, which multiplies the weight of each point, or an expression. Only applies to layers of type `heatmap`.                                                     | 0.2.1 |
+| **`heatmapOpacity`**    | <code>number \| <a href="#expression">Expression</a></code> | The opacity of the heatmap as a value between `0` and `1`, or an expression. Only applies to layers of type `heatmap`.                                                                   | 0.2.1 |
+| **`heatmapRadius`**     | <code>number \| <a href="#expression">Expression</a></code> | The radius of influence of each point in CSS pixels, or an expression. Only applies to layers of type `heatmap`.                                                                         | 0.2.1 |
+| **`heatmapWeight`**     | <code>number \| <a href="#expression">Expression</a></code> | The contribution of each point to the density of the heatmap, or an expression. Only applies to layers of type `heatmap`.                                                                | 0.2.1 |
+| **`lineColor`**         | <code>string \| <a href="#expression">Expression</a></code> | The color of the lines as a hexadecimal string in the format `#RRGGBB` or `#RRGGBBAA`, or an expression. Only applies to layers of type `line`.                                          | 0.1.0 |
+| **`lineOpacity`**       | <code>number \| <a href="#expression">Expression</a></code> | The opacity of the lines as a value between `0` and `1`, or an expression. Only applies to layers of type `line`.                                                                        | 0.1.0 |
+| **`lineWidth`**         | <code>number \| <a href="#expression">Expression</a></code> | The width of the lines in CSS pixels, or an expression. Only applies to layers of type `line`.                                                                                           | 0.1.0 |
 
 
 #### AddMarkerOptions
@@ -1646,6 +1689,17 @@ A point on a map in CSS pixels, relative to the map element.
 ### Type Aliases
 
 
+#### Expression
+
+A [MapLibre style expression](https://maplibre.org/maplibre-style-spec/expressions/),
+e.g. `['get', 'color']`.
+
+Expressions are not validated by the plugin. On iOS, an invalid
+expression crashes the app.
+
+<code>unknown[]</code>
+
+
 #### PermissionState
 
 <code>'prompt' | 'prompt-with-rationale' | 'granted' | 'denied'</code>
@@ -1656,11 +1710,12 @@ A point on a map in CSS pixels, relative to the map element.
 
 #### LayerType
 
-| Members      | Value                 | Description                                    | Since |
-| ------------ | --------------------- | ---------------------------------------------- | ----- |
-| **`Circle`** | <code>'circle'</code> | A layer that renders points as circles.        | 0.1.0 |
-| **`Fill`**   | <code>'fill'</code>   | A layer that renders polygons as filled areas. | 0.1.0 |
-| **`Line`**   | <code>'line'</code>   | A layer that renders line strings as lines.    | 0.1.0 |
+| Members       | Value                  | Description                                              | Since |
+| ------------- | ---------------------- | -------------------------------------------------------- | ----- |
+| **`Circle`**  | <code>'circle'</code>  | A layer that renders points as circles.                  | 0.1.0 |
+| **`Fill`**    | <code>'fill'</code>    | A layer that renders polygons as filled areas.           | 0.1.0 |
+| **`Heatmap`** | <code>'heatmap'</code> | A layer that renders the density of points as a heatmap. | 0.2.1 |
+| **`Line`**    | <code>'line'</code>    | A layer that renders line strings as lines.              | 0.1.0 |
 
 
 #### MarkerIconAnchor

@@ -36,6 +36,28 @@ public class MapLibreHelper {
         }
     }
 
+    static func createExpression(_ value: Any?) throws -> NSExpression? {
+        if let value = value as? NSNumber {
+            return NSExpression(forConstantValue: value)
+        }
+        if let value = value as? String {
+            return getColor(value).map { NSExpression(forConstantValue: $0) }
+        }
+        if let value = value as? [Any] {
+            try validateExpression(value)
+            return NSExpression(mglJSONObject: value)
+        }
+        return nil
+    }
+
+    static func createPredicate(_ value: JSArray?) throws -> NSPredicate? {
+        guard let value = value else {
+            return nil
+        }
+        try validateExpression(value)
+        return NSPredicate(mglJSONObject: value)
+    }
+
     static func getCameraMoveReason(_ reason: MLNCameraChangeReason) -> CameraMoveReason {
         return reason.isDisjoint(with: gestureChangeReasons) ? .api : .gesture
     }
@@ -95,5 +117,11 @@ public class MapLibreHelper {
             throw error
         }
         return value
+    }
+
+    private static func validateExpression(_ value: [Any]) throws {
+        guard value.first is String else {
+            throw CustomError.expressionInvalid
+        }
     }
 }

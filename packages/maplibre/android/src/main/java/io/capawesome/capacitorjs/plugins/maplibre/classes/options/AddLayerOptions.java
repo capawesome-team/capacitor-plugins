@@ -9,13 +9,17 @@ import io.capawesome.capacitorjs.plugins.maplibre.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.maplibre.classes.LayerPaint;
 import java.util.Arrays;
 import java.util.List;
+import org.maplibre.android.style.expressions.Expression;
 
 public class AddLayerOptions {
 
-    private static final List<String> LAYER_TYPES = Arrays.asList("circle", "fill", "line");
+    private static final List<String> LAYER_TYPES = Arrays.asList("circle", "fill", "heatmap", "line");
 
     @Nullable
     private final String belowLayerId;
+
+    @Nullable
+    private final Expression filter;
 
     @NonNull
     private final String layerId;
@@ -52,6 +56,7 @@ public class AddLayerOptions {
             throw CustomExceptions.LAYER_TYPE_INVALID;
         }
         this.belowLayerId = call.getString("belowLayerId");
+        this.filter = MapLibreHelper.createExpression(call.getArray("filter"));
         this.layerId = layerId;
         this.mapId = MapLibreHelper.getMapIdFromCall(call);
         this.maxZoom = call.getDouble("maxZoom");
@@ -64,6 +69,11 @@ public class AddLayerOptions {
     @Nullable
     public String getBelowLayerId() {
         return belowLayerId;
+    }
+
+    @Nullable
+    public Expression getFilter() {
+        return filter;
     }
 
     @NonNull
