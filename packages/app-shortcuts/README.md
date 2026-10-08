@@ -98,10 +98,38 @@ export default config;
 
 ### iOS
 
-On iOS, you must add the following to your app's `AppDelegate.swift`:
+On iOS, the plugin requires the following changes.
+
+#### If the app has `SceneDelegate.swift` (default since Capacitor 8.5)
+
+Add the following to the app's `SceneDelegate.swift`:
 
 ```diff
-+ import CapawesomeCapacitorAppShortcuts
++ import AppShortcutsPlugin // Replace with `import CapawesomeCapacitorAppShortcuts` when using CocoaPods
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        // ...
+
++        // Add at the end of this method
++        if let shortcutItem = connectionOptions.shortcutItem {
++            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        }
+    }
+
++    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
++        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        completionHandler(true)
++    }
+```
+
+#### If the app has no `SceneDelegate.swift`
+
+Add the following to the app's `AppDelegate.swift`:
+
+```diff
++ import AppShortcutsPlugin // Replace with `import CapawesomeCapacitorAppShortcuts` when using CocoaPods
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
