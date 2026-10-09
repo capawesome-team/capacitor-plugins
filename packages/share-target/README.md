@@ -619,10 +619,7 @@ extension UIImage {
 Finally, you need to pass the URLs opened by the share extension to the plugin. If your app uses the UIScene lifecycle (default since Capacitor 8.5), modify the `SceneDelegate.swift` file of your main app target. Add the missing import and the following code to the `scene(_:willConnectTo:options:)` and `scene(_:openURLContexts:)` methods:
 
 ```diff
-// If you are using Swift Package Manager, add the following import:
 + import ShareTargetPlugin
-// Or if you are using CocoaPods, add the following import:
-// import CapawesomeTeamCapacitorShareTarget
 
 func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     guard let windowScene = scene as? UIWindowScene else { return }
@@ -652,10 +649,7 @@ func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>)
 If your app does not use the UIScene lifecycle, modify the `AppDelegate.swift` file of your main app target instead. Add the missing import and the following code to the `application(_:open:options:)` method:
 
 ```diff
-// If you are using Swift Package Manager, add the following import:
 + import ShareTargetPlugin
-// Or if you are using CocoaPods, add the following import:
-// import CapawesomeTeamCapacitorShareTarget
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 +    // Handle share target URLs
@@ -667,7 +661,11 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 }
 ```
 
-**Attention**: If you are using **CocoaPods** instead of Swift Package Manager, replace `import ShareTargetPlugin` with `import CapawesomeTeamCapacitorShareTarget`.
+If your project still uses CocoaPods instead of Swift Package Manager (SPM), import `CapawesomeTeamCapacitorShareTarget` rather than `ShareTargetPlugin`:
+
+```diff
++ import CapawesomeTeamCapacitorShareTarget
+```
 
 #### Capabilities
 
