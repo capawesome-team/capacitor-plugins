@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- [`6980ad028ebf0b3fb42b65622fb17c99a3466f43`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6980ad028ebf0b3fb42b65622fb17c99a3466f43) ([#671](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/671)): refactor(electron)!: require Electron 39 or later
+
+- [`6980ad028ebf0b3fb42b65622fb17c99a3466f43`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6980ad028ebf0b3fb42b65622fb17c99a3466f43) ([#671](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/671)): fix(electron)!: bind whole numbers as `INTEGER` and booleans as `1` and `0`, and return `changes` and `rowId` only for modifying statements
+
+- [`c2191dc1bb8e0cd0058c74ec7a3b18c6e400c767`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c2191dc1bb8e0cd0058c74ec7a3b18c6e400c767) ([#490](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/490)): refactor(electron)!: migrate to the `@capawesome/capacitor-electron` platform contract
+
+- [`1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021) ([#667](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/667)): fix(ios)!: bind integer `values` of `query(...)` as `INTEGER` and reject unsupported values
+
+- [`beb8030d63ded9d422a3d9a25f21bb86219d03af`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/beb8030d63ded9d422a3d9a25f21bb86219d03af) ([#669](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/669)): fix(web)!: return integers outside the safe range as `number` instead of `bigint`
+
+- [`1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021) ([#667](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/667)): fix(web)!: return BLOB values as `number[]` and accept `number[]` BLOB values
+
+- [`1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021) ([#667](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/667)): fix(android)!: bind the `values` of `query(...)` with their type instead of as strings and bind booleans in `execute(...)` as `1` and `0`
+
+### Patch Changes
+
+- [`6980ad028ebf0b3fb42b65622fb17c99a3466f43`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6980ad028ebf0b3fb42b65622fb17c99a3466f43) ([#671](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/671)): fix(electron): keep duplicate and numeric column names in `query(...)` results
+
+- [`c7b4e4c0e0c891aa6c03c928460846432cb8ccd0`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c7b4e4c0e0c891aa6c03c928460846432cb8ccd0) ([#672](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/672)): docs: clarify how to keep the Electron `userData` directory when migrating to `@capawesome/capacitor-electron`
+
+- [`c2191dc1bb8e0cd0058c74ec7a3b18c6e400c767`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c2191dc1bb8e0cd0058c74ec7a3b18c6e400c767) ([#490](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/490)): fix(electron): return integers outside the safe range as `number` instead of throwing
+
+- [`beb8030d63ded9d422a3d9a25f21bb86219d03af`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/beb8030d63ded9d422a3d9a25f21bb86219d03af) ([#669](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/669)): fix(web): reject whole numbers outside the 64-bit integer range instead of storing `0`
+
+- [`beb8030d63ded9d422a3d9a25f21bb86219d03af`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/beb8030d63ded9d422a3d9a25f21bb86219d03af) ([#669](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/669)): docs: document the iOS limitations for multiple statements and the number of `values`
+
+- [`1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1e4a5a5ffbeda844a6f2e9ef3d47711b124a5021) ([#667](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/667)): fix(android): return BLOB bytes greater than `127` as positive numbers
+
 ## 0.4.1
 
 ### Patch Changes
