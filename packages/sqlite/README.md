@@ -382,7 +382,7 @@ npx cap add @capawesome/capacitor-electron
 cd electron && npm install && cd ..
 ```
 
-This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 35+).
+This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. It requires Node.js 22.20 or later (Electron 39+).
 
 #### Database Storage
 
@@ -1142,7 +1142,8 @@ The Electron implementation of this plugin has the following limitations:
 
 - **Platform**: Only supported with the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`). Other Electron integrations are not supported.
 - **Encryption**: Database encryption is not supported.
-- **Node.js version**: Requires Node.js 22.5.0 or later (Electron 35+) to use the native `node:sqlite` module.
+- **Node.js version**: Requires Node.js 22.20 or later (Electron 39+) to use the native `node:sqlite` module.
+- **Named parameters**: Named parameters (e.g. `:name`, `@name` or `$name`) are not supported. Use `?` or `?NNN` parameters instead.
 - **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
 
 ## Troubleshooting

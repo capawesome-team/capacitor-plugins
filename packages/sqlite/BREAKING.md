@@ -89,6 +89,27 @@ await Sqlite.query({
 });
 ```
 
+### Minimum Electron version (Electron)
+
+The plugin now requires Electron 39 or later (Node.js 22.20), because it uses `node:sqlite` features that are not available in older versions.
+
+### Parameter types (Electron)
+
+`execute(...)` and `query(...)` now bind whole numbers as `INTEGER` instead of `REAL`, like on the other platforms. This only changes results where the type of a parameter matters, for example in `SELECT ? / 2` or when storing a number in a `TEXT` column (`'1'` instead of `'1.0'`). If you relied on the previous behavior, cast the value in the statement:
+
+```diff
+await Sqlite.query({
+  databaseId,
+-  statement: 'SELECT ? / 2',
++  statement: 'SELECT CAST(? AS REAL) / 2',
+  values: [1],
+});
+```
+
+### `execute(...)` results (Electron)
+
+`execute(...)` now only returns `changes` for `INSERT`, `UPDATE` and `DELETE` statements and `rowId` for `INSERT` statements, like on the other platforms. Previously, both were returned for every statement.
+
 ### Electron Platform
 
 Electron support has switched from [`@capacitor-community/electron`](https://github.com/capacitor-community/electron) to the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`), which is actively maintained and offers better security and tooling. Follow the [migration guide](https://github.com/capawesome-team/capacitor-electron#migration) to continue using this plugin on Electron. No changes to your plugin calls are required.
