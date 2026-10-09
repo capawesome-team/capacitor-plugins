@@ -114,7 +114,7 @@ await Sqlite.query({
 
 Electron support has switched from [`@capacitor-community/electron`](https://github.com/capacitor-community/electron) to the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`), which is actively maintained and offers better security and tooling. Follow the [migration guide](https://github.com/capawesome-team/capacitor-electron#migration) to continue using this plugin on Electron. No changes to your plugin calls are required.
 
-**Attention**: Databases opened with a relative `path` are stored in Electron's `userData` directory, which is named after the app. With `@capacitor-community/electron`, this was your `appName`. With `@capawesome/capacitor-electron`, the name comes from `productName` in `electron/package.json`. To keep using your existing databases, make sure `productName` is set to your `appName`, or move the database files to the new `userData` directory:
+**Attention**: Databases opened with a relative `path` are stored in Electron's `userData` directory, which is named after `productName` (or `name`, if `productName` is missing) in `electron/package.json`. The new `electron/package.json` sets `productName` to your `appName`, which `@capacitor-community/electron` used as `name` by default. If your old `electron/package.json` used a different `productName` or `name` (e.g. because you renamed it to package your app), set `productName` in the new `electron/package.json` to that value to keep using your existing databases, or move the database files to the new `userData` directory:
 
 ```diff
 {
