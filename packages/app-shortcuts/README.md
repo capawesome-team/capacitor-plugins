@@ -98,10 +98,38 @@ export default config;
 
 ### iOS
 
-On iOS, you must add the following to your app's `AppDelegate.swift`:
+If your app uses the UIScene lifecycle (default since Capacitor 8.5), add the following to your app's `SceneDelegate.swift`:
 
 ```diff
-+ import CapawesomeCapacitorAppShortcuts
++ import AppShortcutsPlugin
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = CAPBridgeViewController()
+        window?.makeKeyAndVisible()
+
++        if let shortcutItem = connectionOptions.shortcutItem {
++            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        }
+
+        SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+    }
+
++    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
++        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        completionHandler(true)
++    }
+```
+
+If your app does not use the UIScene lifecycle, add the following to your app's `AppDelegate.swift` instead:
+
+```diff
++ import AppShortcutsPlugin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -109,15 +137,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 +        if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
 +            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
-+            return true
 +        }
         return true
     }
-    
+
 +    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
 +        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
 +        completionHandler(true)
 +    }
+```
+
+If your project still uses CocoaPods instead of Swift Package Manager (SPM), import `CapawesomeCapacitorAppShortcuts` rather than `AppShortcutsPlugin`:
+
+```diff
++ import CapawesomeCapacitorAppShortcuts
 ```
 
 ## Usage
