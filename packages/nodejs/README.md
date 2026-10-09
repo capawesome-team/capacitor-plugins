@@ -70,11 +70,10 @@ npx cap sync
 
 #### Variables
 
-If needed, you can define the following project variables in your app's `variables.gradle` file to change the default version of the runtime:
+If needed, you can define the following project variables in your app's `variables.gradle` file to use different runtime binaries:
 
-- `$nodejsMobileVersion` version of the Node.js for Mobile Apps runtime (default: `18.20.4-capawesome.2`, a [16 KB page size compatible build](https://github.com/capawesome-team/nodejs-mobile/releases))
-- `$nodejsMobileAndroidUrl` download URL of the Android runtime binaries (default: GitHub release of `$nodejsMobileVersion`)
-- `$nodejsMobileAndroidSha256` SHA-256 checksum of the Android runtime binaries download (default: checksum of `$nodejsMobileVersion`)
+- `$nodejsMobileAndroidUrl` download URL of the Android runtime binaries (default: GitHub release of `18.20.4-capawesome.2`, a [16 KB page size compatible build](https://github.com/capawesome-team/nodejs-mobile/releases))
+- `$nodejsMobileAndroidSha256` SHA-256 checksum of the Android runtime binaries download (default: checksum of the default download)
 
 ### iOS
 
