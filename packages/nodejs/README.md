@@ -72,7 +72,7 @@ npx cap sync
 
 If needed, you can define the following project variables in your app's `variables.gradle` file to change the default version of the runtime:
 
-- `$nodejsMobileVersion` version of the Node.js for Mobile Apps runtime (default: `18.20.4-capawesome.1`, a [16 KB page size compatible build](https://github.com/capawesome-team/nodejs-mobile/releases))
+- `$nodejsMobileVersion` version of the Node.js for Mobile Apps runtime (default: `18.20.4-capawesome.2`, a [16 KB page size compatible build](https://github.com/capawesome-team/nodejs-mobile/releases))
 - `$nodejsMobileAndroidUrl` download URL of the Android runtime binaries (default: GitHub release of `$nodejsMobileVersion`)
 - `$nodejsMobileAndroidSha256` SHA-256 checksum of the Android runtime binaries download (default: checksum of `$nodejsMobileVersion`)
 
@@ -452,6 +452,7 @@ The underlying [Node.js for Mobile Apps](https://github.com/nodejs-mobile/nodejs
 - **No child processes**: The `child_process` module is not supported on mobile platforms.
 - **No JIT on iOS**: On iOS, the JavaScript engine runs in interpreter-only mode (no JIT compilation), which results in slower JavaScript execution compared to Android.
 - **App size**: Embedding the Node.js runtime increases the app size by several tens of megabytes per CPU architecture.
+- **Locale data**: The `Intl` APIs only include English locale data. `TextDecoder` supports all encodings.
 - **Native addons**: Node.js native addons are only supported on Android if they are provided as prebuilds (see [`node-gyp-build`](https://github.com/prebuild/node-gyp-build)) for the target architectures.
 - **`process.exit()`**: Calling `process.exit()` is not allowed by the Apple App Store guidelines.
 
@@ -494,6 +495,8 @@ See [CHANGELOG.md](https://github.com/capawesome-team/capacitor-plugins/blob/mai
 ## License
 
 See [LICENSE](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/nodejs/LICENSE).
+
+The embedded Node.js runtime and its bundled dependencies (V8, OpenSSL, ICU, libuv, and others) are distributed under their own licenses. See the [Node.js license](https://github.com/capawesome-team/nodejs-mobile/blob/main/LICENSE).
 
 [^1]: This project is not affiliated with, endorsed by, sponsored by, or approved by the OpenJS Foundation or any of their affiliates or subsidiaries.
 [^2]: `Node.js` is a registered trademark of the OpenJS Foundation.
