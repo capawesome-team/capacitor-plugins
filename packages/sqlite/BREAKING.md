@@ -15,13 +15,45 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 `query(...)` now returns BLOB values as `number[]` instead of `Uint8Array`, matching the `Value` type and the other platforms. Convert the value with `new Uint8Array(value)` if you need a typed array.
 
+```diff
+const { rows } = await Sqlite.query({ databaseId, statement: 'SELECT data FROM files' });
+- const bytes = rows[0][0] as Uint8Array;
++ const bytes = new Uint8Array(rows[0][0] as number[]);
+```
+
 ### Large integers (Web)
 
-`query(...)` now returns integers outside the safe range of JavaScript numbers (±2^53 - 1) as `number` instead of `bigint`, like on Android and iOS. Such integers lose precision.
+`query(...)` now returns integers outside the safe range of JavaScript numbers (±2^53 - 1) as `number` instead of `bigint`, like on Android, iOS and Electron. Such integers lose precision.
+
+If you need the exact value (e.g. for 64-bit IDs), pass it as a string and read it as text:
+
+```ts
+await Sqlite.execute({
+  databaseId,
+  statement: 'INSERT INTO items (id) VALUES (?)',
+  values: ['9007199254740993'],
+});
+const { rows } = await Sqlite.query({
+  databaseId,
+  statement: 'SELECT CAST(id AS TEXT) FROM items',
+});
+// rows[0][0] === '9007199254740993'
+```
 
 ### Parameter types in `query(...)` (Android)
 
 `query(...)` now binds the `values` with their type instead of converting them to strings. This only changes results where the type of a parameter matters, for example in expressions like `SELECT ? + 1` or in comparisons with columns without a type affinity.
+
+If you relied on the previous behavior, pass the value as a string:
+
+```diff
+await Sqlite.query({
+  databaseId,
+  statement: "SELECT * FROM items WHERE json_extract(data, '$.code') = ?",
+-  values: [42],
++  values: [String(42)],
+});
+```
 
 ### Boolean values in `execute(...)` (Android)
 
@@ -31,9 +63,45 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 `query(...)` now binds integer `values` as `INTEGER` instead of `REAL`. This only changes results where the type of a parameter matters, for example in `SELECT ? / 2`.
 
+If you relied on the previous behavior, cast the value in the statement:
+
+```diff
+await Sqlite.query({
+  databaseId,
+-  statement: 'SELECT ? / 2',
++  statement: 'SELECT CAST(? AS REAL) / 2',
+  values: [1],
+});
+```
+
 ### Unsupported values in `query(...)` (iOS)
 
 `query(...)` now rejects `values` of an unsupported type, like `execute(...)` already did. Previously these values were bound as `NULL`.
+
+Convert such values to a supported type before passing them, e.g. objects to JSON:
+
+```diff
+await Sqlite.query({
+  databaseId,
+  statement: 'SELECT * FROM users WHERE settings = ?',
+-  values: [settings],
++  values: [JSON.stringify(settings)],
+});
+```
+
+### Electron Platform
+
+Electron support has switched from [`@capacitor-community/electron`](https://github.com/capacitor-community/electron) to the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`), which is actively maintained and offers better security and tooling. Follow the [migration guide](https://github.com/capawesome-team/capacitor-electron#migration) to continue using this plugin on Electron. No changes to your plugin calls are required.
+
+**Attention**: Databases opened with a relative `path` are stored in Electron's `userData` directory, which is named after the app. With `@capacitor-community/electron`, this was your `appName`. With `@capawesome/capacitor-electron`, the name comes from `productName` in `electron/package.json`. To keep using your existing databases, make sure `productName` is set to your `appName`, or move the database files to the new `userData` directory:
+
+```diff
+{
+  "name": "my-app-electron",
++  "productName": "My App",
+  ...
+}
+```
 
 ## Version 0.4.x
 

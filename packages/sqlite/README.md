@@ -374,7 +374,15 @@ You can inspect the SQLite database stored in OPFS using the [OPFS Explorer](htt
 
 ### Electron
 
-This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 33+).
+Electron support is provided exclusively through the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`). Other Electron integrations are not supported.
+
+```bash
+npm install @capawesome/capacitor-electron
+npx cap add @capawesome/capacitor-electron
+cd electron && npm install && cd ..
+```
+
+This plugin uses the Node.js `node:sqlite` module to provide native SQLite support on Electron. The `node:sqlite` module is available starting from Node.js 22.5.0 (Electron 35+).
 
 #### Database Storage
 
@@ -1132,8 +1140,9 @@ The web implementation of this plugin has the following limitations:
 
 The Electron implementation of this plugin has the following limitations:
 
+- **Platform**: Only supported with the [Capacitor Electron platform](https://capawesome.io/docs/sdks/capacitor/electron/) (`@capawesome/capacitor-electron`). Other Electron integrations are not supported.
 - **Encryption**: Database encryption is not supported.
-- **Node.js version**: Requires Node.js 22.5.0 or later (Electron 33+) to use the native `node:sqlite` module.
+- **Node.js version**: Requires Node.js 22.5.0 or later (Electron 35+) to use the native `node:sqlite` module.
 - **Single statement per call**: Only one SQL statement can be executed per `execute(...)` or `query(...)` call. Statements joined by `;` will not all be executed. To run multiple statements, call `execute(...)` or `query(...)` once per statement.
 
 ## Troubleshooting
