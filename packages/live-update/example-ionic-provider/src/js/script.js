@@ -18,11 +18,9 @@ const log = (label, value) => {
 };
 
 const readConfig = () => {
-  const managerKey = document.querySelector('#manager-key-input').value?.trim();
   const appId = document.querySelector('#app-id-input').value?.trim();
   const channel = document.querySelector('#channel-input').value?.trim();
   return {
-    managerKey: managerKey || 'example-shell',
     ...(appId ? { appId } : {}),
     ...(channel ? { channel } : {}),
   };

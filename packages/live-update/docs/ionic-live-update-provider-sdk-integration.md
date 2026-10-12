@@ -6,7 +6,7 @@ There is no registry and no separate provider id: Federated Capacitor resolves t
 
 The SDK integration is **optional** on both platforms, in different ways:
 
-- **Android** — zero configuration. The SDK is a compile-time-only dependency of the plugin; Federated Capacitor and Ionic Portals bring it at runtime. The plugin deliberately does not implement the SDK's `LiveUpdateProvider` interface — instead it exposes a `createManager(Context, Map)` method that Federated Capacitor resolves reflectively and invokes. Apps that don't use Portals/FedCap ship zero extra bytes.
+- **Android** — zero configuration. The SDK is a compile-time-only dependency of the plugin; Federated Capacitor and Ionic Portals bring it at runtime. The plugin deliberately does not implement the SDK's `LiveUpdateProvider` interface — instead it exposes a `createManager(Context, Map)` method that Federated Capacitor resolves reflectively and invokes. Apps that don't use Portals/FedCap still ship the manager class and the Kotlin standard library, but not the SDK itself.
 - **iOS** — opt-in at build time via the `IonicProvider` CocoaPods subspec or SPM package trait (see below), which links the SDK and compiles in the provider classes.
 
 > **Real-world example:** [`ionic-portals-ecommerce-demo`](https://github.com/capawesome-team/ionic-portals-ecommerce-demo) is a complete Ionic Portals app that delivers live updates to multiple portals via Capawesome Cloud.
@@ -17,6 +17,7 @@ The SDK integration is **optional** on both platforms, in different ways:
 - [Provider configuration](#provider-configuration)
 - [Federated Capacitor usage](#federated-capacitor-usage)
 - [Ionic Portals usage](#ionic-portals-usage)
+- [Bundle storage](#bundle-storage)
 - [Verifying updates](#verifying-updates)
 
 ## Installation
@@ -39,7 +40,7 @@ A native Portals host isn't a Capacitor project, so there's no `npx cap sync` to
      "private": true,
      "dependencies": {
        "@capacitor/android": "8.2.0",
-       "@capawesome/capacitor-live-update": "^8.3.0"
+       "@capawesome/capacitor-live-update": "^8.7.0"
      }
    }
    ```
@@ -131,7 +132,7 @@ To provide that source, add a minimal `package.json` next to the host app and ru
   "name": "ios-app",
   "private": true,
   "dependencies": {
-    "@capawesome/capacitor-live-update": "^8.3.0"
+    "@capawesome/capacitor-live-update": "^8.7.0"
   }
 }
 ```
@@ -143,6 +144,20 @@ pod 'CapawesomeCapacitorLiveUpdate/IonicProvider', :path => 'node_modules/@capaw
 ```
 
 > Prefer not to commit a `node_modules`/npm step? Vendor the plugin's `ios/` directory, `CapawesomeCapacitorLiveUpdate.podspec`, and `package.json` into your repo and point `:path` at that folder instead.
+
+Xcode 27 refuses to build pods whose deployment target is below iOS 15, and Ionic Portals pulls in three of them (`ZIPFoundation`, `Alamofire` and `IonicLiveUpdates`). A Capacitor app gets the fix from the `post_install` hook the Capacitor CLI generates. A native host has no such hook, so add one to the `Podfile`:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.0
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      end
+    end
+  end
+end
+```
 
 #### Native iOS host (Ionic Portals, Swift Package Manager)
 
@@ -183,13 +198,21 @@ Reference the wrapper from your app (_File → Add Package Dependencies… → A
 
 When Federated Capacitor or Portals creates a manager via `createManager(...)`, it passes a configuration map. The following keys are accepted:
 
-| Key          | Type   | Required | Description                                                                                    |
-| ------------ | ------ | -------- | ---------------------------------------------------------------------------------------------- |
-| `managerKey` | string | Yes      | Scopes per-manager persisted state. Use a stable, unique key per shell / portal.               |
-| `appId`      | string | No       | Capawesome Cloud app UUID. Falls back to the plugin-wide `appId` from `capacitor.config.json`. |
-| `channel`    | string | No       | Channel to sync. Falls back to the plugin-wide `defaultChannel` from `capacitor.config.json`.  |
+| Key            | Type   | Description                                                                                                                                                                                                                                                                                                                        |
+| -------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `appId`        | string | Capawesome Cloud app UUID. Required in a native Portals host. Under Federated Capacitor, falls back to the plugin's `appId` (a value set via `setConfig()` wins over `capacitor.config.json`). If neither is set, the manager construction fails with `appId must be configured.`.                                                 |
+| `channel`      | string | Channel to sync. Falls back to the plugin's channel: a value set via `setChannel()` wins over the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS, `capawesome_live_update_default_channel` in `strings.xml` on Android), which wins over `defaultChannel` from `capacitor.config.json`. |
+| `publicKey`    | string | Public key to verify the integrity of the bundle, as a single-line PEM string. Enables code signing verification for this manager. Native Portals host only.                                                                                                                                                                       |
+| `serverDomain` | string | API domain of the Capawesome Cloud server **without** scheme or path. Native Portals host only.                                                                                                                                                                                                                                    |
+| `httpTimeout`  | number | Timeout in milliseconds for HTTP requests. Native Portals host only.                                                                                                                                                                                                                                                               |
 
-All other settings (`serverDomain`, `publicKey`, `httpTimeout`, etc.) come from the plugin-wide Capacitor config. To set the per-device `customId`, call `LiveUpdate.setCustomId({ customId })` from JavaScript once at app startup.
+`publicKey`, `serverDomain` and `httpTimeout` only apply when your native code constructs the manager directly (Ionic Portals). If one of them is present with the wrong type, the manager construction fails with `<key> has an invalid type.`. Under Federated Capacitor, `createManager(...)` reuses the running plugin instance, so the plugin's Capacitor config applies and these three keys are ignored.
+
+There is no configuration key for the per-device `customId`. Under Federated Capacitor, call `LiveUpdate.setCustomId({ customId })` from JavaScript once at app startup. A native Portals host has no JavaScript API, so `customId` is not available there.
+
+### Code signing
+
+We recommend signing your bundles in production. A native Portals host passes the public key via the `publicKey` key of the manager configuration. Under Federated Capacitor, set `publicKey` in the plugin's Capacitor config instead. See [Code Signing](https://capawesome.io/docs/cloud/live-updates/code-signing/) for how to generate a key pair and upload signed bundles. Once a channel only receives signed bundles, you can mark it as [protected](https://capawesome.io/docs/cloud/live-updates/channels/#protected-channels) in Capawesome Cloud so that unsigned bundles cannot be distributed through it.
 
 ## Federated Capacitor usage
 
@@ -199,7 +222,6 @@ Select the provider by this plugin's Capacitor plugin name (**`LiveUpdate`**) an
 liveUpdateConfig: {
   pluginName: 'LiveUpdate',
   config: {
-    managerKey: 'my-shell',
     appId: '6e351b4f-69a7-415e-a057-4567df7ffe94',
     channel: 'production',
   },
@@ -222,7 +244,6 @@ import CapawesomeCapacitorLiveUpdate
 import IonicPortals
 
 let manager = try LiveUpdateIonicManager(configuration: [
-    "managerKey": "portal-checkout",
     "appId": "6e351b4f-69a7-415e-a057-4567df7ffe94",
     "channel": "production"
 ])
@@ -246,7 +267,6 @@ import io.ionic.portals.PortalManager
 val manager = LiveUpdateIonicManager(
     context,
     mapOf(
-        "managerKey" to "portal-checkout",
         "appId" to "6e351b4f-69a7-415e-a057-4567df7ffe94",
         "channel" to "production",
     ),
@@ -261,14 +281,25 @@ PortalManager.newPortal("checkout")
 // or `portal.syncProviderAsync()` (CompletableFuture) from Java.
 ```
 
-The directly constructed manager runs headless: it uses the plugin's default configuration (e.g. `serverDomain`), so pass `appId` and `channel` via the configuration map. Because there is no registration step, no retry logic is needed — construct and sync right away.
+The directly constructed manager runs headless: there is no Capacitor config, so pass `appId` (required), `channel` and, if needed, `publicKey`, `serverDomain` and `httpTimeout` via the configuration map. Because there is no registration step, no retry logic is needed: construct and sync right away.
 
 Bundle **seed content** at each Portal's `startDir` so the first Portal can render on a fresh, offline launch; Live Updates refresh it afterward.
+
+## Bundle storage
+
+Provider managers share the plugin's on-disk bundle storage, but keep their own state:
+
+- The state of a manager is scoped by its resolved app ID and channel (`<appId>` or `<appId>.<channel>`). Managers with the same app ID and channel share their state by design, so Portals that show the same web app share one bundle.
+- After a native app update (the version code on Android or `CFBundleVersion` on iOS changes), each manager forgets its synced bundle and serves the seed content until the next sync.
+- Bundles that were replaced by a sync, or dropped after an app update, are deleted the next time a manager is constructed (usually at app launch), not right after a sync, because a visible portal may still serve them. A bundle is kept as long as any manager points to it or it is the plugin's current or next bundle. Managers never delete bundles they did not sync themselves.
+- Leftovers of interrupted downloads are removed once per process at startup. Concurrent syncs or downloads of the same bundle do not fail; the bundle counts as installed.
 
 ## Verifying updates
 
 - **Publish a bundle** to the matching Capawesome Cloud `appId` and `channel` with the [`@capawesome/cli`](https://capawesome.io/cloud/live-updates/). Each shell/portal syncs the app whose `appId` it was configured with.
-- On sync, the manager downloads the latest bundle, sets `latestAppDirectory` to the new on-disk location, and persists it per `managerKey` so the correct bundle is restored on the next launch.
-- When an update was applied, `sync()` returns a `MetadataSyncResult` whose `metadata` carries `bundleId`, `channel`, and any `customProperties` attached to the bundle in Capawesome Cloud. Federated Capacitor forwards this metadata to the web layer. When no update is available, `sync()` returns `nil`/`null` (nothing to report). Failures are thrown/propagated as errors.
+- On sync, the manager downloads the latest bundle, sets `latestAppDirectory` to the new on-disk location, and persists it per app ID and channel so the same bundle is restored on the next launch.
+- When an update was applied, `sync()` returns a `MetadataSyncResult` whose `metadata` carries `bundleId`, `channel`, and any `customProperties` attached to the bundle in Capawesome Cloud. Federated Capacitor forwards this metadata to the web layer.
+- `sync()` returns `nil`/`null` when there is nothing to report: the server answered with an error status (for example, no bundle matches the request) or the bundle is unchanged.
+- `sync()` throws on network failures (offline, DNS, TLS, timeout), on an invalid response body, and when the download or the verification of the bundle fails. The behavior is the same on Android and iOS.
 
-> Provider mode and the standalone JavaScript sync flow share the same on-disk bundle storage but use isolated, `managerKey`-scoped state pointers. Pick one mode per app to avoid surprises.
+> Provider mode and the standalone JavaScript sync flow share the same on-disk bundle storage but use separate state: the provider state is scoped by app ID and channel, the JavaScript flow uses the plugin's `currentBundleId` / `nextBundleId`. Pick one mode per app to avoid surprises. In particular, do not enable `autoDeleteBundles` in a Federated Capacitor shell that calls `ready()`: the plugin then deletes every bundle that is not its current or next bundle, including the bundles synced by provider managers.

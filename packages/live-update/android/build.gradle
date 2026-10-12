@@ -8,6 +8,7 @@ ext {
     okhttp3Version = project.hasProperty('okhttp3Version') ? rootProject.ext.okhttp3Version : '5.3.2'
     zip4jVersion = project.hasProperty('zip4jVersion') ? rootProject.ext.zip4jVersion : '2.11.5'
     ionicLiveUpdateProviderVersion = project.hasProperty('ionicLiveUpdateProviderVersion') ? rootProject.ext.ionicLiveUpdateProviderVersion : '1.0.0'
+    kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.11.0'
 }
 
 buildscript {
@@ -74,6 +75,7 @@ dependencies {
     // and Ionic Portals bring it transitively at runtime, and the provider classes
     // are only loaded when a host actually calls `createManager`.
     compileOnly "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxCoroutinesVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

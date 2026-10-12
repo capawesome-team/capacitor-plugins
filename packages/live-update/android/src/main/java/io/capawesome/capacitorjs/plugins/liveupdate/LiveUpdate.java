@@ -86,6 +86,8 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
+    private static final AtomicBoolean downloadsDirectoryDeleted = new AtomicBoolean(false);
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
     @NonNull
@@ -146,8 +148,11 @@ public class LiveUpdate {
         // Set the device ID on the HTTP client (after any potential config reset)
         this.httpClient.setDeviceId(getDeviceId());
 
-        // Delete the leftovers of downloads that were interrupted by a process kill
-        tryDeleteDownloadsDirectory();
+        // Delete the leftovers of downloads that were interrupted by a process kill.
+        // Only once per process, because other instances may be downloading at this moment.
+        if (downloadsDirectoryDeleted.compareAndSet(false, true)) {
+            tryDeleteDownloadsDirectory();
+        }
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -169,6 +174,17 @@ public class LiveUpdate {
         deleteBundleById(bundleId);
 
         callback.success();
+    }
+
+    public void deleteBundleById(@NonNull String bundleId) {
+        // Delete the bundle directory
+        File bundleDirectory = buildBundleDirectoryFor(bundleId);
+        deleteFileRecursively(bundleDirectory);
+        // Reset the next bundle if it is the deleted bundle
+        String nextBundleId = getNextBundleId();
+        if (bundleId.equals(nextBundleId)) {
+            setNextBundleById(null);
+        }
     }
 
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) {
@@ -283,6 +299,15 @@ public class LiveUpdate {
         );
     }
 
+    @Nullable
+    public String getAppId() {
+        String appId = preferences.getAppId();
+        if (appId != null) {
+            return appId;
+        }
+        return config.getAppId();
+    }
+
     public void getBlockedBundles(@NonNull NonEmptyCallback<GetBlockedBundlesResult> callback) {
         String blockedIds = preferences.getBlockedBundleIds();
         String[] bundleIds;
@@ -311,6 +336,22 @@ public class LiveUpdate {
         String channel = getChannel();
         GetChannelResult result = new GetChannelResult(channel);
         callback.success(result);
+    }
+
+    @Nullable
+    public String getChannel() {
+        String channel = null;
+        if (config.getDefaultChannel() != null) {
+            channel = config.getDefaultChannel();
+        }
+        String nativeChannel = getNativeChannel();
+        if (nativeChannel != null) {
+            channel = nativeChannel;
+        }
+        if (preferences.getChannel() != null) {
+            channel = preferences.getChannel();
+        }
+        return channel;
     }
 
     public void getConfig(@NonNull NonEmptyCallback<GetConfigResult> callback) {
@@ -361,10 +402,20 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    public String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
+        return String.valueOf(getVersionCodeAsInt());
+    }
+
     public void getVersionName(@NonNull NonEmptyCallback callback) throws PackageManager.NameNotFoundException {
         String versionName = getVersionName();
         GetVersionNameResult result = new GetVersionNameResult(versionName);
         callback.success(result);
+    }
+
+    public boolean isBundleInUse(@NonNull String bundleId) {
+        String currentBundleId = getCurrentBundleId();
+        String nextBundleId = getNextBundleId();
+        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
     }
 
     public void isSyncing(@NonNull NonEmptyCallback<IsSyncingResult> callback) {
@@ -572,7 +623,8 @@ public class LiveUpdate {
         // Move the bundle directory to the bundles directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         boolean moved = indexHtmlFile.getParentFile().renameTo(bundleDirectory);
-        if (!moved) {
+        // A concurrent download of the same bundle may have finished first
+        if (!moved && !hasBundleById(bundleId)) {
             throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_MOVE_FAILED);
         }
     }
@@ -688,17 +740,6 @@ public class LiveUpdate {
         File temporaryDirectory = new File(buildDownloadsDirectory(), UUID.randomUUID().toString());
         temporaryDirectory.mkdirs();
         return temporaryDirectory;
-    }
-
-    private void deleteBundleById(@NonNull String bundleId) {
-        // Delete the bundle directory
-        File bundleDirectory = buildBundleDirectoryFor(bundleId);
-        deleteFileRecursively(bundleDirectory);
-        // Reset the next bundle if it is the deleted bundle
-        String nextBundleId = getNextBundleId();
-        if (bundleId.equals(nextBundleId)) {
-            setNextBundleById(null);
-        }
     }
 
     private void deleteFileRecursively(@NonNull File file) {
@@ -1132,31 +1173,6 @@ public class LiveUpdate {
     }
 
     @Nullable
-    private String getAppId() {
-        String appId = preferences.getAppId();
-        if (appId != null) {
-            return appId;
-        }
-        return config.getAppId();
-    }
-
-    @Nullable
-    private String getChannel() {
-        String channel = null;
-        if (config.getDefaultChannel() != null) {
-            channel = config.getDefaultChannel();
-        }
-        String nativeChannel = getNativeChannel();
-        if (nativeChannel != null) {
-            channel = nativeChannel;
-        }
-        if (preferences.getChannel() != null) {
-            channel = preferences.getChannel();
-        }
-        return channel;
-    }
-
-    @Nullable
     private String getNativeChannel() {
         int resId = context.getResources().getIdentifier("capawesome_live_update_default_channel", "string", context.getPackageName());
         if (resId == 0) {
@@ -1241,10 +1257,6 @@ public class LiveUpdate {
         return (int) PackageInfoCompat.getLongVersionCode(getPackageInfo());
     }
 
-    private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
-        return String.valueOf(getVersionCodeAsInt());
-    }
-
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
     }
@@ -1261,12 +1273,6 @@ public class LiveUpdate {
     private boolean hasBundleById(@NonNull String bundleId) {
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         return bundleDirectory.exists();
-    }
-
-    private boolean isBundleInUse(@NonNull String bundleId) {
-        String currentBundleId = getCurrentBundleId();
-        String nextBundleId = getNextBundleId();
-        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
     }
 
     @Nullable

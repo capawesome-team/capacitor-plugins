@@ -11,11 +11,11 @@ public enum CustomError: Error {
     case channelMissing
     case checksumCalculationFailed
     case checksumMismatch
+    case configurationValueInvalid(key: String)
     case customIdMissing
     case downloadFailed
     case downloadUrlMissing
     case httpTimeout
-    case managerKeyMissing
     case pluginNotInitialized
     case signatureMissing
     case signatureVerificationFailed
@@ -47,6 +47,9 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Failed to calculate checksum.", comment: "checksumCalculationFailed")
         case .checksumMismatch:
             return NSLocalizedString("Checksum mismatch.", comment: "checksumMismatch")
+        case .configurationValueInvalid(let key):
+            let format = NSLocalizedString("%@ has an invalid type.", comment: "configurationValueInvalid")
+            return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
         case .downloadFailed:
@@ -55,8 +58,6 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
         case .httpTimeout:
             return NSLocalizedString("Request timed out.", comment: "httpTimeout")
-        case .managerKeyMissing:
-            return NSLocalizedString("managerKey must be provided.", comment: "managerKeyMissing")
         case .pluginNotInitialized:
             return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .signatureMissing:

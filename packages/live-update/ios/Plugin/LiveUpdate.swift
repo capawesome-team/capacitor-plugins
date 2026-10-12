@@ -7,6 +7,8 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private static var downloadsDirectoryDeleted = false
+
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
@@ -41,8 +43,13 @@ import CommonCrypto
         // Set the device ID on the HTTP client (after any potential config reset)
         self.httpClient.setDeviceId(getDeviceId())
 
-        // Delete the leftovers of downloads that were interrupted by a process kill
-        tryDeleteDownloadsDirectory()
+        // Delete the leftovers of downloads that were interrupted by a process kill.
+        // Only once per process, because other instances (e.g. one per Ionic provider manager)
+        // may have downloads in flight.
+        if !Self.downloadsDirectoryDeleted {
+            Self.downloadsDirectoryDeleted = true
+            tryDeleteDownloadsDirectory()
+        }
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -362,7 +369,12 @@ import CommonCrypto
 
         // Move the unzipped files to the bundles directory
         let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
-        try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
+        do {
+            try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
+        } catch where hasBundleById(bundleId) {
+            // A concurrent download of the same bundle was installed first
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle already installed: \(bundleId)")
+        }
     }
 
     private func addBundleOfTypeManifest(bundleId: String, directory: URL) async throws {
@@ -466,18 +478,8 @@ import CommonCrypto
     }
 
     private func deleteUnusedBundles() {
-        let bundleIds = getDownloadedBundleIds()
-        let currentBundleId = getCurrentBundleId()
-        let nextBundleId = getNextBundleId()
-
-        for bundleId in bundleIds {
-            if bundleId != currentBundleId && bundleId != nextBundleId {
-                do {
-                    try deleteBundleById(bundleId)
-                } catch {
-                    CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
-                }
-            }
+        for bundleId in getDownloadedBundleIds() {
+            tryDeleteUnusedBundle(bundleId: bundleId)
         }
     }
 
@@ -627,12 +629,12 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
         }
         if let error = response.error {
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            // The server answered with an error status, so no update is available
+            if let statusCode = response.response?.statusCode, !(200..<300).contains(statusCode) {
+                return nil
             }
-            return nil
+            // The server could not be reached (e.g. offline or timed out) or sent an invalid body
+            throw error.underlyingError ?? error
         }
         if let value = response.value {
             return value
@@ -655,14 +657,14 @@ import CommonCrypto
         }
     }
 
-    private func getAppId() -> String? {
+    func getAppId() -> String? {
         if let appId = preferences.getAppId() {
             return appId
         }
         return config.appId
     }
 
-    private func getChannel() -> String? {
+    func getChannel() -> String? {
         var channel: String?
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
@@ -743,7 +745,7 @@ import CommonCrypto
         return preferences.getPreviousBundleId()
     }
 
-    private func getVersionCode() -> String {
+    func getVersionCode() -> String {
         guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
             return ""
         }
@@ -1004,6 +1006,25 @@ import CommonCrypto
             try FileManager.default.removeItem(at: url)
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete directory: \(url.path)")
+        }
+    }
+
+    /// Deletes the bundle unless it is the current or next bundle.
+    /// - Returns: `true` if the bundle does not exist anymore.
+    @discardableResult
+    func tryDeleteUnusedBundle(bundleId: String) -> Bool {
+        guard hasBundleById(bundleId) else {
+            return true
+        }
+        guard bundleId != getCurrentBundleId() && bundleId != getNextBundleId() else {
+            return false
+        }
+        do {
+            try deleteBundleById(bundleId)
+            return true
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
+            return false
         }
     }
 

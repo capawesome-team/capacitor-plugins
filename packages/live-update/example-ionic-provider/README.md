@@ -57,20 +57,21 @@ The web UI exposes three buttons backed by the custom `IonicProviderTest`
 plugin:
 
 1. **Is Provider Available?** — resolves the `LiveUpdate` plugin from the Capacitor bridge and checks that it implements/conforms to `LiveUpdateProvider`. Should return `{ available: true }` once the app finishes loading.
-2. **Get Latest App Directory** — constructs a manager via `createManager(...)` on the plugin using the values from the form, then returns its `latestAppDirectory` *without* syncing. Useful to verify state restoration: after a successful sync, kill the app, relaunch, tap this button — the directory should be restored from the per-`managerKey` preference store.
+2. **Get Latest App Directory** — constructs a manager via `createManager(...)` on the plugin using the values from the form, then returns its `latestAppDirectory` *without* syncing. Useful to verify state restoration: after a successful sync, kill the app, relaunch, tap this button — the directory should be restored from the preference store, which is scoped by app ID and channel.
 3. **Sync Manager** — constructs a manager and calls `manager.sync()`. On success, returns the new `latestAppDirectory` plus any `MetadataSyncResult.metadata` (empty when the sync had nothing to report — `sync()` returns `nil`/`null` when no update is available). On failure, surfaces the error message. This is the main end-to-end test.
 
 The form fields populate the provider configuration map:
 
-| Field        | Required | Notes                                                                       |
-| ------------ | -------- | --------------------------------------------------------------------------- |
-| `managerKey` | yes      | Scopes per-manager persisted state. Use different values to test isolation. |
-| `appId`      | no       | Capawesome Cloud app UUID; falls back to `capacitor.config.ts`.             |
-| `channel`    | no       | Channel name; falls back to plugin-wide `defaultChannel`.                   |
+| Field     | Required | Notes                                                                                                      |
+| --------- | -------- | ---------------------------------------------------------------------------------------------------------- |
+| `appId`   | no       | Capawesome Cloud app UUID; falls back to `capacitor.config.ts`.                                            |
+| `channel` | no       | Channel name; falls back to the plugin's channel (`setChannel()`, native resource, then `defaultChannel`). |
+
+The manager state is scoped by the resolved app ID and channel, so managers with the same values share one bundle. `publicKey`, `serverDomain` and `httpTimeout` are not exposed here, because `createManager(...)` on the running plugin uses the plugin config.
 
 ## Things worth checking
 
-- **State isolation** — sync with `managerKey=shell-a`, then `managerKey=shell-b`. Both should persist independently. Calling `getLatestAppDirectory` for each should return distinct paths after the next launch.
+- **State isolation** — sync with two different `channel` values (or two different `appId` values). Each combination of app ID and channel persists its own bundle. Calling `getLatestAppDirectory` for each should return distinct paths after the next launch.
 - **Standalone coexistence** — provider mode never touches the standalone plugin's `currentBundleId` / `nextBundleId`. You can verify by calling the standalone JS API in parallel (this example doesn't expose it, but you can drop into the main `example/` app side by side).
 
 ## Notes

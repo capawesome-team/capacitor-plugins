@@ -39,8 +39,8 @@ dependencies {
     implementation project(':capacitor-android')
     // Required by `IonicProviderTestPlugin` so the example app can import the
     // Ionic Live Update Provider SDK directly (the live-update plugin only
-    // exposes it as an `implementation` dependency, which Gradle hides from
-    // consumers' compile classpath).
+    // declares it as a `compileOnly` dependency, which Gradle does not pass
+    // on to consumers).
     implementation "io.ionic:liveupdateprovider:1.0.0"
     // Required to call the suspending `ProviderManager.sync()` from the test plugin.
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2"

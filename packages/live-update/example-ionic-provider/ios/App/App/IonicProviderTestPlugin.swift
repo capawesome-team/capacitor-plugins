@@ -7,7 +7,6 @@ import LiveUpdateProvider
 /// without needing a real Federated Capacitor or Portals host.
 @objc(IonicProviderTestPlugin)
 public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
-    public static let errorManagerKeyMissing = "managerKey must be provided."
     public static let errorProviderNotAvailable = "The LiveUpdate plugin does not conform to LiveUpdateProvider."
 
     public let identifier = "IonicProviderTestPlugin"
@@ -61,13 +60,10 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     private func createManager(from call: CAPPluginCall) throws -> any ProviderManager {
-        guard let managerKey = call.getString("managerKey"), !managerKey.isEmpty else {
-            throw PluginCallError(IonicProviderTestPlugin.errorManagerKeyMissing)
-        }
         guard let provider = resolveProvider() else {
             throw PluginCallError(IonicProviderTestPlugin.errorProviderNotAvailable)
         }
-        var configuration: [String: Any] = ["managerKey": managerKey]
+        var configuration: [String: Any] = [:]
         if let appId = call.getString("appId") {
             configuration["appId"] = appId
         }

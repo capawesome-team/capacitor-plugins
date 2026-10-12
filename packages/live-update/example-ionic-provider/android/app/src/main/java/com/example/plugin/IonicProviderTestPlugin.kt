@@ -24,7 +24,6 @@ import org.json.JSONObject
 class IonicProviderTestPlugin : Plugin() {
 
     companion object {
-        const val ERROR_MANAGER_KEY_MISSING = "managerKey must be provided."
         const val ERROR_PROVIDER_NOT_AVAILABLE = "The LiveUpdate plugin does not provide createManager."
         const val ERROR_UNKNOWN_ERROR = "An unknown error has occurred."
     }
@@ -63,17 +62,12 @@ class IonicProviderTestPlugin : Plugin() {
     }
 
     private fun createManagerFromCall(call: PluginCall): ProviderManager? {
-        val managerKey = call.getString("managerKey")
-        if (managerKey.isNullOrEmpty()) {
-            call.reject(ERROR_MANAGER_KEY_MISSING)
-            return null
-        }
         val createManager = resolveCreateManager()
         if (createManager == null) {
             call.reject(ERROR_PROVIDER_NOT_AVAILABLE)
             return null
         }
-        val configuration = mutableMapOf<String, Any>("managerKey" to managerKey)
+        val configuration = mutableMapOf<String, Any>()
         call.getString("appId")?.let { configuration["appId"] = it }
         call.getString("channel")?.let { configuration["channel"] = it }
         return try {
