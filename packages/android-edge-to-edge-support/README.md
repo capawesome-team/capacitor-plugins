@@ -3,8 +3,8 @@
 Capacitor plugin to support [edge-to-edge](https://developer.android.com/develop/ui/views/layout/edge-to-edge) display on Android with advanced features like setting the background color of the status bar and navigation bar.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 

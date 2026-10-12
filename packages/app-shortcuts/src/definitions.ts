@@ -95,8 +95,6 @@ export interface Shortcut {
    *
    * On **Android**, the launcher shows this instead of the short title when it has enough space.
    *
-   * **Attention**: On **iOS**, the icon and the description must be used together.
-   *
    * @since 6.0.0
    */
   description?: string;

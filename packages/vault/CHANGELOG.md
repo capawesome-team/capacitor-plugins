@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- [`5b944aca9fa89cdb4284c1839b87bb243eebd12f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/5b944aca9fa89cdb4284c1839b87bb243eebd12f) ([#664](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/664)): fix(android): persist `setValue(...)`, `removeValue(...)` and `importData(...)` synchronously so that the values survive the app process being killed right after the call resolves
+
 ## 0.2.0
 
 ### Minor Changes

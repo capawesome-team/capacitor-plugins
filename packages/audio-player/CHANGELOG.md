@@ -1,5 +1,19 @@
 # Changelog
 
+## 8.5.1
+
+### Patch Changes
+
+- [`26fa1fe708e2461b40c447eccad2b308865f44b3`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/26fa1fe708e2461b40c447eccad2b308865f44b3) ([#659](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/659)): fix(ios, web): restart the current track via the previous track button of the media controls after 3 seconds or on the first track, and disable the next track button on the last track
+
+## 8.5.0
+
+### Minor Changes
+
+- [`7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10) ([#651](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/651)): feat(android): add the `smallIcon`, `seekBackwardIcon` and `seekForwardIcon` configuration options to customize the media notification icons
+
+- [`7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7255de2cb0aa6ffc3c291b1f0cfc0496295e2d10) ([#651](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/651)): feat: add the `seekBackwardOffset` and `seekForwardOffset` options to `play(...)` to display seek buttons in the system's media controls
+
 ## 8.4.2
 
 ### Patch Changes

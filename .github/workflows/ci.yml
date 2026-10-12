@@ -278,6 +278,27 @@ jobs:
         with:
           name: maestro-ios-${{ github.run_id }}
           path: ~/.maestro/tests
+  e2e-electron:
+    name: E2E (Electron)
+    runs-on: ubuntu-latest
+    needs: [build-web]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install Node.js dependencies
+        run: npm ci
+      - name: Run e2e of packages affected by changes
+        if: github.ref != 'refs/heads/main'
+        run: xvfb-run --auto-servernum npm run affected:e2e:electron
+      - name: Run e2e of all packages
+        if: github.ref == 'refs/heads/main'
+        run: xvfb-run --auto-servernum npm run e2e:electron
   release:
     name: Release
     runs-on: ubuntu-latest

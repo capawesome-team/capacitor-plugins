@@ -3,8 +3,8 @@
 Capacitor plugin to request biometric authentication, such as using face recognition or fingerprint recognition.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -40,15 +40,15 @@ The Biometrics plugin is typically used whenever an app needs to verify the iden
 | -------------- | ----------------- | -------------- |
 | 0.5.x          | >=8.x.x           | Active support |
 
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-biometrics-demo](https://github.com/capawesome-team/capacitor-biometrics-demo)
+
 ## Guides
 
 - [Announcing the Capacitor Biometrics Plugin](https://capawesome.io/blog/announcing-the-capacitor-biometrics-plugin/)
 - [Exploring the Capacitor Biometrics API](https://capawesome.io/blog/exploring-the-capacitor-biometrics-api/)
 - [How to Securely Store Credentials with Capacitor](https://capawesome.io/blog/how-to-securely-store-credentials-with-capacitor/)
-
-## Demo
-
-A working example can be found here: [capawesome-team/capacitor-biometrics-demo](https://github.com/capawesome-team/capacitor-biometrics-demo)
 
 ## Videos
 

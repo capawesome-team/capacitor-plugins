@@ -11,6 +11,8 @@ export interface AppUpdatePlugin {
    * Opens the app store entry of the app in the Play Store (Android) or App Store (iOS).
    *
    * Only available on Android and iOS.
+   *
+   * @since 1.0.0
    */
   openAppStore(options?: OpenAppStoreOptions): Promise<void>;
   /**
@@ -176,6 +178,18 @@ export interface OpenAppStoreOptions {
    * @example "com.example.app"
    */
   androidPackageName?: string;
+  /**
+   * The package name of the store app that should open the app store entry
+   * (e.g. `com.android.vending` for the Google Play Store).
+   *
+   * If not provided, the system's default handler for `market://` links will be used.
+   *
+   * Only available on Android.
+   *
+   * @since 8.1.0
+   * @example "com.android.vending"
+   */
+  androidStorePackageName?: string;
   /**
    * The app ID of the app to open in the App Store.
    *

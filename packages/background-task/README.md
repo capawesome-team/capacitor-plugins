@@ -3,8 +3,8 @@
 Capacitor plugin for running background tasks.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 
@@ -25,6 +25,10 @@ The Background Task plugin is typically used to finish short-running work when t
 | 7.x.x          | 7.x.x             | Deprecated     |
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
+
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Installation
 
@@ -51,10 +55,6 @@ npx cap sync
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
 
 ## Usage
 

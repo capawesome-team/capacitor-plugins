@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`191ad4a8a199e206a87c630ae92f146b61b85269`](https://github.com/capawesome-team/capacitor-plugins/commit/191ad4a8a199e206a87c630ae92f146b61b85269) ([#1119](https://github.com/capawesome-team/capacitor-plugins/pull/1119)): fix(ios): remove unreachable `catch` blocks that caused Xcode warnings
+
 ## 8.0.3
 
 ### Patch Changes

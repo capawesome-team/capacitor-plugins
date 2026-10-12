@@ -3,8 +3,8 @@
 Capacitor plugin to use the [Play Age Signals API](https://developer.android.com/google/play/age-signals/overview) (Android) and [DeclaredAgeRange](https://developer.apple.com/documentation/declaredagerange/) (iOS) to request age signals about the user.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 

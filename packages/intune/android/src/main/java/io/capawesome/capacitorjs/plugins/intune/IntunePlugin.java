@@ -2,6 +2,7 @@ package io.capawesome.capacitorjs.plugins.intune;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -20,6 +21,7 @@ import io.capawesome.capacitorjs.plugins.intune.classes.options.GetPolicyOptions
 import io.capawesome.capacitorjs.plugins.intune.classes.options.IsFileEncryptedOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.ProtectFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.RegisterAndEnrollAccountOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.RemediateComplianceOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.UnenrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.AcquireTokenResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetAppConfigResult;
@@ -27,6 +29,7 @@ import io.capawesome.capacitorjs.plugins.intune.classes.results.GetEnrolledAccou
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetPolicyResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetSdkVersionResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.IsFileEncryptedResult;
+import io.capawesome.capacitorjs.plugins.intune.classes.results.RemediateComplianceResult;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.NonEmptyResultCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.Result;
@@ -251,6 +254,27 @@ public class IntunePlugin extends Plugin {
     }
 
     @PluginMethod
+    public void remediateCompliance(PluginCall call) {
+        try {
+            RemediateComplianceOptions options = new RemediateComplianceOptions(call);
+            NonEmptyResultCallback<RemediateComplianceResult> callback = new NonEmptyResultCallback<>() {
+                @Override
+                public void success(@NonNull RemediateComplianceResult result) {
+                    resolveCall(call, result);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+            implementation.remediateCompliance(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
     public void showDiagnosticConsole(PluginCall call) {
         try {
             implementation.showDiagnosticConsole(createEmptyCallback(call));
@@ -290,11 +314,13 @@ public class IntunePlugin extends Plugin {
             message = ERROR_UNKNOWN_ERROR;
         }
         String code = null;
+        JSObject data = null;
         if (exception instanceof CustomException) {
             code = ((CustomException) exception).getCode();
+            data = ((CustomException) exception).getData();
         }
         Logger.error(TAG, message, exception);
-        call.reject(message, code);
+        call.reject(message, code, data);
     }
 
     private void rejectCallAsUnimplemented(@NonNull PluginCall call) {

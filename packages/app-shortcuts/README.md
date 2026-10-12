@@ -3,8 +3,8 @@
 Capacitor plugin to manage app shortcuts and quick actions.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 
@@ -22,6 +22,14 @@ The App Shortcuts plugin is typically used to give users faster access to key pa
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
+
+| Android                                                                                                     | iOS                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| <image src="https://github.com/user-attachments/assets/58ac7272-de12-457f-a047-8f1f1e08ef52" width="324" /> | <image src="https://github.com/user-attachments/assets/6de8e629-8c31-4383-ba1a-faa921117128" width="324" /> |
 
 ## Installation
 
@@ -90,10 +98,38 @@ export default config;
 
 ### iOS
 
-On iOS, you must add the following to your app's `AppDelegate.swift`:
+If your app uses the UIScene lifecycle (default since Capacitor 8.5), add the following to your app's `SceneDelegate.swift`:
 
 ```diff
-+ import CapawesomeCapacitorAppShortcuts
++ import AppShortcutsPlugin
+
+class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    var window: UIWindow?
+
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        guard let windowScene = scene as? UIWindowScene else { return }
+
+        window = UIWindow(windowScene: windowScene)
+        window?.rootViewController = CAPBridgeViewController()
+        window?.makeKeyAndVisible()
+
++        if let shortcutItem = connectionOptions.shortcutItem {
++            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        }
+
+        SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+    }
+
++    func windowScene(_ windowScene: UIWindowScene, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
++        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
++        completionHandler(true)
++    }
+```
+
+If your app does not use the UIScene lifecycle, add the following to your app's `AppDelegate.swift` instead:
+
+```diff
++ import AppShortcutsPlugin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -101,24 +137,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 +        if let shortcutItem = launchOptions?[.shortcutItem] as? UIApplicationShortcutItem {
 +            NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
-+            return true
++            return false
 +        }
         return true
     }
-    
+
 +    func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
 +        NotificationCenter.default.post(name: NSNotification.Name(AppShortcutsPlugin.notificationName), object: nil, userInfo: [AppShortcutsPlugin.userInfoShortcutItemKey: shortcutItem])
 +        completionHandler(true)
 +    }
 ```
 
-## Demo
+If your project still uses CocoaPods instead of Swift Package Manager (SPM), import `CapawesomeCapacitorAppShortcuts` rather than `AppShortcutsPlugin`:
 
-A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-shortcuts/example).
-
-| Android                                                                                                     | iOS                                                                                                         |
-| ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| <image src="https://github.com/user-attachments/assets/58ac7272-de12-457f-a047-8f1f1e08ef52" width="324" /> | <image src="https://github.com/user-attachments/assets/6de8e629-8c31-4383-ba1a-faa921117128" width="324" /> |
+```diff
++ import CapawesomeCapacitorAppShortcuts
+```
 
 ## Usage
 
@@ -304,7 +338,7 @@ Remove all listeners for this plugin.
 
 | Prop              | Type                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | Since |
 | ----------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`description`** | <code>string</code>           | The description. On **Android**, the launcher shows this instead of the short title when it has enough space. **Attention**: On **iOS**, the icon and the description must be used together.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | 6.0.0 |
+| **`description`** | <code>string</code>           | The description. On **Android**, the launcher shows this instead of the short title when it has enough space.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | 6.0.0 |
 | **`id`**          | <code>string</code>           | The unique identifier.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | 6.0.0 |
 | **`title`**       | <code>string</code>           | The display name.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | 6.0.0 |
 | **`icon`**        | <code>string \| number</code> | The icon to display. On **Android**, the icon can be one of the following: - An integer value of the [R.drawable](https://developer.android.com/reference/android/R.drawable) enum (e.g. `17301547`). - A string that represents the name of the drawable resource (e.g. `"alert_dark_frame"`). - A base64 encoded image string (e.g. `"data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC..."`). On **iOS**, the icon can be one of the following: - The constant integer value of the [UIApplicationShortcutIcon.IconType](https://developer.apple.com/documentation/uikit/uiapplicationshortcuticon/icontype) enum (e.g. `6`). - A system symbol name (e.g. `star.fill`). - Name of the image asset from the asset catalogue. | 6.1.0 |

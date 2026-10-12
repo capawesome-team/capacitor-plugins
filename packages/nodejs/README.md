@@ -3,8 +3,8 @@
 Capacitor plugin for running [Node.js](https://nodejs.org/) in mobile apps.[^1][^2]
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -37,6 +37,10 @@ The Node.js plugin is typically used whenever an app needs functionality that on
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.0.x          | >=8.x.x           | Active support |
+
+## Demo
+
+A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/nodejs/example).
 
 ## Installation
 
@@ -127,10 +131,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-A working example can be found [here](https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/nodejs/example).
 
 ## Usage
 

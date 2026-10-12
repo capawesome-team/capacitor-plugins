@@ -4,7 +4,7 @@ Capacitor plugin to securely store key/value pairs in lockable, biometric-protec
 
 <div class="capawesome-z29o10a">
   <a href="https://capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 

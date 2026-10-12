@@ -5,7 +5,11 @@ name: Sync (keeps app state)
 - extendedWaitUntil:
     visible: "Capacitor Live Update"
     timeout: 10000
-- tapOn: "Channel"
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: channel-input
+      INPUT_LABEL: Channel
 - inputText: "${typeof CHANNEL !== 'undefined' ? CHANNEL : 'default'}"
 - runFlow: _dismiss-keyboard.yaml
 - scrollUntilVisible:

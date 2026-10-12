@@ -58,6 +58,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.PublicKey;
@@ -199,7 +200,7 @@ public class LiveUpdate {
                 .host(config.getServerDomain())
                 .addPathSegment("v1")
                 .addPathSegment("apps")
-                .addPathSegment(getAppId())
+                .addPathSegment(requireAppId())
                 .addPathSegment("channels");
             if (options.getLimit() != null) {
                 urlBuilder.addQueryParameter("limit", String.valueOf(options.getLimit()));
@@ -769,6 +770,8 @@ public class LiveUpdate {
                             Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
                             completionCallback.error(exception);
                         }
+                    } catch (IOException e) {
+                        handleDownloadFailure(e, completionCallback);
                     } catch (Exception e) {
                         completionCallback.error(e);
                     }
@@ -776,7 +779,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    completionCallback.error(exception);
+                    handleDownloadFailure(exception, completionCallback);
                 }
             }
         );
@@ -1187,11 +1190,15 @@ public class LiveUpdate {
 
     @NonNull
     private String getDeviceId() {
-        String deviceId = preferences.getDeviceIdForApp(getAppId());
+        String deviceId = preferences.getDeviceId();
+        if (deviceId != null) {
+            return deviceId;
+        }
+        deviceId = preferences.getLegacyDeviceIdForApp(getAppId());
         if (deviceId == null) {
             deviceId = UUID.randomUUID().toString().toLowerCase();
-            preferences.setDeviceIdForApp(getAppId(), deviceId);
         }
+        preferences.setDeviceId(deviceId);
         return deviceId;
     }
 
@@ -1240,6 +1247,15 @@ public class LiveUpdate {
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
+    }
+
+    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+        if (exception instanceof SocketTimeoutException) {
+            callback.error(exception);
+        } else {
+            callback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+        }
     }
 
     private boolean hasBundleById(@NonNull String bundleId) {
@@ -1321,6 +1337,15 @@ public class LiveUpdate {
             }
         };
         sync(options, callback);
+    }
+
+    @NonNull
+    private String requireAppId() throws Exception {
+        String appId = getAppId();
+        if (appId == null || appId.isEmpty()) {
+            throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
+        }
+        return appId;
     }
 
     private void rollback() {

@@ -8,6 +8,7 @@ import type {
   GetSdkVersionResult,
   IntunePlugin,
   IsFileEncryptedResult,
+  RemediateComplianceResult,
 } from './definitions';
 
 export class IntuneWeb extends WebPlugin implements IntunePlugin {
@@ -52,6 +53,10 @@ export class IntuneWeb extends WebPlugin implements IntunePlugin {
   }
 
   async registerAndEnrollAccount(): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async remediateCompliance(): Promise<RemediateComplianceResult> {
     throw this.unimplemented('Not implemented on web.');
   }
 

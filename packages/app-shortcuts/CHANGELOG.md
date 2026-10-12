@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.3
+
+### Patch Changes
+
+- [`761bf7fa77e0a49c9e2f7fea485512c4e3ce8491`](https://github.com/capawesome-team/capacitor-plugins/commit/761bf7fa77e0a49c9e2f7fea485512c4e3ce8491) ([#1124](https://github.com/capawesome-team/capacitor-plugins/pull/1124)): docs(ios): update setup instructions for Swift Package Manager and the UIScene lifecycle
+
+- [`283d563e12f6b5d4d87a38097e1a3b3c5dc5272f`](https://github.com/capawesome-team/capacitor-plugins/commit/283d563e12f6b5d4d87a38097e1a3b3c5dc5272f) ([#1126](https://github.com/capawesome-team/capacitor-plugins/pull/1126)): docs: remove outdated iOS note about icon and description.
+
 ## 8.0.2
 
 ### Patch Changes

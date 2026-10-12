@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- [`0db3b0ed62541264a224a0f4103fe10b8d713fa2`](https://github.com/capawesome-team/capacitor-plugins/commit/0db3b0ed62541264a224a0f4103fe10b8d713fa2) ([#1102](https://github.com/capawesome-team/capacitor-plugins/pull/1102)): fix(ios): show the native action sheet with its cancel button on iPhone with iOS 26
+
 ## 0.2.0
 
 ### Minor Changes

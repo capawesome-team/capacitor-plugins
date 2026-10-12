@@ -3,8 +3,8 @@
 Capacitor plugin that lets the user pick an option from a list using a native picker.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 
@@ -36,6 +36,12 @@ The Option Picker plugin is typically used as a native replacement for HTML `<se
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+| iOS                                                                                                                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/option-picker/assets/option-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
@@ -200,7 +206,7 @@ It presents the platform's own single-choice picker on Android and iOS through a
 
 ### Which native UI is used on each platform?
 
-On iOS, the plugin presents a `UIPickerView` in a bottom sheet with a toolbar that contains the cancel button, the title, and the done button. On Android, the plugin presents a Material 3 dialog with a scrollable single-choice list and a done and cancel button. Both follow the system appearance, including dark mode.
+On iOS, the plugin presents a `UIPickerView` in a bottom sheet with a toolbar that contains the cancel button, the title, and the done button. On iOS 26 and later, the bottom sheet uses the system's Liquid Glass design. On Android, the plugin presents a Material 3 dialog with a scrollable single-choice list and a done and cancel button. Both follow the system appearance, including dark mode.
 
 ### Does the Android dialog use my app's theme?
 
@@ -212,7 +218,7 @@ Yes, set the `theme` option to `light` or `dark`. By default (`auto`), the picke
 
 ### What happens when the user cancels the picker?
 
-The returned promise is rejected with the `ErrorCode.Canceled` error code. This happens when the user taps the cancel button, taps outside of the picker, or presses the back button on Android. See the [Handle cancellation](#handle-cancellation) example.
+The returned promise is rejected with the `ErrorCode.Canceled` error code. This happens when the user taps the cancel button, taps outside of the picker, swipes the picker down on iOS 26 and later, or presses the back button on Android. See the [Handle cancellation](#handle-cancellation) example.
 
 ### Which option is selected when the picker opens?
 

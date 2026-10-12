@@ -3,8 +3,8 @@
 Capacitor plugin for headless image transforms like crop, resize, rotate, flip and format conversion, including HEIC to JPEG.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 
@@ -39,6 +39,10 @@ The Photo Manipulator plugin is typically used whenever an app needs to process 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Guides
+
+- [How to Take and Edit Photos in a Capacitor App](https://capawesome.io/blog/how-to-take-and-edit-photos-in-a-capacitor-app/)
 
 ## Installation
 

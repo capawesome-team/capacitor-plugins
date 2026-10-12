@@ -29,8 +29,10 @@ import UIKit
 
         let vc = MonthPickerViewController(cancelText: cancelText, doneText: doneText, selectedDate: selectedDate,
                                            minDate: minDate, maxDate: maxDate, locale: locale, theme: theme)
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.modalTransitionStyle = .crossDissolve
+        if #unavailable(iOS 26) {
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.modalTransitionStyle = .crossDissolve
+        }
 
         vc.onMonthSelected = { (selectedData) in
             completion?(selectedData, ErrorCode.none)
@@ -120,6 +122,9 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        if #available(iOS 26, *) {
+            return
+        }
         if newCollection.userInterfaceStyle != traitCollection.userInterfaceStyle {
             setUpThemeMode(theme: theme, systemIsDark: newCollection.userInterfaceStyle == .dark)
         }
@@ -156,6 +161,11 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
 
     private func initialSetup() {
+        if #available(iOS 26, *) {
+            setUpPickerSheet(picker: pickerView, cancelText: cancelText, doneText: doneText, theme: theme)
+            selectInitialRows()
+            return
+        }
         view.backgroundColor = UIColor.clear
         view.addSubview(transView)
         transView.surroundConstraints(view)
@@ -170,13 +180,17 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
         let height = barViewHeight + (2 * lineHeight) + pickerHeight
         stackView.pinConstraints(view, left: 0, right: 0, bottom: 0, height: height)
 
+        selectInitialRows()
+
+        setUpThemeMode(theme: theme, systemIsDark: traitCollection.userInterfaceStyle == .dark)
+    }
+
+    private func selectInitialRows() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             self.pickerView.selectRow(self.selectedMonthIndex, inComponent: 0, animated: false)
             self.pickerView.selectRow(self.selectedYearIndex, inComponent: 1, animated: false)
         }
-
-        setUpThemeMode(theme: theme, systemIsDark: traitCollection.userInterfaceStyle == .dark)
     }
 
     private func setUpThemeMode(theme: Theme, systemIsDark: Bool) {
@@ -260,6 +274,9 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
     }
 
     private func currentTextColor() -> UIColor {
+        if #available(iOS 26, *) {
+            return UIColor.label
+        }
         switch theme {
         case .light:
             return UIColor.black
@@ -326,7 +343,9 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
         let pv = UIPickerView()
         pv.dataSource = self
         pv.delegate = self
-        pv.pinConstraints(view, height: pickerHeight, width: view.frame.width)
+        if #unavailable(iOS 26) {
+            pv.pinConstraints(view, height: pickerHeight, width: view.frame.width)
+        }
         return pv
     }()
 
@@ -378,6 +397,13 @@ class MonthPickerViewController: UIViewController, UIPickerViewDataSource, UIPic
         button.addTarget(self, action: #selector(onCancelButton), for: .touchUpInside)
         return button
     }()
+}
+
+extension MonthPickerViewController: PickerSheetPresentable {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        onBackdropDismissed?()
+        onWillDismiss?()
+    }
 }
 
 // MARK: - Private helpers

@@ -27,7 +27,8 @@ public class AppReviewPlugin extends Plugin {
     public void openAppStore(PluginCall call) {
         assert implementation != null;
         try {
-            implementation.openAppStore();
+            String storePackageName = call.getString("androidStorePackageName");
+            implementation.openAppStore(storePackageName);
             resolveCall(call);
         } catch (Exception exception) {
             rejectCall(call, exception);

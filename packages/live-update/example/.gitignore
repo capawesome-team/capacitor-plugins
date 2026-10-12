@@ -8,3 +8,6 @@ dist/
 
 *.pem
 *.crt
+
+test/electron/.fixtures/
+test/electron/test-results/

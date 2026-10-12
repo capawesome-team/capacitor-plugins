@@ -3,8 +3,8 @@
 Capacitor plugin for communicating with Apple Watch and Wear OS apps. Send messages, sync state and queue transfers between your Capacitor app and your native watch app with a single, unified API.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 
@@ -46,6 +46,7 @@ The Watch plugin is typically used whenever an app wants to extend its experienc
 
 - [Announcing the Capacitor Watch Plugin](https://capawesome.io/blog/announcing-the-capacitor-watch-plugin/): A tour of the three communication channels, the watch-side SDKs, and how the plugin behaves while your app is closed.
 - [How to Build a Wear OS App for Your Capacitor App](https://capawesome.io/blog/how-to-build-a-wear-os-app-for-your-capacitor-app/): Add a native Kotlin watch module and exchange messages, state, and transfers with this plugin.
+- [How to Build an Apple Watch App for Your Capacitor App](https://capawesome.io/blog/how-to-build-an-apple-watch-app-for-your-capacitor-app/): Add a native SwiftUI watch target, wire in the watchOS SDK, and exchange messages, state, and transfers with this plugin.
 
 ## Installation
 

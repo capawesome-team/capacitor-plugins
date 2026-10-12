@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.2.0
+
+### Minor Changes
+
+- [`5d0a6e534c354e066c5e068cb1bb15673f8abafe`](https://github.com/capawesome-team/capacitor-plugins/commit/5d0a6e534c354e066c5e068cb1bb15673f8abafe) ([#1105](https://github.com/capawesome-team/capacitor-plugins/pull/1105)): feat(ios): use the Liquid Glass design on iOS 26
+
 ## 8.1.5
 
 ### Patch Changes

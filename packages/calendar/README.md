@@ -3,8 +3,8 @@
 Capacitor plugin to manage calendars and events on Android and iOS. Create, read, update and delete calendars and events, work with recurring events, present the system event dialogs, and listen for calendar changes.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 
@@ -54,6 +54,7 @@ The Calendar plugin is typically used whenever an app needs to read from or writ
 ## Guides
 
 - [Announcing the Capacitor Calendar Plugin](https://capawesome.io/blog/announcing-the-capacitor-calendar-plugin/): Create, read, and update events with recurrence rules and a calendarChange listener.
+- [How to Manage Recurring Calendar Events in Capacitor](https://capawesome.io/blog/recurring-calendar-events-in-capacitor/): Write a recurrence rule, expand it into occurrences, and update or delete a single occurrence or every later one on Android and iOS.
 
 ## Installation
 

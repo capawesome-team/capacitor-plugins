@@ -19,10 +19,13 @@ export interface ActionSheetPlugin {
 export interface ShowActionsOptions {
   /**
    * Whether the action sheet can be dismissed by tapping outside of it or
-   * pressing the back button (Android).
+   * pressing the back button.
    *
-   * On iOS, the action sheet can always be dismissed by tapping outside of it
-   * (a system behavior).
+   * On iOS, this is a system behavior: on iPhone, tapping outside dismisses the
+   * action sheet only if it has a button with the `Cancel` style. On iPad,
+   * tapping outside always dismisses it.
+   *
+   * Only available on Android.
    *
    * @since 0.1.0
    * @default true

@@ -3,8 +3,8 @@
 Capacitor plugin for Android to manage battery optimization settings, request exemptions, and enhance app performance under Doze and App Standby modes.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -22,6 +22,14 @@ The Android Battery Optimization plugin is typically used by apps whose core fun
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 8.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" alt="Android Demo" /> |
 
 ## Installation
 
@@ -58,14 +66,6 @@ This API requires the following permissions be added to your `AndroidManifest.xm
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/188197064-c042a970-f555-40b8-a19d-d05fc2443b5a.gif" width="324" alt="Android Demo" /> |
 
 ## Usage
 

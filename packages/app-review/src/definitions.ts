@@ -24,16 +24,30 @@ export interface AppReviewPlugin {
  */
 export interface OpenAppStoreOptions {
   /**
+   * The package name of the store app that should open the app store entry
+   * (e.g. `com.android.vending` for the Google Play Store).
+   *
+   * If not provided, the system's default handler for `market://` links will be used.
+   *
+   * Only available on Android.
+   *
+   * @since 8.1.0
+   * @example "com.android.vending"
+   */
+  androidStorePackageName?: string;
+  /**
    * The app ID of the app to open in the App Store.
    *
    * On **iOS**, this is the Apple ID of your app (e.g. `123456789`).
    * You can find the ID in the URL of your app store entry
    * (e.g. `https://apps.apple.com/app/id123456789`).
    *
+   * **Attention**: This option is required on iOS.
+   *
    * Only available on iOS.
    *
    * @since 6.0.1
-   * @example 123456789
+   * @example "123456789"
    */
-  appId: string;
+  appId?: string;
 }

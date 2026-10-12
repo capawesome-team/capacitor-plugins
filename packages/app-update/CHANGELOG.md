@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`57eaa294ca092baa9457f0be9333dec5cb1faa0f`](https://github.com/capawesome-team/capacitor-plugins/commit/57eaa294ca092baa9457f0be9333dec5cb1faa0f) ([#1111](https://github.com/capawesome-team/capacitor-plugins/pull/1111)): feat(android): add `androidStorePackageName` option to `openAppStore(...)`
+
 ## 8.0.5
 
 ### Patch Changes

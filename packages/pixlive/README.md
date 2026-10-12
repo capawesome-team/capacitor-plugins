@@ -2,6 +2,12 @@
 
 Unofficial Capacitor plugin for [PixLive SDK](https://www.vidinoti.com/) by Vidinoti.
 
+<div class="capawesome-z29o10a">
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
+  </a>
+</div>
+
 ## Use Cases
 
 The PixLive plugin is typically used to build augmented reality experiences with content managed in PixLive Maker, for example:

@@ -3,8 +3,8 @@
 Capacitor plugin to show native toast notifications.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Try Capawesome Cloud free for 14 days — iOS builds without a Mac" src="https://capawesome.io/assets/banners/cloud-free-trial-capacitor-apps.png" />
   </a>
 </div>
 
@@ -34,6 +34,12 @@ The Toast plugin is typically used to give users brief, non-blocking feedback, f
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+| Android                                                                                                                                                            | iOS                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/toast/assets/toast-demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/toast/assets/toast-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Installation
 

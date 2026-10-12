@@ -41,7 +41,7 @@ import java.util.Map;
 public class LiveUpdatePlugin extends Plugin {
 
     public static final String TAG = "LiveUpdate";
-    public static final String VERSION = "8.4.3";
+    public static final String VERSION = "8.6.0";
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_DIRECTORY_NOT_FOUND = "Bundle directory could not be resolved.";
@@ -69,17 +69,13 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String EVENT_RELOADED = "reloaded";
 
     @Nullable
-    private LiveUpdateConfig config;
-
-    @Nullable
     private LiveUpdate implementation;
 
     private boolean webViewListenerRegistered = false;
 
     public void load() {
         try {
-            config = getLiveUpdateConfig();
-            implementation = new LiveUpdate(config, this);
+            implementation = new LiveUpdate(getLiveUpdateConfig(), this);
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
         }
@@ -214,12 +210,6 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void fetchChannels(PluginCall call) {
         try {
-            String appId = config.getAppId();
-            if (appId == null || appId.isEmpty()) {
-                call.reject(ERROR_APP_ID_MISSING);
-                return;
-            }
-
             FetchChannelsOptions options = new FetchChannelsOptions(call);
             NonEmptyCallback<FetchChannelsResult> callback = new NonEmptyCallback<>() {
                 @Override
@@ -242,12 +232,6 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void fetchLatestBundle(PluginCall call) {
         try {
-            String appId = config.getAppId();
-            if (appId == null || appId.isEmpty()) {
-                call.reject(ERROR_APP_ID_MISSING);
-                return;
-            }
-
             FetchLatestBundleOptions options = new FetchLatestBundleOptions(call);
             NonEmptyCallback<FetchLatestBundleResult> callback = new NonEmptyCallback<>() {
                 @Override
@@ -664,12 +648,6 @@ public class LiveUpdatePlugin extends Plugin {
     @PluginMethod
     public void sync(PluginCall call) {
         try {
-            String appId = config.getAppId();
-            if (appId == null || appId.isEmpty()) {
-                call.reject(ERROR_APP_ID_MISSING);
-                return;
-            }
-
             SyncOptions options = new SyncOptions(call);
             NonEmptyCallback<Result> callback = new NonEmptyCallback<>() {
                 @Override

@@ -5,8 +5,8 @@ Capacitor plugin to interact with media controllers, volume keys and media butto
 **Attention**: This plugin relays media control events to your JavaScript code, so it is designed for playback that runs inside the web view, such as HTML5 `<audio>` and `<video>` elements or web-based audio and video calls. For native audio playback with the [Audio Player](https://capawesome.io/docs/sdks/capacitor/audio-player/) plugin, use its built-in media session integration instead, which handles the media controls natively — even when the web view is suspended.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 

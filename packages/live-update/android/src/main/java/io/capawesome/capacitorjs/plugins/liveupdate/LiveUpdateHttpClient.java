@@ -88,7 +88,7 @@ public class LiveUpdateHttpClient {
 
                 @Override
                 public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    callback.error(new Exception(e));
+                    callback.error(e);
                 }
             }
         );

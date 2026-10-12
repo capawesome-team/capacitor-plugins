@@ -3,8 +3,8 @@
 Capacitor plugin that allows you to update your app remotely in real-time without requiring users to download a new version from the app store, known as Over-the-Air (OTA) updates.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 
@@ -12,7 +12,7 @@ Capacitor plugin that allows you to update your app remotely in real-time withou
 
 The Capacitor Live Update plugin is one of the most feature-rich Over-the-Air (OTA) update solutions for Capacitor apps. Here are some of the key features:
 
-- 🔋 Supports **Android and iOS**
+- 🔋 Supports **Android, iOS and Electron**
 - ⚡️ **Capacitor 6/7/8** support
 - 📦 **Bundle Management**: Download, set, and delete bundles.
 - ☁️ **Cloud Support**: Use the [Capawesome Cloud](https://cloud.capawesome.io/) to manage your app updates.
@@ -52,6 +52,14 @@ The Live Update plugin is typically used to ship changes to users without going 
 | 7.x.x          | 7.x.x             | Maintenance    |
 | 6.x.x          | 6.x.x             | Maintenance    |
 | 5.x.x          | 5.x.x             | Deprecated     |
+
+## Demo
+
+A working example can be found here: [capawesome-team/capacitor-live-update-demo](https://github.com/capawesome-team/capacitor-live-update-demo)
+
+| Android                                                                                                                                              | iOS                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-ios.png" width="324" alt="iOS Demo" /> |
 
 ## Guides
 
@@ -180,6 +188,36 @@ This trait is the Swift Package Manager equivalent of the `CapawesomeCapacitorLi
 
 **Attention**: SPM trait support requires Capacitor CLI **8.3.0+** and Xcode **16.3+** (Swift 6.1+).
 
+### Electron
+
+This plugin supports the [Capacitor Electron platform](https://github.com/capawesome-team/capacitor-electron) (`@capawesome/capacitor-electron` version `0.2.0` or later). No additional configuration is required.
+
+Please note the following differences on Electron:
+
+- The app version is the `version` from your `electron/package.json` file, so make sure to maintain it.
+- Only the `zip` artifact type is supported.
+- Bundles and state are stored in the `capawesome-live-update` directory inside the app's [`userData`](https://www.electronjs.org/docs/latest/api/app#appgetpathname) directory.
+- The rollback is kill-safe: if the app is closed or crashes before `ready()` is called, the rollback is performed on the next app start.
+
+#### Channel
+
+If you are using [Versioned Channels](https://capawesome.io/docs/cloud/live-updates/channels/#versioned-channels), you can set a default channel in your `electron/capacitor.electron.config.ts` file.
+This configuration takes precedence over the Capacitor configuration and allows you to tie the channel to the app version:
+
+```ts
+import { defineConfig } from '@capawesome/capacitor-electron/config';
+
+import packageJson from './package.json';
+
+export default defineConfig({
+  plugins: {
+    LiveUpdate: {
+      defaultChannel: `production-${packageJson.version}`,
+    },
+  },
+});
+```
+
 ## Ionic Live Update Provider SDK Integration
 
 This plugin implements the [Ionic Live Update Provider SDK](https://github.com/ionic-team/live-update-provider-sdk) contract, so that **Ionic Portals** and **Federated Capacitor** apps can use Capawesome Cloud to deliver live updates. Federated Capacitor resolves the provider by the plugin name `LiveUpdate`. See [the full setup guide](https://github.com/capawesome-team/capacitor-plugins/blob/main/packages/live-update/docs/ionic-live-update-provider-sdk-integration.md) for details.
@@ -189,17 +227,17 @@ This plugin implements the [Ionic Live Update Provider SDK](https://github.com/i
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-| Prop                             | Type                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                | Default                                | Since |
-| -------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ----- |
-| **`appId`**                      | <code>string</code>                 | The app ID is used to identify the app when using [Capawesome Cloud](https://capawesome.io/cloud/). This is **NOT** the same as the app identifier (e.g. `com.example.app`). This is a unique identifier generated by Capawesome Cloud (e.g. `6e351b4f-69a7-415e-a057-4567df7ffe94`).                                                                                                                                      |                                        | 5.0.0 |
-| **`autoBlockRolledBackBundles`** | <code>boolean</code>                | Whether or not to automatically block bundles that have been rolled back. When enabled, the plugin will automatically block bundles that caused a rollback (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked. Blocked bundles will be skipped in future sync operations. **Attention**: This option has no effect if `readyTimeout` is set to `0`. Only available on Android and iOS. | <code>false</code>                     | 7.3.0 |
-| **`autoDeleteBundles`**          | <code>boolean</code>                | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`.                                                                                                                                                                                                                                                                          | <code>false</code>                     | 5.0.0 |
-| **`autoUpdateStrategy`**         | <code>'none' \| 'background'</code> | The auto-update strategy for live updates. - `none`: Live updates will not be applied automatically. - `background`: Live updates will be automatically downloaded and applied in the background at app startup and when the app resumes (if the last check was more than 15 minutes ago). Only available on Android and iOS.                                                                                              | <code>'none'</code>                    | 7.3.0 |
-| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app. This can be overridden by `setChannel()`, the `channel` parameter of `sync()`, or the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or `capawesome_live_update_default_channel` in `strings.xml` on Android).                                                                                                                                  |                                        | 6.3.0 |
-| **`httpTimeout`**                | <code>number</code>                 | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                                             | <code>60000</code>                     | 6.4.0 |
-| **`publicKey`**                  | <code>string</code>                 | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                                                 |                                        | 6.1.0 |
-| **`readyTimeout`**               | <code>number</code>                 | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option (e.g. `10000` ms) so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout.          | <code>0</code>                         | 5.0.0 |
-| **`serverDomain`**               | <code>string</code>                 | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.                                                                                                                                                                                                                                                                                                                   | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
+| Prop                             | Type                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                          | Default                                | Since |
+| -------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------- | ----- |
+| **`appId`**                      | <code>string</code>                 | The app ID is used to identify the app when using [Capawesome Cloud](https://capawesome.io/cloud/). This is **NOT** the same as the app identifier (e.g. `com.example.app`). This is a unique identifier generated by Capawesome Cloud (e.g. `6e351b4f-69a7-415e-a057-4567df7ffe94`).                                                                                                                                                |                                        | 5.0.0 |
+| **`autoBlockRolledBackBundles`** | <code>boolean</code>                | Whether or not to automatically block bundles that have been rolled back. When enabled, the plugin will automatically block bundles that caused a rollback (up to 100 bundles). When the limit is reached, the oldest blocked bundle is unblocked. Blocked bundles will be skipped in future sync operations. **Attention**: This option has no effect if `readyTimeout` is set to `0`. Only available on Android, iOS and Electron. | <code>false</code>                     | 7.3.0 |
+| **`autoDeleteBundles`**          | <code>boolean</code>                | Whether or not to automatically delete unused bundles. When enabled, the plugin will automatically delete unused bundles after calling `ready()`.                                                                                                                                                                                                                                                                                    | <code>false</code>                     | 5.0.0 |
+| **`autoUpdateStrategy`**         | <code>'none' \| 'background'</code> | The auto-update strategy for live updates. - `none`: Live updates will not be applied automatically. - `background`: Live updates will be automatically downloaded and applied in the background at app startup and when the app resumes (if the last check was more than 15 minutes ago). Only available on Android, iOS and Electron.                                                                                              | <code>'none'</code>                    | 7.3.0 |
+| **`defaultChannel`**             | <code>string</code>                 | The default channel of the app. This can be overridden by `setChannel()`, the `channel` parameter of `sync()`, or the native channel configuration (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS, `capawesome_live_update_default_channel` in `strings.xml` on Android or `electron/capacitor.electron.config.ts` on Electron).                                                                                       |                                        | 6.3.0 |
+| **`httpTimeout`**                | <code>number</code>                 | The timeout in milliseconds for HTTP requests.                                                                                                                                                                                                                                                                                                                                                                                       | <code>60000</code>                     | 6.4.0 |
+| **`publicKey`**                  | <code>string</code>                 | The public key to verify the integrity of the bundle. The public key must be a PEM-encoded RSA public key.                                                                                                                                                                                                                                                                                                                           |                                        | 6.1.0 |
+| **`readyTimeout`**               | <code>number</code>                 | The timeout in milliseconds to wait for the app to be ready before resetting to the default bundle. It is strongly **recommended** to configure this option (e.g. `10000` ms) so that the plugin can roll back to the default bundle in case of problems. If configured, the plugin will wait for the app to call the `ready()` method before resetting to the default bundle. Set to `0` to disable the timeout.                    | <code>0</code>                         | 5.0.0 |
+| **`serverDomain`**               | <code>string</code>                 | The API domain of the [Capawesome Cloud](https://cloud.capawesome.io) server **without** scheme or path.                                                                                                                                                                                                                                                                                                                             | <code>'api.cloud.capawesome.io'</code> | 7.0.0 |
 
 ### Examples
 
@@ -250,14 +288,6 @@ export default config;
 ```
 
 </docgen-config>
-
-## Demo
-
-A working example can be found here: [capawesome-team/capacitor-live-update-demo](https://github.com/capawesome-team/capacitor-live-update-demo)
-
-| Android                                                                                                                                              | iOS                                                                                                                                          |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/live-update/.github/assets/demo-ios.png" width="324" alt="iOS Demo" /> |
 
 ## Usage
 
@@ -513,7 +543,7 @@ Clear all blocked bundles from the blocked list.
 This removes all bundle identifiers that were automatically blocked
 due to rollbacks when `autoBlockRolledBackBundles` is enabled.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Since:** 7.4.0
 
@@ -528,7 +558,7 @@ deleteBundle(options: DeleteBundleOptions) => Promise<void>
 
 Delete a bundle from the app.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                                |
 | ------------- | ------------------------------------------------------------------- |
@@ -547,7 +577,7 @@ downloadBundle(options: DownloadBundleOptions) => Promise<void>
 
 Download a bundle.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                                    |
 | ------------- | ----------------------------------------------------------------------- |
@@ -574,7 +604,7 @@ dynamically switch between them using `setChannel(...)`.
 If channels are private, they can still be set using `setChannel(...)`
 but won't be returned by this method.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
@@ -595,7 +625,7 @@ fetchLatestBundle(options?: FetchLatestBundleOptions | undefined) => Promise<Fet
 
 Fetch the latest bundle using the [Capawesome Cloud](https://capawesome.io/cloud/).
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                                          |
 | ------------- | ----------------------------------------------------------------------------- |
@@ -619,7 +649,7 @@ Get all blocked bundle identifiers.
 Returns the list of bundle identifiers that were automatically blocked
 due to rollbacks when `autoBlockRolledBackBundles` is enabled.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getblockedbundlesresult">GetBlockedBundlesResult</a>&gt;</code>
 
@@ -636,7 +666,7 @@ getBundles() => Promise<GetBundlesResult>
 
 Get all identifiers of bundles that have been downloaded.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getbundlesresult">GetBundlesResult</a>&gt;</code>
 
@@ -655,14 +685,15 @@ Get the channel that is used for the update.
 
 The channel is resolved in the following order (highest priority first):
 1. `setChannel()` (SharedPreferences on Android / UserDefaults on iOS)
-2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS or
-   `capawesome_live_update_default_channel` in `strings.xml` on Android)
+2. Native config (`CapawesomeLiveUpdateDefaultChannel` in `Info.plist` on iOS,
+   `capawesome_live_update_default_channel` in `strings.xml` on Android or
+   `defaultChannel` in `electron/capacitor.electron.config.ts` on Electron)
 3. Capacitor config `defaultChannel`
 
 **Note**: The `channel` parameter of `sync()` takes the highest priority
 but is not persisted and therefore not returned by this method.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getchannelresult">GetChannelResult</a>&gt;</code>
 
@@ -682,7 +713,7 @@ Get the runtime configuration.
 Returns the current plugin configuration including any runtime
 overrides set via `setConfig()`.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getconfigresult">GetConfigResult</a>&gt;</code>
 
@@ -699,7 +730,7 @@ getDownloadedBundles() => Promise<GetDownloadedBundlesResult>
 
 Get all identifiers of bundles that have been downloaded.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getdownloadedbundlesresult">GetDownloadedBundlesResult</a>&gt;</code>
 
@@ -717,7 +748,7 @@ getCurrentBundle() => Promise<GetCurrentBundleResult>
 Get the bundle identifier of the current bundle.
 The current bundle is the bundle that is currently used by the app.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getcurrentbundleresult">GetCurrentBundleResult</a>&gt;</code>
 
@@ -734,7 +765,7 @@ getCustomId() => Promise<GetCustomIdResult>
 
 Get the custom identifier of the device.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getcustomidresult">GetCustomIdResult</a>&gt;</code>
 
@@ -751,7 +782,7 @@ getDeviceId() => Promise<GetDeviceIdResult>
 
 Get the unique device identifier.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getdeviceidresult">GetDeviceIdResult</a>&gt;</code>
 
@@ -768,7 +799,7 @@ isSyncing() => Promise<IsSyncingResult>
 
 Check whether a sync operation is currently in progress.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#issyncingresult">IsSyncingResult</a>&gt;</code>
 
@@ -787,7 +818,7 @@ Get the bundle identifier of the next bundle.
 The next bundle is the bundle that will be used after calling `reload()`
 or restarting the app.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getnextbundleresult">GetNextBundleResult</a>&gt;</code>
 
@@ -806,8 +837,9 @@ Get the version code of the app.
 
 On **Android**, this is the `versionCode` from the `android/app/build.gradle` file.
 On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file.
+On **Electron**, this is the `version` from the `electron/package.json` file.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getversioncoderesult">GetVersionCodeResult</a>&gt;</code>
 
@@ -826,8 +858,9 @@ Get the version name of the app.
 
 On **Android**, this is the `versionName` from the `android/app/build.gradle` file.
 On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file.
+On **Electron**, this is the `version` from the `electron/package.json` file.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#getversionnameresult">GetVersionNameResult</a>&gt;</code>
 
@@ -848,7 +881,7 @@ Notify the plugin that the app is ready to use and no rollback is needed.
 to prevent the app from being reset to the default bundle.
 It must always be called before `sync(...)` or any other method that changes the bundle.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Returns:** <code>Promise&lt;<a href="#readyresult">ReadyResult</a>&gt;</code>
 
@@ -873,7 +906,7 @@ on the next app start instead.
 
 **Attention**: The in-memory state of the app (e.g. unsaved user input) is lost.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Since:** 5.0.0
 
@@ -890,7 +923,7 @@ Reset the app to the default bundle.
 
 Call `reload()` or restart the app to apply the changes.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Since:** 5.0.0
 
@@ -908,7 +941,7 @@ Reset the runtime configuration to the values from the Capacitor config file.
 This clears any runtime configuration set via `setConfig()`.
 The changes take effect immediately.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 **Since:** 7.4.0
 
@@ -923,7 +956,7 @@ setChannel(options: SetChannelOptions) => Promise<void>
 
 Set the channel to use for the update.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -949,7 +982,7 @@ The changes are persisted across app restarts and take effect immediately.
 whenever the native app is updated to a new version. This ensures that
 configuration from previous versions doesn't persist after an app update.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -968,7 +1001,7 @@ setCustomId(options: SetCustomIdOptions) => Promise<void>
 
 Set the custom identifier of the device.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                              |
 | ------------- | ----------------------------------------------------------------- |
@@ -989,7 +1022,7 @@ Set the next bundle to use for the app.
 
 Call `reload()` or restart the app to apply the changes.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
@@ -1010,7 +1043,7 @@ Automatically download and set the latest bundle for the app using the [Capaweso
 
 Call `reload()` or restart the app to apply the changes.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param         | Type                                                |
 | ------------- | --------------------------------------------------- |
@@ -1031,7 +1064,7 @@ addListener(eventName: 'downloadBundleProgress', listenerFunc: DownloadBundlePro
 
 Listen for the download progress of a bundle.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param              | Type                                                                                      |
 | ------------------ | ----------------------------------------------------------------------------------------- |
@@ -1056,7 +1089,7 @@ Listen for when a bundle is set as the next bundle.
 This event is triggered whenever a bundle is set to be used on the next app restart,
 either through automatic updates or manual calls to `setNextBundle()`.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param              | Type                                                                    |
 | ------------------ | ----------------------------------------------------------------------- |
@@ -1085,7 +1118,7 @@ and the app has been reloaded.
 use the `ready()` method instead. The `ready()` method provides detailed information
 about the current bundle, previous bundle, and whether a rollback occurred.
 
-Only available on Android and iOS.
+Only available on Android, iOS and Electron.
 
 | Param              | Type                                                          |
 | ------------------ | ------------------------------------------------------------- |
@@ -1126,7 +1159,7 @@ Remove all listeners for this plugin.
 
 | Prop               | Type                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Default            | Since |
 | ------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | <code>'zip'</code> | 6.6.0 |
+| **`artifactType`** | <code>'manifest' \| 'zip'</code> | The artifact type of the bundle. On **Electron**, only the `zip` artifact type is supported.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | <code>'zip'</code> | 6.6.0 |
 | **`bundleId`**     | <code>string</code>              | The unique identifier of the bundle. **Attention**: The value `public` is reserved and cannot be used as a bundle identifier.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |                    | 5.0.0 |
 | **`checksum`**     | <code>string</code>              | The checksum of the self-hosted bundle as a SHA-256 hash in hex format to verify the integrity of the bundle. **Attention**: Only supported for the `zip` artifact type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |                    | 7.1.0 |
 | **`signature`**    | <code>string</code>              | The signature of the self-hosted bundle as a signed SHA-256 hash in base64 format to verify the integrity of the bundle. **Attention**: Only supported for the `zip` artifact type.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |                    | 7.1.0 |
@@ -1161,7 +1194,7 @@ Remove all listeners for this plugin.
 
 | Prop                   | Type                                    | Description                                                                                                                                                                                     | Since |
 | ---------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle.                                                                                                                                                                | 6.7.0 |
+| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle. On **Electron**, only the `zip` artifact type is supported.                                                                                                    | 6.7.0 |
 | **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                   | 6.6.0 |
 | **`channel`**          | <code>string</code>                     | The name of the channel that the bundle is actually from. This is the resolved channel after applying any forced channel assignment and may differ from the channel set by the Live Update SDK. | 8.3.0 |
 | **`checksum`**         | <code>string</code>                     | The checksum of the latest bundle if the bundle is self-hosted. If the bundle is hosted on Capawesome Cloud, the checksum will be returned as response header when downloading the bundle.      | 7.1.0 |
@@ -1229,9 +1262,9 @@ Remove all listeners for this plugin.
 
 #### GetDeviceIdResult
 
-| Prop           | Type                | Description                                                                                                                                                                                                                                                                    | Since |
-| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. | 5.0.0 |
+| Prop           | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Since |
+| -------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`deviceId`** | <code>string</code> | The unique identifier of the device. On iOS, [`identifierForVendor`](https://developer.apple.com/documentation/uikit/uidevice/1620059-identifierforvendor) is used. The value of this property is the same for apps that come from the same vendor running on the same device. On Android, a random UUID is generated once per installation and stored by the plugin. The value is shared across all app IDs and changes when the app is reinstalled or its data is cleared. On Electron, a random UUID is generated on first use and stored in the app's user data directory. The value changes when the user data is cleared. | 5.0.0 |
 
 
 #### IsSyncingResult
@@ -1250,16 +1283,16 @@ Remove all listeners for this plugin.
 
 #### GetVersionCodeResult
 
-| Prop              | Type                | Description                                                                                                                                                                            | Since |
-| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`versionCode`** | <code>string</code> | The version code of the app. On **Android**, this is the `versionCode` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file. | 5.0.0 |
+| Prop              | Type                | Description                                                                                                                                                                                                                                                          | Since |
+| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`versionCode`** | <code>string</code> | The version code of the app. On **Android**, this is the `versionCode` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleVersion` from the `Info.plist` file. On **Electron**, this is the `version` from the `electron/package.json` file. | 5.0.0 |
 
 
 #### GetVersionNameResult
 
-| Prop              | Type                | Description                                                                                                                                                                                       | Since |
-| ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`versionName`** | <code>string</code> | The version name of the app. On **Android**, this is the `versionName` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file. | 5.0.0 |
+| Prop              | Type                | Description                                                                                                                                                                                                                                                                     | Since |
+| ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`versionName`** | <code>string</code> | The version name of the app. On **Android**, this is the `versionName` from the `android/app/build.gradle` file. On **iOS**, this is the `CFBundleShortVersionString` from the `Info.plist` file. On **Electron**, this is the `version` from the `electron/package.json` file. | 5.0.0 |
 
 
 #### ReadyResult

@@ -3,8 +3,8 @@
 Capacitor plugin that allows the user to edit a photo.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -24,6 +24,18 @@ The Photo Editor plugin is typically used whenever an app wants to hand a photo 
 | 7.x.x          | 7.x.x             | Deprecated     |
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
+
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/062c0623-ebb2-4782-a464-b4bebd2aa58d" width="324" alt="Android Demo" /> |
+
+## Guides
+
+- [How to Take and Edit Photos in a Capacitor App](https://capawesome.io/blog/how-to-take-and-edit-photos-in-a-capacitor-app/)
 
 ## Installation
 
@@ -67,14 +79,6 @@ This is an example:
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                                |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <img src="https://github.com/capawesome-team/capacitor-plugins/assets/13857929/062c0623-ebb2-4782-a464-b4bebd2aa58d" width="324" alt="Android Demo" /> |
 
 ## Usage
 

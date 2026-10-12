@@ -5,33 +5,40 @@ name: Download a bundle via the form, optionally expecting an error toast
 - extendedWaitUntil:
     visible: "Capacitor Live Update"
     timeout: 10000
-- tapOn: "Bundle ID"
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: bundle-id-input
+      INPUT_LABEL: Bundle ID
 - inputText: "${typeof BUNDLE_ID !== 'undefined' ? BUNDLE_ID : 'test-bundle'}"
 - runFlow: _dismiss-keyboard.yaml
 - runFlow:
     when:
       true: ${typeof CHECKSUM !== 'undefined' && CHECKSUM != ''}
     commands:
-      - scrollUntilVisible:
-          element:
-            text: "Checksum"
-      - tapOn: "Checksum"
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: checksum-input
+            INPUT_LABEL: Checksum
       - inputText: ${CHECKSUM}
       - runFlow: _dismiss-keyboard.yaml
-- scrollUntilVisible:
-    element:
-      text: "Download URL"
-- tapOn: "Download URL"
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: download-url-input
+      INPUT_LABEL: Download URL
 - inputText: ${URL}
 - runFlow: _dismiss-keyboard.yaml
 - runFlow:
     when:
       true: ${typeof SIGNATURE !== 'undefined' && SIGNATURE != ''}
     commands:
-      - scrollUntilVisible:
-          element:
-            text: "Signature"
-      - tapOn: "Signature"
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: signature-input
+            INPUT_LABEL: Signature
       - inputText: ${SIGNATURE}
       - runFlow: _dismiss-keyboard.yaml
 - scrollUntilVisible:

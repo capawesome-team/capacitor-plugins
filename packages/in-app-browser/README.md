@@ -3,8 +3,8 @@
 Capacitor plugin to open URLs in the external browser, the system browser or an embedded web view.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -40,6 +40,12 @@ The In-App Browser plugin is typically used whenever an app needs to display web
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+| iOS                                                                                                                                                                          |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/in-app-browser/assets/in-app-browser-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
@@ -681,12 +687,12 @@ Remove all listeners for this plugin.
 
 #### OpenInSystemBrowserIosOptions
 
-| Prop                     | Type                                                              | Description                                                                           | Default             | Since |
-| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------- | ----- |
-| **`barCollapsing`**      | <code>boolean</code>                                              | Whether or not the toolbar should collapse when the user scrolls down.                | <code>true</code>   | 0.1.0 |
-| **`dismissButtonStyle`** | <code><a href="#dismissbuttonstyle">DismissButtonStyle</a></code> | The style of the dismiss button in the toolbar.                                       | <code>'done'</code> | 0.1.0 |
-| **`readerMode`**         | <code>boolean</code>                                              | Whether or not the reader mode should be entered if it is available for the web page. | <code>false</code>  | 0.1.0 |
-| **`toolbarColor`**       | <code>string</code>                                               | The background color of the toolbar as a hex color code.                              |                     | 0.1.0 |
+| Prop                     | Type                                                              | Description                                                                                             | Default             | Since |
+| ------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- | ----- |
+| **`barCollapsing`**      | <code>boolean</code>                                              | Whether or not the toolbar should collapse when the user scrolls down.                                  | <code>true</code>   | 0.1.0 |
+| **`dismissButtonStyle`** | <code><a href="#dismissbuttonstyle">DismissButtonStyle</a></code> | The style of the dismiss button in the toolbar.                                                         | <code>'done'</code> | 0.1.0 |
+| **`readerMode`**         | <code>boolean</code>                                              | Whether or not the reader mode should be entered if it is available for the web page.                   | <code>false</code>  | 0.1.0 |
+| **`toolbarColor`**       | <code>string</code>                                               | The background color of the toolbar as a hex color code. This option has no effect on iOS 26 and later. |                     | 0.1.0 |
 
 
 #### OpenInWebViewOptions
@@ -723,15 +729,15 @@ Remove all listeners for this plugin.
 
 #### WebViewToolbarOptions
 
-| Prop                        | Type                 | Description                                                                                            | Default              | Since |
-| --------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------ | -------------------- | ----- |
-| **`backgroundColor`**       | <code>string</code>  | The background color of the toolbar as a hex color code.                                               |                      | 0.1.0 |
-| **`closeButtonText`**       | <code>string</code>  | The text of the close button in the toolbar.                                                           | <code>'Close'</code> | 0.1.0 |
-| **`color`**                 | <code>string</code>  | The text color of the toolbar as a hex color code.                                                     |                      | 0.1.0 |
-| **`showNavigationButtons`** | <code>boolean</code> | Whether or not the back and forward navigation buttons should be shown in the toolbar.                 | <code>false</code>   | 0.1.0 |
-| **`showUrl`**               | <code>boolean</code> | Whether or not the current URL should be displayed in the toolbar instead of the title.                | <code>false</code>   | 0.1.0 |
-| **`title`**                 | <code>string</code>  | The fixed title to display in the toolbar. If not set, the title of the current web page is displayed. |                      | 0.1.0 |
-| **`visible`**               | <code>boolean</code> | Whether or not the toolbar should be visible.                                                          | <code>true</code>    | 0.1.0 |
+| Prop                        | Type                 | Description                                                                                                                                  | Default              | Since |
+| --------------------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ----- |
+| **`backgroundColor`**       | <code>string</code>  | The background color of the toolbar as a hex color code. On iOS 26 and later, this replaces the Liquid Glass toolbar with an opaque toolbar. |                      | 0.1.0 |
+| **`closeButtonText`**       | <code>string</code>  | The text of the close button in the toolbar.                                                                                                 | <code>'Close'</code> | 0.1.0 |
+| **`color`**                 | <code>string</code>  | The text color of the toolbar as a hex color code.                                                                                           |                      | 0.1.0 |
+| **`showNavigationButtons`** | <code>boolean</code> | Whether or not the back and forward navigation buttons should be shown in the toolbar.                                                       | <code>false</code>   | 0.1.0 |
+| **`showUrl`**               | <code>boolean</code> | Whether or not the current URL should be displayed in the toolbar instead of the title.                                                      | <code>false</code>   | 0.1.0 |
+| **`title`**                 | <code>string</code>  | The fixed title to display in the toolbar. If not set, the title of the current web page is displayed.                                       |                      | 0.1.0 |
+| **`visible`**               | <code>boolean</code> | Whether or not the toolbar should be visible.                                                                                                | <code>true</code>    | 0.1.0 |
 
 
 #### PostMessageOptions

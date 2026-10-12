@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.Logger;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
@@ -19,16 +20,17 @@ public class AppReview {
         this.plugin = plugin;
     }
 
-    public void openAppStore() {
+    public void openAppStore(@Nullable String storePackageName) {
         String packageName = plugin.getContext().getPackageName();
-        Intent launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-
-        try {
-            plugin.getBridge().getActivity().startActivity(launchIntent);
-        } catch (ActivityNotFoundException ex) {
-            launchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-            plugin.getBridge().getActivity().startActivity(launchIntent);
+        Intent marketIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
+        if (storePackageName != null && tryStartActivity(new Intent(marketIntent).setPackage(storePackageName))) {
+            return;
         }
+        if (tryStartActivity(marketIntent)) {
+            return;
+        }
+        Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
+        plugin.getBridge().getActivity().startActivity(webIntent);
     }
 
     public void requestReviewFlow(EmptyCallback callback) {
@@ -47,5 +49,14 @@ public class AppReview {
                 callback.error(task.getException());
             }
         });
+    }
+
+    private boolean tryStartActivity(@NonNull Intent intent) {
+        try {
+            plugin.getBridge().getActivity().startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException exception) {
+            return false;
+        }
     }
 }

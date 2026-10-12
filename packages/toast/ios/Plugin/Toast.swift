@@ -29,7 +29,7 @@ import UIKit
             self.applyConstraints(to: toastView, in: containerView, position: position)
             self.currentToastView = toastView
             UIView.animate(withDuration: Self.fadeDurationInSeconds) {
-                toastView.alpha = 1
+                self.setVisible(true, for: toastView)
             }
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 self.dismiss(toastView)
@@ -57,25 +57,36 @@ import UIKit
     }
 
     private func createToastView(text: String) -> UIView {
-        let toastView = UIView()
-        toastView.translatesAutoresizingMaskIntoConstraints = false
-        toastView.backgroundColor = UIColor(white: 0, alpha: 0.8)
-        toastView.layer.cornerRadius = 20
-        toastView.clipsToBounds = true
-        toastView.alpha = 0
+        let toastView: UIView
+        let contentView: UIView
         let label = UILabel()
+        if #available(iOS 26, *) {
+            let glassView = UIVisualEffectView()
+            glassView.cornerConfiguration = .capsule()
+            toastView = glassView
+            contentView = glassView.contentView
+            label.textColor = .label
+        } else {
+            toastView = UIView()
+            toastView.backgroundColor = UIColor(white: 0, alpha: 0.8)
+            toastView.layer.cornerRadius = 20
+            toastView.clipsToBounds = true
+            contentView = toastView
+            label.textColor = .white
+        }
+        toastView.translatesAutoresizingMaskIntoConstraints = false
+        setVisible(false, for: toastView)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = text
-        label.textColor = .white
         label.font = .systemFont(ofSize: 14)
         label.numberOfLines = 0
         label.textAlignment = .center
-        toastView.addSubview(label)
+        contentView.addSubview(label)
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: toastView.topAnchor, constant: 12),
-            label.bottomAnchor.constraint(equalTo: toastView.bottomAnchor, constant: -12),
-            label.leadingAnchor.constraint(equalTo: toastView.leadingAnchor, constant: 20),
-            label.trailingAnchor.constraint(equalTo: toastView.trailingAnchor, constant: -20)
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            label.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
         ])
         return toastView
     }
@@ -87,7 +98,7 @@ import UIKit
         UIView.animate(
             withDuration: Self.fadeDurationInSeconds,
             animations: {
-                toastView.alpha = 0
+                self.setVisible(false, for: toastView)
             },
             completion: { _ in
                 toastView.removeFromSuperview()
@@ -102,5 +113,15 @@ import UIKit
     private func removeCurrentToast() {
         currentToastView?.removeFromSuperview()
         currentToastView = nil
+    }
+
+    private func setVisible(_ isVisible: Bool, for toastView: UIView) {
+        // Glass cannot be faded via `alpha`, so it is shown and hidden by animating its effect instead.
+        if #available(iOS 26, *), let glassView = toastView as? UIVisualEffectView {
+            glassView.effect = isVisible ? UIGlassEffect(style: .regular) : nil
+            glassView.contentView.alpha = isVisible ? 1 : 0
+        } else {
+            toastView.alpha = isVisible ? 1 : 0
+        }
     }
 }

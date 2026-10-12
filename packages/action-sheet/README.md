@@ -3,8 +3,8 @@
 Capacitor plugin for native action sheets.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -35,6 +35,12 @@ The Action Sheet plugin is typically used to let the user choose between several
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
+
+## Demo
+
+| Android                                                                                                                                                                          | iOS                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-android.png" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/action-sheet/assets/action-sheet-demo-ios.png" width="266" alt="iOS Demo" /> |
 
 ## Installation
 
@@ -156,12 +162,12 @@ Only available on Android and iOS.
 
 #### ShowActionsOptions
 
-| Prop             | Type                             | Description                                                                                                                                                                                              | Default           | Since |
-| ---------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ----- |
-| **`cancelable`** | <code>boolean</code>             | Whether the action sheet can be dismissed by tapping outside of it or pressing the back button (Android). On iOS, the action sheet can always be dismissed by tapping outside of it (a system behavior). | <code>true</code> | 0.1.0 |
-| **`message`**    | <code>string</code>              | The message to display below the title.                                                                                                                                                                  |                   | 0.1.0 |
-| **`options`**    | <code>ActionSheetButton[]</code> | The buttons to display in the action sheet.                                                                                                                                                              |                   | 0.1.0 |
-| **`title`**      | <code>string</code>              | The title of the action sheet.                                                                                                                                                                           |                   | 0.1.0 |
+| Prop             | Type                             | Description                                                                                                                                                                                                                                                                                                        | Default           | Since |
+| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------- | ----- |
+| **`cancelable`** | <code>boolean</code>             | Whether the action sheet can be dismissed by tapping outside of it or pressing the back button. On iOS, this is a system behavior: on iPhone, tapping outside dismisses the action sheet only if it has a button with the `Cancel` style. On iPad, tapping outside always dismisses it. Only available on Android. | <code>true</code> | 0.1.0 |
+| **`message`**    | <code>string</code>              | The message to display below the title.                                                                                                                                                                                                                                                                            |                   | 0.1.0 |
+| **`options`**    | <code>ActionSheetButton[]</code> | The buttons to display in the action sheet.                                                                                                                                                                                                                                                                        |                   | 0.1.0 |
+| **`title`**      | <code>string</code>              | The title of the action sheet.                                                                                                                                                                                                                                                                                     |                   | 0.1.0 |
 
 
 #### ActionSheetButton
@@ -212,7 +218,7 @@ The result of `showActions(...)` contains the zero-based `index` of the selected
 
 ### Can the user dismiss the action sheet without selecting a button?
 
-Yes. On Android, the action sheet can be dismissed by tapping outside of it or pressing the back button unless you set the `cancelable` option to `false`. On iOS, the action sheet can always be dismissed by tapping outside of it, which is a system behavior. If the action sheet is dismissed, the promise is rejected with the `CANCELED` error code.
+Yes. On Android, the action sheet can be dismissed by tapping outside of it or pressing the back button unless you set the `cancelable` option to `false`. On iOS, the `cancelable` option has no effect: on iPhone, tapping outside dismisses the action sheet only if it has a button with the `ActionSheetButtonStyle.Cancel` style, while on iPad, tapping outside always dismisses it. If the action sheet is dismissed, the promise is rejected with the `CANCELED` error code.
 
 ### How is this plugin different from the official Capacitor Action Sheet plugin?
 

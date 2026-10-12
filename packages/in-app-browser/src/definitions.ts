@@ -279,6 +279,8 @@ export interface OpenInSystemBrowserIosOptions {
   /**
    * The background color of the toolbar as a hex color code.
    *
+   * This option has no effect on iOS 26 and later.
+   *
    * @example '#008080'
    * @since 0.1.0
    */
@@ -369,6 +371,9 @@ export interface OpenInWebViewOptions {
 export interface WebViewToolbarOptions {
   /**
    * The background color of the toolbar as a hex color code.
+   *
+   * On iOS 26 and later, this replaces the Liquid Glass toolbar with an
+   * opaque toolbar.
    *
    * @example '#008080'
    * @since 0.1.0

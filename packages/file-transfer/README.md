@@ -3,8 +3,8 @@
 Capacitor plugin for reliable background file uploads and downloads that survive the app being backgrounded. Task-based transfers with pause/resume, progress events, retries, and a persisted task store.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Ship a fix in one command with Capawesome Cloud Live Updates, no store review" src="https://capawesome.io/assets/banners/cloud-ship-a-fix-in-one-command.png" />
   </a>
 </div>
 
@@ -45,16 +45,16 @@ The File Transfer plugin is typically used whenever an app needs to move large f
 | -------------- | ----------------- | -------------- |
 | 0.x.x          | >=8.x.x           | Active support |
 
-## Guides
-
-- [Announcing the Capacitor File Transfer Plugin](https://capawesome.io/blog/announcing-the-capacitor-file-transfer-plugin/): Task-based background transfers with pause and resume, retries, and a persisted task store.
-- [An Alternative to cordova-plugin-file-transfer](https://capawesome.io/blog/alternative-to-cordova-plugin-file-transfer/): Compares the XHR advice, this plugin, and its background transfer API.
-
 ## Demo
 
 | Android                                                                                                                                                                          | iOS                                                                                                                                                                          |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/file-transfer/assets/file-transfer-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/file-transfer/assets/file-transfer-demo-ios.mp4" width="266" controls></video> |
+
+## Guides
+
+- [Announcing the Capacitor File Transfer Plugin](https://capawesome.io/blog/announcing-the-capacitor-file-transfer-plugin/): Task-based background transfers with pause and resume, retries, and a persisted task store.
+- [An Alternative to cordova-plugin-file-transfer](https://capawesome.io/blog/alternative-to-cordova-plugin-file-transfer/): Compares the XHR advice, this plugin, and its background transfer API.
 
 ## Installation
 

@@ -101,7 +101,8 @@ import CommonCrypto
         if let query = options.getQuery() {
             parameters["query"] = query
         }
-        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(getAppId() ?? "")/channels")!
+        let appId = try requireAppId()
+        var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(appId)/channels")!
         if !parameters.isEmpty {
             urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
@@ -814,6 +815,13 @@ import CommonCrypto
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
             }
         }
+    }
+
+    private func requireAppId() throws -> String {
+        guard let appId = getAppId(), !appId.isEmpty else {
+            throw CustomError.appIdMissing
+        }
+        return appId
     }
 
     private func rollback() {

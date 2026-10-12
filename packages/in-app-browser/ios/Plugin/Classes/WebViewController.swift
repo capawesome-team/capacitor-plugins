@@ -26,6 +26,14 @@ import WebKit
     private var urlObservation: NSKeyValueObservation?
     private var webView: WKWebView?
 
+    private var webViewExtendsUnderNavigationBar: Bool {
+        guard #available(iOS 26, *) else {
+            return false
+        }
+        // A toolbar with a background color is opaque and would hide the content.
+        return options.toolbar.visible && options.toolbar.backgroundColor == nil
+    }
+
     init(options: OpenInWebViewOptions) {
         self.options = options
         super.init(nibName: nil, bundle: nil)
@@ -77,14 +85,24 @@ import WebKit
         let webView = createWebView()
         self.webView = webView
         view.addSubview(webView)
+        let topAnchor = webViewExtendsUnderNavigationBar ? view.topAnchor : view.safeAreaLayoutGuide.topAnchor
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.topAnchor.constraint(equalTo: topAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         configureNavigationBar()
         loadUrl()
+    }
+
+    override public func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        guard #available(iOS 26, *), webViewExtendsUnderNavigationBar else {
+            return
+        }
+        // Keeps fixed and sticky elements of the page below the navigation bar.
+        webView?.obscuredContentInsets = UIEdgeInsets(top: view.safeAreaInsets.top, left: 0, bottom: 0, right: 0)
     }
 
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
@@ -152,7 +170,9 @@ import WebKit
             navigationController?.navigationBar.compactAppearance = appearance
         }
         if let color = options.toolbar.color {
-            navigationController?.navigationBar.tintColor = color
+            closeButtonItem.tintColor = color
+            backButtonItem?.tintColor = color
+            forwardButtonItem?.tintColor = color
         }
         updateTitle()
     }

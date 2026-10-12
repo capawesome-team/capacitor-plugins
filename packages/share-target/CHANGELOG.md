@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.5
+
+### Patch Changes
+
+- [`6f128680008fd60f044581092990418c4f02eb46`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/6f128680008fd60f044581092990418c4f02eb46) ([#665](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/665)): docs: document the `SceneDelegate.swift` setup for the UIScene lifecycle
+
+- [`b251f52a9d790f902a6e81edf1b1a10229c196bd`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/b251f52a9d790f902a6e81edf1b1a10229c196bd) ([#670](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/670)): docs(ios): align the Swift Package Manager and CocoaPods import instructions with the other plugins
+
 ## 8.0.4
 
 ### Patch Changes

@@ -4,6 +4,7 @@ class OptionPickerViewController: UIViewController {
     private static let backdropAlpha: CGFloat = 0.4
     private static let headerHeight: CGFloat = 44
     private static let horizontalPadding: CGFloat = 16
+    private static let sheetTopPadding: CGFloat = 16
     private static let titleSpacing: CGFloat = 8
 
     private let completion: (PresentResult?, Error?) -> Void
@@ -19,8 +20,10 @@ class OptionPickerViewController: UIViewController {
         self.options = options
         self.completion = completion
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
-        modalTransitionStyle = .crossDissolve
+        if #unavailable(iOS 26) {
+            modalPresentationStyle = .overFullScreen
+            modalTransitionStyle = .crossDissolve
+        }
         overrideUserInterfaceStyle = options.theme.userInterfaceStyle
     }
 
@@ -30,19 +33,13 @@ class OptionPickerViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backdropView = createBackdropView()
-        let sheetView = createSheetView()
-        view.addSubview(backdropView)
-        view.addSubview(sheetView)
-        NSLayoutConstraint.activate([
-            backdropView.topAnchor.constraint(equalTo: view.topAnchor),
-            backdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            backdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            backdropView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        if #available(iOS 26, *) {
+            setUpSystemSheet()
+        } else {
+            setUpCustomSheet()
+        }
         pickerView.selectRow(initialRow, inComponent: 0, animated: false)
     }
 
@@ -92,6 +89,19 @@ class OptionPickerViewController: UIViewController {
         return headerView
     }
 
+    @available(iOS 26, *)
+    private func createNavigationBar() -> UINavigationBar {
+        let navigationItem = UINavigationItem()
+        navigationItem.title = options.title
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: options.cancelButtonText, style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            title: options.doneButtonText, style: .prominent, target: self, action: #selector(handleDone))
+        let navigationBar = UINavigationBar()
+        navigationBar.items = [navigationItem]
+        return navigationBar
+    }
+
     private func createSeparatorView() -> UIView {
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -100,8 +110,6 @@ class OptionPickerViewController: UIViewController {
     }
 
     private func createSheetView() -> UIView {
-        pickerView.dataSource = self
-        pickerView.delegate = self
         let stackView = UIStackView(arrangedSubviews: [createHeaderView(), pickerView])
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -146,6 +154,49 @@ class OptionPickerViewController: UIViewController {
     @objc private func handleDone() {
         let selectedRow = pickerView.selectedRow(inComponent: 0)
         finish(PresentResult(value: options.options[selectedRow].value), nil)
+    }
+
+    private func setUpCustomSheet() {
+        let backdropView = createBackdropView()
+        let sheetView = createSheetView()
+        view.addSubview(backdropView)
+        view.addSubview(sheetView)
+        NSLayoutConstraint.activate([
+            backdropView.topAnchor.constraint(equalTo: view.topAnchor),
+            backdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backdropView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            sheetView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            sheetView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    @available(iOS 26, *)
+    private func setUpSystemSheet() {
+        let stackView = UIStackView(arrangedSubviews: [createNavigationBar(), pickerView])
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor, constant: Self.sheetTopPadding),
+            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        let height = Self.sheetTopPadding + stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize).height
+        sheetPresentationController?.detents = [.custom { _ in height }]
+        presentationController?.delegate = self
+        // The glass background belongs to the presentation controller and ignores `overrideUserInterfaceStyle`.
+        if options.theme != .auto {
+            presentationController?.traitOverrides.userInterfaceStyle = options.theme.userInterfaceStyle
+        }
+    }
+}
+
+extension OptionPickerViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        completion(nil, CustomError.pickerCanceled)
     }
 }
 

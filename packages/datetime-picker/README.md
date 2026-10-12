@@ -3,8 +3,8 @@
 Capacitor plugin for seamless date and time selection with advanced features like localization, theming, and more. Available for Android and iOS.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -43,6 +43,14 @@ The Datetime Picker plugin is typically used whenever an app needs the user to e
 | 6.x.x          | 6.x.x             | Deprecated     |
 | 5.x.x          | 5.x.x             | Deprecated     |
 
+## Demo
+
+A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
+
+| Android                                                                                                                                            | iOS                                                                                                                                                                            |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/13857929/184545710-a837f45f-e335-4903-b3a9-e1f30b42163f.gif" width="324" alt="Android Demo" /> | <img src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/datetime-picker/assets/datetime-picker-demo-ios.png" width="266" alt="iOS Demo" /> |
+
 ## Installation
 
 You can use our **AI-Assisted Setup** to install the plugin.
@@ -68,14 +76,6 @@ npx cap sync
 ## Configuration
 
 No configuration required for this plugin.
-
-## Demo
-
-A working example can be found here: [robingenz/capacitor-plugin-demo](https://github.com/robingenz/capacitor-plugin-demo)
-
-| Android                                                                                                                                            | iOS                                                                                                                                            |
-| -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://user-images.githubusercontent.com/13857929/184545710-a837f45f-e335-4903-b3a9-e1f30b42163f.gif" width="324" alt="Android Demo" /> | <img src="https://user-images.githubusercontent.com/13857929/184545717-a10291e4-95fe-4453-91f7-c04246c61dec.gif" width="266" alt="iOS Demo" /> |
 
 ## Usage
 
@@ -201,7 +201,7 @@ Only available on Android and iOS.
 | **`max`**                   | <code>string</code>                                    | The latest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string later than or equal to the one specified by the `min` attribute.                                                                                                                                                   |                                             | 0.0.1 |
 | **`min`**                   | <code>string</code>                                    | The earliest date and time to accept. The format of this value must match the value of the `format` parameter. This value must specify a date string earlier than or equal to the one specified by the `max` attribute.                                                                                                                                               |                                             | 0.0.1 |
 | **`mode`**                  | <code>'date' \| 'time' \| 'datetime' \| 'month'</code> | Whether you want a date, time, datetime or month picker. The `month` mode (since `8.1.0`) lets the user pick a month and year only. Unlike the other modes, it uses a custom (non-native) UI on both platforms, because neither Android nor iOS provide a native month-only picker. The returned value is the first day of the selected month at 00:00:00 local time. | <code>'datetime'</code>                     | 0.0.1 |
-| **`theme`**                 | <code>'auto' \| 'light' \| 'dark'</code>               | Choose the theme that the datetime picker should have. With `auto` the system theme is used. This value overwrites the `theme` configuration value. Only available on Android and iOS. Spinner options only available on Android                                                                                                                                      |                                             | 0.0.1 |
+| **`theme`**                 | <code>'auto' \| 'light' \| 'dark'</code>               | Choose the theme that the datetime picker should have. With `auto` the system theme is used. This value overwrites the `theme` configuration value. On iOS 26 and later, the picker uses the system's Liquid Glass sheet, so the theme only selects its light or dark appearance. Only available on Android and iOS. Spinner options only available on Android        |                                             | 0.0.1 |
 | **`value`**                 | <code>string</code>                                    | The predefined value when opening the picker. The format of this value must match the value of the `format` parameter.                                                                                                                                                                                                                                                |                                             | 0.0.1 |
 | **`androidTimePickerMode`** | <code>'clock' \| 'spinner'</code>                      | Whether to use the spinner or clock mode for the time picker on Android. This value overwrites the `androidTimePickerMode` configuration value. Only available on Android.                                                                                                                                                                                            |                                             | 5.1.0 |
 | **`androidDatePickerMode`** | <code>'spinner' \| 'calendar'</code>                   | Whether to use the calendar or spinner mode for the date picker on Android. This value overwrites the `androidDatePickerMode` configuration value. Only available on Android.                                                                                                                                                                                         |                                             | 5.1.0 |

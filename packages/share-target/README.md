@@ -3,8 +3,8 @@
 Capacitor plugin to receive content such as text, links, and files from other apps.
 
 <div class="capawesome-z29o10a">
-  <a href="https://cloud.capawesome.io/" target="_blank">
-    <img alt="Deliver Live Updates to your Capacitor app with Capawesome Cloud" src="https://cloud.capawesome.io/assets/banners/cloud-build-and-deploy-capacitor-apps.png?t=1" />
+  <a href="https://capawesome.io/" target="_blank">
+    <img alt="Thousands of teams ship faster with Capawesome Cloud Native Builds and Live Updates" src="https://capawesome.io/assets/banners/cloud-teams-ship-faster-with-capacitor.png" />
   </a>
 </div>
 
@@ -616,13 +616,40 @@ extension UIImage {
 
 **Attention**: Replace `<YOUR_URL_SCHEME>` with the URL scheme you defined in your main app's `Info.plist` file (e.g. `myapp`) and `<YOUR_APP_IDENTIFIER>` with your app identifier (e.g. `com.example.app`). Make sure to keep the `group.` prefix for the app group identifier.
 
-Finally, you need to modify the `AppDelegate.swift` file of your main app target to handle the URLs opened by the share extension. Add the missing import and the following code to the `application(_:open:options:)` method:
+Finally, you need to pass the URLs opened by the share extension to the plugin. If your app uses the UIScene lifecycle (default since Capacitor 8.5), modify the `SceneDelegate.swift` file of your main app target. Add the missing import and the following code to the `scene(_:willConnectTo:options:)` and `scene(_:openURLContexts:)` methods:
 
 ```diff
-// If you are using Swift Package Manager, add the following import:
 + import ShareTargetPlugin
-// Or if you are using CocoaPods, add the following import:
-// import CapawesomeTeamCapacitorShareTarget
+
+func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    guard let windowScene = scene as? UIWindowScene else { return }
+
+    window = UIWindow(windowScene: windowScene)
+    window?.rootViewController = CAPBridgeViewController()
+    window?.makeKeyAndVisible()
+
++    // Handle share target URLs that launched the app
++    for context in connectionOptions.urlContexts {
++        let _ = ShareTargetPlugin.handleOpenUrl(context.url)
++    }
++
+    SceneDelegateProxy.shared.scene(scene, willConnectTo: session, options: connectionOptions)
+}
+
+func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
++    // Handle share target URLs
++    for context in URLContexts {
++        let _ = ShareTargetPlugin.handleOpenUrl(context.url)
++    }
++
+    SceneDelegateProxy.shared.scene(scene, openURLContexts: URLContexts)
+}
+```
+
+If your app does not use the UIScene lifecycle, modify the `AppDelegate.swift` file of your main app target instead. Add the missing import and the following code to the `application(_:open:options:)` method:
+
+```diff
++ import ShareTargetPlugin
 
 func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
 +    // Handle share target URLs
@@ -634,7 +661,11 @@ func application(_ app: UIApplication, open url: URL, options: [UIApplication.Op
 }
 ```
 
-**Attention**: If you are using **CocoaPods** instead of Swift Package Manager, replace `import ShareTargetPlugin` with `import CapawesomeTeamCapacitorShareTarget`.
+If your project still uses CocoaPods instead of Swift Package Manager (SPM), import `CapawesomeTeamCapacitorShareTarget` rather than `ShareTargetPlugin`:
+
+```diff
++ import CapawesomeTeamCapacitorShareTarget
+```
 
 #### Capabilities
 
@@ -932,7 +963,7 @@ The plugin can handle text, URLs, images, videos, and other files. Which content
 
 ### Why do I need a share extension on iOS?
 
-On iOS, it's not possible to receive shared content directly in the main app. Instead, a share extension handles the shared content and communicates it back to your main app via a URL scheme. The [Installation](#installation) section walks you through creating the share extension, setting up the URL scheme, and handling the URLs in your `AppDelegate.swift`.
+On iOS, it's not possible to receive shared content directly in the main app. Instead, a share extension handles the shared content and communicates it back to your main app via a URL scheme. The [Installation](#installation) section walks you through creating the share extension, setting up the URL scheme, and handling the URLs in your `SceneDelegate.swift` or `AppDelegate.swift`.
 
 ### How do I read the files that were shared?
 

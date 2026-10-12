@@ -1,5 +1,25 @@
 # Changelog
 
+## 8.6.0
+
+### Minor Changes
+
+- [`6bb75918914d53dc2ad75d8e5ff008ca835e8cbb`](https://github.com/capawesome-team/capacitor-plugins/commit/6bb75918914d53dc2ad75d8e5ff008ca835e8cbb) ([#1114](https://github.com/capawesome-team/capacitor-plugins/pull/1114)): feat(android): use one device ID per installation across all app IDs
+
+## 8.5.0
+
+### Minor Changes
+
+- [`f3b4aaf947e739c2073b4510ff6651a3efeb71f9`](https://github.com/capawesome-team/capacitor-plugins/commit/f3b4aaf947e739c2073b4510ff6651a3efeb71f9) ([#1109](https://github.com/capawesome-team/capacitor-plugins/pull/1109)): feat: add support for the Electron platform via [`@capawesome/capacitor-electron`](https://github.com/capawesome-team/capacitor-electron)
+
+## 8.4.4
+
+### Patch Changes
+
+- [`7ebd0878716a963ea06d03fa3eecd6af13ed2195`](https://github.com/capawesome-team/capacitor-plugins/commit/7ebd0878716a963ea06d03fa3eecd6af13ed2195) ([#1096](https://github.com/capawesome-team/capacitor-plugins/pull/1096)): fix(android): reject with `Request timed out.` on HTTP timeouts and with `Bundle could not be downloaded.` on network errors during a download
+
+- [`cf2223fc618585f57a76fef819cb1c592da8a77b`](https://github.com/capawesome-team/capacitor-plugins/commit/cf2223fc618585f57a76fef819cb1c592da8a77b) ([#1092](https://github.com/capawesome-team/capacitor-plugins/pull/1092)): fix: respect the `appId` set via `setConfig(...)` in `sync(...)`, `fetchLatestBundle(...)` and `fetchChannels(...)`
+
 ## 8.4.3
 
 ### Patch Changes

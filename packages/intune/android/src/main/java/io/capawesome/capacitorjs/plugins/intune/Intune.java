@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 import com.microsoft.identity.client.AcquireTokenParameters;
 import com.microsoft.identity.client.AcquireTokenSilentParameters;
@@ -17,6 +18,7 @@ import com.microsoft.identity.client.Prompt;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
 import com.microsoft.identity.client.exception.MsalException;
+import com.microsoft.identity.client.exception.MsalIntuneAppProtectionPolicyRequiredException;
 import com.microsoft.identity.client.exception.MsalUserCancelException;
 import com.microsoft.intune.mam.client.app.MAMComponents;
 import com.microsoft.intune.mam.client.identity.MAMFileProtectionInfo;
@@ -24,12 +26,15 @@ import com.microsoft.intune.mam.client.identity.MAMFileProtectionManager;
 import com.microsoft.intune.mam.client.identity.MAMPolicyManager;
 import com.microsoft.intune.mam.client.notification.MAMNotificationReceiverRegistry;
 import com.microsoft.intune.mam.policy.AppPolicy;
+import com.microsoft.intune.mam.policy.MAMCAComplianceStatus;
+import com.microsoft.intune.mam.policy.MAMComplianceManager;
 import com.microsoft.intune.mam.policy.MAMEnrollmentManager;
 import com.microsoft.intune.mam.policy.MAMServiceAuthenticationCallbackExtended;
 import com.microsoft.intune.mam.policy.MAMUserInfo;
 import com.microsoft.intune.mam.policy.SaveLocation;
 import com.microsoft.intune.mam.policy.appconfig.MAMAppConfig;
 import com.microsoft.intune.mam.policy.appconfig.MAMAppConfigManager;
+import com.microsoft.intune.mam.policy.notification.MAMComplianceNotification;
 import com.microsoft.intune.mam.policy.notification.MAMEnrollmentNotification;
 import com.microsoft.intune.mam.policy.notification.MAMNotification;
 import com.microsoft.intune.mam.policy.notification.MAMNotificationType;
@@ -48,6 +53,7 @@ import io.capawesome.capacitorjs.plugins.intune.classes.options.GetPolicyOptions
 import io.capawesome.capacitorjs.plugins.intune.classes.options.IsFileEncryptedOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.ProtectFileOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.RegisterAndEnrollAccountOptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.options.RemediateComplianceOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.options.UnenrollAccountOptions;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.AcquireTokenResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetAppConfigResult;
@@ -55,6 +61,7 @@ import io.capawesome.capacitorjs.plugins.intune.classes.results.GetEnrolledAccou
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetPolicyResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.GetSdkVersionResult;
 import io.capawesome.capacitorjs.plugins.intune.classes.results.IsFileEncryptedResult;
+import io.capawesome.capacitorjs.plugins.intune.classes.results.RemediateComplianceResult;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.NonEmptyResultCallback;
 import java.io.File;
@@ -65,9 +72,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -94,6 +103,8 @@ public class Intune {
 
     @NonNull
     private final IntunePlugin plugin;
+
+    private final Map<String, List<NonEmptyResultCallback<RemediateComplianceResult>>> remediateComplianceCallbacks = new HashMap<>();
 
     public Intune(@NonNull IntunePlugin plugin) {
         this.plugin = plugin;
@@ -297,6 +308,22 @@ public class Intune {
         );
     }
 
+    public void remediateCompliance(
+        @NonNull RemediateComplianceOptions options,
+        @NonNull NonEmptyResultCallback<RemediateComplianceResult> callback
+    ) throws Exception {
+        // The callback must be added before the remediation starts, because the result may be reported immediately.
+        addRemediateComplianceCallback(options.getAccountId(), callback);
+        MAMComplianceManager complianceManager = MAMComponents.get(MAMComplianceManager.class);
+        complianceManager.remediateCompliance(
+            options.getUsername(),
+            options.getAccountId(),
+            options.getTenantId(),
+            options.getAuthority(),
+            !options.getSilent()
+        );
+    }
+
     public void showDiagnosticConsole(@NonNull EmptyCallback callback) throws Exception {
         Activity activity = plugin.getActivity();
         activity.runOnUiThread(() -> {
@@ -340,6 +367,15 @@ public class Intune {
                 }
             }
         );
+    }
+
+    private void addRemediateComplianceCallback(
+        @NonNull String accountId,
+        @NonNull NonEmptyResultCallback<RemediateComplianceResult> callback
+    ) {
+        synchronized (remediateComplianceCallbacks) {
+            remediateComplianceCallbacks.computeIfAbsent(accountId.toLowerCase(Locale.ROOT), key -> new ArrayList<>()).add(callback);
+        }
     }
 
     private static void copyFile(@NonNull File source, @NonNull File destination) throws IOException {
@@ -393,9 +429,28 @@ public class Intune {
     }
 
     @NonNull
+    private static CustomException createProtectionPolicyRequiredException(
+        @NonNull MsalIntuneAppProtectionPolicyRequiredException exception
+    ) {
+        JSObject data = new JSObject();
+        data.put("accountId", exception.getAccountUserId());
+        data.put("authority", exception.getAuthorityUrl());
+        data.put("tenantId", exception.getTenantId());
+        data.put("username", exception.getAccountUpn());
+        return new CustomException(
+            "PROTECTION_POLICY_REQUIRED",
+            "An Intune app protection policy is required to acquire a token for this account.",
+            data
+        );
+    }
+
+    @NonNull
     private static CustomException createTokenAcquisitionException(@NonNull MsalException exception) {
         if (exception instanceof MsalUserCancelException) {
             return CustomExceptions.INTERACTION_CANCELED;
+        }
+        if (exception instanceof MsalIntuneAppProtectionPolicyRequiredException) {
+            return createProtectionPolicyRequiredException((MsalIntuneAppProtectionPolicyRequiredException) exception);
         }
         return new CustomException("TOKEN_ACQUISITION_FAILED", getErrorMessage(exception));
     }
@@ -455,6 +510,13 @@ public class Intune {
         }
     }
 
+    private static void handleComplianceStatus(@NonNull MAMComplianceNotification notification) {
+        Intune intune = instance;
+        if (intune != null) {
+            intune.resolveRemediateComplianceCallbacks(notification);
+        }
+    }
+
     private static void handleEnrollmentChange(@Nullable String accountId, @NonNull String status) {
         EnrollmentChangeEvent event = new EnrollmentChangeEvent(accountId, status);
         Intune intune = instance;
@@ -481,6 +543,31 @@ public class Intune {
         persistPendingWipeAccountId(accountId);
         if (intune != null) {
             intune.plugin.notifyWipeRequestedListeners(new WipeRequestedEvent(accountId));
+        }
+    }
+
+    @NonNull
+    private static String mapComplianceStatus(@Nullable MAMCAComplianceStatus status) {
+        if (status == null) {
+            return "unknown";
+        }
+        switch (status) {
+            case CLIENT_ERROR:
+                return "clientError";
+            case COMPANY_PORTAL_REQUIRED:
+                return "companyPortalRequired";
+            case COMPLIANT:
+                return "compliant";
+            case NETWORK_FAILURE:
+                return "networkFailure";
+            case NOT_COMPLIANT:
+                return "notCompliant";
+            case PENDING:
+                return "pending";
+            case SERVICE_FAILURE:
+                return "serviceFailure";
+            default:
+                return "unknown";
         }
     }
 
@@ -559,6 +646,10 @@ public class Intune {
             return;
         }
         registry.registerReceiver(notification -> {
+            handleComplianceStatus((MAMComplianceNotification) notification);
+            return true;
+        }, MAMNotificationType.COMPLIANCE_STATUS);
+        registry.registerReceiver(notification -> {
             MAMEnrollmentNotification enrollmentNotification = (MAMEnrollmentNotification) notification;
             handleEnrollmentChange(
                 enrollmentNotification.getUserOid(),
@@ -578,6 +669,28 @@ public class Intune {
             handleWipeRequested(getAccountIdFromNotification(notification));
             return true;
         }, MAMNotificationType.WIPE_USER_DATA);
+    }
+
+    private void resolveRemediateComplianceCallbacks(@NonNull MAMComplianceNotification notification) {
+        String accountId = notification.getUserOid();
+        if (accountId == null) {
+            return;
+        }
+        List<NonEmptyResultCallback<RemediateComplianceResult>> callbacks;
+        synchronized (remediateComplianceCallbacks) {
+            callbacks = remediateComplianceCallbacks.remove(accountId.toLowerCase(Locale.ROOT));
+        }
+        if (callbacks == null) {
+            return;
+        }
+        RemediateComplianceResult result = new RemediateComplianceResult(
+            notification.getComplianceErrorMessage(),
+            notification.getComplianceErrorTitle(),
+            mapComplianceStatus(notification.getComplianceStatus())
+        );
+        for (NonEmptyResultCallback<RemediateComplianceResult> callback : callbacks) {
+            callback.success(result);
+        }
     }
 
     @Nullable

@@ -10,6 +10,9 @@ declare module '@capacitor/cli' {
        * Choose the theme that the datetime picker should have.
        * With `auto` the system theme is used.
        *
+       * On iOS 26 and later, the picker uses the system's Liquid Glass sheet,
+       * so the theme only selects its light or dark appearance.
+       *
        * Only available on Android and iOS.
        *
        * @since 0.0.1
@@ -124,6 +127,9 @@ export interface PresentOptions {
    * Choose the theme that the datetime picker should have.
    * With `auto` the system theme is used.
    * This value overwrites the `theme` configuration value.
+   *
+   * On iOS 26 and later, the picker uses the system's Liquid Glass sheet,
+   * so the theme only selects its light or dark appearance.
    *
    * Only available on Android and iOS.
    * Spinner options only available on Android
