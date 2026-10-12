@@ -10,6 +10,7 @@
 		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
 		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
 		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
+		C4D0BF0DB3A5999B940335E7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1516EFEC86FA070BAAA9B9 /* SceneDelegate.swift */; };
 		BB0100000000000000010001 /* IonicProviderTestPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0200000000000000010001 /* IonicProviderTestPlugin.swift */; };
 		BB0100000000000000010002 /* MyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB0200000000000000010002 /* MyViewController.swift */; };
 		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		8B1516EFEC86FA070BAAA9B9 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BB0200000000000000010001 /* IonicProviderTestPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IonicProviderTestPlugin.swift; sourceTree = "<group>"; };
 		BB0200000000000000010002 /* MyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyViewController.swift; sourceTree = "<group>"; };
 		504EC30C1FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			children = (
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
+				8B1516EFEC86FA070BAAA9B9 /* SceneDelegate.swift */,
 				BB0200000000000000010002 /* MyViewController.swift */,
 				BB0200000000000000010001 /* IonicProviderTestPlugin.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
@@ -216,6 +219,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				C4D0BF0DB3A5999B940335E7 /* SceneDelegate.swift in Sources */,
 				BB0100000000000000010002 /* MyViewController.swift in Sources */,
 				BB0100000000000000010001 /* IonicProviderTestPlugin.swift in Sources */,
 			);
