@@ -1,0 +1,25 @@
+appId: io.ionic.portals.ecommerce
+name: Open the help and checkout portals of the Portals demo and take screenshots
+---
+- extendedWaitUntil:
+    visible: "Capacitor Snapback"
+    timeout: 30000
+- takeScreenshot: ${OUT}-shop
+- tapOn: "Capacitor Snapback"
+- tapOn: "toolbar help icon"
+- extendedWaitUntil:
+    visible: "Get Assistance.*"
+    timeout: 20000
+    optional: true
+- takeScreenshot: ${OUT}-help
+- tapOn:
+    id: "BackButton"
+- tapOn: "Add to cart"
+- tapOn:
+    id: "tab-cart-icon"
+- tapOn: "Checkout"
+- extendedWaitUntil:
+    visible: "Checkout .*"
+    timeout: 20000
+    optional: true
+- takeScreenshot: ${OUT}-checkout

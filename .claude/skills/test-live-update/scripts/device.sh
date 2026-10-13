@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Inspect or manipulate the example app's plugin storage on a device.
-# Usage: device.sh <ios|android> <inspect|bundles|files|plant-leftover|force-stop> [simulator udid | adb serial]
+# Usage: device.sh <ios|android> <inspect|bundles|files|prefs|plant-leftover|force-stop> [simulator udid | adb serial]
+# Set APP to inspect another app, for example the Portals demo (io.ionic.portals.ecommerce / io.ionic.demo.ecommerce).
 # Fails loudly when the device or the app is not reachable; only a missing directory is reported as absent.
 set -euo pipefail
 platform=$1; action=$2; device=${3:-}
-app=com.example.plugin
+app=${APP:-com.example.plugin}
 downloads=capawesome_capacitor_live_update_downloads
 
 title_of() { grep -o '<ion-title>[^<]*</ion-title>' | head -1; }
@@ -22,6 +23,7 @@ if [ "$platform" = ios ]; then
       echo "bundles: $([ -d "$bundles" ] && ls "$bundles" | tr '\n' ' ')"
       if [ -d "$cache/$downloads" ]; then echo "downloads dir: [$(ls "$cache/$downloads" | tr '\n' ' ')] (empty = clean)"; else echo "downloads dir: absent (clean)"; fi
       echo "stray zips in cache root: $(ls "$cache" | grep -c '\.zip$' || true)" ;;
+    prefs) plutil -p "$container/Library/Preferences/$app.plist" | grep CapawesomeLiveUpdateIonicProvider || echo "no provider prefs" ;;
     plant-leftover) mkdir -p "$cache/$downloads/leftover" && echo x > "$cache/$downloads/leftover/bundle.zip" && echo planted ;;
     force-stop) xcrun simctl terminate "${device:-booted}" "$app" ;;
     *) echo "unknown action: $action" >&2; exit 2 ;;
@@ -41,6 +43,7 @@ else
       if ra test -d cache/$downloads; then echo "downloads dir: [$(ra ls cache/$downloads | tr '\n' ' ')] (empty = clean)"; else echo "downloads dir: absent (clean)"; fi
       echo "cache root: $(ra ls cache | tr '\n' ' ')"
       echo "serverBasePath: $(ra cat shared_prefs/CapWebViewSettings.xml 2>/dev/null | grep -o 'serverBasePath[^<]*' | head -1 || true)" ;;
+    prefs) ra cat shared_prefs/CapawesomeLiveUpdateIonicProvider.xml 2>/dev/null | grep -v '^<?xml\|^<map\|^</map' || echo "no provider prefs" ;;
     plant-leftover) ra mkdir -p cache/$downloads/leftover; ra touch cache/$downloads/leftover/bundle.zip; echo planted ;;
     force-stop) "${adb[@]}" shell am force-stop "$app" ;;
     *) echo "unknown action: $action" >&2; exit 2 ;;

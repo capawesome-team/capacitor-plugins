@@ -1,0 +1,45 @@
+appId: com.example.plugin
+name: Fill the provider form of example-ionic-provider and tap one of its buttons
+---
+- runFlow:
+    when:
+      true: ${typeof RELAUNCH !== 'undefined' && RELAUNCH === 'yes'}
+    commands:
+      - launchApp:
+          stopApp: true
+- extendedWaitUntil:
+    visible: "Sync Manager"
+    timeout: 30000
+- tapOn: "Clear Log"
+- runFlow:
+    when:
+      true: ${typeof APPID !== 'undefined' && APPID !== ''}
+    commands:
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: app-id-input
+            INPUT_LABEL: "(optional, falls back to capacitor.config.ts)"
+      - eraseText: 100
+      - inputText: ${APPID}
+      - runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    when:
+      true: ${typeof CHANNEL !== 'undefined' && CHANNEL !== ''}
+    commands:
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: channel-input
+            INPUT_LABEL: "(optional, falls back to defaultChannel)"
+      - eraseText: 100
+      - inputText: ${CHANNEL}
+      - runFlow: _dismiss-keyboard.yaml
+- tapOn: ${BUTTON}
+- runFlow:
+    when:
+      true: ${typeof TWICE !== 'undefined' && TWICE === 'yes'}
+    commands:
+      - tapOn: ${BUTTON}
+- waitForAnimationToEnd:
+    timeout: 4000
