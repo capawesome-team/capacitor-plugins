@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
+    "@capacitor/core": "^8.5.3",
     "@capawesome/capacitor-nodejs": "file:..",
-    "@capacitor/ios": "8.0.0",
-    "@capacitor/android": "8.0.0"
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/android": "^8.5.3"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
+    "@capacitor/cli": "^8.5.3",
     "vite": "^7.3.1"
   },
   "author": "",
