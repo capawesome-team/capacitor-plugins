@@ -2,11 +2,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "CapawesomeCapacitorMapLibre",
+    name: "CapawesomeCapacitorMaplibre",
     platforms: [.iOS(.v15)],
     products: [
         .library(
-            name: "CapawesomeCapacitorMapLibre",
+            name: "CapawesomeCapacitorMaplibre",
             targets: ["MapLibrePlugin"])
     ],
     dependencies: [
