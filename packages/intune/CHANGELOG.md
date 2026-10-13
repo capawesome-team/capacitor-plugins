@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`354b7da56c8f15fa4372e7d4e82cfc447a6dd6e8`](https://github.com/capawesome-team/capacitor-plugins/commit/354b7da56c8f15fa4372e7d4e82cfc447a6dd6e8) ([#1130](https://github.com/capawesome-team/capacitor-plugins/pull/1130)): fix(ios): pin MSAL to `2.16.0` because the `2.16.1` tag has no release artifacts and SPM resolution fails
+
 ## 0.1.2
 
 ### Patch Changes
