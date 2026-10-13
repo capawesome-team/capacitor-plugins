@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.liveupdate;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -85,17 +86,22 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
+    private static final AtomicBoolean downloadsDirectoryDeleted = new AtomicBoolean(false);
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
     @NonNull
     private final LiveUpdateConfig config;
+
+    @NonNull
+    private final Context context;
 
     private final String defaultWebAssetDir = Bridge.DEFAULT_WEB_ASSET_DIR;
 
     @NonNull
     private final LiveUpdateHttpClient httpClient;
 
-    @NonNull
+    @Nullable
     private final LiveUpdatePlugin plugin;
 
     @NonNull
@@ -115,11 +121,26 @@ public class LiveUpdate {
     private boolean syncInProgress = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
+        this(config, plugin.getContext(), plugin);
+    }
+
+    /**
+     * Creates a headless instance without a Capacitor plugin, e.g. for Ionic Portals hosts
+     * that construct a provider manager directly. WebView-related operations (server path
+     * changes, reload) and plugin events are skipped in this mode.
+     */
+    public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context) throws PackageManager.NameNotFoundException {
+        this(config, context, null);
+    }
+
+    private LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context, @Nullable LiveUpdatePlugin plugin)
+        throws PackageManager.NameNotFoundException {
         this.config = config;
+        this.context = context;
         this.httpClient = new LiveUpdateHttpClient(config);
         this.plugin = plugin;
-        this.preferences = new LiveUpdatePreferences(plugin.getContext());
-        this.webViewSettingsEditor = plugin.getContext().getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
+        this.preferences = new LiveUpdatePreferences(context);
+        this.webViewSettingsEditor = context.getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE).edit();
 
         // Check version and reset config if version changed
         checkAndResetConfigIfVersionChanged();
@@ -127,8 +148,11 @@ public class LiveUpdate {
         // Set the device ID on the HTTP client (after any potential config reset)
         this.httpClient.setDeviceId(getDeviceId());
 
-        // Delete the leftovers of downloads that were interrupted by a process kill
-        tryDeleteDownloadsDirectory();
+        // Delete the leftovers of downloads that were interrupted by a process kill.
+        // Only once per process, because other instances may be downloading at this moment.
+        if (downloadsDirectoryDeleted.compareAndSet(false, true)) {
+            tryDeleteDownloadsDirectory();
+        }
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -264,6 +288,15 @@ public class LiveUpdate {
         );
     }
 
+    @Nullable
+    public String getAppId() {
+        String appId = preferences.getAppId();
+        if (appId != null) {
+            return appId;
+        }
+        return config.getAppId();
+    }
+
     public void getBlockedBundles(@NonNull NonEmptyCallback<GetBlockedBundlesResult> callback) {
         String blockedIds = preferences.getBlockedBundleIds();
         String[] bundleIds;
@@ -294,6 +327,22 @@ public class LiveUpdate {
         callback.success(result);
     }
 
+    @Nullable
+    public String getChannel() {
+        String channel = null;
+        if (config.getDefaultChannel() != null) {
+            channel = config.getDefaultChannel();
+        }
+        String nativeChannel = getNativeChannel();
+        if (nativeChannel != null) {
+            channel = nativeChannel;
+        }
+        if (preferences.getChannel() != null) {
+            channel = preferences.getChannel();
+        }
+        return channel;
+    }
+
     public void getConfig(@NonNull NonEmptyCallback<GetConfigResult> callback) {
         String appId = getAppId();
         String autoUpdateStrategy = config.getAutoUpdateStrategy();
@@ -305,6 +354,17 @@ public class LiveUpdate {
         String bundleId = getCurrentBundleId();
         GetCurrentBundleResult result = new GetCurrentBundleResult(bundleId);
         callback.success(result);
+    }
+
+    /**
+     * @return The on-disk directory of a downloaded bundle, or `null` if the bundle does not exist.
+     */
+    @Nullable
+    public File getBundleDirectory(@NonNull String bundleId) {
+        if (!hasBundleById(bundleId)) {
+            return null;
+        }
+        return buildBundleDirectoryFor(bundleId);
     }
 
     public void getCustomId(@NonNull NonEmptyCallback callback) {
@@ -329,6 +389,10 @@ public class LiveUpdate {
         String versionCode = getVersionCodeAsString();
         GetVersionCodeResult result = new GetVersionCodeResult(versionCode);
         callback.success(result);
+    }
+
+    public String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
+        return String.valueOf(getVersionCodeAsInt());
     }
 
     public void getVersionName(@NonNull NonEmptyCallback callback) throws PackageManager.NameNotFoundException {
@@ -529,6 +593,20 @@ public class LiveUpdate {
         );
     }
 
+    /**
+     * @return `true` if the bundle does not exist or was deleted, `false` if it is the current or next bundle.
+     */
+    public boolean tryDeleteUnusedBundle(@NonNull String bundleId) {
+        if (!hasBundleById(bundleId)) {
+            return true;
+        }
+        if (isBundleInUse(bundleId)) {
+            return false;
+        }
+        deleteBundleById(bundleId);
+        return true;
+    }
+
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
         // Search folder with index.html file
         File indexHtmlFile = searchIndexHtmlFile(sourceDirectory);
@@ -542,7 +620,8 @@ public class LiveUpdate {
         // Move the bundle directory to the bundles directory
         File bundleDirectory = buildBundleDirectoryFor(bundleId);
         boolean moved = indexHtmlFile.getParentFile().renameTo(bundleDirectory);
-        if (!moved) {
+        // A concurrent download of the same bundle may have finished first
+        if (!moved && !hasBundleById(bundleId)) {
             throw new Exception(LiveUpdatePlugin.ERROR_BUNDLE_MOVE_FAILED);
         }
     }
@@ -559,15 +638,15 @@ public class LiveUpdate {
     }
 
     private File buildBundlesDirectory() {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory);
+        return new File(context.getFilesDir(), bundlesDirectory);
     }
 
     private File buildBundleDirectoryFor(@NonNull String bundleId) {
-        return new File(plugin.getContext().getFilesDir(), bundlesDirectory + "/" + bundleId);
+        return new File(context.getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
     private File buildDownloadsDirectory() {
-        return new File(plugin.getContext().getCacheDir(), downloadsDirectory);
+        return new File(context.getCacheDir(), downloadsDirectory);
     }
 
     private void copyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) throws IOException {
@@ -575,7 +654,7 @@ public class LiveUpdate {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
             // Create the source input stream
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             InputStream inputStream = assets.open(defaultWebAssetDir + "/" + href);
             // Create the destination file
             File destination = new File(destinationDirectory, href);
@@ -1003,18 +1082,20 @@ public class LiveUpdate {
         @NonNull NonEmptyCallback<GetLatestBundleResponse> callback
     ) {
         try {
+            String appId = requireAppId(options.getAppId());
+            String bundleId = options.getBundleId() == null ? getCurrentBundleId() : options.getBundleId();
             String channel = options.getChannel() == null ? getChannel() : options.getChannel();
             String url = new HttpUrl.Builder()
                 .scheme("https")
                 .host(config.getServerDomain())
                 .addPathSegment("v1")
                 .addPathSegment("apps")
-                .addPathSegment(requireAppId())
+                .addPathSegment(appId)
                 .addPathSegment("bundles")
                 .addPathSegment("latest")
                 .addQueryParameter("appVersionCode", getVersionCodeAsString())
                 .addQueryParameter("appVersionName", getVersionName())
-                .addQueryParameter("bundleId", getCurrentBundleId())
+                .addQueryParameter("bundleId", bundleId)
                 .addQueryParameter("channelName", channel)
                 .addQueryParameter("customId", preferences.getCustomId())
                 .addQueryParameter("deviceId", getDeviceId())
@@ -1097,40 +1178,12 @@ public class LiveUpdate {
     }
 
     @Nullable
-    private String getAppId() {
-        String appId = preferences.getAppId();
-        if (appId != null) {
-            return appId;
-        }
-        return config.getAppId();
-    }
-
-    @Nullable
-    private String getChannel() {
-        String channel = null;
-        if (config.getDefaultChannel() != null) {
-            channel = config.getDefaultChannel();
-        }
-        String nativeChannel = getNativeChannel();
-        if (nativeChannel != null) {
-            channel = nativeChannel;
-        }
-        if (preferences.getChannel() != null) {
-            channel = preferences.getChannel();
-        }
-        return channel;
-    }
-
-    @Nullable
     private String getNativeChannel() {
-        int resId = plugin
-            .getContext()
-            .getResources()
-            .getIdentifier("capawesome_live_update_default_channel", "string", plugin.getContext().getPackageName());
+        int resId = context.getResources().getIdentifier("capawesome_live_update_default_channel", "string", context.getPackageName());
         if (resId == 0) {
             return null;
         }
-        return plugin.getContext().getResources().getString(resId);
+        return context.getResources().getString(resId);
     }
 
     /**
@@ -1149,6 +1202,10 @@ public class LiveUpdate {
      * @return The absolute path to the current bundle directory (`public` for the built-in bundle).
      */
     private String getCurrentCapacitorServerPath() {
+        if (plugin == null) {
+            // Headless mode: there is no WebView, so the default bundle is always current.
+            return defaultWebAssetDir;
+        }
         return plugin.getBridge().getServerBasePath();
     }
 
@@ -1183,8 +1240,7 @@ public class LiveUpdate {
      */
     @NonNull
     private String getNextCapacitorServerPath() {
-        String path = plugin
-            .getContext()
+        String path = context
             .getSharedPreferences(WebView.WEBVIEW_PREFS_NAME, Activity.MODE_PRIVATE)
             .getString(WebView.CAP_SERVER_PATH, defaultWebAssetDir);
         // Empty path means default path
@@ -1204,10 +1260,6 @@ public class LiveUpdate {
 
     private int getVersionCodeAsInt() throws PackageManager.NameNotFoundException {
         return (int) PackageInfoCompat.getLongVersionCode(getPackageInfo());
-    }
-
-    private String getVersionCodeAsString() throws PackageManager.NameNotFoundException {
-        return String.valueOf(getVersionCodeAsInt());
     }
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
@@ -1238,7 +1290,7 @@ public class LiveUpdate {
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
         if (currentBundleId == null) {
-            AssetManager assets = plugin.getContext().getAssets();
+            AssetManager assets = context.getAssets();
             boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
             if (manifestFileExists) {
                 InputStream inputStream = assets.open(defaultWebAssetDir + "/" + manifestFileName);
@@ -1270,6 +1322,9 @@ public class LiveUpdate {
     }
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
+        if (plugin == null) {
+            return;
+        }
         plugin.notifyDownloadBundleProgressListeners(event);
     }
 
@@ -1303,7 +1358,12 @@ public class LiveUpdate {
 
     @NonNull
     private String requireAppId() throws Exception {
-        String appId = getAppId();
+        return requireAppId(null);
+    }
+
+    @NonNull
+    private String requireAppId(@Nullable String appIdOverride) throws Exception {
+        String appId = appIdOverride == null ? getAppId() : appIdOverride;
         if (appId == null || appId.isEmpty()) {
             throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
         }
@@ -1365,6 +1425,10 @@ public class LiveUpdate {
     }
 
     private void setCurrentCapacitorServerPath(@NonNull String path) {
+        if (plugin == null) {
+            // Headless mode: there is no WebView to point at the new path.
+            return;
+        }
         if (path.equals(defaultWebAssetDir)) {
             this.plugin.getBridge().setServerAssetPath(path);
         } else {
@@ -1391,11 +1455,17 @@ public class LiveUpdate {
     }
 
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
+        if (plugin == null) {
+            return;
+        }
         NextBundleSetEvent event = new NextBundleSetEvent(bundleId);
         plugin.notifyNextBundleSetListeners(event);
     }
 
     private void notifyReloadedListeners() {
+        if (plugin == null) {
+            return;
+        }
         plugin.notifyReloadedListeners();
     }
 
@@ -1552,11 +1622,11 @@ public class LiveUpdate {
     }
 
     private PackageInfo getPackageInfo() throws PackageManager.NameNotFoundException {
-        String packageName = this.plugin.getContext().getPackageName();
+        String packageName = this.context.getPackageName();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
+            return this.context.getPackageManager().getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0));
         } else {
-            return this.plugin.getContext().getPackageManager().getPackageInfo(packageName, 0);
+            return this.context.getPackageManager().getPackageInfo(packageName, 0);
         }
     }
 }

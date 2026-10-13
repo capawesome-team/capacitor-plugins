@@ -1,0 +1,229 @@
+package io.capawesome.capacitorjs.plugins.liveupdate.providers.ionic
+
+import android.content.Context
+import com.getcapacitor.Logger
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdateConfig
+import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdatePlugin
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback
+import io.ionic.liveupdateprovider.MetadataSyncResult
+import io.ionic.liveupdateprovider.ProviderError
+import io.ionic.liveupdateprovider.ProviderManager
+import io.ionic.liveupdateprovider.ProviderSyncResult
+import java.io.File
+import java.util.concurrent.ConcurrentHashMap
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import org.json.JSONObject
+
+/**
+ * Ionic Live Update Provider manager backed by the Capawesome live update plugin.
+ *
+ * Each manager persists its active bundle scoped by its resolved app ID and channel, so that
+ * multiple shells (Portals or Federated Capacitor apps) do not collide with each other or with
+ * the standalone plugin's `currentBundleId` / `nextBundleId` state.
+ *
+ * Provider configuration keys (V1):
+ * - `appId` (optional) — Capawesome Cloud app UUID; falls back to plugin config, required in either
+ * - `channel` (optional) — channel to sync; falls back to plugin config
+ * - `publicKey`, `serverDomain`, `httpTimeout` (optional) — same as the plugin config; only
+ *   applied by the headless constructor, otherwise the running plugin's config is used
+ */
+class LiveUpdateIonicManager
+@Throws(ProviderError.InvalidConfiguration::class)
+constructor(context: Context, configuration: Map<String, *>, private val liveUpdate: LiveUpdate) : ProviderManager {
+
+    /**
+     * Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
+     * that construct the manager directly and attach it to a Portal via
+     * `setLiveUpdateProviderManager(...)`. Uses a headless [LiveUpdate] instance configured
+     * via the configuration map.
+     */
+    @Throws(ProviderError.InvalidConfiguration::class)
+    constructor(
+        context: Context,
+        configuration: Map<String, *>
+    ) : this(context, configuration, LiveUpdate(createLiveUpdateConfig(configuration), context.applicationContext))
+
+    companion object {
+        /**
+         * Downloads in flight per bundle ID, shared by all managers, so that concurrent syncs
+         * download the same bundle only once.
+         */
+        private val bundleDownloads = ConcurrentHashMap<String, Deferred<Unit>>()
+        private val bundleDownloadScope = CoroutineScope(SupervisorJob())
+
+        @Throws(ProviderError.InvalidConfiguration::class)
+        private fun createLiveUpdateConfig(configuration: Map<String, *>): LiveUpdateConfig {
+            val config = LiveUpdateConfig()
+            getOptionalValue<String>(configuration, "publicKey")?.let { config.publicKey = it }
+            getOptionalValue<String>(configuration, "serverDomain")?.let { config.serverDomain = it }
+            getOptionalValue<Number>(configuration, "httpTimeout")?.let { config.httpTimeout = it.toInt() }
+            return config
+        }
+
+        @Throws(ProviderError.InvalidConfiguration::class)
+        private inline fun <reified T> getOptionalValue(configuration: Map<String, *>, key: String): T? {
+            val value = configuration[key] ?: return null
+            return value as? T ?: throw ProviderError.InvalidConfiguration("$key has an invalid type.")
+        }
+    }
+
+    override var latestAppDirectory: File? = null
+        private set
+
+    private val appId: String
+    private val channel: String?
+    private val preferences: LiveUpdateIonicPreferences
+    private val versionCode: String = liveUpdate.versionCodeAsString
+    private var syncedBundleId: String? = null
+
+    init {
+        val resolvedAppId = configuration["appId"] as? String ?: liveUpdate.appId
+        if (resolvedAppId.isNullOrEmpty()) {
+            throw ProviderError.InvalidConfiguration(LiveUpdatePlugin.ERROR_APP_ID_MISSING)
+        }
+        appId = resolvedAppId
+        channel = configuration["channel"] as? String ?: liveUpdate.channel
+        val stateKey = if (channel.isNullOrEmpty()) appId else "$appId.$channel"
+        val sharedPreferences =
+            context.applicationContext.getSharedPreferences(LiveUpdateIonicPreferences.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        preferences = LiveUpdateIonicPreferences(sharedPreferences, stateKey)
+        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode)
+        restoreSyncedBundle()
+        deleteSupersededBundles()
+    }
+
+    override suspend fun sync(): ProviderSyncResult? {
+        try {
+            val result = fetchLatestBundle()
+
+            // No update available; nothing to report.
+            val bundleId = result.bundleId
+            if (bundleId == null || bundleId == syncedBundleId) {
+                return null
+            }
+
+            // Use the bundle on disk, or download it (or wait for a running download of the same bundle).
+            val directory = liveUpdate.getBundleDirectory(bundleId) ?: run {
+                downloadBundleOnce(bundleId, result)
+                liveUpdate.getBundleDirectory(bundleId) ?: throw Exception(LiveUpdatePlugin.ERROR_BUNDLE_DIRECTORY_NOT_FOUND)
+            }
+            applySyncedBundle(bundleId, directory)
+            return MetadataSyncResult(buildMetadata(bundleId, result.customProperties))
+        } catch (exception: Exception) {
+            Logger.error(LiveUpdatePlugin.TAG, "Ionic provider sync failed: ${exception.message}", exception)
+            throw exception
+        }
+    }
+
+    private fun applySyncedBundle(bundleId: String, directory: File) {
+        syncedBundleId = bundleId
+        latestAppDirectory = directory
+        preferences.setLastSyncedBundleId(bundleId, versionCode)
+    }
+
+    private fun buildMetadata(bundleId: String, customProperties: JSONObject?): Map<String, Any> {
+        val metadata = mutableMapOf<String, Any>("bundleId" to bundleId)
+        channel?.let { metadata["channel"] = it }
+        customProperties?.let {
+            val customPropertiesMap = jsonObjectToMap(it)
+            if (customPropertiesMap.isNotEmpty()) {
+                metadata["customProperties"] = customPropertiesMap
+            }
+        }
+        return metadata
+    }
+
+    /**
+     * Deletes the bundles this manager no longer points at, unless another manager or the
+     * plugin still uses them. Never runs right after a sync, because a visible portal may
+     * still serve the previous bundle.
+     */
+    private fun deleteSupersededBundles() {
+        val supersededBundleIds = preferences.getSupersededBundleIds()
+        if (supersededBundleIds.isEmpty()) {
+            return
+        }
+        val referencedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
+        val deletedBundleIds = supersededBundleIds
+            .filter { it !in referencedBundleIds && liveUpdate.tryDeleteUnusedBundle(it) }
+            .toSet()
+        preferences.removeSupersededBundleIds(deletedBundleIds)
+    }
+
+    private suspend fun downloadBundle(bundleId: String, result: FetchLatestBundleResult) {
+        val downloadUrl = result.downloadUrl
+        if (downloadUrl.isNullOrEmpty()) {
+            throw Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_URL_MISSING)
+        }
+        val artifactType = result.artifactType ?: ArtifactType.ZIP
+        val options = DownloadBundleOptions(artifactType, bundleId, result.checksum, result.signature, downloadUrl)
+        suspendCoroutine { continuation ->
+            liveUpdate.downloadBundle(
+                options,
+                object : EmptyCallback {
+                    override fun success() = continuation.resume(Unit)
+
+                    override fun error(exception: Exception) = continuation.resumeWithException(exception)
+                }
+            )
+        }
+    }
+
+    private suspend fun downloadBundleOnce(bundleId: String, result: FetchLatestBundleResult) {
+        val download = bundleDownloads.computeIfAbsent(bundleId) {
+            bundleDownloadScope.async { downloadBundle(bundleId, result) }
+        }
+        try {
+            download.await()
+        } finally {
+            bundleDownloads.remove(bundleId, download)
+        }
+    }
+
+    private suspend fun fetchLatestBundle(): FetchLatestBundleResult = suspendCoroutine { continuation ->
+        liveUpdate.fetchLatestBundle(
+            FetchLatestBundleOptions(appId, syncedBundleId, channel),
+            object : NonEmptyCallback<FetchLatestBundleResult> {
+                override fun success(result: FetchLatestBundleResult) = continuation.resume(result)
+
+                override fun error(exception: Exception) = continuation.resumeWithException(exception)
+            }
+        )
+    }
+
+    private fun jsonObjectToMap(jsonObject: JSONObject): Map<String, Any> {
+        val map = mutableMapOf<String, Any>()
+        val keys = jsonObject.keys()
+        while (keys.hasNext()) {
+            val key = keys.next()
+            val value = jsonObject.opt(key)
+            if (value != null && value != JSONObject.NULL) {
+                map[key] = value
+            }
+        }
+        return map
+    }
+
+    /**
+     * Restores the last synced bundle, if it is still on disk, so the host can load it offline
+     * and the next sync reports it as the bundle in use.
+     */
+    private fun restoreSyncedBundle() {
+        val bundleId = preferences.getLastSyncedBundleId() ?: return
+        val directory = liveUpdate.getBundleDirectory(bundleId) ?: return
+        syncedBundleId = bundleId
+        latestAppDirectory = directory
+    }
+}

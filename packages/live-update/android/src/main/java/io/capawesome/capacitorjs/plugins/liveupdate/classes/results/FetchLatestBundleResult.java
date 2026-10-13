@@ -48,6 +48,36 @@ public class FetchLatestBundleResult implements Result {
         this.signature = signature;
     }
 
+    @Nullable
+    public ArtifactType getArtifactType() {
+        return artifactType;
+    }
+
+    @Nullable
+    public String getBundleId() {
+        return bundleId;
+    }
+
+    @Nullable
+    public String getChecksum() {
+        return checksum;
+    }
+
+    @Nullable
+    public JSONObject getCustomProperties() {
+        return customProperties;
+    }
+
+    @Nullable
+    public String getDownloadUrl() {
+        return downloadUrl;
+    }
+
+    @Nullable
+    public String getSignature() {
+        return signature;
+    }
+
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();

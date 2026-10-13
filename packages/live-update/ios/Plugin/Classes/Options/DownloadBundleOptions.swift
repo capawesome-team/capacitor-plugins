@@ -8,12 +8,13 @@ import Capacitor
     private var signature: String?
     private var url: String
 
-    init(artifactType: String, bundleId: String, checksum: String?, signature: String?, url: String) {
-        if artifactType == "manifest" {
-            self.artifactType = .manifest
-        } else {
-            self.artifactType = .zip
-        }
+    convenience init(artifactType: String, bundleId: String, checksum: String?, signature: String?, url: String) {
+        let artifactType: ArtifactType = artifactType == "manifest" ? .manifest : .zip
+        self.init(artifactType: artifactType, bundleId: bundleId, checksum: checksum, signature: signature, url: url)
+    }
+
+    init(artifactType: ArtifactType, bundleId: String, checksum: String?, signature: String?, url: String) {
+        self.artifactType = artifactType
         self.bundleId = bundleId
         self.checksum = checksum
         self.signature = signature

@@ -28,11 +28,17 @@ public class DownloadBundleOptions {
         @Nullable String signature,
         @NonNull String url
     ) {
-        if (artifactType.equals("manifest")) {
-            this.artifactType = ArtifactType.MANIFEST;
-        } else {
-            this.artifactType = ArtifactType.ZIP;
-        }
+        this(artifactType.equals("manifest") ? ArtifactType.MANIFEST : ArtifactType.ZIP, bundleId, checksum, signature, url);
+    }
+
+    public DownloadBundleOptions(
+        @NonNull ArtifactType artifactType,
+        @NonNull String bundleId,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull String url
+    ) {
+        this.artifactType = artifactType;
         this.bundleId = bundleId;
         this.checksum = checksum;
         this.signature = signature;

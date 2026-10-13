@@ -46,7 +46,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     private let eventNextBundleSet = "nextBundleSet"
     private let eventReloaded = "reloaded"
 
-    private var implementation: LiveUpdate?
+    var implementation: LiveUpdate?
 
     override public func load() {
         self.implementation = LiveUpdate(config: liveUpdateConfig(), plugin: self)

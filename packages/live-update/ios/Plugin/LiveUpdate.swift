@@ -7,17 +7,24 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    private static let downloadsDirectoryUrl = FileManager.default
+        .urls(for: .cachesDirectory, in: .userDomainMask).first!
+        .appendingPathComponent("capawesome_capacitor_live_update_downloads")
+    /// Deletes the leftovers of downloads that a process kill interrupted. Runs once per process and
+    /// blocks concurrent initializers until it is done, so no other instance can have a download in flight.
+    private static let interruptedDownloadsDeleted: Void = {
+        try? FileManager.default.removeItem(at: downloadsDirectoryUrl)
+    }()
+
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
-    private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let downloadsDirectory = "capawesome_capacitor_live_update_downloads"
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
-    private let plugin: LiveUpdatePlugin
+    private let plugin: LiveUpdatePlugin?
     private let preferences: LiveUpdatePreferences
 
     private var rollbackDispatchWorkItem: DispatchWorkItem?
@@ -25,7 +32,10 @@ import CommonCrypto
     private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
-    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin) {
+    /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
+    ///   (e.g. for Ionic Portals hosts that construct a provider manager directly).
+    ///   In headless mode, WebView-related operations and plugin events are skipped.
+    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin? = nil) {
         self.config = config
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
@@ -38,8 +48,7 @@ import CommonCrypto
         // Set the device ID on the HTTP client (after any potential config reset)
         self.httpClient.setDeviceId(getDeviceId())
 
-        // Delete the leftovers of downloads that were interrupted by a process kill
-        tryDeleteDownloadsDirectory()
+        _ = Self.interruptedDownloadsDeleted
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -164,6 +173,14 @@ import CommonCrypto
         let bundleId = getCurrentBundleId()
         let result = GetCurrentBundleResult(bundleId: bundleId)
         completion(result, nil)
+    }
+
+    /// - Returns: The on-disk URL of a downloaded bundle, or `nil` if the bundle does not exist.
+    public func getBundleDirectory(bundleId: String) -> URL? {
+        guard hasBundleById(bundleId) else {
+            return nil
+        }
+        return buildBundleURLFor(bundleId: bundleId)
     }
 
     @objc public func getCustomId(completion: @escaping (Result?, Error?) -> Void) {
@@ -351,7 +368,12 @@ import CommonCrypto
 
         // Move the unzipped files to the bundles directory
         let bundlePath = self.buildBundlePathFor(bundleId: bundleId)
-        try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
+        do {
+            try FileManager.default.moveItem(atPath: indexHtmlFile.deletingLastPathComponent().path, toPath: bundlePath)
+        } catch where hasBundleById(bundleId) {
+            // A concurrent download of the same bundle was installed first
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle already installed: \(bundleId)")
+        }
     }
 
     private func addBundleOfTypeManifest(bundleId: String, directory: URL) async throws {
@@ -385,7 +407,7 @@ import CommonCrypto
     }
 
     private func buildDownloadsDirectoryUrl() -> URL {
-        return cachesDirectoryUrl.appendingPathComponent(downloadsDirectory)
+        return Self.downloadsDirectoryUrl
     }
 
     private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
@@ -455,18 +477,8 @@ import CommonCrypto
     }
 
     private func deleteUnusedBundles() {
-        let bundleIds = getDownloadedBundleIds()
-        let currentBundleId = getCurrentBundleId()
-        let nextBundleId = getNextBundleId()
-
-        for bundleId in bundleIds {
-            if bundleId != currentBundleId && bundleId != nextBundleId {
-                do {
-                    try deleteBundleById(bundleId)
-                } catch {
-                    CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
-                }
-            }
+        for bundleId in getDownloadedBundleIds() {
+            tryDeleteUnusedBundle(bundleId: bundleId)
         }
     }
 
@@ -593,18 +605,18 @@ import CommonCrypto
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
+        let appId = try requireAppId(options.getAppId())
         let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
         parameters["appVersionName"] = getVersionName()
-        parameters["bundleId"] = getCurrentBundleId()
+        parameters["bundleId"] = options.getBundleId() ?? getCurrentBundleId()
         parameters["channelName"] = channel
         parameters["customId"] = preferences.getCustomId()
         parameters["deviceId"] = getDeviceId()
         parameters["osVersion"] = await UIDevice.current.systemVersion
         parameters["platform"] = "1"
         parameters["pluginVersion"] = LiveUpdatePlugin.version
-        let appId = try requireAppId()
         var urlComponents = URLComponents(string: "https://\(config.serverDomain)/v1/apps/\(appId)/bundles/latest")!
         urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         let url = try urlComponents.asURL()
@@ -614,12 +626,12 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Latest bundle response: ", String(decoding: data, as: UTF8.self))
         }
         if let error = response.error {
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            // The server answered with an error status, so no update is available
+            if let statusCode = response.response?.statusCode, !(200..<300).contains(statusCode) {
+                return nil
             }
-            return nil
+            // The server could not be reached (e.g. offline or timed out) or sent an invalid body
+            throw error.underlyingError ?? error
         }
         if let value = response.value {
             return value
@@ -642,14 +654,14 @@ import CommonCrypto
         }
     }
 
-    private func getAppId() -> String? {
+    func getAppId() -> String? {
         if let appId = preferences.getAppId() {
             return appId
         }
         return config.appId
     }
 
-    private func getChannel() -> String? {
+    func getChannel() -> String? {
         var channel: String?
         if let _ = config.defaultChannel {
             channel = config.defaultChannel
@@ -695,7 +707,7 @@ import CommonCrypto
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return nil
         }
         return viewController.getServerBasePath()
@@ -730,7 +742,7 @@ import CommonCrypto
         return preferences.getPreviousBundleId()
     }
 
-    private func getVersionCode() -> String {
+    func getVersionCode() -> String {
         guard let appVersionCode = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else {
             return ""
         }
@@ -777,7 +789,7 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
-        plugin.notifyDownloadBundleProgressListeners(event)
+        plugin?.notifyDownloadBundleProgressListeners(event)
     }
 
     private func performAutoUpdate() {
@@ -804,8 +816,8 @@ import CommonCrypto
         }
     }
 
-    private func requireAppId() throws -> String {
-        guard let appId = getAppId(), !appId.isEmpty else {
+    private func requireAppId(_ appIdOverride: String? = nil) throws -> String {
+        guard let appId = appIdOverride ?? getAppId(), !appId.isEmpty else {
             throw CustomError.appIdMissing
         }
         return appId
@@ -861,7 +873,7 @@ import CommonCrypto
     }
 
     private func setCurrentCapacitorServerPath(path: String) {
-        guard let viewController = self.plugin.bridge?.viewController as? CAPBridgeViewController else {
+        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
             return
         }
         viewController.setServerBasePath(path: path)
@@ -880,11 +892,11 @@ import CommonCrypto
 
     private func notifyNextBundleSetListeners(_ bundleId: String?) {
         let event = NextBundleSetEvent(bundleId: bundleId)
-        plugin.notifyNextBundleSetListeners(event)
+        plugin?.notifyNextBundleSetListeners(event)
     }
 
     private func notifyReloadedListeners() {
-        plugin.notifyReloadedListeners()
+        plugin?.notifyReloadedListeners()
     }
 
     private func addBlockedBundleId(_ bundleId: String) {
@@ -994,8 +1006,23 @@ import CommonCrypto
         }
     }
 
-    private func tryDeleteDownloadsDirectory() {
-        tryDeleteDirectory(buildDownloadsDirectoryUrl())
+    /// Deletes the bundle unless it is the current or next bundle.
+    /// - Returns: `true` if the bundle does not exist anymore.
+    @discardableResult
+    func tryDeleteUnusedBundle(bundleId: String) -> Bool {
+        guard hasBundleById(bundleId) else {
+            return true
+        }
+        guard bundleId != getCurrentBundleId() && bundleId != getNextBundleId() else {
+            return false
+        }
+        do {
+            try deleteBundleById(bundleId)
+            return true
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
+            return false
+        }
     }
 
     private func unzipDownloadedBundle(zipFile: URL) throws -> URL {

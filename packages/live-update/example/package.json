@@ -16,13 +16,13 @@
     "e2e:electron": "npm run build && cap sync @capawesome/capacitor-electron && tsc -p electron/tsconfig.json && node test/electron/support/build-fixtures.mjs && playwright test -c test/electron/playwright.config.mjs"
   },
   "dependencies": {
-    "@capacitor/android": "^8.0.0",
-    "@capacitor/core": "^8.0.0",
-    "@capacitor/ios": "^8.0.0",
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "@capawesome/capacitor-live-update": "file:.."
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.0.0",
+    "@capacitor/cli": "^8.5.3",
     "@capawesome/capacitor-electron": "^0.2.0",
     "@capawesome/cli": "^4.18.2",
     "@playwright/test": "1.63.0",

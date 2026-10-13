@@ -3,6 +3,7 @@ import Foundation
 public enum CustomError: Error {
     case appIdMissing
     case bundleAlreadyExists
+    case bundleDirectoryNotFound
     case bundleIdMissing
     case bundleIndexHtmlMissing
     case bundleNotFound
@@ -10,9 +11,12 @@ public enum CustomError: Error {
     case channelMissing
     case checksumCalculationFailed
     case checksumMismatch
+    case configurationValueInvalid(key: String)
     case customIdMissing
     case downloadFailed
+    case downloadUrlMissing
     case httpTimeout
+    case pluginNotInitialized
     case signatureMissing
     case signatureVerificationFailed
     case syncInProgress
@@ -27,6 +31,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("appId must be configured.", comment: "appIdMissing")
         case .bundleAlreadyExists:
             return NSLocalizedString("bundle already exists.", comment: "bundleAlreadyExists")
+        case .bundleDirectoryNotFound:
+            return NSLocalizedString("Bundle directory could not be resolved.", comment: "bundleDirectoryNotFound")
         case .bundleIdMissing:
             return NSLocalizedString("bundleId must be provided.", comment: "bundleIdMissing")
         case .bundleIndexHtmlMissing:
@@ -41,12 +47,19 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Failed to calculate checksum.", comment: "checksumCalculationFailed")
         case .checksumMismatch:
             return NSLocalizedString("Checksum mismatch.", comment: "checksumMismatch")
+        case .configurationValueInvalid(let key):
+            let format = NSLocalizedString("%@ has an invalid type.", comment: "configurationValueInvalid")
+            return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
         case .downloadFailed:
             return NSLocalizedString("Bundle could not be downloaded.", comment: "downloadFailed")
+        case .downloadUrlMissing:
+            return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
         case .httpTimeout:
             return NSLocalizedString("Request timed out.", comment: "httpTimeout")
+        case .pluginNotInitialized:
+            return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .signatureMissing:
             return NSLocalizedString("Bundle does not contain a signature.", comment: "signatureMissing")
         case .signatureVerificationFailed:
