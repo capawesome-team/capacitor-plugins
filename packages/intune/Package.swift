@@ -12,7 +12,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
         .package(url: "https://github.com/msintuneappsdk/ms-intune-app-sdk-ios.git", exact: "21.7.1"),
-        .package(url: "https://github.com/AzureAD/microsoft-authentication-library-for-objc.git", .upToNextMajor(from: "2.13.0"))
+        .package(url: "https://github.com/AzureAD/microsoft-authentication-library-for-objc.git", exact: "2.16.0")
     ],
     targets: [
         .target(
