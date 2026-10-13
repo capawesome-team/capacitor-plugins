@@ -164,8 +164,8 @@ end
 Add the package root (`node_modules/@capawesome/capacitor-live-update`) as a **local package dependency with the `IonicProvider` trait enabled**. A package trait is enabled in a `Package.swift` (`traits: [...]`), so route the dependency through a small local wrapper package — exactly how the Capacitor CLI wires SPM under the hood:
 
 ```swift
-// Package.swift of a local wrapper package next to your app
 // swift-tools-version: 6.1
+// Package.swift of a local wrapper package next to your app
 import PackageDescription
 
 let package = Package(
@@ -193,6 +193,8 @@ let package = Package(
 ```
 
 Reference the wrapper from your app (_File → Add Package Dependencies… → Add Local…_) and link its product to your app target.
+
+With Swift Package Manager the Swift module is named after the target, so your code imports `LiveUpdatePlugin` instead of `CapawesomeCapacitorLiveUpdate`. The product name only appears in `Package.swift`.
 
 ## Provider configuration
 
@@ -238,6 +240,8 @@ Ionic Portals uses a `ProviderManager` directly — there is no resolution step.
 > Requires Portals `0.14.0` or later (earlier releases consumed the pre-1.0 registry-based contract).
 
 ### iOS
+
+With CocoaPods the module is `CapawesomeCapacitorLiveUpdate`. With Swift Package Manager import `LiveUpdatePlugin` instead.
 
 ```swift
 import CapawesomeCapacitorLiveUpdate
