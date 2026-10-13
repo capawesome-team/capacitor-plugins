@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "@capacitor/core": "^8.5.3",
-    "@capacitor/camera": "latest",
-    "@capacitor/splash-screen": "latest",
+    "@capacitor/camera": "^8.0.0",
+    "@capacitor/splash-screen": "^8.0.0",
     "@capawesome/capacitor-grafana-faro": "file:..",
     "@capacitor/ios": "^8.5.3",
     "@capacitor/android": "^8.5.3"
