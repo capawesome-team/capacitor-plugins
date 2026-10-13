@@ -176,17 +176,6 @@ public class LiveUpdate {
         callback.success();
     }
 
-    public void deleteBundleById(@NonNull String bundleId) {
-        // Delete the bundle directory
-        File bundleDirectory = buildBundleDirectoryFor(bundleId);
-        deleteFileRecursively(bundleDirectory);
-        // Reset the next bundle if it is the deleted bundle
-        String nextBundleId = getNextBundleId();
-        if (bundleId.equals(nextBundleId)) {
-            setNextBundleById(null);
-        }
-    }
-
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) {
         ArtifactType artifactType = options.getArtifactType();
         String bundleId = options.getBundleId();
@@ -412,12 +401,6 @@ public class LiveUpdate {
         callback.success(result);
     }
 
-    public boolean isBundleInUse(@NonNull String bundleId) {
-        String currentBundleId = getCurrentBundleId();
-        String nextBundleId = getNextBundleId();
-        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
-    }
-
     public void isSyncing(@NonNull NonEmptyCallback<IsSyncingResult> callback) {
         IsSyncingResult result = new IsSyncingResult(syncInProgress);
         callback.success(result);
@@ -610,6 +593,20 @@ public class LiveUpdate {
         );
     }
 
+    /**
+     * @return `true` if the bundle does not exist or was deleted, `false` if it is the current or next bundle.
+     */
+    public boolean tryDeleteUnusedBundle(@NonNull String bundleId) {
+        if (!hasBundleById(bundleId)) {
+            return true;
+        }
+        if (isBundleInUse(bundleId)) {
+            return false;
+        }
+        deleteBundleById(bundleId);
+        return true;
+    }
+
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
         // Search folder with index.html file
         File indexHtmlFile = searchIndexHtmlFile(sourceDirectory);
@@ -740,6 +737,17 @@ public class LiveUpdate {
         File temporaryDirectory = new File(buildDownloadsDirectory(), UUID.randomUUID().toString());
         temporaryDirectory.mkdirs();
         return temporaryDirectory;
+    }
+
+    private void deleteBundleById(@NonNull String bundleId) {
+        // Delete the bundle directory
+        File bundleDirectory = buildBundleDirectoryFor(bundleId);
+        deleteFileRecursively(bundleDirectory);
+        // Reset the next bundle if it is the deleted bundle
+        String nextBundleId = getNextBundleId();
+        if (bundleId.equals(nextBundleId)) {
+            setNextBundleById(null);
+        }
     }
 
     private void deleteFileRecursively(@NonNull File file) {
@@ -1074,10 +1082,7 @@ public class LiveUpdate {
         @NonNull NonEmptyCallback<GetLatestBundleResponse> callback
     ) {
         try {
-            String appId = options.getAppId() == null ? getAppId() : options.getAppId();
-            if (appId == null || appId.isEmpty()) {
-                throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
-            }
+            String appId = requireAppId(options.getAppId());
             String bundleId = options.getBundleId() == null ? getCurrentBundleId() : options.getBundleId();
             String channel = options.getChannel() == null ? getChannel() : options.getChannel();
             String url = new HttpUrl.Builder()
@@ -1275,6 +1280,12 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
+    private boolean isBundleInUse(@NonNull String bundleId) {
+        String currentBundleId = getCurrentBundleId();
+        String nextBundleId = getNextBundleId();
+        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
+    }
+
     @Nullable
     private Manifest loadCurrentManifest() throws Exception {
         String currentBundleId = getCurrentBundleId();
@@ -1347,7 +1358,12 @@ public class LiveUpdate {
 
     @NonNull
     private String requireAppId() throws Exception {
-        String appId = getAppId();
+        return requireAppId(null);
+    }
+
+    @NonNull
+    private String requireAppId(@Nullable String appIdOverride) throws Exception {
+        String appId = appIdOverride == null ? getAppId() : appIdOverride;
         if (appId == null || appId.isEmpty()) {
             throw new Exception(LiveUpdatePlugin.ERROR_APP_ID_MISSING);
         }

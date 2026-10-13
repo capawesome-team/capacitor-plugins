@@ -7,15 +7,20 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
-    private static var downloadsDirectoryDeleted = false
+    private static let downloadsDirectoryUrl = FileManager.default
+        .urls(for: .cachesDirectory, in: .userDomainMask).first!
+        .appendingPathComponent("capawesome_capacitor_live_update_downloads")
+    /// Deletes the leftovers of downloads that a process kill interrupted. Runs once per process and
+    /// blocks concurrent initializers until it is done, so no other instance can have a download in flight.
+    private static let interruptedDownloadsDeleted: Void = {
+        try? FileManager.default.removeItem(at: downloadsDirectoryUrl)
+    }()
 
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
     private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
-    private let cachesDirectoryUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
-    private let downloadsDirectory = "capawesome_capacitor_live_update_downloads"
     private let httpClient: LiveUpdateHttpClient
     private let libraryDirectoryUrl = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
     private let manifestFileName = "capawesome-live-update-manifest.json" // DO NOT CHANGE!
@@ -43,13 +48,7 @@ import CommonCrypto
         // Set the device ID on the HTTP client (after any potential config reset)
         self.httpClient.setDeviceId(getDeviceId())
 
-        // Delete the leftovers of downloads that were interrupted by a process kill.
-        // Only once per process, because other instances (e.g. one per Ionic provider manager)
-        // may have downloads in flight.
-        if !Self.downloadsDirectoryDeleted {
-            Self.downloadsDirectoryDeleted = true
-            tryDeleteDownloadsDirectory()
-        }
+        _ = Self.interruptedDownloadsDeleted
 
         // Start the rollback timer to rollback to the default bundle
         // if the app is not ready after a certain time
@@ -408,7 +407,7 @@ import CommonCrypto
     }
 
     private func buildDownloadsDirectoryUrl() -> URL {
-        return cachesDirectoryUrl.appendingPathComponent(downloadsDirectory)
+        return Self.downloadsDirectoryUrl
     }
 
     private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
@@ -606,9 +605,7 @@ import CommonCrypto
     }
 
     private func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> GetLatestBundleResponse? {
-        guard let appId = options.getAppId() ?? getAppId(), !appId.isEmpty else {
-            throw CustomError.appIdMissing
-        }
+        let appId = try requireAppId(options.getAppId())
         let channel = options.getChannel() ?? getChannel()
         var parameters = [String: String]()
         parameters["appVersionCode"] = getVersionCode()
@@ -819,8 +816,8 @@ import CommonCrypto
         }
     }
 
-    private func requireAppId() throws -> String {
-        guard let appId = getAppId(), !appId.isEmpty else {
+    private func requireAppId(_ appIdOverride: String? = nil) throws -> String {
+        guard let appId = appIdOverride ?? getAppId(), !appId.isEmpty else {
             throw CustomError.appIdMissing
         }
         return appId
@@ -1026,10 +1023,6 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
             return false
         }
-    }
-
-    private func tryDeleteDownloadsDirectory() {
-        tryDeleteDirectory(buildDownloadsDirectoryUrl())
     }
 
     private func unzipDownloadedBundle(zipFile: URL) throws -> URL {

@@ -20,8 +20,8 @@ import Capacitor
         self.signature = signature
     }
 
-    public func getArtifactType() -> String? {
-        return artifactType?.rawValue
+    func getArtifactType() -> ArtifactType? {
+        return artifactType
     }
 
     public func getBundleId() -> String? {

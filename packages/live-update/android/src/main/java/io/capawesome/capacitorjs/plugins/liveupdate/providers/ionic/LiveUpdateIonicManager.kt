@@ -85,6 +85,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     private val appId: String
     private val channel: String?
     private val preferences: LiveUpdateIonicPreferences
+    private val versionCode: String = liveUpdate.versionCodeAsString
     private var syncedBundleId: String? = null
 
     init {
@@ -98,7 +99,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         val sharedPreferences =
             context.applicationContext.getSharedPreferences(LiveUpdateIonicPreferences.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         preferences = LiveUpdateIonicPreferences(sharedPreferences, stateKey)
-        preferences.resetLastSyncedBundleIdIfVersionChanged(liveUpdate.versionCodeAsString)
+        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode)
         restoreSyncedBundle()
         deleteSupersededBundles()
     }
@@ -113,18 +114,12 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
                 return null
             }
 
-            // Bundle already on disk — just point latestAppDirectory at it and persist.
-            val existingDirectory = liveUpdate.getBundleDirectory(bundleId)
-            if (existingDirectory != null) {
-                applySyncedBundle(bundleId, existingDirectory)
-                return MetadataSyncResult(buildMetadata(bundleId, result.customProperties))
-            }
-
-            // Otherwise, download (or wait for a running download of the same bundle) and then apply.
-            downloadBundleOnce(bundleId, result)
-            val downloadedDirectory =
+            // Use the bundle on disk, or download it (or wait for a running download of the same bundle).
+            val directory = liveUpdate.getBundleDirectory(bundleId) ?: run {
+                downloadBundleOnce(bundleId, result)
                 liveUpdate.getBundleDirectory(bundleId) ?: throw Exception(LiveUpdatePlugin.ERROR_BUNDLE_DIRECTORY_NOT_FOUND)
-            applySyncedBundle(bundleId, downloadedDirectory)
+            }
+            applySyncedBundle(bundleId, directory)
             return MetadataSyncResult(buildMetadata(bundleId, result.customProperties))
         } catch (exception: Exception) {
             Logger.error(LiveUpdatePlugin.TAG, "Ionic provider sync failed: ${exception.message}", exception)
@@ -135,7 +130,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     private fun applySyncedBundle(bundleId: String, directory: File) {
         syncedBundleId = bundleId
         latestAppDirectory = directory
-        preferences.setLastSyncedBundleId(bundleId, liveUpdate.versionCodeAsString)
+        preferences.setLastSyncedBundleId(bundleId, versionCode)
     }
 
     private fun buildMetadata(bundleId: String, customProperties: JSONObject?): Map<String, Any> {
@@ -156,12 +151,15 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
      * still serve the previous bundle.
      */
     private fun deleteSupersededBundles() {
+        val supersededBundleIds = preferences.getSupersededBundleIds()
+        if (supersededBundleIds.isEmpty()) {
+            return
+        }
         val referencedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
-        val deletableBundleIds = preferences.getSupersededBundleIds()
-            .filter { it !in referencedBundleIds && !liveUpdate.isBundleInUse(it) }
+        val deletedBundleIds = supersededBundleIds
+            .filter { it !in referencedBundleIds && liveUpdate.tryDeleteUnusedBundle(it) }
             .toSet()
-        deletableBundleIds.forEach { liveUpdate.deleteBundleById(it) }
-        preferences.removeSupersededBundleIds(deletableBundleIds)
+        preferences.removeSupersededBundleIds(deletedBundleIds)
     }
 
     private suspend fun downloadBundle(bundleId: String, result: FetchLatestBundleResult) {
@@ -169,9 +167,9 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         if (downloadUrl.isNullOrEmpty()) {
             throw Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_URL_MISSING)
         }
-        val artifactType = if (result.artifactType == ArtifactType.MANIFEST) "manifest" else "zip"
+        val artifactType = result.artifactType ?: ArtifactType.ZIP
         val options = DownloadBundleOptions(artifactType, bundleId, result.checksum, result.signature, downloadUrl)
-        return suspendCoroutine { continuation ->
+        suspendCoroutine { continuation ->
             liveUpdate.downloadBundle(
                 options,
                 object : EmptyCallback {

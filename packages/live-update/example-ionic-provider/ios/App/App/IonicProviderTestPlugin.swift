@@ -21,8 +21,6 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             let manager = try createManager(from: call)
             call.resolve(["latestAppDirectory": manager.latestAppDirectory?.path ?? NSNull()])
-        } catch let error as PluginCallError {
-            call.reject(error.message)
         } catch {
             call.reject(error.localizedDescription)
         }
@@ -36,9 +34,6 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
         let manager: any ProviderManager
         do {
             manager = try createManager(from: call)
-        } catch let error as PluginCallError {
-            call.reject(error.message)
-            return
         } catch {
             call.reject(error.localizedDescription)
             return
@@ -80,12 +75,12 @@ public class IonicProviderTestPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 }
 
-/// Internal error type so we can carry a user-facing message back to the
-/// `CAPPluginCall.reject` callsite.
-private struct PluginCallError: Error {
-    let message: String
+/// Internal error type that carries a user-facing message to `CAPPluginCall.reject`
+/// via `localizedDescription`.
+private struct PluginCallError: LocalizedError {
+    let errorDescription: String?
 
     init(_ message: String) {
-        self.message = message
+        self.errorDescription = message
     }
 }
