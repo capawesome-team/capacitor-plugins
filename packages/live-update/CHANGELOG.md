@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.7.0
+
+### Minor Changes
+
+- [`b653c5015d9170878942f9264f1cb14291075584`](https://github.com/capawesome-team/capacitor-plugins/commit/b653c5015d9170878942f9264f1cb14291075584) ([#818](https://github.com/capawesome-team/capacitor-plugins/pull/818)): feat: integrate Ionic Live Update Provider SDK
+
+### Patch Changes
+
+- [`b653c5015d9170878942f9264f1cb14291075584`](https://github.com/capawesome-team/capacitor-plugins/commit/b653c5015d9170878942f9264f1cb14291075584) ([#818](https://github.com/capawesome-team/capacitor-plugins/pull/818)): fix(ios): reject with an error on network failures and invalid responses when fetching the latest bundle instead of resolving with no update
+
 ## 8.6.0
 
 ### Minor Changes
