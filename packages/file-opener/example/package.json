@@ -13,12 +13,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "^8.0.0",
+    "@capacitor/core": "^8.5.3",
     "@capawesome-team/capacitor-file-opener": "file:..",
     "@capawesome/capacitor-file-picker": "7.2.0"
   },
   "devDependencies": {
-    "@capacitor/cli": "^8.0.0",
+    "@capacitor/cli": "^8.5.3",
     "vite": "7.2.2"
   }
 }
