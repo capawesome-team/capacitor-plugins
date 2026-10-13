@@ -17,6 +17,7 @@
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		7C6B28602E89470A00919C9E /* RTKWebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 7C6B285F2E89470A00919C9E /* RTKWebRTC */; };
 		7C6B28622E89470A00919C9E /* RealtimeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7C6B28612E89470A00919C9E /* RealtimeKit */; };
+		3E144394F8C1446D9CDBCE67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFFCF5FC1F784F99A646A03C /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
 		958DCC722DB07C7200EA8C5F /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = debug.xcconfig; path = ../debug.xcconfig; sourceTree = SOURCE_ROOT; };
+		FFFCF5FC1F784F99A646A03C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				504EC3131FED79650016851F /* Info.plist */,
 				2FAD9762203C412B000D30F8 /* config.xml */,
 				50B271D01FEDC1A000F3C39B /* public */,
+				FFFCF5FC1F784F99A646A03C /* SceneDelegate.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -163,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				3E144394F8C1446D9CDBCE67 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

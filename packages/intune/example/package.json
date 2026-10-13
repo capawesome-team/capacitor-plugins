@@ -13,13 +13,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "8.0.0",
+    "@capacitor/core": "^8.5.3",
     "@capawesome/capacitor-intune": "file:..",
-    "@capacitor/ios": "8.0.0",
-    "@capacitor/android": "8.0.0"
+    "@capacitor/ios": "^8.5.3",
+    "@capacitor/android": "^8.5.3"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
+    "@capacitor/cli": "^8.5.3",
     "vite": "^5.4.2"
   },
   "author": "",
