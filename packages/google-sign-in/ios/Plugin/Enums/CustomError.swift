@@ -2,6 +2,7 @@ import Foundation
 
 public enum CustomError: Error {
     case authorizationCanceled
+    case authorizationInProgress
     case clientIdMissing
     case iosClientIdMissing
     case signInCanceled
@@ -28,6 +29,8 @@ extension CustomError: LocalizedError {
         switch self {
         case .authorizationCanceled:
             return NSLocalizedString("The user canceled the authorization flow.", comment: "authorizationCanceled")
+        case .authorizationInProgress:
+            return NSLocalizedString("An authorization is already in progress.", comment: "authorizationInProgress")
         case .clientIdMissing:
             return NSLocalizedString("clientId must be provided.", comment: "clientIdMissing")
         case .iosClientIdMissing:

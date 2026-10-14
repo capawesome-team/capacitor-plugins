@@ -10,6 +10,7 @@ public class CustomExceptions {
         "AUTHORIZATION_CANCELED",
         "The user canceled the authorization flow."
     );
+    public static final CustomException AUTHORIZATION_IN_PROGRESS = new CustomException(null, "An authorization is already in progress.");
     public static final CustomException CLIENT_ID_MISSING = new CustomException(null, "clientId must be provided.");
     public static final CustomException NO_CREDENTIAL_AVAILABLE = new CustomException(
         "NO_CREDENTIAL_AVAILABLE",

@@ -3,6 +3,7 @@ import Capacitor
 import GoogleSignIn
 
 @objc public class GoogleSignInImpl: NSObject {
+    private var isAuthorizationInProgress = false
     private let plugin: GoogleSignInPlugin
     private var scopes: [String]?
 
@@ -12,6 +13,9 @@ import GoogleSignIn
 
     @objc public func authorize(_ options: AuthorizeOptions, completion: @escaping (_ result: AuthorizeResult?, _ error: Error?) -> Void) {
         DispatchQueue.main.async {
+            guard let completion = self.reserveAuthorization(completion) else {
+                return
+            }
             guard let viewController = self.plugin.bridge?.viewController else {
                 completion(nil, CustomError.viewControllerUnavailable)
                 return
@@ -44,59 +48,16 @@ import GoogleSignIn
     }
 
     @objc public func signIn(completion: @escaping (_ result: SignInResult?, _ error: Error?) -> Void) {
-        let signInCompletion: (GIDSignInResult?, Error?) -> Void = { result, error in
-            if let error = error {
-                if self.isCanceledError(error) {
-                    completion(nil, CustomError.signInCanceled)
-                } else {
-                    completion(nil, error)
-                }
-                return
-            }
-            guard let result = result else {
-                completion(nil, CustomError.signInResultMissing)
-                return
-            }
-            let user = result.user
-            guard let idToken = user.idToken?.tokenString else {
-                completion(nil, CustomError.idTokenMissing)
-                return
-            }
-            guard let userId = user.userID else {
-                completion(nil, CustomError.userIdMissing)
-                return
-            }
-            let email = user.profile?.email
-            let displayName = user.profile?.name
-            let givenName = user.profile?.givenName
-            let familyName = user.profile?.familyName
-            let imageUrl = user.profile?.imageURL(withDimension: 0)?.absoluteString
-
-            var accessToken: String?
-            var serverAuthCode: String?
-            if self.scopes != nil && !(self.scopes?.isEmpty ?? true) {
-                accessToken = user.accessToken.tokenString
-                serverAuthCode = result.serverAuthCode
-            }
-
-            let signInResult = SignInResult(
-                idToken: idToken,
-                userId: userId,
-                email: email,
-                displayName: displayName,
-                givenName: givenName,
-                familyName: familyName,
-                imageUrl: imageUrl,
-                accessToken: accessToken,
-                serverAuthCode: serverAuthCode
-            )
-            completion(signInResult, nil)
-        }
-
         DispatchQueue.main.async {
+            guard let completion = self.reserveAuthorization(completion) else {
+                return
+            }
             guard let viewController = self.plugin.bridge?.viewController else {
                 completion(nil, CustomError.viewControllerUnavailable)
                 return
+            }
+            let signInCompletion: (GIDSignInResult?, Error?) -> Void = { result, error in
+                self.resolveSignIn(result, error, completion: completion)
             }
             if let scopes = self.scopes, !scopes.isEmpty {
                 GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: scopes, completion: signInCompletion)
@@ -138,6 +99,23 @@ import GoogleSignIn
         return (error as NSError).code == GIDSignInError.canceled.rawValue
     }
 
+    /// Reserves the single interactive Google Sign-In flow, because `GIDSignIn` silently drops
+    /// the completion of a running flow when a new one starts.
+    /// Returns a completion that releases the reservation, or `nil` if another flow is in progress.
+    private func reserveAuthorization<T>(
+        _ completion: @escaping (_ result: T?, _ error: Error?) -> Void
+    ) -> ((_ result: T?, _ error: Error?) -> Void)? {
+        if isAuthorizationInProgress {
+            completion(nil, CustomError.authorizationInProgress)
+            return nil
+        }
+        isAuthorizationInProgress = true
+        return { result, error in
+            self.isAuthorizationInProgress = false
+            completion(result, error)
+        }
+    }
+
     private func resolveAuthorization(
         _ result: GIDSignInResult?,
         _ error: Error?,
@@ -152,6 +130,59 @@ import GoogleSignIn
             return
         }
         completion(AuthorizeResult(accessToken: result.user.accessToken.tokenString, serverAuthCode: result.serverAuthCode), nil)
+    }
+
+    private func resolveSignIn(
+        _ result: GIDSignInResult?,
+        _ error: Error?,
+        completion: @escaping (_ result: SignInResult?, _ error: Error?) -> Void
+    ) {
+        if let error = error {
+            if isCanceledError(error) {
+                completion(nil, CustomError.signInCanceled)
+            } else {
+                completion(nil, error)
+            }
+            return
+        }
+        guard let result = result else {
+            completion(nil, CustomError.signInResultMissing)
+            return
+        }
+        let user = result.user
+        guard let idToken = user.idToken?.tokenString else {
+            completion(nil, CustomError.idTokenMissing)
+            return
+        }
+        guard let userId = user.userID else {
+            completion(nil, CustomError.userIdMissing)
+            return
+        }
+        let email = user.profile?.email
+        let displayName = user.profile?.name
+        let givenName = user.profile?.givenName
+        let familyName = user.profile?.familyName
+        let imageUrl = user.profile?.imageURL(withDimension: 0)?.absoluteString
+
+        var accessToken: String?
+        var serverAuthCode: String?
+        if scopes != nil && !(scopes?.isEmpty ?? true) {
+            accessToken = user.accessToken.tokenString
+            serverAuthCode = result.serverAuthCode
+        }
+
+        let signInResult = SignInResult(
+            idToken: idToken,
+            userId: userId,
+            email: email,
+            displayName: displayName,
+            givenName: givenName,
+            familyName: familyName,
+            imageUrl: imageUrl,
+            accessToken: accessToken,
+            serverAuthCode: serverAuthCode
+        )
+        completion(signInResult, nil)
     }
 
     private func restorePreviousUser(completion: @escaping (_ user: GIDGoogleUser?, _ error: Error?) -> Void) {

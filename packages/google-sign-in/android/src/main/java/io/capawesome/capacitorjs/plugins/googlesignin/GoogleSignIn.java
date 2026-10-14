@@ -155,6 +155,12 @@ public class GoogleSignIn {
     }
 
     private void authorize(@NonNull String[] scopes, @NonNull NonEmptyResultCallback<AuthorizeResult> callback) {
+        if (pendingAuthorizationCallback != null) {
+            callback.error(CustomExceptions.AUTHORIZATION_IN_PROGRESS);
+            return;
+        }
+        pendingAuthorizationCallback = callback;
+
         List<Scope> scopeList = new ArrayList<>();
         for (String scope : scopes) {
             scopeList.add(new Scope(scope));
@@ -166,18 +172,21 @@ public class GoogleSignIn {
             .authorize(request)
             .addOnSuccessListener(authorizationResult -> {
                 if (!authorizationResult.hasResolution()) {
-                    resolveAuthorization(authorizationResult, callback);
+                    handleAuthorizationResult(authorizationResult);
                     return;
                 }
                 PendingIntent pendingIntent = authorizationResult.getPendingIntent();
                 if (pendingIntent == null) {
-                    callback.error(new Exception("Authorization resolution has no pending intent."));
+                    handleAuthorizationFailed(new Exception("Authorization resolution has no pending intent."));
                     return;
                 }
-                pendingAuthorizationCallback = callback;
-                plugin.launchAuthorizationIntent(pendingIntent);
+                try {
+                    plugin.launchAuthorizationIntent(pendingIntent);
+                } catch (Exception exception) {
+                    handleAuthorizationFailed(exception);
+                }
             })
-            .addOnFailureListener(exception -> callback.error(new Exception(exception.getMessage(), exception)));
+            .addOnFailureListener(exception -> handleAuthorizationFailed(new Exception(exception.getMessage(), exception)));
     }
 
     /**
