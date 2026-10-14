@@ -124,7 +124,7 @@ No configuration required for this plugin.
 
 ## Usage
 
-The following examples show how to initialize the plugin, sign in and sign out a user, and complete the sign-in flow on the Web.
+The following examples show how to initialize the plugin, sign in and sign out a user, get an access token, and complete the sign-in flow on the Web.
 
 ### Initialize the plugin
 
@@ -164,6 +164,30 @@ const signIn = async () => {
       console.log('No Google account is available on this device.');
     } else if (error.code === ErrorCode.ProviderConfigurationError) {
       console.log('Google Play services is not available or not up to date.');
+    } else {
+      console.log('Another error occurred:', error);
+    }
+  }
+};
+```
+
+### Get an access token
+
+Get an access token for the given scopes, for example to call a Google API after the previous access token has expired. No UI is shown if the user has already granted the scopes. Otherwise, the consent screen is shown, so only call this method while the app is in the foreground. Only available on Android and iOS:
+
+```typescript
+import { ErrorCode, GoogleSignIn } from '@capawesome/capacitor-google-sign-in';
+
+const authorize = async () => {
+  try {
+    const result = await GoogleSignIn.authorize({
+      scopes: ['https://www.googleapis.com/auth/drive.appdata'],
+    });
+    console.log(result.accessToken);
+    console.log(result.serverAuthCode);
+  } catch (error) {
+    if (error.code === ErrorCode.AuthorizationCanceled) {
+      console.log('The user canceled the authorization flow.');
     } else {
       console.log('Another error occurred:', error);
     }

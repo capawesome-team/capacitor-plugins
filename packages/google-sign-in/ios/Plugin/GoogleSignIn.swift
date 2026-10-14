@@ -26,9 +26,7 @@ import GoogleSignIn
                     return
                 }
                 guard let user = user else {
-                    GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: options.scopes) { result, error in
-                        self.resolveAuthorization(result, error, completion: completion)
-                    }
+                    self.authorizeWithSignIn(scopes: options.scopes, presenting: viewController, completion: completion)
                     return
                 }
                 self.authorize(user, scopes: options.scopes, presenting: viewController, completion: completion)
@@ -87,6 +85,10 @@ import GoogleSignIn
             return
         }
         user.refreshTokensIfNeeded { _, error in
+            if let error = error, self.isGrantInvalidError(error) {
+                self.authorizeWithSignIn(scopes: scopes, presenting: viewController, completion: completion)
+                return
+            }
             if let error = error {
                 completion(nil, error)
                 return
@@ -95,8 +97,25 @@ import GoogleSignIn
         }
     }
 
+    private func authorizeWithSignIn(
+        scopes: [String],
+        presenting viewController: UIViewController,
+        completion: @escaping (_ result: AuthorizeResult?, _ error: Error?) -> Void
+    ) {
+        GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: scopes) { result, error in
+            self.resolveAuthorization(result, error, completion: completion)
+        }
+    }
+
     private func isCanceledError(_ error: Error) -> Bool {
-        return (error as NSError).code == GIDSignInError.canceled.rawValue
+        return (error as? GIDSignInError)?.code == .canceled
+    }
+
+    /// Returns `true` if Google rejected the saved grant (e.g. revoked or expired),
+    /// so that only a new interactive sign-in can recover.
+    private func isGrantInvalidError(_ error: Error) -> Bool {
+        // Value of `OIDOAuthTokenErrorDomain` from AppAuth, which is not a direct dependency of this plugin.
+        return (error as NSError).domain == "org.openid.appauth.oauth_token"
     }
 
     /// Reserves the single interactive Google Sign-In flow, because `GIDSignIn` silently drops
@@ -194,6 +213,12 @@ import GoogleSignIn
             completion(nil, nil)
             return
         }
-        GIDSignIn.sharedInstance.restorePreviousSignIn(completion: completion)
+        GIDSignIn.sharedInstance.restorePreviousSignIn { user, error in
+            if let error = error, self.isGrantInvalidError(error) {
+                completion(nil, nil)
+                return
+            }
+            completion(user, error)
+        }
     }
 }
