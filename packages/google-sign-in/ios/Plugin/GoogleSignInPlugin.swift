@@ -6,6 +6,7 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "GoogleSignInPlugin"
     public let jsName = "GoogleSignIn"
     public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "authorize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise),
@@ -17,6 +18,21 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
     override public func load() {
         super.load()
         self.implementation = GoogleSignInImpl(plugin: self)
+    }
+
+    @objc func authorize(_ call: CAPPluginCall) {
+        do {
+            let options = try AuthorizeOptions(call)
+            implementation?.authorize(options, completion: { result, error in
+                if let error = error {
+                    self.rejectCall(call, error)
+                } else {
+                    self.resolveCall(call, result)
+                }
+            })
+        } catch {
+            self.rejectCall(call, error)
+        }
     }
 
     @objc func handleRedirectCallback(_ call: CAPPluginCall) {
@@ -58,10 +74,6 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
         })
     }
 
-    private func rejectCallAsUnimplemented(_ call: CAPPluginCall) {
-        call.unimplemented("This method is not available on this platform.")
-    }
-
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", self.tag, "] ", error)
         if let error = error as? CustomError {
@@ -69,6 +81,10 @@ public class GoogleSignInPlugin: CAPPlugin, CAPBridgedPlugin {
         } else {
             call.reject(error.localizedDescription)
         }
+    }
+
+    private func rejectCallAsUnimplemented(_ call: CAPPluginCall) {
+        call.unimplemented("This method is not available on this platform.")
     }
 
     private func resolveCall(_ call: CAPPluginCall) {

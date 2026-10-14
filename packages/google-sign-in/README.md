@@ -209,6 +209,7 @@ const signOut = async () => {
 
 <docgen-index>
 
+* [`authorize(...)`](#authorize)
 * [`handleRedirectCallback()`](#handleredirectcallback)
 * [`initialize(...)`](#initialize)
 * [`signIn(...)`](#signin)
@@ -219,6 +220,38 @@ const signOut = async () => {
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### authorize(...)
+
+```typescript
+authorize(options: AuthorizeOptions) => Promise<AuthorizeResult>
+```
+
+Request an access token for the given scopes.
+
+No UI is shown if the user has already granted the scopes.
+Otherwise, the consent screen is shown.
+Use this method to get a new access token after the previous one has expired,
+without having to sign in again.
+
+On iOS, the previous sign-in is restored. If there is no previous sign-in,
+the sign-in screen is shown.
+
+Since the consent screen may be shown, this method should only be called
+while the app is in the foreground.
+
+Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#authorizeoptions">AuthorizeOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#authorizeresult">AuthorizeResult</a>&gt;</code>
+
+**Since:** 0.1.5
+
+--------------------
+
 
 ### handleRedirectCallback()
 
@@ -301,6 +334,21 @@ On Web, this is a no-op.
 
 
 ### Interfaces
+
+
+#### AuthorizeResult
+
+| Prop                 | Type                        | Description                                                                                                                                                                     | Since |
+| -------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`accessToken`**    | <code>string</code>         | The access token for accessing Google APIs.                                                                                                                                     | 0.1.5 |
+| **`serverAuthCode`** | <code>string \| null</code> | The server auth code that can be exchanged on your backend for access and refresh tokens. On iOS, this is only available if the consent screen or the sign-in screen was shown. | 0.1.5 |
+
+
+#### AuthorizeOptions
+
+| Prop         | Type                  | Description                  | Since |
+| ------------ | --------------------- | ---------------------------- | ----- |
+| **`scopes`** | <code>string[]</code> | The OAuth scopes to request. | 0.1.5 |
 
 
 #### SignInResult
