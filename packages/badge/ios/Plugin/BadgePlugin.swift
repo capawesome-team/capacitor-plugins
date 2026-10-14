@@ -56,79 +56,35 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func set(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            if let error = error {
-                strongSelf.rejectCall(call, error)
-                return
-            }
-            let count = call.getInt("count") ?? 0
-            strongSelf.implementation?.set(count: count, completion: { error in
-                if let error = error {
-                    strongSelf.rejectCall(call, error)
-                    return
-                }
-                call.resolve()
+        let count = call.getInt("count") ?? 0
+        requestPermissionsIfNeeded(count: count, call: call) { [weak self] in
+            self?.implementation?.set(count: count, completion: { error in
+                self?.resolveCall(call, error)
             })
-        })
+        }
     }
 
     @objc func increase(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            if let error = error {
-                strongSelf.rejectCall(call, error)
-                return
-            }
-            strongSelf.implementation?.increase(completion: { error in
-                if let error = error {
-                    strongSelf.rejectCall(call, error)
-                    return
-                }
-                call.resolve()
+        let count = (implementation?.get() ?? 0) + 1
+        requestPermissionsIfNeeded(count: count, call: call) { [weak self] in
+            self?.implementation?.increase(completion: { error in
+                self?.resolveCall(call, error)
             })
-        })
+        }
     }
 
     @objc func decrease(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            if let error = error {
-                strongSelf.rejectCall(call, error)
-                return
-            }
-            strongSelf.implementation?.decrease(completion: { error in
-                if let error = error {
-                    strongSelf.rejectCall(call, error)
-                    return
-                }
-                call.resolve()
+        let count = max((implementation?.get() ?? 0) - 1, 0)
+        requestPermissionsIfNeeded(count: count, call: call) { [weak self] in
+            self?.implementation?.decrease(completion: { error in
+                self?.resolveCall(call, error)
             })
-        })
+        }
     }
 
     @objc func clear(_ call: CAPPluginCall) {
-        implementation?.requestPermissions(completion: { [weak self] _, error in
-            guard let strongSelf = self else {
-                return
-            }
-            if let error = error {
-                strongSelf.rejectCall(call, error)
-                return
-            }
-            strongSelf.implementation?.clear(completion: { error in
-                if let error = error {
-                    strongSelf.rejectCall(call, error)
-                    return
-                }
-                call.resolve()
-            })
+        implementation?.clear(completion: { [weak self] error in
+            self?.resolveCall(call, error)
         })
     }
 
@@ -150,6 +106,29 @@ public class BadgePlugin: CAPPlugin, CAPBridgedPlugin {
         config.autoClear = getConfig().getBoolean("autoClear", config.autoClear)
 
         return config
+    }
+
+    // Clearing the badge works without permission, so only prompt when a badge will be shown
+    private func requestPermissionsIfNeeded(count: Int, call: CAPPluginCall, completion: @escaping () -> Void) {
+        guard count > 0 else {
+            completion()
+            return
+        }
+        implementation?.requestPermissions(completion: { [weak self] _, error in
+            if let error = error {
+                self?.rejectCall(call, error)
+                return
+            }
+            completion()
+        })
+    }
+
+    private func resolveCall(_ call: CAPPluginCall, _ error: Error?) {
+        if let error = error {
+            rejectCall(call, error)
+            return
+        }
+        call.resolve()
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
