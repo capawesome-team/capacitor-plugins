@@ -1,4 +1,4 @@
-def nodejsMobileVersion = '18.20.4-capawesome.2'
+def nodejsMobileVersion = '18.20.4-capawesome.3'
 
 ext {
     junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
@@ -10,7 +10,7 @@ ext {
         : "https://github.com/capawesome-team/nodejs-mobile/releases/download/v${nodejsMobileVersion}/nodejs-mobile-v${nodejsMobileVersion}-android.zip"
     nodejsMobileAndroidSha256 = project.hasProperty('nodejsMobileAndroidSha256')
         ? rootProject.ext.nodejsMobileAndroidSha256
-        : 'a35d07fa733146d9f6a71e24946e4d2c2f52e7588fb39c859bb98afd1cae3ef7'
+        : '0a8d094d3f60bcd3b8ff0ad98e4aafeeb59c933fbf53af82eb7cdeab015c503f'
 }
 
 def libnodeCacheDir = new File(gradle.gradleUserHomeDir, 'caches/capawesome-capacitor-nodejs')
