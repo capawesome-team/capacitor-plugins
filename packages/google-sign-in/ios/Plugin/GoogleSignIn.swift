@@ -10,6 +10,28 @@ import GoogleSignIn
         self.plugin = plugin
     }
 
+    @objc public func authorize(_ options: AuthorizeOptions, completion: @escaping (_ result: AuthorizeResult?, _ error: Error?) -> Void) {
+        DispatchQueue.main.async {
+            guard let viewController = self.plugin.bridge?.viewController else {
+                completion(nil, CustomError.viewControllerUnavailable)
+                return
+            }
+            self.restorePreviousUser { user, error in
+                if let error = error {
+                    completion(nil, error)
+                    return
+                }
+                guard let user = user else {
+                    GIDSignIn.sharedInstance.signIn(withPresenting: viewController, hint: nil, additionalScopes: options.scopes) { result, error in
+                        self.resolveAuthorization(result, error, completion: completion)
+                    }
+                    return
+                }
+                self.authorize(user, scopes: options.scopes, presenting: viewController, completion: completion)
+            }
+        }
+    }
+
     @objc public func initialize(_ options: InitializeOptions, completion: @escaping (_ error: Error?) -> Void) {
         guard let iosClientId = Bundle.main.object(forInfoDictionaryKey: "GIDClientID") as? String else {
             completion(CustomError.iosClientIdMissing)
@@ -24,7 +46,7 @@ import GoogleSignIn
     @objc public func signIn(completion: @escaping (_ result: SignInResult?, _ error: Error?) -> Void) {
         let signInCompletion: (GIDSignInResult?, Error?) -> Void = { result, error in
             if let error = error {
-                if (error as NSError).code == GIDSignInError.canceled.rawValue {
+                if self.isCanceledError(error) {
                     completion(nil, CustomError.signInCanceled)
                 } else {
                     completion(nil, error)
@@ -87,5 +109,60 @@ import GoogleSignIn
     @objc public func signOut(completion: @escaping (_ error: Error?) -> Void) {
         GIDSignIn.sharedInstance.signOut()
         completion(nil)
+    }
+
+    private func authorize(
+        _ user: GIDGoogleUser,
+        scopes: [String],
+        presenting viewController: UIViewController,
+        completion: @escaping (_ result: AuthorizeResult?, _ error: Error?) -> Void
+    ) {
+        let grantedScopes = user.grantedScopes ?? []
+        let missingScopes = scopes.filter { !grantedScopes.contains($0) }
+        if !missingScopes.isEmpty {
+            user.addScopes(missingScopes, presenting: viewController) { result, error in
+                self.resolveAuthorization(result, error, completion: completion)
+            }
+            return
+        }
+        user.refreshTokensIfNeeded { _, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            completion(AuthorizeResult(accessToken: user.accessToken.tokenString, serverAuthCode: nil), nil)
+        }
+    }
+
+    private func isCanceledError(_ error: Error) -> Bool {
+        return (error as NSError).code == GIDSignInError.canceled.rawValue
+    }
+
+    private func resolveAuthorization(
+        _ result: GIDSignInResult?,
+        _ error: Error?,
+        completion: @escaping (_ result: AuthorizeResult?, _ error: Error?) -> Void
+    ) {
+        if let error = error {
+            completion(nil, isCanceledError(error) ? CustomError.authorizationCanceled : error)
+            return
+        }
+        guard let result = result else {
+            completion(nil, CustomError.signInResultMissing)
+            return
+        }
+        completion(AuthorizeResult(accessToken: result.user.accessToken.tokenString, serverAuthCode: result.serverAuthCode), nil)
+    }
+
+    private func restorePreviousUser(completion: @escaping (_ user: GIDGoogleUser?, _ error: Error?) -> Void) {
+        if let currentUser = GIDSignIn.sharedInstance.currentUser {
+            completion(currentUser, nil)
+            return
+        }
+        guard GIDSignIn.sharedInstance.hasPreviousSignIn() else {
+            completion(nil, nil)
+            return
+        }
+        GIDSignIn.sharedInstance.restorePreviousSignIn(completion: completion)
     }
 }

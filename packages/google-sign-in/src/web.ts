@@ -1,6 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  AuthorizeResult,
   GoogleSignInPlugin,
   InitializeOptions,
   SignInOptions,
@@ -16,6 +17,10 @@ export class GoogleSignInWeb extends WebPlugin implements GoogleSignInPlugin {
   private clientId: string | undefined;
   private redirectUrl: string | undefined;
   private scopes: string[] | undefined;
+
+  async authorize(): Promise<AuthorizeResult> {
+    throw this.unimplemented('Not implemented on web.');
+  }
 
   async handleRedirectCallback(): Promise<SignInResult> {
     const hash = window.location.hash.substring(1);
