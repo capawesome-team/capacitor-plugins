@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`3514044625ecb3e54aa6a2391ed2857f3b206ca5`](https://github.com/capawesome-team/capacitor-plugins/commit/3514044625ecb3e54aa6a2391ed2857f3b206ca5) ([#1123](https://github.com/capawesome-team/capacitor-plugins/pull/1123)): refactor(android)!: remove the `nodejsMobileVersion` variable in favor of `nodejsMobileAndroidUrl` and `nodejsMobileAndroidSha256` (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`3514044625ecb3e54aa6a2391ed2857f3b206ca5`](https://github.com/capawesome-team/capacitor-plugins/commit/3514044625ecb3e54aa6a2391ed2857f3b206ca5) ([#1123](https://github.com/capawesome-team/capacitor-plugins/pull/1123)): feat: support all `TextDecoder` encodings and `Intl` locales
+
 ## 0.1.1
 
 ### Patch Changes
