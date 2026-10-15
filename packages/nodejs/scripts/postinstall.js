@@ -15,13 +15,13 @@ const https = require('https');
 const os = require('os');
 const path = require('path');
 
-const version = '18.20.4-capawesome.1';
+const version = '18.20.4-capawesome.3';
 const url =
   process.env.CAPACITOR_NODEJS_IOS_URL ||
   `https://github.com/capawesome-team/nodejs-mobile/releases/download/v${version}/nodejs-mobile-v${version}-ios.zip`;
 const sha256 =
   process.env.CAPACITOR_NODEJS_IOS_SHA256 ||
-  '8c5ca3a0d1e38de7f182a5642593e82593b820efd375a14b3ecafc4bcfee620e';
+  'da54bb43c2257aadccfd88798452c2f6a838fbefba8de44917764cefa6365484';
 
 const libnodeDir = path.join(__dirname, '..', 'ios', 'libnode');
 const cacheDir = path.join(
