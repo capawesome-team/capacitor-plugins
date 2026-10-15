@@ -187,7 +187,8 @@ public class AppUpdatePlugin extends Plugin {
     public void completeFlexibleUpdate(PluginCall call) {
         try {
             // do not unregister the listener here: install state events (FAILED) must still reach JS
-            this.appUpdateManager.completeUpdate()
+            this.appUpdateManager
+                .completeUpdate()
                 .addOnSuccessListener(unused -> call.resolve())
                 .addOnFailureListener(failure -> {
                     JSObject ret = new JSObject();

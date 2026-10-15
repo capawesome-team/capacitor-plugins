@@ -34,7 +34,7 @@ export interface AppUpdatePlugin {
    * message and an `onFlexibleUpdateStateChange` event with
    * `installStatus: FlexibleUpdateInstallStatus.FAILED` and an `error`
    * message is emitted. When the install succeeds, the app is restarted.
-   * 
+   *
    * Only available on Android.
    */
   completeFlexibleUpdate(): Promise<void>;

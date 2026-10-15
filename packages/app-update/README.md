@@ -270,6 +270,11 @@ completeFlexibleUpdate() => Promise<void>
 
 Completes a flexible in-app update by restarting the app.
 
+If the install fails, the returned promise is rejected with the error
+message and an `onFlexibleUpdateStateChange` event with
+`installStatus: <a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus.FAILED`</a> and an `error`
+message is emitted. When the install succeeds, the app is restarted.
+
 Only available on Android.
 
 --------------------
@@ -359,11 +364,12 @@ Remove all listeners for this plugin.
 
 #### FlexibleUpdateState
 
-| Prop                       | Type                                                                                | Description                                                                                                                        |
-| -------------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| **`installStatus`**        | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status.                                                                                             |
-| **`bytesDownloaded`**      | <code>number</code>                                                                 | Returns the number of bytes downloaded so far. `undefined` if the install status is other than `DOWNLOADING`.                      |
-| **`totalBytesToDownload`** | <code>number</code>                                                                 | Returns the total number of bytes to be downloaded for this update. `undefined` if the install status is other than `DOWNLOADING`. |
+| Prop                       | Type                                                                                | Description                                                                                                                         |
+| -------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **`installStatus`**        | <code><a href="#flexibleupdateinstallstatus">FlexibleUpdateInstallStatus</a></code> | Flexible in-app update install status.                                                                                              |
+| **`bytesDownloaded`**      | <code>number</code>                                                                 | Returns the number of bytes downloaded so far. `undefined` if the install status is other than `DOWNLOADING`.                       |
+| **`totalBytesToDownload`** | <code>number</code>                                                                 | Returns the total number of bytes to be downloaded for this update. `undefined` if the install status is other than `DOWNLOADING`.  |
+| **`error`**                | <code>string</code>                                                                 | The failure message. Only set if the install status is `FAILED` after `completeFlexibleUpdate()` was called; `undefined` otherwise. |
 
 
 ### Enums
