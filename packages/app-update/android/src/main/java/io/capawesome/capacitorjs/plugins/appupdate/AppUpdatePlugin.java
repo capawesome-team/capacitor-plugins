@@ -165,6 +165,14 @@ public class AppUpdatePlugin extends Plugin {
                     ret.put("totalBytesToDownload", state.totalBytesToDownload());
                 }
                 notifyListeners("onFlexibleUpdateStateChange", ret);
+                // keep listening until a terminal state so a failure after completeFlexibleUpdate() still reaches JS
+                if (
+                    installStatus == InstallStatus.INSTALLED ||
+                    installStatus == InstallStatus.FAILED ||
+                    installStatus == InstallStatus.CANCELED
+                ) {
+                    this.unregisterListener();
+                }
             };
             this.appUpdateManager.registerListener(this.listener);
             AppUpdateOptions appUpdateOptions = AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build();
@@ -178,9 +186,17 @@ public class AppUpdatePlugin extends Plugin {
     @PluginMethod
     public void completeFlexibleUpdate(PluginCall call) {
         try {
-            this.unregisterListener();
-            this.appUpdateManager.completeUpdate();
-            call.resolve();
+            // do not unregister the listener here: install state events (FAILED) must still reach JS
+            this.appUpdateManager.completeUpdate()
+                .addOnSuccessListener(unused -> call.resolve())
+                .addOnFailureListener(failure -> {
+                    JSObject ret = new JSObject();
+                    ret.put("installStatus", InstallStatus.FAILED);
+                    ret.put("error", failure.getMessage());
+                    notifyListeners("onFlexibleUpdateStateChange", ret);
+                    this.unregisterListener();
+                    call.reject(failure.getMessage());
+                });
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());

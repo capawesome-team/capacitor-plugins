@@ -30,6 +30,11 @@ export interface AppUpdatePlugin {
   /**
    * Completes a flexible in-app update by restarting the app.
    *
+   * If the install fails, the returned promise is rejected with the error
+   * message and an `onFlexibleUpdateStateChange` event with
+   * `installStatus: FlexibleUpdateInstallStatus.FAILED` and an `error`
+   * message is emitted. When the install succeeds, the app is restarted.
+   * 
    * Only available on Android.
    */
   completeFlexibleUpdate(): Promise<void>;
@@ -222,6 +227,13 @@ export interface FlexibleUpdateState {
    * `undefined` if the install status is other than `DOWNLOADING`.
    */
   totalBytesToDownload: number | undefined;
+
+  /**
+   * The failure message.
+   * Only set if the install status is `FAILED` after `completeFlexibleUpdate()`
+   * was called; `undefined` otherwise.
+   */
+  error?: string;
 }
 
 export enum FlexibleUpdateInstallStatus {
