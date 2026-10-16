@@ -23,7 +23,7 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'MSAL', '~> 2.13'
+  pod 'MSAL', '~> 2.13', '< 2.16.1'
 end
 
 target 'PluginTests' do
