@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`a4726c69959d7513d3ed60a1a769c275e1c2371c`](https://github.com/capawesome-team/capacitor-plugins/commit/a4726c69959d7513d3ed60a1a769c275e1c2371c) ([#1142](https://github.com/capawesome-team/capacitor-plugins/pull/1142)): fix(android): reject `completeFlexibleUpdate()` when the installation fails and keep emitting `onFlexibleUpdateStateChange` until a final install status
+
 ## 8.1.0
 
 ### Minor Changes
