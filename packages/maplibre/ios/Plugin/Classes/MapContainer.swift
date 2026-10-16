@@ -58,3 +58,30 @@ public class MapContainer {
         }
     }
 }
+
+extension WKWebView {
+    /// WebKit only hit-tests its own views, so a touch on a map view inserted into a
+    /// `WKChildScrollView` stops at that scroll view and never reaches the map's
+    /// gesture recognizers. Forward such touches to the map view.
+    override open func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let hitView = super.hitTest(point, with: event)
+        guard let container = hitView as? UIScrollView,
+              let mapView = container.subviews.first(where: { $0 is MLNMapView }) else {
+            return hitView
+        }
+        return mapView.hitTest(convert(point, to: mapView), with: event) ?? hitView
+    }
+}
+
+/// A map view that reports when WebKit tears down the scroll view it was inserted into
+/// (e.g. when an overlay changes the page's compositing), so it can be reattached.
+class ContainedMapView: MLNMapView {
+    var onRemovedFromWindow: (() -> Void)?
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        if window == nil {
+            onRemovedFromWindow?()
+        }
+    }
+}
