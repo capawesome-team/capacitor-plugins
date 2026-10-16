@@ -164,6 +164,9 @@ public class AppUpdatePlugin extends Plugin {
                     ret.put("bytesDownloaded", state.bytesDownloaded());
                     ret.put("totalBytesToDownload", state.totalBytesToDownload());
                 }
+                if (isFinalInstallStatus(installStatus)) {
+                    this.unregisterListener();
+                }
                 notifyListeners("onFlexibleUpdateStateChange", ret);
             };
             this.appUpdateManager.registerListener(this.listener);
@@ -178,9 +181,12 @@ public class AppUpdatePlugin extends Plugin {
     @PluginMethod
     public void completeFlexibleUpdate(PluginCall call) {
         try {
-            this.unregisterListener();
-            this.appUpdateManager.completeUpdate();
-            call.resolve();
+            Task<Void> completeUpdateTask = this.appUpdateManager.completeUpdate();
+            completeUpdateTask.addOnSuccessListener(result -> call.resolve());
+            completeUpdateTask.addOnFailureListener(failure -> {
+                Logger.error(TAG, failure.getMessage(), failure);
+                call.reject(failure.getMessage());
+            });
         } catch (Exception exception) {
             Logger.error(TAG, exception.getMessage(), exception);
             call.reject(exception.getMessage());
@@ -240,6 +246,10 @@ public class AppUpdatePlugin extends Plugin {
                 savedFlexibleUpdateCall = null;
             }
         }
+    }
+
+    private boolean isFinalInstallStatus(int installStatus) {
+        return installStatus == InstallStatus.INSTALLED || installStatus == InstallStatus.FAILED || installStatus == InstallStatus.CANCELED;
     }
 
     private boolean isGooglePlayServicesAvailable() {
