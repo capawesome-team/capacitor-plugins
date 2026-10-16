@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- [`d793c03d5096166696d8370f32d5130213815089`](https://github.com/capawesome-team/capacitor-plugins/commit/d793c03d5096166696d8370f32d5130213815089) ([#1146](https://github.com/capawesome-team/capacitor-plugins/pull/1146)): fix(ios): forward touches to the map view and reattach it when WebKit recreates its container
+
 ## 0.2.1
 
 ### Patch Changes
