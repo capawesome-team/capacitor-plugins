@@ -6,6 +6,8 @@ import UIKit
 public class MapInstance: NSObject, MLNMapViewDelegate, UIGestureRecognizerDelegate {
     let geoJsonManager: GeoJsonManager
     let mapId: String
+    /// The last known content size of the map element, used to find its container again.
+    var contentSize: MapContentSize?
     let mapView: MLNMapView
     let markerManager: MarkerManager
     let polylineManager: PolylineManager
@@ -33,6 +35,7 @@ public class MapInstance: NSObject, MLNMapViewDelegate, UIGestureRecognizerDeleg
     }
 
     func destroy() {
+        (mapView as? ContainedMapView)?.onRemovedFromWindow = nil
         cameraIdleWorkItem?.cancel()
         markerManager.destroy()
         mapView.delegate = nil

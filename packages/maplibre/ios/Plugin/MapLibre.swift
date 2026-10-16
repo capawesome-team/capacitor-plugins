@@ -91,7 +91,9 @@ import WebKit
                 }
                 self.mapsById[options.mapId] = map
                 self.makeWebViewTransparent(webView)
+                map.contentSize = options.contentSize
                 MapContainer.attach(map.mapView, to: container)
+                self.reattachWhenContainerIsLost(map)
             }
         }
     }
@@ -220,6 +222,7 @@ import WebKit
     @objc public func setFrame(_ options: SetFrameOptions, completion: @escaping (_ error: Error?) -> Void) {
         runOnMap(options.mapId, completion) { map, completion in
             map.setFrame(options.frame)
+            map.contentSize = options.contentSize ?? map.contentSize
             self.reattachIfNeeded(map, contentSize: options.contentSize)
             completion(nil)
         }
@@ -261,9 +264,9 @@ import WebKit
     private static func createMapView(_ options: CreateMapOptions) -> MLNMapView {
         let mapView: MLNMapView
         if let styleJson = options.styleJson {
-            mapView = MLNMapView(frame: options.frame.toCGRect(), styleJSON: styleJson)
+            mapView = ContainedMapView(frame: options.frame.toCGRect(), styleJSON: styleJson)
         } else {
-            mapView = MLNMapView(frame: options.frame.toCGRect(), styleURL: options.styleUrl)
+            mapView = ContainedMapView(frame: options.frame.toCGRect(), styleURL: options.styleUrl)
         }
         if let maxZoom = options.maxZoom {
             mapView.maximumZoomLevel = maxZoom
@@ -317,6 +320,24 @@ import WebKit
             return
         }
         MapContainer.attach(map.mapView, to: container)
+    }
+
+    /// WebKit may tear down and recreate the scroll view of the map element at any time
+    /// (e.g. while an overlay is presented), which takes the map view with it.
+    private func reattachWhenContainerIsLost(_ map: MapInstance) {
+        (map.mapView as? ContainedMapView)?.onRemovedFromWindow = { [weak self, weak map] in
+            guard let self = self, let map = map, let contentSize = map.contentSize,
+                  let webView = self.plugin.bridge?.webView else {
+                return
+            }
+            MapContainer.findWhenLaidOut(in: webView, matching: contentSize) { container in
+                guard let container = container, map.mapView.window == nil,
+                      self.mapsById[map.mapId] === map else {
+                    return
+                }
+                MapContainer.attach(map.mapView, to: container)
+            }
+        }
     }
 
     private func removeMap(_ map: MapInstance) {
