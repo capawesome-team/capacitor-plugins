@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.6
+
+### Patch Changes
+
+- [`998e77c1cba7beb10f3c37a201ec3d1e6e1d00ea`](https://github.com/capawesome-team/capacitor-plugins/commit/998e77c1cba7beb10f3c37a201ec3d1e6e1d00ea) ([#1145](https://github.com/capawesome-team/capacitor-plugins/pull/1145)): fix(ios): reject `openFile(...)` while a file preview is already open or still being presented instead of stacking a second preview
+
 ## 8.0.5
 
 ### Patch Changes
