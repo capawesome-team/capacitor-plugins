@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`ff6e374b7e8aada397fa113e3d82afd6f9b9806f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ff6e374b7e8aada397fa113e3d82afd6f9b9806f) ([#679](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/679)): feat!: report transfers stopped by the system in the new `interrupted` state with an `interruptionReason` and a `transferInterrupted` event instead of `failed` (see `BREAKING.md`)
+
+- [`ff6e374b7e8aada397fa113e3d82afd6f9b9806f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ff6e374b7e8aada397fa113e3d82afd6f9b9806f) ([#679](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/679)): feat(android)!: show one notification for all running transfers, configured with the new `setConfig(...)` method, instead of one per transfer (see `BREAKING.md`)
+
+### Patch Changes
+
+- [`ff6e374b7e8aada397fa113e3d82afd6f9b9806f`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ff6e374b7e8aada397fa113e3d82afd6f9b9806f) ([#679](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/679)): fix(android): stop the foreground service when the daily `dataSync` time limit is reached on Android 15+ instead of crashing, and interrupt the running transfers
+
 ## 0.1.2
 
 ### Patch Changes
