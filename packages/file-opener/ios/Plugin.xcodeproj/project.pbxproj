@@ -10,6 +10,7 @@
 		03FC29A292ACC40490383A1F /* Pods_Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */; };
 		20C0B05DCFC8E3958A738AF2 /* Pods_PluginTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */; };
 		2F98D68224C9AAE500613A4C /* FileOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F98D68124C9AAE400613A4C /* FileOpener.swift */; };
+		FE00000000000000000000B2 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00000000000000000000B1 /* CustomError.swift */; };
 		50ADFF92201F53D600D50D53 /* Plugin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFF88201F53D600D50D53 /* Plugin.framework */; };
 		50ADFF97201F53D600D50D53 /* FileOpenerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFF96201F53D600D50D53 /* FileOpenerTests.swift */; };
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		2F98D68124C9AAE400613A4C /* FileOpener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileOpener.swift; sourceTree = "<group>"; };
+		FE00000000000000000000B1 /* CustomError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomError.swift; sourceTree = "<group>"; };
 		3B2A61DA5A1F2DD4F959604D /* Pods_Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF88201F53D600D50D53 /* Plugin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Plugin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50ADFF8C201F53D600D50D53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -90,9 +92,18 @@
 			children = (
 				50E1A94720377CB70090CE1A /* FileOpenerPlugin.swift */,
 				2F98D68124C9AAE400613A4C /* FileOpener.swift */,
+				FE0000000000000000000F04 /* Enums */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
 			);
 			path = Plugin;
+			sourceTree = "<group>";
+		};
+		FE0000000000000000000F04 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				FE00000000000000000000B1 /* CustomError.swift */,
+			);
+			path = Enums;
 			sourceTree = "<group>";
 		};
 		50ADFF95201F53D600D50D53 /* PluginTests */ = {
@@ -301,6 +312,7 @@
 			files = (
 				50E1A94820377CB70090CE1A /* FileOpenerPlugin.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* FileOpener.swift in Sources */,
+				FE00000000000000000000B2 /* CustomError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
