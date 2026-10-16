@@ -7,10 +7,16 @@ import MobileCoreServices
     private var interactionController: UIDocumentInteractionController?
     private weak var previewPresentingViewController: UIViewController?
 
-    /// `documentInteractionControllerDidEndPreview` is not called when the presenting view controller
-    /// is removed together with the preview, so a view controller without a window means the preview is gone.
+    /// The preview is still being presented while the presenting view controller is in a window,
+    /// and on screen while it presents the preview. UIKit removes the presenting view from the window
+    /// after a full-screen presentation, so both checks are needed. `documentInteractionControllerDidEndPreview`
+    /// is not called when the presenting view controller is removed together with the preview,
+    /// so both checks failing means the preview is gone.
     private var isPreviewOpen: Bool {
-        return previewPresentingViewController?.view.window != nil
+        guard let viewController = previewPresentingViewController else {
+            return false
+        }
+        return viewController.presentedViewController != nil || viewController.view.window != nil
     }
 
     init(plugin: FileOpenerPlugin) {
