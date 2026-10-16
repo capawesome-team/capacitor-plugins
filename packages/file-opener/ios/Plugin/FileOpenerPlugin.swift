@@ -14,7 +14,6 @@ public class FileOpenerPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
     public let errorPathMissing = "path must be provided."
     public let errorFileNotExist = "File does not exist."
-    public let errorCannotOpenFile = "File cannot be opened."
 
     private var implementation: FileOpener?
 
@@ -33,9 +32,9 @@ public class FileOpenerPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
 
-        implementation?.openFile(url: url, mimeType: mimeType, completion: {completionResult in
-            if completionResult == false {
-                call.reject(self.errorCannotOpenFile)
+        implementation?.openFile(url: url, mimeType: mimeType, completion: { error in
+            if let error = error {
+                call.reject(error.localizedDescription)
             } else {
                 call.resolve()
             }

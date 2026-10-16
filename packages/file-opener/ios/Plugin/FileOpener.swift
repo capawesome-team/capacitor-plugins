@@ -5,12 +5,19 @@ import MobileCoreServices
 @objc public class FileOpener: NSObject {
     private let plugin: FileOpenerPlugin
     private var interactionController: UIDocumentInteractionController?
+    private weak var previewPresentingViewController: UIViewController?
+
+    /// `documentInteractionControllerDidEndPreview` is not called when the presenting view controller
+    /// is removed together with the preview, so a view controller without a window means the preview is gone.
+    private var isPreviewOpen: Bool {
+        return previewPresentingViewController?.view.window != nil
+    }
 
     init(plugin: FileOpenerPlugin) {
         self.plugin = plugin
     }
 
-    @objc public func openFile(url: URL, mimeType: String?, completion: @escaping (Bool) -> Void) {
+    @objc public func openFile(url: URL, mimeType: String?, completion: @escaping (Error?) -> Void) {
         if self.interactionController == nil {
             self.interactionController = UIDocumentInteractionController()
         }
@@ -22,16 +29,20 @@ import MobileCoreServices
             guard let strongSelf = self else {
                 return
             }
+            // Quick Look shows the preview with a delay, so a second call in that time would stack a second preview.
+            if strongSelf.isPreviewOpen {
+                completion(CustomError.previewAlreadyOpen)
+                return
+            }
             strongSelf.interactionController?.url = url
             strongSelf.interactionController?.uti = uti
             strongSelf.interactionController?.delegate = strongSelf
-            // Presenting a preview that is already visible raises an exception.
-            strongSelf.interactionController?.dismissPreview(animated: false)
-            let isPresentPreview = strongSelf.interactionController?.presentPreview(animated: true)
-            if isPresentPreview == false {
-                completion(false)
+            let isPreviewPresented = strongSelf.interactionController?.presentPreview(animated: true) == true
+            if isPreviewPresented {
+                completion(nil)
             } else {
-                completion(true)
+                strongSelf.previewPresentingViewController = nil
+                completion(CustomError.cannotOpenFile)
             }
         }
     }
@@ -76,7 +87,12 @@ extension FileOpener: UIDocumentInteractionControllerDelegate {
         if let navigationController = viewController as? UINavigationController {
             viewController = navigationController.topViewController
         }
+        self.previewPresentingViewController = viewController
         return viewController ?? UIViewController()
+    }
+
+    public func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
+        self.previewPresentingViewController = nil
     }
 
     private static var keyWindow: UIWindow? {
