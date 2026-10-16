@@ -270,6 +270,9 @@ completeFlexibleUpdate() => Promise<void>
 
 Completes a flexible in-app update by restarting the app.
 
+The returned promise rejects if the installation fails,
+for example because the device is low on storage.
+
 Only available on Android.
 
 --------------------
