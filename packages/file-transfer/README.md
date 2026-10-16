@@ -43,12 +43,13 @@ The File Transfer plugin is typically used whenever an app needs to move large f
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.x.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Active support |
+| 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Demo
 
 | Android                                                                                                                                                                          | iOS                                                                                                                                                                          |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/file-transfer/assets/file-transfer-demo-android.mp4" width="324" controls></video> | <video src="https://raw.githubusercontent.com/capawesome-team/capacitor-plugins/main/packages/file-transfer/assets/file-transfer-demo-ios.mp4" width="266" controls></video> |
 
 ## Guides
@@ -93,24 +94,30 @@ npx cap sync
 
 The plugin declares the `INTERNET`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_DATA_SYNC` and `POST_NOTIFICATIONS` permissions and the `dataSync` foreground service in its own manifest, so no manifest changes are required.
 
-On Android 13 (API level 33) and higher, the progress notification is only shown if the user has granted the `POST_NOTIFICATIONS` runtime permission. Transfers still run without it — only the notification is hidden. Call `requestPermissions()` before starting a transfer if you want the notification to appear:
+While transfers run, one notification is shown — Android requires a foreground service to have one. It lists every running transfer by its `title` and shows the combined progress of all of them. Its own title and channel name are set with `setConfig(...)`, usually once at app start and again when the user changes the language:
+
+```typescript
+await FileTransfer.setConfig({
+  androidNotification: { title: 'Downloads', channelName: 'Downloads' },
+});
+
+await FileTransfer.startDownload({ url, path, title: 'Super Racer' });
+```
+
+Transfers that the user should not see, e.g. small files that belong to another transfer, can be hidden from the notification with `hidden: true`.
+
+On Android 13 (API level 33) and higher, the notification is only shown if the user has granted the `POST_NOTIFICATIONS` runtime permission. Transfers still run without it — only the notification is hidden. Call `requestPermissions()` before starting a transfer if you want the notification to appear:
 
 ```typescript
 const { notifications } = await FileTransfer.requestPermissions();
 if (notifications !== 'granted') {
-  // The transfer will run, but no progress notification is shown.
+  // The transfer will run, but no notification is shown.
 }
 ```
 
-The foreground service notification itself is shown while a transfer runs — Android requires a foreground service to have one. On Android 12+, a transfer that starts while the app is in the background (e.g. after waiting for an unmetered network) runs without the foreground service, since Android does not allow starting one from the background. The per-transfer progress notification is opt-in and off by default:
+On Android 12+, a transfer that starts while the app is in the background (e.g. after waiting for an unmetered network) runs without the foreground service and its notification, since Android does not allow starting one from the background.
 
-```typescript
-await FileTransfer.startDownload({
-  url,
-  path,
-  androidNotification: { title: 'Downloading', progress: true },
-});
-```
+On Android 15+, the foreground service may run for a total of 6 hours per day. When the limit is reached, the running transfers are `interrupted` and can be resumed with `resumeTransferById(...)` once the app is in the foreground again. See the [FAQ](#do-transfers-continue-when-the-app-is-in-the-background) for details.
 
 #### Proguard
 
@@ -157,7 +164,20 @@ Without this hook, background transfers still complete, but iOS may not be able 
 
 ## Configuration
 
-No configuration required for this plugin.
+The notification that Android shows while transfers run is configured at runtime with `setConfig(...)`, so that its texts can be localized. The configuration is kept until the app restarts:
+
+```typescript
+import { FileTransfer } from '@capawesome-team/capacitor-file-transfer';
+
+const setConfig = async () => {
+  await FileTransfer.setConfig({
+    androidNotification: {
+      title: 'Downloads',
+      channelName: 'Downloads',
+    },
+  });
+};
+```
 
 ## Usage
 
@@ -179,10 +199,7 @@ const startDownload = async () => {
     },
     network: 'unmetered',
     maxRetries: 3,
-    androidNotification: {
-      title: 'Downloading file',
-      text: 'The file is being downloaded.',
-    },
+    title: 'Quarterly report',
   });
   return id;
 };
@@ -244,7 +261,11 @@ const addTransferListeners = async () => {
     console.log(`Transfer ${event.id} completed: `, event.path);
   });
   await FileTransfer.addListener('transferFailed', event => {
-    console.error(`Transfer ${event.id} failed: `, event.errorCode, event.message);
+    console.error(
+      `Transfer ${event.id} failed: `,
+      event.errorCode,
+      event.message,
+    );
   });
 };
 ```
@@ -295,6 +316,23 @@ const getRunningTransfers = async () => {
 };
 ```
 
+### Resume interrupted transfers
+
+A transfer that was stopped by the system, e.g. because the app process was terminated, is restored in the `interrupted` state and reported through a `transferInterrupted` event on the next app start. Interrupted transfers are not failures, so resume them:
+
+```typescript
+import { FileTransfer } from '@capawesome-team/capacitor-file-transfer';
+
+const resumeInterruptedTransfers = async () => {
+  const { transfers } = await FileTransfer.getTransfers();
+  for (const transfer of transfers) {
+    if (transfer.state === 'interrupted') {
+      await FileTransfer.resumeTransferById({ id: transfer.id });
+    }
+  }
+};
+```
+
 ### Remove all listeners
 
 Remove all listeners that your app has registered, for example when a view is destroyed:
@@ -318,10 +356,12 @@ const removeAllListeners = async () => {
 * [`pauseTransferById(...)`](#pausetransferbyid)
 * [`requestPermissions()`](#requestpermissions)
 * [`resumeTransferById(...)`](#resumetransferbyid)
+* [`setConfig(...)`](#setconfig)
 * [`startDownload(...)`](#startdownload)
 * [`startUpload(...)`](#startupload)
 * [`addListener('transferCompleted', ...)`](#addlistenertransfercompleted-)
 * [`addListener('transferFailed', ...)`](#addlistenertransferfailed-)
+* [`addListener('transferInterrupted', ...)`](#addlistenertransferinterrupted-)
 * [`addListener('transferProgress', ...)`](#addlistenertransferprogress-)
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
@@ -338,7 +378,7 @@ const removeAllListeners = async () => {
 cancelTransferById(options: CancelTransferByIdOptions) => Promise<void>
 ```
 
-Cancel a running or paused transfer and delete any partially transferred data.
+Cancel an unfinished transfer and delete any partially transferred data.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
@@ -391,6 +431,8 @@ getTransfers() => Promise<GetTransfersResult>
 
 Get all known transfers, including transfers that were restored after an app restart.
 
+Completed and canceled transfers are removed on the next app start.
+
 **Returns:** <code>Promise&lt;<a href="#gettransfersresult">GetTransfersResult</a>&gt;</code>
 
 **Since:** 0.0.1
@@ -425,7 +467,7 @@ with the `TRANSFER_NOT_PAUSABLE` error code.
 requestPermissions() => Promise<PermissionStatus>
 ```
 
-Request permission to post the progress notification.
+Request permission to post the notification.
 
 On **Android 12 and older**, on **iOS** and on the **web**, this resolves
 without prompting since no notification permission is required.
@@ -443,16 +485,36 @@ without prompting since no notification permission is required.
 resumeTransferById(options: ResumeTransferByIdOptions) => Promise<void>
 ```
 
-Resume a paused or failed transfer.
+Resume a paused, interrupted or failed transfer.
 
-Only transfers in the `paused` or `failed` state are resumed. For a transfer
-in any other state, this resolves without effect.
+For a transfer in any other state, this resolves without effect.
 
 | Param         | Type                                                                            |
 | ------------- | ------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#resumetransferbyidoptions">ResumeTransferByIdOptions</a></code> |
 
 **Since:** 0.0.1
+
+--------------------
+
+
+### setConfig(...)
+
+```typescript
+setConfig(options: SetConfigOptions) => Promise<void>
+```
+
+Set the plugin configuration.
+
+The configuration replaces the previous one. Omitted properties fall back
+to their defaults. It is kept until the app restarts, so call this on
+every app start and again when the user changes the language.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#setconfigoptions">SetConfigOptions</a></code> |
+
+**Since:** 0.2.0
 
 --------------------
 
@@ -549,6 +611,30 @@ and delivered once a listener is added.
 --------------------
 
 
+### addListener('transferInterrupted', ...)
+
+```typescript
+addListener(eventName: 'transferInterrupted', listenerFunc: (event: TransferInterruptedEvent) => void) => Promise<PluginListenerHandle>
+```
+
+Called when the system interrupts a transfer.
+
+Events that occur while no listener is registered are retained and
+delivered once a listener is added, so interruptions caused by the
+termination of the app are delivered on the next app start.
+
+| Param              | Type                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'transferInterrupted'</code>                                                                |
+| **`listenerFunc`** | <code>(event: <a href="#transferinterruptedevent">TransferInterruptedEvent</a>) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
+
+**Since:** 0.2.0
+
+--------------------
+
+
 ### addListener('transferProgress', ...)
 
 ```typescript
@@ -596,9 +682,9 @@ Remove all listeners for this plugin.
 
 #### PermissionStatus
 
-| Prop                | Type                                                        | Description                                                                                                                                                                                                                                                                  | Since |
-| ------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`notifications`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for posting notifications. The progress notification is only shown if this is `granted`. Transfers still run without it. On **Android 12 and older**, on **iOS** and on the **web**, this is always `granted` since no notification permission is required. | 0.0.1 |
+| Prop                | Type                                                        | Description                                                                                                                                                                                                                                                         | Since |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`notifications`** | <code><a href="#permissionstate">PermissionState</a></code> | Permission state for posting notifications. The notification is only shown if this is `granted`. Transfers still run without it. On **Android 12 and older**, on **iOS** and on the **web**, this is always `granted` since no notification permission is required. | 0.0.1 |
 
 
 #### GetTransferByIdResult
@@ -610,15 +696,18 @@ Remove all listeners for this plugin.
 
 #### Transfer
 
-| Prop             | Type                                                    | Description                                                  | Since |
-| ---------------- | ------------------------------------------------------- | ------------------------------------------------------------ | ----- |
-| **`id`**         | <code>string</code>                                     | The identifier of the transfer.                              | 0.0.1 |
-| **`type`**       | <code><a href="#transfertype">TransferType</a></code>   | The direction of the transfer.                               | 0.0.1 |
-| **`state`**      | <code><a href="#transferstate">TransferState</a></code> | The current state of the transfer.                           | 0.0.1 |
-| **`url`**        | <code>string</code>                                     | The URL of the transfer.                                     | 0.0.1 |
-| **`path`**       | <code>string</code>                                     | The path on the device of the transfer.                      | 0.0.1 |
-| **`bytes`**      | <code>number</code>                                     | The number of bytes that have been transferred so far.       | 0.0.1 |
-| **`totalBytes`** | <code>number \| null</code>                             | The total number of bytes to transfer, or `null` if unknown. | 0.0.1 |
+| Prop                     | Type                                                                                      | Description                                                                      | Since |
+| ------------------------ | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----- |
+| **`id`**                 | <code>string</code>                                                                       | The identifier of the transfer.                                                  | 0.0.1 |
+| **`type`**               | <code><a href="#transfertype">TransferType</a></code>                                     | The direction of the transfer.                                                   | 0.0.1 |
+| **`state`**              | <code><a href="#transferstate">TransferState</a></code>                                   | The current state of the transfer.                                               | 0.0.1 |
+| **`title`**              | <code>string</code>                                                                       | The name of the transfer that is shown to the user.                              | 0.2.0 |
+| **`url`**                | <code>string</code>                                                                       | The URL of the transfer.                                                         | 0.0.1 |
+| **`path`**               | <code>string</code>                                                                       | The path on the device of the transfer.                                          | 0.0.1 |
+| **`bytes`**              | <code>number</code>                                                                       | The number of bytes that have been transferred so far.                           | 0.0.1 |
+| **`totalBytes`**         | <code>number \| null</code>                                                               | The total number of bytes to transfer, or `null` if unknown.                     | 0.0.1 |
+| **`errorCode`**          | <code>string \| null</code>                                                               | The error code of the failure, or `null` if the transfer is not `failed`.        | 0.2.0 |
+| **`interruptionReason`** | <code><a href="#transferinterruptionreason">TransferInterruptionReason</a> \| null</code> | The reason for the interruption, or `null` if the transfer is not `interrupted`. | 0.2.0 |
 
 
 #### GetTransferByIdOptions
@@ -649,6 +738,28 @@ Remove all listeners for this plugin.
 | **`id`** | <code>string</code> | The identifier of the transfer to resume. | 0.0.1 |
 
 
+#### SetConfigOptions
+
+| Prop                      | Type                                                                              | Description                                                                    | Since |
+| ------------------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ----- |
+| **`androidNotification`** | <code><a href="#androidnotificationoptions">AndroidNotificationOptions</a></code> | The notification that is shown while transfers run. Only available on Android. | 0.2.0 |
+
+
+#### AndroidNotificationOptions
+
+The notification that Android shows while transfers run. It lists every
+running transfer by its `title` and shows the combined progress of all of them.
+
+On **Android 12+**, a transfer that starts while the app is in the background
+(e.g. after waiting for an unmetered network) runs without the foreground service
+and its notification, since Android does not allow starting one from the background.
+
+| Prop              | Type                | Description                           | Default                      | Since |
+| ----------------- | ------------------- | ------------------------------------- | ---------------------------- | ----- |
+| **`channelName`** | <code>string</code> | The name of the notification channel. | <code>'File Transfer'</code> | 0.2.0 |
+| **`title`**       | <code>string</code> | The title of the notification.        | <code>'File Transfer'</code> | 0.2.0 |
+
+
 #### StartDownloadResult
 
 | Prop     | Type                | Description                             | Since |
@@ -658,34 +769,17 @@ Remove all listeners for this plugin.
 
 #### StartDownloadOptions
 
-| Prop                      | Type                                                                                | Description                                                                                                                                                                                                                                                    | Default            | Since |
-| ------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`androidNotification`** | <code><a href="#transfernotificationoptions">TransferNotificationOptions</a></code> | The configuration of the foreground service notification. Only available on Android.                                                                                                                                                                           |                    | 0.0.1 |
-| **`url`**                 | <code>string</code>                                                                 | The URL to download the file from.                                                                                                                                                                                                                             |                    | 0.0.1 |
-| **`path`**                | <code>string</code>                                                                 | The path on the device where the downloaded file should be stored.                                                                                                                                                                                             |                    | 0.0.1 |
-| **`headers`**             | <code>Record&lt;string, string&gt;</code>                                           | The HTTP headers to send with the request.                                                                                                                                                                                                                     |                    | 0.0.1 |
-| **`method`**              | <code>'GET' \| 'POST'</code>                                                        | The HTTP method to use for the request.                                                                                                                                                                                                                        | <code>'GET'</code> | 0.0.1 |
-| **`network`**             | <code><a href="#transfernetwork">TransferNetwork</a></code>                         | The network type that is required for the transfer to run. Use `'unmetered'` to only run the transfer on unmetered networks (e.g. Wi-Fi). The transfer waits until such a network is available. On **Android**, it stays in the `pending` state while waiting. | <code>'any'</code> | 0.0.1 |
-| **`resumable`**           | <code>boolean</code>                                                                | Whether the download may be resumed after a pause or an interruption. Requires the server to support the HTTP `Range` header.                                                                                                                                  | <code>true</code>  | 0.0.1 |
-| **`maxRetries`**          | <code>number</code>                                                                 | The maximum number of times the transfer is retried after a network error.                                                                                                                                                                                     | <code>0</code>     | 0.0.1 |
-
-
-#### TransferNotificationOptions
-
-The configuration of the Android foreground service notification.
-
-On **Android 12+**, a transfer that starts while the app is in the background
-(e.g. after waiting for an unmetered network) runs without the foreground service
-and its notification, since Android does not allow starting one from the background.
-
-Only available on Android.
-
-| Prop              | Type                 | Description                                                                                                                                                                                                                                   | Default                      | Since |
-| ----------------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- | ----- |
-| **`title`**       | <code>string</code>  | The title of the notification.                                                                                                                                                                                                                |                              | 0.0.1 |
-| **`progress`**    | <code>boolean</code> | Whether to show a separate notification with a progress bar for this transfer. The foreground service notification is shown while a transfer runs, because Android requires it. This option only adds the per-transfer progress notification. | <code>false</code>           | 0.0.1 |
-| **`text`**        | <code>string</code>  | The text of the notification.                                                                                                                                                                                                                 |                              | 0.0.1 |
-| **`channelName`** | <code>string</code>  | The name of the notification channel.                                                                                                                                                                                                         | <code>'File Transfer'</code> | 0.0.1 |
+| Prop             | Type                                                        | Description                                                                                                                                                                                                                                                    | Default                              | Since |
+| ---------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----- |
+| **`url`**        | <code>string</code>                                         | The URL to download the file from.                                                                                                                                                                                                                             |                                      | 0.0.1 |
+| **`path`**       | <code>string</code>                                         | The path on the device where the downloaded file should be stored.                                                                                                                                                                                             |                                      | 0.0.1 |
+| **`title`**      | <code>string</code>                                         | The name of the transfer that is shown to the user, e.g. in the notification.                                                                                                                                                                                  | <code>The file name of `path`</code> | 0.2.0 |
+| **`hidden`**     | <code>boolean</code>                                        | Whether the transfer is hidden from the notification.                                                                                                                                                                                                          | <code>false</code>                   | 0.2.0 |
+| **`headers`**    | <code>Record&lt;string, string&gt;</code>                   | The HTTP headers to send with the request.                                                                                                                                                                                                                     |                                      | 0.0.1 |
+| **`method`**     | <code>'GET' \| 'POST'</code>                                | The HTTP method to use for the request.                                                                                                                                                                                                                        | <code>'GET'</code>                   | 0.0.1 |
+| **`network`**    | <code><a href="#transfernetwork">TransferNetwork</a></code> | The network type that is required for the transfer to run. Use `'unmetered'` to only run the transfer on unmetered networks (e.g. Wi-Fi). The transfer waits until such a network is available. On **Android**, it stays in the `pending` state while waiting. | <code>'any'</code>                   | 0.0.1 |
+| **`resumable`**  | <code>boolean</code>                                        | Whether the download may be resumed after a pause or an interruption. Requires the server to support the HTTP `Range` header.                                                                                                                                  | <code>true</code>                    | 0.0.1 |
+| **`maxRetries`** | <code>number</code>                                         | The maximum number of times the transfer is retried after a network error.                                                                                                                                                                                     | <code>0</code>                       | 0.0.1 |
 
 
 #### StartUploadResult
@@ -697,19 +791,20 @@ Only available on Android.
 
 #### StartUploadOptions
 
-| Prop                      | Type                                                                                | Description                                                                                                                                                                                                                                                    | Default                  | Since |
-| ------------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ----- |
-| **`androidNotification`** | <code><a href="#transfernotificationoptions">TransferNotificationOptions</a></code> | The configuration of the foreground service notification. Only available on Android.                                                                                                                                                                           |                          | 0.0.1 |
-| **`url`**                 | <code>string</code>                                                                 | The URL to upload the file to.                                                                                                                                                                                                                                 |                          | 0.0.1 |
-| **`path`**                | <code>string</code>                                                                 | The path on the device of the file to upload.                                                                                                                                                                                                                  |                          | 0.0.1 |
-| **`method`**              | <code>'POST' \| 'PUT'</code>                                                        | The HTTP method to use for the request.                                                                                                                                                                                                                        | <code>'POST'</code>      | 0.0.1 |
-| **`uploadType`**          | <code><a href="#transferuploadtype">TransferUploadType</a></code>                   | The type of upload to perform. Use `'binary'` to send the raw file as the request body (e.g. for S3 presigned URLs) or `'multipart'` to send a `multipart/form-data` request.                                                                                  | <code>'multipart'</code> | 0.0.1 |
-| **`fileField`**           | <code>string</code>                                                                 | The name of the form field that contains the file. Only used when `uploadType` is `'multipart'`.                                                                                                                                                               | <code>'file'</code>      | 0.0.1 |
-| **`mimeType`**            | <code>string</code>                                                                 | The MIME type of the file to upload.                                                                                                                                                                                                                           |                          | 0.0.1 |
-| **`formFields`**          | <code>Record&lt;string, string&gt;</code>                                           | The additional form fields to send with the request. Only used when `uploadType` is `'multipart'`.                                                                                                                                                             |                          | 0.0.1 |
-| **`headers`**             | <code>Record&lt;string, string&gt;</code>                                           | The HTTP headers to send with the request.                                                                                                                                                                                                                     |                          | 0.0.1 |
-| **`network`**             | <code><a href="#transfernetwork">TransferNetwork</a></code>                         | The network type that is required for the transfer to run. Use `'unmetered'` to only run the transfer on unmetered networks (e.g. Wi-Fi). The transfer waits until such a network is available. On **Android**, it stays in the `pending` state while waiting. | <code>'any'</code>       | 0.0.1 |
-| **`maxRetries`**          | <code>number</code>                                                                 | The maximum number of times the transfer is retried after a network error.                                                                                                                                                                                     | <code>0</code>           | 0.0.1 |
+| Prop             | Type                                                              | Description                                                                                                                                                                                                                                                    | Default                              | Since |
+| ---------------- | ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----- |
+| **`url`**        | <code>string</code>                                               | The URL to upload the file to.                                                                                                                                                                                                                                 |                                      | 0.0.1 |
+| **`path`**       | <code>string</code>                                               | The path on the device of the file to upload.                                                                                                                                                                                                                  |                                      | 0.0.1 |
+| **`title`**      | <code>string</code>                                               | The name of the transfer that is shown to the user, e.g. in the notification.                                                                                                                                                                                  | <code>The file name of `path`</code> | 0.2.0 |
+| **`hidden`**     | <code>boolean</code>                                              | Whether the transfer is hidden from the notification.                                                                                                                                                                                                          | <code>false</code>                   | 0.2.0 |
+| **`method`**     | <code>'POST' \| 'PUT'</code>                                      | The HTTP method to use for the request.                                                                                                                                                                                                                        | <code>'POST'</code>                  | 0.0.1 |
+| **`uploadType`** | <code><a href="#transferuploadtype">TransferUploadType</a></code> | The type of upload to perform. Use `'binary'` to send the raw file as the request body (e.g. for S3 presigned URLs) or `'multipart'` to send a `multipart/form-data` request.                                                                                  | <code>'multipart'</code>             | 0.0.1 |
+| **`fileField`**  | <code>string</code>                                               | The name of the form field that contains the file. Only used when `uploadType` is `'multipart'`.                                                                                                                                                               | <code>'file'</code>                  | 0.0.1 |
+| **`mimeType`**   | <code>string</code>                                               | The MIME type of the file to upload.                                                                                                                                                                                                                           |                                      | 0.0.1 |
+| **`formFields`** | <code>Record&lt;string, string&gt;</code>                         | The additional form fields to send with the request. Only used when `uploadType` is `'multipart'`.                                                                                                                                                             |                                      | 0.0.1 |
+| **`headers`**    | <code>Record&lt;string, string&gt;</code>                         | The HTTP headers to send with the request.                                                                                                                                                                                                                     |                                      | 0.0.1 |
+| **`network`**    | <code><a href="#transfernetwork">TransferNetwork</a></code>       | The network type that is required for the transfer to run. Use `'unmetered'` to only run the transfer on unmetered networks (e.g. Wi-Fi). The transfer waits until such a network is available. On **Android**, it stays in the `pending` state while waiting. | <code>'any'</code>                   | 0.0.1 |
+| **`maxRetries`** | <code>number</code>                                               | The maximum number of times the transfer is retried after a network error.                                                                                                                                                                                     | <code>0</code>                       | 0.0.1 |
 
 
 #### PluginListenerHandle
@@ -737,6 +832,14 @@ Only available on Android.
 | **`errorCode`**    | <code>string</code>         | The error code of the failure.                                    | 0.0.1 |
 | **`message`**      | <code>string</code>         | The error message of the failure.                                 | 0.0.1 |
 | **`responseCode`** | <code>number \| null</code> | The HTTP status code of the response, or `null` if not available. | 0.0.1 |
+
+
+#### TransferInterruptedEvent
+
+| Prop         | Type                                                                              | Description                      | Since |
+| ------------ | --------------------------------------------------------------------------------- | -------------------------------- | ----- |
+| **`id`**     | <code>string</code>                                                               | The identifier of the transfer.  | 0.2.0 |
+| **`reason`** | <code><a href="#transferinterruptionreason">TransferInterruptionReason</a></code> | The reason for the interruption. | 0.2.0 |
 
 
 #### TransferProgressEvent
@@ -768,7 +871,25 @@ The direction of a transfer.
 
 The current state of a transfer.
 
-<code>'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'canceled'</code>
+`paused` is set by the app, `interrupted` by the system. Both are resumed
+with `resumeTransferById(...)`.
+
+<code>'pending' | 'running' | 'paused' | 'interrupted' | 'completed' | 'failed' | 'canceled'</code>
+
+
+#### TransferInterruptionReason
+
+The reason why the system interrupted a transfer.
+
+- `appTerminated`: The app process was terminated, e.g. by the system, by a
+  force quit or by a device restart.
+- `timeLimitReached`: On **Android 15+**, the daily time limit of the
+  foreground service was reached. The transfer can be resumed once the app
+  is in the foreground again.
+
+Interrupted transfers are not failures. Resume them with `resumeTransferById(...)`.
+
+<code>'appTerminated' | 'timeLimitReached'</code>
 
 
 #### TransferNetwork
@@ -788,13 +909,13 @@ The type of upload to perform.
 
 ## Migration from `@capacitor/file-transfer`
 
-| `@capacitor/file-transfer`     | `@capawesome-team/capacitor-file-transfer`                                         |
-| ------------------------------ | ---------------------------------------------------------------------------------- |
-| `downloadFile({ url, path })`  | `startDownload({ url, path })` → returns `{ id }` and continues in the background  |
-| `uploadFile({ url, path })`    | `startUpload({ url, path })` → returns `{ id }` and continues in the background    |
-| `addListener('progress', ...)` | `addListener('transferProgress', ...)`                                             |
+| `@capacitor/file-transfer`     | `@capawesome-team/capacitor-file-transfer`                                                         |
+| ------------------------------ | -------------------------------------------------------------------------------------------------- |
+| `downloadFile({ url, path })`  | `startDownload({ url, path })` → returns `{ id }` and continues in the background                  |
+| `uploadFile({ url, path })`    | `startUpload({ url, path })` → returns `{ id }` and continues in the background                    |
+| `addListener('progress', ...)` | `addListener('transferProgress', ...)`                                                             |
 | _No equivalent_                | `pauseTransferById`, `resumeTransferById`, `cancelTransferById`, `getTransferById`, `getTransfers` |
-| _No equivalent_                | `transferCompleted` and `transferFailed` events                                    |
+| _No equivalent_                | `transferCompleted` and `transferFailed` events                                                    |
 
 Transfers are asynchronous: `startDownload(...)` and `startUpload(...)` resolve immediately with a transfer `id`, and you observe completion through the `transferCompleted` and `transferFailed` events.
 
@@ -804,14 +925,15 @@ Transfers are asynchronous: `startDownload(...)` and `startUpload(...)` resolve 
 
 Yes. On Android, transfers keep running in a `dataSync` foreground service, and on iOS, in a background `URLSession`. The following table summarizes what happens to a transfer in each app state:
 
-| App State                     | Android                                                 | iOS                                                                                                                                                   |
-| ----------------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Foreground                    | Runs.                                                   | Runs.                                                                                                                                                 |
-| Backgrounded                  | Runs (via the `dataSync` foreground service).           | Runs (via the background `URLSession`).                                                                                                               |
-| Killed by the OS (low memory) | Interrupted; restored as `failed`, downloads resumable. | Continued by the OS and delivered on relaunch.                                                                                                        |
-| Force-quit by the user        | Interrupted; restored as `failed`, downloads resumable. | Canceled by the OS (documented OS behavior); on relaunch retried when `maxRetries > 0`, otherwise restored as `failed` with a `transferFailed` event. |
+| App State                     | Android                                                                                                                                        | iOS                                                                                                                                              |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Foreground                    | Runs.                                                                                                                                          | Runs.                                                                                                                                            |
+| Backgrounded                  | Runs (via the `dataSync` foreground service).                                                                                                  | Runs (via the background `URLSession`).                                                                                                          |
+| Background time limit reached | On Android 15+, the `dataSync` foreground service may run for 6 hours per day; the transfers are `interrupted` with reason `timeLimitReached`. | Not applicable.                                                                                                                                  |
+| Killed by the OS (low memory) | `interrupted` with reason `appTerminated` and a `transferInterrupted` event on the next app start, downloads resumable.                        | Continued by the OS and delivered on relaunch.                                                                                                   |
+| Force-quit by the user        | `interrupted` with reason `appTerminated` and a `transferInterrupted` event on the next app start, downloads resumable.                        | Canceled by the OS (documented OS behavior); on relaunch `interrupted` with reason `appTerminated` and a `transferInterrupted` event, resumable. |
 
-Resuming an interrupted download requires the server to support the HTTP `Range` header.
+Resuming an interrupted download requires the server to support the HTTP `Range` header on Android. On iOS, the resume data of the canceled task is used.
 
 ### Can I pause an upload?
 
