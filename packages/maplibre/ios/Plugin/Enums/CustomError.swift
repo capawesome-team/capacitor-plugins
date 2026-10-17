@@ -3,6 +3,7 @@ import Foundation
 public enum CustomError: Error {
     case boundsMissing
     case contentSizeMissing
+    case expressionInvalid
     case frameMissing
     case iconLoadFailed
     case layerAlreadyExists
@@ -63,6 +64,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("bounds must be provided.", comment: "boundsMissing")
         case .contentSizeMissing:
             return NSLocalizedString("contentSize must be provided.", comment: "contentSizeMissing")
+        case .expressionInvalid:
+            return NSLocalizedString("expression must be an array whose first element is an operator.", comment: "expressionInvalid")
         case .frameMissing:
             return NSLocalizedString("frame must be provided.", comment: "frameMissing")
         case .iconLoadFailed:
@@ -74,7 +77,7 @@ extension CustomError: LocalizedError {
         case .layerNotFound:
             return NSLocalizedString("layer not found.", comment: "layerNotFound")
         case .layerTypeInvalid:
-            return NSLocalizedString("type must be one of circle, fill or line.", comment: "layerTypeInvalid")
+            return NSLocalizedString("type must be one of circle, fill, heatmap or line.", comment: "layerTypeInvalid")
         case .locationPermissionDenied:
             return NSLocalizedString("location permission denied.", comment: "locationPermissionDenied")
         case .mapAlreadyExists:
