@@ -1179,6 +1179,15 @@ export interface MarkerClickEvent {
    * @since 0.1.0
    */
   markerId: string;
+  /**
+   * The point of the marker.
+   *
+   * This is the projected coordinate of the marker where its icon anchor is
+   * placed, not the point the user tapped on.
+   *
+   * @since 0.2.1
+   */
+  point: MapPoint;
 }
 
 /**

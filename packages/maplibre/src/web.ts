@@ -20,6 +20,7 @@ import type {
   LatLng,
   LayerPaint,
   MapLibrePlugin,
+  MapPoint,
   Marker,
   Padding,
   PermissionStatus,
@@ -546,7 +547,7 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
       this.notifyListeners(MapLibreWeb.eventMapClick, {
         coordinates: this.toLatLng(event.lngLat),
         mapId,
-        point: { x: event.point.x, y: event.point.y },
+        point: this.toMapPoint(event.point),
       });
     });
     map.on('movestart', event => {
@@ -735,6 +736,7 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
         coordinates: this.toLatLng(instance.getLngLat()),
         mapId,
         markerId: marker.id,
+        point: this.toMapPoint(mapState.map.project(instance.getLngLat())),
       });
     });
     instance.on('dragstart', () => {
@@ -1008,6 +1010,10 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
 
   private toLngLat(coordinates: LatLng): [number, number] {
     return [coordinates.longitude, coordinates.latitude];
+  }
+
+  private toMapPoint(point: { x: number; y: number }): MapPoint {
+    return { x: point.x, y: point.y };
   }
 
   private toPadding(
