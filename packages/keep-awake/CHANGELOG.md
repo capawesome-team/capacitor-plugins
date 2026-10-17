@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`59a65d0ba8755940ee6f33a5887ebacba5252771`](https://github.com/capawesome-team/capacitor-plugins/commit/59a65d0ba8755940ee6f33a5887ebacba5252771) ([#1101](https://github.com/capawesome-team/capacitor-plugins/pull/1101)): fix(web): release the wake lock if `allowSleep()` is called while a request is pending
+
 ## 0.1.2
 
 ### Patch Changes

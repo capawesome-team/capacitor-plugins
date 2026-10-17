@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.3
+
+### Patch Changes
+
+- [`bb9277568e12d555cf1ca56238437176f79ad491`](https://github.com/capawesome-team/capacitor-plugins/commit/bb9277568e12d555cf1ca56238437176f79ad491) ([#1095](https://github.com/capawesome-team/capacitor-plugins/pull/1095)): feat: add heatmap layer type
+
+- [`5346eff1929838c9e89e51fbff0c24c030eb9f4f`](https://github.com/capawesome-team/capacitor-plugins/commit/5346eff1929838c9e89e51fbff0c24c030eb9f4f) ([#1094](https://github.com/capawesome-team/capacitor-plugins/pull/1094)): feat: support expressions for layer paint properties and add `circleBlur` paint property and `filter` option
+
+- [`bb9277568e12d555cf1ca56238437176f79ad491`](https://github.com/capawesome-team/capacitor-plugins/commit/bb9277568e12d555cf1ca56238437176f79ad491) ([#1095](https://github.com/capawesome-team/capacitor-plugins/pull/1095)): feat: add `point` property to `MarkerClickEvent`
+
 ## 0.2.2
 
 ### Patch Changes
