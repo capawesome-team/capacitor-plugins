@@ -51,8 +51,16 @@ export class KeepAwakeWeb extends WebPlugin implements KeepAwakePlugin {
 
   private async handleVisibilityChange(): Promise<void> {
     if (this.keepAwakeRequested && document.visibilityState === 'visible') {
-      await this.requestWakeLock();
+      try {
+        await this.requestWakeLock();
+      } catch (error) {
+        console.error(error);
+      }
     }
+  }
+
+  private hasActiveWakeLock(): boolean {
+    return !!this.wakeLockSentinel && !this.wakeLockSentinel.released;
   }
 
   private isSupported(): boolean {
@@ -60,16 +68,20 @@ export class KeepAwakeWeb extends WebPlugin implements KeepAwakePlugin {
   }
 
   private async releaseWakeLock(): Promise<void> {
-    if (this.wakeLockSentinel) {
-      await this.wakeLockSentinel.release();
-      this.wakeLockSentinel = null;
-    }
+    const sentinel = this.wakeLockSentinel;
+    this.wakeLockSentinel = null;
+    await sentinel?.release();
   }
 
   private async requestWakeLock(): Promise<void> {
-    if (this.wakeLockSentinel && !this.wakeLockSentinel.released) {
+    if (this.hasActiveWakeLock()) {
       return;
     }
-    this.wakeLockSentinel = await navigator.wakeLock.request('screen');
+    const sentinel = await navigator.wakeLock.request('screen');
+    if (!this.keepAwakeRequested || this.hasActiveWakeLock()) {
+      await sentinel.release();
+      return;
+    }
+    this.wakeLockSentinel = sentinel;
   }
 }
