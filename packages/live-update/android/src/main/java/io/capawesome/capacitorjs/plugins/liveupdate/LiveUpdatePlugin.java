@@ -132,6 +132,22 @@ public class LiveUpdatePlugin extends Plugin {
         }
     }
 
+    @Override
+    protected void handleOnStart() {
+        super.handleOnStart();
+        if (implementation != null) {
+            implementation.handleOnStart();
+        }
+    }
+
+    @Override
+    protected void handleOnStop() {
+        super.handleOnStop();
+        if (implementation != null) {
+            implementation.handleOnStop();
+        }
+    }
+
     @PluginMethod
     public void clearBlockedBundles(PluginCall call) {
         try {

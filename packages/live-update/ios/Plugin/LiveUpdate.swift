@@ -27,9 +27,13 @@ import CommonCrypto
     private let plugin: LiveUpdatePlugin?
     private let preferences: LiveUpdatePreferences
 
+    private var isAppInBackground = false
+    private var lastAutoUpdateCheckTimestamp: Int64 = 0
+    /// Milliseconds left on the rollback timer while it is paused in the background.
+    private var remainingRollbackTimeout: Int?
+    private var rollbackDeadline: DispatchTime?
     private var rollbackDispatchWorkItem: DispatchWorkItem?
     private var rollbackPerformed = false
-    private var lastAutoUpdateCheckTimestamp: Int64 = 0
     private var syncInProgress = false
 
     /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
@@ -225,7 +229,14 @@ import CommonCrypto
         }
     }
 
+    @objc public func handleAppDidEnterBackground() {
+        isAppInBackground = true
+        pauseRollbackTimer()
+    }
+
     @objc public func handleAppWillEnterForeground() {
+        isAppInBackground = false
+        resumeRollbackTimer()
         if config.autoUpdateStrategy == "background" {
             performAutoUpdate()
         }
@@ -816,6 +827,25 @@ import CommonCrypto
         }
     }
 
+    private func pauseRollbackTimer() {
+        guard let deadline = rollbackDeadline else {
+            return
+        }
+        rollbackDispatchWorkItem?.cancel()
+        rollbackDispatchWorkItem = nil
+        rollbackDeadline = nil
+        let now = DispatchTime.now()
+        remainingRollbackTimeout = deadline > now ? Int((deadline.uptimeNanoseconds - now.uptimeNanoseconds) / 1_000_000) : 0
+    }
+
+    private func resumeRollbackTimer() {
+        guard let remainingRollbackTimeout = remainingRollbackTimeout else {
+            return
+        }
+        self.remainingRollbackTimeout = nil
+        scheduleRollback(afterMilliseconds: remainingRollbackTimeout)
+    }
+
     private func requireAppId(_ appIdOverride: String? = nil) throws -> String {
         guard let appId = appIdOverride ?? getAppId(), !appId.isEmpty else {
             throw CustomError.appIdMissing
@@ -968,19 +998,35 @@ import CommonCrypto
         preferences.setPreviousBundleId(bundleId)
     }
 
+    private func scheduleRollback(afterMilliseconds milliseconds: Int) {
+        let deadline = DispatchTime.now() + DispatchTimeInterval.milliseconds(milliseconds)
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.rollbackDeadline = nil
+            self?.rollback()
+        }
+        rollbackDeadline = deadline
+        rollbackDispatchWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: deadline, execute: workItem)
+    }
+
+    /// The timer only counts time in the foreground, because a suspended app cannot call `ready()`.
     private func startRollbackTimer() {
         guard config.readyTimeout > 0 else {
             return
         }
         stopRollbackTimer()
-        rollbackDispatchWorkItem = DispatchWorkItem { [weak self] in
-            self?.rollback()
+        if isAppInBackground {
+            remainingRollbackTimeout = config.readyTimeout
+        } else {
+            scheduleRollback(afterMilliseconds: config.readyTimeout)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + DispatchTimeInterval.milliseconds(config.readyTimeout), execute: rollbackDispatchWorkItem!)
     }
 
     private func stopRollbackTimer() {
         rollbackDispatchWorkItem?.cancel()
+        rollbackDispatchWorkItem = nil
+        rollbackDeadline = nil
+        remainingRollbackTimeout = nil
     }
 
     private func tryCopyCurrentBundleFile(

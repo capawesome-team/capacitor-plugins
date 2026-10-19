@@ -54,13 +54,22 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         // Notify implementation about load
         implementation?.handleLoad()
 
-        // Register for app resume notifications
+        // Register for app lifecycle notifications
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleAppDidEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(handleAppWillEnterForeground),
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
+        if UIApplication.shared.applicationState == .background {
+            implementation?.handleAppDidEnterBackground()
+        }
     }
 
     @objc func clearBlockedBundles(_ call: CAPPluginCall) {
@@ -385,6 +394,10 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     func notifyReloadedListeners() {
         let event = JSObject()
         notifyListeners(eventReloaded, data: event, retainUntilConsumed: true)
+    }
+
+    @objc private func handleAppDidEnterBackground() {
+        implementation?.handleAppDidEnterBackground()
     }
 
     @objc private func handleAppWillEnterForeground() {
