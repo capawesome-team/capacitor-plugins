@@ -85,6 +85,9 @@ A 500 response from the update server needs a server you control that answers ov
 - The example sends empty strings for blank inputs and the plugin verifies an empty checksum. Manual downloads that should succeed need the real checksum.
 - Maestro logs env placeholders unsubstituted, for example `Assert that "${TITLE}" is visible... COMPLETED`. Filter on `COMPLETED` and `FAILED`, never on the expected value.
 - Release branches may default `readyTimeout` to 10 seconds. There, run `ready` right after `reload` or the bundle rolls back before you look.
+- Maestro needs 10–15 s to start a flow, longer than a 10 s `readyTimeout`. Put `reload` and `ready` into one flow; a separate `ready` flow arrives after the rollback.
+- Maestro matches text partially, so `expect-title` with `Capacitor Live Update` also matches `Capacitor Live Update v2`. To prove a rollback, wait until the new title is gone (`extendedWaitUntil` with `notVisible`) instead of asserting the default title.
+- The background auto update row needs `defaultChannel` set to your channel, because the plugin otherwise syncs the Cloud `default` channel. The plugin skips auto update for 15 minutes after the last check, so upload the next bundle, keep the app in the background for 15 minutes, and only then test the resume.
 
 ---
 
