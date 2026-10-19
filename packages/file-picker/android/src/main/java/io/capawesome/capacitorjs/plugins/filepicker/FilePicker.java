@@ -19,7 +19,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Objects;
 
 public class FilePicker {
 
@@ -31,11 +30,8 @@ public class FilePicker {
     }
 
     public void copyFile(@NonNull Uri from, @NonNull Uri to, Boolean shouldOverwrite) throws Exception {
-        if (!shouldOverwrite) {
-            File file = new File(Objects.requireNonNull(to.getPath()));
-            if (file.exists()) {
-                throw new Exception(FilePickerPlugin.ERROR_FILE_ALREADY_EXISTS);
-            }
+        if (!shouldOverwrite && fileExists(to)) {
+            throw new Exception(FilePickerPlugin.ERROR_FILE_ALREADY_EXISTS);
         }
         InputStream inputStream = plugin.getBridge().getContext().getContentResolver().openInputStream(from);
         OutputStream outputStream = plugin.getBridge().getContext().getContentResolver().openOutputStream(to);
@@ -49,6 +45,14 @@ public class FilePicker {
         }
         outputStream.close();
         inputStream.close();
+    }
+
+    private boolean fileExists(@NonNull Uri uri) throws IOException {
+        try (InputStream inputStream = plugin.getBridge().getContext().getContentResolver().openInputStream(uri)) {
+            return inputStream != null;
+        } catch (FileNotFoundException exception) {
+            return false;
+        }
     }
 
     public String getPathFromUri(@NonNull Uri uri) {
