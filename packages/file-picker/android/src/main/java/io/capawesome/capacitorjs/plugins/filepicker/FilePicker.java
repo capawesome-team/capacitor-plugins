@@ -33,7 +33,7 @@ public class FilePicker {
     public void copyFile(@NonNull Uri from, @NonNull Uri to, Boolean shouldOverwrite) throws Exception {
         if (!shouldOverwrite) {
             File file = new File(Objects.requireNonNull(to.getPath()));
-            if (!file.exists()) {
+            if (file.exists()) {
                 throw new Exception(FilePickerPlugin.ERROR_FILE_ALREADY_EXISTS);
             }
         }
