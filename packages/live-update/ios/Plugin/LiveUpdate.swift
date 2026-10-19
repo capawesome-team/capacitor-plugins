@@ -34,6 +34,8 @@ import CommonCrypto
     private var rollbackDeadline: DispatchTime?
     private var rollbackDispatchWorkItem: DispatchWorkItem?
     private var rollbackPerformed = false
+    /// Guards the rollback timer state: plugin methods run on the bridge queue, lifecycle callbacks on main.
+    private let rollbackTimerLock = NSLock()
     private var syncInProgress = false
 
     /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
@@ -230,11 +232,15 @@ import CommonCrypto
     }
 
     @objc public func handleAppDidEnterBackground() {
+        rollbackTimerLock.lock()
+        defer { rollbackTimerLock.unlock() }
         isAppInBackground = true
         pauseRollbackTimer()
     }
 
     @objc public func handleAppWillEnterForeground() {
+        rollbackTimerLock.lock()
+        defer { rollbackTimerLock.unlock() }
         isAppInBackground = false
         resumeRollbackTimer()
         if config.autoUpdateStrategy == "background" {
@@ -419,6 +425,14 @@ import CommonCrypto
 
     private func buildDownloadsDirectoryUrl() -> URL {
         return Self.downloadsDirectoryUrl
+    }
+
+    /// Must be called with `rollbackTimerLock` held.
+    private func clearRollbackTimer() {
+        rollbackDispatchWorkItem?.cancel()
+        rollbackDispatchWorkItem = nil
+        rollbackDeadline = nil
+        remainingRollbackTimeout = nil
     }
 
     private func copyCurrentBundleFile(fileToCopy: ManifestItem, toDirectory: URL) throws {
@@ -827,6 +841,7 @@ import CommonCrypto
         }
     }
 
+    /// Must be called with `rollbackTimerLock` held.
     private func pauseRollbackTimer() {
         guard let deadline = rollbackDeadline else {
             return
@@ -838,6 +853,7 @@ import CommonCrypto
         remainingRollbackTimeout = deadline > now ? Int((deadline.uptimeNanoseconds - now.uptimeNanoseconds) / 1_000_000) : 0
     }
 
+    /// Must be called with `rollbackTimerLock` held.
     private func resumeRollbackTimer() {
         guard let remainingRollbackTimeout = remainingRollbackTimeout else {
             return
@@ -1001,8 +1017,13 @@ import CommonCrypto
     private func scheduleRollback(afterMilliseconds milliseconds: Int) {
         let deadline = DispatchTime.now() + DispatchTimeInterval.milliseconds(milliseconds)
         let workItem = DispatchWorkItem { [weak self] in
-            self?.rollbackDeadline = nil
-            self?.rollback()
+            guard let self = self else {
+                return
+            }
+            self.rollbackTimerLock.lock()
+            self.rollbackDeadline = nil
+            self.rollbackTimerLock.unlock()
+            self.rollback()
         }
         rollbackDeadline = deadline
         rollbackDispatchWorkItem = workItem
@@ -1014,7 +1035,9 @@ import CommonCrypto
         guard config.readyTimeout > 0 else {
             return
         }
-        stopRollbackTimer()
+        rollbackTimerLock.lock()
+        defer { rollbackTimerLock.unlock() }
+        clearRollbackTimer()
         if isAppInBackground {
             remainingRollbackTimeout = config.readyTimeout
         } else {
@@ -1023,10 +1046,9 @@ import CommonCrypto
     }
 
     private func stopRollbackTimer() {
-        rollbackDispatchWorkItem?.cancel()
-        rollbackDispatchWorkItem = nil
-        rollbackDeadline = nil
-        remainingRollbackTimeout = nil
+        rollbackTimerLock.lock()
+        defer { rollbackTimerLock.unlock() }
+        clearRollbackTimer()
     }
 
     private func tryCopyCurrentBundleFile(
