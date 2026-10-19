@@ -9,6 +9,7 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Base64;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,8 +116,18 @@ public class LiveUpdate {
     private final Handler rollbackHandler = new Handler(Looper.getMainLooper());
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
 
+    private boolean activityStopped = false;
     private boolean initialPageLoaded = false;
     private long lastAutoUpdateCheckTimestamp = 0;
+
+    /** Milliseconds left on the rollback timer while it is paused in the background. */
+    @Nullable
+    private Long remainingRollbackTimeout = null;
+
+    /** Uptime at which the scheduled rollback fires, or {@code null} if none is scheduled. */
+    @Nullable
+    private Long rollbackDeadline = null;
+
     private boolean rollbackPerformed = false;
     private boolean syncInProgress = false;
 
@@ -419,6 +430,16 @@ public class LiveUpdate {
         if ("background".equals(config.getAutoUpdateStrategy()) && initialPageLoaded) {
             performAutoUpdate();
         }
+    }
+
+    public synchronized void handleOnStart() {
+        activityStopped = false;
+        resumeRollbackTimer();
+    }
+
+    public synchronized void handleOnStop() {
+        activityStopped = true;
+        pauseRollbackTimer();
     }
 
     public void ready(@NonNull NonEmptyCallback callback) {
@@ -1356,6 +1377,23 @@ public class LiveUpdate {
         sync(options, callback);
     }
 
+    private void pauseRollbackTimer() {
+        if (rollbackDeadline == null) {
+            return;
+        }
+        rollbackHandler.removeCallbacksAndMessages(null);
+        remainingRollbackTimeout = Math.max(0, rollbackDeadline - SystemClock.uptimeMillis());
+        rollbackDeadline = null;
+    }
+
+    private void resumeRollbackTimer() {
+        if (remainingRollbackTimeout == null) {
+            return;
+        }
+        scheduleRollback(remainingRollbackTimeout);
+        remainingRollbackTimeout = null;
+    }
+
     @NonNull
     private String requireAppId() throws Exception {
         return requireAppId(null);
@@ -1532,16 +1570,33 @@ public class LiveUpdate {
         preferences.setPreviousBundleId(bundleId);
     }
 
-    private void startRollbackTimer() {
+    private void scheduleRollback(long delayMillis) {
+        rollbackDeadline = SystemClock.uptimeMillis() + delayMillis;
+        rollbackHandler.postDelayed(() -> {
+            synchronized (this) {
+                rollbackDeadline = null;
+            }
+            rollback();
+        }, delayMillis);
+    }
+
+    /** The timer only counts time in the foreground, because a stopped activity may not run JS. */
+    private synchronized void startRollbackTimer() {
         if (config.getReadyTimeout() <= 0) {
             return;
         }
         stopRollbackTimer();
-        rollbackHandler.postDelayed(() -> rollback(), config.getReadyTimeout());
+        if (activityStopped) {
+            remainingRollbackTimeout = (long) config.getReadyTimeout();
+        } else {
+            scheduleRollback(config.getReadyTimeout());
+        }
     }
 
-    private void stopRollbackTimer() {
+    private synchronized void stopRollbackTimer() {
         rollbackHandler.removeCallbacksAndMessages(null);
+        rollbackDeadline = null;
+        remainingRollbackTimeout = null;
     }
 
     private boolean tryCopyCurrentBundleFile(@NonNull ManifestItem fileToCopy, @NonNull File destinationDirectory) {
