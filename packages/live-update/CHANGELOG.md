@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.7.1
+
+### Patch Changes
+
+- [`cceb241eb4046b6d715c164ca4aaebbc71de883f`](https://github.com/capawesome-team/capacitor-plugins/commit/cceb241eb4046b6d715c164ca4aaebbc71de883f) ([#1153](https://github.com/capawesome-team/capacitor-plugins/pull/1153)): fix: pause the `readyTimeout` rollback timer while the app is in the background
+
 ## 8.7.0
 
 ### Minor Changes
