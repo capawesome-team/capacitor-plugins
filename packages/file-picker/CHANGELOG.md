@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`cc8d7fc6bb57f6bd65ec59d5622555d638263271`](https://github.com/capawesome-team/capacitor-plugins/commit/cc8d7fc6bb57f6bd65ec59d5622555d638263271) ([#1150](https://github.com/capawesome-team/capacitor-plugins/pull/1150)): fix(android): reject `copyFile(...)` with `File already exists` only when the destination exists and `overwrite` is `false`
+
 ## 8.1.0
 
 ### Minor Changes
