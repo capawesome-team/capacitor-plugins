@@ -55,6 +55,7 @@ import Capacitor
             ScreenOrientation.supportedInterfaceOrientations = orientationMask
             UINavigationController.attemptRotationToDeviceOrientation()
             guard let orientationType = self.lastOrientationType else {
+                completion()
                 return
             }
             let orientationValue = self.convertOrientationTypeToValue(orientationType)
