@@ -39,25 +39,20 @@ public class Network {
 
     private final ConnectivityManager.NetworkCallback networkCallback = new ConnectivityManager.NetworkCallback() {
         @Override
-        public void onAvailable(@NonNull android.net.Network network) {
-            handleNetworkStatusChange();
-        }
-
-        @Override
         public void onCapabilitiesChanged(@NonNull android.net.Network network, @NonNull NetworkCapabilities capabilities) {
-            handleNetworkStatusChange();
+            handleNetworkStatusChange(computeStatus(capabilities));
         }
 
         @Override
         public void onLost(@NonNull android.net.Network network) {
-            handleNetworkStatusChange();
+            handleNetworkStatusChange(computeStatus(null));
         }
     };
 
     private final BroadcastReceiver restrictBackgroundChangedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            handleNetworkStatusChange();
+            handleNetworkStatusChange(computeStatus());
         }
     };
 
@@ -135,6 +130,11 @@ public class Network {
     private GetStatusResult computeStatus() {
         android.net.Network network = connectivityManager.getActiveNetwork();
         NetworkCapabilities capabilities = network == null ? null : connectivityManager.getNetworkCapabilities(network);
+        return computeStatus(capabilities);
+    }
+
+    @NonNull
+    private GetStatusResult computeStatus(@Nullable NetworkCapabilities capabilities) {
         boolean connected = capabilities != null;
         String connectionType = computeConnectionType(capabilities);
         boolean internetReachable =
@@ -165,8 +165,7 @@ public class Network {
         return status.toJSObject().toString();
     }
 
-    private void handleNetworkStatusChange() {
-        GetStatusResult status = computeStatus();
+    private void handleNetworkStatusChange(@NonNull GetStatusResult status) {
         String statusKey = createStatusKey(status);
         if (statusKey.equals(lastStatusKey)) {
             return;
