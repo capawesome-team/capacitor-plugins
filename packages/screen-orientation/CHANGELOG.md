@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.0.4
+
+### Patch Changes
+
+- [`829ca7376cb52f3269d3cec801505a7cd3d600ee`](https://github.com/capawesome-team/capacitor-plugins/commit/829ca7376cb52f3269d3cec801505a7cd3d600ee) ([#1158](https://github.com/capawesome-team/capacitor-plugins/pull/1158)): fix(ios): resolve `unlock()` even if no device orientation change has been observed yet
+
 ## 8.0.3
 
 ### Patch Changes
