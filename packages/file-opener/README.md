@@ -122,8 +122,8 @@ const open = async () => {
       path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',
     });
   } catch (error) {
-    if (error.code === ErrorCode.PreviewAlreadyOpen) {
-      // On iOS, a file preview is already open or still being presented.
+    if (error.code === ErrorCode.FileAlreadyOpen) {
+      // On iOS, a file is already open or still being opened.
     } else {
       // Handle other errors.
     }

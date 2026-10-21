@@ -37,7 +37,7 @@ import MobileCoreServices
             }
             // Quick Look shows the preview with a delay, so a second call in that time would stack a second preview.
             if strongSelf.isPreviewOpen {
-                completion(CustomError.previewAlreadyOpen)
+                completion(CustomError.fileAlreadyOpen)
                 return
             }
             strongSelf.interactionController?.url = url

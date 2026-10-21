@@ -58,11 +58,11 @@ export enum ErrorCode {
    */
   OpenFailed = 'OPEN_FAILED',
   /**
-   * A file preview is already open or still being presented.
+   * A file is already open or still being opened.
    *
    * Only available on iOS.
    *
    * @since 8.1.0
    */
-  PreviewAlreadyOpen = 'PREVIEW_ALREADY_OPEN',
+  FileAlreadyOpen = 'FILE_ALREADY_OPEN',
 }

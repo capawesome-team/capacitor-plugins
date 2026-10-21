@@ -4,7 +4,7 @@ enum CustomError: Error {
     case pathMissing
     case fileNotFound
     case openFailed
-    case previewAlreadyOpen
+    case fileAlreadyOpen
 
     var code: String? {
         switch self {
@@ -14,8 +14,8 @@ enum CustomError: Error {
             return "FILE_NOT_FOUND"
         case .openFailed:
             return "OPEN_FAILED"
-        case .previewAlreadyOpen:
-            return "PREVIEW_ALREADY_OPEN"
+        case .fileAlreadyOpen:
+            return "FILE_ALREADY_OPEN"
         }
     }
 }
@@ -29,8 +29,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("File does not exist.", comment: "fileNotFound")
         case .openFailed:
             return NSLocalizedString("File cannot be opened.", comment: "openFailed")
-        case .previewAlreadyOpen:
-            return NSLocalizedString("A file preview is already open.", comment: "previewAlreadyOpen")
+        case .fileAlreadyOpen:
+            return NSLocalizedString("A file is already open.", comment: "fileAlreadyOpen")
         }
     }
 }
