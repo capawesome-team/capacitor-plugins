@@ -36,3 +36,33 @@ export interface OpenFileOptions {
    */
   mimeType?: string;
 }
+
+/**
+ * @since 8.1.0
+ */
+export enum ErrorCode {
+  /**
+   * The file does not exist.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.1.0
+   */
+  FileNotFound = 'FILE_NOT_FOUND',
+  /**
+   * The file cannot be opened, for example because no app can handle it.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.1.0
+   */
+  OpenFailed = 'OPEN_FAILED',
+  /**
+   * A file is already open or still being opened.
+   *
+   * Only available on iOS.
+   *
+   * @since 8.1.0
+   */
+  FileAlreadyOpen = 'FILE_ALREADY_OPEN',
+}
