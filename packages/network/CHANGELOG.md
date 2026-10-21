@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`5dd455606a7bd569e528d8234857d05bed6e3c76`](https://github.com/capawesome-team/capacitor-plugins/commit/5dd455606a7bd569e528d8234857d05bed6e3c76) ([#1161](https://github.com/capawesome-team/capacitor-plugins/pull/1161)): fix(android): use the capabilities passed to the network callback so that a lost connection is not missed
+
 ## 0.1.4
 
 ### Patch Changes
