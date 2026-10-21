@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.0
+
+### Minor Changes
+
+- [`a0829b13bcdc5154fb082727edf8c4151edfb450`](https://github.com/capawesome-team/capacitor-plugins/commit/a0829b13bcdc5154fb082727edf8c4151edfb450) ([#1163](https://github.com/capawesome-team/capacitor-plugins/pull/1163)): feat: reject `openFile(...)` with the error codes `FILE_NOT_FOUND`, `OPEN_FAILED` and `FILE_ALREADY_OPEN`
+
 ## 8.0.6
 
 ### Patch Changes
