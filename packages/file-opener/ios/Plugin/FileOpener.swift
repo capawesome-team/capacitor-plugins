@@ -48,7 +48,7 @@ import MobileCoreServices
                 completion(nil)
             } else {
                 strongSelf.previewPresentingViewController = nil
-                completion(CustomError.cannotOpenFile)
+                completion(CustomError.openFailed)
             }
         }
     }

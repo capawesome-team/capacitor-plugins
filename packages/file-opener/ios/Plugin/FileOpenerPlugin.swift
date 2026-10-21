@@ -12,8 +12,6 @@ public class FileOpenerPlugin: CAPPlugin, CAPBridgedPlugin {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "openFile", returnType: CAPPluginReturnPromise)
     ]
-    public let errorPathMissing = "path must be provided."
-    public let errorFileNotExist = "File does not exist."
 
     private var implementation: FileOpener?
 
@@ -23,21 +21,26 @@ public class FileOpenerPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func openFile(_ call: CAPPluginCall) {
         guard let path = call.getString("path") else {
-            call.reject(errorPathMissing)
+            rejectCall(call, CustomError.pathMissing)
             return
         }
         let mimeType = call.getString("mimeType")
         guard let url = implementation?.getFileUrlByPath(path) else {
-            call.reject(errorFileNotExist)
+            rejectCall(call, CustomError.fileNotFound)
             return
         }
 
         implementation?.openFile(url: url, mimeType: mimeType, completion: { error in
             if let error = error {
-                call.reject(error.localizedDescription)
+                self.rejectCall(call, error)
             } else {
                 call.resolve()
             }
         })
+    }
+
+    private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
+        let code = (error as? CustomError)?.code
+        call.reject(error.localizedDescription, code)
     }
 }

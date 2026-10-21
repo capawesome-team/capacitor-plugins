@@ -18,6 +18,7 @@ The Capacitor File Opener plugin is one of the most complete file opening soluti
 - 📱 **Native integration**: Uses system file associations on mobile platforms.
 - 📁 **Flexible paths**: Support for file paths and content URIs on Android.
 - 🔍 **MIME type detection**: Automatic MIME type detection or manual specification.
+- 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - 🤝 **Compatibility**: Works alongside the [File Compressor](https://capawesome.io/docs/sdks/capacitor/file-compressor/), [File Picker](https://capawesome.io/docs/sdks/capacitor/file-picker/) and [Printer](https://capawesome.io/docs/sdks/capacitor/printer/) plugins.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
 
@@ -113,12 +114,20 @@ The following example shows how to open a file with the default application.
 On Android and iOS, pass the path of the file. On Android, both file paths and content URIs are supported. The mime type is determined automatically, but you can also specify it with the `mimeType` option. On Web, pass a `Blob` instance instead:
 
 ```typescript
-import { FileOpener } from '@capawesome-team/capacitor-file-opener';
+import { ErrorCode, FileOpener } from '@capawesome-team/capacitor-file-opener';
 
 const open = async () => {
-  await FileOpener.openFile({
-    path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',
-  });
+  try {
+    await FileOpener.openFile({
+      path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',
+    });
+  } catch (error) {
+    if (error.code === ErrorCode.PreviewAlreadyOpen) {
+      // On iOS, a file preview is already open or still being presented.
+    } else {
+      // Handle other errors.
+    }
+  }
 };
 ```
 
