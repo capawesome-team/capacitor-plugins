@@ -66,7 +66,7 @@ export interface TabBarPlugin {
   /**
    * Hide the tab bar.
    *
-   * The tabs are kept and the bottom safe area inset is reset.
+   * The tabs are kept and the safe area insets of the web view are reset.
    *
    * Only available on iOS.
    *
@@ -110,8 +110,9 @@ export interface TabBarPlugin {
   /**
    * Show the tab bar.
    *
-   * The tab bar is placed at the bottom of the screen and the bottom
-   * safe area inset of the web view is increased by the height of the tab bar.
+   * The system places the tab bar: at the bottom on iPhone, at the top on iPad
+   * and in the vertical bar on iPhone Duo. The safe area insets of the web view
+   * are extended so that your content is not covered.
    *
    * The tabs must be set first using `setTabs(...)` or the `tabs` configuration.
    *
@@ -189,6 +190,8 @@ export interface SetTabsOptions {
    * The tabs to display.
    *
    * Each tab must have a unique ID.
+   * On iPhone, if more than five tabs are provided, the system shows the first four
+   * and groups the remaining tabs in a `More` tab.
    *
    * @since 0.1.0
    */

@@ -13,7 +13,8 @@ Capacitor plugin to display a native [tab bar](https://developer.apple.com/docum
 - 🫧 **Liquid Glass**: Renders the native Liquid Glass tab bar on iOS 26 and the classic tab bar on earlier versions.
 - 🧭 **Tabs**: Use SF Symbols or images from your asset catalog as icons and show badges.
 - 🎨 **Colors**: Customize the colors of the selected and unselected tabs.
-- 📐 **Safe area**: Extends the bottom safe area inset of the web view, so your content is never covered by the tab bar.
+- 📱 **Adaptive layout**: Placed by the system at the bottom on iPhone, at the top on iPad and in the vertical bar on iPhone Duo.
+- 📐 **Safe area**: Extends the safe area insets of the web view, so your content is never covered by the tab bar.
 - 🚀 **Launch configuration**: Show the tab bar from launch without waiting for your web app.
 - 📦 **CocoaPods & SPM**: Supports CocoaPods and Swift Package Manager for iOS.
 - 🔁 **Up-to-date**: Always supports the latest Capacitor version.
@@ -24,7 +25,8 @@ Missing a feature? Just [open an issue](https://github.com/capawesome-team/capac
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.x.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Active support |
+| 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Demo
 
@@ -58,7 +60,7 @@ This plugin is only available on **iOS**. On Android and Web, all methods reject
 
 ### iOS
 
-The tab bar is placed on top of the web view and the bottom safe area inset of the web view is increased by the height of the tab bar. Your web app must meet the following requirements so that its content is not covered by the tab bar:
+The plugin embeds the web view in a native tab bar controller. The system places the tab bar at the bottom on iPhone, at the top on iPad and in the vertical bar on iPhone Duo, and the safe area insets of the web view are extended by the tab bar. Your web app must meet the following requirements so that its content is not covered by the tab bar:
 
 - The `viewport` meta tag of your page must contain `viewport-fit=cover`:
 
@@ -68,7 +70,7 @@ The tab bar is placed on top of the web view and the bottom safe area inset of t
 
 - The [`ios.contentInset`](https://capacitorjs.com/docs/config) configuration option must be set to `never` (default). With `always`, the inset is applied twice.
 
-- Your content must respect the bottom safe area inset, for example using `padding-bottom: env(safe-area-inset-bottom)`.
+- Your content must respect all safe area insets, for example using `padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)`.
 
 If you use [`@capacitor/splash-screen`](https://capacitorjs.com/docs/apis/splash-screen), do not configure the `tabs` in your Capacitor configuration, as the tab bar would be displayed on top of the splash screen. Instead, call `setTabs(...)` and `show()` after `SplashScreen.hide()`.
 
@@ -302,7 +304,7 @@ hide() => Promise<void>
 
 Hide the tab bar.
 
-The tabs are kept and the bottom safe area inset is reset.
+The tabs are kept and the safe area insets of the web view are reset.
 
 Only available on iOS.
 
@@ -386,8 +388,9 @@ show() => Promise<void>
 
 Show the tab bar.
 
-The tab bar is placed at the bottom of the screen and the bottom
-safe area inset of the web view is increased by the height of the tab bar.
+The system places the tab bar: at the bottom on iPhone, at the top on iPad
+and in the vertical bar on iPhone Duo. The safe area insets of the web view
+are extended so that your content is not covered.
 
 The tabs must be set first using `setTabs(...)` or the `tabs` configuration.
 
@@ -457,10 +460,10 @@ Only available on iOS.
 
 #### SetTabsOptions
 
-| Prop                | Type                | Description                                                                                                                                           | Since |
-| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`tabs`**          | <code>Tab[]</code>  | The tabs to display. Each tab must have a unique ID.                                                                                                  | 0.1.0 |
-| **`selectedTabId`** | <code>string</code> | The ID of the tab to select. If not provided, the currently selected tab stays selected if its ID still exists. Otherwise, the first tab is selected. | 0.1.0 |
+| Prop                | Type                | Description                                                                                                                                                                         | Since |
+| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`tabs`**          | <code>Tab[]</code>  | The tabs to display. Each tab must have a unique ID. On iPhone, if more than five tabs are provided, the system shows the first four and groups the remaining tabs in a `More` tab. | 0.1.0 |
+| **`selectedTabId`** | <code>string</code> | The ID of the tab to select. If not provided, the currently selected tab stays selected if its ID still exists. Otherwise, the first tab is selected.                               | 0.1.0 |
 
 
 #### Tab
