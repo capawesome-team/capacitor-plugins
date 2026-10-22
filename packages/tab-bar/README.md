@@ -56,7 +56,7 @@ npm install @capawesome/capacitor-tab-bar
 npx cap sync
 ```
 
-This plugin is only available on **iOS**. On Android and Web, all methods reject as unimplemented.
+This plugin is only available on **iOS 18 and later**. On Android and Web, all methods reject as unimplemented. On earlier iOS versions, all methods reject as unavailable, so your app can keep a lower deployment target.
 
 ### iOS
 
@@ -81,12 +81,12 @@ If you use [`@capacitor/splash-screen`](https://capacitorjs.com/docs/apis/splash
 
 These configuration values are available:
 
-| Prop                  | Type                | Description                                                                                                                                                                                                                                | Since |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`tabs`**            | <code>Tab[]</code>  | The tabs to display at launch. If set, the tab bar is created and visible from launch. Do not set this option if you use `@capacitor/splash-screen`, as the tab bar would be displayed on top of the splash screen. Only available on iOS. | 0.1.0 |
-| **`selectedTabId`**   | <code>string</code> | The ID of the tab to select at launch. If not set, the first tab is selected. Only available on iOS.                                                                                                                                       | 0.1.0 |
-| **`selectedColor`**   | <code>string</code> | The color of the selected tab as a hex color code. If not set, the system default is used. Only available on iOS.                                                                                                                          | 0.1.0 |
-| **`unselectedColor`** | <code>string</code> | The color of the unselected tabs as a hex color code. If not set, the system default is used. Has no effect on iOS 26 and later, as the system determines the color of the unselected tabs on Liquid Glass. Only available on iOS.         | 0.1.0 |
+| Prop                  | Type                | Description                                                                                                                                                                                                                                                                                  | Since |
+| --------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`tabs`**            | <code>Tab[]</code>  | The tabs to display at launch. If set, the tab bar is created and visible from launch. A maximum of five tabs is supported. Do not set this option if you use `@capacitor/splash-screen`, as the tab bar would be displayed on top of the splash screen. Only available on iOS 18 and later. | 0.1.0 |
+| **`selectedTabId`**   | <code>string</code> | The ID of the tab to select at launch. If not set, the first tab is selected. Only available on iOS 18 and later.                                                                                                                                                                            | 0.1.0 |
+| **`selectedColor`**   | <code>string</code> | The color of the selected tab as a hex color code. If not set, the system default is used. Only available on iOS 18 and later.                                                                                                                                                               | 0.1.0 |
+| **`unselectedColor`** | <code>string</code> | The color of the unselected tabs as a hex color code. If not set, the system default is used. Has no effect on iOS 26 and later, as the system determines the color of the unselected tabs on Liquid Glass. Only available on iOS 18 and later.                                              | 0.1.0 |
 
 ### Examples
 
@@ -306,7 +306,7 @@ Hide the tab bar.
 
 The tabs are kept and the safe area insets of the web view are reset.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 **Since:** 0.1.0
 
@@ -323,7 +323,7 @@ Select the tab with the given ID.
 
 This method does not emit the `tabSelected` event.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 | Param         | Type                                                                  |
 | ------------- | --------------------------------------------------------------------- |
@@ -344,7 +344,7 @@ Set the colors of the tabs.
 
 Colors that are not provided are reset to the system default.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -369,7 +369,7 @@ Otherwise, the currently selected tab stays selected if its ID still exists, or 
 
 This method does not change the visibility of the tab bar.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
@@ -394,7 +394,7 @@ are extended so that your content is not covered.
 
 The tabs must be set first using `setTabs(...)` or the `tabs` configuration.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 **Since:** 0.1.0
 
@@ -411,7 +411,7 @@ Called when the user taps a tab.
 
 This event is also emitted if the user taps the tab that is already selected.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 | Param              | Type                                                                              |
 | ------------------ | --------------------------------------------------------------------------------- |
@@ -433,7 +433,7 @@ removeAllListeners() => Promise<void>
 
 Remove all listeners for this plugin.
 
-Only available on iOS.
+Only available on iOS 18 and later.
 
 **Since:** 0.1.0
 
@@ -460,10 +460,10 @@ Only available on iOS.
 
 #### SetTabsOptions
 
-| Prop                | Type                | Description                                                                                                                                                                         | Since |
-| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`tabs`**          | <code>Tab[]</code>  | The tabs to display. Each tab must have a unique ID. On iPhone, if more than five tabs are provided, the system shows the first four and groups the remaining tabs in a `More` tab. | 0.1.0 |
-| **`selectedTabId`** | <code>string</code> | The ID of the tab to select. If not provided, the currently selected tab stays selected if its ID still exists. Otherwise, the first tab is selected.                               | 0.1.0 |
+| Prop                | Type                | Description                                                                                                                                           | Since |
+| ------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`tabs`**          | <code>Tab[]</code>  | The tabs to display. Each tab must have a unique ID. A maximum of five tabs is supported.                                                             | 0.1.0 |
+| **`selectedTabId`** | <code>string</code> | The ID of the tab to select. If not provided, the currently selected tab stays selected if its ID still exists. Otherwise, the first tab is selected. | 0.1.0 |
 
 
 #### Tab

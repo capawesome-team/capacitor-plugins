@@ -12,10 +12,11 @@ declare module '@capacitor/cli' {
        * The tabs to display at launch.
        *
        * If set, the tab bar is created and visible from launch.
+       * A maximum of five tabs is supported.
        * Do not set this option if you use `@capacitor/splash-screen`,
        * as the tab bar would be displayed on top of the splash screen.
        *
-       * Only available on iOS.
+       * Only available on iOS 18 and later.
        *
        * @since 0.1.0
        * @example [{ "id": "home", "title": "Home", "systemImage": "house.fill" }]
@@ -26,7 +27,7 @@ declare module '@capacitor/cli' {
        *
        * If not set, the first tab is selected.
        *
-       * Only available on iOS.
+       * Only available on iOS 18 and later.
        *
        * @since 0.1.0
        * @example "home"
@@ -37,7 +38,7 @@ declare module '@capacitor/cli' {
        *
        * If not set, the system default is used.
        *
-       * Only available on iOS.
+       * Only available on iOS 18 and later.
        *
        * @since 0.1.0
        * @example "#007AFF"
@@ -49,7 +50,7 @@ declare module '@capacitor/cli' {
        * If not set, the system default is used.
        * Has no effect on iOS 26 and later, as the system determines the color of the unselected tabs on Liquid Glass.
        *
-       * Only available on iOS.
+       * Only available on iOS 18 and later.
        *
        * @since 0.1.0
        * @example "#8E8E93"
@@ -68,7 +69,7 @@ export interface TabBarPlugin {
    *
    * The tabs are kept and the safe area insets of the web view are reset.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -78,7 +79,7 @@ export interface TabBarPlugin {
    *
    * This method does not emit the `tabSelected` event.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -88,7 +89,7 @@ export interface TabBarPlugin {
    *
    * Colors that are not provided are reset to the system default.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -102,7 +103,7 @@ export interface TabBarPlugin {
    *
    * This method does not change the visibility of the tab bar.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -116,7 +117,7 @@ export interface TabBarPlugin {
    *
    * The tabs must be set first using `setTabs(...)` or the `tabs` configuration.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -126,7 +127,7 @@ export interface TabBarPlugin {
    *
    * This event is also emitted if the user taps the tab that is already selected.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -137,7 +138,7 @@ export interface TabBarPlugin {
   /**
    * Remove all listeners for this plugin.
    *
-   * Only available on iOS.
+   * Only available on iOS 18 and later.
    *
    * @since 0.1.0
    */
@@ -190,8 +191,7 @@ export interface SetTabsOptions {
    * The tabs to display.
    *
    * Each tab must have a unique ID.
-   * On iPhone, if more than five tabs are provided, the system shows the first four
-   * and groups the remaining tabs in a `More` tab.
+   * A maximum of five tabs is supported.
    *
    * @since 0.1.0
    */

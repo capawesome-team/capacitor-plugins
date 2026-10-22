@@ -118,10 +118,10 @@ import UIKit
     }
 
     private func setTabBarHidden(_ hidden: Bool) {
-        if #available(iOS 18.0, *) {
-            tabBarController.setTabBarHidden(hidden, animated: false)
-        } else {
-            tabBarController.tabBar.isHidden = hidden
+        // The plugin is only loaded on iOS 18 and later, where hiding also removes the space reserved for the bar.
+        guard #available(iOS 18.0, *) else {
+            return
         }
+        tabBarController.setTabBarHidden(hidden, animated: false)
     }
 }
