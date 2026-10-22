@@ -2,31 +2,26 @@ import Foundation
 import Capacitor
 import UIKit
 
-@objc public class TabBar: NSObject, UITabBarDelegate {
+@objc public class TabBar: NSObject, UITabBarControllerDelegate {
     private let plugin: TabBarPlugin
-    private let tabBarView = TabBarView()
+    private let tabBarController = UITabBarController()
     private var tabs: [Tab] = []
-    private var webViewFrameObservation: NSKeyValueObservation?
-    private var windowObserverView: WindowObserverView?
 
     init(plugin: TabBarPlugin, config: TabBarConfig?) {
         self.plugin = plugin
         super.init()
-        setUpTabBarView()
-        observeWebViewFrame()
-        guard let config = config else {
-            return
-        }
-        applyColors(config.colors)
-        if let tabsOptions = config.tabs {
-            applyTabs(tabsOptions)
-            attachTabBarView()
+        tabBarController.delegate = self
+        embedTabBarController()
+        applyTabs(config?.tabs?.tabs ?? [], selectedTabId: config?.tabs?.selectedTabId)
+        setTabBarHidden(tabs.isEmpty)
+        if let colors = config?.colors {
+            applyColors(colors)
         }
     }
 
     @objc public func hide(completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
-            self.detachTabBarView()
+            self.setTabBarHidden(true)
             completion(nil)
         }
     }
@@ -37,7 +32,7 @@ import UIKit
                 completion(CustomError.tabNotFound)
                 return
             }
-            self.tabBarView.selectedItem = self.tabBarView.items?[index]
+            self.tabBarController.selectedIndex = index
             completion(nil)
         }
     }
@@ -51,7 +46,7 @@ import UIKit
 
     @objc public func setTabs(_ options: SetTabsOptions, completion: @escaping (_ error: Error?) -> Void) {
         DispatchQueue.main.async {
-            self.applyTabs(options)
+            self.applyTabs(options.tabs, selectedTabId: options.selectedTabId)
             completion(nil)
         }
     }
@@ -62,102 +57,71 @@ import UIKit
                 completion(CustomError.tabsNotSet)
                 return
             }
-            self.attachTabBarView()
+            self.setTabBarHidden(false)
             completion(nil)
         }
     }
 
-    public func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        plugin.notifyTabSelectedListeners(TabSelectedEvent(id: tabs[item.tag].id))
+    public func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        guard let index = tabBarController.viewControllers?.firstIndex(of: viewController), tabs.indices.contains(index) else {
+            return
+        }
+        plugin.notifyTabSelectedListeners(TabSelectedEvent(id: tabs[index].id))
+    }
+
+    private var selectedTabId: String? {
+        let index = tabBarController.selectedIndex
+        return tabs.indices.contains(index) ? tabs[index].id : nil
     }
 
     private func applyColors(_ options: SetColorsOptions) {
-        tabBarView.tintColor = options.selectedColor
-        tabBarView.unselectedItemTintColor = options.unselectedColor
+        tabBarController.tabBar.tintColor = options.selectedColor
+        tabBarController.tabBar.unselectedItemTintColor = options.unselectedColor
     }
 
-    private func applyTabs(_ options: SetTabsOptions) {
-        let previouslySelectedTabId = tabBarView.selectedItem.map { tabs[$0.tag].id }
-        tabs = options.tabs
-        tabBarView.items = tabs.enumerated().map { index, tab in
-            let item = UITabBarItem(title: tab.title, image: tab.image, tag: index)
-            item.badgeValue = tab.badge
-            return item
-        }
-        let selectedIndex = indexOfTab(withId: options.selectedTabId) ?? indexOfTab(withId: previouslySelectedTabId) ?? 0
-        tabBarView.selectedItem = tabBarView.items?[selectedIndex]
-    }
-
-    private func attachTabBarView() {
-        guard tabBarView.superview == nil, windowObserverView == nil, let webView = plugin.bridge?.webView else {
+    private func applyTabs(_ newTabs: [Tab], selectedTabId: String?) {
+        guard let webView = plugin.bridge?.webView else {
             return
         }
-        // Never add the tab bar to the web view itself, as its safe area would then depend on the inset it causes.
-        guard let host = webView.superview else {
-            attachTabBarViewWhenInWindow(webView)
+        let previouslySelectedTabId = self.selectedTabId
+        tabs = newTabs
+        // The web view always needs a content view controller, even without tabs.
+        let contentViewControllers = tabs.isEmpty ? [TabContentViewController(webView: webView)] : tabs.map { tab in
+            let viewController = TabContentViewController(webView: webView)
+            viewController.tabBarItem = UITabBarItem(title: tab.title, image: tab.image, tag: 0)
+            viewController.tabBarItem.badgeValue = tab.badge
+            return viewController
+        }
+        tabBarController.setViewControllers(contentViewControllers, animated: false)
+        tabBarController.selectedIndex = indexOfTab(withId: selectedTabId) ?? indexOfTab(withId: previouslySelectedTabId) ?? 0
+    }
+
+    /// Replaces the view of the bridge view controller, which is the web view itself, with a container
+    /// that hosts the tab bar controller. The web view becomes the content of the selected tab.
+    /// Plugins are loaded before the view of the bridge view controller is added to a window.
+    private func embedTabBarController() {
+        guard let viewController = plugin.bridge?.viewController, let webView = plugin.bridge?.webView else {
             return
         }
-        host.addSubview(tabBarView)
-        NSLayoutConstraint.activate([
-            tabBarView.leadingAnchor.constraint(equalTo: host.leadingAnchor),
-            tabBarView.trailingAnchor.constraint(equalTo: host.trailingAnchor),
-            tabBarView.bottomAnchor.constraint(equalTo: host.bottomAnchor)
-        ])
-    }
-
-    private func attachTabBarViewWhenInWindow(_ webView: UIView) {
-        let observerView = WindowObserverView()
-        observerView.isHidden = true
-        observerView.onMoveToWindow = { [weak self] in
-            self?.windowObserverView = nil
-            self?.attachTabBarView()
-        }
-        windowObserverView = observerView
-        webView.addSubview(observerView)
-    }
-
-    private func detachTabBarView() {
-        windowObserverView?.removeFromSuperview()
-        windowObserverView = nil
-        tabBarView.removeFromSuperview()
-        plugin.bridge?.viewController?.additionalSafeAreaInsets.bottom = 0
+        let container = UIView()
+        container.backgroundColor = webView.backgroundColor
+        viewController.view = container
+        viewController.addChild(tabBarController)
+        tabBarController.view.frame = container.bounds
+        tabBarController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        container.addSubview(tabBarController.view)
+        tabBarController.didMove(toParent: viewController)
     }
 
     private func indexOfTab(withId id: String?) -> Int? {
         return tabs.firstIndex { $0.id == id }
     }
 
-    private func observeWebViewFrame() {
-        // Resizing the web view (e.g. by a keyboard plugin) does not lay out the tab bar, so the inset must be recomputed.
-        webViewFrameObservation = plugin.bridge?.webView?.observe(\.frame) { [weak self] _, _ in
-            self?.tabBarView.setNeedsLayout()
-        }
-    }
-
-    private func setUpTabBarView() {
-        tabBarView.delegate = self
-        tabBarView.translatesAutoresizingMaskIntoConstraints = false
-        tabBarView.onLayoutSubviews = { [weak self] in
-            self?.updateSafeAreaInsets()
-        }
-        if #available(iOS 26.0, *), let scrollView = plugin.bridge?.webView?.scrollView {
-            let interaction = UIScrollEdgeElementContainerInteraction()
-            interaction.scrollView = scrollView
-            interaction.edge = .bottom
-            tabBarView.addInteraction(interaction)
-        }
-    }
-
-    private func updateSafeAreaInsets() {
-        guard tabBarView.window != nil, let webView = plugin.bridge?.webView, let viewController = plugin.bridge?.viewController else {
+    private func setTabBarHidden(_ hidden: Bool) {
+        // The plugin is only loaded on iOS 18 and later, where hiding also removes the space reserved for the bar.
+        guard #available(iOS 18.0, *) else {
             return
         }
-        let tabBarFrame = tabBarView.convert(tabBarView.bounds, to: webView)
-        let tabBarTopFromBottom = webView.bounds.height - tabBarFrame.minY
-        let naturalBottomInset = webView.safeAreaInsets.bottom - viewController.additionalSafeAreaInsets.bottom
-        let additionalBottomInset = max(0, tabBarTopFromBottom - naturalBottomInset)
-        if abs(additionalBottomInset - viewController.additionalSafeAreaInsets.bottom) > 0.5 {
-            viewController.additionalSafeAreaInsets.bottom = additionalBottomInset
-        }
+        tabBarController.setTabBarHidden(hidden, animated: false)
     }
 }
