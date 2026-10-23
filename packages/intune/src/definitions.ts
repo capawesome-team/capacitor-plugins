@@ -264,6 +264,29 @@ export interface IntunePlugin {
  */
 export interface AcquireTokenOptions {
   /**
+   * The authority URL to use.
+   *
+   * If not provided, the authority of the static MSAL configuration is
+   * used (`authorities` in `auth_config.json` on Android and
+   * `ADALAuthority` in `Info.plist` on iOS).
+   *
+   * @since 0.1.4
+   * @example "https://login.microsoftonline.com/b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
+   */
+  authority?: string;
+  /**
+   * The client ID of the Microsoft Entra app registration to use.
+   *
+   * If not provided, the client ID of the static MSAL configuration is
+   * used (`client_id` in `auth_config.json` on Android and `ADALClientId`
+   * in `Info.plist` on iOS). Pass this together with `authority` to switch
+   * between tenants at runtime.
+   *
+   * @since 0.1.4
+   * @example "6c7e8f2a-1b3d-4e5f-9a0b-c1d2e3f4a5b6"
+   */
+  clientId?: string;
+  /**
    * Whether or not to force the account selection prompt to be shown, even
    * if a user is already signed in.
    *
@@ -340,6 +363,29 @@ export interface AcquireTokenSilentOptions {
    * @example "870ba1ef-6d94-4288-9f8e-000c04a92da2"
    */
   accountId: string;
+  /**
+   * The authority URL to use.
+   *
+   * If not provided, the authority of the static MSAL configuration is
+   * used (`authorities` in `auth_config.json` on Android and
+   * `ADALAuthority` in `Info.plist` on iOS).
+   *
+   * @since 0.1.4
+   * @example "https://login.microsoftonline.com/b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
+   */
+  authority?: string;
+  /**
+   * The client ID of the Microsoft Entra app registration to use.
+   *
+   * If not provided, the client ID of the static MSAL configuration is
+   * used (`client_id` in `auth_config.json` on Android and `ADALClientId`
+   * in `Info.plist` on iOS). Pass this together with `authority` to switch
+   * between tenants at runtime.
+   *
+   * @since 0.1.4
+   * @example "6c7e8f2a-1b3d-4e5f-9a0b-c1d2e3f4a5b6"
+   */
+  clientId?: string;
   /**
    * Whether or not to ignore any cached token and force a token refresh.
    *
@@ -648,6 +694,30 @@ export interface RegisterAndEnrollAccountOptions {
    * @example "870ba1ef-6d94-4288-9f8e-000c04a92da2"
    */
   accountId: string;
+  /**
+   * The authority URL to use.
+   *
+   * Pass the same value that was used in `acquireToken(...)`. If not
+   * provided, the authority of the static MSAL configuration is used
+   * (`authorities` in `auth_config.json` on Android and `ADALAuthority`
+   * in `Info.plist` on iOS).
+   *
+   * @since 0.1.4
+   * @example "https://login.microsoftonline.com/b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
+   */
+  authority?: string;
+  /**
+   * The client ID of the Microsoft Entra app registration to use.
+   *
+   * Pass the same value that was used in `acquireToken(...)`. If not
+   * provided, the client ID of the static MSAL configuration is used
+   * (`client_id` in `auth_config.json` on Android and `ADALClientId` in
+   * `Info.plist` on iOS).
+   *
+   * @since 0.1.4
+   * @example "6c7e8f2a-1b3d-4e5f-9a0b-c1d2e3f4a5b6"
+   */
+  clientId?: string;
 }
 
 /**

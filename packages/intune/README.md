@@ -1021,20 +1021,24 @@ Remove all listeners for this plugin.
 
 #### AcquireTokenOptions
 
-| Prop              | Type                  | Description                                                                                            | Default            | Since |
-| ----------------- | --------------------- | ------------------------------------------------------------------------------------------------------ | ------------------ | ----- |
-| **`forcePrompt`** | <code>boolean</code>  | Whether or not to force the account selection prompt to be shown, even if a user is already signed in. | <code>false</code> | 0.1.0 |
-| **`loginHint`**   | <code>string</code>   | The username to pre-fill in the sign-in UI.                                                            |                    | 0.1.0 |
-| **`scopes`**      | <code>string[]</code> | The scopes to request the access token for.                                                            |                    | 0.1.0 |
+| Prop              | Type                  | Description                                                                                                                                                                                                                                                                                               | Default            | Since |
+| ----------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`authority`**   | <code>string</code>   | The authority URL to use. If not provided, the authority of the static MSAL configuration is used (`authorities` in `auth_config.json` on Android and `ADALAuthority` in `Info.plist` on iOS).                                                                                                            |                    | 0.1.4 |
+| **`clientId`**    | <code>string</code>   | The client ID of the Microsoft Entra app registration to use. If not provided, the client ID of the static MSAL configuration is used (`client_id` in `auth_config.json` on Android and `ADALClientId` in `Info.plist` on iOS). Pass this together with `authority` to switch between tenants at runtime. |                    | 0.1.4 |
+| **`forcePrompt`** | <code>boolean</code>  | Whether or not to force the account selection prompt to be shown, even if a user is already signed in.                                                                                                                                                                                                    | <code>false</code> | 0.1.0 |
+| **`loginHint`**   | <code>string</code>   | The username to pre-fill in the sign-in UI.                                                                                                                                                                                                                                                               |                    | 0.1.0 |
+| **`scopes`**      | <code>string[]</code> | The scopes to request the access token for.                                                                                                                                                                                                                                                               |                    | 0.1.0 |
 
 
 #### AcquireTokenSilentOptions
 
-| Prop               | Type                  | Description                                                                  | Default            | Since |
-| ------------------ | --------------------- | ---------------------------------------------------------------------------- | ------------------ | ----- |
-| **`accountId`**    | <code>string</code>   | The Microsoft Entra object ID (OID) of the account to acquire the token for. |                    | 0.1.0 |
-| **`forceRefresh`** | <code>boolean</code>  | Whether or not to ignore any cached token and force a token refresh.         | <code>false</code> | 0.1.0 |
-| **`scopes`**       | <code>string[]</code> | The scopes to request the access token for.                                  |                    | 0.1.0 |
+| Prop               | Type                  | Description                                                                                                                                                                                                                                                                                               | Default            | Since |
+| ------------------ | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`accountId`**    | <code>string</code>   | The Microsoft Entra object ID (OID) of the account to acquire the token for.                                                                                                                                                                                                                              |                    | 0.1.0 |
+| **`authority`**    | <code>string</code>   | The authority URL to use. If not provided, the authority of the static MSAL configuration is used (`authorities` in `auth_config.json` on Android and `ADALAuthority` in `Info.plist` on iOS).                                                                                                            |                    | 0.1.4 |
+| **`clientId`**     | <code>string</code>   | The client ID of the Microsoft Entra app registration to use. If not provided, the client ID of the static MSAL configuration is used (`client_id` in `auth_config.json` on Android and `ADALClientId` in `Info.plist` on iOS). Pass this together with `authority` to switch between tenants at runtime. |                    | 0.1.4 |
+| **`forceRefresh`** | <code>boolean</code>  | Whether or not to ignore any cached token and force a token refresh.                                                                                                                                                                                                                                      | <code>false</code> | 0.1.0 |
+| **`scopes`**       | <code>string[]</code> | The scopes to request the access token for.                                                                                                                                                                                                                                                               |                    | 0.1.0 |
 
 
 #### DecryptFileOptions
@@ -1134,9 +1138,11 @@ Remove all listeners for this plugin.
 
 #### RegisterAndEnrollAccountOptions
 
-| Prop            | Type                | Description                                                                                                    | Since |
-| --------------- | ------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
-| **`accountId`** | <code>string</code> | The Microsoft Entra object ID (OID) of the account to register and enroll, as returned by `acquireToken(...)`. | 0.1.0 |
+| Prop            | Type                | Description                                                                                                                                                                                                                                                                               | Since |
+| --------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`accountId`** | <code>string</code> | The Microsoft Entra object ID (OID) of the account to register and enroll, as returned by `acquireToken(...)`.                                                                                                                                                                            | 0.1.0 |
+| **`authority`** | <code>string</code> | The authority URL to use. Pass the same value that was used in `acquireToken(...)`. If not provided, the authority of the static MSAL configuration is used (`authorities` in `auth_config.json` on Android and `ADALAuthority` in `Info.plist` on iOS).                                  | 0.1.4 |
+| **`clientId`**  | <code>string</code> | The client ID of the Microsoft Entra app registration to use. Pass the same value that was used in `acquireToken(...)`. If not provided, the client ID of the static MSAL configuration is used (`client_id` in `auth_config.json` on Android and `ADALClientId` in `Info.plist` on iOS). | 0.1.4 |
 
 
 #### RemediateComplianceResult

@@ -13,7 +13,6 @@ import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAccount;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.IMultipleAccountPublicClientApplication;
-import com.microsoft.identity.client.IPublicClientApplication;
 import com.microsoft.identity.client.Prompt;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.SilentAuthenticationCallback;
@@ -41,6 +40,7 @@ import com.microsoft.intune.mam.policy.notification.MAMNotificationType;
 import com.microsoft.intune.mam.policy.notification.MAMUserNotification;
 import io.capawesome.capacitorjs.plugins.intune.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.intune.classes.CustomExceptions;
+import io.capawesome.capacitorjs.plugins.intune.classes.PublicClientAccount;
 import io.capawesome.capacitorjs.plugins.intune.classes.events.AppConfigChangeEvent;
 import io.capawesome.capacitorjs.plugins.intune.classes.events.EnrollmentChangeEvent;
 import io.capawesome.capacitorjs.plugins.intune.classes.events.PolicyChangeEvent;
@@ -64,21 +64,27 @@ import io.capawesome.capacitorjs.plugins.intune.classes.results.IsFileEncryptedR
 import io.capawesome.capacitorjs.plugins.intune.classes.results.RemediateComplianceResult;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.intune.interfaces.NonEmptyResultCallback;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class Intune {
 
@@ -94,8 +100,11 @@ public class Intune {
 
     private static final String PENDING_WIPE_ACCOUNT_IDS_KEY = "pendingWipeAccountIds";
 
-    @Nullable
-    private static IMultipleAccountPublicClientApplication publicClientApplication;
+    private static final String PUBLIC_CLIENT_APPLICATION_KEYS_KEY = "publicClientApplicationKeys";
+
+    private static final String PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR = "|";
+
+    private static final Map<String, IMultipleAccountPublicClientApplication> publicClientApplications = new HashMap<>();
 
     private static final String SHARED_PREFERENCES_NAME = "capawesome_capacitor_intune_events";
 
@@ -121,12 +130,11 @@ public class Intune {
         applicationContext = context.getApplicationContext();
         registerAuthenticationCallback();
         registerNotificationReceivers();
-        createPublicClientApplication(context.getApplicationContext());
     }
 
     public void acquireToken(@NonNull AcquireTokenOptions options, @NonNull NonEmptyResultCallback<AcquireTokenResult> callback)
         throws Exception {
-        IMultipleAccountPublicClientApplication application = getPublicClientApplication();
+        IMultipleAccountPublicClientApplication application = getPublicClientApplication(options.getClientId(), options.getAuthority());
         Activity activity = plugin.getActivity();
         AcquireTokenParameters.Builder builder = new AcquireTokenParameters.Builder()
             .startAuthorizationFromActivity(activity)
@@ -160,7 +168,7 @@ public class Intune {
 
     public void acquireTokenSilent(@NonNull AcquireTokenSilentOptions options, @NonNull NonEmptyResultCallback<AcquireTokenResult> callback)
         throws Exception {
-        IMultipleAccountPublicClientApplication application = getPublicClientApplication();
+        IMultipleAccountPublicClientApplication application = getPublicClientApplication(options.getClientId(), options.getAuthority());
         application.getAccount(
             options.getAccountId(),
             new IMultipleAccountPublicClientApplication.GetAccountCallback() {
@@ -276,7 +284,7 @@ public class Intune {
 
     public void registerAndEnrollAccount(@NonNull RegisterAndEnrollAccountOptions options, @NonNull EmptyCallback callback)
         throws Exception {
-        IMultipleAccountPublicClientApplication application = getPublicClientApplication();
+        IMultipleAccountPublicClientApplication application = getPublicClientApplication(options.getClientId(), options.getAuthority());
         application.getAccount(
             options.getAccountId(),
             new IMultipleAccountPublicClientApplication.GetAccountCallback() {
@@ -347,26 +355,20 @@ public class Intune {
                 return;
             }
         }
-        IMultipleAccountPublicClientApplication application = getPublicClientApplication();
-        application.getAccount(
-            options.getAccountId(),
-            new IMultipleAccountPublicClientApplication.GetAccountCallback() {
-                @Override
-                public void onTaskCompleted(@Nullable IAccount account) {
-                    if (account == null) {
-                        callback.error(CustomExceptions.NOT_ENROLLED);
-                        return;
-                    }
-                    enrollmentManager.unregisterAccountForMAM(account.getUsername(), account.getId());
-                    callback.success();
-                }
-
-                @Override
-                public void onError(@NonNull MsalException exception) {
-                    callback.error(new CustomException("UNENROLL_FAILED", getErrorMessage(exception)));
-                }
-            }
-        );
+        PublicClientAccount publicClientAccount;
+        try {
+            publicClientAccount = findPublicClientAccount(options.getAccountId());
+        } catch (Exception exception) {
+            callback.error(new CustomException("UNENROLL_FAILED", getErrorMessage(exception)));
+            return;
+        }
+        if (publicClientAccount == null) {
+            callback.error(CustomExceptions.NOT_ENROLLED);
+            return;
+        }
+        IAccount account = publicClientAccount.getAccount();
+        enrollmentManager.unregisterAccountForMAM(account.getUsername(), account.getId());
+        callback.success();
     }
 
     private void addRemediateComplianceCallback(
@@ -378,37 +380,73 @@ public class Intune {
         }
     }
 
+    private static void addToPersistedStringSet(@NonNull String key, @NonNull String value) {
+        SharedPreferences preferences = getSharedPreferences();
+        if (preferences == null) {
+            return;
+        }
+        Set<String> values = new HashSet<>();
+        Set<String> persistedValues = preferences.getStringSet(key, null);
+        if (persistedValues != null) {
+            values.addAll(persistedValues);
+        }
+        values.add(value);
+        preferences.edit().putStringSet(key, values).apply();
+    }
+
     private static void copyFile(@NonNull File source, @NonNull File destination) throws IOException {
         try (InputStream inputStream = new FileInputStream(source); OutputStream outputStream = new FileOutputStream(destination)) {
-            byte[] buffer = new byte[8192];
-            int length;
-            while ((length = inputStream.read(buffer)) > 0) {
-                outputStream.write(buffer, 0, length);
-            }
+            copyStream(inputStream, outputStream);
         }
     }
 
-    private static void createPublicClientApplication(@NonNull Context context) {
+    private static void copyStream(@NonNull InputStream inputStream, @NonNull OutputStream outputStream) throws IOException {
+        byte[] buffer = new byte[8192];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+    }
+
+    /**
+     * Creates the MSAL application from `res/raw/auth_config.json`. If a client ID or authority is given,
+     * it replaces the `client_id` or `authorities` entry of that file while all other settings are kept.
+     */
+    @NonNull
+    private static IMultipleAccountPublicClientApplication createPublicClientApplication(
+        @NonNull Context context,
+        @Nullable String clientId,
+        @Nullable String authority
+    ) throws Exception {
         int resourceId = context.getResources().getIdentifier("auth_config", "raw", context.getPackageName());
         if (resourceId == 0) {
-            Logger.warn(IntunePlugin.TAG, "The res/raw/auth_config.json resource was not found. MSAL is not initialized.");
-            return;
+            throw CustomExceptions.MSAL_CONFIGURATION_MISSING;
         }
-        PublicClientApplication.createMultipleAccountPublicClientApplication(
-            context,
-            resourceId,
-            new IPublicClientApplication.IMultipleAccountApplicationCreatedListener() {
-                @Override
-                public void onCreated(IMultipleAccountPublicClientApplication application) {
-                    publicClientApplication = application;
-                }
-
-                @Override
-                public void onError(MsalException exception) {
-                    Logger.error(IntunePlugin.TAG, "MSAL could not be initialized.", exception);
-                }
+        if (clientId == null && authority == null) {
+            return PublicClientApplication.createMultipleAccountPublicClientApplication(context, resourceId);
+        }
+        JSONObject configuration = new JSONObject(readRawResource(context, resourceId));
+        if (clientId != null) {
+            configuration.put("client_id", clientId);
+        }
+        if (authority != null) {
+            JSONObject authorityConfiguration = new JSONObject().put("type", "AAD").put("authority_url", authority);
+            configuration.put("authorities", new JSONArray().put(authorityConfiguration));
+        }
+        File configurationFile = File.createTempFile("auth_config", ".json", context.getCacheDir());
+        try {
+            try (OutputStream outputStream = new FileOutputStream(configurationFile)) {
+                outputStream.write(configuration.toString().getBytes(StandardCharsets.UTF_8));
             }
-        );
+            return PublicClientApplication.createMultipleAccountPublicClientApplication(context, configurationFile);
+        } finally {
+            configurationFile.delete();
+        }
+    }
+
+    @NonNull
+    private static String createPublicClientApplicationKey(@Nullable String clientId, @Nullable String authority) {
+        return (clientId == null ? "" : clientId) + PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR + (authority == null ? "" : authority);
     }
 
     @NonNull
@@ -479,6 +517,26 @@ public class Intune {
         }
     }
 
+    /**
+     * Searches the account in every MSAL application that has been used so far, because the token cache of MSAL is
+     * kept per client ID.
+     */
+    @Nullable
+    private static PublicClientAccount findPublicClientAccount(@NonNull String accountId) throws Exception {
+        for (String key : getPublicClientApplicationKeys()) {
+            String[] keyParts = key.split(Pattern.quote(PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR), -1);
+            IMultipleAccountPublicClientApplication application = getPublicClientApplication(
+                keyParts[0].isEmpty() ? null : keyParts[0],
+                keyParts[1].isEmpty() ? null : keyParts[1]
+            );
+            IAccount account = application.getAccount(accountId);
+            if (account != null) {
+                return new PublicClientAccount(application, account);
+            }
+        }
+        return null;
+    }
+
     @NonNull
     private static String getErrorMessage(@NonNull Exception exception) {
         String message = exception.getMessage();
@@ -486,12 +544,36 @@ public class Intune {
     }
 
     @NonNull
-    private static IMultipleAccountPublicClientApplication getPublicClientApplication() throws Exception {
-        IMultipleAccountPublicClientApplication application = publicClientApplication;
-        if (application == null) {
+    private static synchronized IMultipleAccountPublicClientApplication getPublicClientApplication(
+        @Nullable String clientId,
+        @Nullable String authority
+    ) throws Exception {
+        Context context = applicationContext;
+        if (context == null) {
             throw CustomExceptions.MSAL_NOT_INITIALIZED;
         }
+        String key = createPublicClientApplicationKey(clientId, authority);
+        IMultipleAccountPublicClientApplication application = publicClientApplications.get(key);
+        if (application == null) {
+            application = createPublicClientApplication(context, clientId, authority);
+            publicClientApplications.put(key, application);
+            addToPersistedStringSet(PUBLIC_CLIENT_APPLICATION_KEYS_KEY, key);
+        }
         return application;
+    }
+
+    @NonNull
+    private static Set<String> getPublicClientApplicationKeys() {
+        Set<String> keys = new LinkedHashSet<>();
+        keys.add(createPublicClientApplicationKey(null, null));
+        SharedPreferences preferences = getSharedPreferences();
+        if (preferences != null) {
+            Set<String> persistedKeys = preferences.getStringSet(PUBLIC_CLIENT_APPLICATION_KEYS_KEY, null);
+            if (persistedKeys != null) {
+                keys.addAll(persistedKeys);
+            }
+        }
+        return keys;
     }
 
     @Nullable
@@ -589,17 +671,16 @@ public class Intune {
     }
 
     private static void persistPendingWipeAccountId(@Nullable String accountId) {
-        SharedPreferences preferences = getSharedPreferences();
-        if (preferences == null) {
-            return;
+        addToPersistedStringSet(PENDING_WIPE_ACCOUNT_IDS_KEY, accountId == null ? "" : accountId);
+    }
+
+    @NonNull
+    private static String readRawResource(@NonNull Context context, int resourceId) throws IOException {
+        try (InputStream inputStream = context.getResources().openRawResource(resourceId)) {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            copyStream(inputStream, outputStream);
+            return outputStream.toString(StandardCharsets.UTF_8.name());
         }
-        Set<String> accountIds = new HashSet<>();
-        Set<String> persistedAccountIds = preferences.getStringSet(PENDING_WIPE_ACCOUNT_IDS_KEY, null);
-        if (persistedAccountIds != null) {
-            accountIds.addAll(persistedAccountIds);
-        }
-        accountIds.add(accountId == null ? "" : accountId);
-        preferences.edit().putStringSet(PENDING_WIPE_ACCOUNT_IDS_KEY, accountIds).apply();
     }
 
     private static void registerAuthenticationCallback() {
@@ -619,17 +700,16 @@ public class Intune {
                     @NonNull String resourceId
                 ) {
                     try {
-                        IMultipleAccountPublicClientApplication application = getPublicClientApplication();
-                        IAccount account = application.getAccount(aadId);
-                        if (account == null) {
+                        PublicClientAccount publicClientAccount = findPublicClientAccount(aadId);
+                        if (publicClientAccount == null) {
                             return null;
                         }
                         AcquireTokenSilentParameters parameters = new AcquireTokenSilentParameters.Builder()
-                            .forAccount(account)
+                            .forAccount(publicClientAccount.getAccount())
                             .fromAuthority(authority)
                             .withScopes(Collections.singletonList(resourceId + "/.default"))
                             .build();
-                        IAuthenticationResult result = application.acquireTokenSilent(parameters);
+                        IAuthenticationResult result = publicClientAccount.getApplication().acquireTokenSilent(parameters);
                         return result.getAccessToken();
                     } catch (Exception exception) {
                         Logger.error(IntunePlugin.TAG, "Failed to acquire a token for the MAM service.", exception);

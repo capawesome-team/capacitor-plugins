@@ -8,7 +8,8 @@ import MSAL
     private static let pendingWipeAccountIdsKey = "capawesome_capacitor_intune_pending_wipe_account_ids"
     private static let pendingWipeNilAccountId = ""
 
-    private var msalApplication: MSALPublicClientApplication?
+    private var msalApplications: [String: MSALPublicClientApplication] = [:]
+    private let msalApplicationsLock = NSLock()
     private let plugin: IntunePlugin
     private var remediateComplianceCompletions: [String: [(_ result: RemediateComplianceResult?, _ error: Error?) -> Void]] = [:]
     private let remediateComplianceCompletionsLock = NSLock()
@@ -47,7 +48,7 @@ import MSAL
     @objc public func acquireToken(_ options: AcquireTokenOptions, completion: @escaping (_ result: AcquireTokenResult?, _ error: Error?) -> Void) {
         DispatchQueue.main.async {
             do {
-                let application = try self.getMsalApplication()
+                let application = try self.getMsalApplication(clientId: options.clientId, authority: options.authority)
                 guard let viewController = self.plugin.bridge?.viewController else {
                     throw CustomError.tokenAcquisitionFailed(message: "The view controller is not available.")
                 }
@@ -78,7 +79,7 @@ import MSAL
 
     @objc public func acquireTokenSilent(_ options: AcquireTokenSilentOptions, completion: @escaping (_ result: AcquireTokenResult?, _ error: Error?) -> Void) {
         do {
-            let application = try getMsalApplication()
+            let application = try getMsalApplication(clientId: options.clientId, authority: options.authority)
             guard let account = findAccount(in: application, accountId: options.accountId) else {
                 completion(nil, CustomError.notEnrolled)
                 return
@@ -137,7 +138,10 @@ import MSAL
     @objc public func getEnrolledAccount(completion: @escaping (_ result: GetEnrolledAccountResult?, _ error: Error?) -> Void) {
         let accountId = IntuneMAMEnrollmentManager.instance().enrolledAccountId()
         var username: String?
-        if let accountId = accountId, let application = try? getMsalApplication() {
+        if let accountId = accountId, let application = try? getMsalApplication(
+            clientId: IntuneMAMSettings.aadClientIdOverride,
+            authority: IntuneMAMSettings.aadAuthorityUriOverride
+        ) {
             username = findAccount(in: application, accountId: accountId)?.username
         }
         completion(GetEnrolledAccountResult(accountId: accountId, username: username), nil)
@@ -186,6 +190,8 @@ import MSAL
     }
 
     @objc public func registerAndEnrollAccount(_ options: RegisterAndEnrollAccountOptions, completion: @escaping (_ error: Error?) -> Void) {
+        IntuneMAMSettings.aadClientIdOverride = options.clientId
+        IntuneMAMSettings.aadAuthorityUriOverride = options.authority
         IntuneMAMEnrollmentManager.instance().registerAndEnrollAccountId(options.accountId)
         completion(nil)
     }
@@ -287,26 +293,30 @@ import MSAL
         return accounts.first { $0.homeAccountId?.objectId?.caseInsensitiveCompare(accountId) == .orderedSame }
     }
 
-    private func getMsalApplication() throws -> MSALPublicClientApplication {
-        if let application = msalApplication {
-            return application
-        }
+    private func getMsalApplication(clientId clientIdOverride: String?, authority authorityOverride: String?) throws -> MSALPublicClientApplication {
         let settings = Bundle.main.object(forInfoDictionaryKey: "IntuneMAMSettings") as? [String: Any]
-        guard let clientId = settings?["ADALClientId"] as? String, !clientId.isEmpty else {
+        guard let clientId = nonEmpty(clientIdOverride) ?? nonEmpty(settings?["ADALClientId"] as? String) else {
             throw CustomError.clientIdMissing
+        }
+        let authorityUri = nonEmpty(authorityOverride) ?? nonEmpty(settings?["ADALAuthority"] as? String)
+        let key = "\(clientId)|\(authorityUri ?? "")"
+        msalApplicationsLock.lock()
+        defer { msalApplicationsLock.unlock() }
+        if let application = msalApplications[key] {
+            return application
         }
         var redirectUri = settings?["ADALRedirectUri"] as? String
         if redirectUri == nil, let scheme = settings?["ADALRedirectScheme"] as? String, let bundleId = Bundle.main.bundleIdentifier {
             redirectUri = "\(scheme)://\(bundleId)"
         }
         var authority: MSALAuthority?
-        if let authorityUri = settings?["ADALAuthority"] as? String, let authorityUrl = URL(string: authorityUri) {
+        if let authorityUri = authorityUri, let authorityUrl = URL(string: authorityUri) {
             authority = try MSALAADAuthority(url: authorityUrl)
         }
         let configuration = MSALPublicClientApplicationConfig(clientId: clientId, redirectUri: redirectUri, authority: authority)
         configuration.clientApplicationCapabilities = ["protapp"]
         let application = try MSALPublicClientApplication(configuration: configuration)
-        msalApplication = application
+        msalApplications[key] = application
         return application
     }
 
@@ -361,6 +371,13 @@ import MSAL
         @unknown default:
             return "unknown"
         }
+    }
+
+    private func nonEmpty(_ value: String?) -> String? {
+        guard let value = value, !value.isEmpty else {
+            return nil
+        }
+        return value
     }
 
     private func persistPendingWipeAccountId(_ accountId: String?) {

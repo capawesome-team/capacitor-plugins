@@ -51,7 +51,7 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("accountId must be provided.", comment: "accountIdMissing")
         case .clientIdMissing:
             return NSLocalizedString(
-                "ADALClientId must be provided in the IntuneMAMSettings dictionary of the Info.plist file.",
+                "clientId must be provided or ADALClientId must be set in the IntuneMAMSettings dictionary of the Info.plist file.",
                 comment: "clientIdMissing"
             )
         case .enrollmentFailed(let message):
