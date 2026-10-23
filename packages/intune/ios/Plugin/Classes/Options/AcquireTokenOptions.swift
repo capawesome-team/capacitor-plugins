@@ -2,11 +2,15 @@ import Foundation
 import Capacitor
 
 @objc public class AcquireTokenOptions: NSObject {
+    let authority: String?
+    let clientId: String?
     let forcePrompt: Bool
     let loginHint: String?
     let scopes: [String]
 
     init(_ call: CAPPluginCall) throws {
+        self.authority = call.getString("authority")
+        self.clientId = call.getString("clientId")
         self.forcePrompt = call.getBool("forcePrompt") ?? false
         self.loginHint = call.getString("loginHint")
         self.scopes = try AcquireTokenOptions.getScopesFromCall(call)
