@@ -1,7 +1,7 @@
 import Foundation
-import YoutubePlayerView
 
 @objc public class PlayerInstance: NSObject {
+    let host: String
     let view: YoutubePlayerView
 
     var lastState: YoutubePlayerState = .unknown
@@ -12,8 +12,9 @@ import YoutubePlayerView
     var ready = false
     var volume = 100
 
-    init(view: YoutubePlayerView, playerVars: [String: Any], muted: Bool) {
+    init(view: YoutubePlayerView, host: String, playerVars: [String: Any], muted: Bool) {
         self.view = view
+        self.host = host
         self.playerVars = playerVars
         self.muted = muted
     }

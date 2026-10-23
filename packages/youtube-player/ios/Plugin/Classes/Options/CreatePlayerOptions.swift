@@ -8,6 +8,7 @@ import Foundation
     let end: Int?
     let frame: PlayerFrame
     let fullscreen: Bool
+    let host: String
     let id: String
     let ivLoadPolicy: Bool
     let mute: Bool
@@ -23,12 +24,21 @@ import Foundation
         self.end = CreatePlayerOptions.getSecondsFromObject(playerOptions, "end")
         self.frame = try PlayerFrame.getFrameFromCall(call)
         self.fullscreen = playerOptions?["fullscreen"] as? Bool ?? false
+        self.host = try CreatePlayerOptions.getHostFromObject(playerOptions)
         self.id = call.getString("id") ?? UUID().uuidString
         self.ivLoadPolicy = playerOptions?["ivLoadPolicy"] as? Bool ?? false
         self.mute = playerOptions?["mute"] as? Bool ?? false
         self.rel = playerOptions?["rel"] as? Bool ?? false
         self.start = CreatePlayerOptions.getSecondsFromObject(playerOptions, "start")
         self.videoId = call.getString("videoId")
+    }
+
+    private static func getHostFromObject(_ object: JSObject?) throws -> String {
+        let host = object?["host"] as? String ?? YoutubePlayerHelper.defaultHost
+        guard YoutubePlayerHelper.allowedHosts.contains(host) else {
+            throw CustomError.hostInvalid
+        }
+        return host
     }
 
     private static func getSecondsFromObject(_ object: JSObject?, _ key: String) -> Int? {

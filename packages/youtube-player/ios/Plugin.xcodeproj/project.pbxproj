@@ -41,6 +41,10 @@
 		CF0000000000000000000032 /* GetDurationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000031 /* GetDurationResult.swift */; };
 		CF0000000000000000000034 /* CustomError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000033 /* CustomError.swift */; };
 		CF0000000000000000000036 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000035 /* Result.swift */; };
+		CF0000000000000000000040 /* YoutubePlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000041 /* YoutubePlayerView.swift */; };
+		CF0000000000000000000042 /* YoutubePlayerError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000043 /* YoutubePlayerError.swift */; };
+		CF0000000000000000000044 /* YoutubePlayerState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000045 /* YoutubePlayerState.swift */; };
+		CF0000000000000000000046 /* YoutubePlayerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF0000000000000000000047 /* YoutubePlayerViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +99,10 @@
 		CF0000000000000000000035 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF0000000000000000000041 /* YoutubePlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlayerView.swift; sourceTree = "<group>"; };
+		CF0000000000000000000043 /* YoutubePlayerError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlayerError.swift; sourceTree = "<group>"; };
+		CF0000000000000000000045 /* YoutubePlayerState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlayerState.swift; sourceTree = "<group>"; };
+		CF0000000000000000000047 /* YoutubePlayerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YoutubePlayerViewDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,6 +199,7 @@
 				CG000000000000000000003A /* Results */,
 				CF0000000000000000000003 /* PlayerFrame.swift */,
 				CF0000000000000000000005 /* PlayerInstance.swift */,
+				CF0000000000000000000041 /* YoutubePlayerView.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -242,6 +251,8 @@
 			isa = PBXGroup;
 			children = (
 				CF0000000000000000000033 /* CustomError.swift */,
+				CF0000000000000000000043 /* YoutubePlayerError.swift */,
+				CF0000000000000000000045 /* YoutubePlayerState.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -250,6 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				CF0000000000000000000035 /* Result.swift */,
+				CF0000000000000000000047 /* YoutubePlayerViewDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -392,13 +404,11 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PluginTests/Pods-PluginTests-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Capacitor/Capacitor.framework",
 				"${BUILT_PRODUCTS_DIR}/CapacitorCordova/Cordova.framework",
-				"${BUILT_PRODUCTS_DIR}/YoutubePlayerView/YoutubePlayerView.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Capacitor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cordova.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YoutubePlayerView.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -459,6 +469,10 @@
 				CF0000000000000000000032 /* GetDurationResult.swift in Sources */,
 				CF0000000000000000000034 /* CustomError.swift in Sources */,
 				CF0000000000000000000036 /* Result.swift in Sources */,
+				CF0000000000000000000046 /* YoutubePlayerViewDelegate.swift in Sources */,
+				CF0000000000000000000044 /* YoutubePlayerState.swift in Sources */,
+				CF0000000000000000000042 /* YoutubePlayerError.swift in Sources */,
+				CF0000000000000000000040 /* YoutubePlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
