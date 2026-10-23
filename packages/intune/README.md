@@ -1156,13 +1156,14 @@ Remove all listeners for this plugin.
 
 #### RemediateComplianceOptions
 
-| Prop            | Type                 | Description                                                                                                                                                                                     | Default            | Since |
-| --------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`accountId`** | <code>string</code>  | The Microsoft Entra object ID (OID) of the account to remediate.                                                                                                                                |                    | 0.1.2 |
-| **`authority`** | <code>string</code>  | The authority URL of the account. Only available on Android. Required on Android.                                                                                                               |                    | 0.1.2 |
-| **`silent`**    | <code>boolean</code> | Whether or not to remediate without showing any UI of the Intune App SDK. On iOS, the status `interactionRequired` is returned if the remediation cannot be completed without user interaction. | <code>false</code> | 0.1.2 |
-| **`tenantId`**  | <code>string</code>  | The Microsoft Entra tenant ID of the account. Only available on Android. Required on Android.                                                                                                   |                    | 0.1.2 |
-| **`username`**  | <code>string</code>  | The username (usually the UPN) of the account. Only available on Android. Required on Android.                                                                                                  |                    | 0.1.2 |
+| Prop            | Type                 | Description                                                                                                                                                                                                          | Default            | Since |
+| --------------- | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`accountId`** | <code>string</code>  | The Microsoft Entra object ID (OID) of the account to remediate.                                                                                                                                                     |                    | 0.1.2 |
+| **`authority`** | <code>string</code>  | The authority URL of the account. On iOS, it selects the app registration for the enrollment together with `clientId`. If not provided, the authority of the static MSAL configuration is used. Required on Android. |                    | 0.1.2 |
+| **`clientId`**  | <code>string</code>  | The client ID of the Microsoft Entra app registration that was used to acquire the token. If not provided, the client ID of the static MSAL configuration is used.                                                   |                    | 0.1.4 |
+| **`silent`**    | <code>boolean</code> | Whether or not to remediate without showing any UI of the Intune App SDK. On iOS, the status `interactionRequired` is returned if the remediation cannot be completed without user interaction.                      | <code>false</code> | 0.1.2 |
+| **`tenantId`**  | <code>string</code>  | The Microsoft Entra tenant ID of the account. Only available on Android. Required on Android.                                                                                                                        |                    | 0.1.2 |
+| **`username`**  | <code>string</code>  | The username (usually the UPN) of the account. Only available on Android. Required on Android.                                                                                                                       |                    | 0.1.2 |
 
 
 #### UnenrollAccountOptions

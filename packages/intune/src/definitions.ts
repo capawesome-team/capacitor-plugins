@@ -734,12 +734,27 @@ export interface RemediateComplianceOptions {
   /**
    * The authority URL of the account.
    *
-   * Only available on Android. Required on Android.
+   * On iOS, it selects the app registration for the enrollment together
+   * with `clientId`. If not provided, the authority of the static MSAL
+   * configuration is used.
+   *
+   * Required on Android.
    *
    * @since 0.1.2
    * @example "https://login.microsoftonline.com/b55f0d51-fe4d-4a04-a4a6-0b0a4d011c9d"
    */
   authority?: string;
+  /**
+   * The client ID of the Microsoft Entra app registration that was used to
+   * acquire the token.
+   *
+   * If not provided, the client ID of the static MSAL configuration is
+   * used.
+   *
+   * @since 0.1.4
+   * @example "6c7e8f2a-1b3d-4e5f-9a0b-c1d2e3f4a5b6"
+   */
+  clientId?: string;
   /**
    * Whether or not to remediate without showing any UI of the Intune App
    * SDK.
@@ -903,8 +918,9 @@ export enum ErrorCode {
    * token can be acquired (App Protection Conditional Access).
    *
    * The `data` of the error contains the `accountId`, `tenantId` and
-   * `username` of the account and, on Android, the `authority`. Pass it to
-   * `remediateCompliance(...)` and retry the token acquisition afterwards.
+   * `username` of the account as well as the `clientId` and `authority` to
+   * pass to `remediateCompliance(...)`. Retry the token acquisition after
+   * the remediation.
    *
    * @since 0.1.2
    */

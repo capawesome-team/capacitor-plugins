@@ -98,6 +98,8 @@ public class Intune {
 
     private static final List<EnrollmentChangeEvent> pendingEnrollmentChangeEvents = Collections.synchronizedList(new ArrayList<>());
 
+    private static final String ENROLLED_ACCOUNT_CLIENT_ID_KEY_PREFIX = "enrolledAccountClientId_";
+
     private static final String PENDING_WIPE_ACCOUNT_IDS_KEY = "pendingWipeAccountIds";
 
     private static final String PUBLIC_CLIENT_APPLICATION_KEYS_KEY = "publicClientApplicationKeys";
@@ -148,7 +150,7 @@ public class Intune {
 
                     @Override
                     public void onError(MsalException exception) {
-                        callback.error(createTokenAcquisitionException(exception));
+                        callback.error(createTokenAcquisitionException(exception, options.getClientId()));
                     }
 
                     @Override
@@ -180,7 +182,7 @@ public class Intune {
                     }
                     AcquireTokenSilentParameters parameters = new AcquireTokenSilentParameters.Builder()
                         .forAccount(account)
-                        .fromAuthority(account.getAuthority())
+                        .fromAuthority(options.getAuthority() == null ? account.getAuthority() : options.getAuthority())
                         .withScopes(options.getScopes())
                         .forceRefresh(options.getForceRefresh())
                         .withCallback(
@@ -192,7 +194,7 @@ public class Intune {
 
                                 @Override
                                 public void onError(MsalException exception) {
-                                    callback.error(createTokenAcquisitionException(exception));
+                                    callback.error(createTokenAcquisitionException(exception, options.getClientId()));
                                 }
                             }
                         )
@@ -202,7 +204,7 @@ public class Intune {
 
                 @Override
                 public void onError(@NonNull MsalException exception) {
-                    callback.error(createTokenAcquisitionException(exception));
+                    callback.error(createTokenAcquisitionException(exception, options.getClientId()));
                 }
             }
         );
@@ -299,6 +301,7 @@ public class Intune {
                         callback.error(createEnrollmentException(null));
                         return;
                     }
+                    persistEnrolledAccountClientId(options.getAccountId(), options.getClientId());
                     enrollmentManager.registerAccountForMAM(
                         account.getUsername(),
                         account.getId(),
@@ -322,6 +325,7 @@ public class Intune {
     ) throws Exception {
         // The callback must be added before the remediation starts, because the result may be reported immediately.
         addRemediateComplianceCallback(options.getAccountId(), callback);
+        persistEnrolledAccountClientId(options.getAccountId(), options.getClientId());
         MAMComplianceManager complianceManager = MAMComponents.get(MAMComplianceManager.class);
         complianceManager.remediateCompliance(
             options.getUsername(),
@@ -445,6 +449,11 @@ public class Intune {
     }
 
     @NonNull
+    private static String createEnrolledAccountClientIdKey(@NonNull String accountId) {
+        return ENROLLED_ACCOUNT_CLIENT_ID_KEY_PREFIX + accountId.toLowerCase(Locale.ROOT);
+    }
+
+    @NonNull
     private static String createPublicClientApplicationKey(@Nullable String clientId, @Nullable String authority) {
         return (clientId == null ? "" : clientId) + PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR + (authority == null ? "" : authority);
     }
@@ -468,11 +477,13 @@ public class Intune {
 
     @NonNull
     private static CustomException createProtectionPolicyRequiredException(
-        @NonNull MsalIntuneAppProtectionPolicyRequiredException exception
+        @NonNull MsalIntuneAppProtectionPolicyRequiredException exception,
+        @Nullable String clientId
     ) {
         JSObject data = new JSObject();
         data.put("accountId", exception.getAccountUserId());
         data.put("authority", exception.getAuthorityUrl());
+        data.put("clientId", clientId);
         data.put("tenantId", exception.getTenantId());
         data.put("username", exception.getAccountUpn());
         return new CustomException(
@@ -483,12 +494,12 @@ public class Intune {
     }
 
     @NonNull
-    private static CustomException createTokenAcquisitionException(@NonNull MsalException exception) {
+    private static CustomException createTokenAcquisitionException(@NonNull MsalException exception, @Nullable String clientId) {
         if (exception instanceof MsalUserCancelException) {
             return CustomExceptions.INTERACTION_CANCELED;
         }
         if (exception instanceof MsalIntuneAppProtectionPolicyRequiredException) {
-            return createProtectionPolicyRequiredException((MsalIntuneAppProtectionPolicyRequiredException) exception);
+            return createProtectionPolicyRequiredException((MsalIntuneAppProtectionPolicyRequiredException) exception, clientId);
         }
         return new CustomException("TOKEN_ACQUISITION_FAILED", getErrorMessage(exception));
     }
@@ -519,11 +530,11 @@ public class Intune {
 
     /**
      * Searches the account in every MSAL application that has been used so far, because the token cache of MSAL is
-     * kept per client ID.
+     * kept per client ID. Applications with the client ID the account was enrolled with are searched first.
      */
     @Nullable
     private static PublicClientAccount findPublicClientAccount(@NonNull String accountId) throws Exception {
-        for (String key : getPublicClientApplicationKeys()) {
+        for (String key : getPublicClientApplicationKeys(accountId)) {
             String[] keyParts = key.split(Pattern.quote(PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR), -1);
             IMultipleAccountPublicClientApplication application = getPublicClientApplication(
                 keyParts[0].isEmpty() ? null : keyParts[0],
@@ -563,15 +574,21 @@ public class Intune {
     }
 
     @NonNull
-    private static Set<String> getPublicClientApplicationKeys() {
+    private static Set<String> getPublicClientApplicationKeys(@NonNull String accountId) {
         Set<String> keys = new LinkedHashSet<>();
-        keys.add(createPublicClientApplicationKey(null, null));
         SharedPreferences preferences = getSharedPreferences();
-        if (preferences != null) {
-            Set<String> persistedKeys = preferences.getStringSet(PUBLIC_CLIENT_APPLICATION_KEYS_KEY, null);
-            if (persistedKeys != null) {
-                keys.addAll(persistedKeys);
+        Set<String> persistedKeys = preferences == null ? null : preferences.getStringSet(PUBLIC_CLIENT_APPLICATION_KEYS_KEY, null);
+        String enrolledClientId = preferences == null ? null : preferences.getString(createEnrolledAccountClientIdKey(accountId), null);
+        if (persistedKeys != null && enrolledClientId != null) {
+            for (String key : persistedKeys) {
+                if (key.startsWith(enrolledClientId + PUBLIC_CLIENT_APPLICATION_KEY_SEPARATOR)) {
+                    keys.add(key);
+                }
             }
+        }
+        keys.add(createPublicClientApplicationKey(null, null));
+        if (persistedKeys != null) {
+            keys.addAll(persistedKeys);
         }
         return keys;
     }
@@ -668,6 +685,17 @@ public class Intune {
             default:
                 return "failed";
         }
+    }
+
+    private static void persistEnrolledAccountClientId(@NonNull String accountId, @Nullable String clientId) {
+        SharedPreferences preferences = getSharedPreferences();
+        if (preferences == null) {
+            return;
+        }
+        preferences
+            .edit()
+            .putString(createEnrolledAccountClientIdKey(accountId), clientId == null ? "" : clientId)
+            .apply();
     }
 
     private static void persistPendingWipeAccountId(@Nullable String accountId) {

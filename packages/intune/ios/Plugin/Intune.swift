@@ -62,7 +62,7 @@ import MSAL
                 }
                 application.acquireToken(with: parameters) { result, error in
                     if let error = error {
-                        completion(nil, self.createTokenAcquisitionError(error))
+                        completion(nil, self.createTokenAcquisitionError(error, clientId: options.clientId, authority: options.authority))
                         return
                     }
                     guard let result = result else {
@@ -88,7 +88,7 @@ import MSAL
             parameters.forceRefresh = options.forceRefresh
             application.acquireTokenSilent(with: parameters) { result, error in
                 if let error = error {
-                    completion(nil, self.createTokenAcquisitionError(error))
+                    completion(nil, self.createTokenAcquisitionError(error, clientId: options.clientId, authority: options.authority))
                     return
                 }
                 guard let result = result else {
@@ -199,6 +199,8 @@ import MSAL
     @objc public func remediateCompliance(_ options: RemediateComplianceOptions, completion: @escaping (_ result: RemediateComplianceResult?, _ error: Error?) -> Void) {
         // The completion must be added before the remediation starts, because the result may be reported immediately.
         addRemediateComplianceCompletion(completion, forAccountId: options.accountId)
+        IntuneMAMSettings.aadClientIdOverride = options.clientId
+        IntuneMAMSettings.aadAuthorityUriOverride = options.authority
         DispatchQueue.main.async {
             IntuneMAMComplianceManager.instance().remediateCompliance(forAccountId: options.accountId, silent: options.silent)
         }
@@ -248,7 +250,7 @@ import MSAL
         completion(acquireTokenResult, nil)
     }
 
-    private func createProtectionPolicyRequiredError(_ error: NSError) -> CustomError? {
+    private func createProtectionPolicyRequiredError(_ error: NSError, clientId: String?, authority: String?) -> CustomError? {
         guard let homeAccountId = error.userInfo[MSALHomeAccountIdKey] as? String else {
             return nil
         }
@@ -259,18 +261,20 @@ import MSAL
         }
         return CustomError.protectionPolicyRequired(
             accountId: accountId,
+            authority: authority,
+            clientId: clientId,
             tenantId: homeAccountIdParts.count > 1 ? homeAccountIdParts[1] : nil,
             username: error.userInfo[MSALDisplayableUserIdKey] as? String
         )
     }
 
-    private func createTokenAcquisitionError(_ error: Error) -> CustomError {
+    private func createTokenAcquisitionError(_ error: Error, clientId: String?, authority: String?) -> CustomError {
         let nsError = error as NSError
         if nsError.domain == MSALErrorDomain && nsError.code == MSALError.userCanceled.rawValue {
             return CustomError.interactionCanceled
         }
         if nsError.domain == MSALErrorDomain && nsError.code == MSALError.serverProtectionPoliciesRequired.rawValue,
-           let protectionPolicyRequiredError = createProtectionPolicyRequiredError(nsError) {
+           let protectionPolicyRequiredError = createProtectionPolicyRequiredError(nsError, clientId: clientId, authority: authority) {
             return protectionPolicyRequiredError
         }
         return CustomError.tokenAcquisitionFailed(message: error.localizedDescription)
