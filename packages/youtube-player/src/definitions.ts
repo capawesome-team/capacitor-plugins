@@ -529,6 +529,21 @@ export interface PlayerOptions {
    */
   fullscreen?: boolean;
   /**
+   * The host from which the player is loaded.
+   *
+   * Set to `https://www.youtube-nocookie.com` to use YouTube's
+   * [privacy-enhanced mode](https://support.google.com/youtube/answer/171780).
+   *
+   * Must be either `https://www.youtube.com` or `https://www.youtube-nocookie.com`.
+   *
+   * Only available on iOS and Web.
+   *
+   * @default 'https://www.youtube.com'
+   * @since 0.1.2
+   * @example 'https://www.youtube-nocookie.com'
+   */
+  host?: string;
+  /**
    * Whether video annotations are shown by default.
    *
    * @default false

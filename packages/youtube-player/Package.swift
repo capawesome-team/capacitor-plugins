@@ -10,16 +10,14 @@ let package = Package(
             targets: ["YoutubePlayerPlugin"])
     ],
     dependencies: [
-        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
-        .package(url: "https://github.com/mukeshydv/YoutubePlayerView.git", .upToNextMajor(from: "1.2.2"))
+        .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0")
     ],
     targets: [
         .target(
             name: "YoutubePlayerPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
-                .product(name: "Cordova", package: "capacitor-swift-pm"),
-                .product(name: "YoutubePlayerView", package: "YoutubePlayerView")
+                .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
             path: "ios/Plugin")
     ]
