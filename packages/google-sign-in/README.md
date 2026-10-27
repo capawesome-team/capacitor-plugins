@@ -39,7 +39,7 @@ The Google Sign-In plugin is typically used wherever users should sign in with t
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 1.x.x          | >=8.x.x           | Active support |
+| 0.2.x          | >=8.x.x           | Active support |
 | 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Guides 

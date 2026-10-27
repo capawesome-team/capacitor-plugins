@@ -4,9 +4,9 @@ This is a comprehensive list of the breaking changes introduced in the major ver
 
 ## Versions
 
-- [Version 1.x.x](#version-1xx)
+- [Version 0.2.x](#version-02x)
 
-## Version 1.x.x
+## Version 0.2.x
 
 ### Error codes
 
