@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.1.4
+
+### Patch Changes
+
+- [`cb0c2454ba4b6e67992c44d35532bf94616204a2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb0c2454ba4b6e67992c44d35532bf94616204a2) ([#682](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/682)): fix(ios): no longer duplicate text in `partialResult` and `result` when the recognizer revises earlier words
+
+- [`cb0c2454ba4b6e67992c44d35532bf94616204a2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb0c2454ba4b6e67992c44d35532bf94616204a2) ([#682](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/682)): fix(ios): a late result or error of a stopped session no longer leaks into the next session
+
+- [`cb0c2454ba4b6e67992c44d35532bf94616204a2`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cb0c2454ba4b6e67992c44d35532bf94616204a2) ([#682](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/682)): fix(ios): no longer end the session after the first finalized segment when `useSpeechTranscriber` is enabled
+
 ## 8.1.3
 
 ### Patch Changes
