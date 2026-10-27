@@ -39,7 +39,8 @@ The Google Sign-In plugin is typically used wherever users should sign in with t
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.1.x          | >=8.x.x           | Active support |
+| 1.x.x          | >=8.x.x           | Active support |
+| 0.1.x          | >=8.x.x           | Deprecated     |
 
 ## Guides 
 
@@ -376,7 +377,7 @@ Auth.Api.Credentials: colz: [8] Unknown error [status=UNREGISTERED_ON_API_CONSOL
 Auth.Api.Credentials: colz: [16] Account reauth failed.
 ```
 
-Google Play services reports this as a cancellation, so the plugin rejects the call with the `SIGN_IN_CANCELED` error code and `Account reauth failed` as the error message. Make sure that an Android OAuth client exists for the package name and the SHA-1 fingerprint of the certificate that signs the app, as described in the [Installation](#android) section. Builds distributed via Google Play must use the fingerprint of the app signing key, not the upload key.
+Google Play services reports this as a cancellation, but the plugin rejects the call without an error code and with `Account reauth failed` in the error message, so it is not mistaken for a user cancellation. Make sure that an Android OAuth client exists for the package name and the SHA-1 fingerprint of the certificate that signs the app, as described in the [Installation](#android) section. Builds distributed via Google Play must use the fingerprint of the app signing key, not the upload key.
 
 ## Related Plugins
 
