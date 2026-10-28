@@ -7,7 +7,7 @@ public enum CustomError: Error {
     case interactionCanceled
     case notEnrolled
     case pathMissing
-    case protectionPolicyRequired(accountId: String, tenantId: String?, username: String?)
+    case protectionPolicyRequired(accountId: String, authority: String?, clientId: String?, tenantId: String?, username: String?)
     case scopesMissing
     case tokenAcquisitionFailed(message: String)
     case unenrollFailed(message: String)
@@ -33,8 +33,10 @@ public enum CustomError: Error {
 
     public var data: [String: Any]? {
         switch self {
-        case .protectionPolicyRequired(let accountId, let tenantId, let username):
+        case .protectionPolicyRequired(let accountId, let authority, let clientId, let tenantId, let username):
             var data: [String: Any] = ["accountId": accountId]
+            data["authority"] = authority
+            data["clientId"] = clientId
             data["tenantId"] = tenantId
             data["username"] = username
             return data
@@ -51,7 +53,7 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("accountId must be provided.", comment: "accountIdMissing")
         case .clientIdMissing:
             return NSLocalizedString(
-                "ADALClientId must be provided in the IntuneMAMSettings dictionary of the Info.plist file.",
+                "clientId must be provided or ADALClientId must be set in the IntuneMAMSettings dictionary of the Info.plist file.",
                 comment: "clientIdMissing"
             )
         case .enrollmentFailed(let message):
