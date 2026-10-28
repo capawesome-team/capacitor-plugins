@@ -3,6 +3,25 @@
  */
 export interface GoogleSignInPlugin {
   /**
+   * Request an access token for the given scopes.
+   *
+   * No UI is shown if the user has already granted the scopes.
+   * Otherwise, the consent screen is shown.
+   * Use this method to get a new access token after the previous one has expired,
+   * without having to sign in again.
+   *
+   * On iOS, the previous sign-in is restored. If there is no previous sign-in,
+   * the sign-in screen is shown.
+   *
+   * Since the consent screen may be shown, this method should only be called
+   * while the app is in the foreground.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.5
+   */
+  authorize(options: AuthorizeOptions): Promise<AuthorizeResult>;
+  /**
    * Handle the redirect callback from the OAuth provider.
    *
    * This method must be called when the app is redirected back from the OAuth provider.
@@ -42,6 +61,40 @@ export interface GoogleSignInPlugin {
    * @since 0.1.0
    */
   signOut(): Promise<void>;
+}
+
+/**
+ * @since 0.1.5
+ */
+export interface AuthorizeOptions {
+  /**
+   * The OAuth scopes to request.
+   *
+   * @since 0.1.5
+   * @example ["https://www.googleapis.com/auth/drive.appdata"]
+   */
+  scopes: string[];
+}
+
+/**
+ * @since 0.1.5
+ */
+export interface AuthorizeResult {
+  /**
+   * The access token for accessing Google APIs.
+   *
+   * @since 0.1.5
+   */
+  accessToken: string;
+  /**
+   * The server auth code that can be exchanged on your backend
+   * for access and refresh tokens.
+   *
+   * On iOS, this is only available if the consent screen or the sign-in screen was shown.
+   *
+   * @since 0.1.5
+   */
+  serverAuthCode: string | null;
 }
 
 /**
@@ -168,6 +221,14 @@ export interface SignInResult {
  * @since 0.1.0
  */
 export enum ErrorCode {
+  /**
+   * The user canceled the authorization flow.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 0.1.5
+   */
+  AuthorizationCanceled = 'AUTHORIZATION_CANCELED',
   /**
    * No Google account is available on the device.
    *
