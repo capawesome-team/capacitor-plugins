@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.1.1
+
+### Patch Changes
+
+- [`07294218cdd637de9a2bdd2620ace508e1b72d45`](https://github.com/capawesome-team/capacitor-plugins/commit/07294218cdd637de9a2bdd2620ace508e1b72d45) ([#1179](https://github.com/capawesome-team/capacitor-plugins/pull/1179)): fix(android): reject `openFile(...)` with `FILE_NOT_FOUND` for a missing `file://` URI or path
+
 ## 8.1.0
 
 ### Minor Changes
