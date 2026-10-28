@@ -37,12 +37,12 @@ public class FileOpenerPlugin extends Plugin {
             }
             String mimeType = call.getString("mimeType");
 
-            Uri uri = implementation.getUriByPath(path);
-            boolean fileExists = implementation.isFileExists(uri);
+            boolean fileExists = implementation.isFileExists(path);
             if (!fileExists) {
                 call.reject(ERROR_FILE_NOT_EXIST, ERROR_CODE_FILE_NOT_FOUND);
                 return;
             }
+            Uri uri = implementation.getUriByPath(path);
 
             try {
                 Intent intent = implementation.createIntent(uri, mimeType);
