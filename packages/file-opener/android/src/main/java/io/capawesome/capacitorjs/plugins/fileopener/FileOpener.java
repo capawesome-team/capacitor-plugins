@@ -28,23 +28,36 @@ public class FileOpener {
         return intent;
     }
 
-    public boolean isFileExists(@NonNull Uri uri) {
-        DocumentFile document = DocumentFile.fromSingleUri(plugin.getContext(), uri);
-        return document.exists();
-    }
-
     public Uri getUriByPath(@NonNull String path) {
         Uri uri = Uri.parse(path);
-        if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+        if (isContentUri(uri)) {
             return uri;
-        } else if (uri.getScheme() == null || uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
-            return FileProvider.getUriForFile(
-                plugin.getActivity(),
-                plugin.getContext().getPackageName() + ".fileprovider",
-                new File(uri.getPath())
-            );
-        } else {
-            return FileProvider.getUriForFile(plugin.getActivity(), plugin.getContext().getPackageName() + ".fileprovider", new File(path));
         }
+        return FileProvider.getUriForFile(
+            plugin.getActivity(),
+            plugin.getContext().getPackageName() + ".fileprovider",
+            getFileByPath(path)
+        );
+    }
+
+    public boolean isFileExists(@NonNull String path) {
+        Uri uri = Uri.parse(path);
+        if (isContentUri(uri)) {
+            DocumentFile document = DocumentFile.fromSingleUri(plugin.getContext(), uri);
+            return document.exists();
+        }
+        return getFileByPath(path).exists();
+    }
+
+    private File getFileByPath(@NonNull String path) {
+        Uri uri = Uri.parse(path);
+        if (uri.getScheme() == null || uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+            return new File(uri.getPath());
+        }
+        return new File(path);
+    }
+
+    private boolean isContentUri(@NonNull Uri uri) {
+        return uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT);
     }
 }
