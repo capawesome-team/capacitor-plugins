@@ -54,6 +54,7 @@ body:
         - label: Document Scanner
         - label: Exif
         - label: Facebook Sign-In
+        - label: Ferrostar Navigation
         - label: File Compressor
         - label: File Manager
         - label: File Opener
