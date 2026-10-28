@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.identity.AuthorizationResult;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
-import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.InitializeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.SignInOptions;
@@ -33,6 +32,8 @@ import java.util.List;
 import org.json.JSONObject;
 
 public class GoogleSignIn {
+
+    private static final String[] CANCELLATION_MESSAGES = { "Cancelled by user", "activity is cancelled by the user" };
 
     private final GoogleSignInPlugin plugin;
 
@@ -105,8 +106,8 @@ public class GoogleSignIn {
 
                 @Override
                 public void onError(@NonNull GetCredentialException exception) {
-                    if (exception instanceof GetCredentialCancellationException) {
-                        callback.error(createSignInCanceledException(exception));
+                    if (isCanceledByUser(exception)) {
+                        callback.error(CustomExceptions.SIGN_IN_CANCELED);
                     } else if (exception instanceof NoCredentialException) {
                         callback.error(CustomExceptions.NO_CREDENTIAL_AVAILABLE);
                     } else if (exception instanceof GetCredentialProviderConfigurationException) {
@@ -281,18 +282,22 @@ public class GoogleSignIn {
     }
 
     /**
-     * Creates an exception for a canceled sign-in flow.
+     * Returns whether the user canceled the sign-in flow.
      *
-     * Google Play services also reports configuration errors (e.g. a missing Android OAuth client)
-     * as a cancellation, so the original error message must be preserved to stay diagnosable.
+     * Google Play services also reports configuration errors (e.g. `[16] Account reauth failed.` for a wrong SHA-1)
+     * as a cancellation, so only known cancellation messages count.
      */
-    @NonNull
-    private CustomException createSignInCanceledException(@NonNull GetCredentialException exception) {
+    private boolean isCanceledByUser(@NonNull GetCredentialException exception) {
         CharSequence errorMessage = exception.getErrorMessage();
-        if (errorMessage == null || errorMessage.length() == 0) {
-            return CustomExceptions.SIGN_IN_CANCELED;
+        if (!(exception instanceof GetCredentialCancellationException) || errorMessage == null) {
+            return false;
         }
-        return new CustomException(CustomExceptions.SIGN_IN_CANCELED.getCode(), errorMessage.toString());
+        for (String cancellationMessage : CANCELLATION_MESSAGES) {
+            if (errorMessage.toString().contains(cancellationMessage)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable
