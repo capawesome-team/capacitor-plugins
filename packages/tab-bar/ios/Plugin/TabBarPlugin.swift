@@ -17,11 +17,16 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     private var implementation: TabBar?
 
     override public func load() {
-        self.implementation = TabBar(plugin: self, config: getTabBarConfig())
+        if #available(iOS 18.0, *) {
+            self.implementation = TabBar(plugin: self, config: getTabBarConfig())
+        }
     }
 
     @objc func hide(_ call: CAPPluginCall) {
-        implementation?.hide(completion: { error in
+        guard let implementation = implementation else {
+            return rejectCallAsUnavailable(call)
+        }
+        implementation.hide(completion: { error in
             self.handleCompletion(call, error)
         })
     }
@@ -31,9 +36,12 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func selectTabById(_ call: CAPPluginCall) {
+        guard let implementation = implementation else {
+            return rejectCallAsUnavailable(call)
+        }
         do {
             let options = try SelectTabByIdOptions(call)
-            implementation?.selectTabById(options, completion: { error in
+            implementation.selectTabById(options, completion: { error in
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -42,9 +50,12 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func setColors(_ call: CAPPluginCall) {
+        guard let implementation = implementation else {
+            return rejectCallAsUnavailable(call)
+        }
         do {
             let options = try SetColorsOptions(call)
-            implementation?.setColors(options, completion: { error in
+            implementation.setColors(options, completion: { error in
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -53,9 +64,12 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func setTabs(_ call: CAPPluginCall) {
+        guard let implementation = implementation else {
+            return rejectCallAsUnavailable(call)
+        }
         do {
             let options = try SetTabsOptions(call)
-            implementation?.setTabs(options, completion: { error in
+            implementation.setTabs(options, completion: { error in
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -64,7 +78,10 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func show(_ call: CAPPluginCall) {
-        implementation?.show(completion: { error in
+        guard let implementation = implementation else {
+            return rejectCallAsUnavailable(call)
+        }
+        implementation.show(completion: { error in
             self.handleCompletion(call, error)
         })
     }
@@ -84,6 +101,10 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
         } else {
             resolveCall(call)
         }
+    }
+
+    private func rejectCallAsUnavailable(_ call: CAPPluginCall) {
+        call.unavailable("This method is only available on iOS 18 and later.")
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

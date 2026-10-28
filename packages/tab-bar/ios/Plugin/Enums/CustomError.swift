@@ -12,6 +12,7 @@ enum CustomError: Error {
     case tabsEmpty
     case tabsMissing
     case tabsNotSet
+    case tabsTooMany
     case titleMissing
     case unselectedColorInvalid
 }
@@ -41,6 +42,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("tabs must be provided.", comment: "tabsMissing")
         case .tabsNotSet:
             return NSLocalizedString("No tabs have been set yet.", comment: "tabsNotSet")
+        case .tabsTooMany:
+            return NSLocalizedString("tabs must not contain more than five tabs.", comment: "tabsTooMany")
         case .titleMissing:
             return NSLocalizedString("title must be provided.", comment: "titleMissing")
         case .unselectedColorInvalid:
