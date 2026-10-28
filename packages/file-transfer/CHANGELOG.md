@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- [`2d98302f71e61f726608156cfc5ebe00423b5e69`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/2d98302f71e61f726608156cfc5ebe00423b5e69) ([#684](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/684)): fix(android): keep the foreground service running when the next transfer starts right after the last one finished instead of dropping it or crashing with `Context.startForegroundService() did not then call Service.startForeground()`
+
 ## 0.2.0
 
 ### Minor Changes
