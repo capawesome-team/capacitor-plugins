@@ -19,7 +19,7 @@ public class FerrostarNavigationPlugin: CAPPlugin, CAPBridgedPlugin {
     public static let tag = "FerrostarNavigation"
     private var implementation: FerrostarNavigation?
     private var locationManager: CLLocationManager?
-    private var locationPermissionCall: CAPPluginCall?
+    private var locationPermissionCalls: [CAPPluginCall] = []
 
     override public func load() {
         super.load()
@@ -118,10 +118,13 @@ public class FerrostarNavigationPlugin: CAPPlugin, CAPBridgedPlugin {
             return
         }
         DispatchQueue.main.async {
+            self.locationPermissionCalls.append(call)
+            if self.locationManager != nil {
+                return
+            }
             let locationManager = CLLocationManager()
             locationManager.delegate = self
             self.locationManager = locationManager
-            self.locationPermissionCall = call
             locationManager.requestWhenInUseAuthorization()
         }
     }
@@ -133,11 +136,12 @@ public class FerrostarNavigationPlugin: CAPPlugin, CAPBridgedPlugin {
 
 extension FerrostarNavigationPlugin: CLLocationManagerDelegate {
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        guard manager.authorizationStatus != .notDetermined, let call = locationPermissionCall else {
+        guard manager.authorizationStatus != .notDetermined else {
             return
         }
+        let calls = locationPermissionCalls
         locationManager = nil
-        locationPermissionCall = nil
-        handleLocationPermissionCallback(call)
+        locationPermissionCalls = []
+        calls.forEach { handleLocationPermissionCallback($0) }
     }
 }

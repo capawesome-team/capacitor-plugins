@@ -72,6 +72,10 @@ class FerrostarNavigation(private val plugin: FerrostarNavigationPlugin) {
 
     @Throws(Exception::class)
     fun startNavigation(options: StartNavigationOptions, callback: EmptyCallback) {
+        // Android refuses to start a location foreground service from the background, and Ferrostar does not catch that.
+        if (options.continueInBackground && !plugin.bridge.app.isActive) {
+            throw CustomExceptions.APP_NOT_IN_FOREGROUND
+        }
         stopNavigation()
         val route = parseRoute(options.osrmResponseJson, options.polylinePrecision)
         val core = FerrostarCore(
@@ -273,7 +277,13 @@ class FerrostarNavigation(private val plugin: FerrostarNavigationPlugin) {
     private fun startNavigation(core: FerrostarCore, route: Route, callback: EmptyCallback) {
         wasComplete = false
         wasOffRoute = false
-        core.startNavigation(route)
+        try {
+            core.startNavigation(route)
+        } catch (exception: Exception) {
+            stopNavigation()
+            callback.error(exception)
+            return
+        }
         observeState(core)
         callback.success()
     }

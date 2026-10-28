@@ -9,8 +9,8 @@ import Foundation
 
     private var core: FerrostarCore?
     private var isOffRoute = false
+    private var locationProvider: LocationProviding?
     private weak var plugin: FerrostarNavigationPlugin?
-    private var simulatedLocationProvider: SimulatedLocationProvider?
     private var stateCancellable: AnyCancellable?
     private var status: NavigationStatus?
 
@@ -142,11 +142,13 @@ import Foundation
             throw CustomError.notNavigating
         }
         let route = try parseRoute(options.osrmResponseJson, polylinePrecision: options.polylinePrecision)
-        if let simulatedLocationProvider {
+        if let simulatedLocationProvider = locationProvider as? SimulatedLocationProvider {
             // Stop the simulation first so that the old session does not receive the start of the new route.
             simulatedLocationProvider.stopUpdating()
             try simulatedLocationProvider.setSimulatedRoute(route)
         }
+        // Ferrostar only clears the speech queue on stop, not when a route starts on a running session.
+        core.spokenInstructionObserver.stopAndClearQueue()
         resetEventTracking()
         try core.startNavigation(route: route)
     }
@@ -177,9 +179,14 @@ import Foundation
         )
         core.delegate = self
         resetEventTracking()
-        try core.startNavigation(route: route)
+        do {
+            try core.startNavigation(route: route)
+        } catch {
+            locationProvider.delegate = nil
+            throw error
+        }
         self.core = core
-        simulatedLocationProvider = locationProvider as? SimulatedLocationProvider
+        self.locationProvider = locationProvider
         stateCancellable = core.$state.sink { [weak self] state in
             self?.handleStateChange(state)
         }
@@ -190,8 +197,10 @@ import Foundation
             return
         }
         core.stopNavigation()
+        // The provider holds the core strongly as its delegate, so the cycle must be broken to release the session.
+        locationProvider?.delegate = nil
         self.core = nil
-        simulatedLocationProvider = nil
+        locationProvider = nil
         stateCancellable = nil
     }
 }
