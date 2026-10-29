@@ -56,7 +56,28 @@ npx cap sync
 
 This plugin is only available on **iOS**. On Android and Web, all methods reject as unimplemented.
 
-### iOS
+Swift Package Manager resolves the WebView Native UI Engine dependency automatically.
+
+### iOS (CocoaPods)
+For CocoaPods projects, install a compatible Engine 1.x version directly in your application:
+
+```bash
+npm install @webview-native-ui/engine@^1.0.0
+```
+
+Add its local pod inside your app target, outside the generated `capacitor_pods` function, then run `npx cap sync ios`:
+
+```ruby
+target 'App' do
+  capacitor_pods
+  pod 'WebViewNativeUIEngine', :path => '../../node_modules/@webview-native-ui/engine'
+end
+```
+
+This dependency setup is required for CocoaPods builds even when Web projection is not enabled.
+Adjust the path if your native project or node_modules directory uses a different layout.
+
+### iOS layout
 
 The tab bar is placed on top of the web view and the bottom safe area inset of the web view is increased by the height of the tab bar. Your web app must meet the following requirements so that its content is not covered by the tab bar:
 
@@ -72,19 +93,73 @@ The tab bar is placed on top of the web view and the bottom safe area inset of t
 
 If you use [`@capacitor/splash-screen`](https://capacitorjs.com/docs/apis/splash-screen), do not configure the `tabs` in your Capacitor configuration, as the tab bar would be displayed on top of the splash screen. Instead, call `setTabs(...)` and `show()` after `SplashScreen.hide()`.
 
+## Optional Web projection
+
+Web overlays normally cannot cover the native tab bar because it sits above the WebView. Opt in to [WebView Native UI Engine](https://github.com/webview-native-ui/engine) to temporarily project its prepared appearance into the DOM, then restore native interaction after the overlay closes.
+
+The default remains native-only. To opt in, configure an existing DOM container:
+
+```ts
+plugins: {
+  TabBar: {
+    projectionSelector: '#tab-bar-projection',
+    // Keep your existing tabs and colors.
+  },
+},
+```
+
+Keep that container mounted outside the overlay, with a real layout box in the tab bar's position. The application owns its fallback content and navigation. For example, a bottom-aligned host can use the bottom safe area already extended by this plugin:
+
+```html
+<nav id="tab-bar-projection" aria-label="Tabs">
+  <!-- Your application's Web tab controls, used if capture is unavailable. -->
+</nav>
+```
+
+```css
+#tab-bar-projection {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: env(safe-area-inset-bottom);
+}
+```
+
+The container must resolve to exactly one element. Its stacking order must place it below the covering Web overlay. Do not reserve its `::before` pseudo-element for other content. With this option configured, a missing container keeps native projection hidden until the DOM appears; omit the option to retain launch-time native display without waiting for the Web page.
+
+For Ionic overlays, install the matching Engine package in the application and enable the shared observer once during startup:
+
+```ts
+import { enableSupportIonicOverlays } from '@webview-native-ui/engine/ionic';
+
+enableSupportIonicOverlays();
+```
+
+See the [overlay configuration](https://github.com/webview-native-ui/engine/blob/v1.0.0/docs/configuration/ionic-overlays.md) for custom overlay events and coverage rules. No Ionic dependency is added to this plugin. Registration, appearance updates and restoration use native integration; the existing TabBar methods are not wrapped or replayed.
+
+Images are prepared after a 600 ms quiet period following appearance updates, allowing Liquid Glass selection animations to settle. Opening an overlay does not wait for this timer; until the next image is ready, it can use the previous cached appearance.
+
+UIKit image rendering can differ from live Liquid Glass rendering over patterned backgrounds. Validate the appearance with the backgrounds your application uses.
+
+The projected image is noninteractive. If a prepared image is unavailable, the application's Web fallback is used. Keep the fallback's selected state and actions in sync with your app. SDK-specific capture restrictions, unsupported layouts and continuously changing backgrounds require separate validation; this feature does not continuously render native pixels into the WebView.
+
 ## Configuration
+
+The examples below include Web projection. Provide the container described above, or omit `projectionSelector` for native-only display.
 
 <docgen-config>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 These configuration values are available:
 
-| Prop                  | Type                | Description                                                                                                                                                                                                                                | Since |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`tabs`**            | <code>Tab[]</code>  | The tabs to display at launch. If set, the tab bar is created and visible from launch. Do not set this option if you use `@capacitor/splash-screen`, as the tab bar would be displayed on top of the splash screen. Only available on iOS. | 0.1.0 |
-| **`selectedTabId`**   | <code>string</code> | The ID of the tab to select at launch. If not set, the first tab is selected. Only available on iOS.                                                                                                                                       | 0.1.0 |
-| **`selectedColor`**   | <code>string</code> | The color of the selected tab as a hex color code. If not set, the system default is used. Only available on iOS.                                                                                                                          | 0.1.0 |
-| **`unselectedColor`** | <code>string</code> | The color of the unselected tabs as a hex color code. If not set, the system default is used. Has no effect on iOS 26 and later, as the system determines the color of the unselected tabs on Liquid Glass. Only available on iOS.         | 0.1.0 |
+| Prop                     | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                | Since |
+| ------------------------ | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`projectionSelector`** | <code>string</code> | CSS selector of an existing DOM container for optional Web projection. Enables WebView Native UI Engine integration. The application supplies the container and its Web fallback. When configured, the native tab bar waits for this container before being displayed. Omit to keep the default native-only behavior. Ionic overlays require enabling the Engine's optional overlay support in application startup. Only available on iOS. | next  |
+| **`tabs`**               | <code>Tab[]</code>  | The tabs to display at launch. If set, the tab bar is created and visible from launch. Do not set this option if you use `@capacitor/splash-screen`, as the tab bar would be displayed on top of the splash screen. Only available on iOS.                                                                                                                                                                                                 | 0.1.0 |
+| **`selectedTabId`**      | <code>string</code> | The ID of the tab to select at launch. If not set, the first tab is selected. Only available on iOS.                                                                                                                                                                                                                                                                                                                                       | 0.1.0 |
+| **`selectedColor`**      | <code>string</code> | The color of the selected tab as a hex color code. If not set, the system default is used. Only available on iOS.                                                                                                                                                                                                                                                                                                                          | 0.1.0 |
+| **`unselectedColor`**    | <code>string</code> | The color of the unselected tabs as a hex color code. If not set, the system default is used. Has no effect on iOS 26 and later, as the system determines the color of the unselected tabs on Liquid Glass. Only available on iOS.                                                                                                                                                                                                         | 0.1.0 |
 
 ### Examples
 
@@ -94,6 +169,7 @@ In `capacitor.config.json`:
 {
   "plugins": {
     "TabBar": {
+      "projectionSelector": "#tab-bar-projection",
       "tabs": [{ "id": "home", "title": "Home", "systemImage": "house.fill" }],
       "selectedTabId": "home",
       "selectedColor": "#007AFF",
@@ -113,6 +189,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   plugins: {
     TabBar: {
+      projectionSelector: "#tab-bar-projection",
       tabs: [{ "id": "home", "title": "Home", "systemImage": "house.fill" }],
       selectedTabId: "home",
       selectedColor: "#007AFF",
