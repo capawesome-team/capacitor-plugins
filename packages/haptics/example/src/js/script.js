@@ -53,14 +53,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
   document
-    .querySelector('#playPrimitivePattern')
+    .querySelector('#playAndroidComposition')
     .addEventListener('click', async () => {
-      await Haptics.playPattern({
-        events: [
-          { time: 0, intensity: 0.5, primitive: 'TICK' },
-          { time: 0.1, intensity: 1, primitive: 'CLICK' },
-          { time: 0.5, intensity: 1, primitive: 'SLOW_RISE' },
-          { time: 1, intensity: 1, primitive: 'THUD' },
+      await Haptics.playAndroidComposition({
+        primitives: [
+          { type: 'TICK', scale: 0.5 },
+          { type: 'CLICK', delay: 50 },
+          { type: 'SLOW_RISE', delay: 300 },
+          { type: 'THUD' },
         ],
       });
     });

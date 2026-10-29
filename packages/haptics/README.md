@@ -147,29 +147,45 @@ const playPattern = async () => {
 };
 ```
 
-On Android 12+, events can name a haptic primitive. On iOS, parameter curves can change the intensity or sharpness of the whole pattern over time. Each platform ignores the hints of the other, so both can live in one pattern:
+On iOS, parameter curves change the intensity or sharpness of the whole pattern over time, for example to ramp up a continuous event before a final tap:
 
 ```typescript
-import {
-  AndroidHapticPrimitive,
-  HapticParameter,
-  Haptics,
-} from '@capawesome/capacitor-haptics';
+import { HapticParameter, Haptics } from '@capawesome/capacitor-haptics';
 
-const playToggleOn = async () => {
+const playRampUp = async () => {
   await Haptics.playPattern({
     events: [
-      { time: 0, intensity: 0.5, sharpness: 0.3, primitive: AndroidHapticPrimitive.Tick },
-      { time: 0.1, intensity: 1, sharpness: 0.9, primitive: AndroidHapticPrimitive.Click },
+      { time: 0, intensity: 1, sharpness: 0.3, duration: 1 },
+      { time: 1, intensity: 1, sharpness: 0.9 },
     ],
     parameterCurves: [
       {
         parameter: HapticParameter.Intensity,
         controlPoints: [
-          { time: 0, value: 0.5 },
-          { time: 0.1, value: 1 },
+          { time: 0, value: 0.1 },
+          { time: 1, value: 1 },
         ],
       },
+    ],
+  });
+};
+```
+
+### Play an Android composition
+
+Play a composition of haptic primitives, for example the double click that Android uses for toggles. Only available on Android 12+:
+
+```typescript
+import {
+  AndroidHapticPrimitiveType,
+  Haptics,
+} from '@capawesome/capacitor-haptics';
+
+const playToggleOn = async () => {
+  await Haptics.playAndroidComposition({
+    primitives: [
+      { type: AndroidHapticPrimitiveType.Tick, scale: 0.5 },
+      { type: AndroidHapticPrimitiveType.Click, delay: 50 },
     ],
   });
 };
@@ -207,6 +223,7 @@ const vibrate = async () => {
 * [`isAvailable()`](#isavailable)
 * [`notification(...)`](#notification)
 * [`performAndroidHaptic(...)`](#performandroidhaptic)
+* [`playAndroidComposition(...)`](#playandroidcomposition)
 * [`playPattern(...)`](#playpattern)
 * [`selectionChanged()`](#selectionchanged)
 * [`selectionEnd()`](#selectionend)
@@ -307,6 +324,33 @@ Only available on Android.
 --------------------
 
 
+### playAndroidComposition(...)
+
+```typescript
+playAndroidComposition(options: PlayAndroidCompositionOptions) => Promise<void>
+```
+
+Play a composition of haptic primitives.
+
+In contrast to `playPattern(...)`, this method maps directly to the
+composition primitives of the Android vibrator system, for example to
+build the direction-aware double click that Android uses for toggles.
+The composition respects the system touch feedback setting on
+Android 13+.
+
+A primitive the device does not support is played as `Click`.
+
+Only available on Android 12+.
+
+| Param         | Type                                                                                    |
+| ------------- | --------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#playandroidcompositionoptions">PlayAndroidCompositionOptions</a></code> |
+
+**Since:** 0.1.3
+
+--------------------
+
+
 ### playPattern(...)
 
 ```typescript
@@ -322,9 +366,9 @@ Otherwise, the call rejects as unavailable.
 
 On Android, the pattern is played using vibration effects. Intensity is
 only respected on devices with amplitude control. On Android 12+, a
-pattern whose events are all transient or have a `primitive` is played
-as a composition of haptic primitives. On Android 13+, the pattern
-respects the system touch feedback setting.
+pattern of transient events only is played as a composition of click
+primitives. On Android 13+, the pattern respects the system touch
+feedback setting.
 
 On the web, the pattern is approximated using the Vibration API.
 
@@ -438,6 +482,22 @@ Vibrate the device.
 | **`type`** | <code><a href="#androidhaptictype">AndroidHapticType</a></code> | The Android haptic feedback effect to perform. | 0.1.0 |
 
 
+#### PlayAndroidCompositionOptions
+
+| Prop             | Type                                  | Description                                                     | Since |
+| ---------------- | ------------------------------------- | --------------------------------------------------------------- | ----- |
+| **`primitives`** | <code>AndroidHapticPrimitive[]</code> | The primitives that make up the composition, in playback order. | 0.1.3 |
+
+
+#### AndroidHapticPrimitive
+
+| Prop        | Type                                                                              | Description                                                                                                                                    | Default        | Since |
+| ----------- | --------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----- |
+| **`delay`** | <code>number</code>                                                               | The time to wait before playing this primitive, in milliseconds. The delay starts when the previous primitive of the composition has finished. | <code>0</code> | 0.1.3 |
+| **`scale`** | <code>number</code>                                                               | The scale of the primitive as a value between `0` and `1`.                                                                                     | <code>1</code> | 0.1.3 |
+| **`type`**  | <code><a href="#androidhapticprimitivetype">AndroidHapticPrimitiveType</a></code> | The type of the primitive.                                                                                                                     |                | 0.1.3 |
+
+
 #### PlayPatternOptions
 
 | Prop                  | Type                                | Description                                                                                                                       | Since |
@@ -448,13 +508,12 @@ Vibrate the device.
 
 #### HapticEvent
 
-| Prop            | Type                                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                      | Default          | Since |
-| --------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`duration`**  | <code>number</code>                                                       | The duration of the event in seconds. If omitted, the event is a transient tap.                                                                                                                                                                                                                                                                                                                                                  |                  | 0.1.0 |
-| **`intensity`** | <code>number</code>                                                       | The intensity of the event as a value between `0` and `1`. On Android, the intensity is only respected on devices with amplitude control.                                                                                                                                                                                                                                                                                        |                  | 0.1.0 |
-| **`primitive`** | <code><a href="#androidhapticprimitive">AndroidHapticPrimitive</a></code> | The haptic primitive used to play the event. When every event of a pattern is either transient or has a primitive, the pattern is played as a composition of primitives. Each primitive has its own duration, so the `duration` of an event with a primitive is ignored. A primitive the device does not support is played as `Click`. Only available on Android 12+. On older versions, the event is played as a transient tap. |                  | 0.1.3 |
-| **`sharpness`** | <code>number</code>                                                       | The sharpness of the event as a value between `0` and `1`. A lower value results in a rounder, softer feedback while a higher value results in a crisper, more precise feedback. Only available on iOS.                                                                                                                                                                                                                          | <code>0.5</code> | 0.1.0 |
-| **`time`**      | <code>number</code>                                                       | The relative time at which the event occurs, in seconds.                                                                                                                                                                                                                                                                                                                                                                         |                  | 0.1.0 |
+| Prop            | Type                | Description                                                                                                                                                                                             | Default          | Since |
+| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`duration`**  | <code>number</code> | The duration of the event in seconds. If omitted, the event is a transient tap.                                                                                                                         |                  | 0.1.0 |
+| **`intensity`** | <code>number</code> | The intensity of the event as a value between `0` and `1`. On Android, the intensity is only respected on devices with amplitude control.                                                               |                  | 0.1.0 |
+| **`sharpness`** | <code>number</code> | The sharpness of the event as a value between `0` and `1`. A lower value results in a rounder, softer feedback while a higher value results in a crisper, more precise feedback. Only available on iOS. | <code>0.5</code> | 0.1.0 |
+| **`time`**      | <code>number</code> | The relative time at which the event occurs, in seconds.                                                                                                                                                |                  | 0.1.0 |
 
 
 #### HapticParameterCurve
@@ -518,7 +577,7 @@ Vibrate the device.
 | **`VirtualKey`**   | <code>'VIRTUAL_KEY'</code>   | The user has pressed on a virtual on-screen key.                                                                          | 0.1.0 |
 
 
-#### AndroidHapticPrimitive
+#### AndroidHapticPrimitiveType
 
 | Members         | Value                     | Description                                               | Since |
 | --------------- | ------------------------- | --------------------------------------------------------- | ----- |

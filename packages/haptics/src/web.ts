@@ -7,6 +7,7 @@ import type {
   IsAvailableResult,
   NotificationOptions,
   PerformAndroidHapticOptions,
+  PlayAndroidCompositionOptions,
   PlayPatternOptions,
   VibrateOptions,
 } from './definitions';
@@ -33,6 +34,12 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
 
   async performAndroidHaptic(
     _options: PerformAndroidHapticOptions,
+  ): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async playAndroidComposition(
+    _options: PlayAndroidCompositionOptions,
   ): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }

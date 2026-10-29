@@ -2,6 +2,7 @@ package io.capawesome.capacitorjs.plugins.haptics.classes;
 
 public class CustomExceptions {
 
+    public static final CustomException DELAY_INVALID = new CustomException(null, "delay must be greater than or equal to 0.");
     public static final CustomException DURATION_INVALID = new CustomException(null, "duration must be greater than 0.");
     public static final CustomException EVENTS_MISSING = new CustomException(null, "events must be provided.");
     public static final CustomException INTENSITY_INVALID = new CustomException(null, "intensity must be between 0 and 1.");
@@ -10,7 +11,8 @@ public class CustomExceptions {
         "PATTERN_PLAYBACK_FAILED",
         "The haptic pattern could not be played."
     );
-    public static final CustomException PRIMITIVE_INVALID = new CustomException(null, "primitive must be one of the supported values.");
+    public static final CustomException PRIMITIVES_MISSING = new CustomException(null, "primitives must be provided.");
+    public static final CustomException SCALE_INVALID = new CustomException(null, "scale must be between 0 and 1.");
     public static final CustomException STYLE_INVALID = new CustomException(null, "style must be one of the supported values.");
     public static final CustomException TIME_INVALID = new CustomException(null, "time must be greater than or equal to 0.");
     public static final CustomException TIME_MISSING = new CustomException(null, "time must be provided.");

@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.haptics;
 
+import android.os.Build;
 import androidx.annotation.NonNull;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -10,6 +11,7 @@ import io.capawesome.capacitorjs.plugins.haptics.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.ImpactOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.NotificationOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticOptions;
+import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayAndroidCompositionOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayPatternOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.VibrateOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.results.IsAvailableResult;
@@ -20,6 +22,7 @@ import io.capawesome.capacitorjs.plugins.haptics.interfaces.Result;
 @CapacitorPlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
 
+    public static final String ERROR_ANDROID_VERSION_UNSUPPORTED = "This method requires Android 12 or newer.";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String TAG = "HapticsPlugin";
 
@@ -109,6 +112,31 @@ public class HapticsPlugin extends Plugin {
                 }
             };
             implementation.performAndroidHaptic(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void playAndroidComposition(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            call.unavailable(ERROR_ANDROID_VERSION_UNSUPPORTED);
+            return;
+        }
+        try {
+            PlayAndroidCompositionOptions options = new PlayAndroidCompositionOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+            implementation.playAndroidComposition(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

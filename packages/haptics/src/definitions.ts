@@ -45,6 +45,22 @@ export interface HapticsPlugin {
    */
   performAndroidHaptic(options: PerformAndroidHapticOptions): Promise<void>;
   /**
+   * Play a composition of haptic primitives.
+   *
+   * In contrast to `playPattern(...)`, this method maps directly to the
+   * composition primitives of the Android vibrator system, for example to
+   * build the direction-aware double click that Android uses for toggles.
+   * The composition respects the system touch feedback setting on
+   * Android 13+.
+   *
+   * A primitive the device does not support is played as `Click`.
+   *
+   * Only available on Android 12+.
+   *
+   * @since 0.1.3
+   */
+  playAndroidComposition(options: PlayAndroidCompositionOptions): Promise<void>;
+  /**
    * Play a custom haptic pattern composed of individual haptic events.
    *
    * On iOS, the pattern is played using Core Haptics with full support for
@@ -54,9 +70,9 @@ export interface HapticsPlugin {
    *
    * On Android, the pattern is played using vibration effects. Intensity is
    * only respected on devices with amplitude control. On Android 12+, a
-   * pattern whose events are all transient or have a `primitive` is played
-   * as a composition of haptic primitives. On Android 13+, the pattern
-   * respects the system touch feedback setting.
+   * pattern of transient events only is played as a composition of click
+   * primitives. On Android 13+, the pattern respects the system touch
+   * feedback setting.
    *
    * On the web, the pattern is approximated using the Vibration API.
    *
@@ -104,6 +120,38 @@ export interface HapticsPlugin {
 }
 
 /**
+ * @since 0.1.3
+ */
+export interface AndroidHapticPrimitive {
+  /**
+   * The time to wait before playing this primitive, in milliseconds.
+   *
+   * The delay starts when the previous primitive of the composition has
+   * finished.
+   *
+   * @since 0.1.3
+   * @default 0
+   * @example 100
+   */
+  delay?: number;
+  /**
+   * The scale of the primitive as a value between `0` and `1`.
+   *
+   * @since 0.1.3
+   * @default 1
+   * @example 0.5
+   */
+  scale?: number;
+  /**
+   * The type of the primitive.
+   *
+   * @since 0.1.3
+   * @example AndroidHapticPrimitiveType.Click
+   */
+  type: AndroidHapticPrimitiveType;
+}
+
+/**
  * @since 0.1.0
  */
 export interface HapticEvent {
@@ -126,21 +174,6 @@ export interface HapticEvent {
    * @example 1.0
    */
   intensity: number;
-  /**
-   * The haptic primitive used to play the event.
-   *
-   * When every event of a pattern is either transient or has a primitive,
-   * the pattern is played as a composition of primitives. Each primitive has
-   * its own duration, so the `duration` of an event with a primitive is
-   * ignored. A primitive the device does not support is played as `Click`.
-   *
-   * Only available on Android 12+. On older versions, the event is played as
-   * a transient tap.
-   *
-   * @since 0.1.3
-   * @example AndroidHapticPrimitive.SlowRise
-   */
-  primitive?: AndroidHapticPrimitive;
   /**
    * The sharpness of the event as a value between `0` and `1`.
    *
@@ -256,6 +289,18 @@ export interface PerformAndroidHapticOptions {
 }
 
 /**
+ * @since 0.1.3
+ */
+export interface PlayAndroidCompositionOptions {
+  /**
+   * The primitives that make up the composition, in playback order.
+   *
+   * @since 0.1.3
+   */
+  primitives: AndroidHapticPrimitive[];
+}
+
+/**
  * @since 0.1.0
  */
 export interface PlayPatternOptions {
@@ -366,14 +411,14 @@ export enum AndroidHapticType {
 }
 
 /**
- * The haptic primitive of a haptic event.
+ * The type of a haptic primitive.
  *
- * The primitives correspond to the composition primitives of the Android
+ * The types correspond to the composition primitives of the Android
  * vibrator system.
  *
  * @since 0.1.3
  */
-export enum AndroidHapticPrimitive {
+export enum AndroidHapticPrimitiveType {
   /**
    * A sharp, crisp click.
    *
