@@ -9,7 +9,6 @@ end
 
 target 'Plugin' do
   capacitor_pods
-  pod 'YoutubePlayerView', '~> 1.2'
 end
 
 target 'PluginTests' do

@@ -1,9 +1,10 @@
 import Capacitor
 import Foundation
-import YoutubePlayerView
 
 public class YoutubePlayerHelper {
+    static let allowedHosts = ["https://www.youtube.com", "https://www.youtube-nocookie.com"]
     static let allowedPlaybackRates: [Double] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]
+    static let defaultHost = "https://www.youtube.com"
 
     static func getPlayerIdFromCall(_ call: CAPPluginCall) throws -> String {
         guard let id = call.getString("id") else {
@@ -12,14 +13,11 @@ public class YoutubePlayerHelper {
         return id
     }
 
-    static func mapPlayerError(_ error: Error) -> String {
-        guard let playerError = error as? YoutubePlayerError else {
-            return "unknown"
-        }
-        switch playerError {
-        case .invalidParam:
+    static func mapPlayerError(_ error: YoutubePlayerError) -> String {
+        switch error {
+        case .invalidParameter:
             return "invalid-parameter"
-        case .HTML5Error:
+        case .html5Error:
             return "html5-error"
         case .videoNotFound:
             return "video-not-found"

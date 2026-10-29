@@ -78,11 +78,11 @@ The plugin automatically adds the `android.permission.ACCESS_NETWORK_STATE` perm
 
 ### iOS
 
-On iOS, the plugin uses the [YoutubePlayerView](https://github.com/mukeshydv/YoutubePlayerView) library, an open-source wrapper around the official YouTube IFrame Player API. It can be integrated via Swift Package Manager or CocoaPods. No additional configuration is required.
+On iOS, the plugin renders the player in a `WKWebView` using the official [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference). No additional configuration is required.
 
 ### Web
 
-The web implementation loads the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference) from YouTube at runtime. This requires an active network connection. If your app enforces a [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), make sure to allow the YouTube domains (e.g. `https://www.youtube.com` for `script-src` and `frame-src`).
+The web implementation loads the [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference) from YouTube at runtime. This requires an active network connection. If your app enforces a [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), make sure to allow the YouTube domains (e.g. `https://www.youtube.com` for `script-src` and `frame-src`, and `https://www.youtube-nocookie.com` for `frame-src` if you set the `host` option).
 
 ## Configuration
 
@@ -635,17 +635,18 @@ The frame of a player in CSS pixels, relative to the viewport.
 
 #### PlayerOptions
 
-| Prop               | Type                 | Description                                                                                                                             | Default            | Since |
-| ------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
-| **`autoplay`**     | <code>boolean</code> | Whether the video starts playing automatically when the player is created.                                                              | <code>false</code> | 0.1.0 |
-| **`ccLoadPolicy`** | <code>boolean</code> | Whether closed captions are shown by default, even if the user has turned captions off.                                                 | <code>false</code> | 0.1.0 |
-| **`controls`**     | <code>boolean</code> | Whether the player controls are displayed.                                                                                              | <code>true</code>  | 0.1.0 |
-| **`end`**          | <code>number</code>  | The time in seconds at which the player should stop playing the video.                                                                  |                    | 0.1.0 |
-| **`fullscreen`**   | <code>boolean</code> | Whether the fullscreen button is displayed. Only available on Android and Web.                                                          | <code>false</code> | 0.1.0 |
-| **`ivLoadPolicy`** | <code>boolean</code> | Whether video annotations are shown by default.                                                                                         | <code>false</code> | 0.1.0 |
-| **`mute`**         | <code>boolean</code> | Whether the player is muted when it is created.                                                                                         | <code>false</code> | 0.1.0 |
-| **`rel`**          | <code>boolean</code> | Whether related videos from other channels are shown when playback ends. If `false`, related videos are limited to the video's channel. | <code>false</code> | 0.1.0 |
-| **`start`**        | <code>number</code>  | The time in seconds from which the video should start playing.                                                                          |                    | 0.1.0 |
+| Prop               | Type                 | Description                                                                                                                                                                                                                                                                                    | Default                                | Since |
+| ------------------ | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | ----- |
+| **`autoplay`**     | <code>boolean</code> | Whether the video starts playing automatically when the player is created.                                                                                                                                                                                                                     | <code>false</code>                     | 0.1.0 |
+| **`ccLoadPolicy`** | <code>boolean</code> | Whether closed captions are shown by default, even if the user has turned captions off.                                                                                                                                                                                                        | <code>false</code>                     | 0.1.0 |
+| **`controls`**     | <code>boolean</code> | Whether the player controls are displayed.                                                                                                                                                                                                                                                     | <code>true</code>                      | 0.1.0 |
+| **`end`**          | <code>number</code>  | The time in seconds at which the player should stop playing the video.                                                                                                                                                                                                                         |                                        | 0.1.0 |
+| **`fullscreen`**   | <code>boolean</code> | Whether the fullscreen button is displayed. Only available on Android and Web.                                                                                                                                                                                                                 | <code>false</code>                     | 0.1.0 |
+| **`host`**         | <code>string</code>  | The host from which the player is loaded. Set to `https://www.youtube-nocookie.com` to use YouTube's [privacy-enhanced mode](https://support.google.com/youtube/answer/171780). Must be either `https://www.youtube.com` or `https://www.youtube-nocookie.com`. Only available on iOS and Web. | <code>'https://www.youtube.com'</code> | 0.1.2 |
+| **`ivLoadPolicy`** | <code>boolean</code> | Whether video annotations are shown by default.                                                                                                                                                                                                                                                | <code>false</code>                     | 0.1.0 |
+| **`mute`**         | <code>boolean</code> | Whether the player is muted when it is created.                                                                                                                                                                                                                                                | <code>false</code>                     | 0.1.0 |
+| **`rel`**          | <code>boolean</code> | Whether related videos from other channels are shown when playback ends. If `false`, related videos are limited to the video's channel.                                                                                                                                                        | <code>false</code>                     | 0.1.0 |
+| **`start`**        | <code>number</code>  | The time in seconds from which the video should start playing.                                                                                                                                                                                                                                 |                                        | 0.1.0 |
 
 
 #### CreatePlayerWebOptions

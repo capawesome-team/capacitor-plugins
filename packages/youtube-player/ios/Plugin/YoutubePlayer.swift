@@ -1,8 +1,6 @@
 import Capacitor
 import Foundation
 import UIKit
-import WebKit
-import YoutubePlayerView
 
 // swiftlint:disable:next type_body_length
 @objc public class YoutubePlayerImpl: NSObject, YoutubePlayerViewDelegate {
@@ -38,10 +36,10 @@ import YoutubePlayerView
             let view = YoutubePlayerView(frame: options.frame.toCGRect())
             view.delegate = self
             let playerVars = self.createPlayerVars(options)
-            let instance = PlayerInstance(view: view, playerVars: playerVars, muted: options.mute)
+            let instance = PlayerInstance(view: view, host: options.host, playerVars: playerVars, muted: options.mute)
             webView.addSubview(view)
             if let videoId = options.videoId {
-                view.loadWithVideoId(videoId, with: playerVars)
+                view.load(videoId: videoId, host: options.host, playerVars: playerVars)
                 instance.loaded = true
             }
             self.players[options.id] = instance
@@ -97,7 +95,7 @@ import YoutubePlayerView
         withPlayerInstance(options.id, completion) { instance in
             self.whenReady(instance) {
                 instance.muted = true
-                self.evaluateJavaScript("player.mute();", in: instance.view)
+                instance.view.mute()
                 completion(nil)
             }
         }
@@ -121,7 +119,7 @@ import YoutubePlayerView
         }
     }
 
-    public func playerView(_ playerView: YoutubePlayerView, didChangedToState state: YoutubePlayerState) {
+    public func playerView(_ playerView: YoutubePlayerView, didChangeToState state: YoutubePlayerState) {
         guard let (id, instance) = findPlayer(by: playerView) else {
             return
         }
@@ -141,7 +139,7 @@ import YoutubePlayerView
         plugin.notifyCurrentTimeChangeListeners(CurrentTimeChangeEvent(currentTime: Double(time), id: id))
     }
 
-    public func playerView(_ playerView: YoutubePlayerView, receivedError error: Error) {
+    public func playerView(_ playerView: YoutubePlayerView, receivedError error: YoutubePlayerError) {
         guard let (id, _) = findPlayer(by: playerView) else {
             return
         }
@@ -154,7 +152,7 @@ import YoutubePlayerView
         }
         instance.ready = true
         if instance.muted {
-            evaluateJavaScript("player.mute();", in: playerView)
+            playerView.mute()
         }
         let pendingActions = instance.pendingActions
         instance.pendingActions = []
@@ -215,7 +213,7 @@ import YoutubePlayerView
         withPlayerInstance(options.id, completion) { instance in
             self.whenReady(instance) {
                 instance.muted = false
-                self.evaluateJavaScript("player.unMute();", in: instance.view)
+                instance.view.unmute()
                 completion(nil)
             }
         }
@@ -244,13 +242,6 @@ import YoutubePlayerView
         return playerVars
     }
 
-    private func evaluateJavaScript(_ javaScript: String, in view: YoutubePlayerView) {
-        guard let webView = view.subviews.compactMap({ $0 as? WKWebView }).first else {
-            return
-        }
-        webView.evaluateJavaScript(javaScript, completionHandler: nil)
-    }
-
     private func findPlayer(by view: YoutubePlayerView) -> (String, PlayerInstance)? {
         for (id, instance) in players where instance.view === view {
             return (id, instance)
@@ -276,9 +267,9 @@ import YoutubePlayerView
         if instance.loaded {
             whenReady(instance) {
                 if autoplay {
-                    instance.view.loadVideoById(videoId, startSeconds: startSeconds, suggestedQuality: .default)
+                    instance.view.loadVideoById(videoId, startSeconds: startSeconds)
                 } else {
-                    instance.view.cueVideoById(videoId, startSeconds: startSeconds, suggestedQuality: .default)
+                    instance.view.cueVideoById(videoId, startSeconds: startSeconds)
                 }
                 completion(nil)
             }
@@ -288,7 +279,7 @@ import YoutubePlayerView
             if startSeconds > 0 {
                 playerVars["start"] = Int(startSeconds)
             }
-            instance.view.loadWithVideoId(videoId, with: playerVars)
+            instance.view.load(videoId: videoId, host: instance.host, playerVars: playerVars)
             instance.loaded = true
             completion(nil)
         }

@@ -5,6 +5,7 @@ public enum CustomError: Error {
     case frameInvalid
     case frameMissing
     case frameTooSmall
+    case hostInvalid
     case playerAlreadyExists
     case playerIdInvalid
     case playerIdMissing
@@ -21,7 +22,7 @@ public enum CustomError: Error {
             return "FRAME_INVALID"
         case .frameMissing:
             return "FRAME_MISSING"
-        case .playerAlreadyExists:
+        case .hostInvalid, .playerAlreadyExists:
             return nil
         case .playerIdInvalid:
             return "PLAYER_ID_INVALID"
@@ -50,6 +51,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("frame must be provided.", comment: "frameMissing")
         case .frameTooSmall:
             return NSLocalizedString("frame must be at least 200×200 pixels.", comment: "frameTooSmall")
+        case .hostInvalid:
+            return NSLocalizedString("host must be https://www.youtube.com or https://www.youtube-nocookie.com.", comment: "hostInvalid")
         case .playerAlreadyExists:
             return NSLocalizedString("a player with the provided id already exists.", comment: "playerAlreadyExists")
         case .playerIdInvalid:

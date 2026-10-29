@@ -49,6 +49,7 @@ interface YouTubePlayerOptions {
     onStateChange: (event: { data: number }) => void;
   };
   height: string;
+  host?: string;
   playerVars: Record<string, string | number>;
   videoId?: string;
   width: string;
@@ -77,6 +78,10 @@ interface PlayerInstance {
 }
 
 export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
+  private static readonly allowedHosts = [
+    'https://www.youtube.com',
+    'https://www.youtube-nocookie.com',
+  ];
   private static readonly allowedPlaybackRates = [
     0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2,
   ];
@@ -90,6 +95,8 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
   private static readonly errorFrameMissing = 'frame must be provided.';
   private static readonly errorFrameTooSmall =
     'frame must be at least 200×200 pixels.';
+  private static readonly errorHostInvalid =
+    'host must be https://www.youtube.com or https://www.youtube-nocookie.com.';
   private static readonly errorPlayerAlreadyExists =
     'a player with the provided id already exists.';
   private static readonly errorPlayerIdInvalid =
@@ -120,6 +127,7 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
       throw this.createException(YoutubePlayerWeb.errorPlayerAlreadyExists);
     }
     const frame = this.getValidFrame(options.frame);
+    const host = this.getValidHost(options.options?.host);
     const api = await this.loadApi();
     let container: HTMLElement;
     let ownsContainer: boolean;
@@ -166,6 +174,7 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
         },
       },
       height: '100%',
+      host,
       playerVars: this.createPlayerVars(options),
       videoId: options.videoId,
       width: '100%',
@@ -400,6 +409,13 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
       );
     }
     return frame;
+  }
+
+  private getValidHost(host: string | undefined): string | undefined {
+    if (host !== undefined && !YoutubePlayerWeb.allowedHosts.includes(host)) {
+      throw this.createException(YoutubePlayerWeb.errorHostInvalid);
+    }
+    return host;
   }
 
   private getValidVideoId(videoId: string | undefined): string {
