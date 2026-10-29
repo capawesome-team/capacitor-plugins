@@ -7,7 +7,7 @@ enum CustomError: Error {
     case intensityInvalid
     case intensityMissing
     case parameterInvalid
-    case patternPlaybackFailed
+    case playbackFailed
     case sharpnessInvalid
     case styleInvalid
     case timeInvalid
@@ -18,8 +18,8 @@ enum CustomError: Error {
 
     var code: String? {
         switch self {
-        case .patternPlaybackFailed:
-            return "PATTERN_PLAYBACK_FAILED"
+        case .playbackFailed:
+            return "PLAYBACK_FAILED"
         default:
             return nil
         }
@@ -41,8 +41,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("intensity must be provided.", comment: "intensityMissing")
         case .parameterInvalid:
             return NSLocalizedString("parameter must be one of the supported values.", comment: "parameterInvalid")
-        case .patternPlaybackFailed:
-            return NSLocalizedString("The haptic pattern could not be played.", comment: "patternPlaybackFailed")
+        case .playbackFailed:
+            return NSLocalizedString("The haptic pattern could not be played.", comment: "playbackFailed")
         case .sharpnessInvalid:
             return NSLocalizedString("sharpness must be between 0 and 1.", comment: "sharpnessInvalid")
         case .styleInvalid:

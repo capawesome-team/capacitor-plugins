@@ -9,7 +9,7 @@ public class HapticsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "impact", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "isAvailable", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "notification", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "performAndroidHaptic", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "performAndroidHapticFeedback", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "playAndroidComposition", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "playPattern", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "selectionChanged", returnType: CAPPluginReturnPromise),
@@ -65,7 +65,7 @@ public class HapticsPlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
-    @objc func performAndroidHaptic(_ call: CAPPluginCall) {
+    @objc func performAndroidHapticFeedback(_ call: CAPPluginCall) {
         rejectCallAsUnimplemented(call)
     }
 

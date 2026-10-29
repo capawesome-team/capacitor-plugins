@@ -10,7 +10,7 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.haptics.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.ImpactOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.NotificationOptions;
-import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticOptions;
+import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticFeedbackOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayAndroidCompositionOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayPatternOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.VibrateOptions;
@@ -97,9 +97,9 @@ public class HapticsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void performAndroidHaptic(PluginCall call) {
+    public void performAndroidHapticFeedback(PluginCall call) {
         try {
-            PerformAndroidHapticOptions options = new PerformAndroidHapticOptions(call);
+            PerformAndroidHapticFeedbackOptions options = new PerformAndroidHapticFeedbackOptions(call);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
@@ -111,7 +111,7 @@ public class HapticsPlugin extends Plugin {
                     rejectCall(call, exception);
                 }
             };
-            implementation.performAndroidHaptic(options, callback);
+            implementation.performAndroidHapticFeedback(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }

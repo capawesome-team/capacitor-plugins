@@ -7,10 +7,7 @@ public class CustomExceptions {
     public static final CustomException EVENTS_MISSING = new CustomException(null, "events must be provided.");
     public static final CustomException INTENSITY_INVALID = new CustomException(null, "intensity must be between 0 and 1.");
     public static final CustomException INTENSITY_MISSING = new CustomException(null, "intensity must be provided.");
-    public static final CustomException PATTERN_PLAYBACK_FAILED = new CustomException(
-        "PATTERN_PLAYBACK_FAILED",
-        "The haptic pattern could not be played."
-    );
+    public static final CustomException PLAYBACK_FAILED = new CustomException("PLAYBACK_FAILED", "The haptic pattern could not be played.");
     public static final CustomException PRIMITIVES_MISSING = new CustomException(null, "primitives must be provided.");
     public static final CustomException SCALE_INVALID = new CustomException(null, "scale must be between 0 and 1.");
     public static final CustomException STYLE_INVALID = new CustomException(null, "style must be one of the supported values.");

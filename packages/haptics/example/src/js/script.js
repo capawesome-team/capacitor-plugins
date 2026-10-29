@@ -38,17 +38,17 @@ document.addEventListener('DOMContentLoaded', () => {
       await Haptics.selectionEnd();
     });
   document
-    .querySelector('#performAndroidHaptic')
+    .querySelector('#performAndroidHapticFeedback')
     .addEventListener('click', async () => {
-      const type = document.querySelector('#androidHapticType').value;
-      await Haptics.performAndroidHaptic({ type });
+      const type = document.querySelector('#androidHapticFeedbackType').value;
+      await Haptics.performAndroidHapticFeedback({ type });
     });
   document.querySelector('#playPattern').addEventListener('click', async () => {
     await Haptics.playPattern({
       events: [
         { time: 0, intensity: 1, sharpness: 0.8 },
-        { time: 0.2, intensity: 0.6, sharpness: 0.4 },
-        { time: 0.4, intensity: 0.8, duration: 0.5 },
+        { time: 200, intensity: 0.6, sharpness: 0.4 },
+        { time: 400, intensity: 0.8, duration: 500 },
       ],
     });
   });
@@ -69,15 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
     .addEventListener('click', async () => {
       await Haptics.playPattern({
         events: [
-          { time: 0, intensity: 1, sharpness: 0.3, duration: 1 },
-          { time: 1, intensity: 1, sharpness: 0.9 },
+          { time: 0, intensity: 1, sharpness: 0.3, duration: 1000 },
+          { time: 1000, intensity: 1, sharpness: 0.9 },
         ],
         parameterCurves: [
           {
             parameter: 'INTENSITY',
             controlPoints: [
               { time: 0, value: 0.1 },
-              { time: 1, value: 1 },
+              { time: 1000, value: 1 },
             ],
           },
         ],

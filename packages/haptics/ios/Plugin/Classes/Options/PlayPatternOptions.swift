@@ -53,9 +53,9 @@ import CoreHaptics
                 guard value > 0 else {
                     throw CustomError.durationInvalid
                 }
-                duration = value
+                duration = value / 1000
             }
-            events.append(Event(duration: duration, intensity: intensity, sharpness: sharpness, time: time))
+            events.append(Event(duration: duration, intensity: intensity, sharpness: sharpness, time: time / 1000))
         }
         return events
     }
@@ -102,6 +102,6 @@ import CoreHaptics
         guard valueRange.contains(value) else {
             throw CustomError.valueInvalid
         }
-        return CHHapticParameterCurve.ControlPoint(relativeTime: time, value: value)
+        return CHHapticParameterCurve.ControlPoint(relativeTime: time / 1000, value: value)
     }
 }

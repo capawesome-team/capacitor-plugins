@@ -44,7 +44,7 @@ import UIKit
             try player.start(atTime: CHHapticTimeImmediate)
             completion(nil)
         } catch {
-            completion(CustomError.patternPlaybackFailed)
+            completion(CustomError.playbackFailed)
         }
     }
 

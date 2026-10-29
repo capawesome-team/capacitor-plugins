@@ -15,7 +15,7 @@ import androidx.annotation.RequiresApi;
 import io.capawesome.capacitorjs.plugins.haptics.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.ImpactOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.NotificationOptions;
-import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticOptions;
+import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticFeedbackOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayAndroidCompositionOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayPatternOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.VibrateOptions;
@@ -56,7 +56,8 @@ public class Haptics {
         callback.success();
     }
 
-    public void performAndroidHaptic(@NonNull PerformAndroidHapticOptions options, @NonNull EmptyCallback callback) throws Exception {
+    public void performAndroidHapticFeedback(@NonNull PerformAndroidHapticFeedbackOptions options, @NonNull EmptyCallback callback)
+        throws Exception {
         int constant = getHapticFeedbackConstantForType(options.getType());
         View webView = plugin.getBridge().getWebView();
         webView.post(() -> webView.performHapticFeedback(constant));
@@ -69,7 +70,7 @@ public class Haptics {
             try {
                 playComposition(options.getPrimitives());
             } catch (RuntimeException exception) {
-                throw CustomExceptions.PATTERN_PLAYBACK_FAILED;
+                throw CustomExceptions.PLAYBACK_FAILED;
             }
         }
         callback.success();
@@ -85,7 +86,7 @@ public class Haptics {
                     playTimeline(events);
                 }
             } catch (RuntimeException exception) {
-                throw CustomExceptions.PATTERN_PLAYBACK_FAILED;
+                throw CustomExceptions.PLAYBACK_FAILED;
             }
         }
         callback.success();
