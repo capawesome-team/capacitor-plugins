@@ -6,7 +6,8 @@ import type {
   ImpactOptions,
   IsAvailableResult,
   NotificationOptions,
-  PerformAndroidHapticOptions,
+  PerformAndroidHapticFeedbackOptions,
+  PlayAndroidCompositionOptions,
   PlayPatternOptions,
   VibrateOptions,
 } from './definitions';
@@ -31,8 +32,14 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     this.vibrateOrThrow(this.getPatternForNotificationType(type));
   }
 
-  async performAndroidHaptic(
-    _options: PerformAndroidHapticOptions,
+  async performAndroidHapticFeedback(
+    _options: PerformAndroidHapticFeedbackOptions,
+  ): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async playAndroidComposition(
+    _options: PlayAndroidCompositionOptions,
   ): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
@@ -66,10 +73,10 @@ export class HapticsWeb extends WebPlugin implements HapticsPlugin {
     const pattern: number[] = [];
     let currentTime = 0;
     for (const event of sortedEvents) {
-      const startTime = Math.max(Math.round(event.time * 1000), currentTime);
+      const startTime = Math.max(Math.round(event.time), currentTime);
       const pause = startTime - currentTime;
       const duration = event.duration
-        ? Math.round(event.duration * 1000)
+        ? Math.round(event.duration)
         : HapticsWeb.transientEventDuration;
       if (pattern.length === 0) {
         if (pause > 0) {

@@ -80,9 +80,9 @@ public class PlayPatternOptions {
                 if (duration <= 0) {
                     throw CustomExceptions.DURATION_INVALID;
                 }
-                durationMs = Math.round(duration * 1000);
+                durationMs = Math.round(duration);
             }
-            events.add(new Event(durationMs, (float) intensity, Math.round(time * 1000)));
+            events.add(new Event(durationMs, (float) intensity, Math.round(time)));
         }
         return events;
     }

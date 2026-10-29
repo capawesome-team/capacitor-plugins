@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import com.getcapacitor.PluginCall;
 import io.capawesome.capacitorjs.plugins.haptics.classes.CustomExceptions;
 
-public class PerformAndroidHapticOptions {
+public class PerformAndroidHapticFeedbackOptions {
 
     @NonNull
     private final String type;
 
-    public PerformAndroidHapticOptions(@NonNull PluginCall call) throws Exception {
-        this.type = PerformAndroidHapticOptions.getTypeFromCall(call);
+    public PerformAndroidHapticFeedbackOptions(@NonNull PluginCall call) throws Exception {
+        this.type = PerformAndroidHapticFeedbackOptions.getTypeFromCall(call);
     }
 
     @NonNull

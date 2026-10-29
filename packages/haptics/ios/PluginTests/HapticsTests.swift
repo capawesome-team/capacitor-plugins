@@ -3,7 +3,7 @@ import XCTest
 
 class HapticsTests: XCTestCase {
 
-    func testPatternPlaybackFailedErrorCode() {
-        XCTAssertEqual("PATTERN_PLAYBACK_FAILED", CustomError.patternPlaybackFailed.code)
+    func testPlaybackFailedErrorCode() {
+        XCTAssertEqual("PLAYBACK_FAILED", CustomError.playbackFailed.code)
     }
 }

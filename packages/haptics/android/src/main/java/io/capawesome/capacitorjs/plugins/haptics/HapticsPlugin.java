@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.haptics;
 
+import android.os.Build;
 import androidx.annotation.NonNull;
 import com.getcapacitor.Logger;
 import com.getcapacitor.Plugin;
@@ -9,7 +10,8 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.haptics.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.ImpactOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.NotificationOptions;
-import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticOptions;
+import io.capawesome.capacitorjs.plugins.haptics.classes.options.PerformAndroidHapticFeedbackOptions;
+import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayAndroidCompositionOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.PlayPatternOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.options.VibrateOptions;
 import io.capawesome.capacitorjs.plugins.haptics.classes.results.IsAvailableResult;
@@ -20,6 +22,8 @@ import io.capawesome.capacitorjs.plugins.haptics.interfaces.Result;
 @CapacitorPlugin(name = "Haptics")
 public class HapticsPlugin extends Plugin {
 
+    public static final String ERROR_ANDROID_VERSION_UNSUPPORTED = "This method requires Android 12 or newer.";
+    public static final String ERROR_PRIMITIVES_UNSUPPORTED = "This device does not support haptic primitives.";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String TAG = "HapticsPlugin";
 
@@ -94,9 +98,9 @@ public class HapticsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void performAndroidHaptic(PluginCall call) {
+    public void performAndroidHapticFeedback(PluginCall call) {
         try {
-            PerformAndroidHapticOptions options = new PerformAndroidHapticOptions(call);
+            PerformAndroidHapticFeedbackOptions options = new PerformAndroidHapticFeedbackOptions(call);
             EmptyCallback callback = new EmptyCallback() {
                 @Override
                 public void success() {
@@ -108,7 +112,36 @@ public class HapticsPlugin extends Plugin {
                     rejectCall(call, exception);
                 }
             };
-            implementation.performAndroidHaptic(options, callback);
+            implementation.performAndroidHapticFeedback(options, callback);
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void playAndroidComposition(PluginCall call) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            call.unavailable(ERROR_ANDROID_VERSION_UNSUPPORTED);
+            return;
+        }
+        if (!implementation.supportsPrimitives()) {
+            call.unavailable(ERROR_PRIMITIVES_UNSUPPORTED);
+            return;
+        }
+        try {
+            PlayAndroidCompositionOptions options = new PlayAndroidCompositionOptions(call);
+            EmptyCallback callback = new EmptyCallback() {
+                @Override
+                public void success() {
+                    resolveCall(call);
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    rejectCall(call, exception);
+                }
+            };
+            implementation.playAndroidComposition(options, callback);
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
