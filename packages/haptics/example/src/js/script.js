@@ -52,4 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
       ],
     });
   });
+  document
+    .querySelector('#playPrimitivePattern')
+    .addEventListener('click', async () => {
+      await Haptics.playPattern({
+        events: [
+          { time: 0, intensity: 0.5, primitive: 'TICK' },
+          { time: 0.1, intensity: 1, primitive: 'CLICK' },
+          { time: 0.5, intensity: 1, primitive: 'SLOW_RISE' },
+          { time: 1, intensity: 1, primitive: 'THUD' },
+        ],
+      });
+    });
+  document
+    .querySelector('#playCurvePattern')
+    .addEventListener('click', async () => {
+      await Haptics.playPattern({
+        events: [
+          { time: 0, intensity: 1, sharpness: 0.3, duration: 1 },
+          { time: 1, intensity: 1, sharpness: 0.9 },
+        ],
+        parameterCurves: [
+          {
+            parameter: 'INTENSITY',
+            controlPoints: [
+              { time: 0, value: 0.1 },
+              { time: 1, value: 1 },
+            ],
+          },
+        ],
+      });
+    });
 });

@@ -1,16 +1,20 @@
 import Foundation
 
 enum CustomError: Error {
+    case controlPointsMissing
     case durationInvalid
     case eventsMissing
     case intensityInvalid
     case intensityMissing
+    case parameterInvalid
     case patternPlaybackFailed
     case sharpnessInvalid
     case styleInvalid
     case timeInvalid
     case timeMissing
     case typeInvalid
+    case valueInvalid
+    case valueMissing
 
     var code: String? {
         switch self {
@@ -25,6 +29,8 @@ enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .controlPointsMissing:
+            return NSLocalizedString("controlPoints must be provided.", comment: "controlPointsMissing")
         case .durationInvalid:
             return NSLocalizedString("duration must be greater than 0.", comment: "durationInvalid")
         case .eventsMissing:
@@ -33,6 +39,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("intensity must be between 0 and 1.", comment: "intensityInvalid")
         case .intensityMissing:
             return NSLocalizedString("intensity must be provided.", comment: "intensityMissing")
+        case .parameterInvalid:
+            return NSLocalizedString("parameter must be one of the supported values.", comment: "parameterInvalid")
         case .patternPlaybackFailed:
             return NSLocalizedString("The haptic pattern could not be played.", comment: "patternPlaybackFailed")
         case .sharpnessInvalid:
@@ -45,6 +53,10 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("time must be provided.", comment: "timeMissing")
         case .typeInvalid:
             return NSLocalizedString("type must be one of the supported values.", comment: "typeInvalid")
+        case .valueInvalid:
+            return NSLocalizedString("value must be between 0 and 1 for INTENSITY and between -1 and 1 for SHARPNESS.", comment: "valueInvalid")
+        case .valueMissing:
+            return NSLocalizedString("value must be provided.", comment: "valueMissing")
         }
     }
 }

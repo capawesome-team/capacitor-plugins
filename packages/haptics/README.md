@@ -147,6 +147,34 @@ const playPattern = async () => {
 };
 ```
 
+On Android 12+, events can name a haptic primitive. On iOS, parameter curves can change the intensity or sharpness of the whole pattern over time. Each platform ignores the hints of the other, so both can live in one pattern:
+
+```typescript
+import {
+  AndroidHapticPrimitive,
+  HapticParameter,
+  Haptics,
+} from '@capawesome/capacitor-haptics';
+
+const playToggleOn = async () => {
+  await Haptics.playPattern({
+    events: [
+      { time: 0, intensity: 0.5, sharpness: 0.3, primitive: AndroidHapticPrimitive.Tick },
+      { time: 0.1, intensity: 1, sharpness: 0.9, primitive: AndroidHapticPrimitive.Click },
+    ],
+    parameterCurves: [
+      {
+        parameter: HapticParameter.Intensity,
+        controlPoints: [
+          { time: 0, value: 0.5 },
+          { time: 0.1, value: 1 },
+        ],
+      },
+    ],
+  });
+};
+```
+
 ### Perform an Android haptic effect
 
 Perform a semantic Android haptic feedback effect that respects the user's haptic feedback settings. Only available on Android:
@@ -293,7 +321,10 @@ playback support (for example an iPhone with a Taptic Engine).
 Otherwise, the call rejects as unavailable.
 
 On Android, the pattern is played using vibration effects. Intensity is
-only respected on devices with amplitude control.
+only respected on devices with amplitude control. On Android 12+, a
+pattern whose events are all transient or have a `primitive` is played
+as a composition of haptic primitives. On Android 13+, the pattern
+respects the system touch feedback setting.
 
 On the web, the pattern is approximated using the Vibration API.
 
@@ -409,19 +440,37 @@ Vibrate the device.
 
 #### PlayPatternOptions
 
-| Prop         | Type                       | Description                                 | Since |
-| ------------ | -------------------------- | ------------------------------------------- | ----- |
-| **`events`** | <code>HapticEvent[]</code> | The haptic events that make up the pattern. | 0.1.0 |
+| Prop                  | Type                                | Description                                                                                                                       | Since |
+| --------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`events`**          | <code>HapticEvent[]</code>          | The haptic events that make up the pattern.                                                                                       | 0.1.0 |
+| **`parameterCurves`** | <code>HapticParameterCurve[]</code> | The curves that change a parameter of the whole pattern over time, for example an intensity that ramps up. Only available on iOS. | 0.1.3 |
 
 
 #### HapticEvent
 
-| Prop            | Type                | Description                                                                                                                                                                                             | Default          | Since |
-| --------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
-| **`duration`**  | <code>number</code> | The duration of the event in seconds. If omitted, the event is a transient tap.                                                                                                                         |                  | 0.1.0 |
-| **`intensity`** | <code>number</code> | The intensity of the event as a value between `0` and `1`. On Android, the intensity is only respected on devices with amplitude control.                                                               |                  | 0.1.0 |
-| **`sharpness`** | <code>number</code> | The sharpness of the event as a value between `0` and `1`. A lower value results in a rounder, softer feedback while a higher value results in a crisper, more precise feedback. Only available on iOS. | <code>0.5</code> | 0.1.0 |
-| **`time`**      | <code>number</code> | The relative time at which the event occurs, in seconds.                                                                                                                                                |                  | 0.1.0 |
+| Prop            | Type                                                                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                      | Default          | Since |
+| --------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ----- |
+| **`duration`**  | <code>number</code>                                                       | The duration of the event in seconds. If omitted, the event is a transient tap.                                                                                                                                                                                                                                                                                                                                                  |                  | 0.1.0 |
+| **`intensity`** | <code>number</code>                                                       | The intensity of the event as a value between `0` and `1`. On Android, the intensity is only respected on devices with amplitude control.                                                                                                                                                                                                                                                                                        |                  | 0.1.0 |
+| **`primitive`** | <code><a href="#androidhapticprimitive">AndroidHapticPrimitive</a></code> | The haptic primitive used to play the event. When every event of a pattern is either transient or has a primitive, the pattern is played as a composition of primitives. Each primitive has its own duration, so the `duration` of an event with a primitive is ignored. A primitive the device does not support is played as `Click`. Only available on Android 12+. On older versions, the event is played as a transient tap. |                  | 0.1.3 |
+| **`sharpness`** | <code>number</code>                                                       | The sharpness of the event as a value between `0` and `1`. A lower value results in a rounder, softer feedback while a higher value results in a crisper, more precise feedback. Only available on iOS.                                                                                                                                                                                                                          | <code>0.5</code> | 0.1.0 |
+| **`time`**      | <code>number</code>                                                       | The relative time at which the event occurs, in seconds.                                                                                                                                                                                                                                                                                                                                                                         |                  | 0.1.0 |
+
+
+#### HapticParameterCurve
+
+| Prop                | Type                                                        | Description                                                                                                         | Since |
+| ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`controlPoints`** | <code>HapticParameterCurveControlPoint[]</code>             | The control points of the curve, at most 16. The value is interpolated linearly between consecutive control points. | 0.1.3 |
+| **`parameter`**     | <code><a href="#hapticparameter">HapticParameter</a></code> | The parameter the curve controls.                                                                                   | 0.1.3 |
+
+
+#### HapticParameterCurveControlPoint
+
+| Prop        | Type                | Description                                                                     | Since |
+| ----------- | ------------------- | ------------------------------------------------------------------------------- | ----- |
+| **`time`**  | <code>number</code> | The time of the control point relative to the start of the pattern, in seconds. | 0.1.3 |
+| **`value`** | <code>number</code> | The value of the parameter at this control point.                               | 0.1.3 |
 
 
 #### VibrateOptions
@@ -467,6 +516,28 @@ Vibrate the device.
 | **`ToggleOff`**    | <code>'TOGGLE_OFF'</code>    | The user has toggled a switch or button into the off position. On Android 13 and older, `ClockTick` is performed instead. | 0.1.0 |
 | **`ToggleOn`**     | <code>'TOGGLE_ON'</code>     | The user has toggled a switch or button into the on position. On Android 13 and older, `ClockTick` is performed instead.  | 0.1.0 |
 | **`VirtualKey`**   | <code>'VIRTUAL_KEY'</code>   | The user has pressed on a virtual on-screen key.                                                                          | 0.1.0 |
+
+
+#### AndroidHapticPrimitive
+
+| Members         | Value                     | Description                                               | Since |
+| --------------- | ------------------------- | --------------------------------------------------------- | ----- |
+| **`Click`**     | <code>'CLICK'</code>      | A sharp, crisp click.                                     | 0.1.3 |
+| **`LowTick`**   | <code>'LOW_TICK'</code>   | A very short, low frequency tick.                         | 0.1.3 |
+| **`QuickFall`** | <code>'QUICK_FALL'</code> | A quick downwards movement with gravity.                  | 0.1.3 |
+| **`QuickRise`** | <code>'QUICK_RISE'</code> | A quick upwards movement against gravity.                 | 0.1.3 |
+| **`SlowRise`**  | <code>'SLOW_RISE'</code>  | A slow upwards movement against gravity.                  | 0.1.3 |
+| **`Spin`**      | <code>'SPIN'</code>       | A spinning momentum.                                      | 0.1.3 |
+| **`Thud`**      | <code>'THUD'</code>       | A downwards movement with gravity, ending in a collision. | 0.1.3 |
+| **`Tick`**      | <code>'TICK'</code>       | A very short, light and crisp tick.                       | 0.1.3 |
+
+
+#### HapticParameter
+
+| Members         | Value                    | Description                                                                          | Since |
+| --------------- | ------------------------ | ------------------------------------------------------------------------------------ | ----- |
+| **`Intensity`** | <code>'INTENSITY'</code> | Multiplies the intensity of every event. Control point values range from `0` to `1`. | 0.1.3 |
+| **`Sharpness`** | <code>'SHARPNESS'</code> | Offsets the sharpness of every event. Control point values range from `-1` to `1`.   | 0.1.3 |
 
 </docgen-api>
 

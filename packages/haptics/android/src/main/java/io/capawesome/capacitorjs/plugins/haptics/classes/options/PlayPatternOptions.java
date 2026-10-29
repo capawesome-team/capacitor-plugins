@@ -1,6 +1,9 @@
 package io.capawesome.capacitorjs.plugins.haptics.classes.options;
 
+import android.annotation.SuppressLint;
+import android.os.VibrationEffect;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
 import io.capawesome.capacitorjs.plugins.haptics.classes.CustomExceptions;
@@ -14,11 +17,16 @@ public class PlayPatternOptions {
 
         private final long durationMs;
         private final float intensity;
+
+        @Nullable
+        private final Integer primitive;
+
         private final long timeMs;
 
-        public Event(long durationMs, float intensity, long timeMs) {
+        public Event(long durationMs, float intensity, @Nullable Integer primitive, long timeMs) {
             this.durationMs = durationMs;
             this.intensity = intensity;
+            this.primitive = primitive;
             this.timeMs = timeMs;
         }
 
@@ -28,6 +36,11 @@ public class PlayPatternOptions {
 
         public float getIntensity() {
             return intensity;
+        }
+
+        @Nullable
+        public Integer getPrimitive() {
+            return primitive;
         }
 
         public long getTimeMs() {
@@ -82,8 +95,36 @@ public class PlayPatternOptions {
                 }
                 durationMs = Math.round(duration * 1000);
             }
-            events.add(new Event(durationMs, (float) intensity, Math.round(time * 1000)));
+            Integer primitive = null;
+            if (eventObject.has("primitive")) {
+                primitive = PlayPatternOptions.getPrimitiveForName(eventObject.getString("primitive"));
+            }
+            events.add(new Event(durationMs, (float) intensity, primitive, Math.round(time * 1000)));
         }
         return events;
+    }
+
+    @SuppressLint("InlinedApi")
+    private static int getPrimitiveForName(@NonNull String name) throws Exception {
+        switch (name) {
+            case "CLICK":
+                return VibrationEffect.Composition.PRIMITIVE_CLICK;
+            case "LOW_TICK":
+                return VibrationEffect.Composition.PRIMITIVE_LOW_TICK;
+            case "QUICK_FALL":
+                return VibrationEffect.Composition.PRIMITIVE_QUICK_FALL;
+            case "QUICK_RISE":
+                return VibrationEffect.Composition.PRIMITIVE_QUICK_RISE;
+            case "SLOW_RISE":
+                return VibrationEffect.Composition.PRIMITIVE_SLOW_RISE;
+            case "SPIN":
+                return VibrationEffect.Composition.PRIMITIVE_SPIN;
+            case "THUD":
+                return VibrationEffect.Composition.PRIMITIVE_THUD;
+            case "TICK":
+                return VibrationEffect.Composition.PRIMITIVE_TICK;
+            default:
+                throw CustomExceptions.PRIMITIVE_INVALID;
+        }
     }
 }

@@ -10,6 +10,7 @@ public class CustomExceptions {
         "PATTERN_PLAYBACK_FAILED",
         "The haptic pattern could not be played."
     );
+    public static final CustomException PRIMITIVE_INVALID = new CustomException(null, "primitive must be one of the supported values.");
     public static final CustomException STYLE_INVALID = new CustomException(null, "style must be one of the supported values.");
     public static final CustomException TIME_INVALID = new CustomException(null, "time must be greater than or equal to 0.");
     public static final CustomException TIME_MISSING = new CustomException(null, "time must be provided.");

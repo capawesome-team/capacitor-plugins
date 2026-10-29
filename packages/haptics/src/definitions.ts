@@ -53,7 +53,10 @@ export interface HapticsPlugin {
    * Otherwise, the call rejects as unavailable.
    *
    * On Android, the pattern is played using vibration effects. Intensity is
-   * only respected on devices with amplitude control.
+   * only respected on devices with amplitude control. On Android 12+, a
+   * pattern whose events are all transient or have a `primitive` is played
+   * as a composition of haptic primitives. On Android 13+, the pattern
+   * respects the system touch feedback setting.
    *
    * On the web, the pattern is approximated using the Vibration API.
    *
@@ -124,6 +127,21 @@ export interface HapticEvent {
    */
   intensity: number;
   /**
+   * The haptic primitive used to play the event.
+   *
+   * When every event of a pattern is either transient or has a primitive,
+   * the pattern is played as a composition of primitives. Each primitive has
+   * its own duration, so the `duration` of an event with a primitive is
+   * ignored. A primitive the device does not support is played as `Click`.
+   *
+   * Only available on Android 12+. On older versions, the event is played as
+   * a transient tap.
+   *
+   * @since 0.1.3
+   * @example AndroidHapticPrimitive.SlowRise
+   */
+  primitive?: AndroidHapticPrimitive;
+  /**
    * The sharpness of the event as a value between `0` and `1`.
    *
    * A lower value results in a rounder, softer feedback while a higher value
@@ -143,6 +161,47 @@ export interface HapticEvent {
    * @example 0.2
    */
   time: number;
+}
+
+/**
+ * @since 0.1.3
+ */
+export interface HapticParameterCurve {
+  /**
+   * The control points of the curve, at most 16.
+   *
+   * The value is interpolated linearly between consecutive control points.
+   *
+   * @since 0.1.3
+   */
+  controlPoints: HapticParameterCurveControlPoint[];
+  /**
+   * The parameter the curve controls.
+   *
+   * @since 0.1.3
+   */
+  parameter: HapticParameter;
+}
+
+/**
+ * @since 0.1.3
+ */
+export interface HapticParameterCurveControlPoint {
+  /**
+   * The time of the control point relative to the start of the pattern,
+   * in seconds.
+   *
+   * @since 0.1.3
+   * @example 0.3
+   */
+  time: number;
+  /**
+   * The value of the parameter at this control point.
+   *
+   * @since 0.1.3
+   * @example 1.0
+   */
+  value: number;
 }
 
 /**
@@ -206,6 +265,15 @@ export interface PlayPatternOptions {
    * @since 0.1.0
    */
   events: HapticEvent[];
+  /**
+   * The curves that change a parameter of the whole pattern over time, for
+   * example an intensity that ramps up.
+   *
+   * Only available on iOS.
+   *
+   * @since 0.1.3
+   */
+  parameterCurves?: HapticParameterCurve[];
 }
 
 /**
@@ -298,6 +366,65 @@ export enum AndroidHapticType {
 }
 
 /**
+ * The haptic primitive of a haptic event.
+ *
+ * The primitives correspond to the composition primitives of the Android
+ * vibrator system.
+ *
+ * @since 0.1.3
+ */
+export enum AndroidHapticPrimitive {
+  /**
+   * A sharp, crisp click.
+   *
+   * @since 0.1.3
+   */
+  Click = 'CLICK',
+  /**
+   * A very short, low frequency tick.
+   *
+   * @since 0.1.3
+   */
+  LowTick = 'LOW_TICK',
+  /**
+   * A quick downwards movement with gravity.
+   *
+   * @since 0.1.3
+   */
+  QuickFall = 'QUICK_FALL',
+  /**
+   * A quick upwards movement against gravity.
+   *
+   * @since 0.1.3
+   */
+  QuickRise = 'QUICK_RISE',
+  /**
+   * A slow upwards movement against gravity.
+   *
+   * @since 0.1.3
+   */
+  SlowRise = 'SLOW_RISE',
+  /**
+   * A spinning momentum.
+   *
+   * @since 0.1.3
+   */
+  Spin = 'SPIN',
+  /**
+   * A downwards movement with gravity, ending in a collision.
+   *
+   * @since 0.1.3
+   */
+  Thud = 'THUD',
+  /**
+   * A very short, light and crisp tick.
+   *
+   * @since 0.1.3
+   */
+  Tick = 'TICK',
+}
+
+/**
  * @since 0.1.0
  */
 export enum ErrorCode {
@@ -307,6 +434,30 @@ export enum ErrorCode {
    * @since 0.1.0
    */
   PatternPlaybackFailed = 'PATTERN_PLAYBACK_FAILED',
+}
+
+/**
+ * The parameter of a haptic pattern that a parameter curve controls.
+ *
+ * @since 0.1.3
+ */
+export enum HapticParameter {
+  /**
+   * Multiplies the intensity of every event.
+   *
+   * Control point values range from `0` to `1`.
+   *
+   * @since 0.1.3
+   */
+  Intensity = 'INTENSITY',
+  /**
+   * Offsets the sharpness of every event.
+   *
+   * Control point values range from `-1` to `1`.
+   *
+   * @since 0.1.3
+   */
+  Sharpness = 'SHARPNESS',
 }
 
 /**

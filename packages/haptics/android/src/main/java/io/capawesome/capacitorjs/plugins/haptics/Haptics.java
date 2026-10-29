@@ -1,7 +1,9 @@
 package io.capawesome.capacitorjs.plugins.haptics;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.os.VibrationAttributes;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.os.VibratorManager;
@@ -64,7 +66,7 @@ public class Haptics {
         if (vibrator != null) {
             List<PlayPatternOptions.Event> events = sortEventsByTime(options.getEvents());
             try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && supportsComposition(events)) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && supportsComposition(events)) {
                     playComposition(events);
                 } else {
                     playTimeline(events);
@@ -90,7 +92,7 @@ public class Haptics {
     }
 
     public void vibrate(@NonNull VibrateOptions options, @NonNull EmptyCallback callback) {
-        vibrateOneShot(options.getDuration(), VibrationEffect.DEFAULT_AMPLITUDE);
+        vibrateOneShot(options.getDuration(), VibrationEffect.DEFAULT_AMPLITUDE, false);
         callback.success();
     }
 
@@ -140,28 +142,28 @@ public class Haptics {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     vibratePredefined(VibrationEffect.EFFECT_HEAVY_CLICK);
                 } else {
-                    vibrateOneShot(60, 255);
+                    vibrateOneShot(60, 255, true);
                 }
                 break;
             case "LIGHT":
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     vibratePredefined(VibrationEffect.EFFECT_TICK);
                 } else {
-                    vibrateOneShot(20, 100);
+                    vibrateOneShot(20, 100, true);
                 }
                 break;
             case "MEDIUM":
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     vibratePredefined(VibrationEffect.EFFECT_CLICK);
                 } else {
-                    vibrateOneShot(40, 180);
+                    vibrateOneShot(40, 180, true);
                 }
                 break;
             case "RIGID":
-                vibrateOneShot(25, 255);
+                vibrateOneShot(25, 255, true);
                 break;
             case "SOFT":
-                vibrateOneShot(50, 100);
+                vibrateOneShot(50, 100, true);
                 break;
             default:
                 throw CustomExceptions.STYLE_INVALID;
@@ -194,23 +196,44 @@ public class Haptics {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibratePredefined(VibrationEffect.EFFECT_TICK);
         } else {
-            vibrateOneShot(10, 80);
+            vibrateOneShot(10, 80, true);
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
+    /**
+     * The delay of a primitive counts from the end of the previous primitive,
+     * so the measured primitive durations are needed to hit the event times.
+     */
+    @SuppressLint("WrongConstant")
+    @RequiresApi(api = Build.VERSION_CODES.S)
     private void playComposition(@NonNull List<PlayPatternOptions.Event> sortedEvents) {
         if (vibrator == null) {
             return;
         }
+        int[] primitives = getSupportedPrimitives(sortedEvents);
+        int[] durations = vibrator.getPrimitiveDurations(primitives);
         VibrationEffect.Composition composition = VibrationEffect.startComposition();
-        long currentTime = 0;
-        for (PlayPatternOptions.Event event : sortedEvents) {
-            long startTime = Math.max(event.getTimeMs(), currentTime);
-            composition.addPrimitive(VibrationEffect.Composition.PRIMITIVE_CLICK, event.getIntensity(), (int) (startTime - currentTime));
-            currentTime = startTime;
+        long previousEndTime = 0;
+        for (int index = 0; index < sortedEvents.size(); index++) {
+            PlayPatternOptions.Event event = sortedEvents.get(index);
+            long startTime = Math.max(event.getTimeMs(), previousEndTime);
+            composition.addPrimitive(primitives[index], event.getIntensity(), Math.toIntExact(startTime - previousEndTime));
+            previousEndTime = startTime + durations[index];
         }
-        vibrator.vibrate(composition.compose());
+        vibrateEffect(composition.compose(), true);
+    }
+
+    @NonNull
+    @SuppressLint("WrongConstant")
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private int[] getSupportedPrimitives(@NonNull List<PlayPatternOptions.Event> events) {
+        int[] primitives = new int[events.size()];
+        for (int index = 0; index < events.size(); index++) {
+            Integer primitive = events.get(index).getPrimitive();
+            boolean supported = primitive != null && vibrator != null && vibrator.areAllPrimitivesSupported(primitive);
+            primitives[index] = supported ? primitive : VibrationEffect.Composition.PRIMITIVE_CLICK;
+        }
+        return primitives;
     }
 
     private void playTimeline(@NonNull List<PlayPatternOptions.Event> sortedEvents) {
@@ -239,25 +262,37 @@ public class Haptics {
         return sortedEvents;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.R)
+    @RequiresApi(api = Build.VERSION_CODES.S)
     private boolean supportsComposition(@NonNull List<PlayPatternOptions.Event> events) {
         if (vibrator == null) {
             return false;
         }
         for (PlayPatternOptions.Event event : events) {
-            if (!event.isTransient()) {
+            if (event.getPrimitive() == null && !event.isTransient()) {
                 return false;
             }
         }
         return vibrator.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_CLICK);
     }
 
-    private void vibrateOneShot(long duration, int amplitude) {
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void vibrateEffect(@NonNull VibrationEffect effect, boolean isTouchFeedback) {
+        if (vibrator == null) {
+            return;
+        }
+        if (isTouchFeedback && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            vibrator.vibrate(effect, VibrationAttributes.createForUsage(VibrationAttributes.USAGE_TOUCH));
+        } else {
+            vibrator.vibrate(effect);
+        }
+    }
+
+    private void vibrateOneShot(long duration, int amplitude, boolean isTouchFeedback) {
         if (vibrator == null) {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(duration, amplitude));
+            vibrateEffect(VibrationEffect.createOneShot(duration, amplitude), isTouchFeedback);
         } else {
             vibrator.vibrate(duration);
         }
@@ -265,10 +300,7 @@ public class Haptics {
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     private void vibratePredefined(int effectId) {
-        if (vibrator == null) {
-            return;
-        }
-        vibrator.vibrate(VibrationEffect.createPredefined(effectId));
+        vibrateEffect(VibrationEffect.createPredefined(effectId), true);
     }
 
     private void vibrateWaveform(@NonNull long[] timings, @NonNull int[] amplitudes) {
@@ -276,7 +308,7 @@ public class Haptics {
             return;
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createWaveform(timings, amplitudes, -1));
+            vibrateEffect(VibrationEffect.createWaveform(timings, amplitudes, -1), true);
         } else {
             vibrator.vibrate(timings, -1);
         }

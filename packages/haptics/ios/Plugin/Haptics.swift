@@ -37,7 +37,7 @@ import UIKit
 
     @objc public func playPattern(_ options: PlayPatternOptions, completion: @escaping (Error?) -> Void) {
         do {
-            let pattern = try createPattern(from: options.events)
+            let pattern = try createPattern(from: options)
             let engine = try getEngine()
             let player = try engine.makePlayer(with: pattern)
             try engine.start()
@@ -82,9 +82,9 @@ import UIKit
         completion(nil)
     }
 
-    private func createPattern(from events: [PlayPatternOptions.Event]) throws -> CHHapticPattern {
+    private func createPattern(from options: PlayPatternOptions) throws -> CHHapticPattern {
         var hapticEvents: [CHHapticEvent] = []
-        for event in events {
+        for event in options.events {
             let parameters = [
                 CHHapticEventParameter(parameterID: .hapticIntensity, value: event.intensity),
                 CHHapticEventParameter(parameterID: .hapticSharpness, value: event.sharpness)
@@ -97,7 +97,10 @@ import UIKit
                 hapticEvents.append(CHHapticEvent(eventType: .hapticTransient, parameters: parameters, relativeTime: event.time))
             }
         }
-        return try CHHapticPattern(events: hapticEvents, parameters: [])
+        let parameterCurves = options.parameterCurves.map { curve in
+            CHHapticParameterCurve(parameterID: curve.parameter, controlPoints: curve.controlPoints, relativeTime: 0)
+        }
+        return try CHHapticPattern(events: hapticEvents, parameterCurves: parameterCurves)
     }
 
     private func getEngine() throws -> CHHapticEngine {
