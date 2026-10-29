@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`1fd215c6809d36226802875541c15c60157a2251`](https://github.com/capawesome-team/capacitor-plugins/commit/1fd215c6809d36226802875541c15c60157a2251) ([#1171](https://github.com/capawesome-team/capacitor-plugins/pull/1171)): feat(ios/web): add `host` player option to support YouTube's privacy-enhanced mode
+
+- [`1fd215c6809d36226802875541c15c60157a2251`](https://github.com/capawesome-team/capacitor-plugins/commit/1fd215c6809d36226802875541c15c60157a2251) ([#1171](https://github.com/capawesome-team/capacitor-plugins/pull/1171)): refactor(ios): replace the `YoutubePlayerView` dependency with a built-in player view
+
 ## 0.1.1
 
 ### Patch Changes
