@@ -105,6 +105,11 @@ public class Haptics {
         callback.success();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public boolean supportsPrimitives() {
+        return vibrator != null && vibrator.areAllPrimitivesSupported(VibrationEffect.Composition.PRIMITIVE_CLICK);
+    }
+
     public void vibrate(@NonNull VibrateOptions options, @NonNull EmptyCallback callback) {
         if (vibrator != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

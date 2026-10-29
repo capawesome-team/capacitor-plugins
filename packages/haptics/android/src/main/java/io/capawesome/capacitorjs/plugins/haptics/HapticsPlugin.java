@@ -23,6 +23,7 @@ import io.capawesome.capacitorjs.plugins.haptics.interfaces.Result;
 public class HapticsPlugin extends Plugin {
 
     public static final String ERROR_ANDROID_VERSION_UNSUPPORTED = "This method requires Android 12 or newer.";
+    public static final String ERROR_PRIMITIVES_UNSUPPORTED = "This device does not support haptic primitives.";
     public static final String ERROR_UNKNOWN_ERROR = "An unknown error has occurred.";
     public static final String TAG = "HapticsPlugin";
 
@@ -121,6 +122,10 @@ public class HapticsPlugin extends Plugin {
     public void playAndroidComposition(PluginCall call) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             call.unavailable(ERROR_ANDROID_VERSION_UNSUPPORTED);
+            return;
+        }
+        if (!implementation.supportsPrimitives()) {
+            call.unavailable(ERROR_PRIMITIVES_UNSUPPORTED);
             return;
         }
         try {

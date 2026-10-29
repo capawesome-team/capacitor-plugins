@@ -57,7 +57,8 @@ export interface HapticsPlugin {
    *
    * A primitive the device does not support is played as `Click`.
    *
-   * Only available on Android 12+.
+   * Only available on Android 12+. This requires a device with haptic
+   * primitive support. Otherwise, the call rejects as unavailable.
    *
    * @since 0.2.0
    */
