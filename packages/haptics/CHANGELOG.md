@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): feat!: use milliseconds for all times and durations of `playPattern(...)`
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): feat!: rename `performAndroidHaptic(...)` to `performAndroidHapticFeedback(...)` and `AndroidHapticType` to `AndroidHapticFeedbackType`
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): feat!: rename the `PATTERN_PLAYBACK_FAILED` error code to `PLAYBACK_FAILED`
+
+### Patch Changes
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): fix(android): play `playPattern(...)` events at their requested times when played as a composition, which now requires Android 12+
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): feat(android): add the `playAndroidComposition(...)` method
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): fix(android): play haptic feedback with the touch vibration usage so that the system touch feedback setting is respected
+
+- [`a60b200e78c2eb6c8fb03a42650618bc81a01a7b`](https://github.com/capawesome-team/capacitor-plugins/commit/a60b200e78c2eb6c8fb03a42650618bc81a01a7b) ([#1185](https://github.com/capawesome-team/capacitor-plugins/pull/1185)): feat(ios): add the `parameterCurves` option to the `PlayPatternOptions` interface
+
 ## 0.1.2
 
 ### Patch Changes
