@@ -55,7 +55,7 @@ import UIKit
             pdfView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             pdfView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             pdfView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            pdfView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            pdfView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         NotificationCenter.default.addObserver(
             self,
@@ -87,6 +87,10 @@ import UIKit
         pdfView.displayMode = .singlePageContinuous
         pdfView.displayDirection = .vertical
         pdfView.document = document
+        // The view is laid out inside the safe area, so no inset is needed. The automatic
+        // adjustment lags one layout pass behind, which shifts the initial scroll position
+        // by the navigation bar height and skews `go(to:)` by the safe area insets.
+        (pdfView.subviews.first { $0 is UIScrollView } as? UIScrollView)?.contentInsetAdjustmentBehavior = .never
         return pdfView
     }
 
