@@ -1,5 +1,11 @@
 # @capawesome/capacitor-pdf-viewer
 
+## 0.1.4
+
+### Patch Changes
+
+- [`d7928b6525f4eda60e68efc4410a2923f2c8cd0a`](https://github.com/capawesome-team/capacitor-plugins/commit/d7928b6525f4eda60e68efc4410a2923f2c8cd0a) ([#1183](https://github.com/capawesome-team/capacitor-plugins/pull/1183)): fix(ios): open the viewer at the top of the first page instead of scrolled partway into it
+
 ## 0.1.3
 
 ### Patch Changes
