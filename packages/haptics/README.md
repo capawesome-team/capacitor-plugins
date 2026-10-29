@@ -197,15 +197,10 @@ const playToggleOn = async () => {
 Perform a semantic Android haptic feedback effect that respects the user's haptic feedback settings. Only available on Android:
 
 ```typescript
-import {
-  AndroidHapticFeedbackType,
-  Haptics,
-} from '@capawesome/capacitor-haptics';
+import { AndroidHapticFeedbackType, Haptics } from '@capawesome/capacitor-haptics';
 
 const performAndroidHapticFeedback = async () => {
-  await Haptics.performAndroidHapticFeedback({
-    type: AndroidHapticFeedbackType.Confirm,
-  });
+  await Haptics.performAndroidHapticFeedback({ type: AndroidHapticFeedbackType.Confirm });
 };
 ```
 
@@ -225,18 +220,18 @@ const vibrate = async () => {
 
 <docgen-index>
 
-- [`impact(...)`](#impact)
-- [`isAvailable()`](#isavailable)
-- [`notification(...)`](#notification)
-- [`performAndroidHapticFeedback(...)`](#performandroidhapticfeedback)
-- [`playAndroidComposition(...)`](#playandroidcomposition)
-- [`playPattern(...)`](#playpattern)
-- [`selectionChanged()`](#selectionchanged)
-- [`selectionEnd()`](#selectionend)
-- [`selectionStart()`](#selectionstart)
-- [`vibrate(...)`](#vibrate)
-- [Interfaces](#interfaces)
-- [Enums](#enums)
+* [`impact(...)`](#impact)
+* [`isAvailable()`](#isavailable)
+* [`notification(...)`](#notification)
+* [`performAndroidHapticFeedback(...)`](#performandroidhapticfeedback)
+* [`playAndroidComposition(...)`](#playandroidcomposition)
+* [`playPattern(...)`](#playpattern)
+* [`selectionChanged()`](#selectionchanged)
+* [`selectionEnd()`](#selectionend)
+* [`selectionStart()`](#selectionstart)
+* [`vibrate(...)`](#vibrate)
+* [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -262,7 +257,8 @@ On Android, the impact style is mapped to a best-effort vibration effect.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### isAvailable()
 
@@ -280,7 +276,8 @@ On the web, this checks whether the Vibration API is supported.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### notification(...)
 
@@ -302,7 +299,8 @@ effect.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### performAndroidHapticFeedback(...)
 
@@ -324,7 +322,8 @@ Only available on Android.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### playAndroidComposition(...)
 
@@ -351,7 +350,8 @@ primitive support. Otherwise, the call rejects as unavailable.
 
 **Since:** 0.2.0
 
----
+--------------------
+
 
 ### playPattern(...)
 
@@ -380,7 +380,8 @@ On the web, the pattern is approximated using the Vibration API.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### selectionChanged()
 
@@ -396,7 +397,8 @@ On the web, this method does nothing.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### selectionEnd()
 
@@ -412,7 +414,8 @@ On the web, this method does nothing.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### selectionStart()
 
@@ -430,7 +433,8 @@ On the web, this method does nothing.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### vibrate(...)
 
@@ -446,9 +450,11 @@ Vibrate the device.
 
 **Since:** 0.1.0
 
----
+--------------------
+
 
 ### Interfaces
+
 
 #### ImpactOptions
 
@@ -456,11 +462,13 @@ Vibrate the device.
 | ----------- | --------------------------------------------------- | ------------------------ | ------------------------------- | ----- |
 | **`style`** | <code><a href="#impactstyle">ImpactStyle</a></code> | The style of the impact. | <code>ImpactStyle.Medium</code> | 0.1.0 |
 
+
 #### IsAvailableResult
 
 | Prop            | Type                 | Description                                                | Since |
 | --------------- | -------------------- | ---------------------------------------------------------- | ----- |
 | **`available`** | <code>boolean</code> | Whether or not haptic feedback is available on the device. | 0.1.0 |
+
 
 #### NotificationOptions
 
@@ -468,17 +476,20 @@ Vibrate the device.
 | ---------- | ------------------------------------------------------------- | ----------------------------- | ------------------------------------- | ----- |
 | **`type`** | <code><a href="#notificationtype">NotificationType</a></code> | The type of the notification. | <code>NotificationType.Success</code> | 0.1.0 |
 
+
 #### PerformAndroidHapticFeedbackOptions
 
 | Prop       | Type                                                                            | Description                                    | Since |
 | ---------- | ------------------------------------------------------------------------------- | ---------------------------------------------- | ----- |
 | **`type`** | <code><a href="#androidhapticfeedbacktype">AndroidHapticFeedbackType</a></code> | The Android haptic feedback effect to perform. | 0.1.0 |
 
+
 #### PlayAndroidCompositionOptions
 
 | Prop             | Type                                  | Description                                                     | Since |
 | ---------------- | ------------------------------------- | --------------------------------------------------------------- | ----- |
 | **`primitives`** | <code>AndroidHapticPrimitive[]</code> | The primitives that make up the composition, in playback order. | 0.2.0 |
+
 
 #### AndroidHapticPrimitive
 
@@ -488,12 +499,14 @@ Vibrate the device.
 | **`scale`** | <code>number</code>                                                               | The scale of the primitive as a value between `0` and `1`.                                                                                     | <code>1</code> | 0.2.0 |
 | **`type`**  | <code><a href="#androidhapticprimitivetype">AndroidHapticPrimitiveType</a></code> | The type of the primitive.                                                                                                                     |                | 0.2.0 |
 
+
 #### PlayPatternOptions
 
 | Prop                  | Type                                | Description                                                                                                                       | Since |
 | --------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`events`**          | <code>HapticEvent[]</code>          | The haptic events that make up the pattern.                                                                                       | 0.1.0 |
 | **`parameterCurves`** | <code>HapticParameterCurve[]</code> | The curves that change a parameter of the whole pattern over time, for example an intensity that ramps up. Only available on iOS. | 0.2.0 |
+
 
 #### HapticEvent
 
@@ -504,12 +517,14 @@ Vibrate the device.
 | **`sharpness`** | <code>number</code> | The sharpness of the event as a value between `0` and `1`. A lower value results in a rounder, softer feedback while a higher value results in a crisper, more precise feedback. Only available on iOS. | <code>0.5</code> | 0.1.0 |
 | **`time`**      | <code>number</code> | The relative time at which the event occurs, in milliseconds.                                                                                                                                           |                  | 0.1.0 |
 
+
 #### HapticParameterCurve
 
 | Prop                | Type                                                        | Description                                                                                                         | Since |
 | ------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
 | **`controlPoints`** | <code>HapticParameterCurveControlPoint[]</code>             | The control points of the curve, at most 16. The value is interpolated linearly between consecutive control points. | 0.2.0 |
 | **`parameter`**     | <code><a href="#hapticparameter">HapticParameter</a></code> | The parameter the curve controls.                                                                                   | 0.2.0 |
+
 
 #### HapticParameterCurveControlPoint
 
@@ -518,13 +533,16 @@ Vibrate the device.
 | **`time`**  | <code>number</code> | The time of the control point relative to the start of the pattern, in milliseconds. | 0.2.0 |
 | **`value`** | <code>number</code> | The value of the parameter at this control point.                                    | 0.2.0 |
 
+
 #### VibrateOptions
 
 | Prop           | Type                | Description                                                                       | Default          | Since |
 | -------------- | ------------------- | --------------------------------------------------------------------------------- | ---------------- | ----- |
 | **`duration`** | <code>number</code> | The duration of the vibration in milliseconds. Only available on Android and Web. | <code>300</code> | 0.1.0 |
 
+
 ### Enums
+
 
 #### ImpactStyle
 
@@ -536,6 +554,7 @@ Vibrate the device.
 | **`Rigid`**  | <code>'RIGID'</code>  | A collision between hard or inflexible user interface elements. | 0.1.0 |
 | **`Soft`**   | <code>'SOFT'</code>   | A collision between soft or flexible user interface elements.   | 0.1.0 |
 
+
 #### NotificationType
 
 | Members       | Value                  | Description                                  | Since |
@@ -543,6 +562,7 @@ Vibrate the device.
 | **`Error`**   | <code>'ERROR'</code>   | A task or action has failed.                 | 0.1.0 |
 | **`Success`** | <code>'SUCCESS'</code> | A task or action has completed successfully. | 0.1.0 |
 | **`Warning`** | <code>'WARNING'</code> | A task or action has produced a warning.     | 0.1.0 |
+
 
 #### AndroidHapticFeedbackType
 
@@ -558,6 +578,7 @@ Vibrate the device.
 | **`ToggleOn`**     | <code>'TOGGLE_ON'</code>     | The user has toggled a switch or button into the on position. On Android 13 and older, `ClockTick` is performed instead.  | 0.1.0 |
 | **`VirtualKey`**   | <code>'VIRTUAL_KEY'</code>   | The user has pressed on a virtual on-screen key.                                                                          | 0.1.0 |
 
+
 #### AndroidHapticPrimitiveType
 
 | Members         | Value                     | Description                                               | Since |
@@ -570,6 +591,7 @@ Vibrate the device.
 | **`Spin`**      | <code>'SPIN'</code>       | A spinning momentum.                                      | 0.2.0 |
 | **`Thud`**      | <code>'THUD'</code>       | A downwards movement with gravity, ending in a collision. | 0.2.0 |
 | **`Tick`**      | <code>'TICK'</code>       | A very short, light and crisp tick.                       | 0.2.0 |
+
 
 #### HapticParameter
 
@@ -584,18 +606,18 @@ Vibrate the device.
 
 This plugin is a drop-in replacement for the official `@capacitor/haptics` plugin with a few differences:
 
-| `@capacitor/haptics`                             | Haptics                                                      |
-| ------------------------------------------------ | ------------------------------------------------------------ |
-| `impact()` (defaults to `ImpactStyle.Heavy`)     | `impact()` (defaults to `ImpactStyle.Medium`)                |
-| `impact({ style })` (`Heavy`, `Medium`, `Light`) | `impact({ style })` (plus the new `Rigid` and `Soft` styles) |
-| `notification({ type })`                         | `notification({ type })`                                     |
-| `vibrate({ duration })`                          | `vibrate({ duration })`                                      |
-| `selectionStart()`                               | `selectionStart()`                                           |
-| `selectionChanged()`                             | `selectionChanged()`                                         |
-| `selectionEnd()`                                 | `selectionEnd()`                                             |
-| —                                                | `isAvailable()`                                              |
-| —                                                | `performAndroidHapticFeedback({ type })`                     |
-| —                                                | `playPattern({ events })`                                    |
+| `@capacitor/haptics`                             | Haptics                                                       |
+| ------------------------------------------------ | ------------------------------------------------------------- |
+| `impact()` (defaults to `ImpactStyle.Heavy`)     | `impact()` (defaults to `ImpactStyle.Medium`)                 |
+| `impact({ style })` (`Heavy`, `Medium`, `Light`) | `impact({ style })` (plus the new `Rigid` and `Soft` styles)  |
+| `notification({ type })`                         | `notification({ type })`                                      |
+| `vibrate({ duration })`                          | `vibrate({ duration })`                                       |
+| `selectionStart()`                               | `selectionStart()`                                            |
+| `selectionChanged()`                             | `selectionChanged()`                                          |
+| `selectionEnd()`                                 | `selectionEnd()`                                              |
+| —                                                | `isAvailable()`                                               |
+| —                                                | `performAndroidHapticFeedback({ type })`                              |
+| —                                                | `playPattern({ events })`                                     |
 
 **Attention**: The default impact style changed from `ImpactStyle.Heavy` to `ImpactStyle.Medium`. If you rely on the old default, pass `ImpactStyle.Heavy` explicitly.
 
@@ -603,15 +625,15 @@ This plugin is a drop-in replacement for the official `@capacitor/haptics` plugi
 
 The haptic capabilities of the platforms differ. This plugin maps every method to the best available platform API:
 
-| Method                              | Android                                     | iOS                                                      | Web           |
-| ----------------------------------- | ------------------------------------------- | -------------------------------------------------------- | ------------- |
-| `impact(...)`                       | Predefined or tuned vibration effects       | `UIImpactFeedbackGenerator` (all 5 styles)               | Vibration API |
-| `notification(...)`                 | Tuned vibration waveforms                   | `UINotificationFeedbackGenerator`                        | Vibration API |
-| `selection*()`                      | Tick vibration effect                       | `UISelectionFeedbackGenerator`                           | No-op         |
-| `vibrate(...)`                      | Vibrator with custom duration               | System vibration (fixed duration)                        | Vibration API |
-| `performAndroidHapticFeedback(...)` | Haptic feedback constants (no vibrator)     | Not available                                            | Not available |
-| `playAndroidComposition(...)`       | Composition of haptic primitives            | Not available                                            | Not available |
-| `playPattern(...)`                  | Vibration effects (composition or waveform) | Core Haptics (intensity, sharpness and parameter curves) | Vibration API |
+| Method                   | Android                                     | iOS                                        | Web                       |
+| ------------------------ | ------------------------------------------- | ------------------------------------------ | ------------------------- |
+| `impact(...)`            | Predefined or tuned vibration effects       | `UIImpactFeedbackGenerator` (all 5 styles) | Vibration API             |
+| `notification(...)`      | Tuned vibration waveforms                   | `UINotificationFeedbackGenerator`          | Vibration API             |
+| `selection*()`           | Tick vibration effect                       | `UISelectionFeedbackGenerator`             | No-op                     |
+| `vibrate(...)`           | Vibrator with custom duration               | System vibration (fixed duration)          | Vibration API             |
+| `performAndroidHapticFeedback(...)` | Haptic feedback constants (no vibrator)  | Not available                              | Not available             |
+| `playAndroidComposition(...)` | Composition of haptic primitives | Not available | Not available |
+| `playPattern(...)`       | Vibration effects (composition or waveform) | Core Haptics (intensity, sharpness and parameter curves) | Vibration API |
 
 Custom haptic patterns are strongest on iOS, where Core Haptics supports per-event intensity and sharpness. On Android, patterns are approximated using vibration effect primitives (Android 12+ with supported hardware) or amplitude-controlled waveforms. On the web, patterns are approximated using the Vibration API, which only supports on/off timings.
 
