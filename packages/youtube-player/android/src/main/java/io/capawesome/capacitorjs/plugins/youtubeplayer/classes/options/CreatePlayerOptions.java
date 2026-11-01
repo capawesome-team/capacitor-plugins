@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.PluginCall;
+import io.capawesome.capacitorjs.plugins.youtubeplayer.YoutubePlayerHelper;
+import io.capawesome.capacitorjs.plugins.youtubeplayer.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.youtubeplayer.classes.PlayerFrame;
 import java.util.UUID;
 
@@ -20,6 +22,9 @@ public class CreatePlayerOptions {
     private final PlayerFrame frame;
 
     private final boolean fullscreen;
+
+    @NonNull
+    private final String host;
 
     @NonNull
     private final String id;
@@ -42,6 +47,7 @@ public class CreatePlayerOptions {
         this.end = CreatePlayerOptions.getSecondsFromObject(playerOptions, "end");
         this.frame = PlayerFrame.getFrameFromCall(call);
         this.fullscreen = playerOptions != null && playerOptions.optBoolean("fullscreen", false);
+        this.host = CreatePlayerOptions.getHostFromObject(playerOptions);
         this.id = CreatePlayerOptions.getIdFromCall(call);
         this.ivLoadPolicy = playerOptions != null && playerOptions.optBoolean("ivLoadPolicy", false);
         this.mute = playerOptions != null && playerOptions.optBoolean("mute", false);
@@ -77,6 +83,11 @@ public class CreatePlayerOptions {
     }
 
     @NonNull
+    public String getHost() {
+        return host;
+    }
+
+    @NonNull
     public String getId() {
         return id;
     }
@@ -101,6 +112,18 @@ public class CreatePlayerOptions {
     @Nullable
     public String getVideoId() {
         return videoId;
+    }
+
+    @NonNull
+    private static String getHostFromObject(@Nullable JSObject object) throws Exception {
+        String host = object == null ? null : object.getString("host");
+        if (host == null) {
+            return YoutubePlayerHelper.DEFAULT_HOST;
+        }
+        if (!YoutubePlayerHelper.ALLOWED_HOSTS.contains(host)) {
+            throw CustomExceptions.HOST_INVALID;
+        }
+        return host;
     }
 
     @NonNull

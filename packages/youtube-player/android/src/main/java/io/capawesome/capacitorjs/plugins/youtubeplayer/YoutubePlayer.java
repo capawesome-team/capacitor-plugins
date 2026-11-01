@@ -327,6 +327,7 @@ public class YoutubePlayer {
             .fullscreen(options.getFullscreen() ? 1 : 0)
             .ivLoadPolicy(options.getIvLoadPolicy() ? 1 : 3)
             .mute(options.getMute() ? 1 : 0)
+            .privacyEnhancedMode(options.getHost().equals(YoutubePlayerHelper.PRIVACY_ENHANCED_HOST))
             .rel(options.getRel() ? 1 : 0);
         if (options.getEnd() != null) {
             builder.end(options.getEnd());

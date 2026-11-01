@@ -5,8 +5,13 @@ import androidx.annotation.Nullable;
 import com.getcapacitor.PluginCall;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import io.capawesome.capacitorjs.plugins.youtubeplayer.classes.CustomExceptions;
+import java.util.List;
 
 public class YoutubePlayerHelper {
+
+    public static final String DEFAULT_HOST = "https://www.youtube.com";
+    public static final String PRIVACY_ENHANCED_HOST = "https://www.youtube-nocookie.com";
+    public static final List<String> ALLOWED_HOSTS = List.of(DEFAULT_HOST, PRIVACY_ENHANCED_HOST);
 
     @NonNull
     public static String getPlayerIdFromCall(@NonNull PluginCall call) throws Exception {
