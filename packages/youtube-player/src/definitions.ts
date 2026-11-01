@@ -536,7 +536,9 @@ export interface PlayerOptions {
    *
    * Must be either `https://www.youtube.com` or `https://www.youtube-nocookie.com`.
    *
-   * Only available on iOS and Web.
+   * Note that privacy-enhanced mode does not prevent YouTube from storing
+   * cookies on the device, because the IFrame Player API script is always
+   * loaded from `https://www.youtube.com`.
    *
    * @default 'https://www.youtube.com'
    * @since 0.1.2

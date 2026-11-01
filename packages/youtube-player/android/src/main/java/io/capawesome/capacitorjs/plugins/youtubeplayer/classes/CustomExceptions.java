@@ -9,6 +9,10 @@ public class CustomExceptions {
     );
     public static final CustomException FRAME_MISSING = new CustomException("FRAME_MISSING", "frame must be provided.");
     public static final CustomException FRAME_TOO_SMALL = new CustomException("FRAME_INVALID", "frame must be at least 200×200 pixels.");
+    public static final CustomException HOST_INVALID = new CustomException(
+        null,
+        "host must be https://www.youtube.com or https://www.youtube-nocookie.com."
+    );
     public static final CustomException PLAYER_ALREADY_EXISTS = new CustomException(null, "a player with the provided id already exists.");
     public static final CustomException PLAYER_ID_INVALID = new CustomException(
         "PLAYER_ID_INVALID",
