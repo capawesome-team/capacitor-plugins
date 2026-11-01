@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`21e7b4c55f1f98fca9b30aa7a7bb9532ba201330`](https://github.com/capawesome-team/capacitor-plugins/commit/21e7b4c55f1f98fca9b30aa7a7bb9532ba201330) ([#1187](https://github.com/capawesome-team/capacitor-plugins/pull/1187)): feat(android): add support for the `host` player option
+
 ## 0.1.2
 
 ### Patch Changes
