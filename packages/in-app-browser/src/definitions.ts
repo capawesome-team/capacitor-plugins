@@ -292,6 +292,15 @@ export interface OpenInSystemBrowserIosOptions {
  */
 export interface OpenInWebViewOptions {
   /**
+   * Whether or not the web view accepts third-party cookies.
+   *
+   * Only available on Android.
+   *
+   * @default false
+   * @since 0.2.3
+   */
+  acceptThirdPartyCookies?: boolean;
+  /**
    * Options that are only applied on Android.
    *
    * Only available on Android.

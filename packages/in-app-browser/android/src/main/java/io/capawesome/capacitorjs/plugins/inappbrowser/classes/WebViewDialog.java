@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -232,6 +233,7 @@ public class WebViewDialog extends Dialog {
         settings.setSupportZoom(options.getAllowZoom());
         settings.setBuiltInZoomControls(options.getAllowZoom());
         settings.setDisplayZoomControls(false);
+        CookieManager.getInstance().setAcceptThirdPartyCookies(webView, options.getAcceptThirdPartyCookies());
         String userAgent = options.getUserAgent();
         if (userAgent != null) {
             settings.setUserAgentString(userAgent);
