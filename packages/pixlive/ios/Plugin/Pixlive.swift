@@ -56,13 +56,25 @@ import VDARSDK
             return
         }
         let priors = PixliveHelper.buildTagPriors(options.tags)
-        VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
-            if let err = err {
-                completion(err)
-            } else {
-                completion(nil)
-            }
-        })
+        runAfterLoadingOnMain {
+            VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
+                if let err = err {
+                    completion(err)
+                } else {
+                    completion(nil)
+                }
+            })
+        }
+    }
+
+    // The SDK requires the context DB to be loaded and the call to happen on the main thread.
+    private func runAfterLoadingOnMain(_ block: @escaping () -> Void) {
+        let mainBlock = { DispatchQueue.main.async(execute: block) }
+        if let queue = VDARSDKController.sharedInstance()?.afterLoadingQueue {
+            queue.addOperation(mainBlock)
+        } else {
+            mainBlock()
+        }
     }
 
     @objc public func synchronizeWithToursAndContexts(_ options: SynchronizeWithToursAndContextsOptions, completion: @escaping (_ error: Error?) -> Void) {
@@ -71,13 +83,15 @@ import VDARSDK
             return
         }
         let priors = PixliveHelper.buildFullPriors(tags: options.tags, tourIds: options.tourIds, contextIds: options.contextIds)
-        VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
-            if let err = err {
-                completion(err)
-            } else {
-                completion(nil)
-            }
-        })
+        runAfterLoadingOnMain {
+            VDARRemoteController.sharedInstance()?.syncRemoteModelsAsynchronously(withPriors: priors, withCompletionBlock: { _, err in
+                if let err = err {
+                    completion(err)
+                } else {
+                    completion(nil)
+                }
+            })
+        }
     }
 
     @objc public func updateTagMapping(_ options: UpdateTagMappingOptions, completion: @escaping (_ error: Error?) -> Void) {
@@ -85,13 +99,15 @@ import VDARSDK
             completion(CustomError.notInitialized)
             return
         }
-        VDARRemoteController.sharedInstance()?.syncTagContexts(options.tags, withCompletionBlock: { _, err in
-            if let err = err {
-                completion(err)
-            } else {
-                completion(nil)
-            }
-        })
+        runAfterLoadingOnMain {
+            VDARRemoteController.sharedInstance()?.syncTagContexts(options.tags, withCompletionBlock: { _, err in
+                if let err = err {
+                    completion(err)
+                } else {
+                    completion(nil)
+                }
+            })
+        }
     }
 
     @objc public func enableContextsWithTags(_ options: EnableContextsWithTagsOptions, completion: @escaping (_ error: Error?) -> Void) {
@@ -99,9 +115,11 @@ import VDARSDK
             completion(CustomError.notInitialized)
             return
         }
-        VDARSDKController.sharedInstance()?.disableContexts()
-        VDARSDKController.sharedInstance()?.enableContexts(withTags: options.tags)
-        completion(nil)
+        runAfterLoadingOnMain {
+            VDARSDKController.sharedInstance()?.disableContexts()
+            VDARSDKController.sharedInstance()?.enableContexts(withTags: options.tags)
+            completion(nil)
+        }
     }
 
     @objc public func getContexts(completion: @escaping (_ result: GetContextsResult?, _ error: Error?) -> Void) {

@@ -132,23 +132,29 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         try {
             List<VDARPrior> priors = PixliveHelper.buildTagPriors(options.getTags());
             ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
-            VDARRemoteController.getInstance().syncRemoteContextsAsynchronouslyWithPriors(
-                priorsList,
-                new Observer() {
-                    @Override
-                    public void update(Observable o, Object arg) {
-                        VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
-                        if (!info.isCompleted()) {
-                            return;
+            VDARSDKController.getInstance().addNewAfterLoadingTask(() -> {
+                try {
+                    VDARRemoteController.getInstance().syncRemoteContextsAsynchronouslyWithPriors(
+                        priorsList,
+                        new Observer() {
+                            @Override
+                            public void update(Observable o, Object arg) {
+                                VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
+                                if (!info.isCompleted()) {
+                                    return;
+                                }
+                                if (info.getError() != null) {
+                                    callback.error(new Exception(info.getError()));
+                                } else {
+                                    callback.success();
+                                }
+                            }
                         }
-                        if (info.getError() != null) {
-                            callback.error(new Exception(info.getError()));
-                        } else {
-                            callback.success();
-                        }
-                    }
+                    );
+                } catch (Exception exception) {
+                    callback.error(exception);
                 }
-            );
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -162,23 +168,29 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
         try {
             List<VDARPrior> priors = PixliveHelper.buildFullPriors(options.getTags(), options.getTourIds(), options.getContextIds());
             ArrayList<VDARPrior> priorsList = new ArrayList<>(priors);
-            VDARRemoteController.getInstance().syncRemoteContextsAsynchronouslyWithPriors(
-                priorsList,
-                new Observer() {
-                    @Override
-                    public void update(Observable o, Object arg) {
-                        VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
-                        if (!info.isCompleted()) {
-                            return;
+            VDARSDKController.getInstance().addNewAfterLoadingTask(() -> {
+                try {
+                    VDARRemoteController.getInstance().syncRemoteContextsAsynchronouslyWithPriors(
+                        priorsList,
+                        new Observer() {
+                            @Override
+                            public void update(Observable o, Object arg) {
+                                VDARRemoteController.ObserverUpdateInfo info = (VDARRemoteController.ObserverUpdateInfo) arg;
+                                if (!info.isCompleted()) {
+                                    return;
+                                }
+                                if (info.getError() != null) {
+                                    callback.error(new Exception(info.getError()));
+                                } else {
+                                    callback.success();
+                                }
+                            }
                         }
-                        if (info.getError() != null) {
-                            callback.error(new Exception(info.getError()));
-                        } else {
-                            callback.success();
-                        }
-                    }
+                    );
+                } catch (Exception exception) {
+                    callback.error(exception);
                 }
-            );
+            });
         } catch (Exception exception) {
             callback.error(exception);
         }
@@ -194,19 +206,21 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             for (int i = 0; i < options.getTags().length(); i++) {
                 tags.add(options.getTags().getString(i));
             }
-            VDARRemoteController.getInstance().syncTagContexts(
-                tags,
-                new VDARRemoteController.Callback<Void>() {
-                    @Override
-                    public void onSuccess(Void result) {
-                        callback.success();
-                    }
+            VDARSDKController.getInstance().addNewAfterLoadingTask(() ->
+                VDARRemoteController.getInstance().syncTagContexts(
+                    tags,
+                    new VDARRemoteController.Callback<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            callback.success();
+                        }
 
-                    @Override
-                    public void onError(String message, Throwable throwable) {
-                        callback.error(new Exception(message, throwable));
+                        @Override
+                        public void onError(String message, Throwable throwable) {
+                            callback.error(new Exception(message, throwable));
+                        }
                     }
-                }
+                )
             );
         } catch (Exception exception) {
             callback.error(exception);
@@ -223,9 +237,13 @@ public class Pixlive implements VDARSDKControllerEventReceiver, VDARContentEvent
             for (int i = 0; i < options.getTags().length(); i++) {
                 tags.add(options.getTags().getString(i));
             }
-            VDARSDKController.getInstance().disableContexts();
-            VDARSDKController.getInstance().enableContextsWithTags(tags);
-            callback.success();
+            VDARSDKController.getInstance().addNewAfterLoadingTask(() ->
+                plugin.getActivity().runOnUiThread(() -> {
+                    VDARSDKController.getInstance().disableContexts();
+                    VDARSDKController.getInstance().enableContextsWithTags(tags);
+                    callback.success();
+                })
+            );
         } catch (Exception exception) {
             callback.error(exception);
         }
