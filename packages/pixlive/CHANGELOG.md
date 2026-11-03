@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7
+
+### Patch Changes
+
+- [`cb0218f02abd7d55cfa47f5888b8944c602c7efa`](https://github.com/capawesome-team/capacitor-plugins/commit/cb0218f02abd7d55cfa47f5888b8944c602c7efa) ([#1192](https://github.com/capawesome-team/capacitor-plugins/pull/1192)): fix: wait for the context DB to be loaded before `synchronize(...)`, `synchronizeWithToursAndContexts(...)`, `updateTagMapping(...)` and `enableContextsWithTags(...)`, and run them on the main thread on iOS (and `enableContextsWithTags(...)` on the UI thread on Android), so `updateTagMapping(...)` resolves on iOS and language filtering works
+
 ## 0.1.6
 
 ### Patch Changes
