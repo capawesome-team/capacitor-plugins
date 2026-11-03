@@ -12,6 +12,7 @@ import java.util.Map;
 
 public class OpenInWebViewOptions {
 
+    private final boolean acceptThirdPartyCookies;
     private final boolean allowZoom;
     private final boolean hardwareBackButton;
 
@@ -33,6 +34,7 @@ public class OpenInWebViewOptions {
     private final boolean visible;
 
     public OpenInWebViewOptions(@NonNull PluginCall call) throws Exception {
+        this.acceptThirdPartyCookies = call.getBoolean("acceptThirdPartyCookies", false);
         JSObject androidOptions = call.getObject("android");
         this.allowZoom = androidOptions != null && androidOptions.optBoolean("allowZoom", false);
         this.hardwareBackButton = androidOptions == null || androidOptions.optBoolean("hardwareBackButton", true);
@@ -43,6 +45,10 @@ public class OpenInWebViewOptions {
         this.uri = OpenInWebViewOptions.getUriFromCall(call);
         this.userAgent = call.getString("userAgent");
         this.visible = call.getBoolean("visible", true);
+    }
+
+    public boolean getAcceptThirdPartyCookies() {
+        return acceptThirdPartyCookies;
     }
 
     public boolean getAllowZoom() {
