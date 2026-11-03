@@ -1,5 +1,11 @@
 # @capawesome/capacitor-in-app-browser
 
+## 0.2.3
+
+### Patch Changes
+
+- [`310bb433086be37b0e3ddc8ba18e50853bfdc3e6`](https://github.com/capawesome-team/capacitor-plugins/commit/310bb433086be37b0e3ddc8ba18e50853bfdc3e6) ([#1190](https://github.com/capawesome-team/capacitor-plugins/pull/1190)): feat(android): add `acceptThirdPartyCookies` option to `openInWebView(...)`
+
 ## 0.2.2
 
 ### Patch Changes
