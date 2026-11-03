@@ -1,5 +1,13 @@
 # Changelog
 
+## 8.0.6
+
+### Patch Changes
+
+- [`4c3751c6eefccca4795f1b5f5e9da096c2675052`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4c3751c6eefccca4795f1b5f5e9da096c2675052) ([#688](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/688)): fix(ios): keep the audio session active when `speak(...)` flushes a running utterance and restore the app's own session state afterwards
+
+- [`4c3751c6eefccca4795f1b5f5e9da096c2675052`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/4c3751c6eefccca4795f1b5f5e9da096c2675052) ([#688](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/688)): fix(ios): release the audio session when `synthesizeToFile(...)` flushes pending utterances
+
 ## 8.0.5
 
 ### Patch Changes
