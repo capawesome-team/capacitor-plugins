@@ -19,55 +19,76 @@ import androidx.credentials.exceptions.NoCredentialException;
 import com.google.android.gms.auth.api.identity.AuthorizationRequest;
 import com.google.android.gms.auth.api.identity.AuthorizationResult;
 import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.CustomExceptions;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.AuthorizeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.InitializeOptions;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.options.SignInOptions;
+import io.capawesome.capacitorjs.plugins.googlesignin.classes.results.AuthorizeResult;
 import io.capawesome.capacitorjs.plugins.googlesignin.classes.results.SignInResult;
 import io.capawesome.capacitorjs.plugins.googlesignin.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.googlesignin.interfaces.NonEmptyResultCallback;
-import java.util.Arrays;
+import io.capawesome.capacitorjs.plugins.googlesignin.interfaces.Result;
+import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONObject;
 
 public class GoogleSignIn {
 
-    private final GoogleSignInPlugin plugin;
-
     @Nullable
     private String clientId;
+
+    private boolean isAuthorizationInProgress = false;
+
+    @Nullable
+    private NonEmptyResultCallback<AuthorizeResult> pendingAuthorizationCallback;
+
+    private final GoogleSignInPlugin plugin;
 
     @Nullable
     private String[] scopes;
 
-    @Nullable
-    private NonEmptyResultCallback<SignInResult> pendingSignInCallback;
-
-    @Nullable
-    private String pendingIdToken;
-
-    @Nullable
-    private String pendingUserId;
-
-    @Nullable
-    private String pendingEmail;
-
-    @Nullable
-    private String pendingDisplayName;
-
-    @Nullable
-    private String pendingGivenName;
-
-    @Nullable
-    private String pendingFamilyName;
-
-    @Nullable
-    private String pendingImageUrl;
-
     public GoogleSignIn(@NonNull GoogleSignInPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    public void authorize(@NonNull AuthorizeOptions options, @NonNull NonEmptyResultCallback<AuthorizeResult> callback) {
+        if (clientId == null) {
+            callback.error(CustomExceptions.NOT_INITIALIZED);
+            return;
+        }
+        NonEmptyResultCallback<AuthorizeResult> reservedCallback = reserveAuthorization(callback);
+        if (reservedCallback == null) {
+            return;
+        }
+        authorize(options.getScopes(), reservedCallback);
+    }
+
+    public void handleAuthorizationCanceled() {
+        NonEmptyResultCallback<AuthorizeResult> callback = takePendingAuthorizationCallback();
+        if (callback == null) {
+            return;
+        }
+        callback.error(CustomExceptions.AUTHORIZATION_CANCELED);
+    }
+
+    public void handleAuthorizationFailed(@NonNull Exception exception) {
+        NonEmptyResultCallback<AuthorizeResult> callback = takePendingAuthorizationCallback();
+        if (callback == null) {
+            return;
+        }
+        callback.error(exception);
+    }
+
+    public void handleAuthorizationResult(@NonNull AuthorizationResult authorizationResult) {
+        NonEmptyResultCallback<AuthorizeResult> callback = takePendingAuthorizationCallback();
+        if (callback == null) {
+            return;
+        }
+        resolveAuthorization(authorizationResult, callback);
     }
 
     public void initialize(@NonNull InitializeOptions options, @NonNull EmptyCallback callback) {
@@ -81,42 +102,49 @@ public class GoogleSignIn {
             callback.error(CustomExceptions.NOT_INITIALIZED);
             return;
         }
-
-        GetSignInWithGoogleOption.Builder optionBuilder = new GetSignInWithGoogleOption.Builder(clientId);
-        String nonce = options.getNonce();
-        if (nonce != null) {
-            optionBuilder.setNonce(nonce);
+        NonEmptyResultCallback<SignInResult> reservedCallback = reserveAuthorization(callback);
+        if (reservedCallback == null) {
+            return;
         }
-        GetSignInWithGoogleOption signInOption = optionBuilder.build();
+        try {
+            GetSignInWithGoogleOption.Builder optionBuilder = new GetSignInWithGoogleOption.Builder(clientId);
+            String nonce = options.getNonce();
+            if (nonce != null) {
+                optionBuilder.setNonce(nonce);
+            }
+            GetSignInWithGoogleOption signInOption = optionBuilder.build();
 
-        GetCredentialRequest request = new GetCredentialRequest.Builder().addCredentialOption(signInOption).build();
+            GetCredentialRequest request = new GetCredentialRequest.Builder().addCredentialOption(signInOption).build();
 
-        CredentialManager credentialManager = CredentialManager.create(plugin.getContext());
-        credentialManager.getCredentialAsync(
-            plugin.getActivity(),
-            request,
-            null,
-            Runnable::run,
-            new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
-                @Override
-                public void onResult(@NonNull GetCredentialResponse response) {
-                    handleCredentialResponse(response, callback);
-                }
+            CredentialManager credentialManager = CredentialManager.create(plugin.getContext());
+            credentialManager.getCredentialAsync(
+                plugin.getActivity(),
+                request,
+                null,
+                Runnable::run,
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                    @Override
+                    public void onResult(@NonNull GetCredentialResponse response) {
+                        handleCredentialResponse(response, reservedCallback);
+                    }
 
-                @Override
-                public void onError(@NonNull GetCredentialException exception) {
-                    if (exception instanceof GetCredentialCancellationException) {
-                        callback.error(createSignInCanceledException(exception));
-                    } else if (exception instanceof NoCredentialException) {
-                        callback.error(CustomExceptions.NO_CREDENTIAL_AVAILABLE);
-                    } else if (exception instanceof GetCredentialProviderConfigurationException) {
-                        callback.error(CustomExceptions.PROVIDER_CONFIGURATION_ERROR);
-                    } else {
-                        callback.error(createCredentialException(exception.getType(), exception.getErrorMessage(), exception));
+                    @Override
+                    public void onError(@NonNull GetCredentialException exception) {
+                        if (exception instanceof GetCredentialCancellationException) {
+                            reservedCallback.error(createSignInCanceledException(exception));
+                        } else if (exception instanceof NoCredentialException) {
+                            reservedCallback.error(CustomExceptions.NO_CREDENTIAL_AVAILABLE);
+                        } else if (exception instanceof GetCredentialProviderConfigurationException) {
+                            reservedCallback.error(CustomExceptions.PROVIDER_CONFIGURATION_ERROR);
+                        } else {
+                            reservedCallback.error(createCredentialException(exception.getType(), exception.getErrorMessage(), exception));
+                        }
                     }
                 }
-            }
-        );
+            );
+        } catch (Exception exception) {
+            reservedCallback.error(exception);
+        }
     }
 
     public void signOut(@NonNull EmptyCallback callback) {
@@ -140,132 +168,41 @@ public class GoogleSignIn {
         );
     }
 
-    public void handleAuthorizationResult(@NonNull AuthorizationResult authResult) {
-        if (pendingSignInCallback == null) {
-            return;
-        }
-        NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
-        String accessToken = authResult.getAccessToken();
-        String serverAuthCode = authResult.getServerAuthCode();
-        SignInResult result = new SignInResult(
-            pendingIdToken,
-            pendingUserId,
-            pendingEmail,
-            pendingDisplayName,
-            pendingGivenName,
-            pendingFamilyName,
-            pendingImageUrl,
-            accessToken,
-            serverAuthCode
-        );
-        clearPendingState();
-        callback.success(result);
-    }
+    private void authorize(@NonNull String[] scopes, @NonNull NonEmptyResultCallback<AuthorizeResult> callback) {
+        try {
+            List<Scope> scopeList = new ArrayList<>();
+            for (String scope : scopes) {
+                scopeList.add(new Scope(scope));
+            }
 
-    public void handleAuthorizationCanceled() {
-        if (pendingSignInCallback == null) {
-            return;
-        }
-        NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
-        clearPendingState();
-        callback.error(CustomExceptions.SIGN_IN_CANCELED);
-    }
+            AuthorizationRequest request = AuthorizationRequest.builder()
+                .setRequestedScopes(scopeList)
+                .requestOfflineAccess(clientId)
+                .build();
 
-    public void handleAuthorizationFailed(@NonNull Exception exception) {
-        if (pendingSignInCallback == null) {
-            return;
-        }
-        NonEmptyResultCallback<SignInResult> callback = pendingSignInCallback;
-        clearPendingState();
-        callback.error(exception);
-    }
-
-    private void handleCredentialResponse(@NonNull GetCredentialResponse response, @NonNull NonEmptyResultCallback<SignInResult> callback) {
-        Credential credential = response.getCredential();
-        if (!(credential instanceof CustomCredential)) {
-            callback.error(new Exception("Unexpected credential type."));
-            return;
-        }
-        CustomCredential customCredential = (CustomCredential) credential;
-        if (!GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.equals(customCredential.getType())) {
-            callback.error(new Exception("Unexpected credential type."));
-            return;
-        }
-
-        GoogleIdTokenCredential googleCredential = GoogleIdTokenCredential.createFrom(customCredential.getData());
-        String idToken = googleCredential.getIdToken();
-        String userId = parseUserIdFromIdToken(idToken);
-        if (userId == null) {
-            callback.error(new Exception("Failed to parse user ID from ID token."));
-            return;
-        }
-
-        String email = googleCredential.getId();
-        String displayName = googleCredential.getDisplayName();
-        String givenName = googleCredential.getGivenName();
-        String familyName = googleCredential.getFamilyName();
-        android.net.Uri profilePictureUri = googleCredential.getProfilePictureUri();
-        String imageUrl = profilePictureUri != null ? profilePictureUri.toString() : null;
-
-        if (scopes != null && scopes.length > 0) {
-            authorize(idToken, userId, email, displayName, givenName, familyName, imageUrl, callback);
-        } else {
-            SignInResult result = new SignInResult(idToken, userId, email, displayName, givenName, familyName, imageUrl, null, null);
-            callback.success(result);
-        }
-    }
-
-    private void authorize(
-        @NonNull String idToken,
-        @NonNull String userId,
-        @Nullable String email,
-        @Nullable String displayName,
-        @Nullable String givenName,
-        @Nullable String familyName,
-        @Nullable String imageUrl,
-        @NonNull NonEmptyResultCallback<SignInResult> callback
-    ) {
-        List<com.google.android.gms.common.api.Scope> scopeList = new java.util.ArrayList<>();
-        for (String scope : scopes) {
-            scopeList.add(new com.google.android.gms.common.api.Scope(scope));
-        }
-
-        AuthorizationRequest authRequest = AuthorizationRequest.builder()
-            .setRequestedScopes(scopeList)
-            .requestOfflineAccess(clientId)
-            .build();
-
-        Identity.getAuthorizationClient(plugin.getActivity())
-            .authorize(authRequest)
-            .addOnSuccessListener(authResult -> {
-                if (authResult.hasResolution()) {
-                    PendingIntent pendingIntent = authResult.getPendingIntent();
-                    if (pendingIntent != null) {
-                        savePendingState(idToken, userId, email, displayName, givenName, familyName, imageUrl, callback);
-                        plugin.launchAuthorizationIntent(pendingIntent);
-                    } else {
-                        callback.error(new Exception("Authorization resolution has no pending intent."));
+            Identity.getAuthorizationClient(plugin.getActivity())
+                .authorize(request)
+                .addOnSuccessListener(authorizationResult -> {
+                    if (!authorizationResult.hasResolution()) {
+                        resolveAuthorization(authorizationResult, callback);
+                        return;
                     }
-                } else {
-                    String accessToken = authResult.getAccessToken();
-                    String serverAuthCode = authResult.getServerAuthCode();
-                    SignInResult result = new SignInResult(
-                        idToken,
-                        userId,
-                        email,
-                        displayName,
-                        givenName,
-                        familyName,
-                        imageUrl,
-                        accessToken,
-                        serverAuthCode
-                    );
-                    callback.success(result);
-                }
-            })
-            .addOnFailureListener(exception -> {
-                callback.error(new Exception(exception.getMessage(), exception));
-            });
+                    PendingIntent pendingIntent = authorizationResult.getPendingIntent();
+                    if (pendingIntent == null) {
+                        callback.error(new Exception("Authorization resolution has no pending intent."));
+                        return;
+                    }
+                    pendingAuthorizationCallback = callback;
+                    try {
+                        plugin.launchAuthorizationIntent(pendingIntent);
+                    } catch (Exception exception) {
+                        handleAuthorizationFailed(exception);
+                    }
+                })
+                .addOnFailureListener(exception -> callback.error(new Exception(exception.getMessage(), exception)));
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
     }
 
     /**
@@ -295,6 +232,65 @@ public class GoogleSignIn {
         return new CustomException(CustomExceptions.SIGN_IN_CANCELED.getCode(), errorMessage.toString());
     }
 
+    private void handleCredentialResponse(@NonNull GetCredentialResponse response, @NonNull NonEmptyResultCallback<SignInResult> callback) {
+        Credential credential = response.getCredential();
+        if (!(credential instanceof CustomCredential)) {
+            callback.error(new Exception("Unexpected credential type."));
+            return;
+        }
+        CustomCredential customCredential = (CustomCredential) credential;
+        if (!GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.equals(customCredential.getType())) {
+            callback.error(new Exception("Unexpected credential type."));
+            return;
+        }
+
+        GoogleIdTokenCredential googleCredential = GoogleIdTokenCredential.createFrom(customCredential.getData());
+        String idToken = googleCredential.getIdToken();
+        String userId = parseUserIdFromIdToken(idToken);
+        if (userId == null) {
+            callback.error(new Exception("Failed to parse user ID from ID token."));
+            return;
+        }
+
+        String email = googleCredential.getId();
+        String displayName = googleCredential.getDisplayName();
+        String givenName = googleCredential.getGivenName();
+        String familyName = googleCredential.getFamilyName();
+        android.net.Uri profilePictureUri = googleCredential.getProfilePictureUri();
+        String imageUrl = profilePictureUri != null ? profilePictureUri.toString() : null;
+
+        if (scopes == null || scopes.length == 0) {
+            callback.success(new SignInResult(idToken, userId, email, displayName, givenName, familyName, imageUrl, null, null));
+            return;
+        }
+        authorize(
+            scopes,
+            new NonEmptyResultCallback<>() {
+                @Override
+                public void success(@NonNull AuthorizeResult result) {
+                    callback.success(
+                        new SignInResult(
+                            idToken,
+                            userId,
+                            email,
+                            displayName,
+                            givenName,
+                            familyName,
+                            imageUrl,
+                            result.getAccessToken(),
+                            result.getServerAuthCode()
+                        )
+                    );
+                }
+
+                @Override
+                public void error(Exception exception) {
+                    callback.error(exception == CustomExceptions.AUTHORIZATION_CANCELED ? CustomExceptions.SIGN_IN_CANCELED : exception);
+                }
+            }
+        );
+    }
+
     @Nullable
     private String parseUserIdFromIdToken(@NonNull String idToken) {
         try {
@@ -311,34 +307,55 @@ public class GoogleSignIn {
         }
     }
 
-    private void savePendingState(
-        @NonNull String idToken,
-        @NonNull String userId,
-        @Nullable String email,
-        @Nullable String displayName,
-        @Nullable String givenName,
-        @Nullable String familyName,
-        @Nullable String imageUrl,
-        @NonNull NonEmptyResultCallback<SignInResult> callback
-    ) {
-        this.pendingSignInCallback = callback;
-        this.pendingIdToken = idToken;
-        this.pendingUserId = userId;
-        this.pendingEmail = email;
-        this.pendingDisplayName = displayName;
-        this.pendingGivenName = givenName;
-        this.pendingFamilyName = familyName;
-        this.pendingImageUrl = imageUrl;
+    private synchronized void releaseAuthorization() {
+        isAuthorizationInProgress = false;
     }
 
-    private void clearPendingState() {
-        this.pendingSignInCallback = null;
-        this.pendingIdToken = null;
-        this.pendingUserId = null;
-        this.pendingEmail = null;
-        this.pendingDisplayName = null;
-        this.pendingGivenName = null;
-        this.pendingFamilyName = null;
-        this.pendingImageUrl = null;
+    /**
+     * Reserves the single interactive Google Sign-In flow, because a second flow would overwrite
+     * the pending authorization callback of the first one.
+     * Returns a callback that releases the reservation, or `null` if another flow is in progress.
+     */
+    @Nullable
+    private <T extends Result> NonEmptyResultCallback<T> reserveAuthorization(@NonNull NonEmptyResultCallback<T> callback) {
+        synchronized (this) {
+            if (!isAuthorizationInProgress) {
+                isAuthorizationInProgress = true;
+                return new NonEmptyResultCallback<>() {
+                    @Override
+                    public void success(@NonNull T result) {
+                        releaseAuthorization();
+                        callback.success(result);
+                    }
+
+                    @Override
+                    public void error(Exception exception) {
+                        releaseAuthorization();
+                        callback.error(exception);
+                    }
+                };
+            }
+        }
+        callback.error(CustomExceptions.AUTHORIZATION_IN_PROGRESS);
+        return null;
+    }
+
+    private void resolveAuthorization(
+        @NonNull AuthorizationResult authorizationResult,
+        @NonNull NonEmptyResultCallback<AuthorizeResult> callback
+    ) {
+        String accessToken = authorizationResult.getAccessToken();
+        if (accessToken == null) {
+            callback.error(CustomExceptions.ACCESS_TOKEN_MISSING);
+            return;
+        }
+        callback.success(new AuthorizeResult(accessToken, authorizationResult.getServerAuthCode()));
+    }
+
+    @Nullable
+    private NonEmptyResultCallback<AuthorizeResult> takePendingAuthorizationCallback() {
+        NonEmptyResultCallback<AuthorizeResult> callback = pendingAuthorizationCallback;
+        pendingAuthorizationCallback = null;
+        return callback;
     }
 }

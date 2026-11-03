@@ -61,6 +61,13 @@
           <ion-item>
             <ion-input id="email-input" label="Email" readonly></ion-input>
           </ion-item>
+          <ion-item>
+            <ion-input
+              id="access-token-input"
+              label="Access Token"
+              readonly
+            ></ion-input>
+          </ion-item>
         </ion-list>
         <ion-list>
           <ion-button id="initialize-button" expand="block"
@@ -70,6 +77,9 @@
             >Handle Redirect Callback</ion-button
           >
           <ion-button id="sign-in-button" expand="block">Sign In</ion-button>
+          <ion-button id="authorize-button" expand="block"
+            >Authorize</ion-button
+          >
           <ion-button id="sign-out-button" expand="block">Sign Out</ion-button>
         </ion-list>
       </ion-content>

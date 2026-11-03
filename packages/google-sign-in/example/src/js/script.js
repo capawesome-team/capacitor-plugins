@@ -31,6 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('#email-input').value = result.email ?? '';
     });
   document
+    .querySelector('#authorize-button')
+    .addEventListener('click', async () => {
+      const result = await GoogleSignIn.authorize({
+        scopes: ['https://www.googleapis.com/auth/userinfo.email'],
+      });
+      console.log(result);
+      document.querySelector('#access-token-input').value = result.accessToken;
+    });
+  document
     .querySelector('#sign-out-button')
     .addEventListener('click', async () => {
       await GoogleSignIn.signOut();

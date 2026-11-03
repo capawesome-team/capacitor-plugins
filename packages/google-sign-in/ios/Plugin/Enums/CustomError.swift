@@ -1,6 +1,8 @@
 import Foundation
 
 public enum CustomError: Error {
+    case authorizationCanceled
+    case authorizationInProgress
     case clientIdMissing
     case iosClientIdMissing
     case signInCanceled
@@ -8,9 +10,12 @@ public enum CustomError: Error {
     case signInResultMissing
     case idTokenMissing
     case userIdMissing
+    case scopesMissing
 
     public var code: String? {
         switch self {
+        case .authorizationCanceled:
+            return "AUTHORIZATION_CANCELED"
         case .signInCanceled:
             return "SIGN_IN_CANCELED"
         default:
@@ -22,6 +27,10 @@ public enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .authorizationCanceled:
+            return NSLocalizedString("The user canceled the authorization flow.", comment: "authorizationCanceled")
+        case .authorizationInProgress:
+            return NSLocalizedString("An authorization is already in progress.", comment: "authorizationInProgress")
         case .clientIdMissing:
             return NSLocalizedString("clientId must be provided.", comment: "clientIdMissing")
         case .iosClientIdMissing:
@@ -36,6 +45,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("ID token is missing from the sign-in result.", comment: "idTokenMissing")
         case .userIdMissing:
             return NSLocalizedString("User ID is missing from the sign-in result.", comment: "userIdMissing")
+        case .scopesMissing:
+            return NSLocalizedString("scopes must be provided.", comment: "scopesMissing")
         }
     }
 }
