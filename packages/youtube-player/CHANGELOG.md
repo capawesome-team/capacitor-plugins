@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- [`424868c2b9e7a22c39db5df746219f0b904d3a4d`](https://github.com/capawesome-team/capacitor-plugins/commit/424868c2b9e7a22c39db5df746219f0b904d3a4d) ([#1197](https://github.com/capawesome-team/capacitor-plugins/pull/1197)): feat(ios/web): add `hl` player option to set the language of the player interface
+
 ## 0.1.3
 
 ### Patch Changes
