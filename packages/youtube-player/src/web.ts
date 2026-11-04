@@ -354,6 +354,9 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
     if (playerOptions?.end !== undefined) {
       playerVars.end = playerOptions.end;
     }
+    if (playerOptions?.hl) {
+      playerVars.hl = playerOptions.hl;
+    }
     if (playerOptions?.start !== undefined) {
       playerVars.start = playerOptions.start;
     }
