@@ -658,10 +658,10 @@ A pricing phase of a subscription offer.
 
 #### ProductCategory
 
-| Members            | Value                       | Description                                                                                                                               | Since |
-| ------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.INAPP`. | 0.3.3 |
-| **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.SUBS`.                              | 0.3.3 |
+| Members            | Value                       | Description                                                                                                    | Since |
+| ------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
+| **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.ProductType.INAPP`. | 0.3.3 |
+| **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.ProductType.SUBS`.                              | 0.3.3 |
 
 </docgen-api>
 
