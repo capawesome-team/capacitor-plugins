@@ -236,6 +236,10 @@ import UIKit
         if let end = options.end {
             playerVars["end"] = end
         }
+        // swiftlint:disable:next identifier_name
+        if let hl = options.hl {
+            playerVars["hl"] = hl
+        }
         if let start = options.start {
             playerVars["start"] = start
         }

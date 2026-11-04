@@ -9,6 +9,8 @@ import Foundation
     let frame: PlayerFrame
     let fullscreen: Bool
     let host: String
+    // swiftlint:disable:next identifier_name
+    let hl: String?
     let id: String
     let ivLoadPolicy: Bool
     let mute: Bool
@@ -25,6 +27,7 @@ import Foundation
         self.frame = try PlayerFrame.getFrameFromCall(call)
         self.fullscreen = playerOptions?["fullscreen"] as? Bool ?? false
         self.host = try CreatePlayerOptions.getHostFromObject(playerOptions)
+        self.hl = playerOptions?["hl"] as? String
         self.id = call.getString("id") ?? UUID().uuidString
         self.ivLoadPolicy = playerOptions?["ivLoadPolicy"] as? Bool ?? false
         self.mute = playerOptions?["mute"] as? Bool ?? false
