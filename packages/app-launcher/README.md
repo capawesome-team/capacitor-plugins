@@ -152,7 +152,7 @@ On **iOS**, every URL scheme you want to check must be declared in the
 this method always resolves with `value: false`.
 
 On **Android**, every package name or URL scheme you want to check must be
-declared in the `&lt;queries&gt;` element of your app's `AndroidManifest.xml`.
+declared in the `<queries>` element of your app's `AndroidManifest.xml`.
 Otherwise this method always resolves with `value: false`.
 
 | Param         | Type                                                            |
