@@ -469,10 +469,10 @@ Represents an in-app product available for purchase.
 | Prop                      | Type                                                | Description                                                                                                                                                                                                                                                              | Since  |
 | ------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
 | **`id`**                  | <code>string</code>                                 | The unique product identifier.                                                                                                                                                                                                                                           | 0.3.1  |
-| **`displayName`**         | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses <a href="#product">Product.displayName</a>.                                                                                                                 | 0.3.1  |
+| **`displayName`**         | <code>string</code>                                 | The localized display name of the product. On Android, this uses ProductDetails.getName(). On iOS, this uses `StoreKit.Product.displayName`.                                                                                                                             | 0.3.1  |
 | **`description`**         | <code>string</code>                                 | The localized description of the product.                                                                                                                                                                                                                                | 0.3.1  |
 | **`displayPrice`**        | <code>string</code>                                 | The localized price string, formatted for display.                                                                                                                                                                                                                       | 0.3.1  |
-| **`price`**               | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses <a href="#product">Product.price</a> as a decimal.                                                                                                   | 0.3.1  |
+| **`price`**               | <code>number</code>                                 | The price as a decimal number. On Android, this is calculated from priceAmountMicros / 1,000,000. On iOS, this uses `StoreKit.Product.price` as a decimal.                                                                                                               | 0.3.1  |
 | **`currencyCode`**        | <code>string</code>                                 | The ISO 4217 currency code. On Android, this uses priceCurrencyCode. On iOS, this uses priceFormatStyle.currencyCode.                                                                                                                                                    | 0.3.1  |
 | **`type`**                | <code><a href="#producttype">ProductType</a></code> | The type of product.                                                                                                                                                                                                                                                     | 0.3.1  |
 | **`pricingTerms`**        | <code>PricingTerms[]</code>                         | The pricing terms available for the product, one entry per billing plan. Only present for auto-renewable subscriptions that are configured with multiple billing plans (e.g. monthly with 12-month commitment). Only available on iOS (26.4+).                           | 0.3.8  |
@@ -628,12 +628,12 @@ A pricing phase of a subscription offer.
 
 #### ProductType
 
-| Members                         | Value                                      | Description                                                                                                                                                                                           | Since |
-| ------------------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`Consumable`**                | <code>'CONSUMABLE'</code>                  | A consumable in-app product. On Android, this is <a href="#producttype">ProductType</a>.INAPP. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.consumable.      | 0.3.1 |
-| **`NonConsumable`**             | <code>'NON_CONSUMABLE'</code>              | A non-consumable in-app product. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonConsumable. Only available on iOS.                                          | 0.3.1 |
-| **`AutoRenewableSubscription`** | <code>'AUTO_RENEWABLE_SUBSCRIPTION'</code> | An auto-renewable subscription. On Android, this is <a href="#producttype">ProductType</a>.SUBS. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.autoRenewable. | 0.3.1 |
-| **`NonRenewableSubscription`**  | <code>'NON_RENEWABLE_SUBSCRIPTION'</code>  | A non-renewing subscription. On iOS, this is <a href="#product">Product</a>.<a href="#producttype">ProductType</a>.nonRenewable. Only available on iOS.                                               | 0.3.1 |
+| Members                         | Value                                      | Description                                                                                                                                | Since |
+| ------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`Consumable`**                | <code>'CONSUMABLE'</code>                  | A consumable in-app product. On Android, this is `BillingClient.ProductType.INAPP`. On iOS, this is `Product.ProductType.consumable`.      | 0.3.1 |
+| **`NonConsumable`**             | <code>'NON_CONSUMABLE'</code>              | A non-consumable in-app product. On iOS, this is `Product.ProductType.nonConsumable`. Only available on iOS.                               | 0.3.1 |
+| **`AutoRenewableSubscription`** | <code>'AUTO_RENEWABLE_SUBSCRIPTION'</code> | An auto-renewable subscription. On Android, this is `BillingClient.ProductType.SUBS`. On iOS, this is `Product.ProductType.autoRenewable`. | 0.3.1 |
+| **`NonRenewableSubscription`**  | <code>'NON_RENEWABLE_SUBSCRIPTION'</code>  | A non-renewing subscription. On iOS, this is `Product.ProductType.nonRenewable`. Only available on iOS.                                    | 0.3.1 |
 
 
 #### SubscriptionPeriodUnit
@@ -658,10 +658,10 @@ A pricing phase of a subscription offer.
 
 #### ProductCategory
 
-| Members            | Value                       | Description                                                                                                                               | Since |
-| ------------------ | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.INAPP`. | 0.3.3 |
-| **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.<a href="#producttype">ProductType</a>.SUBS`.                              | 0.3.3 |
+| Members            | Value                       | Description                                                                                                    | Since |
+| ------------------ | --------------------------- | -------------------------------------------------------------------------------------------------------------- | ----- |
+| **`InApp`**        | <code>'IN_APP'</code>       | In-app products (consumables and non-consumables). On Android, this maps to `BillingClient.ProductType.INAPP`. | 0.3.3 |
+| **`Subscription`** | <code>'SUBSCRIPTION'</code> | Subscription products. On Android, this maps to `BillingClient.ProductType.SUBS`.                              | 0.3.3 |
 
 </docgen-api>
 
