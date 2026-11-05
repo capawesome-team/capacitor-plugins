@@ -307,9 +307,9 @@ Only available on Android and iOS.
 
 #### SetIconOptions
 
-| Prop       | Type                | Description                                                                                                                                                                                                 | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `&lt;activity-alias&gt;` (without the leading dot). On iOS, this is the name of the alternate app icon set in the asset catalog. | 0.1.0 |
+| Prop       | Type                | Description                                                                                                                                                                                           | Since |
+| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `<activity-alias>` (without the leading dot). On iOS, this is the name of the alternate app icon set in the asset catalog. | 0.1.0 |
 
 </docgen-api>
 
