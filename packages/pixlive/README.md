@@ -32,11 +32,9 @@ Copy the `vdarsdk-release.aar` file into your app's `android/app/libs/` director
 
 ### iOS
 
-Please note, that this plugin does not support SPM but only Cocoapods as iOS dependency manager.
-
 #### SDK Setup
 
-The PixLive iOS SDK (`VDARSDK.xcframework`) must be manually added by copying `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project.
+The PixLive iOS SDK (`VDARSDK.xcframework`) must be manually added by copying `VDARSDK.xcframework` into `ios/App/Frameworks/` in your Capacitor project. This applies to both CocoaPods and Swift Package Manager (SPM).
 
 ## Configuration
 
