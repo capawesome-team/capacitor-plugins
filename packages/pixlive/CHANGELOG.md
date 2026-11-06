@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.8
+
+### Patch Changes
+
+- [`b916d2a865d7c8985498af26ba9eb5ad08280bd5`](https://github.com/capawesome-team/capacitor-plugins/commit/b916d2a865d7c8985498af26ba9eb5ad08280bd5) ([#1205](https://github.com/capawesome-team/capacitor-plugins/pull/1205)): feat(ios): add Swift Package Manager (SPM) support
+
 ## 0.1.7
 
 ### Patch Changes
