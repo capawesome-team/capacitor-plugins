@@ -72,7 +72,7 @@ npx cap sync
 
 If needed, you can define the following project variables in your app's `variables.gradle` file to use different runtime binaries:
 
-- `$nodejsMobileAndroidUrl` download URL of the Android runtime binaries (default: GitHub release of `18.20.4-capawesome.3`, a [16 KB page size compatible build](https://github.com/capawesome-team/nodejs-mobile/releases))
+- `$nodejsMobileAndroidUrl` download URL of the Android runtime binaries (default: GitHub release of `24.5.0-capawesome.1` from [our fork of Node.js for Mobile Apps](https://github.com/capawesome-team/nodejs-mobile/releases))
 - `$nodejsMobileAndroidSha256` SHA-256 checksum of the Android runtime binaries download (default: checksum of the default download)
 
 ### iOS
@@ -450,6 +450,7 @@ The underlying [Node.js for Mobile Apps](https://github.com/nodejs-mobile/nodejs
 - **Single instance**: The Node.js runtime can only be started once per app launch. Stopping and restarting the runtime is not supported.
 - **No child processes**: The `child_process` module is not supported on mobile platforms.
 - **No JIT on iOS**: On iOS, the JavaScript engine runs in interpreter-only mode (no JIT compilation), which results in slower JavaScript execution compared to Android.
+- **iOS Simulator**: The iOS runtime only includes an arm64 simulator slice. Running the app on the iOS Simulator requires an Apple Silicon Mac.
 - **App size**: Embedding the Node.js runtime increases the app size by several tens of megabytes per CPU architecture.
 - **Native addons**: Node.js native addons are only supported on Android if they are provided as prebuilds (see [`node-gyp-build`](https://github.com/prebuild/node-gyp-build)) for the target architectures.
 - **`process.exit()`**: Calling `process.exit()` is not allowed by the Apple App Store guidelines.
@@ -458,7 +459,7 @@ The underlying [Node.js for Mobile Apps](https://github.com/nodejs-mobile/nodejs
 
 ### Which Node.js version is supported?
 
-The plugin currently runs Node.js `18.20.4`, the latest version available from [Node.js for Mobile Apps](https://github.com/nodejs-mobile/nodejs-mobile). Support for newer Node.js versions requires self-built runtime binaries for mobile platforms, which we are evaluating.
+The plugin currently runs Node.js `24.5.0`. The runtime binaries are built from [our fork of Node.js for Mobile Apps](https://github.com/capawesome-team/nodejs-mobile), which adds support for Node.js 24 on top of the upstream project.
 
 ### Why is there no `stop()` method?
 
