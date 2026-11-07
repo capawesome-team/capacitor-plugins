@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`e5b0c32a807d13b1543382313120a2f0f51ef4de`](https://github.com/capawesome-team/capacitor-plugins/commit/e5b0c32a807d13b1543382313120a2f0f51ef4de) ([#1178](https://github.com/capawesome-team/capacitor-plugins/pull/1178)): fix(android): no longer intercept requests to `appleid.apple.com`, which dropped request bodies and cookies and broke the sign-in
+
 ## 0.1.4
 
 ### Patch Changes
