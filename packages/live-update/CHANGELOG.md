@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.8.1
+
+### Patch Changes
+
+- [`0dde414785dca3a985a8a426a7150030df674810`](https://github.com/capawesome-team/capacitor-plugins/commit/0dde414785dca3a985a8a426a7150030df674810) ([#1210](https://github.com/capawesome-team/capacitor-plugins/pull/1210)): fix(android): point the Maven POM project URL and organization to capawesome.io
+
 ## 8.8.0
 
 ### Minor Changes
