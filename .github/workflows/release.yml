@@ -79,20 +79,3 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY_PASSWORD }}
         run: ./gradlew publishAndReleaseToMavenCentral -PmavenCentralPublishing --no-daemon
-  publish-live-update-cocoapods:
-    name: Publish Live Update to CocoaPods
-    runs-on: macos-latest
-    needs: release
-    if: contains(needs.release.outputs.published-packages, '"@capawesome/capacitor-live-update"')
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-      - name: Publish
-        working-directory: packages/live-update
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: pod trunk push CapawesomeCapacitorLiveUpdate.podspec --allow-warnings --synchronous
