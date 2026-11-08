@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.8.0
+
+### Minor Changes
+
+- [`f28459ccb3a5b59476da2211a90866d495ed4795`](https://github.com/capawesome-team/capacitor-plugins/commit/f28459ccb3a5b59476da2211a90866d495ed4795) ([#1208](https://github.com/capawesome-team/capacitor-plugins/pull/1208)): feat: publish the Android library to Maven Central as `io.capawesome:capacitor-live-update`
+
 ## 8.7.1
 
 ### Patch Changes
