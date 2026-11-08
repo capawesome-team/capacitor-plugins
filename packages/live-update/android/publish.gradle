@@ -23,7 +23,11 @@ mavenPublishing {
         name = 'Capacitor Live Update'
         description = packageJson.description
         inceptionYear = '2024'
-        url = 'https://github.com/capawesome-team/capacitor-plugins'
+        url = 'https://capawesome.io/docs/sdks/capacitor/live-update/'
+        organization {
+            name = 'Capawesome'
+            url = 'https://capawesome.io'
+        }
         licenses {
             license {
                 name = 'MIT License'
