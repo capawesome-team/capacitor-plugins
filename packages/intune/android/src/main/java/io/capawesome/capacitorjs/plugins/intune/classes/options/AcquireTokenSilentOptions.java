@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.intune.classes.options;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.JSArray;
 import com.getcapacitor.PluginCall;
 import io.capawesome.capacitorjs.plugins.intune.classes.CustomExceptions;
@@ -12,6 +13,12 @@ public class AcquireTokenSilentOptions {
     @NonNull
     private final String accountId;
 
+    @Nullable
+    private final String authority;
+
+    @Nullable
+    private final String clientId;
+
     private final boolean forceRefresh;
 
     @NonNull
@@ -19,6 +26,8 @@ public class AcquireTokenSilentOptions {
 
     public AcquireTokenSilentOptions(@NonNull PluginCall call) throws Exception {
         this.accountId = AcquireTokenSilentOptions.getAccountIdFromCall(call);
+        this.authority = call.getString("authority");
+        this.clientId = call.getString("clientId");
         this.forceRefresh = Boolean.TRUE.equals(call.getBoolean("forceRefresh", false));
         this.scopes = AcquireTokenSilentOptions.getScopesFromCall(call);
     }
@@ -26,6 +35,16 @@ public class AcquireTokenSilentOptions {
     @NonNull
     public String getAccountId() {
         return accountId;
+    }
+
+    @Nullable
+    public String getAuthority() {
+        return authority;
+    }
+
+    @Nullable
+    public String getClientId() {
+        return clientId;
     }
 
     public boolean getForceRefresh() {

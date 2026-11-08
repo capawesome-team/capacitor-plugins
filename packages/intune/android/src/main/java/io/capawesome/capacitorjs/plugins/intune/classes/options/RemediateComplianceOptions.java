@@ -1,6 +1,7 @@
 package io.capawesome.capacitorjs.plugins.intune.classes.options;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.getcapacitor.PluginCall;
 import io.capawesome.capacitorjs.plugins.intune.classes.CustomExceptions;
 
@@ -11,6 +12,9 @@ public class RemediateComplianceOptions {
 
     @NonNull
     private final String authority;
+
+    @Nullable
+    private final String clientId;
 
     private final boolean silent;
 
@@ -23,6 +27,7 @@ public class RemediateComplianceOptions {
     public RemediateComplianceOptions(@NonNull PluginCall call) throws Exception {
         this.accountId = RemediateComplianceOptions.getAccountIdFromCall(call);
         this.authority = RemediateComplianceOptions.getAuthorityFromCall(call);
+        this.clientId = call.getString("clientId");
         this.silent = Boolean.TRUE.equals(call.getBoolean("silent", false));
         this.tenantId = RemediateComplianceOptions.getTenantIdFromCall(call);
         this.username = RemediateComplianceOptions.getUsernameFromCall(call);
@@ -36,6 +41,11 @@ public class RemediateComplianceOptions {
     @NonNull
     public String getAuthority() {
         return authority;
+    }
+
+    @Nullable
+    public String getClientId() {
+        return clientId;
     }
 
     public boolean getSilent() {

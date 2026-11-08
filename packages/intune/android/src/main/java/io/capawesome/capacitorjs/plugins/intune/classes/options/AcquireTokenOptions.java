@@ -10,6 +10,12 @@ import java.util.List;
 
 public class AcquireTokenOptions {
 
+    @Nullable
+    private final String authority;
+
+    @Nullable
+    private final String clientId;
+
     private final boolean forcePrompt;
 
     @Nullable
@@ -19,9 +25,21 @@ public class AcquireTokenOptions {
     private final List<String> scopes;
 
     public AcquireTokenOptions(@NonNull PluginCall call) throws Exception {
+        this.authority = call.getString("authority");
+        this.clientId = call.getString("clientId");
         this.forcePrompt = Boolean.TRUE.equals(call.getBoolean("forcePrompt", false));
         this.loginHint = call.getString("loginHint");
         this.scopes = AcquireTokenOptions.getScopesFromCall(call);
+    }
+
+    @Nullable
+    public String getAuthority() {
+        return authority;
+    }
+
+    @Nullable
+    public String getClientId() {
+        return clientId;
     }
 
     public boolean getForcePrompt() {
