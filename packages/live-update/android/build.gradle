@@ -9,6 +9,7 @@ ext {
     zip4jVersion = project.hasProperty('zip4jVersion') ? rootProject.ext.zip4jVersion : '2.11.5'
     ionicLiveUpdateProviderVersion = project.hasProperty('ionicLiveUpdateProviderVersion') ? rootProject.ext.ionicLiveUpdateProviderVersion : '1.0.0'
     kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.11.0'
+    capacitorCoreVersion = project.hasProperty('capacitorCoreVersion') ? rootProject.ext.capacitorCoreVersion : '8.0.0'
 }
 
 buildscript {
@@ -20,6 +21,9 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:8.13.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        if (project.hasProperty('mavenCentralPublishing')) {
+            classpath 'com.vanniktech:gradle-maven-publish-plugin:0.37.0'
+        }
     }
 }
 
@@ -66,7 +70,12 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':capacitor-android')
+    if (project.hasProperty('mavenCentralPublishing')) {
+        // The Maven Central artifact depends on the published Capacitor core, not on an app's local module.
+        implementation "com.capacitorjs:core:$capacitorCoreVersion"
+    } else {
+        implementation project(':capacitor-android')
+    }
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation "net.lingala.zip4j:zip4j:$zip4jVersion"
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
@@ -79,4 +88,8 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+}
+
+if (project.hasProperty('mavenCentralPublishing')) {
+    apply from: 'publish.gradle'
 }
