@@ -550,9 +550,6 @@ export interface PlayerOptions {
    * [ISO 639-1 two-letter language code](https://www.loc.gov/standards/iso639-2/php/code_list.php)
    * or a fully specified locale, such as `de` or `pt-BR`.
    *
-   * YouTube also uses this language to decide whether automatic captions
-   * are shown.
-   *
    * If not provided, the player uses the device language.
    *
    * Only available on iOS and Web.
