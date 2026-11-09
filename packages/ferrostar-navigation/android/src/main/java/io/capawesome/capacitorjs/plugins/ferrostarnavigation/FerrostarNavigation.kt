@@ -1,6 +1,11 @@
 package io.capawesome.capacitorjs.plugins.ferrostarnavigation
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.pm.PackageManager
+import android.os.Build
 import android.speech.tts.TextToSpeech
+import com.getcapacitor.util.PermissionHelper
 import com.stadiamaps.ferrostar.core.AndroidTtsObserver
 import com.stadiamaps.ferrostar.core.AndroidTtsStatusListener
 import com.stadiamaps.ferrostar.core.CorrectiveAction
@@ -13,6 +18,7 @@ import com.stadiamaps.ferrostar.core.http.IResponse
 import com.stadiamaps.ferrostar.core.location.AndroidLocationProvider
 import com.stadiamaps.ferrostar.core.location.NavigationLocationProviding
 import com.stadiamaps.ferrostar.core.location.SimulatedLocationProvider
+import com.stadiamaps.ferrostar.core.service.FerrostarForegroundService
 import com.stadiamaps.ferrostar.core.service.FerrostarForegroundServiceManager
 import com.stadiamaps.ferrostar.core.service.ForegroundServiceManager
 import io.capawesome.capacitorjs.plugins.ferrostarnavigation.classes.CustomExceptions
@@ -75,6 +81,9 @@ class FerrostarNavigation(private val plugin: FerrostarNavigationPlugin) {
         // Android refuses to start a location foreground service from the background, and Ferrostar does not catch that.
         if (options.continueInBackground && !plugin.bridge.app.isActive) {
             throw CustomExceptions.APP_NOT_IN_FOREGROUND
+        }
+        if (options.continueInBackground && !isForegroundServiceDeclared()) {
+            throw CustomExceptions.FOREGROUND_SERVICE_NOT_DECLARED
         }
         stopNavigation()
         val route = parseRoute(options.osrmResponseJson, options.polylinePrecision)
@@ -242,6 +251,30 @@ class FerrostarNavigation(private val plugin: FerrostarNavigationPlugin) {
             plugin.notifyNavigationCompletedListeners()
         }
         wasComplete = isComplete
+    }
+
+    /**
+     * The foreground service is only needed to continue in the background, so the app declares it and its permissions
+     * itself. Otherwise every app would need the foreground service declaration in the Google Play Console.
+     */
+    private fun isForegroundServiceDeclared(): Boolean {
+        val context = plugin.context
+        val permissions = listOf(Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.FOREGROUND_SERVICE_LOCATION)
+        if (permissions.any { !PermissionHelper.hasDefinedPermission(context, it) }) {
+            return false
+        }
+        val component = ComponentName(context, FerrostarForegroundService::class.java)
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                context.packageManager.getServiceInfo(component, PackageManager.ComponentInfoFlags.of(0))
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getServiceInfo(component, 0)
+            }
+            true
+        } catch (exception: PackageManager.NameNotFoundException) {
+            false
+        }
     }
 
     private fun notifyRouteDeviationDetectedListenersIfOffRoute(tripState: TripState.Navigating) {

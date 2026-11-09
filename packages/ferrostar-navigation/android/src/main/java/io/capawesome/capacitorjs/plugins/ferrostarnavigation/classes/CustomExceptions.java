@@ -8,6 +8,10 @@ public class CustomExceptions {
     );
     public static final CustomException COLOR_INVALID = new CustomException(null, "color is invalid.");
     public static final CustomException COURSE_FILTERING_INVALID = new CustomException(null, "courseFiltering is invalid.");
+    public static final CustomException FOREGROUND_SERVICE_NOT_DECLARED = new CustomException(
+        null,
+        "The foreground service and its permissions must be declared in the AndroidManifest.xml file to continue in the background."
+    );
     public static final CustomException LOCATION_PERMISSION_DENIED = new CustomException(
         "LOCATION_PERMISSION_DENIED",
         "The location permission was denied."

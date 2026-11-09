@@ -235,6 +235,7 @@ export interface StartNavigationOptions {
    * Whether to continue the navigation while the app is in the background.
    *
    * On **Android**, this starts a foreground service with a persistent notification (see `androidNotification`).
+   * The foreground service and its permissions must be declared in the app (see the installation instructions).
    * The session must be started while the app is in the foreground, otherwise the call is rejected.
    *
    * On **iOS**, this requires the `location` background mode (see the installation instructions).
