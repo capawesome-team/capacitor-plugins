@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-ferrostar-navigation",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Capacitor plugin for headless turn-by-turn navigation based on the Ferrostar core.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
