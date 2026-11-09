@@ -54,6 +54,11 @@ public class FerrostarNavigationPlugin: CAPPlugin, CAPBridgedPlugin {
     @objc func startNavigation(_ call: CAPPluginCall) {
         do {
             let options = try StartNavigationOptions(call)
+            // Without the background mode, Core Location terminates the app when background updates are enabled.
+            if options.continueInBackground && !isLocationBackgroundModeEnabled() {
+                rejectCall(call, CustomError.backgroundModeMissing)
+                return
+            }
             if !options.simulateLocation && !isLocationPermissionGranted() {
                 requestLocationPermission(call)
                 return
@@ -96,6 +101,11 @@ public class FerrostarNavigationPlugin: CAPPlugin, CAPBridgedPlugin {
         default:
             break
         }
+    }
+
+    private func isLocationBackgroundModeEnabled() -> Bool {
+        let backgroundModes = Bundle.main.object(forInfoDictionaryKey: "UIBackgroundModes") as? [String]
+        return backgroundModes?.contains("location") ?? false
     }
 
     private func isLocationPermissionGranted() -> Bool {

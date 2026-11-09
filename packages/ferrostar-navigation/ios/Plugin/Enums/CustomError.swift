@@ -1,6 +1,7 @@
 import Foundation
 
 public enum CustomError: Error {
+    case backgroundModeMissing
     case courseFilteringInvalid
     case locationPermissionDenied
     case notNavigating
@@ -23,6 +24,11 @@ public enum CustomError: Error {
 extension CustomError: LocalizedError {
     public var errorDescription: String? {
         switch self {
+        case .backgroundModeMissing:
+            return NSLocalizedString(
+                "The location background mode must be enabled in the Info.plist file to continue in the background.",
+                comment: "backgroundModeMissing"
+            )
         case .courseFilteringInvalid:
             return NSLocalizedString("courseFiltering is invalid.", comment: "courseFilteringInvalid")
         case .locationPermissionDenied:
