@@ -11,7 +11,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "8.0.0"),
-        .package(url: "https://github.com/stadiamaps/ferrostar.git", from: "0.59.0")
+        // Ferrostar changes its API in minor releases, so only patch releases are accepted (like `$ferrostarVersion` on Android)
+        .package(url: "https://github.com/stadiamaps/ferrostar.git", .upToNextMinor(from: "0.59.0"))
     ],
     targets: [
         .target(
