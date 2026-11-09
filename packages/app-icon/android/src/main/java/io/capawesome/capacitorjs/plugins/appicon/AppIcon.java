@@ -1,5 +1,6 @@
 package io.capawesome.capacitorjs.plugins.appicon;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.pm.ResolveInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.capawesome.capacitorjs.plugins.appicon.classes.CustomExceptions;
+import io.capawesome.capacitorjs.plugins.appicon.classes.options.ResetIconOptions;
 import io.capawesome.capacitorjs.plugins.appicon.classes.options.SetIconOptions;
 import io.capawesome.capacitorjs.plugins.appicon.classes.results.GetCurrentIconResult;
 import io.capawesome.capacitorjs.plugins.appicon.classes.results.IsAvailableResult;
@@ -25,7 +27,8 @@ public class AppIcon {
     @NonNull
     public GetCurrentIconResult getCurrentIcon() {
         List<ResolveInfo> launcherComponents = getLauncherComponents();
-        String defaultIconName = getDefaultIconName(launcherComponents);
+        ResolveInfo defaultComponent = getDefaultLauncherComponent(launcherComponents);
+        String defaultIconName = defaultComponent == null ? null : getIconName(defaultComponent);
         String activeIconName = getActiveIconName(launcherComponents);
         boolean isDefault = activeIconName == null || activeIconName.equals(defaultIconName);
         return new GetCurrentIconResult(isDefault ? null : activeIconName);
@@ -36,30 +39,56 @@ public class AppIcon {
         return new IsAvailableResult(true);
     }
 
-    public void resetIcon() throws Exception {
+    public void resetIcon(@NonNull ResetIconOptions options) throws Exception {
         List<ResolveInfo> launcherComponents = getLauncherComponents();
-        String defaultIconName = getDefaultIconName(launcherComponents);
-        if (defaultIconName == null) {
+        ResolveInfo defaultComponent = getDefaultLauncherComponent(launcherComponents);
+        if (defaultComponent == null) {
             throw CustomExceptions.CHANGE_FAILED;
         }
-        setActiveIcon(launcherComponents, defaultIconName);
+        if (options.getRelaunch()) {
+            relaunchWithIcon(launcherComponents, defaultComponent);
+        } else {
+            setActiveIcon(launcherComponents, defaultComponent);
+        }
     }
 
     public void setIcon(@NonNull SetIconOptions options) throws Exception {
-        String icon = options.getIcon();
         List<ResolveInfo> launcherComponents = getLauncherComponents();
-        if (!hasIcon(launcherComponents, icon)) {
+        ResolveInfo newComponent = findLauncherComponent(launcherComponents, options.getIcon());
+        if (newComponent == null) {
             throw CustomExceptions.ICON_NOT_FOUND;
         }
-        setActiveIcon(launcherComponents, icon);
+        if (options.getRelaunch()) {
+            relaunchWithIcon(launcherComponents, newComponent);
+        } else {
+            setActiveIcon(launcherComponents, newComponent);
+        }
+    }
+
+    private void disableOtherIcons(@NonNull List<ResolveInfo> launcherComponents, @NonNull ResolveInfo newComponent) {
+        String icon = getIconName(newComponent);
+        for (ResolveInfo info : launcherComponents) {
+            if (!getIconName(info).equals(icon)) {
+                setComponentEnabledSetting(info, PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
+            }
+        }
+    }
+
+    @Nullable
+    private ResolveInfo findLauncherComponent(@NonNull List<ResolveInfo> launcherComponents, @NonNull String icon) {
+        for (ResolveInfo info : launcherComponents) {
+            if (getIconName(info).equals(icon)) {
+                return info;
+            }
+        }
+        return null;
     }
 
     @Nullable
     private String getActiveIconName(@NonNull List<ResolveInfo> launcherComponents) {
         PackageManager packageManager = plugin.getContext().getPackageManager();
         for (ResolveInfo info : launcherComponents) {
-            ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
-            int state = packageManager.getComponentEnabledSetting(componentName);
+            int state = packageManager.getComponentEnabledSetting(getComponentName(info));
             boolean isEnabled =
                 state == PackageManager.COMPONENT_ENABLED_STATE_ENABLED ||
                 (state == PackageManager.COMPONENT_ENABLED_STATE_DEFAULT && info.activityInfo.enabled);
@@ -70,11 +99,16 @@ public class AppIcon {
         return null;
     }
 
+    @NonNull
+    private ComponentName getComponentName(@NonNull ResolveInfo info) {
+        return new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
+    }
+
     @Nullable
-    private String getDefaultIconName(@NonNull List<ResolveInfo> launcherComponents) {
+    private ResolveInfo getDefaultLauncherComponent(@NonNull List<ResolveInfo> launcherComponents) {
         for (ResolveInfo info : launcherComponents) {
             if (info.activityInfo.enabled) {
-                return getIconName(info);
+                return info;
             }
         }
         return null;
@@ -96,23 +130,35 @@ public class AppIcon {
         return context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DISABLED_COMPONENTS);
     }
 
-    private boolean hasIcon(@NonNull List<ResolveInfo> launcherComponents, @NonNull String icon) {
-        for (ResolveInfo info : launcherComponents) {
-            if (getIconName(info).equals(icon)) {
-                return true;
-            }
-        }
-        return false;
+    /**
+     * The system closes every task that was started from a launcher component once that
+     * component is disabled. A `singleTask` activity would reuse the task that was started
+     * from the old component, so that task is removed first and the new component is started
+     * in a fresh task before the other components are disabled.
+     */
+    private void relaunchWithIcon(@NonNull List<ResolveInfo> launcherComponents, @NonNull ResolveInfo newComponent) {
+        Activity activity = plugin.getActivity();
+        setComponentEnabledSetting(newComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+        activity.finishAndRemoveTask();
+        startNewTask(newComponent);
+        disableOtherIcons(launcherComponents, newComponent);
     }
 
-    private void setActiveIcon(@NonNull List<ResolveInfo> launcherComponents, @NonNull String icon) {
+    private void setActiveIcon(@NonNull List<ResolveInfo> launcherComponents, @NonNull ResolveInfo newComponent) {
+        setComponentEnabledSetting(newComponent, PackageManager.COMPONENT_ENABLED_STATE_ENABLED);
+        disableOtherIcons(launcherComponents, newComponent);
+    }
+
+    private void setComponentEnabledSetting(@NonNull ResolveInfo info, int newState) {
         PackageManager packageManager = plugin.getContext().getPackageManager();
-        for (ResolveInfo info : launcherComponents) {
-            ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
-            int newState = getIconName(info).equals(icon)
-                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
-            packageManager.setComponentEnabledSetting(componentName, newState, PackageManager.DONT_KILL_APP);
-        }
+        packageManager.setComponentEnabledSetting(getComponentName(info), newState, PackageManager.DONT_KILL_APP);
+    }
+
+    private void startNewTask(@NonNull ResolveInfo component) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        intent.setComponent(getComponentName(component));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        plugin.getContext().getApplicationContext().startActivity(intent);
     }
 }

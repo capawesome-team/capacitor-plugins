@@ -117,7 +117,7 @@ Open your `AndroidManifest.xml` and remove the launcher `<intent-filter>` from y
 The icon name passed to `setIcon(...)` is the alias name **without the leading dot** (e.g. `Christmas`). Add the referenced icon resources (e.g. `@mipmap/ic_launcher_christmas`) to your `res/mipmap-*` folders.
 
 > [!NOTE]
-> The behavior after a change depends on the launcher. Some launchers apply the new icon only after the app's task is closed, and a few kill the app despite the plugin requesting otherwise. Shortcuts that were pinned to a now-disabled alias may stop working.
+> The system closes the app's task when the alias it was started from is disabled, so the app appears to quit after the change. Pass `relaunch: true` to `setIcon(...)` or `resetIcon(...)` to start the app again with the new icon. Some launchers apply the new icon only after the app's task is closed. Shortcuts that were pinned to a now-disabled alias may stop working.
 
 ### iOS
 
@@ -196,13 +196,25 @@ const resetIcon = async () => {
 };
 ```
 
+### Relaunch the app after the change
+
+On Android, the system closes the app when the alias it was launched from is disabled. Pass `relaunch: true` to start the app again with the new icon. Code that runs after the promise resolves may not be executed because the app is restarted. Only available on Android:
+
+```typescript
+import { AppIcon } from '@capawesome/capacitor-app-icon';
+
+const setIconAndRelaunch = async () => {
+  await AppIcon.setIcon({ icon: 'Christmas', relaunch: true });
+};
+```
+
 ## API
 
 <docgen-index>
 
 * [`getCurrentIcon()`](#getcurrenticon)
 * [`isAvailable()`](#isavailable)
-* [`resetIcon()`](#reseticon)
+* [`resetIcon(...)`](#reseticon)
 * [`setIcon(...)`](#seticon)
 * [Interfaces](#interfaces)
 
@@ -250,15 +262,19 @@ Only available on Android and iOS.
 --------------------
 
 
-### resetIcon()
+### resetIcon(...)
 
 ```typescript
-resetIcon() => Promise<void>
+resetIcon(options?: ResetIconOptions | undefined) => Promise<void>
 ```
 
 Restore the default app icon.
 
 Only available on Android and iOS.
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#reseticonoptions">ResetIconOptions</a></code> |
 
 **Since:** 0.1.0
 
@@ -305,11 +321,19 @@ Only available on Android and iOS.
 | **`available`** | <code>boolean</code> | Whether or not changing the app icon is supported on the current device. | 0.1.0 |
 
 
+#### ResetIconOptions
+
+| Prop           | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                          | Default            | Since |
+| -------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`relaunch`** | <code>boolean</code> | Whether or not to relaunch the app after the icon has been changed. On Android, the app is launched from the alias of the active icon. When that alias is disabled, the system closes the app. Set this to `true` to start the app again from the new alias instead. Code that runs after the returned promise resolves may not be executed because the app is restarted. Only available on Android. | <code>false</code> | 0.1.3 |
+
+
 #### SetIconOptions
 
-| Prop       | Type                | Description                                                                                                                                                                                           | Since |
-| ---------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`icon`** | <code>string</code> | The name of the alternate icon to use. On Android, this is the name of the `<activity-alias>` (without the leading dot). On iOS, this is the name of the alternate app icon set in the asset catalog. | 0.1.0 |
+| Prop           | Type                 | Description                                                                                                                                                                                                                                                                                                                                                                                          | Default            | Since |
+| -------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ | ----- |
+| **`icon`**     | <code>string</code>  | The name of the alternate icon to use. On Android, this is the name of the `<activity-alias>` (without the leading dot). On iOS, this is the name of the alternate app icon set in the asset catalog.                                                                                                                                                                                                |                    | 0.1.0 |
+| **`relaunch`** | <code>boolean</code> | Whether or not to relaunch the app after the icon has been changed. On Android, the app is launched from the alias of the active icon. When that alias is disabled, the system closes the app. Set this to `true` to start the app again from the new alias instead. Code that runs after the returned promise resolves may not be executed because the app is restarted. Only available on Android. | <code>false</code> | 0.1.3 |
 
 </docgen-api>
 

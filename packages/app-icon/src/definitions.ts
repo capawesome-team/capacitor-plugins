@@ -27,7 +27,7 @@ export interface AppIconPlugin {
    *
    * @since 0.1.0
    */
-  resetIcon(): Promise<void>;
+  resetIcon(options?: ResetIconOptions): Promise<void>;
   /**
    * Change the app icon to the alternate icon with the given name.
    *
@@ -70,6 +70,27 @@ export interface IsAvailableResult {
 }
 
 /**
+ * @since 0.1.3
+ */
+export interface ResetIconOptions {
+  /**
+   * Whether or not to relaunch the app after the icon has been changed.
+   *
+   * On Android, the app is launched from the alias of the active icon.
+   * When that alias is disabled, the system closes the app.
+   * Set this to `true` to start the app again from the new alias
+   * instead. Code that runs after the returned promise resolves may
+   * not be executed because the app is restarted.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.3
+   * @default false
+   */
+  relaunch?: boolean;
+}
+
+/**
  * @since 0.1.0
  */
 export interface SetIconOptions {
@@ -83,6 +104,21 @@ export interface SetIconOptions {
    * @since 0.1.0
    */
   icon: string;
+  /**
+   * Whether or not to relaunch the app after the icon has been changed.
+   *
+   * On Android, the app is launched from the alias of the active icon.
+   * When that alias is disabled, the system closes the app.
+   * Set this to `true` to start the app again from the new alias
+   * instead. Code that runs after the returned promise resolves may
+   * not be executed because the app is restarted.
+   *
+   * Only available on Android.
+   *
+   * @since 0.1.3
+   * @default false
+   */
+  relaunch?: boolean;
 }
 
 /**

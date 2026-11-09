@@ -4,6 +4,7 @@ import type {
   AppIconPlugin,
   GetCurrentIconResult,
   IsAvailableResult,
+  ResetIconOptions,
   SetIconOptions,
 } from './definitions';
 
@@ -16,7 +17,7 @@ export class AppIconWeb extends WebPlugin implements AppIconPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async resetIcon(): Promise<void> {
+  async resetIcon(_options?: ResetIconOptions): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }
 

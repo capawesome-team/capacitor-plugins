@@ -8,6 +8,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import io.capawesome.capacitorjs.plugins.appicon.classes.CustomException;
+import io.capawesome.capacitorjs.plugins.appicon.classes.options.ResetIconOptions;
 import io.capawesome.capacitorjs.plugins.appicon.classes.options.SetIconOptions;
 import io.capawesome.capacitorjs.plugins.appicon.classes.results.GetCurrentIconResult;
 import io.capawesome.capacitorjs.plugins.appicon.classes.results.IsAvailableResult;
@@ -49,7 +50,8 @@ public class AppIconPlugin extends Plugin {
     @PluginMethod
     public void resetIcon(PluginCall call) {
         try {
-            implementation.resetIcon();
+            ResetIconOptions options = new ResetIconOptions(call);
+            implementation.resetIcon(options);
             resolveCall(call);
         } catch (Exception exception) {
             rejectCall(call, exception);
