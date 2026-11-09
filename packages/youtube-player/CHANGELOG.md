@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.5
+
+### Patch Changes
+
+- [`be5fd03a7d986944880a7d2952bf0ece635fc20d`](https://github.com/capawesome-team/capacitor-plugins/commit/be5fd03a7d986944880a7d2952bf0ece635fc20d) ([#1212](https://github.com/capawesome-team/capacitor-plugins/pull/1212)): docs: remove the note about automatic captions from the `hl` player option
+
 ## 0.1.4
 
 ### Patch Changes
