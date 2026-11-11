@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- [`28bc15f9418b7f9cf6b6667b6548961fab68c63d`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/28bc15f9418b7f9cf6b6667b6548961fab68c63d) ([#694](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/694)): fix(ios): pin `SQLite.swift` to 0.15.x in `Package.swift` so SPM builds resolve the same version as CocoaPods
+
 ## 0.5.0
 
 ### Minor Changes

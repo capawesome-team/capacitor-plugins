@@ -9,7 +9,8 @@ Pod::Spec.new do |s|
   s.license = package['license']
   s.homepage = package['repository']['url']
   s.author = package['author']
-  s.source = { :git => package['repository']['url'], :tag => s.version.to_s }
+  # The npm tarball has the same layout as a local node_modules install, so one podspec serves both.
+  s.source = { :http => "https://registry.npmjs.org/@capawesome/capacitor-live-update/-/capacitor-live-update-#{s.version}.tgz" }
   s.source_files = 'ios/Plugin/**/*.{swift,h,m,c,cc,mm,cpp}'
   s.ios.deployment_target = '15.0'
   s.dependency 'Capacitor'

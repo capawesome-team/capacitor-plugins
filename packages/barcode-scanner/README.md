@@ -623,7 +623,7 @@ placeholder element to measure the frame (e.g. with
 
 By default, the camera preview is rendered **above** the web view so
 that HTML elements cannot overlap it. Set `placement` to
-`PreviewPlacement.Behind` to render the camera preview **behind** the
+<a href="#previewplacement">`PreviewPlacement.Behind`</a> to render the camera preview **behind** the
 web view so that HTML elements can overlap it (see the `placement`
 property for the requirements).
 

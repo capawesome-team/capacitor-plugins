@@ -18,24 +18,30 @@ permissions:
 
 env:
   NODE_VERSION: 24
+  JAVA_VERSION: 21
 
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     if: github.repository == 'capawesome-team/capacitor-plugins'
+    outputs:
+      published-packages: ${{ steps.changesets.outputs['published-packages'] }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
       - name: Set up Node.js ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Install Dependencies
         run: npm ci
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        uses: changesets/action@v2
+        uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
         with:
           publish-script: npm run release
           version-script: npm run changeset:version
@@ -49,3 +55,33 @@ jobs:
         env:
           PUBLISHED_PACKAGES: ${{ steps.changesets.outputs['published-packages'] }}
         run: node ./scripts/publish-sponsorware.mjs --packages="$PUBLISHED_PACKAGES"
+  publish-live-update-maven-central:
+    name: Publish Live Update to Maven Central
+    runs-on: ubuntu-latest
+    needs: release
+    if: contains(needs.release.outputs.published-packages, '"@capawesome/capacitor-live-update"')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Set up Java ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
+
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+      - name: Install Dependencies
+        run: npm ci
+      - name: Publish
+        working-directory: packages/live-update/android
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.MAVEN_CENTRAL_SIGNING_KEY_PASSWORD }}
+        run: ./gradlew publishAndReleaseToMavenCentral -PmavenCentralPublishing --no-daemon

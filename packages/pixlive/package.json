@@ -1,6 +1,6 @@
 {
   "name": "@capawesome/capacitor-pixlive",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Unofficial Capacitor plugin for Pixlive SDK on Android and iOS.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -60,7 +60,7 @@
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
     "ios:pod:install": "cd ios && pod install --repo-update && cd ..",
-    "ios:spm:install": "cd ios && swift package resolve && cd ..",
+    "ios:spm:install": "if [ \"$CI\" = \"true\" ]; then echo 'Skipping iOS SPM install (SDK not available in CI)'; else cd ios && swift package resolve && cd ..; fi",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

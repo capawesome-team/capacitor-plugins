@@ -133,7 +133,7 @@ Check whether an activity exists that can handle the given intent.
 This is a wrapper around the `PackageManager.resolveActivity(...)` API.
 
 On Android 11 (API level 30) and higher, the result is affected by
-package visibility. Your app may need to declare matching `&lt;queries&gt;`
+package visibility. Your app may need to declare matching `<queries>`
 entries in its `AndroidManifest.xml` for the intent to be resolved.
 
 Only available on Android.

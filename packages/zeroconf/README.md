@@ -432,7 +432,7 @@ startAdvertising(options: StartAdvertisingOptions) => Promise<StartAdvertisingRe
 Advertise a service on the local network.
 
 If the service name is already taken, the service is automatically
-renamed (e.g. `My <a href="#service">Service`</a> becomes `My <a href="#service">Service</a> (2)`). The returned
+renamed (e.g. `My Service` becomes `My Service (2)`). The returned
 name is the actually registered name. If the service is renamed
 later, the `advertisingNameChange` event is emitted.
 

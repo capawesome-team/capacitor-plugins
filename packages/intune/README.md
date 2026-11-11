@@ -774,7 +774,7 @@ Protect a file or directory for the given account.
 On iOS, the Intune App SDK does not encrypt files on its own. Call this
 method for every file that contains organization data if the app
 protection policy requires file encryption (see
-`GetPolicyResult.fileEncryptionRequired`). The file is encrypted in
+<a href="#getpolicyresult">`GetPolicyResult.fileEncryptionRequired`</a>). The file is encrypted in
 place if the policy requires it. For a directory, all files it currently
 contains are protected; files added later must be protected separately.
 Encrypted files can only be read through the Intune App SDK, so use

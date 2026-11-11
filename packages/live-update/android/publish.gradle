@@ -1,0 +1,50 @@
+// Publishes the library to Maven Central as `io.capawesome:capacitor-live-update`.
+// Applied by build.gradle only when the `mavenCentralPublishing` project property is set,
+// so apps that build the plugin as a Gradle module never load the publishing plugin.
+apply plugin: 'com.vanniktech.maven.publish'
+
+def packageJson = new groovy.json.JsonSlurper().parse(file('../package.json'))
+
+// The plugin classes are on the build script classpath but not visible to this applied script
+// at compile time, so they are loaded by name.
+def publishClass = { String name -> project.buildscript.classLoader.loadClass("com.vanniktech.maven.publish.$name") }
+// Maven Central requires a javadoc jar. Dokka is not set up and AGP's javadoc task fails on the Kotlin sources, so an empty jar is published.
+def emptyJavadocJar = publishClass('JavadocJar$Empty').getDeclaredConstructor().newInstance()
+def sourcesJar = publishClass('SourcesJar$Sources').getDeclaredConstructor().newInstance()
+def releaseLibrary = publishClass('AndroidSingleVariantLibrary').getDeclaredConstructor(publishClass('JavadocJar'), publishClass('SourcesJar'), String).newInstance(emptyJavadocJar, sourcesJar, 'release')
+
+mavenPublishing {
+    configure(releaseLibrary)
+    coordinates('io.capawesome', 'capacitor-live-update', packageJson.version)
+    publishToMavenCentral()
+    signAllPublications()
+
+    pom {
+        name = 'Capacitor Live Update'
+        description = packageJson.description
+        inceptionYear = '2024'
+        url = 'https://capawesome.io/docs/sdks/capacitor/live-update/'
+        organization {
+            name = 'Capawesome'
+            url = 'https://capawesome.io'
+        }
+        licenses {
+            license {
+                name = 'MIT License'
+                url = 'https://opensource.org/licenses/MIT'
+            }
+        }
+        developers {
+            developer {
+                id = 'capawesome-team'
+                name = 'Capawesome'
+                url = 'https://capawesome.io'
+            }
+        }
+        scm {
+            url = 'https://github.com/capawesome-team/capacitor-plugins'
+            connection = 'scm:git:git://github.com/capawesome-team/capacitor-plugins.git'
+            developerConnection = 'scm:git:ssh://git@github.com/capawesome-team/capacitor-plugins.git'
+        }
+    }
+}

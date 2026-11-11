@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.13
+
+### Patch Changes
+
+- [`df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc) ([#687](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/687)): feat(ios): add `additionalRedirectUrls` option to `login(...)` and `logout(...)` to accept the callback on a fallback URL
+
+- [`df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc) ([#687](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/687)): feat(ios): add `browserMode` option to `login(...)` and `logout(...)` to open the page in the external browser
+
+- [`df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc) ([#687](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/687)): fix(ios): reject a pending `login(...)` or `logout(...)` call with `USER_CANCELED` when a new one starts
+
+- [`df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc) ([#687](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/687)): fix(ios): send the token request once the app is active and retry once after a lost connection
+
+- [`df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/df93c0829a0f4ca7bb6f34fe79cf14a8ff04f1bc) ([#687](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/687)): feat(ios): accept the callback on a universal link
+
 ## 0.1.12
 
 ### Patch Changes
