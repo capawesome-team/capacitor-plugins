@@ -9,6 +9,21 @@ declare module '@capacitor/cli' {
      */
     TabBar?: {
       /**
+       * CSS selector of an existing DOM container for optional Web projection.
+       *
+       * Enables WebView Native UI Engine integration. The application supplies
+       * the container and its Web fallback. When configured, the native tab bar
+       * waits for this container before being displayed. Omit to keep the default
+       * native-only behavior. Ionic overlays require enabling the Engine's
+       * optional overlay support in application startup.
+       *
+       * Only available on iOS.
+       *
+       * @since next
+       * @example "#tab-bar-projection"
+       */
+      projectionSelector?: string;
+      /**
        * The tabs to display at launch.
        *
        * If set, the tab bar is created and visible from launch.
