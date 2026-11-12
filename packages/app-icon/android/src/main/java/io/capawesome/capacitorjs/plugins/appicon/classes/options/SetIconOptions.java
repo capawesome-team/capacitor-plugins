@@ -9,13 +9,20 @@ public class SetIconOptions {
     @NonNull
     private final String icon;
 
+    private final boolean relaunch;
+
     public SetIconOptions(@NonNull PluginCall call) throws Exception {
         this.icon = getIconFromCall(call);
+        this.relaunch = call.getBoolean("relaunch", false);
     }
 
     @NonNull
     public String getIcon() {
         return icon;
+    }
+
+    public boolean getRelaunch() {
+        return relaunch;
     }
 
     @NonNull
