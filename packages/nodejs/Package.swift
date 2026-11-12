@@ -34,5 +34,5 @@ let package = Package(
             path: "ios/Plugin",
             resources: [.copy("Assets/builtin_modules")])
     ],
-    cxxLanguageStandard: .gnucxx17
+    cxxLanguageStandard: .gnucxx20
 )
