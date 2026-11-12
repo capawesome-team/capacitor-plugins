@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+### Patch Changes
+
+- [`53900ddd8b4158dd5cc786a4ba6b4c97bac93f34`](https://github.com/capawesome-team/capacitor-plugins/commit/53900ddd8b4158dd5cc786a4ba6b4c97bac93f34) ([#1216](https://github.com/capawesome-team/capacitor-plugins/pull/1216)): feat(android): add `relaunch` option to `setIcon(...)` and `resetIcon(...)`
+
 ## 0.1.2
 
 ### Patch Changes
