@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- [`7e3042551afca14d5a42d2f190c4a1e6c123629e`](https://github.com/capawesome-team/capacitor-plugins/commit/7e3042551afca14d5a42d2f190c4a1e6c123629e) ([#1203](https://github.com/capawesome-team/capacitor-plugins/pull/1203)): feat: update the Node.js runtime to version `24.5.0`
+
 ## 0.2.0
 
 ### Minor Changes
