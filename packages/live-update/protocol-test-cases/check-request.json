@@ -1,0 +1,62 @@
+[
+  {
+    "name": "sends every field that has a value",
+    "input": {
+      "appVersionCode": "120",
+      "appVersionName": "3.2.0",
+      "bundleId": "0d9c8b7a-6f5e-4d3c-9b2a-1f0e9d8c7b6a",
+      "channelName": "production",
+      "customId": "customer-42",
+      "deviceId": "f2b1c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "failure": {
+        "bundleId": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "reason": "download_failed"
+      },
+      "osVersion": "17.4",
+      "platform": "ios",
+      "pluginVersion": "8.9.0",
+      "runtime": "capacitor"
+    },
+    "expectedBody": {
+      "appVersionCode": "120",
+      "appVersionName": "3.2.0",
+      "bundleId": "0d9c8b7a-6f5e-4d3c-9b2a-1f0e9d8c7b6a",
+      "channelName": "production",
+      "customId": "customer-42",
+      "deviceId": "f2b1c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "failure": {
+        "bundleId": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "reason": "download_failed"
+      },
+      "osVersion": "17.4",
+      "platform": "ios",
+      "pluginVersion": "8.9.0",
+      "runtime": "capacitor"
+    }
+  },
+  {
+    "name": "leaves out every field without a value",
+    "input": {
+      "appVersionCode": "34",
+      "appVersionName": "1.0.0",
+      "bundleId": null,
+      "channelName": null,
+      "customId": null,
+      "deviceId": "f2b1c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "failure": null,
+      "osVersion": "34",
+      "platform": "android",
+      "pluginVersion": "8.9.0",
+      "runtime": "capacitor"
+    },
+    "expectedBody": {
+      "appVersionCode": "34",
+      "appVersionName": "1.0.0",
+      "deviceId": "f2b1c3d4-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+      "osVersion": "34",
+      "platform": "android",
+      "pluginVersion": "8.9.0",
+      "runtime": "capacitor"
+    }
+  }
+]

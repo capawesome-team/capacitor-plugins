@@ -1,0 +1,536 @@
+[
+  {
+    "name": "offers a manifest bundle without a signature",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers a zip bundle with a signature",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing when the device is up to date",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "outcome": "up_to_date",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "turns the reason of a skipped check into upper case",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": "channel_paused",
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "CHANNEL_PAUSED",
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "passes on a reason that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": "some_new_reason",
+      "channelName": null,
+      "bundle": null
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "SOME_NEW_REASON",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for a result that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "some_new_result",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for an artifact type that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "some_new_type",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing when an available answer has no bundle",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers a bundle whose optional fields are missing",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers a bundle without a placeholder in its template that has no checksum",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://downloads.example.org/bundles/1.2.3.zip"
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://downloads.example.org/bundles/1.2.3.zip",
+        "checksum": null,
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing and keeps a pending failure for a 2xx answer that is not 200",
+    "statusCode": 201,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "offers nothing when a bundle with a placeholder in its template has no checksum",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "signature": null,
+        "customProperties": {}
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "passes on no reason when a skipped check has none",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": null,
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing and keeps a pending failure for a body that is not JSON",
+    "statusCode": 200,
+    "retryAfter": null,
+    "rawBody": "<html><body>Sign in to the network</body></html>",
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits the seconds of Retry-After after a 429",
+    "statusCode": 429,
+    "retryAfter": "120",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 120000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "does not wait when Retry-After is zero",
+    "statusCode": 429,
+    "retryAfter": "0",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 0,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits 15 minutes after a 429 without Retry-After",
+    "statusCode": 429,
+    "retryAfter": null,
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is a date",
+    "statusCode": 429,
+    "retryAfter": "Wed, 21 Oct 2026 07:28:00 GMT",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is negative",
+    "statusCode": 429,
+    "retryAfter": "-5",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is not a whole number",
+    "statusCode": 429,
+    "retryAfter": "1.5",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits at most 24 hours",
+    "statusCode": 429,
+    "retryAfter": "604800",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 86400000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "waits 24 hours when Retry-After is larger than any number type",
+    "statusCode": 429,
+    "retryAfter": "99999999999999999999",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 86400000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "offers nothing after a 429 with a body that is not JSON",
+    "statusCode": 429,
+    "retryAfter": "60",
+    "rawBody": "Too many requests",
+    "expected": {
+      "outcome": "skipped",
+      "skipReason": "RATE_LIMITED",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 60000,
+      "clearsPendingFailure": false
+    }
+  },
+  {
+    "name": "offers nothing for an invalid request",
+    "statusCode": 400,
+    "retryAfter": null,
+    "body": {
+      "message": "Invalid request."
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for an unknown app",
+    "statusCode": 404,
+    "retryAfter": null,
+    "body": {
+      "message": "App not found."
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "keeps a pending failure after a server error",
+    "statusCode": 503,
+    "retryAfter": null,
+    "body": {
+      "message": "Service is currently unavailable. Please try again later."
+    },
+    "expected": {
+      "outcome": null,
+      "skipReason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": false
+    }
+  }
+]

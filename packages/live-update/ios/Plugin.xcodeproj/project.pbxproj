@@ -37,7 +37,6 @@
 		7C6715D52BB1BCB70000878A /* GetDeviceIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */; };
 		7C6715D72BB1BCC20000878A /* GetCustomIdResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */; };
 		7C6715D92BB1BDAC0000878A /* LiveUpdatePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */; };
-		7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */; };
 		7CA18F442C5E1FFE00D0BE5B /* ReadyResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */; };
 		7CA1DA9C2D454C0B001EB3D0 /* DownloadBundleProgressEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */; };
 		7CA1DA9D2D454C0C001EB3D0 /* NextBundleSetEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA1DA9E2D454C0C001EB3D0 /* NextBundleSetEvent.swift */; };
@@ -55,6 +54,16 @@
 		AA0300000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift */; };
 		AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010002 /* LiveUpdateIonicManager.swift */; };
 		AA0300000000000000010003 /* LiveUpdateIonicPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010003 /* LiveUpdateIonicPreferences.swift */; };
+		AA0700000000000000010001 /* DownloadUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010001 /* DownloadUrl.swift */; };
+		AA0700000000000000010002 /* FileUrlTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010002 /* FileUrlTemplate.swift */; };
+		AA0700000000000000010003 /* ManifestPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010003 /* ManifestPlan.swift */; };
+		AA0700000000000000010004 /* UpdateFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010004 /* UpdateFailure.swift */; };
+		AA0700000000000000010005 /* CheckOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010005 /* CheckOutcome.swift */; };
+		AA0700000000000000010006 /* FailureReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010006 /* FailureReason.swift */; };
+		AA0700000000000000010007 /* CreateCheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010007 /* CreateCheckRequest.swift */; };
+		AA0700000000000000010008 /* CreateCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010008 /* CreateCheckResponse.swift */; };
+		AA0700000000000000010009 /* ProtocolTestCasesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010009 /* ProtocolTestCasesTests.swift */; };
+		AA0700000000000000010010 /* protocol-test-cases in Resources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010010 /* protocol-test-cases */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +110,6 @@
 		7C6715D42BB1BCB70000878A /* GetDeviceIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDeviceIdResult.swift; sourceTree = "<group>"; };
 		7C6715D62BB1BCC20000878A /* GetCustomIdResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetCustomIdResult.swift; sourceTree = "<group>"; };
 		7C6715D82BB1BDAC0000878A /* LiveUpdatePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdatePreferences.swift; sourceTree = "<group>"; };
-		7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetLatestBundleResponse.swift; sourceTree = "<group>"; };
 		7CA18F432C5E1FFE00D0BE5B /* ReadyResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyResult.swift; sourceTree = "<group>"; };
 		7CA1DA9B2D454C0A001EB3D0 /* DownloadBundleProgressEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadBundleProgressEvent.swift; sourceTree = "<group>"; };
 		7CA1DA9E2D454C0C001EB3D0 /* NextBundleSetEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextBundleSetEvent.swift; sourceTree = "<group>"; };
@@ -121,6 +129,16 @@
 		AA0200000000000000010001 /* LiveUpdatePlugin+LiveUpdateProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LiveUpdatePlugin+LiveUpdateProvider.swift"; sourceTree = "<group>"; };
 		AA0200000000000000010002 /* LiveUpdateIonicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicManager.swift; sourceTree = "<group>"; };
 		AA0200000000000000010003 /* LiveUpdateIonicPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicPreferences.swift; sourceTree = "<group>"; };
+		AA0600000000000000010001 /* DownloadUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadUrl.swift; sourceTree = "<group>"; };
+		AA0600000000000000010002 /* FileUrlTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUrlTemplate.swift; sourceTree = "<group>"; };
+		AA0600000000000000010003 /* ManifestPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPlan.swift; sourceTree = "<group>"; };
+		AA0600000000000000010004 /* UpdateFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFailure.swift; sourceTree = "<group>"; };
+		AA0600000000000000010005 /* CheckOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckOutcome.swift; sourceTree = "<group>"; };
+		AA0600000000000000010006 /* FailureReason.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailureReason.swift; sourceTree = "<group>"; };
+		AA0600000000000000010007 /* CreateCheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckRequest.swift; sourceTree = "<group>"; };
+		AA0600000000000000010008 /* CreateCheckResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckResponse.swift; sourceTree = "<group>"; };
+		AA0600000000000000010009 /* ProtocolTestCasesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolTestCasesTests.swift; sourceTree = "<group>"; };
+		AA0600000000000000010010 /* protocol-test-cases */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "protocol-test-cases"; path = "../protocol-test-cases"; sourceTree = SOURCE_ROOT; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -188,7 +206,9 @@
 			isa = PBXGroup;
 			children = (
 				50ADFF96201F53D600D50D53 /* LiveUpdateIonicPreferencesTests.swift */,
+				AA0600000000000000010009 /* ProtocolTestCasesTests.swift */,
 				50ADFF98201F53D600D50D53 /* Info.plist */,
+				AA0600000000000000010010 /* protocol-test-cases */,
 			);
 			path = PluginTests;
 			sourceTree = "<group>";
@@ -198,6 +218,10 @@
 			children = (
 				7CA1DA9A2D454C04001EB3D0 /* Events */,
 				7C29FB592CBD4148007DCB06 /* Manifest.swift */,
+				AA0600000000000000010004 /* UpdateFailure.swift */,
+				AA0600000000000000010003 /* ManifestPlan.swift */,
+				AA0600000000000000010002 /* FileUrlTemplate.swift */,
+				AA0600000000000000010001 /* DownloadUrl.swift */,
 				7C20114F2BA96529001FABAD /* Results */,
 				7C20114E2BA96524001FABAD /* Options */,
 			);
@@ -258,6 +282,8 @@
 			children = (
 				7C29FB522CBCE2B0007DCB06 /* ArtifactType.swift */,
 				7C62B6502BA9AD220025240F /* CustomError.swift */,
+				AA0600000000000000010006 /* FailureReason.swift */,
+				AA0600000000000000010005 /* CheckOutcome.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -267,7 +293,8 @@
 			children = (
 				7C29FB572CBCEE4B007DCB06 /* ManifestItem.swift */,
 				7CAB13062DEFB130003BC5D5 /* GetChannelsResponseItem.swift */,
-				7C9B252B2BBED5DA0007ED74 /* GetLatestBundleResponse.swift */,
+				AA0600000000000000010008 /* CreateCheckResponse.swift */,
+				AA0600000000000000010007 /* CreateCheckRequest.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -425,6 +452,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA0700000000000000010010 /* protocol-test-cases in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,7 +532,6 @@
 				7C6715D12BB1BC9E0000878A /* SetCustomIdOptions.swift in Sources */,
 				7C2011592BA966F4001FABAD /* DownloadBundleOptions.swift in Sources */,
 				7C29FB502CBAB671007DCB06 /* LiveUpdateHttpClient.swift in Sources */,
-				7C9B252C2BBED5DA0007ED74 /* GetLatestBundleResponse.swift in Sources */,
 				7CA18F442C5E1FFE00D0BE5B /* ReadyResult.swift in Sources */,
 				7CD426B22D155B00003F93F9 /* SetNextBundleOptions.swift in Sources */,
 				7C29FB532CBCE2B5007DCB06 /* ArtifactType.swift in Sources */,
@@ -533,6 +560,14 @@
 				7CA1DA9D2D454C0C001EB3D0 /* NextBundleSetEvent.swift in Sources */,
 				7C2011572BA9661B001FABAD /* DeleteBundleOptions.swift in Sources */,
 				7C29FB582CBCEE4C007DCB06 /* ManifestItem.swift in Sources */,
+				AA0700000000000000010008 /* CreateCheckResponse.swift in Sources */,
+				AA0700000000000000010007 /* CreateCheckRequest.swift in Sources */,
+				AA0700000000000000010006 /* FailureReason.swift in Sources */,
+				AA0700000000000000010005 /* CheckOutcome.swift in Sources */,
+				AA0700000000000000010004 /* UpdateFailure.swift in Sources */,
+				AA0700000000000000010003 /* ManifestPlan.swift in Sources */,
+				AA0700000000000000010002 /* FileUrlTemplate.swift in Sources */,
+				AA0700000000000000010001 /* DownloadUrl.swift in Sources */,
 				7CAB12672DEFA3E0003BB4F7 /* SetConfigOptions.swift in Sources */,
 				7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */,
 				7C4274D52D1487500066184E /* SyncOptions.swift in Sources */,
@@ -551,6 +586,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50ADFF97201F53D600D50D53 /* LiveUpdateIonicPreferencesTests.swift in Sources */,
+				AA0700000000000000010009 /* ProtocolTestCasesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

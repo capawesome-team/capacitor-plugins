@@ -1,0 +1,251 @@
+{
+  "parse": [
+    {
+      "name": "reads the items of a manifest",
+      "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 1432}, {\"href\": \"assets/app.js\", \"checksum\": \"c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e\", \"sizeInBytes\": 184220}]",
+      "expectedItems": [
+        {
+          "href": "index.html",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 1432
+        },
+        {
+          "href": "assets/app.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 184220
+        }
+      ]
+    },
+    {
+      "name": "reads a manifest without items",
+      "text": "[]",
+      "expectedItems": []
+    },
+    {
+      "name": "reads an item without a size as an item of size zero",
+      "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\"}]",
+      "expectedItems": [
+        {
+          "href": "index.html",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 0
+        }
+      ]
+    },
+    {
+      "name": "rejects a manifest with an item that has no checksum",
+      "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}, {\"href\": \"assets/app.js\", \"sizeInBytes\": 100}]",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest with an item that has no path",
+      "text": "[{\"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}]",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest that is not a list",
+      "text": "{\"items\": [{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}]}",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest that is not JSON",
+      "text": "<html></html>",
+      "expectedItems": null
+    }
+  ],
+  "plan": [
+    {
+      "name": "downloads every file when there is no current manifest",
+      "currentItems": null,
+      "latestItems": [
+        {
+          "href": "index.html",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "assets/app.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [],
+        "download": [
+          "index.html",
+          "assets/app.js"
+        ]
+      }
+    },
+    {
+      "name": "copies a file that did not change",
+      "currentItems": [
+        {
+          "href": "index.html",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "assets/app.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 100
+        }
+      ],
+      "latestItems": [
+        {
+          "href": "index.html",
+          "checksum": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "assets/app.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [
+          {
+            "from": "assets/app.js",
+            "to": "assets/app.js"
+          }
+        ],
+        "download": [
+          "index.html"
+        ]
+      }
+    },
+    {
+      "name": "copies a file that moved to another path",
+      "currentItems": [
+        {
+          "href": "assets/logo.png",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "latestItems": [
+        {
+          "href": "img/logo.png",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [
+          {
+            "from": "assets/logo.png",
+            "to": "img/logo.png"
+          }
+        ],
+        "download": []
+      }
+    },
+    {
+      "name": "copies two files that swapped their content from the path that holds the content",
+      "currentItems": [
+        {
+          "href": "a.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "b.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 100
+        }
+      ],
+      "latestItems": [
+        {
+          "href": "a.js",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "b.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [
+          {
+            "from": "b.js",
+            "to": "a.js"
+          },
+          {
+            "from": "a.js",
+            "to": "b.js"
+          }
+        ],
+        "download": []
+      }
+    },
+    {
+      "name": "copies one file to every path that needs its content",
+      "currentItems": [
+        {
+          "href": "a.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "latestItems": [
+        {
+          "href": "a.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "copy-of-a.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [
+          {
+            "from": "a.js",
+            "to": "a.js"
+          },
+          {
+            "from": "a.js",
+            "to": "copy-of-a.js"
+          }
+        ],
+        "download": []
+      }
+    },
+    {
+      "name": "copies from the first path when two current files hold the same content",
+      "currentItems": [
+        {
+          "href": "first.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "second.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "latestItems": [
+        {
+          "href": "third.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        }
+      ],
+      "expected": {
+        "copy": [
+          {
+            "from": "first.js",
+            "to": "third.js"
+          }
+        ],
+        "download": []
+      }
+    }
+  ]
+}

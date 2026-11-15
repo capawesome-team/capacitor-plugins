@@ -493,6 +493,14 @@ export interface DownloadBundleOptions {
   /**
    * The URL of the bundle to download.
    *
+   * To download the bundle that `fetchLatestBundle(...)` returns, pass its
+   * `downloadUrl` without changing it. If the result holds a `checksum`,
+   * pass its `artifactType`, `checksum` and `signature` as well.
+   * On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud
+   * already holds these values, and the three options are then ignored.
+   *
+   * The following applies to a self-hosted bundle:
+   *
    * For the `zip` artifact type, the URL must point to a ZIP file.
    * For the `manifest` artifact type, the URL serves as the base URL
    * to download the individual files. For example, if the URL is
@@ -614,10 +622,9 @@ export interface FetchLatestBundleResult {
    */
   channel?: string;
   /**
-   * The checksum of the latest bundle if the bundle is self-hosted.
+   * The checksum of the latest bundle as a SHA-256 hash in hex format.
    *
-   * If the bundle is hosted on Capawesome Cloud, the checksum will be
-   * returned as response header when downloading the bundle.
+   * For the `manifest` artifact type, this is the checksum of the manifest.
    *
    * @since 7.1.0
    */
@@ -631,20 +638,38 @@ export interface FetchLatestBundleResult {
   customProperties?: { [key: string]: string };
   /**
    * The URL of the latest bundle to download.
-   * Pass this URL to the `downloadBundle(...)` method to download the bundle.
+   * Pass this URL to the `downloadBundle(...)` method without changing it.
+   *
+   * On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud
+   * is only valid for a limited time. After it has expired, the `downloadBundle(...)`
+   * method fails with the error code `DOWNLOAD_URL_EXPIRED`. Call `fetchLatestBundle(...)`
+   * again to get a new URL.
    *
    * @since 6.7.0
    */
   downloadUrl?: string;
   /**
-   * The signature of the latest bundle if the bundle is self-hosted.
+   * The signature of the latest bundle as a signed SHA-256 hash
+   * in base64 format, if the bundle is signed.
    *
-   * If the bundle is hosted on Capawesome Cloud, the signature will be
-   * returned as response header when downloading the bundle.
+   * For the `manifest` artifact type, this is the signature of the manifest.
    *
    * @since 7.1.0
    */
   signature?: string;
+  /**
+   * The reason why no bundle is offered.
+   *
+   * Only set if the update check was skipped, for example because the
+   * channel is paused. A newer server may send a reason that is not part
+   * of `SkipReason`. It is passed on in upper case as well.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.9.0
+   * @example 'CHANNEL_PAUSED'
+   */
+  skipReason?: SkipReason;
 }
 
 /**
@@ -973,6 +998,19 @@ export interface SyncResult {
    * @since 5.0.0
    */
   nextBundleId: string | null;
+  /**
+   * The reason why no bundle is offered.
+   *
+   * Only set if the update check was skipped, for example because the
+   * channel is paused. A newer server may send a reason that is not part
+   * of `SkipReason`. It is passed on in upper case as well.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.9.0
+   * @example 'CHANNEL_PAUSED'
+   */
+  skipReason?: SkipReason;
 }
 
 /**
@@ -1047,3 +1085,93 @@ export interface NextBundleSetEvent {
  * @since 7.4.0
  */
 export type ReloadedListener = () => void;
+
+/**
+ * The reason why an update check offers no bundle.
+ *
+ * @since 8.9.0
+ */
+export enum SkipReason {
+  /**
+   * The version code of the native app is not valid.
+   *
+   * @since 8.9.0
+   */
+  AppVersionInvalid = 'APP_VERSION_INVALID',
+  /**
+   * The latest bundle does not support the version of the native app.
+   *
+   * @since 8.9.0
+   */
+  AppVersionUnsupported = 'APP_VERSION_UNSUPPORTED',
+  /**
+   * No bundle was found for the device.
+   *
+   * @since 8.9.0
+   */
+  BundleMissing = 'BUNDLE_MISSING',
+  /**
+   * The channel is paused.
+   *
+   * @since 8.9.0
+   */
+  ChannelPaused = 'CHANNEL_PAUSED',
+  /**
+   * The channel does not exist.
+   *
+   * @since 8.9.0
+   */
+  ChannelUnknown = 'CHANNEL_UNKNOWN',
+  /**
+   * The channel has no deployment.
+   *
+   * @since 8.9.0
+   */
+  DeploymentMissing = 'DEPLOYMENT_MISSING',
+  /**
+   * The device is not part of the rollout of the latest bundle.
+   *
+   * @since 8.9.0
+   */
+  DeviceNotInRollout = 'DEVICE_NOT_IN_ROLLOUT',
+  /**
+   * The limit of monthly active users (MAU) of the plan is reached.
+   *
+   * @since 8.9.0
+   */
+  MonthlyActiveDevicesLimitReached = 'MONTHLY_ACTIVE_DEVICES_LIMIT_REACHED',
+  /**
+   * The device made too many update checks in a short time.
+   * The plugin makes no further check until the wait time is over
+   * or the app is restarted.
+   *
+   * @since 8.9.0
+   */
+  RateLimited = 'RATE_LIMITED',
+  /**
+   * The runtime of the app does not match the type of the app
+   * on Capawesome Cloud.
+   *
+   * @since 8.9.0
+   */
+  RuntimeMismatched = 'RUNTIME_MISMATCHED',
+  /**
+   * The organization has no active subscription.
+   *
+   * @since 8.9.0
+   */
+  SubscriptionRequired = 'SUBSCRIPTION_REQUIRED',
+}
+
+/**
+ * @since 8.9.0
+ */
+export enum ErrorCode {
+  /**
+   * The download URL of the bundle has expired.
+   * Call `fetchLatestBundle(...)` again to get a new URL.
+   *
+   * @since 8.9.0
+   */
+  DownloadUrlExpired = 'DOWNLOAD_URL_EXPIRED',
+}

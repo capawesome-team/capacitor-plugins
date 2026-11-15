@@ -8,13 +8,9 @@ import Capacitor
         self.items = items
     }
 
-    public static func findDuplicateItems(_ manifest1: Manifest, _ manifest2: Manifest) -> [ManifestItem] {
-        let checksumSet = Set(manifest2.items.map { $0.checksum })
-        return manifest1.items.filter { checksumSet.contains($0.checksum) }
-    }
-
-    public static func findMissingItems(_ manifest1: Manifest, _ manifest2: Manifest) -> [ManifestItem] {
-        let checksumSet = Set(manifest2.items.map { $0.checksum })
-        return manifest1.items.filter { !checksumSet.contains($0.checksum) }
+    /// Throws a `DecodingError` if the data is not a JSON list of items with `href` and `checksum`.
+    static func parse(_ data: Data) throws -> Manifest {
+        let items = try JSONDecoder().decode([ManifestItem].self, from: data)
+        return Manifest(items: items)
     }
 }

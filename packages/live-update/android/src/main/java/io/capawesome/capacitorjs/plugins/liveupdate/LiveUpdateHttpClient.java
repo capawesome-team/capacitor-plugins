@@ -11,8 +11,10 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.brotli.BrotliInterceptor;
@@ -20,8 +22,11 @@ import okio.Buffer;
 import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
+import org.json.JSONObject;
 
 public class LiveUpdateHttpClient {
+
+    private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
 
     @NonNull
     private final LiveUpdateConfig config;
@@ -72,27 +77,21 @@ public class LiveUpdateHttpClient {
     }
 
     public Call enqueue(String url, NonEmptyCallback<Response> callback) {
-        Request.Builder builder = new Request.Builder().url(url);
-        if (deviceId != null) {
-            builder.addHeader("X-Capawesome-Device-Id", deviceId);
-        }
-        Request request = builder.build();
+        Request request = createRequestBuilderWithDeviceId(url).build();
+        return enqueue(request, callback);
+    }
 
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(
-            new Callback() {
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) {
-                    callback.success(response);
-                }
+    @NonNull
+    public Call enqueuePost(@NonNull String url, @NonNull JSONObject body, @NonNull NonEmptyCallback<Response> callback) {
+        RequestBody requestBody = RequestBody.create(body.toString(), JSON_MEDIA_TYPE);
+        Request request = createRequestBuilderWithDeviceId(url).post(requestBody).build();
+        return enqueue(request, callback);
+    }
 
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    callback.error(e);
-                }
-            }
-        );
-        return call;
+    @NonNull
+    public Call enqueueWithoutDeviceId(@NonNull String url, @NonNull NonEmptyCallback<Response> callback) {
+        Request request = new Request.Builder().url(url).build();
+        return enqueue(request, callback);
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
@@ -113,5 +112,33 @@ public class LiveUpdateHttpClient {
         sink.flush();
         sink.close();
         source.close();
+    }
+
+    @NonNull
+    private Request.Builder createRequestBuilderWithDeviceId(@NonNull String url) {
+        Request.Builder builder = new Request.Builder().url(url);
+        if (deviceId != null) {
+            builder.addHeader("X-Capawesome-Device-Id", deviceId);
+        }
+        return builder;
+    }
+
+    @NonNull
+    private Call enqueue(@NonNull Request request, @NonNull NonEmptyCallback<Response> callback) {
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(
+            new Callback() {
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) {
+                    callback.success(response);
+                }
+
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    callback.error(e);
+                }
+            }
+        );
+        return call;
     }
 }

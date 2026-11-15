@@ -140,6 +140,7 @@ public final class LiveUpdateIonicManager: ProviderManager {
             throw CustomError.downloadUrlMissing
         }
         let downloadOptions = DownloadBundleOptions(
+            appId: appId,
             artifactType: result.getArtifactType() ?? .zip,
             bundleId: bundleId,
             checksum: result.getChecksum(),
