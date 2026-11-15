@@ -63,6 +63,7 @@
 		AA0700000000000000010007 /* CreateCheckRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010007 /* CreateCheckRequest.swift */; };
 		AA0700000000000000010008 /* CreateCheckResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010008 /* CreateCheckResponse.swift */; };
 		AA0700000000000000010009 /* ProtocolTestCasesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010009 /* ProtocolTestCasesTests.swift */; };
+		AA0700000000000000010011 /* LiveUpdateHttpClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010011 /* LiveUpdateHttpClientTests.swift */; };
 		AA0700000000000000010010 /* protocol-test-cases in Resources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010010 /* protocol-test-cases */; };
 /* End PBXBuildFile section */
 
@@ -138,6 +139,7 @@
 		AA0600000000000000010007 /* CreateCheckRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckRequest.swift; sourceTree = "<group>"; };
 		AA0600000000000000010008 /* CreateCheckResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCheckResponse.swift; sourceTree = "<group>"; };
 		AA0600000000000000010009 /* ProtocolTestCasesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProtocolTestCasesTests.swift; sourceTree = "<group>"; };
+		AA0600000000000000010011 /* LiveUpdateHttpClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateHttpClientTests.swift; sourceTree = "<group>"; };
 		AA0600000000000000010010 /* protocol-test-cases */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "protocol-test-cases"; path = "../protocol-test-cases"; sourceTree = SOURCE_ROOT; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,6 +209,7 @@
 			children = (
 				50ADFF96201F53D600D50D53 /* LiveUpdateIonicPreferencesTests.swift */,
 				AA0600000000000000010009 /* ProtocolTestCasesTests.swift */,
+				AA0600000000000000010011 /* LiveUpdateHttpClientTests.swift */,
 				50ADFF98201F53D600D50D53 /* Info.plist */,
 				AA0600000000000000010010 /* protocol-test-cases */,
 			);
@@ -587,6 +590,7 @@
 			files = (
 				50ADFF97201F53D600D50D53 /* LiveUpdateIonicPreferencesTests.swift in Sources */,
 				AA0700000000000000010009 /* ProtocolTestCasesTests.swift in Sources */,
+				AA0700000000000000010011 /* LiveUpdateHttpClientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

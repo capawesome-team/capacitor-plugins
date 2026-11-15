@@ -250,7 +250,7 @@ public class LiveUpdate {
             }
             String url = urlBuilder.build().toString();
 
-            httpClient.enqueue(
+            httpClient.enqueueWithDeviceId(
                 url,
                 new NonEmptyCallback<Response>() {
                     @Override
@@ -887,7 +887,7 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        return httpClient.enqueue(
+        return httpClient.enqueueWithDeviceId(
             url,
             new NonEmptyCallback<Response>() {
                 @Override
@@ -926,7 +926,7 @@ public class LiveUpdate {
         @Nullable DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        return httpClient.enqueueWithoutDeviceId(
+        return httpClient.enqueue(
             url,
             new NonEmptyCallback<Response>() {
                 @Override

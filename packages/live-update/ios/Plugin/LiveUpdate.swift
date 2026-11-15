@@ -124,7 +124,7 @@ import CommonCrypto
             urlComponents.queryItems = parameters.map { URLQueryItem(name: $0.key, value: $0.value) }
         }
         let url = try urlComponents.asURL()
-        let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
+        let response = try await self.httpClient.requestWithDeviceId(url: url, type: [GetChannelsResponseItem].self)
         if let error = response.error {
             if response.response?.statusCode == 401 {
                 throw CustomError.channelDiscoveryNotEnabled
@@ -535,7 +535,7 @@ import CommonCrypto
     }
 
     private func downloadAndVerifyFile(url: URL, file: URL, checksum: String?, signature: String?, callback: ((Progress) -> Void)?) async throws {
-        let result = await httpClient.download(url: url, destination: buildDownloadDestination(file: file), callback: callback)
+        let result = await httpClient.downloadWithDeviceId(url: url, destination: buildDownloadDestination(file: file), callback: callback)
         let response = try requireSuccessfulDownloadResponse(result)
         let checksum = checksum ?? LiveUpdateHttpClient.getChecksumFromResponse(response: response)
         let signature = signature ?? LiveUpdateHttpClient.getSignatureFromResponse(response: response)
@@ -661,7 +661,7 @@ import CommonCrypto
     /// Downloads without the device id header. A 403 means that the address has expired.
     private func downloadFileWithMarker(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
         let destination = buildDownloadDestination(file: file)
-        let result = await httpClient.downloadWithoutDeviceId(url: try buildUrl(url), destination: destination, callback: callback)
+        let result = await httpClient.download(url: try buildUrl(url), destination: destination, callback: callback)
         if result.response?.statusCode == 403 {
             throw CustomError.downloadUrlExpired
         }

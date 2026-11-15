@@ -27,6 +27,7 @@ import org.json.JSONObject;
 public class LiveUpdateHttpClient {
 
     private static final MediaType JSON_MEDIA_TYPE = MediaType.get("application/json; charset=utf-8");
+    private static final String USER_AGENT = "capawesome-capacitor-live-update/" + LiveUpdatePlugin.VERSION + " (android)";
 
     @NonNull
     private final LiveUpdateConfig config;
@@ -76,22 +77,39 @@ public class LiveUpdateHttpClient {
         this.deviceId = deviceId;
     }
 
-    public Call enqueue(String url, NonEmptyCallback<Response> callback) {
-        Request request = createRequestBuilderWithDeviceId(url).build();
-        return enqueue(request, callback);
+    @NonNull
+    public Call enqueue(@NonNull String url, @NonNull NonEmptyCallback<Response> callback) {
+        return enqueue(buildRequest(url), callback);
     }
 
     @NonNull
     public Call enqueuePost(@NonNull String url, @NonNull JSONObject body, @NonNull NonEmptyCallback<Response> callback) {
-        RequestBody requestBody = RequestBody.create(body.toString(), JSON_MEDIA_TYPE);
-        Request request = createRequestBuilderWithDeviceId(url).post(requestBody).build();
-        return enqueue(request, callback);
+        return enqueue(buildPostRequest(url, body), callback);
     }
 
     @NonNull
-    public Call enqueueWithoutDeviceId(@NonNull String url, @NonNull NonEmptyCallback<Response> callback) {
-        Request request = new Request.Builder().url(url).build();
-        return enqueue(request, callback);
+    public Call enqueueWithDeviceId(@NonNull String url, @NonNull NonEmptyCallback<Response> callback) {
+        return enqueue(buildRequestWithDeviceId(url), callback);
+    }
+
+    @NonNull
+    Request buildRequest(@NonNull String url) {
+        return createRequestBuilder(url).build();
+    }
+
+    @NonNull
+    Request buildPostRequest(@NonNull String url, @NonNull JSONObject body) {
+        RequestBody requestBody = RequestBody.create(body.toString(), JSON_MEDIA_TYPE);
+        return createRequestBuilder(url).post(requestBody).build();
+    }
+
+    @NonNull
+    Request buildRequestWithDeviceId(@NonNull String url) {
+        Request.Builder builder = createRequestBuilder(url);
+        if (deviceId != null) {
+            builder.addHeader("X-Capawesome-Device-Id", deviceId);
+        }
+        return builder.build();
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)
@@ -115,12 +133,8 @@ public class LiveUpdateHttpClient {
     }
 
     @NonNull
-    private Request.Builder createRequestBuilderWithDeviceId(@NonNull String url) {
-        Request.Builder builder = new Request.Builder().url(url);
-        if (deviceId != null) {
-            builder.addHeader("X-Capawesome-Device-Id", deviceId);
-        }
-        return builder;
+    private Request.Builder createRequestBuilder(@NonNull String url) {
+        return new Request.Builder().url(url).header("User-Agent", USER_AGENT);
     }
 
     @NonNull

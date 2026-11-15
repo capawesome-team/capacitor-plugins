@@ -41,6 +41,20 @@ A bundle needs `id`, `artifactType` and `fileUrlTemplate`. It also needs `checks
 
 The failure that was sent with the check is cleared by a 200 answer whose body is a JSON object, and by every 4xx answer except 429. After every other answer it stays and is sent with the next check.
 
+## The headers
+
+Every request of the SDK carries `User-Agent: capawesome-<sdk>/<version> (<platform>)`, for example `capawesome-capacitor-live-update/8.9.0 (ios)`.
+
+| Part | Value |
+|---|---|
+| `<sdk>` | `<runtime>-live-update`, with `runtime` as in the check. So it is `capacitor-live-update`, `cordova-live-update` or `electron-live-update`, the name of the package without its scope. |
+| `<version>` | The version of that package, as in `pluginVersion` of the check |
+| `<platform>` | `android`, `ios` or `electron`, as in `platform` of the check |
+
+So the Capacitor plugin on Electron sends `capawesome-capacitor-live-update/<version> (electron)`, and the Electron SDK on its own sends `capawesome-electron-live-update/<version> (electron)`.
+
+A request of this protocol never carries the id of the device in a header. The check carries it in its body, and the download of a file does not carry it at all.
+
 ## The address of a file
 
 A bundle of the answer carries `fileUrlTemplate`. The address of a file is the template with every `{checksum}` replaced by the SHA-256 checksum of that file. That holds for the zip file, the manifest and every file that the manifest lists. The replacement is done on the text. No other character of the template changes. A template without `{checksum}` is used as it is.
