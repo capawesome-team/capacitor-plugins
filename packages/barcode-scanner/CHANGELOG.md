@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.6
+
+### Patch Changes
+
+- [`7dd428d3e6f991ad848d94a888587b4df7dac248`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/7dd428d3e6f991ad848d94a888587b4df7dac248) ([#700](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/700)): feat(ios): detect barcodes from the camera frames with the Vision framework
+
 ## 0.1.5
 
 ### Patch Changes
