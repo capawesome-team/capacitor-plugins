@@ -732,10 +732,12 @@ import CommonCrypto
 
     /// - Returns: The path to the current bundle directory or `nil` if no view controller was found.
     private func getCurrentCapacitorServerPath() -> String? {
-        guard let viewController = self.plugin?.bridge?.viewController as? CAPBridgeViewController else {
+        guard let bridge = self.plugin?.bridge, bridge.viewController is CAPBridgeViewController else {
             return nil
         }
-        return viewController.getServerBasePath()
+        // The view controller gets its bridge only after all plugins are loaded,
+        // so its `getServerBasePath()` returns an empty string during `load()`.
+        return bridge.config.appLocation.path
     }
 
     private func getDeviceId() -> String {
