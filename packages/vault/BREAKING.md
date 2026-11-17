@@ -22,4 +22,4 @@ The message of the `KEY_INVALIDATED` error changed from `The encryption key was 
 
 ### `clear(...)`, `destroy(...)`, `importData(...)` and `removeValue(...)` can reject on iOS
 
-All four methods now report a failing Keychain deletion instead of always resolving, for example when the device is locked. Treat a rejection as "not deleted yet" and retry when the app is in the foreground and the device is unlocked; `importData()` rejects before writing anything, so the previous values stay intact. `destroy()` still attempts every deletion and always clears the in-memory state before it rejects.
+All four methods now report a failing Keychain deletion instead of always resolving, for example when the device is locked. Treat a rejection as "not deleted yet" and retry when the app is in the foreground and the device is unlocked; `importData()` rejects before writing anything, so the previous values stay intact. `destroy()` clears the in-memory state first and then deletes the key, the values and the passcode state in that order. It stops at the first failed step, so what remains keeps the vault closed, and calling it again finishes the removal.

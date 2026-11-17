@@ -1091,7 +1091,7 @@ Yes, with the `CUSTOM_PASSCODE` vault type. The other vault types need a device 
 
 ### How do I find out which vault types the device supports?
 
-Call `initialize()` with the type you prefer. If it rejects with `AUTHENTICATOR_UNAVAILABLE`, nothing was created and you can initialize the same vault with another type, for example `CUSTOM_PASSCODE`. The result can change when the user adds or removes the device passcode or a biometric, so repeat this on every app start instead of storing it. Once a vault holds values, it must be initialized with the type it was created with, otherwise `initialize()` rejects.
+Call `initialize()` with the type you prefer. If it rejects with `AUTHENTICATOR_UNAVAILABLE`, nothing was created and you can initialize the same vault with another type, for example `CUSTOM_PASSCODE`. The result can change when the user adds or removes the device passcode or a biometric, so repeat this on every app start instead of storing it. A `CUSTOM_PASSCODE` vault rejects every other type once its passcode is set, and a vault of another type rejects `CUSTOM_PASSCODE` once it holds values. Between `BIOMETRIC`, `BIOMETRIC_OR_DEVICE_PASSCODE` and `DEVICE_PASSCODE` the key keeps the protection it was created with. A different `type` then changes only the unlock prompt on Android and has no effect on iOS.
 
 ### What happens after too many wrong passcodes?
 
