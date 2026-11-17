@@ -17,7 +17,7 @@ The Capacitor Vault plugin is one of the most complete secure storage solutions 
 - 🔓 **Lockable**: Unlock once with a biometric or passcode prompt, then perform many read/write operations until `lock()` is called.
 - ⏱️ **Auto-lock**: Automatically lock the vault after the app has been backgrounded for a configurable duration.
 - 🗂️ **Multi-vault**: Create multiple independent vaults with different configurations on the same device.
-- 🔐 **Multiple vault types**: Authenticate with biometrics, the device passcode, or either.
+- 🔐 **Multiple vault types**: Authenticate with biometrics, the device passcode, either, or a custom passcode set by your app.
 - ♻️ **Key invalidation**: Optionally invalidate the encryption key when the device's biometric set changes.
 - 🚨 **Error Codes**: Provides detailed error codes for better error handling.
 - ✨ **Customizable**: Customize the authentication prompt with a title, subtitle, and button text.
@@ -101,7 +101,7 @@ npx cap sync
 
 #### Minimum Android version
 
-The `DEVICE_PASSCODE` and `BIOMETRIC_OR_DEVICE_PASSCODE` vault types require Android API 30 (Android 11) or higher. On lower versions, `initialize(...)` will reject with the `AUTHENTICATOR_UNAVAILABLE` error code. The `BIOMETRIC` vault type is supported on all supported Android versions.
+The `DEVICE_PASSCODE` and `BIOMETRIC_OR_DEVICE_PASSCODE` vault types require Android API 30 (Android 11) or higher. On lower versions, `initialize(...)` will reject with the `AUTHENTICATOR_UNAVAILABLE` error code. The `BIOMETRIC` and `CUSTOM_PASSCODE` vault types are supported on all supported Android versions, and `CUSTOM_PASSCODE` does not need a screen lock.
 
 #### Proguard
 
@@ -141,7 +141,7 @@ No configuration required for this plugin.
 
 ## Usage
 
-The following examples show how to initialize a vault, check whether one exists, unlock and lock it, store and retrieve values, clear or destroy it, and listen for lock and unlock events.
+The following examples show how to initialize a vault, check whether one exists, unlock and lock it, use a custom passcode, store and retrieve values, clear or destroy it, and listen for lock and unlock events.
 
 ### Initialize the vault
 
@@ -225,6 +225,53 @@ const lock = async () => {
   await Vault.lock();
 };
 ```
+
+### Use a custom passcode
+
+A `CUSTOM_PASSCODE` vault is unlocked with a passcode that your app sets, so it works without a device passcode or biometrics and on every supported Android version. Your app shows its own passcode screen, and the plugin only verifies the passcode and never shows a prompt. Use `exists()` to decide between a setup screen and an unlock screen:
+
+```typescript
+import { Vault, VaultType, ErrorCode } from '@capawesome-team/capacitor-vault';
+
+// Call once per session before any other method.
+const initialize = async () => {
+  await Vault.initialize({
+    type: VaultType.CustomPasscode,
+    lockAfterBackgrounded: 900000,
+  });
+};
+
+// Create the vault with the passcode the user chose on your setup screen.
+// The vault is unlocked afterwards. Three wrong passcodes in a row delete it.
+const setPasscode = async (passcode: string) => {
+  await Vault.setPasscode({ passcode, failedUnlockCountLimit: 3 });
+};
+
+// Verify the passcode the user entered on your unlock screen.
+const unlock = async (passcode: string) => {
+  try {
+    await Vault.unlock({ passcode });
+  } catch (error) {
+    if (error.code === ErrorCode.PasscodeInvalid) {
+      // `remainingAttemptCount` is only set when a limit was configured.
+      console.log(`Attempts left: ${error.data?.remainingAttemptCount}`);
+    } else if (error.code === ErrorCode.PasscodeLimitReached) {
+      // The vault and all values were deleted. Show the setup screen again.
+    } else {
+      throw error;
+    }
+  }
+};
+
+// Change the passcode while the vault is unlocked.
+// Verifying the old passcode first is up to your app.
+const changePasscode = async (oldPasscode: string, newPasscode: string) => {
+  await Vault.unlock({ passcode: oldPasscode });
+  await Vault.setPasscode({ passcode: newPasscode, failedUnlockCountLimit: 3 });
+};
+```
+
+The plugin enforces no passcode policy, so your app decides the length and format. A short passcode protects less than the device credential: set `failedUnlockCountLimit` and keep `lockAfterBackgrounded` short. The iOS simulator accepts any passcode, so test the wrong-passcode handling on a real device.
 
 ### Store and retrieve values
 
@@ -319,6 +366,7 @@ const addListeners = async () => {
 * [`isLocked(...)`](#islocked)
 * [`lock(...)`](#lock)
 * [`removeValue(...)`](#removevalue)
+* [`setPasscode(...)`](#setpasscode)
 * [`setValue(...)`](#setvalue)
 * [`unlock(...)`](#unlock)
 * [`addListener('lock', ...)`](#addlistenerlock-)
@@ -361,7 +409,8 @@ Destroy the vault, removing all values and its configuration.
 
 After calling this method, the vault must be reinitialized before use.
 
-Everything that could be deleted is removed, even if the call rejects.
+If the call rejects, part of the vault may remain. What remains keeps the
+vault closed, and calling this method again finishes the removal.
 
 | Param         | Type                                                      |
 | ------------- | --------------------------------------------------------- |
@@ -516,6 +565,11 @@ Rejects with `KEY_INVALIDATED` if the encryption key is gone while
 encrypted values are still stored. No new key is created in that case,
 because it could not decrypt them.
 
+`CUSTOM_PASSCODE` vaults get their key from `setPasscode()`, not from
+this method. Initializing a `CUSTOM_PASSCODE` vault with another type,
+or a vault of another type that already holds values as
+`CUSTOM_PASSCODE`, rejects.
+
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
 | **`options`** | <code><a href="#initializeoptions">InitializeOptions</a></code> |
@@ -605,6 +659,35 @@ The vault must be unlocked before calling this method.
 --------------------
 
 
+### setPasscode(...)
+
+```typescript
+setPasscode(options: SetPasscodeOptions) => Promise<void>
+```
+
+Set the passcode of a `CUSTOM_PASSCODE` vault.
+
+On a vault without a passcode, this creates the encryption key and
+leaves the vault unlocked. On an existing vault, the vault must be
+unlocked; the stored values are kept and only the key protection is
+replaced, so changing the passcode does not re-encrypt the values.
+To require the old passcode first, call `unlock()` with it before.
+
+The passcode and `failedUnlockCountLimit` are persisted until the vault
+is destroyed. The plugin enforces no passcode policy; the app decides
+length and format.
+
+Rejects for vaults of any other `type`.
+
+| Param         | Type                                                              |
+| ------------- | ----------------------------------------------------------------- |
+| **`options`** | <code><a href="#setpasscodeoptions">SetPasscodeOptions</a></code> |
+
+**Since:** 0.2.2
+
+--------------------
+
+
 ### setValue(...)
 
 ```typescript
@@ -636,7 +719,15 @@ unlock(options?: UnlockOptions | undefined) => Promise<void>
 Unlock the vault.
 
 Prompts the user for biometric authentication or device credential,
-depending on the vault's `type`.
+depending on the vault's `type`. For `CUSTOM_PASSCODE` vaults no prompt
+is shown and the `passcode` option is verified instead; the prompt
+options of `initialize()` are ignored. A passcode passed to an already
+unlocked vault is verified as well: a wrong passcode counts toward the
+limit, and the vault stays unlocked unless the limit is reached.
+
+Rejects with `PASSCODE_INVALID` if the passcode is wrong, and with
+`PASSCODE_LIMIT_REACHED` once `failedUnlockCountLimit` is reached; the
+vault's key and values are deleted in that case.
 
 Rejects with `KEY_INVALIDATED` if the encryption key can no longer be
 used, for example because the device's biometric set changed or the key
@@ -723,9 +814,9 @@ Remove all listeners registered for this plugin.
 
 #### ExistsResult
 
-| Prop         | Type                 | Description                                    | Since |
-| ------------ | -------------------- | ---------------------------------------------- | ----- |
-| **`exists`** | <code>boolean</code> | Whether or not the vault has been initialized. | 0.1.0 |
+| Prop         | Type                 | Description                                                                                                                      | Since |
+| ------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`exists`** | <code>boolean</code> | Whether or not the vault has been initialized. For `CUSTOM_PASSCODE` vaults this is `true` once `setPasscode()` has been called. | 0.1.0 |
 
 
 #### ExistsOptions
@@ -844,6 +935,15 @@ Remove all listeners registered for this plugin.
 | **`vaultId`** | <code>string</code> | The identifier of the vault.              | <code>'default'</code> | 0.1.0 |
 
 
+#### SetPasscodeOptions
+
+| Prop                         | Type                | Description                                                                                                                                                                                                                                                                                                                                                                                         | Default                | Since |
+| ---------------------------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
+| **`failedUnlockCountLimit`** | <code>number</code> | The number of consecutive failed `unlock()` calls after which the vault's key and values are deleted. Must be at least `1`. If omitted, failed attempts are counted but the vault is never deleted. The counter is reset by a successful unlock or by this method. Changing the limit needs an unlocked vault and another `setPasscode()` call; omitting it on that call removes an existing limit. |                        | 0.2.2 |
+| **`passcode`**               | <code>string</code> | The passcode that unlocks the vault. Must not be empty.                                                                                                                                                                                                                                                                                                                                             |                        | 0.2.2 |
+| **`vaultId`**                | <code>string</code> | The identifier of the vault.                                                                                                                                                                                                                                                                                                                                                                        | <code>'default'</code> | 0.2.2 |
+
+
 #### SetValueOptions
 
 | Prop          | Type                | Description                               | Default                | Since |
@@ -855,9 +955,10 @@ Remove all listeners registered for this plugin.
 
 #### UnlockOptions
 
-| Prop          | Type                | Description                  | Default                | Since |
-| ------------- | ------------------- | ---------------------------- | ---------------------- | ----- |
-| **`vaultId`** | <code>string</code> | The identifier of the vault. | <code>'default'</code> | 0.1.0 |
+| Prop           | Type                | Description                                                                                                                  | Default                | Since |
+| -------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ----- |
+| **`passcode`** | <code>string</code> | The passcode of a `CUSTOM_PASSCODE` vault. Required to unlock a locked `CUSTOM_PASSCODE` vault, ignored for all other types. |                        | 0.2.2 |
+| **`vaultId`**  | <code>string</code> | The identifier of the vault.                                                                                                 | <code>'default'</code> | 0.1.0 |
 
 
 #### PluginListenerHandle
@@ -887,11 +988,12 @@ Remove all listeners registered for this plugin.
 
 #### VaultType
 
-| Members                         | Value                                       | Description                                                                                                                                                                                                             | Since |
-| ------------------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`Biometric`**                 | <code>'BIOMETRIC'</code>                    | The vault is unlocked with the device's biometric authentication. Requires a Class 3 (Strong) biometric sensor on Android. Initialization rejects with `AUTHENTICATOR_UNAVAILABLE` if no Strong biometric is available. | 0.1.0 |
-| **`BiometricOrDevicePasscode`** | <code>'BIOMETRIC_OR_DEVICE_PASSCODE'</code> | The vault is unlocked with either the device's biometric authentication or the device's credential (PIN, pattern, or password).                                                                                         | 0.1.0 |
-| **`DevicePasscode`**            | <code>'DEVICE_PASSCODE'</code>              | The vault is unlocked with the device's credential (PIN, pattern, or password).                                                                                                                                         | 0.1.0 |
+| Members                         | Value                                       | Description                                                                                                                                                                                                                                                     | Since |
+| ------------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`Biometric`**                 | <code>'BIOMETRIC'</code>                    | The vault is unlocked with the device's biometric authentication. Requires a Class 3 (Strong) biometric sensor on Android. Initialization rejects with `AUTHENTICATOR_UNAVAILABLE` if no Strong biometric is available.                                         | 0.1.0 |
+| **`BiometricOrDevicePasscode`** | <code>'BIOMETRIC_OR_DEVICE_PASSCODE'</code> | The vault is unlocked with either the device's biometric authentication or the device's credential (PIN, pattern, or password).                                                                                                                                 | 0.1.0 |
+| **`CustomPasscode`**            | <code>'CUSTOM_PASSCODE'</code>              | The vault is unlocked with a passcode the app sets via `setPasscode()`. Works without a device passcode or biometrics and on every supported Android version. The app owns the passcode screen; the plugin only verifies the passcode and never shows a prompt. | 0.2.2 |
+| **`DevicePasscode`**            | <code>'DEVICE_PASSCODE'</code>              | The vault is unlocked with the device's credential (PIN, pattern, or password).                                                                                                                                                                                 | 0.1.0 |
 
 
 #### LockTrigger
@@ -909,11 +1011,13 @@ Remove all listeners registered for this plugin.
 
 On Android, the encryption key is stored in the [Android Keystore](https://developer.android.com/privacy-and-security/keystore) and the encrypted values are stored in two `SharedPreferences` files per vault. On iOS, both the encryption key and the encrypted values are stored as separate [Keychain](https://developer.apple.com/documentation/security/keychain-services) items.
 
+For `CUSTOM_PASSCODE` vaults, the passcode itself is never stored. On Android, a key in the Android Keystore derives a wrapping key from the passcode and a random salt (HMAC-SHA256), and that wrapping key encrypts the vault's encryption key (AES-GCM). The salt, the wrapped encryption key, the failed-attempt counter and the limit are stored in the key `SharedPreferences` file. On iOS, the key item is protected by the passcode through the Keychain's application password access control, and a second Keychain item holds the failed-attempt counter and the limit.
+
 The encryption key is never included in cloud backups on either platform. On Android, the encrypted values in `SharedPreferences` are part of [Android Auto Backup](https://developer.android.com/identity/data/autobackup) by default, but the backed-up ciphertext is unusable on another device without the Keystore key; to exclude the preference files (`capawesome_capacitor_vault_key_<vaultId>.xml` and `capawesome_capacitor_vault_data_<vaultId>.xml`) from backup, see the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles). On iOS, the Keychain items use the `*ThisDeviceOnly` accessibility classes, so they are never synced to iCloud Keychain or included in device backups.
 
 ### Is the data removed when the app is uninstalled?
 
-On Android, yes: both `SharedPreferences` files and the Keystore key of every vault are deleted. On iOS, no: Keychain items survive an uninstall and are available again after a reinstall with the same bundle identifier. Apple does not document or guarantee this behavior.
+On Android, yes: both `SharedPreferences` files and the Keystore key of every vault are deleted. On iOS, no: Keychain items survive an uninstall and are available again after a reinstall with the same bundle identifier, including the passcode and the failed-attempt counter of `CUSTOM_PASSCODE` vaults. Apple does not document or guarantee this behavior.
 
 To start with empty vaults after a reinstall, keep a marker in `UserDefaults`, which is removed with the app, and call `destroy()` for every vault your app uses on the first launch when it is missing:
 
@@ -956,6 +1060,7 @@ Yes. This plugin was built as an alternative to [Ionic Identity Vault](https://i
 
 - Hardware-backed encryption using the Android Keystore and iOS Keychain
 - Biometric, device passcode, or combined authentication
+- Custom app passcode with a configurable failed-attempt limit
 - Lockable session model with manual lock and auto-lock on background
 - Multiple independent vaults per device
 - Key invalidation when the device's biometric set changes
@@ -965,6 +1070,10 @@ Yes. This plugin was built as an alternative to [Ionic Identity Vault](https://i
 For an AI-assisted migration of your code, add the [Capawesome Skills](https://github.com/capawesome-team/skills) to your AI tool and use the `ionic-enterprise-sdk-migration` skill to migrate your project to `@capawesome-team/capacitor-vault`. Alternatively, you can follow the manual instructions and the complete runtime migration example in the blog post [Alternative to the Ionic Identity Vault plugin](https://capawesome.io/blog/alternative-to-ionic-identity-vault-plugin/).
 
 The stored data needs to be migrated at runtime while **both** plugins are still installed: Identity Vault exposes `exportVault()`, which returns a plain key/value map after the user unlocks the vault, and that map has the exact shape expected by this plugin's [`importData(...)`](#importdata) method, so the two can be bridged directly. Note that the user has to authenticate once during the migration to unlock the old vault — this is unavoidable, since the data is protected by the device's biometric or passcode authentication by design. Once all users have migrated (for example, after a release cycle in which everyone has opened the app at least once), you can remove the Identity Vault dependency in a follow-up release.
+
+### Can this plugin and Ionic Identity Vault be installed at the same time?
+
+Yes, the runtime migration depends on it. On iOS, the plugin registers its class as `CapawesomeVaultPlugin`, so it does not clash with the `VaultPlugin` class of Identity Vault. Run `npx cap sync` after installing or updating either plugin so that the generated plugin list is current.
 
 ### What happens when the user enrolls a new fingerprint or face?
 
@@ -976,9 +1085,21 @@ The same error code is reported whenever the encryption key is gone while encryp
 
 On iOS, each vault consists of two kinds of Keychain items: the key item holding the encryption key and one data item per stored value.
 
+### Can I use the vault without a device passcode?
+
+Yes, with the `CUSTOM_PASSCODE` vault type. The other vault types need a device passcode, and `BIOMETRIC` needs an enrolled biometric, otherwise `initialize()` rejects with the `AUTHENTICATOR_UNAVAILABLE` error code. A `CUSTOM_PASSCODE` vault is protected by the passcode your app sets, so it works on devices without a screen lock. See [Use a custom passcode](#use-a-custom-passcode).
+
+### How do I find out which vault types the device supports?
+
+Call `initialize()` with the type you prefer. If it rejects with `AUTHENTICATOR_UNAVAILABLE`, nothing was created and you can initialize the same vault with another type, for example `CUSTOM_PASSCODE`. The result can change when the user adds or removes the device passcode or a biometric, so repeat this on every app start instead of storing it. Once a vault holds values, it must be initialized with the type it was created with, otherwise `initialize()` rejects.
+
+### What happens after too many wrong passcodes?
+
+Once `failedUnlockCountLimit` wrong passcodes in a row were passed to `unlock()`, the vault's encryption key and all values are deleted and the call rejects with the `PASSCODE_LIMIT_REACHED` error code. The counter is persisted, so restarting the app does not reset it. A correct passcode resets it to zero. Afterwards `exists()` returns `false` and `setPasscode()` starts over with a fresh vault. Without a limit, the number of attempts is not restricted.
+
 ### Can I use this plugin on the Web?
 
-The web implementation stores values unencrypted in `localStorage` to make cross-platform development easier. It is intended for development and testing purposes only and should NOT be used in production. The secure, hardware-backed vault is only available on Android and iOS.
+The web implementation stores values unencrypted in `localStorage` to make cross-platform development easier. The same applies to the passcode of a `CUSTOM_PASSCODE` vault, which is stored as plain text and only compared. It is intended for development and testing purposes only and should NOT be used in production. The secure, hardware-backed vault is only available on Android and iOS.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
