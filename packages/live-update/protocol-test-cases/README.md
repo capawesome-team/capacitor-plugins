@@ -21,6 +21,19 @@ The SDK asks for an update with `POST https://<serverDomain>/v1/live-updates/app
 
 A field without a value is left out.
 
+The `reason` of a `failure` is one of these values:
+
+| `reason` | The update failed because |
+|---|---|
+| `app_crashed` | The app ended before it called `ready()`, and the SDK rolled back at the next start. It is sent on Electron only. |
+| `bundle_invalid` | The bundle cannot be used, for example a zip or a manifest that cannot be read, or a bundle without `index.html` |
+| `checksum_mismatched` | A file does not match its checksum |
+| `download_failed` | A file could not be loaded |
+| `readiness_timed_out` | The app did not call `ready()` in time, and the SDK rolled back |
+| `signature_verification_failed` | The signature is missing or does not match, or the configured public key cannot be used |
+
+A rollback has no report of its own. It is a failure with the reason `app_crashed` or `readiness_timed_out`.
+
 A check that the server processed is answered with 200.
 
 | `result` | `reason` | `bundle` |

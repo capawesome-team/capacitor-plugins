@@ -7,7 +7,7 @@ public enum FailureReason {
     BUNDLE_INVALID("bundle_invalid"),
     CHECKSUM_MISMATCHED("checksum_mismatched"),
     DOWNLOAD_FAILED("download_failed"),
-    ROLLED_BACK("rolled_back"),
+    READINESS_TIMED_OUT("readiness_timed_out"),
     SIGNATURE_VERIFICATION_FAILED("signature_verification_failed");
 
     @NonNull

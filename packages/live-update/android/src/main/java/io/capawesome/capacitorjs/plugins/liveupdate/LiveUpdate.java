@@ -1585,7 +1585,9 @@ public class LiveUpdate {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
             String appId = getAppId();
             if (appId != null) {
-                tryRecordFailure(new UpdateFailure().setAppId(appId).setBundleId(currentBundleId).setReason(FailureReason.ROLLED_BACK));
+                tryRecordFailure(
+                    new UpdateFailure().setAppId(appId).setBundleId(currentBundleId).setReason(FailureReason.READINESS_TIMED_OUT)
+                );
             }
             // Rollback to the default bundle
             setNextBundleById(null);

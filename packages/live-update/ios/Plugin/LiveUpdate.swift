@@ -950,7 +950,7 @@ import CommonCrypto
         if let currentBundleId = currentBundleId {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
             if let appId = getAppId() {
-                preferences.setPendingFailure(UpdateFailure(appId: appId, bundleId: currentBundleId, reason: .rolledBack))
+                preferences.setPendingFailure(UpdateFailure(appId: appId, bundleId: currentBundleId, reason: .readinessTimedOut))
             }
             setNextBundleById(nil)
             setCurrentBundleById(nil)
