@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.2
+
+### Patch Changes
+
+- [`f3b34892cc023d0ee32fcd828eb3914157f013be`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f3b34892cc023d0ee32fcd828eb3914157f013be) ([#696](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/696)): feat: add the `CUSTOM_PASSCODE` vault type, whose key is protected by an app-provided passcode, with `setPasscode(...)` and the `PASSCODE_INVALID` and `PASSCODE_LIMIT_REACHED` error codes
+
+- [`d7aea8dca8ea1038f64a03112cd52a8d4e87a035`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/d7aea8dca8ea1038f64a03112cd52a8d4e87a035) ([#704](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/704)): refactor(ios): replace the deprecated `kSecUseAuthenticationUI` Keychain query key with an `LAContext`
+
+- [`f3b34892cc023d0ee32fcd828eb3914157f013be`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f3b34892cc023d0ee32fcd828eb3914157f013be) ([#696](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/696)): fix(ios): reject `exists()`, `getKeys()`, `getValue()`, `isEmpty()` and `exportData()` when the Keychain cannot be read instead of reporting an empty vault
+
+- [`f3b34892cc023d0ee32fcd828eb3914157f013be`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/f3b34892cc023d0ee32fcd828eb3914157f013be) ([#696](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/696)): fix(ios): register the plugin class as `CapawesomeVaultPlugin` so that the app no longer crashes at launch when Ionic Identity Vault is installed as well
+
+- [`ad155a2dedd4a2a6bfa2c7f7896cee149c1a0ea6`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ad155a2dedd4a2a6bfa2c7f7896cee149c1a0ea6) ([#705](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/705)): fix(ios): normalize `vaultId` to one Unicode form so that ids that differ only in composition address the same vault
+
 ## 0.2.1
 
 ### Patch Changes
