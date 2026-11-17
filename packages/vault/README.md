@@ -1015,6 +1015,10 @@ For `CUSTOM_PASSCODE` vaults, the passcode itself is never stored. On Android, a
 
 The encryption key is never included in cloud backups on either platform. On Android, the encrypted values in `SharedPreferences` are part of [Android Auto Backup](https://developer.android.com/identity/data/autobackup) by default, but the backed-up ciphertext is unusable on another device without the Keystore key; to exclude the preference files (`capawesome_capacitor_vault_key_<vaultId>.xml` and `capawesome_capacitor_vault_data_<vaultId>.xml`) from backup, see the [Android documentation](https://developer.android.com/identity/data/autobackup#IncludingFiles). On iOS, the Keychain items use the `*ThisDeviceOnly` accessibility classes, so they are never synced to iCloud Keychain and can never be restored to another device. The key items of the `BIOMETRIC`, `BIOMETRIC_OR_DEVICE_PASSCODE` and `DEVICE_PASSCODE` vault types are never backed up at all. All other items, including every item of a `CUSTOM_PASSCODE` vault, can be part of an encrypted device backup that is restored to the same device.
 
+### What does the plugin protect against?
+
+The plugin protects stored values against other apps on the same device and against anyone who holds the device while it is locked, lost or stolen. It relies on the security of the operating system. On a device that is rooted, jailbroken or otherwise compromised, or that an attacker uses while it is unlocked, this protection does not hold. A custom passcode is only as strong as its failed-attempt limit, and a compromised device can reset that limit.
+
 ### Is the data removed when the app is uninstalled?
 
 On Android, yes: both `SharedPreferences` files and the Keystore key of every vault are deleted. On iOS, no: Keychain items survive an uninstall and are available again after a reinstall with the same bundle identifier, including the passcode and the failed-attempt counter of `CUSTOM_PASSCODE` vaults. Apple does not document or guarantee this behavior.
