@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.3
+
+### Patch Changes
+
+- [`a08bf65dd11e64480817503e16eb844e67177c92`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/a08bf65dd11e64480817503e16eb844e67177c92) ([#706](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/706)): fix(android): reject `unlock()` with `KEY_INVALIDATED` only when the stored key fails its integrity check
+
+- [`550954ca0844b9ff11be1f69a6d9193902ffde7c`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/550954ca0844b9ff11be1f69a6d9193902ffde7c) ([#708](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/708)): fix: reject a non-integer `lockAfterBackgrounded`, non-string `importData()` values and a non-string `vaultId` instead of ignoring them
+
+- [`1fcc6a79c480fee82015f0e9fa946592752e4321`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/1fcc6a79c480fee82015f0e9fa946592752e4321) ([#709](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/709)): docs: describe what the plugin protects against
+
+- [`c53bee4dfb1c4b4a869a5fb989f23436b9eca644`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/c53bee4dfb1c4b4a869a5fb989f23436b9eca644) ([#707](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/707)): fix: drop the key of an unlock that completes after `lock()`, `destroy()` or `initialize()`
+
 ## 0.2.2
 
 ### Patch Changes
