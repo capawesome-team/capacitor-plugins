@@ -204,6 +204,8 @@ const unlock = async () => {
   } catch (error) {
     if (error.code === ErrorCode.UnlockCanceled) {
       console.log('The user canceled the authentication prompt.');
+    } else if (error.code === ErrorCode.AuthenticatorLockedOut) {
+      console.log('Biometrics are locked until the device is unlocked with its passcode.');
     } else if (error.code === ErrorCode.KeyInvalidated) {
       // All values are lost; start over.
       await Vault.destroy();
