@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.4
+
+### Patch Changes
+
+- [`cbbb27cb34e4b83ad1b2c3f159453c8dccf62654`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cbbb27cb34e4b83ad1b2c3f159453c8dccf62654) ([#711](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/711)): feat: reject with the new `AUTHENTICATOR_LOCKED_OUT` error code when the biometric authentication is locked after too many failed attempts
+
+- [`cbbb27cb34e4b83ad1b2c3f159453c8dccf62654`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/cbbb27cb34e4b83ad1b2c3f159453c8dccf62654) ([#711](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/711)): fix(ios): let `initialize()` and `exists()` succeed while the biometric authentication is locked
+
+- [`19f24150f0d44b6799a141e00623941021a1a939`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/19f24150f0d44b6799a141e00623941021a1a939) ([#713](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/713)): fix(ios): hide the fallback button of the authentication prompt for `BIOMETRIC` vaults
+
 ## 0.2.3
 
 ### Patch Changes
