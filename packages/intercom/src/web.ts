@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 import IntercomMessenger, {
   hide,
@@ -234,9 +235,13 @@ export class IntercomWeb extends WebPlugin implements IntercomPlugin {
 
   private throwIfNotInitialized(): void {
     if (!this.initialized) {
-      throw new CapacitorException(IntercomWeb.errorNotInitialized, undefined, {
-        code: ErrorCode.NotInitialized,
-      });
+      throw new CapacitorException(
+        IntercomWeb.errorNotInitialized,
+        ErrorCode.NotInitialized as unknown as ExceptionCode,
+        {
+          code: ErrorCode.NotInitialized,
+        },
+      );
     }
   }
 }

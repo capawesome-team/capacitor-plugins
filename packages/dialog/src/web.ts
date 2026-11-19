@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import type {
@@ -35,9 +36,13 @@ export class DialogWeb extends WebPlugin implements DialogPlugin {
     }
     const value = window.prompt(options.message, options.inputText ?? '');
     if (value === null) {
-      throw new CapacitorException(DialogWeb.errorCanceled, undefined, {
-        code: ErrorCode.Canceled,
-      });
+      throw new CapacitorException(
+        DialogWeb.errorCanceled,
+        ErrorCode.Canceled as unknown as ExceptionCode,
+        {
+          code: ErrorCode.Canceled,
+        },
+      );
     }
     return { value };
   }

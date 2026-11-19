@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import { ClipboardContentType, ErrorCode } from './definitions';
@@ -114,7 +115,9 @@ export class ClipboardWeb extends WebPlugin implements ClipboardPlugin {
     message: string,
     code: ErrorCode,
   ): CapacitorException {
-    return new CapacitorException(message, undefined, { code });
+    return new CapacitorException(message, code as unknown as ExceptionCode, {
+      code,
+    });
   }
 
   private static resolveTextType(value: string): ClipboardContentType {

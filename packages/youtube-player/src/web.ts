@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import type {
@@ -329,7 +330,7 @@ export class YoutubePlayerWeb extends WebPlugin implements YoutubePlayerPlugin {
   ): CapacitorException {
     return new CapacitorException(
       message,
-      undefined,
+      code as unknown as ExceptionCode | undefined,
       code === undefined ? undefined : { code },
     );
   }
