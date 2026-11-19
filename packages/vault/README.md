@@ -154,7 +154,6 @@ const options = {
   type: VaultType.Biometric,
   title: 'Unlock vault',
   cancelButtonText: 'Cancel',
-  iosFallbackButtonText: 'Use Passcode',
   lockAfterBackgrounded: 30000,
 };
 
