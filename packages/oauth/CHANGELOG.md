@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.14
+
+### Patch Changes
+
+- [`94763e9aaf1121abc16770780fc8693da0b77327`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94763e9aaf1121abc16770780fc8693da0b77327) ([#717](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/717)): fix(web): report `INVALID_ID_TOKEN` instead of `UNIMPLEMENTED` for an ID token without a payload part
+
+- [`94763e9aaf1121abc16770780fc8693da0b77327`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94763e9aaf1121abc16770780fc8693da0b77327) ([#717](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/717)): fix: set the error code on `error.code`, not only on `error.data.code`
+
 ## 0.1.13
 
 ### Patch Changes

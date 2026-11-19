@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.5
+
+### Patch Changes
+
+- [`88998bcca4752dc01d7ef747206fdff5173a3275`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/88998bcca4752dc01d7ef747206fdff5173a3275) ([#714](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/714)): docs: drop the fallback button text from the `BIOMETRIC` example
+
+- [`ad10c7bc3f0ae36c4ac4cf9be828f40b08abedb5`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/ad10c7bc3f0ae36c4ac4cf9be828f40b08abedb5) ([#718](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/718)): feat: reject with the new `VAULT_TYPE_MISMATCH` error code when `initialize()` is called with a type that does not match the existing vault
+
+- [`94763e9aaf1121abc16770780fc8693da0b77327`](https://github.com/capawesome-team/capacitor-plugins-sponsorware/commit/94763e9aaf1121abc16770780fc8693da0b77327) ([#717](https://github.com/capawesome-team/capacitor-plugins-sponsorware/pull/717)): fix: set the error code on `error.code`, not only on `error.data.code`
+
 ## 0.2.4
 
 ### Patch Changes
