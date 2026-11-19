@@ -11,6 +11,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
@@ -56,6 +57,7 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_DOWNLOAD_URL_MISSING = "Bundle does not have a valid download URL.";
     public static final String ERROR_HTTP_TIMEOUT = "Request timed out.";
+    public static final String ERROR_MANIFEST_INVALID = "The bundle manifest could not be read.";
     public static final String ERROR_PLUGIN_NOT_INITIALIZED = "Plugin is not initialized.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";
@@ -736,6 +738,11 @@ public class LiveUpdatePlugin extends Plugin {
             message = message == null ? ERROR_UNKNOWN_ERROR : message;
         }
         Logger.error(TAG, message, exception);
-        call.reject(message);
+        String code = exception instanceof CustomException ? ((CustomException) exception).getCode() : null;
+        if (code == null) {
+            call.reject(message);
+        } else {
+            call.reject(message, code);
+        }
     }
 }

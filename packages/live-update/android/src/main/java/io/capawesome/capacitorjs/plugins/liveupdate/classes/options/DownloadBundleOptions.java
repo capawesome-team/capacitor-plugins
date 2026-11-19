@@ -6,6 +6,9 @@ import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 
 public class DownloadBundleOptions {
 
+    @Nullable
+    private final String appId;
+
     @NonNull
     private ArtifactType artifactType;
 
@@ -38,11 +41,31 @@ public class DownloadBundleOptions {
         @Nullable String signature,
         @NonNull String url
     ) {
+        this(null, artifactType, bundleId, checksum, signature, url);
+    }
+
+    /**
+     * @param appId The app ID under which a failure of the download is recorded, or `null` for the configured app ID.
+     */
+    public DownloadBundleOptions(
+        @Nullable String appId,
+        @NonNull ArtifactType artifactType,
+        @NonNull String bundleId,
+        @Nullable String checksum,
+        @Nullable String signature,
+        @NonNull String url
+    ) {
+        this.appId = appId;
         this.artifactType = artifactType;
         this.bundleId = bundleId;
         this.checksum = checksum;
         this.signature = signature;
         this.url = url;
+    }
+
+    @Nullable
+    public String getAppId() {
+        return appId;
     }
 
     @NonNull

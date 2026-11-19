@@ -5,9 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure;
 import java.util.UUID;
+import org.json.JSONException;
 
 public class LiveUpdatePreferences {
+
+    /**
+     * Shared by every instance, because all of them write the same pending failure.
+     */
+    private static final Object pendingFailureLock = new Object();
 
     @NonNull
     private final Context context;
@@ -21,6 +28,7 @@ public class LiveUpdatePreferences {
     private final String deviceIdKey = "deviceId"; // DO NOT CHANGE
     private final String customIdKey = "customId"; // DO NOT CHANGE
     private final String lastVersionCodeKey = "lastVersionCode"; // DO NOT CHANGE
+    private final String pendingFailureKey = "pendingFailure"; // DO NOT CHANGE
     private final String previousBundleIdKey = "previousBundleId"; // DO NOT CHANGE
 
     public LiveUpdatePreferences(@NonNull Context context) {
@@ -63,6 +71,14 @@ public class LiveUpdatePreferences {
     }
 
     @Nullable
+    public UpdateFailure getPendingFailure() {
+        String text = context
+            .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
+            .getString(pendingFailureKey, null);
+        return UpdateFailure.parse(text);
+    }
+
+    @Nullable
     public String getPreviousBundleId() {
         return context
             .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
@@ -74,6 +90,19 @@ public class LiveUpdatePreferences {
         return context
             .getSharedPreferences(LiveUpdatePlugin.SHARED_PREFERENCES_NAME, Activity.MODE_PRIVATE)
             .getString(blockedBundleIdsKey, null);
+    }
+
+    /**
+     * Removes the pending failure only if it is still the reported one, so a failure recorded in the meantime is kept.
+     */
+    public void removePendingFailureIfUnchanged(@NonNull UpdateFailure reportedFailure) {
+        synchronized (pendingFailureLock) {
+            if (!reportedFailure.equals(getPendingFailure())) {
+                return;
+            }
+            settingsEditor.remove(pendingFailureKey);
+            settingsEditor.apply();
+        }
     }
 
     public void setAppId(@Nullable String appId) {
@@ -120,6 +149,14 @@ public class LiveUpdatePreferences {
     public void setLastVersionCode(int versionCode) {
         settingsEditor.putInt(lastVersionCodeKey, versionCode);
         settingsEditor.apply();
+    }
+
+    public void setPendingFailure(@NonNull UpdateFailure failure) throws JSONException {
+        String text = failure.toJSONObject().toString();
+        synchronized (pendingFailureLock) {
+            settingsEditor.putString(pendingFailureKey, text);
+            settingsEditor.apply();
+        }
     }
 
     public void setPreviousBundleId(@Nullable String bundleId) {

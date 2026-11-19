@@ -10,6 +10,7 @@ ext {
     ionicLiveUpdateProviderVersion = project.hasProperty('ionicLiveUpdateProviderVersion') ? rootProject.ext.ionicLiveUpdateProviderVersion : '1.0.0'
     kotlinxCoroutinesVersion = project.hasProperty('kotlinxCoroutinesVersion') ? rootProject.ext.kotlinxCoroutinesVersion : '1.11.0'
     capacitorCoreVersion = project.hasProperty('capacitorCoreVersion') ? rootProject.ext.capacitorCoreVersion : '8.0.0'
+    orgJsonVersion = project.hasProperty('orgJsonVersion') ? rootProject.ext.orgJsonVersion : '20250517'
 }
 
 buildscript {
@@ -86,6 +87,7 @@ dependencies {
     compileOnly "io.ionic:liveupdateprovider:$ionicLiveUpdateProviderVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinxCoroutinesVersion"
     testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.json:json:$orgJsonVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
 }

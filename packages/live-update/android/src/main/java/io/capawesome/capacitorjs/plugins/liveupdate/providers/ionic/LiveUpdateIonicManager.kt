@@ -168,7 +168,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
             throw Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_URL_MISSING)
         }
         val artifactType = result.artifactType ?: ArtifactType.ZIP
-        val options = DownloadBundleOptions(artifactType, bundleId, result.checksum, result.signature, downloadUrl)
+        val options = DownloadBundleOptions(appId, artifactType, bundleId, result.checksum, result.signature, downloadUrl)
         suspendCoroutine { continuation ->
             liveUpdate.downloadBundle(
                 options,

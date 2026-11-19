@@ -58,7 +58,8 @@
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
-    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd ..",
+    "verify:ios": "cd ios && pod install && xcodebuild -workspace Plugin.xcworkspace -scheme Plugin -destination generic/platform=iOS && cd .. && npm run test:ios",
+    "test:ios": "cd ios && xcodebuild test -workspace Plugin.xcworkspace -scheme PluginTests -destination \"id=$(xcrun simctl list devices available | grep -m1 -E 'iPhone .*\\([0-9A-Fa-f-]{36}\\)' | grep -oE '[0-9A-Fa-f-]{36}')\" && cd ..",
     "verify:android": "cd android && ./gradlew clean build test && cd ..",
     "verify:web": "npm run build",
     "e2e:android": "npm install --prefix example && npm run build && npm --prefix example run e2e:android",

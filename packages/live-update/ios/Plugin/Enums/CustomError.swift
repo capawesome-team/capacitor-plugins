@@ -7,13 +7,16 @@ public enum CustomError: Error {
     case bundleIdMissing
     case bundleIndexHtmlMissing
     case bundleNotFound
+    case bundleUnzipFailed(underlyingError: Error)
     case channelDiscoveryNotEnabled
     case channelMissing
     case checksumCalculationFailed
     case checksumMismatch
+    case checksumMissing
     case configurationValueInvalid(key: String)
     case customIdMissing
     case downloadFailed
+    case downloadUrlExpired
     case downloadUrlMissing
     case httpTimeout
     case pluginNotInitialized
@@ -22,6 +25,15 @@ public enum CustomError: Error {
     case syncInProgress
     case unknown
     case urlMissing
+
+    var code: String? {
+        switch self {
+        case .downloadUrlExpired:
+            return "DOWNLOAD_URL_EXPIRED"
+        default:
+            return nil
+        }
+    }
 }
 
 extension CustomError: LocalizedError {
@@ -39,6 +51,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("The bundle does not contain an index.html file.", comment: "bundleIndexHtmlMissing")
         case .bundleNotFound:
             return NSLocalizedString("bundle not found.", comment: "bundleNotFound")
+        case .bundleUnzipFailed(let underlyingError):
+            return underlyingError.localizedDescription
         case .channelDiscoveryNotEnabled:
             return NSLocalizedString("Unauthorized. Channel Discovery may not be enabled for this app.", comment: "channelDiscoveryNotEnabled")
         case .channelMissing:
@@ -47,6 +61,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Failed to calculate checksum.", comment: "checksumCalculationFailed")
         case .checksumMismatch:
             return NSLocalizedString("Checksum mismatch.", comment: "checksumMismatch")
+        case .checksumMissing:
+            return NSLocalizedString("Bundle does not contain a checksum.", comment: "checksumMissing")
         case .configurationValueInvalid(let key):
             let format = NSLocalizedString("%@ has an invalid type.", comment: "configurationValueInvalid")
             return String(format: format, key)
@@ -54,6 +70,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
         case .downloadFailed:
             return NSLocalizedString("Bundle could not be downloaded.", comment: "downloadFailed")
+        case .downloadUrlExpired:
+            return NSLocalizedString("Bundle download URL has expired.", comment: "downloadUrlExpired")
         case .downloadUrlMissing:
             return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
         case .httpTimeout:

@@ -1,0 +1,20 @@
+[
+  {
+    "name": "replaces the placeholder with the checksum of the file",
+    "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+    "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+    "expectedUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e?token=example"
+  },
+  {
+    "name": "replaces every placeholder",
+    "urlTemplate": "https://files.example.com/{checksum}/files/{checksum}",
+    "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+    "expectedUrl": "https://files.example.com/c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e/files/c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e"
+  },
+  {
+    "name": "leaves every other character of the template untouched",
+    "urlTemplate": "https://files.example.com/a%20b/{checksum}?token=a+b/c==&x={y}",
+    "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+    "expectedUrl": "https://files.example.com/a%20b/c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e?token=a+b/c==&x={y}"
+  }
+]

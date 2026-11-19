@@ -1,0 +1,174 @@
+{
+  "build": [
+    {
+      "name": "adds the marker and the fields of a manifest bundle",
+      "bundle": {
+        "artifactType": "manifest",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      },
+      "expectedDownloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=manifest&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample"
+    },
+    {
+      "name": "adds the fields of a signed zip bundle in alphabetical order",
+      "bundle": {
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      },
+      "expectedDownloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=zip&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&signature=MEUCIQDx%2Babc%2Fdef0123456789%3D%3D&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample"
+    },
+    {
+      "name": "adds nothing to the url of a bundle",
+      "bundle": {
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip"
+      },
+      "expectedDownloadUrl": "https://downloads.example.org/bundles/1.2.3.zip"
+    },
+    {
+      "name": "adds nothing to the url of a bundle without a checksum",
+      "bundle": {
+        "artifactType": "zip",
+        "checksum": null,
+        "signature": null,
+        "url": "https://downloads.example.org/bundles/1.2.3.zip"
+      },
+      "expectedDownloadUrl": "https://downloads.example.org/bundles/1.2.3.zip"
+    },
+    {
+      "name": "encodes every character except letters, digits, hyphen, dot, underscore and tilde",
+      "bundle": {
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app~1/{checksum}?token=1*2 ü"
+      },
+      "expectedDownloadUrl": "https://files.example.com/apps/app~1/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=1*2 ü#capawesome-live-update&artifactType=zip&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp~1%2F%7Bchecksum%7D%3Ftoken%3D1%2A2%20%C3%BC"
+    }
+  ],
+  "parse": [
+    {
+      "name": "decodes every encoded character",
+      "downloadUrl": "https://files.example.com/apps/app~1/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=1*2 ü#capawesome-live-update&artifactType=zip&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp~1%2F%7Bchecksum%7D%3Ftoken%3D1%2A2%20%C3%BC",
+      "expected": {
+        "url": "https://files.example.com/apps/app~1/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=1*2 ü",
+        "hasMarker": true,
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app~1/{checksum}?token=1*2 ü"
+      }
+    },
+    {
+      "name": "reads the fields of a manifest bundle",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=manifest&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": "manifest",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      }
+    },
+    {
+      "name": "reads the signature of a signed zip bundle",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=zip&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&signature=MEUCIQDx%2Babc%2Fdef0123456789%3D%3D&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      }
+    },
+    {
+      "name": "reads the fields in any order and ignores a field it does not know",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&signature=MEUCIQDx%2Babc%2Fdef0123456789%3D%3D&someNewField=1&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&artifactType=zip",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      }
+    },
+    {
+      "name": "uses the address as the template when the template is missing",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=zip&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example"
+      }
+    },
+    {
+      "name": "leaves the artifact type open when it is missing",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example"
+      }
+    },
+    {
+      "name": "treats a field with an empty value as a missing field",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=&checksum=3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4&signature=&urlTemplate=",
+      "expected": {
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "hasMarker": true,
+        "artifactType": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example"
+      }
+    },
+    {
+      "name": "treats an address without a fragment as an address without the marker",
+      "downloadUrl": "https://downloads.example.org/bundles/1.2.3.zip",
+      "expected": {
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "hasMarker": false,
+        "artifactType": null,
+        "checksum": null,
+        "urlTemplate": null,
+        "signature": null
+      }
+    },
+    {
+      "name": "treats another fragment as an address without the marker",
+      "downloadUrl": "https://downloads.example.org/bundles/1.2.3.zip#section",
+      "expected": {
+        "url": "https://downloads.example.org/bundles/1.2.3.zip#section",
+        "hasMarker": false,
+        "artifactType": null,
+        "checksum": null,
+        "urlTemplate": null,
+        "signature": null
+      }
+    },
+    {
+      "name": "fails when the marker comes without a checksum",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=zip&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample",
+      "expectedError": "Bundle does not contain a checksum."
+    },
+    {
+      "name": "fails when the marker comes with an empty checksum",
+      "downloadUrl": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example#capawesome-live-update&artifactType=zip&checksum=&urlTemplate=https%3A%2F%2Ffiles.example.com%2Fapps%2Fapp-1%2Fartifacts%2F6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f%2F%7Bchecksum%7D%3Ftoken%3Dexample",
+      "expectedError": "Bundle does not contain a checksum."
+    }
+  ]
+}

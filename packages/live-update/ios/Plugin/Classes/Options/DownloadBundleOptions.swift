@@ -2,6 +2,7 @@ import Foundation
 import Capacitor
 
 @objc public class DownloadBundleOptions: NSObject {
+    private var appId: String?
     private var artifactType: ArtifactType
     private var bundleId: String
     private var checksum: String?
@@ -10,15 +11,21 @@ import Capacitor
 
     convenience init(artifactType: String, bundleId: String, checksum: String?, signature: String?, url: String) {
         let artifactType: ArtifactType = artifactType == "manifest" ? .manifest : .zip
-        self.init(artifactType: artifactType, bundleId: bundleId, checksum: checksum, signature: signature, url: url)
+        self.init(appId: nil, artifactType: artifactType, bundleId: bundleId, checksum: checksum, signature: signature, url: url)
     }
 
-    init(artifactType: ArtifactType, bundleId: String, checksum: String?, signature: String?, url: String) {
+    /// - Parameter appId: The app whose failure is recorded, or `nil` for the app of the plugin.
+    init(appId: String?, artifactType: ArtifactType, bundleId: String, checksum: String?, signature: String?, url: String) {
+        self.appId = appId
         self.artifactType = artifactType
         self.bundleId = bundleId
         self.checksum = checksum
         self.signature = signature
         self.url = url
+    }
+
+    func getAppId() -> String? {
+        return appId
     }
 
     func getArtifactType() -> ArtifactType {

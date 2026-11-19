@@ -493,6 +493,14 @@ export interface DownloadBundleOptions {
   /**
    * The URL of the bundle to download.
    *
+   * To download the bundle that `fetchLatestBundle(...)` returns, pass its
+   * `downloadUrl` without changing it. If the result holds a `checksum`,
+   * pass its `artifactType`, `checksum` and `signature` as well.
+   * On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud
+   * already holds these values, and the three options are then ignored.
+   *
+   * The following applies to a self-hosted bundle:
+   *
    * For the `zip` artifact type, the URL must point to a ZIP file.
    * For the `manifest` artifact type, the URL serves as the base URL
    * to download the individual files. For example, if the URL is
@@ -614,10 +622,9 @@ export interface FetchLatestBundleResult {
    */
   channel?: string;
   /**
-   * The checksum of the latest bundle if the bundle is self-hosted.
+   * The checksum of the latest bundle as a SHA-256 hash in hex format.
    *
-   * If the bundle is hosted on Capawesome Cloud, the checksum will be
-   * returned as response header when downloading the bundle.
+   * For the `manifest` artifact type, this is the checksum of the manifest.
    *
    * @since 7.1.0
    */
@@ -631,16 +638,21 @@ export interface FetchLatestBundleResult {
   customProperties?: { [key: string]: string };
   /**
    * The URL of the latest bundle to download.
-   * Pass this URL to the `downloadBundle(...)` method to download the bundle.
+   * Pass this URL to the `downloadBundle(...)` method without changing it.
+   *
+   * On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud
+   * is only valid for a limited time. After it has expired, the `downloadBundle(...)`
+   * method fails with the error code `DOWNLOAD_URL_EXPIRED`. Call `fetchLatestBundle(...)`
+   * again to get a new URL.
    *
    * @since 6.7.0
    */
   downloadUrl?: string;
   /**
-   * The signature of the latest bundle if the bundle is self-hosted.
+   * The signature of the latest bundle as a signed SHA-256 hash
+   * in base64 format, if the bundle is signed.
    *
-   * If the bundle is hosted on Capawesome Cloud, the signature will be
-   * returned as response header when downloading the bundle.
+   * For the `manifest` artifact type, this is the signature of the manifest.
    *
    * @since 7.1.0
    */
@@ -1047,3 +1059,16 @@ export interface NextBundleSetEvent {
  * @since 7.4.0
  */
 export type ReloadedListener = () => void;
+
+/**
+ * @since 8.9.0
+ */
+export enum ErrorCode {
+  /**
+   * The download URL of the bundle has expired.
+   * Call `fetchLatestBundle(...)` again to get a new URL.
+   *
+   * @since 8.9.0
+   */
+  DownloadUrlExpired = 'DOWNLOAD_URL_EXPIRED',
+}
