@@ -569,7 +569,7 @@ because it could not decrypt them.
 `CUSTOM_PASSCODE` vaults get their key from `setPasscode()`, not from
 this method. Initializing a `CUSTOM_PASSCODE` vault with another type,
 or a vault of another type that already holds values as
-`CUSTOM_PASSCODE`, rejects.
+`CUSTOM_PASSCODE`, rejects with `VAULT_TYPE_MISMATCH`.
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -1096,7 +1096,30 @@ Yes, with the `CUSTOM_PASSCODE` vault type. The other vault types need a device 
 
 ### How do I find out which vault types the device supports?
 
-Call `initialize()` with the type you prefer. If it rejects with `AUTHENTICATOR_UNAVAILABLE`, nothing was created and you can initialize the same vault with another type, for example `CUSTOM_PASSCODE`. The result can change when the user adds or removes the device passcode or a biometric, so repeat this on every app start instead of storing it. A `CUSTOM_PASSCODE` vault rejects every other type once its passcode is set, and a vault of another type rejects `CUSTOM_PASSCODE` once it holds values. Between `BIOMETRIC`, `BIOMETRIC_OR_DEVICE_PASSCODE` and `DEVICE_PASSCODE` the key keeps the protection it was created with. A different `type` then changes only the unlock prompt on Android and has no effect on iOS.
+Call `initialize()` with the type you prefer. If it rejects with `AUTHENTICATOR_UNAVAILABLE` or `VAULT_TYPE_MISMATCH`, nothing was changed and you can initialize the same vault with another type, for example `CUSTOM_PASSCODE`:
+
+```typescript
+import { ErrorCode, Vault, VaultType } from '@capawesome-team/capacitor-vault';
+
+// Returns the type the vault was initialized with, so the app knows which unlock screen to show.
+const initialize = async (): Promise<VaultType> => {
+  try {
+    await Vault.initialize({ type: VaultType.Biometric });
+    return VaultType.Biometric;
+  } catch (error) {
+    if (
+      error.code === ErrorCode.AuthenticatorUnavailable ||
+      error.code === ErrorCode.VaultTypeMismatch
+    ) {
+      await Vault.initialize({ type: VaultType.CustomPasscode });
+      return VaultType.CustomPasscode;
+    }
+    throw error;
+  }
+};
+```
+
+The result can change when the user adds or removes the device passcode or a biometric, so repeat this on every app start instead of storing it. A `CUSTOM_PASSCODE` vault rejects every other type with `VAULT_TYPE_MISMATCH` once its passcode is set, and a vault of another type rejects `CUSTOM_PASSCODE` with the same code once it holds values. Between `BIOMETRIC`, `BIOMETRIC_OR_DEVICE_PASSCODE` and `DEVICE_PASSCODE` the key keeps the protection it was created with. A different `type` then changes only the unlock prompt on Android and has no effect on iOS.
 
 ### What happens after too many wrong passcodes?
 
