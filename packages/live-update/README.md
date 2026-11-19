@@ -256,7 +256,7 @@ In `capacitor.config.json`:
       "httpTimeout": undefined,
       "publicKey": '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       "readyTimeout": 10000,
-      "serverDomain": 'api.cloud.capawesome.eu'
+      "serverDomain": 'api.example.com'
     }
   }
 }
@@ -280,7 +280,7 @@ const config: CapacitorConfig = {
       httpTimeout: undefined,
       publicKey: '-----BEGIN PUBLIC KEY-----MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDodf1SD0OOn6hIlDuKBza0Ed0OqtwyVJwiyjmE9BJaZ7y8ZUfcF+SKmd0l2cDPM45XIg2tAFux5n29uoKyHwSt+6tCi5CJA5Z1/1eZruRRqABLonV77KS3HUtvOgqRLDnKSV89dYZkM++NwmzOPgIF422mvc+VukcVOBfc8/AHQIDAQAB-----END PUBLIC KEY-----',
       readyTimeout: 10000,
-      serverDomain: 'api.cloud.capawesome.eu',
+      serverDomain: 'api.example.com',
     },
   },
 };
