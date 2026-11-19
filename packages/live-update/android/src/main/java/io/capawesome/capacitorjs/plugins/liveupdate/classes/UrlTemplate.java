@@ -6,14 +6,14 @@ import androidx.annotation.NonNull;
  * The address of a bundle file with a placeholder for the checksum of the file.
  * The placeholder is replaced on the text, never through a URL parser, so no other character changes.
  */
-public class FileUrlTemplate {
+public class UrlTemplate {
 
     private static final String CHECKSUM_PLACEHOLDER = "{checksum}";
 
     @NonNull
     private final String value;
 
-    public FileUrlTemplate(@NonNull String value) {
+    public UrlTemplate(@NonNull String value) {
         this.value = value;
     }
 

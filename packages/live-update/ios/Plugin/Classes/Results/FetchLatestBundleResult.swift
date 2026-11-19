@@ -9,7 +9,6 @@ import Capacitor
     private let customProperties: [String: Any]?
     private let downloadUrl: String?
     private let signature: String?
-    private let skipReason: String?
 
     init(_ response: CreateCheckResponse) {
         let bundle = response.bundle
@@ -20,7 +19,6 @@ import Capacitor
         self.customProperties = bundle?.customProperties
         self.downloadUrl = bundle.map { DownloadUrl(bundle: $0).text }
         self.signature = bundle?.signature
-        self.skipReason = response.skipReason
     }
 
     func getArtifactType() -> ArtifactType? {
@@ -69,9 +67,6 @@ import Capacitor
         }
         if let signature = signature {
             result["signature"] = signature
-        }
-        if let skipReason = skipReason {
-            result["skipReason"] = skipReason
         }
         return result as AnyObject
     }

@@ -1,6 +1,6 @@
 import Foundation
 
-/// The address of the first file of a bundle. If it uses a file URL template, every file is loaded from the template
+/// The address of the first file of a bundle. If it uses a URL template, every file is loaded from the template
 /// and verified against its checksum. As text, such an address carries its fields after the `#` and the marker.
 struct DownloadUrl {
     private static let fieldAllowedCharacters = CharacterSet(
@@ -12,32 +12,27 @@ struct DownloadUrl {
     let url: String
     let artifactType: ArtifactType?
     let checksum: String?
-    let fileUrlTemplate: FileUrlTemplate?
     let signature: String?
+    let urlTemplate: UrlTemplate?
 
-    /// `false` for an address that is loaded as before the file URL template existed.
-    var usesFileUrlTemplate: Bool {
-        return fileUrlTemplate != nil
+    /// `false` for an address that is loaded as before the URL template existed.
+    var hasMarker: Bool {
+        return urlTemplate != nil
     }
 
     var text: String {
-        guard usesFileUrlTemplate else {
+        guard hasMarker else {
             return url
         }
         return url + "#" + buildFields()
     }
 
     init(bundle: CreateCheckResponse.Bundle) {
-        if let checksum = bundle.checksum, bundle.fileUrlTemplate.hasChecksumPlaceholder {
-            self.url = bundle.fileUrlTemplate.buildFileUrl(checksum: checksum)
-            self.fileUrlTemplate = bundle.fileUrlTemplate
-        } else {
-            self.url = bundle.fileUrlTemplate.value
-            self.fileUrlTemplate = nil
-        }
+        self.url = bundle.url
         self.artifactType = bundle.artifactType
         self.checksum = bundle.checksum
         self.signature = bundle.signature
+        self.urlTemplate = bundle.urlTemplate
     }
 
     /// An address without the marker, verified as before the marker existed.
@@ -45,16 +40,16 @@ struct DownloadUrl {
         self.url = url
         self.artifactType = nil
         self.checksum = checksum
-        self.fileUrlTemplate = nil
         self.signature = signature
+        self.urlTemplate = nil
     }
 
     private init(url: String, fields: [String: String]) {
         self.url = url
         self.artifactType = fields["artifactType"].flatMap(ArtifactType.init(rawValue:))
         self.checksum = fields["checksum"]
-        self.fileUrlTemplate = FileUrlTemplate(value: fields["fileUrlTemplate"] ?? url)
         self.signature = fields["signature"]
+        self.urlTemplate = UrlTemplate(value: fields["urlTemplate"] ?? url)
     }
 
     /// Cuts the `#` part off with string functions, so that it never reaches a URL class.
@@ -105,11 +100,11 @@ struct DownloadUrl {
         if let checksum = checksum {
             fields.append("checksum=" + Self.encodeField(checksum))
         }
-        if let fileUrlTemplate = fileUrlTemplate {
-            fields.append("fileUrlTemplate=" + Self.encodeField(fileUrlTemplate.value))
-        }
         if let signature = signature {
             fields.append("signature=" + Self.encodeField(signature))
+        }
+        if let urlTemplate = urlTemplate {
+            fields.append("urlTemplate=" + Self.encodeField(urlTemplate.value))
         }
         return fields.joined(separator: "&")
     }

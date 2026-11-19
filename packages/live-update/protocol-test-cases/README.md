@@ -42,13 +42,13 @@ A check that the server processed is answered with 200.
 | `up_to_date` | none | none |
 | `skipped` | Why no bundle is offered | none |
 
-The SDK hands a reason to the app in upper case, for example `CHANNEL_PAUSED`. The upper case does not depend on the language of the device. A reason that the SDK does not know is passed on in the same way.
+The SDK writes the reason to its log as the server sent it, for example `channel_paused`. It does not hand the reason to the app.
 
-A bundle needs `id`, `artifactType` and `fileUrlTemplate`. It also needs `checksum` when the template holds `{checksum}`. `signature` and `customProperties` may be missing. No update is offered when a needed field is missing, when the SDK does not know the `result` or the `artifactType`, when the body is not a JSON object, or when the status is not 200.
+A bundle needs `id`, `artifactType` and exactly one of `urlTemplate` and `url`. A bundle with `urlTemplate` also needs `checksum`, and the template must hold `{checksum}`. `signature` and `customProperties` may be missing. No update is offered when a needed field is missing, when a bundle has both `urlTemplate` and `url`, when a template has no `{checksum}`, when the SDK does not know the `result` or the `artifactType`, when the body is not a JSON object, or when the status is not 200.
 
 | Status | Meaning for the SDK |
 |---|---|
-| 429 | No update, with the reason `RATE_LIMITED`. The SDK makes no further check for the number of seconds in `Retry-After`, which is a whole number that is not negative. Without such a number it waits 15 minutes. It never waits longer than 24 hours. The wait is kept in memory only, so a restart of the app always checks. |
+| 429 | No update. The SDK makes no further check for the number of seconds in `Retry-After`, which is a whole number that is not negative. Without such a number it waits 15 minutes. It never waits longer than 24 hours. The wait is kept in memory only, so a restart of the app always checks. |
 | Other 4xx | No update |
 | Every other status | No update |
 
@@ -66,30 +66,36 @@ Every request of the SDK carries `User-Agent: capawesome-<sdk>/<version> (<platf
 
 So the Capacitor plugin on Electron sends `capawesome-capacitor-live-update/<version> (electron)`, and the Electron SDK on its own sends `capawesome-electron-live-update/<version> (electron)`.
 
-A request of this protocol never carries the id of the device in a header. The check carries it in its body, and the download of a file does not carry it at all.
+A request of this protocol never carries the id of the device in a header. The check carries it in its body, and the download of a file from `urlTemplate` does not carry it at all. The download of a bundle with `url` still carries it in a header, as before this protocol.
 
 ## The address of a file
 
-A bundle of the answer carries `fileUrlTemplate`. The address of a file is the template with every `{checksum}` replaced by the SHA-256 checksum of that file. That holds for the zip file, the manifest and every file that the manifest lists. The replacement is done on the text. No other character of the template changes. A template without `{checksum}` is used as it is.
+A bundle of the answer carries either `urlTemplate` or `url`.
+
+With `urlTemplate`, the address of a file is the template with every `{checksum}` replaced by the SHA-256 checksum of that file. That holds for the zip file, the manifest and every file that the manifest lists. The replacement is done on the text. No other character of the template changes, also not in the query.
+
+With `url`, the address of the first file is `url` as it is. It is never filled in, also when its text holds `{checksum}`. Such a bundle is loaded as before this protocol.
 
 `checksum` and `signature` of the answer belong to the first file. That is the zip file, or the manifest of a bundle that is stored file by file.
+
+The SDK sends `Accept-Encoding: identity` when it downloads the zip file of a bundle with `urlTemplate`. Otherwise the zip file may arrive compressed and without `Content-Length`, and the SDK could report the downloaded bytes but not the total size. Every other file is downloaded with the default encodings of the platform.
 
 ## The `#` part of `downloadUrl`
 
 `fetchLatestBundle()` returns `downloadUrl`, and the app may pass it to `downloadBundle()`. So that the download can be verified, the address carries the fields of the bundle after a `#`:
 
 ```
-<address of the first file>#capawesome-live-update&artifactType=…&checksum=…&fileUrlTemplate=…&signature=…
+<address of the first file>#capawesome-live-update&artifactType=…&checksum=…&signature=…&urlTemplate=…
 ```
 
-- The marker `capawesome-live-update` comes first. The fields follow in alphabetical order.
+- The marker `capawesome-live-update` comes first. The fields follow in alphabetical order: `artifactType`, `checksum`, `signature`, `urlTemplate`.
 - `signature` is left out when the bundle has none.
 - In a value, every character except letters, digits, `-`, `.`, `_` and `~` is percent-encoded.
-- An address whose template has no `{checksum}` gets no `#` part.
+- Only a bundle with `urlTemplate` gets a `#` part. The `downloadUrl` of a bundle with `url` is `url` as it is.
 - The SDK cuts the `#` part off before it makes a request. It is never sent to a server.
 - An address with the marker must carry a checksum. If not, the download fails with "Bundle does not contain a checksum."
 - A field with an empty value counts as a missing field.
-- A missing `fileUrlTemplate` means that the address itself is the template.
+- A missing `urlTemplate` means that the address itself is the template.
 - A missing `artifactType` leaves the choice to the `artifactType` option of `downloadBundle()`.
 - An address without the marker is loaded as before this protocol.
 
@@ -109,13 +115,15 @@ With the marker, the first file is verified against the checksum, and also again
 |---|---|
 | `check-request.json` | `input` holds the values, `expectedBody` the JSON body of the check |
 | `check-response.json` | `statusCode`, `retryAfter` and `body` are the answer. `rawBody` replaces `body` when the text is not JSON. `expected` holds what the SDK reads from it. |
-| `file-url.json` | `fileUrlTemplate` and `checksum` give `expectedUrl` |
+| `url-template.json` | `urlTemplate` and `checksum` give `expectedUrl` |
 | `download-url.json` | `build`: a `bundle` gives `expectedDownloadUrl`. `parse`: a `downloadUrl` gives `expected`, or fails with `expectedError`. |
 | `manifest.json` | `parse`: `text` gives `expectedItems`, or `null` for a manifest that cannot be used. `plan`: `currentItems` and `latestItems` give the files to `copy` and to `download`, in the order of the new manifest. |
 
-Three fields of `expected` in `check-response.json` need a word:
+Five fields of `expected` in `check-response.json` need a word:
 
-- `outcome` is the `result` of a processed answer, `skipped` after a 429, and `null` for every other answer.
+- `outcome` is the `result` of a processed answer, and `null` for every other answer.
+- `reason` is the `reason` of a skipped check as the server sent it, and `null` for every other answer.
+- `url` of `bundle` is the address of the first file. With `urlTemplate`, it is the template filled with `checksum`.
 - `retryAfterMs` is the wait after a 429.
 - `clearsPendingFailure` says whether the failure that was sent is cleared.
 

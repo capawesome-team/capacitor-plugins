@@ -657,19 +657,6 @@ export interface FetchLatestBundleResult {
    * @since 7.1.0
    */
   signature?: string;
-  /**
-   * The reason why no bundle is offered.
-   *
-   * Only set if the update check was skipped, for example because the
-   * channel is paused. A newer server may send a reason that is not part
-   * of `SkipReason`. It is passed on in upper case as well.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 8.9.0
-   * @example 'CHANNEL_PAUSED'
-   */
-  skipReason?: SkipReason;
 }
 
 /**
@@ -998,19 +985,6 @@ export interface SyncResult {
    * @since 5.0.0
    */
   nextBundleId: string | null;
-  /**
-   * The reason why no bundle is offered.
-   *
-   * Only set if the update check was skipped, for example because the
-   * channel is paused. A newer server may send a reason that is not part
-   * of `SkipReason`. It is passed on in upper case as well.
-   *
-   * Only available on Android and iOS.
-   *
-   * @since 8.9.0
-   * @example 'CHANNEL_PAUSED'
-   */
-  skipReason?: SkipReason;
 }
 
 /**
@@ -1085,83 +1059,6 @@ export interface NextBundleSetEvent {
  * @since 7.4.0
  */
 export type ReloadedListener = () => void;
-
-/**
- * The reason why an update check offers no bundle.
- *
- * @since 8.9.0
- */
-export enum SkipReason {
-  /**
-   * The version code of the native app is not valid.
-   *
-   * @since 8.9.0
-   */
-  AppVersionInvalid = 'APP_VERSION_INVALID',
-  /**
-   * The latest bundle does not support the version of the native app.
-   *
-   * @since 8.9.0
-   */
-  AppVersionUnsupported = 'APP_VERSION_UNSUPPORTED',
-  /**
-   * No bundle was found for the device.
-   *
-   * @since 8.9.0
-   */
-  BundleMissing = 'BUNDLE_MISSING',
-  /**
-   * The channel is paused.
-   *
-   * @since 8.9.0
-   */
-  ChannelPaused = 'CHANNEL_PAUSED',
-  /**
-   * The channel does not exist.
-   *
-   * @since 8.9.0
-   */
-  ChannelUnknown = 'CHANNEL_UNKNOWN',
-  /**
-   * The channel has no deployment.
-   *
-   * @since 8.9.0
-   */
-  DeploymentMissing = 'DEPLOYMENT_MISSING',
-  /**
-   * The device is not part of the rollout of the latest bundle.
-   *
-   * @since 8.9.0
-   */
-  DeviceNotInRollout = 'DEVICE_NOT_IN_ROLLOUT',
-  /**
-   * The limit of monthly active users (MAU) of the plan is reached.
-   *
-   * @since 8.9.0
-   */
-  MonthlyActiveDevicesLimitReached = 'MONTHLY_ACTIVE_DEVICES_LIMIT_REACHED',
-  /**
-   * The device made too many update checks in a short time.
-   * The plugin makes no further check until the wait time is over
-   * or the app is restarted.
-   *
-   * @since 8.9.0
-   */
-  RateLimited = 'RATE_LIMITED',
-  /**
-   * The runtime of the app does not match the type of the app
-   * on Capawesome Cloud.
-   *
-   * @since 8.9.0
-   */
-  RuntimeMismatched = 'RUNTIME_MISMATCHED',
-  /**
-   * The organization has no active subscription.
-   *
-   * @since 8.9.0
-   */
-  SubscriptionRequired = 'SUBSCRIPTION_REQUIRED',
-}
 
 /**
  * @since 8.9.0

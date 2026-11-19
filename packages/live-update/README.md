@@ -527,7 +527,6 @@ const reset = async () => {
 * [`removeAllListeners()`](#removealllisteners)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
-* [Enums](#enums)
 
 </docgen-index>
 
@@ -1194,16 +1193,15 @@ Remove all listeners for this plugin.
 
 #### FetchLatestBundleResult
 
-| Prop                   | Type                                              | Description                                                                                                                                                                                                                                                                                                                                                                                  | Since |
-| ---------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`artifactType`**     | <code>'manifest' \| 'zip'</code>                  | The artifact type of the bundle. On **Electron**, only the `zip` artifact type is supported.                                                                                                                                                                                                                                                                                                 | 6.7.0 |
-| **`bundleId`**         | <code>string \| null</code>                       | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                                                                                                                                                                                                                | 6.6.0 |
-| **`channel`**          | <code>string</code>                               | The name of the channel that the bundle is actually from. This is the resolved channel after applying any forced channel assignment and may differ from the channel set by the Live Update SDK.                                                                                                                                                                                              | 8.3.0 |
-| **`checksum`**         | <code>string</code>                               | The checksum of the latest bundle as a SHA-256 hash in hex format. For the `manifest` artifact type, this is the checksum of the manifest.                                                                                                                                                                                                                                                   | 7.1.0 |
-| **`customProperties`** | <code>{ [key: string]: string; }</code>           | Custom properties that are associated with the latest bundle.                                                                                                                                                                                                                                                                                                                                | 7.0.0 |
-| **`downloadUrl`**      | <code>string</code>                               | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method without changing it. On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud is only valid for a limited time. After it has expired, the `downloadBundle(...)` method fails with the error code `DOWNLOAD_URL_EXPIRED`. Call `fetchLatestBundle(...)` again to get a new URL. | 6.7.0 |
-| **`signature`**        | <code>string</code>                               | The signature of the latest bundle as a signed SHA-256 hash in base64 format, if the bundle is signed. For the `manifest` artifact type, this is the signature of the manifest.                                                                                                                                                                                                              | 7.1.0 |
-| **`skipReason`**       | <code><a href="#skipreason">SkipReason</a></code> | The reason why no bundle is offered. Only set if the update check was skipped, for example because the channel is paused. A newer server may send a reason that is not part of <a href="#skipreason">`SkipReason`</a>. It is passed on in upper case as well. Only available on Android and iOS.                                                                                             | 8.9.0 |
+| Prop                   | Type                                    | Description                                                                                                                                                                                                                                                                                                                                                                                  | Since |
+| ---------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`artifactType`**     | <code>'manifest' \| 'zip'</code>        | The artifact type of the bundle. On **Electron**, only the `zip` artifact type is supported.                                                                                                                                                                                                                                                                                                 | 6.7.0 |
+| **`bundleId`**         | <code>string \| null</code>             | The unique identifier of the latest bundle. On Capawesome Cloud, this is the ID of the app build artifact. If `null`, no bundle is available.                                                                                                                                                                                                                                                | 6.6.0 |
+| **`channel`**          | <code>string</code>                     | The name of the channel that the bundle is actually from. This is the resolved channel after applying any forced channel assignment and may differ from the channel set by the Live Update SDK.                                                                                                                                                                                              | 8.3.0 |
+| **`checksum`**         | <code>string</code>                     | The checksum of the latest bundle as a SHA-256 hash in hex format. For the `manifest` artifact type, this is the checksum of the manifest.                                                                                                                                                                                                                                                   | 7.1.0 |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the latest bundle.                                                                                                                                                                                                                                                                                                                                | 7.0.0 |
+| **`downloadUrl`**      | <code>string</code>                     | The URL of the latest bundle to download. Pass this URL to the `downloadBundle(...)` method without changing it. On Android and iOS, the URL of a bundle that is hosted on Capawesome Cloud is only valid for a limited time. After it has expired, the `downloadBundle(...)` method fails with the error code `DOWNLOAD_URL_EXPIRED`. Call `fetchLatestBundle(...)` again to get a new URL. | 6.7.0 |
+| **`signature`**        | <code>string</code>                     | The signature of the latest bundle as a signed SHA-256 hash in base64 format, if the bundle is signed. For the `manifest` artifact type, this is the signature of the manifest.                                                                                                                                                                                                              | 7.1.0 |
 
 
 #### FetchLatestBundleOptions
@@ -1337,10 +1335,9 @@ Remove all listeners for this plugin.
 
 #### SyncResult
 
-| Prop               | Type                                              | Description                                                                                                                                                                                                                                                                                      | Since |
-| ------------------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| **`nextBundleId`** | <code>string \| null</code>                       | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                                                                                                                                                                       | 5.0.0 |
-| **`skipReason`**   | <code><a href="#skipreason">SkipReason</a></code> | The reason why no bundle is offered. Only set if the update check was skipped, for example because the channel is paused. A newer server may send a reason that is not part of <a href="#skipreason">`SkipReason`</a>. It is passed on in upper case as well. Only available on Android and iOS. | 8.9.0 |
+| Prop               | Type                        | Description                                                                                                | Since |
+| ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
+| **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
 
 
 #### SyncOptions
@@ -1400,26 +1397,6 @@ Listener for when a bundle is set as the next bundle.
 Listener for when the app is reloaded.
 
 <code>(): void</code>
-
-
-### Enums
-
-
-#### SkipReason
-
-| Members                                | Value                                               | Description                                                                                                                                    | Since |
-| -------------------------------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`AppVersionInvalid`**                | <code>'APP_VERSION_INVALID'</code>                  | The version code of the native app is not valid.                                                                                               | 8.9.0 |
-| **`AppVersionUnsupported`**            | <code>'APP_VERSION_UNSUPPORTED'</code>              | The latest bundle does not support the version of the native app.                                                                              | 8.9.0 |
-| **`BundleMissing`**                    | <code>'BUNDLE_MISSING'</code>                       | No bundle was found for the device.                                                                                                            | 8.9.0 |
-| **`ChannelPaused`**                    | <code>'CHANNEL_PAUSED'</code>                       | The channel is paused.                                                                                                                         | 8.9.0 |
-| **`ChannelUnknown`**                   | <code>'CHANNEL_UNKNOWN'</code>                      | The channel does not exist.                                                                                                                    | 8.9.0 |
-| **`DeploymentMissing`**                | <code>'DEPLOYMENT_MISSING'</code>                   | The channel has no deployment.                                                                                                                 | 8.9.0 |
-| **`DeviceNotInRollout`**               | <code>'DEVICE_NOT_IN_ROLLOUT'</code>                | The device is not part of the rollout of the latest bundle.                                                                                    | 8.9.0 |
-| **`MonthlyActiveDevicesLimitReached`** | <code>'MONTHLY_ACTIVE_DEVICES_LIMIT_REACHED'</code> | The limit of monthly active users (MAU) of the plan is reached.                                                                                | 8.9.0 |
-| **`RateLimited`**                      | <code>'RATE_LIMITED'</code>                         | The device made too many update checks in a short time. The plugin makes no further check until the wait time is over or the app is restarted. | 8.9.0 |
-| **`RuntimeMismatched`**                | <code>'RUNTIME_MISMATCHED'</code>                   | The runtime of the app does not match the type of the app on Capawesome Cloud.                                                                 | 8.9.0 |
-| **`SubscriptionRequired`**             | <code>'SUBSCRIPTION_REQUIRED'</code>                | The organization has no active subscription.                                                                                                   | 8.9.0 |
 
 </docgen-api>
 

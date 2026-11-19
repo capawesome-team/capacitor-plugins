@@ -2,9 +2,9 @@ package io.capawesome.capacitorjs.plugins.liveupdate
 
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.DownloadUrl
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.FileUrlTemplate
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.UrlTemplate
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckRequest
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponse
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponseBundle
@@ -56,7 +56,7 @@ class ProtocolTestCasesTest {
 
             val expected = case.getJSONObject("expected")
             assertEquals(expected.optStringOrNull("outcome"), response.outcome?.value)
-            assertEquals(expected.optStringOrNull("skipReason"), response.skipReason)
+            assertEquals(expected.optStringOrNull("reason"), response.reason)
             assertEquals(expected.optStringOrNull("channelName"), response.channelName)
             assertBundle(expected.optJSONObject("bundle"), response.bundle)
             assertEquals(if (expected.isNull("retryAfterMs")) null else expected.getLong("retryAfterMs"), response.retryAfterMs)
@@ -92,15 +92,15 @@ class ProtocolTestCasesTest {
             assertEquals(expected.getBoolean("hasMarker"), downloadUrl.hasMarker())
             assertEquals(expected.optStringOrNull("artifactType"), downloadUrl.artifactType?.value)
             assertEquals(expected.optStringOrNull("checksum"), downloadUrl.checksum)
-            assertEquals(expected.optStringOrNull("fileUrlTemplate"), downloadUrl.fileUrlTemplate?.value)
+            assertEquals(expected.optStringOrNull("urlTemplate"), downloadUrl.urlTemplate?.value)
             assertEquals(expected.optStringOrNull("signature"), downloadUrl.signature)
         }
     }
 
     @Test
-    fun fileUrl() {
-        forEachCase(readArray("file-url.json")) { case ->
-            val url = FileUrlTemplate(case.getString("fileUrlTemplate")).fill(case.getString("checksum"))
+    fun urlTemplate() {
+        forEachCase(readArray("url-template.json")) { case ->
+            val url = UrlTemplate(case.getString("urlTemplate")).fill(case.getString("checksum"))
 
             assertEquals(case.getString("expectedUrl"), url)
         }
@@ -150,7 +150,8 @@ class ProtocolTestCasesTest {
         assertNotNull(actual)
         assertEquals(expected.getString("id"), actual!!.id)
         assertEquals(expected.getString("artifactType"), actual.artifactType.value)
-        assertEquals(expected.getString("fileUrlTemplate"), actual.fileUrlTemplate.value)
+        assertEquals(expected.optStringOrNull("url"), actual.url)
+        assertEquals(expected.optStringOrNull("urlTemplate"), actual.urlTemplate?.value)
         assertEquals(expected.optStringOrNull("checksum"), actual.checksum)
         assertEquals(expected.optStringOrNull("signature"), actual.signature)
         val expectedCustomProperties = expected.optJSONObject("customProperties")

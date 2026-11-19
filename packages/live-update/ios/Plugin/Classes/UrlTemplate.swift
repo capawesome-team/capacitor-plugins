@@ -1,7 +1,7 @@
 import Foundation
 
 /// The address of a bundle file with the placeholder `{checksum}` for the checksum of the file.
-struct FileUrlTemplate: Equatable {
+struct UrlTemplate: Equatable {
     private static let checksumPlaceholder = "{checksum}"
 
     let value: String

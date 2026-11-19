@@ -93,6 +93,11 @@ public class LiveUpdateHttpClient {
     }
 
     @NonNull
+    public Call enqueueWithoutCompression(@NonNull String url, @NonNull NonEmptyCallback<Response> callback) {
+        return enqueue(buildRequestWithoutCompression(url), callback);
+    }
+
+    @NonNull
     Request buildRequest(@NonNull String url) {
         return createRequestBuilder(url).build();
     }
@@ -110,6 +115,12 @@ public class LiveUpdateHttpClient {
             builder.addHeader("X-Capawesome-Device-Id", deviceId);
         }
         return builder.build();
+    }
+
+    @NonNull
+    Request buildRequestWithoutCompression(@NonNull String url) {
+        // A compressed answer has no `Content-Length`, so the download progress would have no total
+        return createRequestBuilder(url).header("Accept-Encoding", "identity").build();
     }
 
     public static void writeResponseBodyToFile(ResponseBody body, File file, @Nullable DownloadProgressCallback callback)

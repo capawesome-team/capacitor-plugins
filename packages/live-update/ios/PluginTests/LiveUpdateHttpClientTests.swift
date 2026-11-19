@@ -32,6 +32,12 @@ class LiveUpdateHttpClientTests: XCTestCase {
         XCTAssertEqual(request.value(forHTTPHeaderField: "X-Capawesome-Device-Id"), "device-1")
     }
 
+    func testBuildRequestWithoutCompressionAcceptsOnlyTheIdentityEncoding() throws {
+        let request = httpClient.buildRequestWithoutCompression(url: try makeUrl())
+
+        XCTAssertEqual(request.value(forHTTPHeaderField: "Accept-Encoding"), "identity")
+    }
+
     private func makeUrl() throws -> URL {
         return try XCTUnwrap(URL(string: "https://files.example.com/index.html"))
     }

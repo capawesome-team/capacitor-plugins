@@ -4,7 +4,7 @@ import static io.capawesome.capacitorjs.plugins.liveupdate.classes.JsonFields.ge
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.FileUrlTemplate;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.UrlTemplate;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 import org.json.JSONObject;
 
@@ -20,40 +20,39 @@ public class CreateCheckResponseBundle {
     private final JSONObject customProperties;
 
     @NonNull
-    private final FileUrlTemplate fileUrlTemplate;
-
-    @NonNull
     private final String id;
 
     @Nullable
     private final String signature;
 
-    private CreateCheckResponseBundle(@NonNull JSONObject json, @NonNull ArtifactType artifactType) {
+    @NonNull
+    private final String url;
+
+    @Nullable
+    private final UrlTemplate urlTemplate;
+
+    private CreateCheckResponseBundle(@NonNull JSONObject json, @NonNull ArtifactType artifactType, @NonNull String url) {
         this.artifactType = artifactType;
         this.checksum = getNonEmptyString(json, "checksum");
         this.customProperties = json.optJSONObject("customProperties");
-        this.fileUrlTemplate = new FileUrlTemplate(getNonEmptyString(json, "fileUrlTemplate"));
         this.id = getNonEmptyString(json, "id");
         this.signature = getNonEmptyString(json, "signature");
+        this.url = url;
+        String urlTemplateText = getNonEmptyString(json, "urlTemplate");
+        this.urlTemplate = urlTemplateText == null ? null : new UrlTemplate(urlTemplateText);
     }
 
     /**
-     * The checksum is needed only if the template holds the checksum placeholder.
-     *
-     * @return The bundle, or `null` if a needed field is missing or the artifact type is unknown.
+     * @return The bundle, or `null` if a needed field is missing, the address cannot be built or the artifact type is unknown.
      */
     @Nullable
     public static CreateCheckResponseBundle parse(@NonNull JSONObject json) {
         ArtifactType artifactType = ArtifactType.fromValue(getNonEmptyString(json, "artifactType"));
-        String fileUrlTemplate = getNonEmptyString(json, "fileUrlTemplate");
-        if (artifactType == null || fileUrlTemplate == null || getNonEmptyString(json, "id") == null) {
+        String url = buildUrl(json);
+        if (artifactType == null || getNonEmptyString(json, "id") == null || url == null) {
             return null;
         }
-        boolean needsChecksum = new FileUrlTemplate(fileUrlTemplate).hasChecksumPlaceholder();
-        if (needsChecksum && getNonEmptyString(json, "checksum") == null) {
-            return null;
-        }
-        return new CreateCheckResponseBundle(json, artifactType);
+        return new CreateCheckResponseBundle(json, artifactType, url);
     }
 
     @NonNull
@@ -62,7 +61,7 @@ public class CreateCheckResponseBundle {
     }
 
     /**
-     * @return The checksum of the first file, always set if the template holds the checksum placeholder.
+     * @return The checksum of the first file, always set if the bundle has a URL template.
      */
     @Nullable
     public String getChecksum() {
@@ -75,11 +74,6 @@ public class CreateCheckResponseBundle {
     }
 
     @NonNull
-    public FileUrlTemplate getFileUrlTemplate() {
-        return fileUrlTemplate;
-    }
-
-    @NonNull
     public String getId() {
         return id;
     }
@@ -87,5 +81,38 @@ public class CreateCheckResponseBundle {
     @Nullable
     public String getSignature() {
         return signature;
+    }
+
+    /**
+     * @return The address of the first file.
+     */
+    @NonNull
+    public String getUrl() {
+        return url;
+    }
+
+    @Nullable
+    public UrlTemplate getUrlTemplate() {
+        return urlTemplate;
+    }
+
+    /**
+     * A bundle has exactly one of `url` and `urlTemplate`. A `url` is used as it is. A template is filled with the checksum.
+     *
+     * @return The address of the first file, or `null` if the bundle has both or neither, or a template without a checksum or the placeholder.
+     */
+    @Nullable
+    private static String buildUrl(@NonNull JSONObject json) {
+        String url = getNonEmptyString(json, "url");
+        String urlTemplateText = getNonEmptyString(json, "urlTemplate");
+        if (urlTemplateText == null) {
+            return url;
+        }
+        UrlTemplate urlTemplate = new UrlTemplate(urlTemplateText);
+        String checksum = getNonEmptyString(json, "checksum");
+        if (url != null || checksum == null || !urlTemplate.hasChecksumPlaceholder()) {
+            return null;
+        }
+        return urlTemplate.fill(checksum);
     }
 }

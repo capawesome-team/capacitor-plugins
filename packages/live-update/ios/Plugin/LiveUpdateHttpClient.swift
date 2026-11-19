@@ -35,6 +35,10 @@ public class LiveUpdateHttpClient: NSObject {
         return await download(buildRequestWithDeviceId(url: url), destination: destination, callback: callback)
     }
 
+    public func downloadWithoutCompression(url: URL, destination: @escaping DownloadRequest.Destination, callback: ((Progress) -> Void)?) async -> AFDownloadResponse<Data> {
+        return await download(buildRequestWithoutCompression(url: url), destination: destination, callback: callback)
+    }
+
     /// Resolves for every status code, so that the caller can read the status, the headers and the body of an error answer.
     public func post<T: Encodable>(url: URL, body: T) async throws -> AFDataResponse<Data?> {
         let request = try buildPostRequest(url: url, body: body)
@@ -76,6 +80,13 @@ public class LiveUpdateHttpClient: NSObject {
         if let deviceId = deviceId, !deviceId.isEmpty {
             request.setValue(deviceId, forHTTPHeaderField: "X-Capawesome-Device-Id")
         }
+        return request
+    }
+
+    func buildRequestWithoutCompression(url: URL) -> URLRequest {
+        var request = buildRequest(url: url)
+        // A compressed answer has no `Content-Length`, so the download progress would have no total
+        request.setValue("identity", forHTTPHeaderField: "Accept-Encoding")
         return request
     }
 

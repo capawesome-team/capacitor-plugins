@@ -33,9 +33,6 @@ public class FetchLatestBundleResult implements Result {
     @Nullable
     private final String signature;
 
-    @Nullable
-    private final String skipReason;
-
     public FetchLatestBundleResult(@NonNull CreateCheckResponse response) {
         CreateCheckResponseBundle bundle = response.getBundle();
         this.artifactType = bundle == null ? null : bundle.getArtifactType();
@@ -45,7 +42,6 @@ public class FetchLatestBundleResult implements Result {
         this.customProperties = bundle == null ? null : bundle.getCustomProperties();
         this.downloadUrl = bundle == null ? null : DownloadUrl.fromBundle(bundle).toString();
         this.signature = bundle == null ? null : bundle.getSignature();
-        this.skipReason = response.getSkipReason();
     }
 
     @Nullable
@@ -99,9 +95,6 @@ public class FetchLatestBundleResult implements Result {
         }
         if (signature != null) {
             result.put("signature", signature);
-        }
-        if (skipReason != null) {
-            result.put("skipReason", skipReason);
         }
         return result;
     }

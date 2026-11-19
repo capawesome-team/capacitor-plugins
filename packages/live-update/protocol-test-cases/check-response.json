@@ -10,7 +10,8 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "manifest",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "url": null,
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
@@ -20,12 +21,13 @@
     },
     "expected": {
       "outcome": "available",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "manifest",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
@@ -47,7 +49,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": "MEUCIQDx+abc/def0123456789==",
         "customProperties": {
@@ -57,12 +59,13 @@
     },
     "expected": {
       "outcome": "available",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": "MEUCIQDx+abc/def0123456789==",
         "customProperties": {
@@ -85,7 +88,7 @@
     },
     "expected": {
       "outcome": "up_to_date",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": null,
       "retryAfterMs": null,
@@ -93,7 +96,7 @@
     }
   },
   {
-    "name": "turns the reason of a skipped check into upper case",
+    "name": "reads the reason of a skipped check",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -104,7 +107,7 @@
     },
     "expected": {
       "outcome": "skipped",
-      "skipReason": "CHANNEL_PAUSED",
+      "reason": "channel_paused",
       "channelName": "production",
       "bundle": null,
       "retryAfterMs": null,
@@ -112,7 +115,7 @@
     }
   },
   {
-    "name": "passes on a reason that this version does not know",
+    "name": "reads a reason that this version does not know",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -123,7 +126,7 @@
     },
     "expected": {
       "outcome": "skipped",
-      "skipReason": "SOME_NEW_REASON",
+      "reason": "some_new_reason",
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -142,7 +145,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -160,7 +163,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "some_new_type",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
@@ -170,7 +173,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -189,7 +192,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -207,18 +210,19 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
       }
     },
     "expected": {
       "outcome": "available",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": null
@@ -228,7 +232,7 @@
     }
   },
   {
-    "name": "offers a bundle without a placeholder in its template that has no checksum",
+    "name": "offers a bundle with a url",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -238,21 +242,161 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://downloads.example.org/bundles/1.2.3.zip"
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": null
       }
     },
     "expected": {
       "outcome": "available",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://downloads.example.org/bundles/1.2.3.zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": null
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers a bundle with a url and no checksum",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip"
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
         "checksum": null,
         "signature": null,
         "customProperties": null
       },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "uses a url that holds the placeholder as it is",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/{checksum}.zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/{checksum}.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for a bundle with both a url and a url template",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for a bundle with neither a url nor a url template",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null,
+      "clearsPendingFailure": true
+    }
+  },
+  {
+    "name": "offers nothing for a url template without the placeholder",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/bundle.zip?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "outcome": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
       "retryAfterMs": null,
       "clearsPendingFailure": true
     }
@@ -268,7 +412,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
@@ -278,7 +422,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -286,7 +430,7 @@
     }
   },
   {
-    "name": "offers nothing when a bundle with a placeholder in its template has no checksum",
+    "name": "offers nothing for a url template without a checksum",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -296,14 +440,14 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "fileUrlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "signature": null,
         "customProperties": {}
       }
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -311,7 +455,7 @@
     }
   },
   {
-    "name": "passes on no reason when a skipped check has none",
+    "name": "reads no reason when a skipped check has none",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -322,7 +466,7 @@
     },
     "expected": {
       "outcome": "skipped",
-      "skipReason": null,
+      "reason": null,
       "channelName": "production",
       "bundle": null,
       "retryAfterMs": null,
@@ -336,7 +480,7 @@
     "rawBody": "<html><body>Sign in to the network</body></html>",
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -351,8 +495,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 120000,
@@ -367,8 +511,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 0,
@@ -383,8 +527,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 900000,
@@ -399,8 +543,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 900000,
@@ -415,8 +559,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 900000,
@@ -431,8 +575,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 900000,
@@ -447,8 +591,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 86400000,
@@ -463,8 +607,8 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 86400000,
@@ -477,8 +621,8 @@
     "retryAfter": "60",
     "rawBody": "Too many requests",
     "expected": {
-      "outcome": "skipped",
-      "skipReason": "RATE_LIMITED",
+      "outcome": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": 60000,
@@ -494,7 +638,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -510,7 +654,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,
@@ -526,7 +670,7 @@
     },
     "expected": {
       "outcome": null,
-      "skipReason": null,
+      "reason": null,
       "channelName": null,
       "bundle": null,
       "retryAfterMs": null,

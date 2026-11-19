@@ -44,6 +44,13 @@ class LiveUpdateHttpClientTest {
         assertEquals("device-1", request.header("X-Capawesome-Device-Id"))
     }
 
+    @Test
+    fun buildRequestWithoutCompression_acceptsOnlyTheIdentityEncoding() {
+        val request = httpClient.buildRequestWithoutCompression(url)
+
+        assertEquals("identity", request.header("Accept-Encoding"))
+    }
+
     private fun assertUserAgent(request: Request) {
         val userAgent = request.header("User-Agent")
         assertEquals("capawesome-capacitor-live-update/${LiveUpdatePlugin.VERSION} (android)", userAgent)

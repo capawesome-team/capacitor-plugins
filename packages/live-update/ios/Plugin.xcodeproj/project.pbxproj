@@ -55,7 +55,7 @@
 		AA0300000000000000010002 /* LiveUpdateIonicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010002 /* LiveUpdateIonicManager.swift */; };
 		AA0300000000000000010003 /* LiveUpdateIonicPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000010003 /* LiveUpdateIonicPreferences.swift */; };
 		AA0700000000000000010001 /* DownloadUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010001 /* DownloadUrl.swift */; };
-		AA0700000000000000010002 /* FileUrlTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010002 /* FileUrlTemplate.swift */; };
+		AA0700000000000000010002 /* UrlTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010002 /* UrlTemplate.swift */; };
 		AA0700000000000000010003 /* ManifestPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010003 /* ManifestPlan.swift */; };
 		AA0700000000000000010004 /* UpdateFailure.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010004 /* UpdateFailure.swift */; };
 		AA0700000000000000010005 /* CheckOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000010005 /* CheckOutcome.swift */; };
@@ -131,7 +131,7 @@
 		AA0200000000000000010002 /* LiveUpdateIonicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicManager.swift; sourceTree = "<group>"; };
 		AA0200000000000000010003 /* LiveUpdateIonicPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveUpdateIonicPreferences.swift; sourceTree = "<group>"; };
 		AA0600000000000000010001 /* DownloadUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadUrl.swift; sourceTree = "<group>"; };
-		AA0600000000000000010002 /* FileUrlTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUrlTemplate.swift; sourceTree = "<group>"; };
+		AA0600000000000000010002 /* UrlTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlTemplate.swift; sourceTree = "<group>"; };
 		AA0600000000000000010003 /* ManifestPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManifestPlan.swift; sourceTree = "<group>"; };
 		AA0600000000000000010004 /* UpdateFailure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateFailure.swift; sourceTree = "<group>"; };
 		AA0600000000000000010005 /* CheckOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckOutcome.swift; sourceTree = "<group>"; };
@@ -223,7 +223,7 @@
 				7C29FB592CBD4148007DCB06 /* Manifest.swift */,
 				AA0600000000000000010004 /* UpdateFailure.swift */,
 				AA0600000000000000010003 /* ManifestPlan.swift */,
-				AA0600000000000000010002 /* FileUrlTemplate.swift */,
+				AA0600000000000000010002 /* UrlTemplate.swift */,
 				AA0600000000000000010001 /* DownloadUrl.swift */,
 				7C20114F2BA96529001FABAD /* Results */,
 				7C20114E2BA96524001FABAD /* Options */,
@@ -569,7 +569,7 @@
 				AA0700000000000000010005 /* CheckOutcome.swift in Sources */,
 				AA0700000000000000010004 /* UpdateFailure.swift in Sources */,
 				AA0700000000000000010003 /* ManifestPlan.swift in Sources */,
-				AA0700000000000000010002 /* FileUrlTemplate.swift in Sources */,
+				AA0700000000000000010002 /* UrlTemplate.swift in Sources */,
 				AA0700000000000000010001 /* DownloadUrl.swift in Sources */,
 				7CAB12672DEFA3E0003BB4F7 /* SetConfigOptions.swift in Sources */,
 				7C6715CF2BB1BC920000878A /* SetChannelOptions.swift in Sources */,

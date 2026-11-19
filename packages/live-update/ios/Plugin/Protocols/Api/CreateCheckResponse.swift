@@ -5,19 +5,21 @@ struct CreateCheckResponse {
     struct Bundle {
         let id: String
         let artifactType: ArtifactType
-        /// Only `nil` for a template without the placeholder, which is loaded as before the placeholder existed.
+        /// Always set with `urlTemplate`.
         let checksum: String?
         let customProperties: [String: Any]?
-        let fileUrlTemplate: FileUrlTemplate
         let signature: String?
+        /// The address of the first file.
+        let url: String
+        let urlTemplate: UrlTemplate?
     }
 
     private static let defaultRetryAfterMs: Int64 = 15 * 60 * 1000
     private static let maximumRetryAfterSeconds: Int64 = 24 * 60 * 60
-    private static let rateLimitedSkipReason = "RATE_LIMITED"
 
     let outcome: CheckOutcome?
-    let skipReason: String?
+    /// The reason as the server sent it, only set if the check was skipped.
+    let reason: String?
     let channelName: String?
     let bundle: Bundle?
     let retryAfterMs: Int64?
@@ -28,7 +30,8 @@ struct CreateCheckResponse {
         case 200:
             return parseProcessedAnswer(body: body)
         case 429:
-            return rateLimited(retryAfterMs: parseRetryAfterMs(retryAfter))
+            return CreateCheckResponse(outcome: nil, reason: nil, channelName: nil, bundle: nil,
+                                       retryAfterMs: parseRetryAfterMs(retryAfter), clearsPendingFailure: false)
         case 400..<500:
             return noUpdate(clearsPendingFailure: true)
         default:
@@ -36,31 +39,37 @@ struct CreateCheckResponse {
         }
     }
 
-    static func rateLimited(retryAfterMs: Int64?) -> CreateCheckResponse {
-        return CreateCheckResponse(outcome: .skipped, skipReason: rateLimitedSkipReason, channelName: nil, bundle: nil,
-                                   retryAfterMs: retryAfterMs, clearsPendingFailure: false)
+    static func noUpdate(clearsPendingFailure: Bool) -> CreateCheckResponse {
+        return CreateCheckResponse(outcome: nil, reason: nil, channelName: nil, bundle: nil,
+                                   retryAfterMs: nil, clearsPendingFailure: clearsPendingFailure)
     }
 
-    private static func noUpdate(clearsPendingFailure: Bool) -> CreateCheckResponse {
-        return CreateCheckResponse(outcome: nil, skipReason: nil, channelName: nil, bundle: nil,
-                                   retryAfterMs: nil, clearsPendingFailure: clearsPendingFailure)
+    /// A bundle has exactly one of `url` and `urlTemplate`. A `url` is used as it is. A template is filled with the checksum.
+    /// - Returns: The address of the first file, or `nil` if the bundle has both or neither, or a template without a checksum or the placeholder.
+    private static func buildUrl(url: String?, urlTemplate: UrlTemplate?, checksum: String?) -> String? {
+        guard let urlTemplate = urlTemplate else {
+            return url
+        }
+        guard url == nil, let checksum = checksum, urlTemplate.hasChecksumPlaceholder else {
+            return nil
+        }
+        return urlTemplate.buildFileUrl(checksum: checksum)
     }
 
     private static func parseBundle(_ object: Any?) -> Bundle? {
         guard let object = object as? [String: Any],
               let id = readText(object["id"]),
-              let artifactType = readText(object["artifactType"]).flatMap(ArtifactType.init(rawValue:)),
-              let fileUrlTemplateValue = readText(object["fileUrlTemplate"]) else {
+              let artifactType = readText(object["artifactType"]).flatMap(ArtifactType.init(rawValue:)) else {
             return nil
         }
         let checksum = readText(object["checksum"])
-        let fileUrlTemplate = FileUrlTemplate(value: fileUrlTemplateValue)
-        if fileUrlTemplate.hasChecksumPlaceholder && checksum == nil {
+        let urlTemplate = readText(object["urlTemplate"]).map(UrlTemplate.init(value:))
+        guard let url = buildUrl(url: readText(object["url"]), urlTemplate: urlTemplate, checksum: checksum) else {
             return nil
         }
         return Bundle(id: id, artifactType: artifactType, checksum: checksum,
                       customProperties: object["customProperties"] as? [String: Any],
-                      fileUrlTemplate: fileUrlTemplate, signature: readText(object["signature"]))
+                      signature: readText(object["signature"]), url: url, urlTemplate: urlTemplate)
     }
 
     private static func parseJsonObject(_ text: String?) -> [String: Any]? {
@@ -80,15 +89,13 @@ struct CreateCheckResponse {
             guard let bundle = parseBundle(object["bundle"]) else {
                 return noUpdate(clearsPendingFailure: true)
             }
-            return CreateCheckResponse(outcome: .available, skipReason: nil, channelName: channelName, bundle: bundle,
+            return CreateCheckResponse(outcome: .available, reason: nil, channelName: channelName, bundle: bundle,
                                        retryAfterMs: nil, clearsPendingFailure: true)
         case .skipped:
-            // `uppercased()` does not depend on the locale of the device
-            let skipReason = readText(object["reason"])?.uppercased()
-            return CreateCheckResponse(outcome: .skipped, skipReason: skipReason, channelName: channelName, bundle: nil,
+            return CreateCheckResponse(outcome: .skipped, reason: readText(object["reason"]), channelName: channelName, bundle: nil,
                                        retryAfterMs: nil, clearsPendingFailure: true)
         case .upToDate:
-            return CreateCheckResponse(outcome: .upToDate, skipReason: nil, channelName: channelName, bundle: nil,
+            return CreateCheckResponse(outcome: .upToDate, reason: nil, channelName: channelName, bundle: nil,
                                        retryAfterMs: nil, clearsPendingFailure: true)
         case nil:
             return noUpdate(clearsPendingFailure: true)

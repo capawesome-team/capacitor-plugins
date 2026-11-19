@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
 import java.math.BigInteger;
-import java.util.Locale;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,7 +13,6 @@ public class CreateCheckResponse {
 
     private static final long DEFAULT_RETRY_AFTER_MS = 15 * 60 * 1000;
     private static final BigInteger MAX_RETRY_AFTER_SECONDS = BigInteger.valueOf(24 * 60 * 60);
-    private static final String SKIP_REASON_RATE_LIMITED = "RATE_LIMITED";
 
     @Nullable
     private CreateCheckResponseBundle bundle;
@@ -28,10 +26,10 @@ public class CreateCheckResponse {
     private CheckOutcome outcome;
 
     @Nullable
-    private Long retryAfterMs;
+    private String reason;
 
     @Nullable
-    private String skipReason;
+    private Long retryAfterMs;
 
     private CreateCheckResponse() {}
 
@@ -40,14 +38,11 @@ public class CreateCheckResponse {
     }
 
     /**
-     * @return A skipped check with the reason `RATE_LIMITED`, without a wait and without clearing the pending failure.
+     * @return An answer without an update, without a wait and without clearing the pending failure.
      */
     @NonNull
-    public static CreateCheckResponse createRateLimited() {
-        CreateCheckResponse response = new CreateCheckResponse();
-        response.outcome = CheckOutcome.SKIPPED;
-        response.skipReason = SKIP_REASON_RATE_LIMITED;
-        return response;
+    public static CreateCheckResponse createWithoutUpdate() {
+        return createWithoutUpdate(false);
     }
 
     @Nullable
@@ -66,6 +61,14 @@ public class CreateCheckResponse {
     }
 
     /**
+     * @return The reason as the server sent it, only set if the check was skipped.
+     */
+    @Nullable
+    public String getReason() {
+        return reason;
+    }
+
+    /**
      * @return The milliseconds to wait before the next check, or `null` if no wait was asked for.
      */
     @Nullable
@@ -73,18 +76,10 @@ public class CreateCheckResponse {
         return retryAfterMs;
     }
 
-    /**
-     * @return The reason in upper case, only set if the check was skipped.
-     */
-    @Nullable
-    public String getSkipReason() {
-        return skipReason;
-    }
-
     @NonNull
     public static CreateCheckResponse parse(int statusCode, @Nullable String retryAfter, @NonNull String body) {
         if (statusCode == 429) {
-            CreateCheckResponse response = createRateLimited();
+            CreateCheckResponse response = createWithoutUpdate();
             response.retryAfterMs = parseRetryAfterMs(retryAfter);
             return response;
         }
@@ -126,7 +121,7 @@ public class CreateCheckResponse {
         response.outcome = outcome;
         response.bundle = bundle;
         response.channelName = getNonEmptyString(json, "channelName");
-        response.skipReason = outcome == CheckOutcome.SKIPPED ? parseSkipReason(json) : null;
+        response.reason = outcome == CheckOutcome.SKIPPED ? getNonEmptyString(json, "reason") : null;
         return response;
     }
 
@@ -136,11 +131,5 @@ public class CreateCheckResponse {
         }
         BigInteger seconds = new BigInteger(retryAfter).min(MAX_RETRY_AFTER_SECONDS);
         return seconds.longValue() * 1000;
-    }
-
-    @Nullable
-    private static String parseSkipReason(@NonNull JSONObject json) {
-        String reason = getNonEmptyString(json, "reason");
-        return reason == null ? null : reason.toUpperCase(Locale.ROOT);
     }
 }

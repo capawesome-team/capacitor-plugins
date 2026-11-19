@@ -97,7 +97,7 @@ import CommonCrypto
         }
 
         // With the marker, the fields of the `#` part win over the options
-        if parsedDownloadUrl.usesFileUrlTemplate {
+        if parsedDownloadUrl.hasMarker {
             let artifactType = parsedDownloadUrl.artifactType ?? options.getArtifactType()
             let appId = options.getAppId() ?? getAppId()
             try await downloadBundleRecordingFailure(appId: appId, bundleId: bundleId, artifactType: artifactType, downloadUrl: parsedDownloadUrl)
@@ -492,12 +492,12 @@ import CommonCrypto
         }
     }
 
-    /// Resolves as "no update" with the reason `RATE_LIMITED` while the server asked to wait.
+    /// Resolves as "no update" while the server asked to wait.
     private func createCheck(_ options: FetchLatestBundleOptions) async throws -> CreateCheckResponse {
         let appId = try requireAppId(options.getAppId())
         guard isCheckAllowed(appId: appId) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Check skipped. The server asked to wait before the next check.")
-            return CreateCheckResponse.rateLimited(retryAfterMs: nil)
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. No check was made because the device is rate limited.")
+            return CreateCheckResponse.noUpdate(clearsPendingFailure: false)
         }
         let pendingFailure = getPendingFailure(appId: appId)
         let request = await buildCreateCheckRequest(options, pendingFailure: pendingFailure)
@@ -540,15 +540,6 @@ import CommonCrypto
         let checksum = checksum ?? LiveUpdateHttpClient.getChecksumFromResponse(response: response)
         let signature = signature ?? LiveUpdateHttpClient.getSignatureFromResponse(response: response)
         try verifyFile(url: file, checksum: checksum, signature: signature)
-    }
-
-    private func downloadAndVerifyFirstFileWithMarker(_ downloadUrl: DownloadUrl, file: URL, callback: ((Progress) -> Void)?) async throws {
-        let checksum = try downloadUrl.requireChecksum()
-        try await downloadFileWithMarker(url: downloadUrl.url, file: file, callback: callback)
-        try verifyChecksum(url: file, expectedChecksum: checksum)
-        if let publicKey = config.publicKey {
-            try verifySignature(url: file, signature: downloadUrl.signature, publicKey: publicKey)
-        }
     }
 
     private func downloadBundle(bundleId: String, artifactType: ArtifactType, downloadUrl: DownloadUrl) async throws {
@@ -631,8 +622,9 @@ import CommonCrypto
         defer { tryDeleteDirectory(temporaryDirectory) }
         let zipFile = temporaryDirectory.appendingPathComponent("bundle.zip")
         let callback = buildDownloadProgressCallback(bundleId: bundleId)
-        if downloadUrl.usesFileUrlTemplate {
-            try await downloadAndVerifyFirstFileWithMarker(downloadUrl, file: zipFile, callback: callback)
+        if downloadUrl.hasMarker {
+            try await downloadZipFileWithMarker(url: downloadUrl.url, file: zipFile, callback: callback)
+            try verifyFirstFileWithMarker(downloadUrl, file: zipFile)
         } else {
             let url = try buildUrl(downloadUrl.url)
             try await downloadAndVerifyFile(
@@ -658,33 +650,38 @@ import CommonCrypto
         }
     }
 
-    /// Downloads without the device id header. A 403 means that the address has expired.
+    /// Downloads without the device id header.
     private func downloadFileWithMarker(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
         let destination = buildDownloadDestination(file: file)
         let result = await httpClient.download(url: try buildUrl(url), destination: destination, callback: callback)
-        if result.response?.statusCode == 403 {
-            throw CustomError.downloadUrlExpired
-        }
-        _ = try requireSuccessfulDownloadResponse(result)
+        try requireSuccessfulDownloadResponseWithMarker(result)
     }
 
     private func downloadManifestFile(_ downloadUrl: DownloadUrl, directory: URL) async throws -> URL {
-        guard downloadUrl.usesFileUrlTemplate else {
+        guard downloadUrl.hasMarker else {
             return try await downloadBundleFile(baseUrl: downloadUrl.url, href: manifestFileName, directory: directory, callback: nil)
         }
         let file = directory.appendingPathComponent(manifestFileName)
-        try await downloadAndVerifyFirstFileWithMarker(downloadUrl, file: file, callback: nil)
+        try await downloadFileWithMarker(url: downloadUrl.url, file: file, callback: nil)
+        try verifyFirstFileWithMarker(downloadUrl, file: file)
         return file
     }
 
     private func downloadManifestItem(_ item: ManifestItem, downloadUrl: DownloadUrl, directory: URL, callback: ((Progress) -> Void)?) async throws {
-        guard let fileUrlTemplate = downloadUrl.fileUrlTemplate else {
+        guard let urlTemplate = downloadUrl.urlTemplate else {
             _ = try await downloadBundleFile(baseUrl: downloadUrl.url, href: item.href, directory: directory, callback: callback)
             return
         }
         let file = directory.appendingPathComponent(item.href)
-        try await downloadFileWithMarker(url: fileUrlTemplate.buildFileUrl(checksum: item.checksum), file: file, callback: callback)
+        try await downloadFileWithMarker(url: urlTemplate.buildFileUrl(checksum: item.checksum), file: file, callback: callback)
         try verifyChecksum(url: file, expectedChecksum: item.checksum)
+    }
+
+    /// Downloads without the device id header and without compression.
+    private func downloadZipFileWithMarker(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
+        let destination = buildDownloadDestination(file: file)
+        let result = await httpClient.downloadWithoutCompression(url: try buildUrl(url), destination: destination, callback: callback)
+        try requireSuccessfulDownloadResponseWithMarker(result)
     }
 
     private func getDownloadedBundleIds() -> [String] {
@@ -812,8 +809,7 @@ import CommonCrypto
 
     private func handleSyncCheckResponse(_ response: CreateCheckResponse) async throws -> SyncResult {
         guard let bundle = response.bundle else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
-            return SyncResult(nextBundleId: nil, skipReason: response.skipReason)
+            return SyncResult(nextBundleId: nil)
         }
         // Check if the bundle is blocked
         if isBlockedBundleId(bundle.id) {
@@ -938,6 +934,14 @@ import CommonCrypto
             throw CustomError.unknown
         }
         return response
+    }
+
+    /// A 403 means that the address has expired.
+    private func requireSuccessfulDownloadResponseWithMarker(_ result: AFDownloadResponse<Data>) throws {
+        if result.response?.statusCode == 403 {
+            throw CustomError.downloadUrlExpired
+        }
+        _ = try requireSuccessfulDownloadResponse(result)
     }
 
     private func rollback() {
@@ -1067,6 +1071,16 @@ import CommonCrypto
         return now < checkWait.start || now >= checkWait.end
     }
 
+    private func logNoUpdateReason(_ response: CreateCheckResponse, statusCode: Int) {
+        if statusCode != 200 {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The server answered with status \(statusCode).")
+        } else if response.outcome == .skipped {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The check was skipped with the reason \(response.reason ?? "null").")
+        } else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
+        }
+    }
+
     private func startCheckWait(appId: String, retryAfterMs: Int64) {
         Self.checkWaitsLock.lock()
         defer { Self.checkWaitsLock.unlock() }
@@ -1097,7 +1111,11 @@ import CommonCrypto
             throw error
         }
         let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After")
-        return CreateCheckResponse.parse(statusCode: httpResponse.statusCode, retryAfter: retryAfter, body: body)
+        let checkResponse = CreateCheckResponse.parse(statusCode: httpResponse.statusCode, retryAfter: retryAfter, body: body)
+        if checkResponse.bundle == nil {
+            logNoUpdateReason(checkResponse, statusCode: httpResponse.statusCode)
+        }
+        return checkResponse
     }
 
     private func checkAndResetConfigIfVersionChanged() {
@@ -1239,6 +1257,13 @@ import CommonCrypto
             try verifySignature(url: url, signature: signature, publicKey: publicKey)
         } else if let expectedChecksum = checksum {
             try verifyChecksum(url: url, expectedChecksum: expectedChecksum)
+        }
+    }
+
+    private func verifyFirstFileWithMarker(_ downloadUrl: DownloadUrl, file: URL) throws {
+        try verifyChecksum(url: file, expectedChecksum: downloadUrl.requireChecksum())
+        if let publicKey = config.publicKey {
+            try verifySignature(url: file, signature: downloadUrl.signature, publicKey: publicKey)
         }
     }
 

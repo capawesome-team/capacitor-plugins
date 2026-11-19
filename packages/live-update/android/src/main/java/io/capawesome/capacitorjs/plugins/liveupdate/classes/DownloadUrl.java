@@ -26,27 +26,22 @@ public class DownloadUrl {
     private String checksum;
 
     @Nullable
-    private FileUrlTemplate fileUrlTemplate;
-
-    @Nullable
     private String signature;
 
     @NonNull
     private final String url;
 
+    @Nullable
+    private UrlTemplate urlTemplate;
+
     private DownloadUrl(@NonNull String url) {
         this.url = url;
     }
 
-    /**
-     * Without a checksum placeholder in the template, the address has no marker.
-     */
     @NonNull
     public static DownloadUrl fromBundle(@NonNull CreateCheckResponseBundle bundle) {
-        FileUrlTemplate template = bundle.getFileUrlTemplate();
-        boolean hasMarker = template.hasChecksumPlaceholder();
-        DownloadUrl downloadUrl = new DownloadUrl(hasMarker ? template.fill(bundle.getChecksum()) : template.getValue());
-        downloadUrl.fileUrlTemplate = hasMarker ? template : null;
+        DownloadUrl downloadUrl = new DownloadUrl(bundle.getUrl());
+        downloadUrl.urlTemplate = bundle.getUrlTemplate();
         downloadUrl.checksum = bundle.getChecksum();
         downloadUrl.signature = bundle.getSignature();
         downloadUrl.artifactType = bundle.getArtifactType();
@@ -86,8 +81,8 @@ public class DownloadUrl {
             throw CustomExceptions.CHECKSUM_MISSING;
         }
         DownloadUrl downloadUrl = new DownloadUrl(text.substring(0, fragmentStart));
-        String template = fields.get("fileUrlTemplate");
-        downloadUrl.fileUrlTemplate = new FileUrlTemplate(template == null ? downloadUrl.url : template);
+        String urlTemplateText = fields.get("urlTemplate");
+        downloadUrl.urlTemplate = new UrlTemplate(urlTemplateText == null ? downloadUrl.url : urlTemplateText);
         downloadUrl.checksum = checksum;
         downloadUrl.signature = fields.get("signature");
         downloadUrl.artifactType = ArtifactType.fromValue(fields.get("artifactType"));
@@ -107,14 +102,6 @@ public class DownloadUrl {
         return checksum;
     }
 
-    /**
-     * @return The template for the files of the bundle, only set with the marker.
-     */
-    @Nullable
-    public FileUrlTemplate getFileUrlTemplate() {
-        return fileUrlTemplate;
-    }
-
     @Nullable
     public String getSignature() {
         return signature;
@@ -128,8 +115,16 @@ public class DownloadUrl {
         return url;
     }
 
+    /**
+     * @return The template for the files of the bundle, only set with the marker.
+     */
+    @Nullable
+    public UrlTemplate getUrlTemplate() {
+        return urlTemplate;
+    }
+
     public boolean hasMarker() {
-        return fileUrlTemplate != null;
+        return urlTemplate != null;
     }
 
     /**
@@ -138,14 +133,14 @@ public class DownloadUrl {
     @NonNull
     @Override
     public String toString() {
-        if (fileUrlTemplate == null) {
+        if (urlTemplate == null) {
             return url;
         }
         StringBuilder text = new StringBuilder(url).append('#').append(MARKER);
         appendField(text, "artifactType", artifactType == null ? null : artifactType.getValue());
         appendField(text, "checksum", checksum);
-        appendField(text, "fileUrlTemplate", fileUrlTemplate.getValue());
         appendField(text, "signature", signature);
+        appendField(text, "urlTemplate", urlTemplate.getValue());
         return text.toString();
     }
 

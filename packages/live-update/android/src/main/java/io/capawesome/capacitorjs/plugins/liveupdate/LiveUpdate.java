@@ -19,12 +19,12 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.DownloadUrl;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.FileUrlTemplate;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestFileCopy;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestPlan;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.UrlTemplate;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckRequest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponse;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponseBundle;
@@ -58,6 +58,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.FailureReason;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.CallbackStep;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
@@ -733,8 +734,8 @@ public class LiveUpdate {
         try {
             String appId = requireAppId(options.getAppId());
             if (!isCheckAllowed(appId)) {
-                Logger.debug(LiveUpdatePlugin.TAG, "Check skipped. The server asked to wait before the next check.");
-                callback.success(CreateCheckResponse.createRateLimited());
+                Logger.debug(LiveUpdatePlugin.TAG, "No update available. No check was made because the device is rate limited.");
+                callback.success(CreateCheckResponse.createWithoutUpdate());
                 return;
             }
             UpdateFailure pendingFailure = getPendingFailureOfApp(appId);
@@ -784,6 +785,41 @@ public class LiveUpdate {
         return (downloadedBytes, totalBytes) -> {
             DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
             notifyDownloadBundleProgressListeners(event);
+        };
+    }
+
+    /**
+     * Handles the answer to the download of a file of an address with the marker, without reading any response header.
+     */
+    @NonNull
+    private NonEmptyCallback<Response> createProtocolFileDownloadCallback(
+        @NonNull File file,
+        @NonNull FileVerifier verifier,
+        @Nullable DownloadProgressCallback progressCallback,
+        @NonNull EmptyCallback completionCallback
+    ) {
+        return new NonEmptyCallback<Response>() {
+            @Override
+            public void success(@NonNull Response response) {
+                if (response.code() == 403) {
+                    response.close();
+                    completionCallback.error(CustomExceptions.DOWNLOAD_URL_EXPIRED);
+                    return;
+                }
+                handleDownloadResponse(
+                    response,
+                    body -> {
+                        LiveUpdateHttpClient.writeResponseBodyToFile(body, file, progressCallback);
+                        verifier.verify(file);
+                    },
+                    completionCallback
+                );
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                handleDownloadFailure(exception, completionCallback);
+            }
         };
     }
 
@@ -916,44 +952,6 @@ public class LiveUpdate {
         );
     }
 
-    /**
-     * Downloads a file of an address with the marker: without the device ID header, and without reading any response header.
-     */
-    private Call downloadAndVerifyProtocolFile(
-        @NonNull String url,
-        @NonNull File file,
-        @NonNull FileVerifier verifier,
-        @Nullable DownloadProgressCallback progressCallback,
-        @NonNull EmptyCallback completionCallback
-    ) {
-        return httpClient.enqueue(
-            url,
-            new NonEmptyCallback<Response>() {
-                @Override
-                public void success(@NonNull Response response) {
-                    if (response.code() == 403) {
-                        response.close();
-                        completionCallback.error(CustomExceptions.DOWNLOAD_URL_EXPIRED);
-                        return;
-                    }
-                    handleDownloadResponse(
-                        response,
-                        body -> {
-                            LiveUpdateHttpClient.writeResponseBodyToFile(body, file, progressCallback);
-                            verifier.verify(file);
-                        },
-                        completionCallback
-                    );
-                }
-
-                @Override
-                public void error(@NonNull Exception exception) {
-                    handleDownloadFailure(exception, completionCallback);
-                }
-            }
-        );
-    }
-
     private void downloadBundle(@NonNull String bundleId, @NonNull DownloadUrl downloadUrl, @NonNull EmptyCallback callback) {
         if (downloadUrl.getArtifactType() == ArtifactType.MANIFEST) {
             downloadBundleOfTypeManifest(bundleId, downloadUrl, callback);
@@ -971,19 +969,21 @@ public class LiveUpdate {
     ) {
         File destinationFile = new File(destinationDirectory, item.getHref());
         destinationFile.getParentFile().mkdirs();
-        FileUrlTemplate fileUrlTemplate = downloadUrl.getFileUrlTemplate();
-        if (fileUrlTemplate == null) {
+        UrlTemplate urlTemplate = downloadUrl.getUrlTemplate();
+        if (urlTemplate == null) {
             String url = buildHrefUrl(downloadUrl.getUrl(), item.getHref());
             return downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
         }
         String checksum = item.getChecksum();
-        String url = fileUrlTemplate.fill(checksum);
-        return downloadAndVerifyProtocolFile(
+        String url = urlTemplate.fill(checksum);
+        return httpClient.enqueue(
             url,
-            destinationFile,
-            file -> verifyChecksum(file, checksum),
-            progressCallback,
-            completionCallback
+            createProtocolFileDownloadCallback(
+                destinationFile,
+                file -> verifyChecksum(file, checksum),
+                progressCallback,
+                completionCallback
+            )
         );
     }
 
@@ -1154,12 +1154,9 @@ public class LiveUpdate {
 
     private void downloadManifestFile(@NonNull DownloadUrl downloadUrl, @NonNull File manifestFile, @NonNull EmptyCallback callback) {
         if (downloadUrl.hasMarker()) {
-            downloadAndVerifyProtocolFile(
+            httpClient.enqueue(
                 downloadUrl.getUrl(),
-                manifestFile,
-                file -> verifyFirstProtocolFile(file, downloadUrl),
-                null,
-                callback
+                createProtocolFileDownloadCallback(manifestFile, file -> verifyFirstProtocolFile(file, downloadUrl), null, callback)
             );
         } else {
             String url = buildHrefUrl(downloadUrl.getUrl(), manifestFileName);
@@ -1174,12 +1171,14 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         if (downloadUrl.hasMarker()) {
-            downloadAndVerifyProtocolFile(
+            httpClient.enqueueWithoutCompression(
                 downloadUrl.getUrl(),
-                zipFile,
-                file -> verifyFirstProtocolFile(file, downloadUrl),
-                progressCallback,
-                completionCallback
+                createProtocolFileDownloadCallback(
+                    zipFile,
+                    file -> verifyFirstProtocolFile(file, downloadUrl),
+                    progressCallback,
+                    completionCallback
+                )
             );
         } else {
             downloadAndVerifyFile(
@@ -1383,8 +1382,7 @@ public class LiveUpdate {
         throws Exception {
         CreateCheckResponseBundle bundle = response.getBundle();
         if (bundle == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
-            callback.success(SyncResult.createWithoutNextBundle(response.getSkipReason()));
+            callback.success(new SyncResult(null));
             return;
         }
         String latestBundleId = bundle.getId();
@@ -1429,6 +1427,16 @@ public class LiveUpdate {
             throw new Exception(LiveUpdatePlugin.ERROR_MANIFEST_INVALID);
         }
         return manifest;
+    }
+
+    private void logNoUpdateReason(@NonNull CreateCheckResponse response, int statusCode) {
+        if (statusCode != 200) {
+            Logger.debug(LiveUpdatePlugin.TAG, "No update available. The server answered with status " + statusCode + ".");
+        } else if (response.getOutcome() == CheckOutcome.SKIPPED) {
+            Logger.debug(LiveUpdatePlugin.TAG, "No update available. The check was skipped with the reason " + response.getReason() + ".");
+        } else {
+            Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
+        }
     }
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
@@ -1494,7 +1502,11 @@ public class LiveUpdate {
     private CreateCheckResponse readCreateCheckResponse(@NonNull Response response) throws IOException {
         String body = response.body().string();
         Logger.debug(LiveUpdatePlugin.TAG, "Check response: " + response.code() + " " + body);
-        return CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
+        CreateCheckResponse checkResponse = CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
+        if (checkResponse.getBundle() == null) {
+            logNoUpdateReason(checkResponse, response.code());
+        }
+        return checkResponse;
     }
 
     /**
