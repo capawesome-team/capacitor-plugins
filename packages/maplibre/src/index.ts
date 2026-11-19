@@ -1,5 +1,5 @@
 import { Capacitor, CapacitorException, registerPlugin } from '@capacitor/core';
-import type { PluginListenerHandle } from '@capacitor/core';
+import type { ExceptionCode, PluginListenerHandle } from '@capacitor/core';
 
 import { ErrorCode } from './definitions';
 import type {
@@ -55,9 +55,13 @@ async function createMap(options: CreateMapOptions): Promise<void> {
   }
   const element = document.getElementById(options.elementId);
   if (!element) {
-    throw new CapacitorException(errorElementNotFound, undefined, {
-      code: ErrorCode.ElementNotFound,
-    });
+    throw new CapacitorException(
+      errorElementNotFound,
+      ErrorCode.ElementNotFound as unknown as ExceptionCode,
+      {
+        code: ErrorCode.ElementNotFound,
+      },
+    );
   }
   element.style.background = 'transparent';
   const spacer = platform === 'ios' ? createScrollSpacer(element) : undefined;

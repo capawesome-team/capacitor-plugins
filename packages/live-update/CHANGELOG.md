@@ -1,5 +1,11 @@
 # Changelog
 
+## 8.8.2
+
+### Patch Changes
+
+- [`6b9be87a217e4712a39b2e0fdbb777d75cff8269`](https://github.com/capawesome-team/capacitor-plugins/commit/6b9be87a217e4712a39b2e0fdbb777d75cff8269) ([#1221](https://github.com/capawesome-team/capacitor-plugins/pull/1221)): fix(ios): report the active bundle in the automatic update check on app start
+
 ## 8.8.1
 
 ### Patch Changes

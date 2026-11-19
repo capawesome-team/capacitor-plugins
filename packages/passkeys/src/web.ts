@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import { ErrorCode } from './definitions';
@@ -35,9 +36,13 @@ export class PasskeysWeb extends WebPlugin implements PasskeysPlugin {
       throw PasskeysWeb.createException(error, ErrorCode.CreateFailed);
     }
     if (!(credential instanceof PublicKeyCredential)) {
-      throw new CapacitorException(PasskeysWeb.errorCreateFailed, undefined, {
-        code: ErrorCode.CreateFailed,
-      });
+      throw new CapacitorException(
+        PasskeysWeb.errorCreateFailed,
+        ErrorCode.CreateFailed as unknown as ExceptionCode,
+        {
+          code: ErrorCode.CreateFailed,
+        },
+      );
     }
     return PasskeysWeb.serializeCredential(credential) as CreatePasskeyResult;
   }
@@ -55,9 +60,13 @@ export class PasskeysWeb extends WebPlugin implements PasskeysPlugin {
       throw PasskeysWeb.createException(error, ErrorCode.GetFailed);
     }
     if (!(credential instanceof PublicKeyCredential)) {
-      throw new CapacitorException(PasskeysWeb.errorGetFailed, undefined, {
-        code: ErrorCode.GetFailed,
-      });
+      throw new CapacitorException(
+        PasskeysWeb.errorGetFailed,
+        ErrorCode.GetFailed as unknown as ExceptionCode,
+        {
+          code: ErrorCode.GetFailed,
+        },
+      );
     }
     return PasskeysWeb.serializeCredential(credential) as GetPasskeyResult;
   }
@@ -112,13 +121,19 @@ export class PasskeysWeb extends WebPlugin implements PasskeysPlugin {
     }
     const message =
       error instanceof Error ? error.message : 'An unknown error has occurred.';
-    return new CapacitorException(message, undefined, { code });
+    return new CapacitorException(message, code as unknown as ExceptionCode, {
+      code,
+    });
   }
 
   private static createNotSupportedException(): CapacitorException {
-    return new CapacitorException(PasskeysWeb.errorNotSupported, undefined, {
-      code: ErrorCode.NotSupported,
-    });
+    return new CapacitorException(
+      PasskeysWeb.errorNotSupported,
+      ErrorCode.NotSupported as unknown as ExceptionCode,
+      {
+        code: ErrorCode.NotSupported,
+      },
+    );
   }
 
   private static isWebAuthnSupported(): boolean {

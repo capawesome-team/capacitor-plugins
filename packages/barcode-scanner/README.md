@@ -894,21 +894,21 @@ Remove all listeners for this plugin.
 
 #### BarcodeFormat
 
-| Members          | Value                      | Description                                                                           | Since |
-| ---------------- | -------------------------- | ------------------------------------------------------------------------------------- | ----- |
-| **`Aztec`**      | <code>'AZTEC'</code>       | Aztec barcode.                                                                        | 0.0.1 |
-| **`Codabar`**    | <code>'CODABAR'</code>     | Codabar barcode. On **iOS**, this format is only detected by the camera on iOS 15.4+. | 0.0.1 |
-| **`Code128`**    | <code>'CODE_128'</code>    | Code 128 barcode.                                                                     | 0.0.1 |
-| **`Code39`**     | <code>'CODE_39'</code>     | Code 39 barcode.                                                                      | 0.0.1 |
-| **`Code93`**     | <code>'CODE_93'</code>     | Code 93 barcode.                                                                      | 0.0.1 |
-| **`DataMatrix`** | <code>'DATA_MATRIX'</code> | Data Matrix barcode.                                                                  | 0.0.1 |
-| **`Ean13`**      | <code>'EAN_13'</code>      | EAN-13 barcode.                                                                       | 0.0.1 |
-| **`Ean8`**       | <code>'EAN_8'</code>       | EAN-8 barcode.                                                                        | 0.0.1 |
-| **`Itf`**        | <code>'ITF'</code>         | ITF (Interleaved 2 of 5) barcode.                                                     | 0.0.1 |
-| **`Pdf417`**     | <code>'PDF_417'</code>     | PDF417 barcode.                                                                       | 0.0.1 |
-| **`QrCode`**     | <code>'QR_CODE'</code>     | QR code.                                                                              | 0.0.1 |
-| **`UpcA`**       | <code>'UPC_A'</code>       | UPC-A barcode.                                                                        | 0.0.1 |
-| **`UpcE`**       | <code>'UPC_E'</code>       | UPC-E barcode.                                                                        | 0.0.1 |
+| Members          | Value                      | Description                       | Since |
+| ---------------- | -------------------------- | --------------------------------- | ----- |
+| **`Aztec`**      | <code>'AZTEC'</code>       | Aztec barcode.                    | 0.0.1 |
+| **`Codabar`**    | <code>'CODABAR'</code>     | Codabar barcode.                  | 0.0.1 |
+| **`Code128`**    | <code>'CODE_128'</code>    | Code 128 barcode.                 | 0.0.1 |
+| **`Code39`**     | <code>'CODE_39'</code>     | Code 39 barcode.                  | 0.0.1 |
+| **`Code93`**     | <code>'CODE_93'</code>     | Code 93 barcode.                  | 0.0.1 |
+| **`DataMatrix`** | <code>'DATA_MATRIX'</code> | Data Matrix barcode.              | 0.0.1 |
+| **`Ean13`**      | <code>'EAN_13'</code>      | EAN-13 barcode.                   | 0.0.1 |
+| **`Ean8`**       | <code>'EAN_8'</code>       | EAN-8 barcode.                    | 0.0.1 |
+| **`Itf`**        | <code>'ITF'</code>         | ITF (Interleaved 2 of 5) barcode. | 0.0.1 |
+| **`Pdf417`**     | <code>'PDF_417'</code>     | PDF417 barcode.                   | 0.0.1 |
+| **`QrCode`**     | <code>'QR_CODE'</code>     | QR code.                          | 0.0.1 |
+| **`UpcA`**       | <code>'UPC_A'</code>       | UPC-A barcode.                    | 0.0.1 |
+| **`UpcE`**       | <code>'UPC_E'</code>       | UPC-E barcode.                    | 0.0.1 |
 
 
 #### PreviewPlacement
@@ -925,7 +925,7 @@ Remove all listeners for this plugin.
 | Format        | Android | iOS | Web ¹ |
 | ------------- | ------- | --- | ----- |
 | `AZTEC`       | ✅       | ✅   | ✅     |
-| `CODABAR`     | ✅       | ✅ ² | ✅     |
+| `CODABAR`     | ✅       | ✅   | ✅     |
 | `CODE_39`     | ✅       | ✅   | ✅     |
 | `CODE_93`     | ✅       | ✅   | ✅     |
 | `CODE_128`    | ✅       | ✅   | ✅     |
@@ -935,14 +935,12 @@ Remove all listeners for this plugin.
 | `ITF`         | ✅       | ✅   | ✅     |
 | `PDF_417`     | ✅       | ✅   | ✅     |
 | `QR_CODE`     | ✅       | ✅   | ✅     |
-| `UPC_A`       | ✅       | ✅ ³ | ✅     |
+| `UPC_A`       | ✅       | ✅ ² | ✅     |
 | `UPC_E`       | ✅       | ✅   | ✅     |
 
 ¹ On the web, the supported formats depend on the browser (or the polyfill).
 
-² Camera scanning of Codabar barcodes requires iOS 15.4+. Reading Codabar barcodes from images works on all supported iOS versions.
-
-³ Apple's frameworks report UPC-A barcodes as EAN-13 barcodes with a leading `0`. The plugin normalizes them to `UPC_A` (unless you explicitly request only `EAN_13`), so the behavior is consistent across platforms.
+² Apple's frameworks report UPC-A barcodes as EAN-13 barcodes with a leading `0`. The plugin normalizes them to `UPC_A` (unless you explicitly request only `EAN_13`), so the behavior is consistent across platforms.
 
 ## Migration from ML Kit Barcode Scanning
 
@@ -988,11 +986,11 @@ No. The `scan(...)` method as well as torch and zoom control are not available o
 
 ### Why is the `bytes` property always `null` on iOS and Web?
 
-Apple's AVFoundation and the web `BarcodeDetector` API only expose the string value of a barcode. The raw bytes are only available on Android.
+On iOS and the web, the plugin reads only the string value of a barcode. The raw bytes are only available on Android.
 
 ### Does scanning work offline?
 
-Yes. On Android, the plugin uses the bundled ML Kit model. On iOS, it uses the built-in AVFoundation framework. No network connection or Google Play services module download is required.
+Yes. On Android, the plugin uses the bundled ML Kit model. On iOS, it uses the built-in Vision framework. No network connection or Google Play services module download is required.
 
 ### Can I use this plugin with Ionic, React, Vue or Angular?
 
