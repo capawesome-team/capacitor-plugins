@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import type {
@@ -91,7 +92,7 @@ export class PhotoManipulatorWeb
       if (!context) {
         throw new CapacitorException(
           PhotoManipulatorWeb.errorTransformFailed,
-          undefined,
+          ErrorCode.TransformFailed as unknown as ExceptionCode,
           { code: ErrorCode.TransformFailed },
         );
       }
@@ -133,7 +134,7 @@ export class PhotoManipulatorWeb
     } catch {
       throw new CapacitorException(
         PhotoManipulatorWeb.errorUnsupportedFormat,
-        undefined,
+        ErrorCode.UnsupportedFormat as unknown as ExceptionCode,
         { code: ErrorCode.UnsupportedFormat },
       );
     }
@@ -151,14 +152,14 @@ export class PhotoManipulatorWeb
     if (!blob) {
       throw new CapacitorException(
         PhotoManipulatorWeb.errorTransformFailed,
-        undefined,
+        ErrorCode.TransformFailed as unknown as ExceptionCode,
         { code: ErrorCode.TransformFailed },
       );
     }
     if (blob.type !== mimeType) {
       throw new CapacitorException(
         PhotoManipulatorWeb.errorUnsupportedFormat,
-        undefined,
+        ErrorCode.UnsupportedFormat as unknown as ExceptionCode,
         { code: ErrorCode.UnsupportedFormat },
       );
     }
@@ -172,14 +173,14 @@ export class PhotoManipulatorWeb
     } catch {
       throw new CapacitorException(
         PhotoManipulatorWeb.errorFileNotFound,
-        undefined,
+        ErrorCode.FileNotFound as unknown as ExceptionCode,
         { code: ErrorCode.FileNotFound },
       );
     }
     if (!response.ok) {
       throw new CapacitorException(
         PhotoManipulatorWeb.errorFileNotFound,
-        undefined,
+        ErrorCode.FileNotFound as unknown as ExceptionCode,
         { code: ErrorCode.FileNotFound },
       );
     }

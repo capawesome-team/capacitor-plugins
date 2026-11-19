@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 import { Crisp as CrispSdk, EventsColors } from 'crisp-sdk-web';
 
@@ -175,9 +176,13 @@ export class CrispWeb extends WebPlugin implements CrispPlugin {
 
   private throwIfNotConfigured(): void {
     if (!this.configured) {
-      throw new CapacitorException(CrispWeb.errorNotConfigured, undefined, {
-        code: ErrorCode.NotConfigured,
-      });
+      throw new CapacitorException(
+        CrispWeb.errorNotConfigured,
+        ErrorCode.NotConfigured as unknown as ExceptionCode,
+        {
+          code: ErrorCode.NotConfigured,
+        },
+      );
     }
   }
 }

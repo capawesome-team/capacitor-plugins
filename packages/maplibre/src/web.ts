@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 import type * as MapLibreGl from 'maplibre-gl';
 
@@ -677,7 +678,7 @@ export class MapLibreWeb extends WebPlugin implements MapLibrePlugin {
   ): CapacitorException {
     return new CapacitorException(
       message,
-      undefined,
+      code as unknown as ExceptionCode | undefined,
       code === undefined ? undefined : { code },
     );
   }

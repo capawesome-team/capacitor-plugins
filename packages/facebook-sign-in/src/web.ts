@@ -1,3 +1,4 @@
+import type { ExceptionCode } from '@capacitor/core';
 import { CapacitorException, WebPlugin } from '@capacitor/core';
 
 import type {
@@ -73,7 +74,7 @@ export class FacebookSignInWeb
     if (!authResponse) {
       throw new CapacitorException(
         FacebookSignInWeb.errorSignInCanceled,
-        undefined,
+        ErrorCode.SignInCanceled as unknown as ExceptionCode,
         {
           code: ErrorCode.SignInCanceled,
         },
