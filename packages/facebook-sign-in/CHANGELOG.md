@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- [`abc6977378889d9c940ee6f28ace0c0ffd0d61b9`](https://github.com/capawesome-team/capacitor-plugins/commit/abc6977378889d9c940ee6f28ace0c0ffd0d61b9) ([#1224](https://github.com/capawesome-team/capacitor-plugins/pull/1224)): fix: set the error code on `error.code`, not only on `error.data.code`
+
 ## 0.1.1
 
 ### Patch Changes
