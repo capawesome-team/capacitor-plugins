@@ -7,6 +7,8 @@ import Capacitor
  */
 @objc(LiveUpdatePlugin)
 public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
+    public static let errorDownloadFailed = "Bundle could not be downloaded."
+    public static let errorHttpTimeout = "Request timed out."
     public static let tag = "LiveUpdate"
     public static let version = "8.8.2"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
@@ -422,16 +424,10 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", LiveUpdatePlugin.tag, "] ", error)
-        var message = error.localizedDescription
-        if let urlError = error as? URLError {
-            if urlError.code == .timedOut {
-                message = CustomError.httpTimeout.localizedDescription
-            }
-        }
         if let error = error as? CustomError {
-            call.reject(message, error.code)
+            call.reject(error.localizedDescription, error.code)
         } else {
-            call.reject(message)
+            call.reject(error.localizedDescription)
         }
     }
 

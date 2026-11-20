@@ -17,6 +17,7 @@ import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
@@ -51,6 +52,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Callback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback;
@@ -179,8 +181,7 @@ public class LiveUpdate {
         String bundleId = options.getBundleId();
 
         if (!hasBundleById(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-            callback.error(exception);
+            callback.error(CustomExceptions.BUNDLE_NOT_FOUND);
             return;
         }
         deleteBundleById(bundleId);
@@ -248,8 +249,10 @@ public class LiveUpdate {
                             } else if (response.code() == 401) {
                                 callback.error(new Exception("Unauthorized. Channel Discovery may not be enabled for this app."));
                             } else {
-                                callback.error(new Exception(responseBodyString));
+                                callback.error(CustomExceptions.requestFailed(responseBodyString));
                             }
+                        } catch (IOException e) {
+                            handleRequestFailure(e, callback);
                         } catch (Exception e) {
                             callback.error(e);
                         }
@@ -257,7 +260,7 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        callback.error(exception);
+                        handleRequestFailure(exception, callback);
                     }
                 }
             );
@@ -511,8 +514,7 @@ public class LiveUpdate {
             if (hasBundleById(bundleId)) {
                 setNextBundleById(bundleId);
             } else {
-                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-                callback.error(exception);
+                callback.error(CustomExceptions.BUNDLE_NOT_FOUND);
                 return;
             }
         }
@@ -521,8 +523,7 @@ public class LiveUpdate {
 
     public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) {
         if (syncInProgress) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_SYNC_IN_PROGRESS);
-            callback.error(exception);
+            callback.error(CustomExceptions.SYNC_IN_PROGRESS);
             return;
         }
         syncInProgress = true;
@@ -839,12 +840,12 @@ public class LiveUpdate {
                             completionCallback.success();
                         } else {
                             String errorMessage = response.body().string();
-                            Exception exception = new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
+                            CustomException exception = CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
                             Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
                             completionCallback.error(exception);
                         }
                     } catch (IOException e) {
-                        handleDownloadFailure(e, completionCallback);
+                        handleRequestFailure(e, completionCallback);
                     } catch (Exception e) {
                         completionCallback.error(e);
                     }
@@ -852,7 +853,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    handleDownloadFailure(exception, completionCallback);
+                    handleRequestFailure(exception, completionCallback);
                 }
             }
         );
@@ -1142,6 +1143,8 @@ public class LiveUpdate {
                             } else {
                                 callback.success(null);
                             }
+                        } catch (IOException e) {
+                            handleRequestFailure(e, callback);
                         } catch (Exception e) {
                             callback.error(e);
                         }
@@ -1149,7 +1152,7 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        callback.error(exception);
+                        handleRequestFailure(exception, callback);
                     }
                 }
             );
@@ -1287,12 +1290,14 @@ public class LiveUpdate {
         return getPackageInfo().versionName;
     }
 
-    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+    private void handleRequestFailure(@NonNull Exception exception, @NonNull Callback callback) {
         Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
         if (exception instanceof SocketTimeoutException) {
-            callback.error(exception);
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+        } else if (exception.getMessage() == null) {
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_UNKNOWN_ERROR));
         } else {
-            callback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+            callback.error(CustomExceptions.requestFailed(exception.getMessage()));
         }
     }
 
