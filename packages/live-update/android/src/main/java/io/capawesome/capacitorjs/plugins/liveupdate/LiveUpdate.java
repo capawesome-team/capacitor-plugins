@@ -252,7 +252,7 @@ public class LiveUpdate {
                                 callback.error(CustomExceptions.requestFailed(responseBodyString));
                             }
                         } catch (IOException e) {
-                            handleFetchFailure(e, callback);
+                            handleRequestFailure(e, callback);
                         } catch (Exception e) {
                             callback.error(e);
                         }
@@ -260,7 +260,7 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        handleFetchFailure(exception, callback);
+                        handleRequestFailure(exception, callback);
                     }
                 }
             );
@@ -845,7 +845,7 @@ public class LiveUpdate {
                             completionCallback.error(exception);
                         }
                     } catch (IOException e) {
-                        handleDownloadFailure(e, completionCallback);
+                        handleRequestFailure(e, completionCallback);
                     } catch (Exception e) {
                         completionCallback.error(e);
                     }
@@ -853,7 +853,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    handleDownloadFailure(exception, completionCallback);
+                    handleRequestFailure(exception, completionCallback);
                 }
             }
         );
@@ -1144,7 +1144,7 @@ public class LiveUpdate {
                                 callback.success(null);
                             }
                         } catch (IOException e) {
-                            handleFetchFailure(e, callback);
+                            handleRequestFailure(e, callback);
                         } catch (Exception e) {
                             callback.error(e);
                         }
@@ -1152,7 +1152,7 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        handleFetchFailure(exception, callback);
+                        handleRequestFailure(exception, callback);
                     }
                 }
             );
@@ -1290,19 +1290,12 @@ public class LiveUpdate {
         return getPackageInfo().versionName;
     }
 
-    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+    private void handleRequestFailure(@NonNull Exception exception, @NonNull Callback callback) {
         Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
         if (exception instanceof SocketTimeoutException) {
             callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
-        } else {
-            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
-        }
-    }
-
-    private void handleFetchFailure(@NonNull Exception exception, @NonNull Callback callback) {
-        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-        if (exception instanceof SocketTimeoutException) {
-            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+        } else if (exception.getMessage() == null) {
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_UNKNOWN_ERROR));
         } else {
             callback.error(CustomExceptions.requestFailed(exception.getMessage()));
         }

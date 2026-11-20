@@ -126,10 +126,7 @@ import CommonCrypto
                 throw CustomError.channelDiscoveryNotEnabled
             }
             if case .sessionTaskFailed(let taskError) = error {
-                if let urlError = taskError as? URLError, urlError.code == .timedOut {
-                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
-                }
-                throw CustomError.requestFailed(message: error.localizedDescription)
+                try handleRequestFailure(taskError)
             }
             if case .responseValidationFailed = error {
                 throw CustomError.requestFailed(message: error.localizedDescription)
@@ -521,10 +518,8 @@ import CommonCrypto
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
-                }
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
             }
             throw CustomError.requestFailed(message: LiveUpdatePlugin.errorDownloadFailed)
         }
@@ -662,10 +657,7 @@ import CommonCrypto
             }
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch latest bundle: \(error)")
             if case .sessionTaskFailed(let taskError) = error {
-                if let urlError = taskError as? URLError, urlError.code == .timedOut {
-                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
-                }
-                throw CustomError.requestFailed(message: taskError.localizedDescription)
+                try handleRequestFailure(taskError)
             }
             // The server sent an invalid body
             throw error.underlyingError ?? error
@@ -793,6 +785,13 @@ import CommonCrypto
             return ""
         }
         return appVersionName
+    }
+
+    private func handleRequestFailure(_ error: Error) throws -> Never {
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
+        }
+        throw CustomError.requestFailed(message: error.localizedDescription)
     }
 
     private func hasBundleById(_ bundleId: String) -> Bool {
