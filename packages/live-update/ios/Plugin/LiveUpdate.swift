@@ -121,13 +121,15 @@ import CommonCrypto
         let url = try urlComponents.asURL()
         let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
         if let error = response.error {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch channels: \(error)")
             if response.response?.statusCode == 401 {
                 throw CustomError.channelDiscoveryNotEnabled
             }
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
+            }
+            if case .responseValidationFailed = error {
+                throw CustomError.requestFailed(message: error.localizedDescription)
             }
             throw error
         }
@@ -516,12 +518,10 @@ import CommonCrypto
         let result = try await httpClient.download(url: urlComponents.asURL(), destination: destination, callback: callback)
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
             }
-            throw CustomError.downloadFailed
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorDownloadFailed)
         }
         guard let response = result.response else {
             throw CustomError.unknown
@@ -655,7 +655,11 @@ import CommonCrypto
             if let statusCode = response.response?.statusCode, !(200..<300).contains(statusCode) {
                 return nil
             }
-            // The server could not be reached (e.g. offline or timed out) or sent an invalid body
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch latest bundle: \(error)")
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
+            }
+            // The server sent an invalid body
             throw error.underlyingError ?? error
         }
         if let value = response.value {
@@ -781,6 +785,13 @@ import CommonCrypto
             return ""
         }
         return appVersionName
+    }
+
+    private func handleRequestFailure(_ error: Error) throws -> Never {
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
+        }
+        throw CustomError.requestFailed(message: error.localizedDescription)
     }
 
     private func hasBundleById(_ bundleId: String) -> Bool {

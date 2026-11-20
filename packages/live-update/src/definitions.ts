@@ -1075,4 +1075,24 @@ export enum ErrorCode {
    * @since 8.9.0
    */
   BundleAlreadyExists = 'BUNDLE_ALREADY_EXISTS',
+  /**
+   * No bundle with the given identifier exists on the device.
+   *
+   * @since 8.9.0
+   */
+  BundleNotFound = 'BUNDLE_NOT_FOUND',
+  /**
+   * A request to the server failed. This happens if the device has no connection, the request timed out or a bundle could not be downloaded.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.9.0
+   */
+  RequestFailed = 'REQUEST_FAILED',
+  /**
+   * A sync is already in progress.
+   *
+   * @since 8.9.0
+   */
+  SyncInProgress = 'SYNC_IN_PROGRESS',
 }
