@@ -53,6 +53,55 @@ import UserNotifications
     }
 
     @objc public func set(count: Int, completion: @escaping (Error?) -> Void) {
+        requestPermissionsIfNeeded(count: count, completion: { [weak self] error in
+            if let error = error {
+                completion(error)
+                return
+            }
+            self?.setBadgeCount(count, completion: completion)
+        })
+    }
+
+    @objc public func increase(completion: @escaping (Error?) -> Void) {
+        set(count: get() + 1, completion: completion)
+    }
+
+    @objc public func decrease(completion: @escaping (Error?) -> Void) {
+        let count = get()
+        if count < 1 {
+            completion(nil)
+            return
+        }
+        set(count: count - 1, completion: completion)
+    }
+
+    @objc public func clear(completion: @escaping (Error?) -> Void) {
+        set(count: 0, completion: completion)
+    }
+
+    @objc public func isSupported() -> Bool {
+        return true
+    }
+
+    // Clearing the badge works without permission, so only prompt when a badge will be shown
+    private func requestPermissionsIfNeeded(count: Int, completion: @escaping (Error?) -> Void) {
+        guard count > 0 else {
+            completion(nil)
+            return
+        }
+        requestPermissions(completion: { _, error in
+            completion(error)
+        })
+    }
+
+    @objc private func restore() {
+        let count = get()
+        if count > 0 {
+            setBadgeCount(count, completion: { _ in })
+        }
+    }
+
+    private func setBadgeCount(_ count: Int, completion: @escaping (Error?) -> Void) {
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else {
                 return
@@ -72,35 +121,6 @@ import UserNotifications
                 strongSelf.defaults.set(count, forKey: strongSelf.storageKey)
                 completion(nil)
             }
-        }
-    }
-
-    @objc public func increase(completion: @escaping (Error?) -> Void) {
-        let count = get()
-        set(count: count + 1, completion: { error in completion(error) })
-    }
-
-    @objc public func decrease(completion: @escaping (Error?) -> Void) {
-        let count = get()
-        if count < 1 {
-            completion(nil)
-            return
-        }
-        set(count: count - 1, completion: { error in completion(error) })
-    }
-
-    @objc public func clear(completion: @escaping (Error?) -> Void) {
-        set(count: 0, completion: { error in completion(error) })
-    }
-
-    @objc public func isSupported() -> Bool {
-        return true
-    }
-
-    @objc private func restore() {
-        let count = get()
-        if count > 0 {
-            set(count: count, completion: { _ in })
         }
     }
 }
