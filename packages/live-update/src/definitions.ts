@@ -391,6 +391,9 @@ export interface LiveUpdatePlugin {
   /**
    * Listen for the download progress of a bundle.
    *
+   * On Android and iOS, the event is only sent if there is something to download and its size is known.
+   * For a zip bundle, the server must report the size of the file.
+   *
    * Only available on Android, iOS and Electron.
    *
    * @since 7.0.0

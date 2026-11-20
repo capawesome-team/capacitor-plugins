@@ -879,9 +879,6 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         if (filesToDownload.isEmpty()) {
-            if (progressCallback != null) {
-                progressCallback.onProgress(0, 0);
-            }
             completionCallback.success();
             return;
         }
@@ -1344,6 +1341,10 @@ public class LiveUpdate {
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
         if (plugin == null) {
+            return;
+        }
+        // The progress cannot be computed without a positive total
+        if (event.getTotalBytes() <= 0) {
             return;
         }
         plugin.notifyDownloadBundleProgressListeners(event);
