@@ -11,6 +11,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
@@ -45,7 +46,6 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_DIRECTORY_NOT_FOUND = "Bundle directory could not be resolved.";
-    public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
     public static final String ERROR_BUNDLE_MOVE_FAILED = "Bundle could not be moved.";
@@ -740,6 +740,7 @@ public class LiveUpdatePlugin extends Plugin {
             message = exception.getMessage();
         }
         Logger.error(TAG, message, exception);
-        getBridge().executeOnMainThread(() -> call.reject(message));
+        String code = exception instanceof CustomException ? ((CustomException) exception).getCode() : null;
+        getBridge().executeOnMainThread(() -> call.reject(message, code));
     }
 }

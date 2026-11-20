@@ -17,6 +17,7 @@ import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.GetChannelsResponseItem;
@@ -196,8 +197,7 @@ public class LiveUpdate {
 
         // Check if the bundle already exists
         if (hasBundleById(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_EXISTS);
-            callback.error(exception);
+            callback.error(CustomExceptions.BUNDLE_ALREADY_EXISTS);
             return;
         }
 
