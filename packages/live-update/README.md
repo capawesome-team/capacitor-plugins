@@ -1335,9 +1335,10 @@ Remove all listeners for this plugin.
 
 #### SyncResult
 
-| Prop               | Type                        | Description                                                                                                | Since |
-| ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+| Prop                   | Type                                    | Description                                                                                                                                                                   | Since |
+| ---------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the next bundle. Only set if `nextBundleId` is not `null` and the bundle has custom properties. Only available on Android and iOS. | 8.9.0 |
+| **`nextBundleId`**     | <code>string \| null</code>             | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                                                    | 5.0.0 |
 
 
 #### SyncOptions
