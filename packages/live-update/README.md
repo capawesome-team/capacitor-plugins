@@ -359,10 +359,18 @@ const isNewBundleAvailable = async () => {
 Download a self-hosted bundle from any URL, without any Capawesome Cloud dependency:
 
 ```typescript
-import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { ErrorCode, LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const downloadBundle = async () => {
-  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  try {
+    await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  } catch (error) {
+    if (error.code === ErrorCode.BundleAlreadyExists) {
+      console.log('The bundle is already on the device.');
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -577,6 +585,9 @@ downloadBundle(options: DownloadBundleOptions) => Promise<void>
 ```
 
 Download a bundle.
+
+The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
+is already on the device. Use `getBundles()` to check this first.
 
 Only available on Android, iOS and Electron.
 
@@ -1338,9 +1349,10 @@ Remove all listeners for this plugin.
 
 #### SyncResult
 
-| Prop               | Type                        | Description                                                                                                | Since |
-| ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+| Prop                   | Type                                    | Description                                                                                                                                                                   | Since |
+| ---------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the next bundle. Only set if `nextBundleId` is not `null` and the bundle has custom properties. Only available on Android and iOS. | 8.9.0 |
+| **`nextBundleId`**     | <code>string \| null</code>             | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                                                    | 5.0.0 |
 
 
 #### SyncOptions

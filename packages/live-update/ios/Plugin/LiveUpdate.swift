@@ -345,28 +345,28 @@ import CommonCrypto
         let fetchLatestBundleOptions = FetchLatestBundleOptions(channel: channel)
         guard let response = try await fetchLatestBundle(fetchLatestBundleOptions) else {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
-            return SyncResult(nextBundleId: nil)
+            return SyncResult(customProperties: nil, nextBundleId: nil)
         }
         let artifactType = response.artifactType
         let latestBundleId = response.bundleId
         let checksum = response.checksum
+        let customProperties = response.customProperties
         let signature = response.signature
         let downloadUrl = response.url
         // Check if the bundle is blocked
         if isBlockedBundleId(latestBundleId) {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
-            return SyncResult(nextBundleId: nil)
+            return SyncResult(customProperties: nil, nextBundleId: nil)
         }
         // Check if bundle already exists
         if hasBundleById(latestBundleId) {
-            var nextBundleId: String?
             let currentBundleId = self.getCurrentBundleId()
-            if latestBundleId != currentBundleId {
-                // Set the next bundle
-                setNextBundleById(latestBundleId)
-                nextBundleId = latestBundleId
+            if latestBundleId == currentBundleId {
+                return SyncResult(customProperties: nil, nextBundleId: nil)
             }
-            return SyncResult(nextBundleId: nextBundleId)
+            // Set the next bundle
+            setNextBundleById(latestBundleId)
+            return SyncResult(customProperties: customProperties, nextBundleId: latestBundleId)
         }
         // Download the bundle
         if artifactType == .manifest {
@@ -376,7 +376,7 @@ import CommonCrypto
         }
         // Set the next bundle
         setNextBundleById(latestBundleId)
-        return SyncResult(nextBundleId: latestBundleId)
+        return SyncResult(customProperties: customProperties, nextBundleId: latestBundleId)
     }
 
     private func addBundle(bundleId: String, directory: URL) throws {

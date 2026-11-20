@@ -540,34 +540,37 @@ public class LiveUpdate {
                         if (response == null) {
                             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
                             syncInProgress = false;
-                            SyncResult syncResult = new SyncResult(null);
+                            SyncResult syncResult = new SyncResult(null, null);
                             callback.success(syncResult);
                             return;
                         }
                         ArtifactType artifactType = response.getArtifactType();
                         String latestBundleId = response.getBundleId();
                         String checksum = response.getChecksum();
+                        JSONObject customProperties = response.getCustomProperties();
                         String signature = response.getSignature();
                         String url = response.getUrl();
                         // Check if the bundle is blocked
                         if (isBlockedBundleId(latestBundleId)) {
                             Logger.warn(LiveUpdatePlugin.TAG, "Bundle is blocked and will not be downloaded.");
                             syncInProgress = false;
-                            SyncResult syncResult = new SyncResult(null);
+                            SyncResult syncResult = new SyncResult(null, null);
                             callback.success(syncResult);
                             return;
                         }
                         // Check if the bundle already exists
                         if (hasBundleById(latestBundleId)) {
-                            String nextBundleId = null;
                             String currentBundleId = getCurrentBundleId();
-                            if (!latestBundleId.equals(currentBundleId)) {
-                                // Set the next bundle
-                                setNextBundleById(latestBundleId);
-                                nextBundleId = latestBundleId;
+                            if (latestBundleId.equals(currentBundleId)) {
+                                syncInProgress = false;
+                                SyncResult syncResult = new SyncResult(null, null);
+                                callback.success(syncResult);
+                                return;
                             }
+                            // Set the next bundle
+                            setNextBundleById(latestBundleId);
                             syncInProgress = false;
-                            SyncResult syncResult = new SyncResult(nextBundleId);
+                            SyncResult syncResult = new SyncResult(customProperties, latestBundleId);
                             callback.success(syncResult);
                             return;
                         }
@@ -580,7 +583,7 @@ public class LiveUpdate {
                                     // Set the next bundle
                                     setNextBundleById(latestBundleId);
                                     syncInProgress = false;
-                                    SyncResult syncResult = new SyncResult(latestBundleId);
+                                    SyncResult syncResult = new SyncResult(customProperties, latestBundleId);
                                     callback.success(syncResult);
                                 } catch (Exception e) {
                                     syncInProgress = false;
