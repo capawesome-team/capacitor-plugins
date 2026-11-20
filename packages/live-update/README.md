@@ -359,10 +359,18 @@ const isNewBundleAvailable = async () => {
 Download a self-hosted bundle from any URL, without any Capawesome Cloud dependency:
 
 ```typescript
-import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { ErrorCode, LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const downloadBundle = async () => {
-  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  try {
+    await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  } catch (error) {
+    if (error.code === ErrorCode.BundleAlreadyExists) {
+      console.log('The bundle is already on the device.');
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -578,7 +586,7 @@ downloadBundle(options: DownloadBundleOptions) => Promise<void>
 
 Download a bundle.
 
-The call fails with `bundle already exists.` if a bundle with the same identifier
+The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
 is already on the device. Use `getBundles()` to check this first.
 
 Only available on Android, iOS and Electron.

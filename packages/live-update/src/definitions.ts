@@ -133,7 +133,7 @@ export interface LiveUpdatePlugin {
   /**
    * Download a bundle.
    *
-   * The call fails with `bundle already exists.` if a bundle with the same identifier
+   * The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
    * is already on the device. Use `getBundles()` to check this first.
    *
    * Only available on Android, iOS and Electron.
