@@ -8,14 +8,21 @@ import org.json.JSONObject;
 public class SyncResult implements Result {
 
     @Nullable
+    private final JSONObject customProperties;
+
+    @Nullable
     private final String nextBundleId;
 
-    public SyncResult(@Nullable String nextBundleId) {
+    public SyncResult(@Nullable JSONObject customProperties, @Nullable String nextBundleId) {
+        this.customProperties = customProperties;
         this.nextBundleId = nextBundleId;
     }
 
     public JSObject toJSObject() {
         JSObject result = new JSObject();
+        if (customProperties != null) {
+            result.put("customProperties", customProperties);
+        }
         result.put("nextBundleId", nextBundleId == null ? JSONObject.NULL : nextBundleId);
         return result;
     }
