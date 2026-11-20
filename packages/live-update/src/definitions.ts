@@ -133,6 +133,9 @@ export interface LiveUpdatePlugin {
   /**
    * Download a bundle.
    *
+   * The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
+   * is already on the device. Use `getBundles()` to check this first.
+   *
    * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
@@ -968,6 +971,17 @@ export interface SyncOptions {
  * @since 5.0.0
  */
 export interface SyncResult {
+  /**
+   * Custom properties that are associated with the next bundle.
+   *
+   * Only set if `nextBundleId` is not `null` and the bundle has custom properties.
+   *
+   * Only available on Android and iOS.
+   *
+   * @since 8.9.0
+   * @example { "key": "value" }
+   */
+  customProperties?: { [key: string]: string };
   /**
    * The identifier of the next bundle to use.
    *
