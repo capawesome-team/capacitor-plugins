@@ -163,7 +163,7 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_BUNDLE_ID_MISSING));
                 return;
             }
 
@@ -192,14 +192,14 @@ public class LiveUpdatePlugin extends Plugin {
             String artifactType = call.getString("artifactType", "zip");
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_BUNDLE_ID_MISSING));
                 return;
             }
             String checksum = call.getString("checksum");
             String signature = call.getString("signature");
             String url = call.getString("url");
             if (url == null) {
-                call.reject(ERROR_URL_MISSING);
+                rejectCall(call, new Exception(ERROR_URL_MISSING));
                 return;
             }
 
@@ -615,7 +615,7 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             String customId = call.getString("customId");
             if (customId == null) {
-                call.reject(ERROR_CUSTOM_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_CUSTOM_ID_MISSING));
                 return;
             }
 
@@ -721,21 +721,25 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     private void resolveCall(@NonNull PluginCall call) {
-        call.resolve();
+        // After a reload, Capacitor's MessageHandler.java stores the reply channel of the new page only after it hands over the first call.
+        // A result sent from a later main thread task always uses the new channel. Remove once ionic-team/capacitor#8383 is released.
+        getBridge().executeOnMainThread(() -> call.resolve());
     }
 
     private void resolveCall(@NonNull PluginCall call, @NonNull JSObject result) {
-        call.resolve(result);
+        getBridge().executeOnMainThread(() -> call.resolve(result));
     }
 
     private void rejectCall(PluginCall call, Exception exception) {
-        String message = exception.getMessage();
+        String message;
         if (exception instanceof java.net.SocketTimeoutException) {
             message = ERROR_HTTP_TIMEOUT;
+        } else if (exception.getMessage() == null) {
+            message = ERROR_UNKNOWN_ERROR;
         } else {
-            message = message == null ? ERROR_UNKNOWN_ERROR : message;
+            message = exception.getMessage();
         }
         Logger.error(TAG, message, exception);
-        call.reject(message);
+        getBridge().executeOnMainThread(() -> call.reject(message));
     }
 }
