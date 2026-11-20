@@ -8,9 +8,13 @@ public class CustomExceptions {
         "INTERACTION_CANCELED",
         "The user canceled the sign-in interaction."
     );
+    public static final CustomException MSAL_CONFIGURATION_MISSING = new CustomException(
+        null,
+        "The res/raw/auth_config.json file was not found."
+    );
     public static final CustomException MSAL_NOT_INITIALIZED = new CustomException(
         null,
-        "MSAL is not initialized. Check that the res/raw/auth_config.json file exists and that the plugin is set up correctly."
+        "MSAL is not initialized. Check that the plugin is set up correctly."
     );
     public static final CustomException NOT_ENROLLED = new CustomException(
         "NOT_ENROLLED",
