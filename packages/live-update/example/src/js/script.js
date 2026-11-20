@@ -1,4 +1,11 @@
 import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { defineCustomElements } from '@ionic/core/loader';
+import '@ionic/core/css/ionic.bundle.css';
+import { addIcons } from 'ionicons';
+import { chevronExpandOutline } from 'ionicons/icons';
+
+void defineCustomElements();
+addIcons({ chevronExpandOutline });
 
 const showToast = async message => {
   const toast = document.createElement('ion-toast');
