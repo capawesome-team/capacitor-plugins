@@ -2,6 +2,9 @@ import Foundation
 import Capacitor
 
 @objc public class SetTabsOptions: NSObject {
+    /// `UITabBarController` groups further tabs in a `More` tab, which the plugin does not support.
+    private static let maximumTabCount = 5
+
     let selectedTabId: String?
     let tabs: [Tab]
 
@@ -24,6 +27,9 @@ import Capacitor
         }
         if objects.isEmpty {
             throw CustomError.tabsEmpty
+        }
+        if objects.count > SetTabsOptions.maximumTabCount {
+            throw CustomError.tabsTooMany
         }
         let tabs = try objects.map { try Tab($0) }
         if Set(tabs.map { $0.id }).count != tabs.count {

@@ -17,8 +17,7 @@
 		7AB000000000000000000002 /* TabBarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000001 /* TabBarHelper.swift */; };
 		7AB000000000000000000004 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000003 /* Tab.swift */; };
 		7AB000000000000000000006 /* TabBarConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000005 /* TabBarConfig.swift */; };
-		7AB000000000000000000008 /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000007 /* TabBarView.swift */; };
-		7AB00000000000000000000A /* WindowObserverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000009 /* WindowObserverView.swift */; };
+		7AB000000000000000000008 /* TabContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB000000000000000000007 /* TabContentViewController.swift */; };
 		7AB00000000000000000000C /* TabSelectedEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB00000000000000000000B /* TabSelectedEvent.swift */; };
 		7AB00000000000000000000E /* SelectTabByIdOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB00000000000000000000D /* SelectTabByIdOptions.swift */; };
 		7AB000000000000000000010 /* SetColorsOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB00000000000000000000F /* SetColorsOptions.swift */; };
@@ -55,8 +54,7 @@
 		7AB000000000000000000001 /* TabBarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarHelper.swift; sourceTree = "<group>"; };
 		7AB000000000000000000003 /* Tab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		7AB000000000000000000005 /* TabBarConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarConfig.swift; sourceTree = "<group>"; };
-		7AB000000000000000000007 /* TabBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
-		7AB000000000000000000009 /* WindowObserverView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowObserverView.swift; sourceTree = "<group>"; };
+		7AB000000000000000000007 /* TabContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabContentViewController.swift; sourceTree = "<group>"; };
 		7AB00000000000000000000B /* TabSelectedEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabSelectedEvent.swift; sourceTree = "<group>"; };
 		7AB00000000000000000000D /* SelectTabByIdOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectTabByIdOptions.swift; sourceTree = "<group>"; };
 		7AB00000000000000000000F /* SetColorsOptions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetColorsOptions.swift; sourceTree = "<group>"; };
@@ -158,8 +156,7 @@
 				7AB000000000000000000019 /* Options */,
 				7AB000000000000000000003 /* Tab.swift */,
 				7AB000000000000000000005 /* TabBarConfig.swift */,
-				7AB000000000000000000007 /* TabBarView.swift */,
-				7AB000000000000000000009 /* WindowObserverView.swift */,
+				7AB000000000000000000007 /* TabContentViewController.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -377,8 +374,7 @@
 				7AB000000000000000000002 /* TabBarHelper.swift in Sources */,
 				7AB000000000000000000004 /* Tab.swift in Sources */,
 				7AB000000000000000000006 /* TabBarConfig.swift in Sources */,
-				7AB000000000000000000008 /* TabBarView.swift in Sources */,
-				7AB00000000000000000000A /* WindowObserverView.swift in Sources */,
+				7AB000000000000000000008 /* TabContentViewController.swift in Sources */,
 				7AB00000000000000000000C /* TabSelectedEvent.swift in Sources */,
 				7AB00000000000000000000E /* SelectTabByIdOptions.swift in Sources */,
 				7AB000000000000000000010 /* SetColorsOptions.swift in Sources */,
