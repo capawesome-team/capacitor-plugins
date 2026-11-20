@@ -816,6 +816,10 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
+        // The progress cannot be computed without a positive total
+        guard event.totalBytes > 0 else {
+            return
+        }
         plugin?.notifyDownloadBundleProgressListeners(event)
     }
 

@@ -394,6 +394,9 @@ export interface LiveUpdatePlugin {
   /**
    * Listen for the download progress of a bundle.
    *
+   * On Android and iOS, the event is only sent if there is something to download and its size is known.
+   * For a zip bundle, the server must report the size of the file.
+   *
    * Only available on Android, iOS and Electron.
    *
    * @since 7.0.0
@@ -1050,3 +1053,15 @@ export interface NextBundleSetEvent {
  * @since 7.4.0
  */
 export type ReloadedListener = () => void;
+
+/**
+ * @since 8.9.0
+ */
+export enum ErrorCode {
+  /**
+   * A bundle with the given identifier already exists on the device.
+   *
+   * @since 8.9.0
+   */
+  BundleAlreadyExists = 'BUNDLE_ALREADY_EXISTS',
+}

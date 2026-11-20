@@ -22,6 +22,15 @@ public enum CustomError: Error {
     case syncInProgress
     case unknown
     case urlMissing
+
+    var code: String? {
+        switch self {
+        case .bundleAlreadyExists:
+            return "BUNDLE_ALREADY_EXISTS"
+        default:
+            return nil
+        }
+    }
 }
 
 extension CustomError: LocalizedError {

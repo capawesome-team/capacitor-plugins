@@ -428,7 +428,11 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
                 message = CustomError.httpTimeout.localizedDescription
             }
         }
-        call.reject(message)
+        if let error = error as? CustomError {
+            call.reject(message, error.code)
+        } else {
+            call.reject(message)
+        }
     }
 
     private func resolveCall(_ call: CAPPluginCall) {

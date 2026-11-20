@@ -11,6 +11,7 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.WebViewListener;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.DownloadBundleProgressEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.events.NextBundleSetEvent;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DeleteBundleOptions;
@@ -45,7 +46,6 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String SHARED_PREFERENCES_NAME = "CapawesomeLiveUpdate"; // DO NOT CHANGE
     public static final String ERROR_APP_ID_MISSING = "appId must be configured.";
     public static final String ERROR_BUNDLE_DIRECTORY_NOT_FOUND = "Bundle directory could not be resolved.";
-    public static final String ERROR_BUNDLE_EXISTS = "bundle already exists.";
     public static final String ERROR_BUNDLE_ID_MISSING = "bundleId must be provided.";
     public static final String ERROR_BUNDLE_INDEX_HTML_MISSING = "The bundle does not contain an index.html file.";
     public static final String ERROR_BUNDLE_MOVE_FAILED = "Bundle could not be moved.";
@@ -163,7 +163,7 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_BUNDLE_ID_MISSING));
                 return;
             }
 
@@ -192,14 +192,14 @@ public class LiveUpdatePlugin extends Plugin {
             String artifactType = call.getString("artifactType", "zip");
             String bundleId = call.getString("bundleId");
             if (bundleId == null) {
-                call.reject(ERROR_BUNDLE_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_BUNDLE_ID_MISSING));
                 return;
             }
             String checksum = call.getString("checksum");
             String signature = call.getString("signature");
             String url = call.getString("url");
             if (url == null) {
-                call.reject(ERROR_URL_MISSING);
+                rejectCall(call, new Exception(ERROR_URL_MISSING));
                 return;
             }
 
@@ -615,7 +615,7 @@ public class LiveUpdatePlugin extends Plugin {
         try {
             String customId = call.getString("customId");
             if (customId == null) {
-                call.reject(ERROR_CUSTOM_ID_MISSING);
+                rejectCall(call, new Exception(ERROR_CUSTOM_ID_MISSING));
                 return;
             }
 
@@ -721,21 +721,26 @@ public class LiveUpdatePlugin extends Plugin {
     }
 
     private void resolveCall(@NonNull PluginCall call) {
-        call.resolve();
+        // After a reload, Capacitor's MessageHandler.java stores the reply channel of the new page only after it hands over the first call.
+        // A result sent from a later main thread task always uses the new channel. Remove once ionic-team/capacitor#8383 is released.
+        getBridge().executeOnMainThread(() -> call.resolve());
     }
 
     private void resolveCall(@NonNull PluginCall call, @NonNull JSObject result) {
-        call.resolve(result);
+        getBridge().executeOnMainThread(() -> call.resolve(result));
     }
 
     private void rejectCall(PluginCall call, Exception exception) {
-        String message = exception.getMessage();
+        String message;
         if (exception instanceof java.net.SocketTimeoutException) {
             message = ERROR_HTTP_TIMEOUT;
+        } else if (exception.getMessage() == null) {
+            message = ERROR_UNKNOWN_ERROR;
         } else {
-            message = message == null ? ERROR_UNKNOWN_ERROR : message;
+            message = exception.getMessage();
         }
         Logger.error(TAG, message, exception);
-        call.reject(message);
+        String code = exception instanceof CustomException ? ((CustomException) exception).getCode() : null;
+        getBridge().executeOnMainThread(() -> call.reject(message, code));
     }
 }
