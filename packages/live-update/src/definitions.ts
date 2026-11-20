@@ -133,10 +133,8 @@ export interface LiveUpdatePlugin {
   /**
    * Download a bundle.
    *
-   * On Android and iOS, the call fails with `bundle already exists.` if a bundle
-   * with the same ID is already on the device. This is the case if the app was
-   * closed after the download and before `setNextBundle(...)` was called.
-   * Call `getBundles()` first and skip the download if the bundle is listed.
+   * The call fails with `bundle already exists.` if a bundle with the same identifier
+   * is already on the device. Use `getBundles()` to check this first.
    *
    * Only available on Android, iOS and Electron.
    *
