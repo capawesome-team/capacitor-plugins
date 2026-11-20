@@ -15,6 +15,7 @@ public enum CustomError: Error {
     case customIdMissing
     case downloadFailed
     case downloadUrlMissing
+    case fetchFailed(message: String)
     case httpTimeout
     case pluginNotInitialized
     case signatureMissing
@@ -27,6 +28,12 @@ public enum CustomError: Error {
         switch self {
         case .bundleAlreadyExists:
             return "BUNDLE_ALREADY_EXISTS"
+        case .bundleNotFound:
+            return "BUNDLE_NOT_FOUND"
+        case .downloadFailed, .fetchFailed, .httpTimeout:
+            return "REQUEST_FAILED"
+        case .syncInProgress:
+            return "SYNC_IN_PROGRESS"
         default:
             return nil
         }
@@ -65,6 +72,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Bundle could not be downloaded.", comment: "downloadFailed")
         case .downloadUrlMissing:
             return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
+        case .fetchFailed(let message):
+            return message
         case .httpTimeout:
             return NSLocalizedString("Request timed out.", comment: "httpTimeout")
         case .pluginNotInitialized:

@@ -121,13 +121,18 @@ import CommonCrypto
         let url = try urlComponents.asURL()
         let response = try await self.httpClient.request(url: url, type: [GetChannelsResponseItem].self)
         if let error = response.error {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch channels: \(error)")
             if response.response?.statusCode == 401 {
                 throw CustomError.channelDiscoveryNotEnabled
             }
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
+            if case .sessionTaskFailed(let taskError) = error {
+                if let urlError = taskError as? URLError, urlError.code == .timedOut {
+                    throw CustomError.httpTimeout
                 }
+                throw CustomError.fetchFailed(message: error.localizedDescription)
+            }
+            if case .responseValidationFailed = error {
+                throw CustomError.fetchFailed(message: error.localizedDescription)
             }
             throw error
         }
@@ -518,7 +523,7 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
             if let urlError = error.underlyingError as? URLError {
                 if urlError.code == .timedOut {
-                    throw urlError
+                    throw CustomError.httpTimeout
                 }
             }
             throw CustomError.downloadFailed
@@ -655,7 +660,14 @@ import CommonCrypto
             if let statusCode = response.response?.statusCode, !(200..<300).contains(statusCode) {
                 return nil
             }
-            // The server could not be reached (e.g. offline or timed out) or sent an invalid body
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch latest bundle: \(error)")
+            if case .sessionTaskFailed(let taskError) = error {
+                if let urlError = taskError as? URLError, urlError.code == .timedOut {
+                    throw CustomError.httpTimeout
+                }
+                throw CustomError.fetchFailed(message: taskError.localizedDescription)
+            }
+            // The server sent an invalid body
             throw error.underlyingError ?? error
         }
         if let value = response.value {
