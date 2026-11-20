@@ -4,7 +4,7 @@ import '@ionic/core/css/ionic.bundle.css';
 import { addIcons } from 'ionicons';
 import { chevronExpandOutline } from 'ionicons/icons';
 
-defineCustomElements();
+void defineCustomElements();
 addIcons({ chevronExpandOutline });
 
 const showToast = async message => {
