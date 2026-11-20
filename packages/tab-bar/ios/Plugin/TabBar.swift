@@ -5,6 +5,7 @@ import UIKit
 @objc public class TabBar: NSObject, UITabBarDelegate {
     private let plugin: TabBarPlugin
     private let tabBarView = TabBarView()
+    var projectionView: UIView? { tabBarView.superview == nil ? nil : tabBarView }
     private var tabs: [Tab] = []
     private var webViewFrameObservation: NSKeyValueObservation?
     private var windowObserverView: WindowObserverView?

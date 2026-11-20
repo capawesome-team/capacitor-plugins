@@ -1,5 +1,6 @@
 import Foundation
 import Capacitor
+import WebViewNativeUIEngine
 
 @objc(TabBarPlugin)
 public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
@@ -14,14 +15,36 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
     ]
     public static let eventTabSelected = "tabSelected"
     public static let tag = "TabBarPlugin"
+    private static let eventProjectionUpdated = "nativeProjectionUpdated"
+    private static let eventProjectionShown = "nativeProjectionShown"
+    private static let eventProjectionHidden = "nativeProjectionHidden"
+    private var projection: NativeUIProjection?
     private var implementation: TabBar?
 
     override public func load() {
         self.implementation = TabBar(plugin: self, config: getTabBarConfig())
+        guard let selector = getConfig().getString("projectionSelector") else { return }
+        do {
+            projection = try NativeUIProjection(
+                webView: bridge?.webView,
+                plugin: jsName,
+                projectionSelector: selector,
+                receiveListeners: .init(
+                    update: [Self.eventTabSelected, Self.eventProjectionUpdated],
+                    projection: .init(native: [Self.eventProjectionShown], none: [Self.eventProjectionHidden])
+                ),
+                // Allow Liquid Glass selection animations to settle before preparing pixels.
+                captureDelayMs: 600,
+                view: { [weak self] in self?.implementation?.projectionView }
+            )
+        } catch {
+            CAPLog.print("[", Self.tag, "] Native projection unavailable: ", error)
+        }
     }
 
     @objc func hide(_ call: CAPPluginCall) {
         implementation?.hide(completion: { error in
+            if error == nil { self.notifyListeners(Self.eventProjectionHidden, data: [:]) }
             self.handleCompletion(call, error)
         })
     }
@@ -34,6 +57,7 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             let options = try SelectTabByIdOptions(call)
             implementation?.selectTabById(options, completion: { error in
+                if error == nil { self.notifyListeners(Self.eventProjectionUpdated, data: [:]) }
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -45,6 +69,7 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             let options = try SetColorsOptions(call)
             implementation?.setColors(options, completion: { error in
+                if error == nil { self.notifyListeners(Self.eventProjectionUpdated, data: [:]) }
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -56,6 +81,7 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
         do {
             let options = try SetTabsOptions(call)
             implementation?.setTabs(options, completion: { error in
+                if error == nil { self.notifyListeners(Self.eventProjectionUpdated, data: [:]) }
                 self.handleCompletion(call, error)
             })
         } catch {
@@ -65,8 +91,18 @@ public class TabBarPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func show(_ call: CAPPluginCall) {
         implementation?.show(completion: { error in
+            if error == nil { self.notifyListeners(Self.eventProjectionShown, data: [:]) }
             self.handleCompletion(call, error)
         })
+    }
+
+    override public func notifyListeners(_ eventName: String, data: [String: Any]?, retainUntilConsumed: Bool) {
+        projection?.receive(eventName, data: data)
+        super.notifyListeners(eventName, data: data, retainUntilConsumed: retainUntilConsumed)
+    }
+
+    deinit {
+        projection?.destroy()
     }
 
     private func getTabBarConfig() -> TabBarConfig? {
