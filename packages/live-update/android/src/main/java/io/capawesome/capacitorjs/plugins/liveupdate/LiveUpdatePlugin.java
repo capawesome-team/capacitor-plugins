@@ -52,7 +52,9 @@ public class LiveUpdatePlugin extends Plugin {
     public static final String ERROR_CHECKSUM_CALCULATION_FAILED = "Failed to calculate checksum.";
     public static final String ERROR_CHECKSUM_MISMATCH = "Checksum mismatch.";
     public static final String ERROR_CUSTOM_ID_MISSING = "customId must be provided.";
+    public static final String ERROR_DOWNLOAD_FAILED = "Bundle could not be downloaded.";
     public static final String ERROR_DOWNLOAD_URL_MISSING = "Bundle does not have a valid download URL.";
+    public static final String ERROR_HTTP_TIMEOUT = "Request timed out.";
     public static final String ERROR_PLUGIN_NOT_INITIALIZED = "Plugin is not initialized.";
     public static final String ERROR_URL_MISSING = "url must be provided.";
     public static final String ERROR_SIGNATURE_VERIFICATION_FAILED = "Signature verification failed.";

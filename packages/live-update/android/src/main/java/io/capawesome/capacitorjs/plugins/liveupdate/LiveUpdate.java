@@ -249,7 +249,7 @@ public class LiveUpdate {
                             } else if (response.code() == 401) {
                                 callback.error(new Exception("Unauthorized. Channel Discovery may not be enabled for this app."));
                             } else {
-                                callback.error(new CustomException("REQUEST_FAILED", responseBodyString));
+                                callback.error(CustomExceptions.requestFailed(responseBodyString));
                             }
                         } catch (IOException e) {
                             handleFetchFailure(e, callback);
@@ -840,8 +840,9 @@ public class LiveUpdate {
                             completionCallback.success();
                         } else {
                             String errorMessage = response.body().string();
-                            Logger.error(LiveUpdatePlugin.TAG, errorMessage, CustomExceptions.DOWNLOAD_FAILED);
-                            completionCallback.error(CustomExceptions.DOWNLOAD_FAILED);
+                            CustomException exception = CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
+                            Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
+                            completionCallback.error(exception);
                         }
                     } catch (IOException e) {
                         handleDownloadFailure(e, completionCallback);
@@ -1292,18 +1293,18 @@ public class LiveUpdate {
     private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
         Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
         if (exception instanceof SocketTimeoutException) {
-            callback.error(CustomExceptions.HTTP_TIMEOUT);
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
         } else {
-            callback.error(CustomExceptions.DOWNLOAD_FAILED);
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
         }
     }
 
     private void handleFetchFailure(@NonNull Exception exception, @NonNull Callback callback) {
         Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
         if (exception instanceof SocketTimeoutException) {
-            callback.error(CustomExceptions.HTTP_TIMEOUT);
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
         } else {
-            callback.error(new CustomException("REQUEST_FAILED", exception.getMessage()));
+            callback.error(CustomExceptions.requestFailed(exception.getMessage()));
         }
     }
 

@@ -127,12 +127,12 @@ import CommonCrypto
             }
             if case .sessionTaskFailed(let taskError) = error {
                 if let urlError = taskError as? URLError, urlError.code == .timedOut {
-                    throw CustomError.httpTimeout
+                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
                 }
-                throw CustomError.fetchFailed(message: error.localizedDescription)
+                throw CustomError.requestFailed(message: error.localizedDescription)
             }
             if case .responseValidationFailed = error {
-                throw CustomError.fetchFailed(message: error.localizedDescription)
+                throw CustomError.requestFailed(message: error.localizedDescription)
             }
             throw error
         }
@@ -523,10 +523,10 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
             if let urlError = error.underlyingError as? URLError {
                 if urlError.code == .timedOut {
-                    throw CustomError.httpTimeout
+                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
                 }
             }
-            throw CustomError.downloadFailed
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorDownloadFailed)
         }
         guard let response = result.response else {
             throw CustomError.unknown
@@ -663,9 +663,9 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch latest bundle: \(error)")
             if case .sessionTaskFailed(let taskError) = error {
                 if let urlError = taskError as? URLError, urlError.code == .timedOut {
-                    throw CustomError.httpTimeout
+                    throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
                 }
-                throw CustomError.fetchFailed(message: taskError.localizedDescription)
+                throw CustomError.requestFailed(message: taskError.localizedDescription)
             }
             // The server sent an invalid body
             throw error.underlyingError ?? error
