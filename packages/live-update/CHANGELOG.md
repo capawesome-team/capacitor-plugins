@@ -1,5 +1,23 @@
 # Changelog
 
+## 8.9.0
+
+### Minor Changes
+
+- [`b9b52e58db5fef92f83190f4d1d985f315df4224`](https://github.com/capawesome-team/capacitor-plugins/commit/b9b52e58db5fef92f83190f4d1d985f315df4224) ([#1233](https://github.com/capawesome-team/capacitor-plugins/pull/1233)): feat(android,ios): reject `downloadBundle(...)` with `BUNDLE_ALREADY_EXISTS` if the bundle already exists
+
+- [`f2f551b5a3e526bc58bc2a2ac0b6a5d76bee3db0`](https://github.com/capawesome-team/capacitor-plugins/commit/f2f551b5a3e526bc58bc2a2ac0b6a5d76bee3db0) ([#1239](https://github.com/capawesome-team/capacitor-plugins/pull/1239)): feat(electron): return `customProperties` from `sync(...)` and use the same error codes as on Android and iOS. A failed request now has the code `REQUEST_FAILED`.
+
+- [`1b91cf003c161e8ffd29c8bd82cd9edaa615cf2c`](https://github.com/capawesome-team/capacitor-plugins/commit/1b91cf003c161e8ffd29c8bd82cd9edaa615cf2c) ([#1237](https://github.com/capawesome-team/capacitor-plugins/pull/1237)): feat(android,ios): add the error codes `BUNDLE_NOT_FOUND`, `REQUEST_FAILED` and `SYNC_IN_PROGRESS`
+
+- [`1ce6faae833fe2fd26f378b42205000666fee3c9`](https://github.com/capawesome-team/capacitor-plugins/commit/1ce6faae833fe2fd26f378b42205000666fee3c9) ([#1234](https://github.com/capawesome-team/capacitor-plugins/pull/1234)): feat(android,ios): return the custom properties of the next bundle from `sync(...)`
+
+### Patch Changes
+
+- [`56b78d684eed764b748dec338e02c10e4bf454fa`](https://github.com/capawesome-team/capacitor-plugins/commit/56b78d684eed764b748dec338e02c10e4bf454fa) ([#1230](https://github.com/capawesome-team/capacitor-plugins/pull/1230)): fix(android): return the result of the first method call after a page reload
+
+- [`a1e12e96595706deb1413822db0006e9a71b1ca0`](https://github.com/capawesome-team/capacitor-plugins/commit/a1e12e96595706deb1413822db0006e9a71b1ca0) ([#1232](https://github.com/capawesome-team/capacitor-plugins/pull/1232)): fix(android,ios): do not send `downloadBundleProgress` events for a download without a known size
+
 ## 8.8.2
 
 ### Patch Changes
