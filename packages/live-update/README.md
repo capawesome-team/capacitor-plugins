@@ -292,7 +292,7 @@ export default config;
 
 ## Usage
 
-All methods are only available on Android and iOS. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
+All methods are only available on Android, iOS and Electron. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
 
 ### Sync with Capawesome Cloud
 

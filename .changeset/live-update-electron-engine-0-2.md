@@ -2,4 +2,4 @@
 '@capawesome/capacitor-live-update': minor
 ---
 
-feat(electron): add the error code `REQUEST_FAILED` and return `customProperties` from `sync(...)`. The codes `DOWNLOAD_FAILED` and `HTTP_TIMEOUT` are now `REQUEST_FAILED`. All other codes except `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND` and `SYNC_IN_PROGRESS` are removed.
+feat(electron): return `customProperties` from `sync(...)` and use the same error codes as on Android and iOS. A failed request now has the code `REQUEST_FAILED`. Errors other than `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND`, `REQUEST_FAILED` and `SYNC_IN_PROGRESS` no longer have a code.
