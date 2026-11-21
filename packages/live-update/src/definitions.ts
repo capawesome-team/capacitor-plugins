@@ -976,8 +976,6 @@ export interface SyncResult {
    *
    * Only set if `nextBundleId` is not `null` and the bundle has custom properties.
    *
-   * Only available on Android and iOS.
-   *
    * @since 8.9.0
    * @example { "key": "value" }
    */
@@ -1083,8 +1081,6 @@ export enum ErrorCode {
   BundleNotFound = 'BUNDLE_NOT_FOUND',
   /**
    * A request to the server failed. This happens if the device has no connection, the request timed out or a bundle could not be downloaded.
-   *
-   * Only available on Android and iOS.
    *
    * @since 8.9.0
    */
