@@ -292,7 +292,7 @@ export default config;
 
 ## Usage
 
-All methods are only available on Android and iOS. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
+All methods are only available on Android, iOS and Electron. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
 
 ### Sync with Capawesome Cloud
 
@@ -1349,10 +1349,10 @@ Remove all listeners for this plugin.
 
 #### SyncResult
 
-| Prop                   | Type                                    | Description                                                                                                                                                                   | Since |
-| ---------------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the next bundle. Only set if `nextBundleId` is not `null` and the bundle has custom properties. Only available on Android and iOS. | 8.9.0 |
-| **`nextBundleId`**     | <code>string \| null</code>             | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                                                    | 5.0.0 |
+| Prop                   | Type                                    | Description                                                                                                                                | Since |
+| ---------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the next bundle. Only set if `nextBundleId` is not `null` and the bundle has custom properties. | 8.9.0 |
+| **`nextBundleId`**     | <code>string \| null</code>             | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                 | 5.0.0 |
 
 
 #### SyncOptions
