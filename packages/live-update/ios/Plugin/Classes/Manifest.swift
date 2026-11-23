@@ -17,7 +17,7 @@ import Capacitor
         return hrefsByChecksum
     }
 
-    /// - Returns: `nil` if the data is not a JSON list of items with `href` and `checksum`.
+    /// - Returns: `nil` if the data is not a JSON list or an item cannot be used.
     static func parse(_ data: Data) -> Manifest? {
         guard let items = try? JSONDecoder().decode([ManifestItem].self, from: data) else {
             return nil

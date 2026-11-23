@@ -4,6 +4,7 @@ import static io.capawesome.capacitorjs.plugins.liveupdate.classes.JsonFields.ge
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.util.Arrays;
 import org.json.JSONObject;
 
 public class ManifestItem {
@@ -23,11 +24,12 @@ public class ManifestItem {
     }
 
     /**
-     * @return The item, or `null` if `href` or `checksum` is missing.
+     * @return The item, or `null` if `href` or `checksum` is missing or `href` leaves the bundle.
      */
     @Nullable
     public static ManifestItem parse(@NonNull JSONObject json) {
-        if (getNonEmptyString(json, "checksum") == null || getNonEmptyString(json, "href") == null) {
+        String href = getNonEmptyString(json, "href");
+        if (getNonEmptyString(json, "checksum") == null || href == null || !isHrefInsideBundle(href)) {
             return null;
         }
         return new ManifestItem(json);
@@ -45,5 +47,9 @@ public class ManifestItem {
 
     public int getSizeInBytes() {
         return sizeInBytes;
+    }
+
+    private static boolean isHrefInsideBundle(@NonNull String href) {
+        return !Arrays.asList(href.split("/", -1)).contains("..");
     }
 }

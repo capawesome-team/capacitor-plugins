@@ -37,7 +37,7 @@ public class Manifest {
     }
 
     /**
-     * @return The manifest, or `null` if it is not a JSON list or an item has no `href` or no `checksum`.
+     * @return The manifest, or `null` if it is not a JSON list or an item cannot be used.
      */
     @Nullable
     public static Manifest parse(@NonNull String text) {

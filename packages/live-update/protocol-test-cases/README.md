@@ -94,7 +94,7 @@ The SDK sends `Accept-Encoding: identity` when it downloads the zip file of a bu
 
 ## The manifest
 
-A bundle that is stored file by file has a manifest: a JSON list in which every item has `href`, `checksum` and `sizeInBytes`. An item without `sizeInBytes` counts as an item of size zero. A manifest cannot be used when it is not a JSON list or when an item has no `href` or no `checksum`.
+A bundle that is stored file by file has a manifest: a JSON list in which every item has `href`, `checksum` and `sizeInBytes`. An item without `sizeInBytes` counts as an item of size zero. A manifest cannot be used when it is not a JSON list or when an item has no `href` or no `checksum`. It also cannot be used when an `href` has a `..` part, because every `href` must name a file inside the bundle.
 
 To install such a bundle, the SDK compares the new manifest with the manifest of the bundle that it runs. A file whose checksum is in the current manifest is copied from the path that holds this content there. If two paths hold it, the first one is used. Every other file is downloaded. If the current manifest is missing or cannot be used, every file is downloaded.
 
