@@ -1,58 +1,61 @@
 package io.capawesome.capacitorjs.plugins.liveupdate.classes;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Manifest {
 
-    private List<ManifestItem> items = new ArrayList<>();
+    @NonNull
+    private final List<ManifestItem> items;
 
-    public Manifest(JSONArray jsonArray) throws JSONException {
-        for (int i = 0; i < jsonArray.length(); i++) {
-            ManifestItem manifestItem = new ManifestItem(jsonArray.getJSONObject(i));
-            items.add(manifestItem);
-        }
+    private Manifest(@NonNull List<ManifestItem> items) {
+        this.items = items;
     }
 
+    @NonNull
     public List<ManifestItem> getItems() {
         return items;
     }
 
-    public static List<ManifestItem> findDuplicateItems(Manifest manifest1, Manifest manifest2) {
-        List<ManifestItem> duplicateItems = new ArrayList<>();
-        Set<String> checksums = new HashSet<>();
-
-        for (ManifestItem item : manifest2.getItems()) {
-            checksums.add(item.getChecksum());
+    /**
+     * @return Per checksum, the first path that holds this content.
+     */
+    @NonNull
+    public Map<String, String> mapFirstHrefsByChecksum() {
+        Map<String, String> hrefsByChecksum = new HashMap<>();
+        for (ManifestItem item : items) {
+            hrefsByChecksum.putIfAbsent(item.getChecksum(), item.getHref());
         }
-
-        for (ManifestItem item : manifest1.getItems()) {
-            if (checksums.contains(item.getChecksum())) {
-                duplicateItems.add(item);
-            }
-        }
-
-        return duplicateItems;
+        return hrefsByChecksum;
     }
 
-    public static List<ManifestItem> findMissingItems(Manifest manifest1, Manifest manifest2) {
-        List<ManifestItem> missingItems = new ArrayList<>();
-        Set<String> checksums = new HashSet<>();
-
-        for (ManifestItem item : manifest2.getItems()) {
-            checksums.add(item.getChecksum());
+    /**
+     * @return The manifest, or `null` if it is not a JSON list or an item has no `href` or no `checksum`.
+     */
+    @Nullable
+    public static Manifest parse(@NonNull String text) {
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(text);
+        } catch (JSONException exception) {
+            return null;
         }
-
-        for (ManifestItem item : manifest1.getItems()) {
-            if (!checksums.contains(item.getChecksum())) {
-                missingItems.add(item);
+        List<ManifestItem> items = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject itemJson = jsonArray.optJSONObject(i);
+            ManifestItem item = itemJson == null ? null : ManifestItem.parse(itemJson);
+            if (item == null) {
+                return null;
             }
+            items.add(item);
         }
-
-        return missingItems;
+        return new Manifest(items);
     }
 }

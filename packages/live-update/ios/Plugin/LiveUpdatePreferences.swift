@@ -1,4 +1,5 @@
 import Foundation
+import Capacitor
 
 public class LiveUpdatePreferences: NSObject {
     private let appIdKey = "appId" // DO NOT CHANGE
@@ -7,6 +8,7 @@ public class LiveUpdatePreferences: NSObject {
     private let customIdKey = "customId" // DO NOT CHANGE
     private let lastVersionCodeKey = "lastVersionCode" // DO NOT CHANGE
     private let lastVersionNameKey = "lastVersionName" // DO NOT CHANGE
+    private let pendingFailureKey = "pendingFailure" // DO NOT CHANGE
     private let previousBundleIdKey = "previousBundleIdKey" // DO NOT CHANGE
 
     public func getAppId() -> String? {
@@ -93,6 +95,35 @@ public class LiveUpdatePreferences: NSObject {
         } else {
             UserDefaults.standard.removeObject(forKey: applyPrefix(to: previousBundleIdKey))
         }
+        UserDefaults.standard.synchronize()
+    }
+
+    /// - Returns: The pending failure, or `nil` if none is stored or the stored value cannot be read.
+    func getPendingFailure() -> UpdateFailure? {
+        guard let data = UserDefaults.standard.data(forKey: applyPrefix(to: pendingFailureKey)) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(UpdateFailure.self, from: data)
+    }
+
+    /// Removes the pending failure only if it is still the given one. A failure that was recorded since then is kept.
+    func removeReportedFailure(_ failure: UpdateFailure) {
+        guard getPendingFailure() == failure else {
+            return
+        }
+        UserDefaults.standard.removeObject(forKey: applyPrefix(to: pendingFailureKey))
+        UserDefaults.standard.synchronize()
+    }
+
+    func trySetPendingFailure(_ value: UpdateFailure) {
+        let data: Data
+        do {
+            data = try JSONEncoder().encode(value)
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to record the failed update: ", error.localizedDescription)
+            return
+        }
+        UserDefaults.standard.set(data, forKey: applyPrefix(to: pendingFailureKey))
         UserDefaults.standard.synchronize()
     }
 

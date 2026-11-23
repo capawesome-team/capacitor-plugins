@@ -3,6 +3,8 @@ package io.capawesome.capacitorjs.plugins.liveupdate.classes.results;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.getcapacitor.JSObject;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponse;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponseBundle;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Result;
 import org.json.JSONObject;
@@ -30,61 +32,22 @@ public class FetchLatestBundleResult implements Result {
     @Nullable
     private final String signature;
 
-    public FetchLatestBundleResult(
-        @Nullable ArtifactType artifactType,
-        @Nullable String bundleId,
-        @Nullable String channel,
-        @Nullable String checksum,
-        @Nullable JSONObject customProperties,
-        @Nullable String downloadUrl,
-        @Nullable String signature
-    ) {
-        this.artifactType = artifactType;
-        this.bundleId = bundleId;
-        this.channel = channel;
-        this.checksum = checksum;
-        this.customProperties = customProperties;
-        this.downloadUrl = downloadUrl;
-        this.signature = signature;
-    }
-
-    @Nullable
-    public ArtifactType getArtifactType() {
-        return artifactType;
-    }
-
-    @Nullable
-    public String getBundleId() {
-        return bundleId;
-    }
-
-    @Nullable
-    public String getChecksum() {
-        return checksum;
-    }
-
-    @Nullable
-    public JSONObject getCustomProperties() {
-        return customProperties;
-    }
-
-    @Nullable
-    public String getDownloadUrl() {
-        return downloadUrl;
-    }
-
-    @Nullable
-    public String getSignature() {
-        return signature;
+    public FetchLatestBundleResult(@NonNull CreateCheckResponse response) {
+        CreateCheckResponseBundle bundle = response.getBundle();
+        this.artifactType = bundle == null ? null : bundle.getArtifactType();
+        this.bundleId = bundle == null ? null : bundle.getId();
+        this.channel = response.getChannelName();
+        this.checksum = bundle == null ? null : bundle.getChecksum();
+        this.customProperties = bundle == null ? null : bundle.getCustomProperties();
+        this.downloadUrl = bundle == null ? null : bundle.getUrl();
+        this.signature = bundle == null ? null : bundle.getSignature();
     }
 
     @NonNull
     public JSObject toJSObject() {
         JSObject result = new JSObject();
-        if (artifactType == ArtifactType.MANIFEST) {
-            result.put("artifactType", "manifest");
-        } else if (artifactType == ArtifactType.ZIP) {
-            result.put("artifactType", "zip");
+        if (artifactType != null) {
+            result.put("artifactType", artifactType.getValue());
         }
         result.put("bundleId", bundleId == null ? JSONObject.NULL : bundleId);
         if (channel != null) {

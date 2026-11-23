@@ -10,38 +10,15 @@ import Capacitor
     private let downloadUrl: String?
     private let signature: String?
 
-    init(artifactType: ArtifactType?, bundleId: String?, channel: String?, checksum: String?, customProperties: [String: Any]?, downloadUrl: String?, signature: String?) {
-        self.artifactType = artifactType
-        self.bundleId = bundleId
-        self.channel = channel
-        self.checksum = checksum
-        self.customProperties = customProperties
-        self.downloadUrl = downloadUrl
-        self.signature = signature
-    }
-
-    func getArtifactType() -> ArtifactType? {
-        return artifactType
-    }
-
-    public func getBundleId() -> String? {
-        return bundleId
-    }
-
-    public func getChecksum() -> String? {
-        return checksum
-    }
-
-    public func getCustomProperties() -> [String: Any]? {
-        return customProperties
-    }
-
-    public func getDownloadUrl() -> String? {
-        return downloadUrl
-    }
-
-    public func getSignature() -> String? {
-        return signature
+    init(_ response: CreateCheckResponse) {
+        let bundle = response.bundle
+        self.artifactType = bundle?.artifactType
+        self.bundleId = bundle?.id
+        self.channel = response.channelName
+        self.checksum = bundle?.checksum
+        self.customProperties = bundle?.customProperties
+        self.downloadUrl = bundle?.url
+        self.signature = bundle?.signature
     }
 
     public func toJSObject() -> AnyObject {

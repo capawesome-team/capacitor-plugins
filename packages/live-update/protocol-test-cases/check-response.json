@@ -1,0 +1,678 @@
+[
+  {
+    "name": "offers a manifest bundle without a signature",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a zip bundle with a signature",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads the bundle when the device is up to date",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "artifactType": "manifest",
+        "legacyUrl": "https://legacy.example.com/bundles/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "artifactType": "manifest",
+        "url": "https://legacy.example.com/bundles/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads an up to date answer without a bundle",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads the reason of a skipped check",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": "channel_paused",
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "result": "skipped",
+      "reason": "channel_paused",
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads a reason that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": "some_new_reason",
+      "channelName": null,
+      "bundle": null
+    },
+    "expected": {
+      "result": "skipped",
+      "reason": "some_new_reason",
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing for a result that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "some_new_result",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing for an artifact type that this version does not know",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "some_new_type",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing when an available answer has no bundle",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a bundle whose optional fields are missing",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a bundle with a url",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": null
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": "MEUCIQDx+abc/def0123456789==",
+        "customProperties": null
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a bundle with a legacy url and no url template",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a bundle with a url and no checksum",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip"
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/1.2.3.zip",
+        "urlTemplate": null,
+        "checksum": null,
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "uses a url that holds the placeholder as it is",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/{checksum}.zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://downloads.example.org/bundles/{checksum}.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing for a bundle with neither a url nor a legacy url",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing for a url template without the placeholder",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/bundle.zip?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
+      }
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "fails for a 2xx answer that is not 200",
+    "statusCode": 201,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expectedError": "REQUEST_FAILED"
+  },
+  {
+    "name": "offers nothing for a url template without a checksum",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
+        "signature": null,
+        "customProperties": {}
+      }
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads no reason when a skipped check has none",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "skipped",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null
+    },
+    "expected": {
+      "result": "skipped",
+      "reason": null,
+      "channelName": "production",
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers nothing for a body that is not JSON",
+    "statusCode": 200,
+    "retryAfter": null,
+    "rawBody": "<html><body>Sign in to the network</body></html>",
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "waits the seconds of Retry-After after a 429",
+    "statusCode": 429,
+    "retryAfter": "120",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 120000
+    }
+  },
+  {
+    "name": "does not wait when Retry-After is zero",
+    "statusCode": 429,
+    "retryAfter": "0",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 0
+    }
+  },
+  {
+    "name": "waits 15 minutes after a 429 without Retry-After",
+    "statusCode": 429,
+    "retryAfter": null,
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is a date",
+    "statusCode": 429,
+    "retryAfter": "Wed, 21 Oct 2026 07:28:00 GMT",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is negative",
+    "statusCode": 429,
+    "retryAfter": "-5",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000
+    }
+  },
+  {
+    "name": "waits 15 minutes when Retry-After is not a whole number",
+    "statusCode": 429,
+    "retryAfter": "1.5",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 900000
+    }
+  },
+  {
+    "name": "waits at most 24 hours",
+    "statusCode": 429,
+    "retryAfter": "604800",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 86400000
+    }
+  },
+  {
+    "name": "waits 24 hours when Retry-After is larger than any number type",
+    "statusCode": 429,
+    "retryAfter": "99999999999999999999",
+    "body": {
+      "message": "Too many requests."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 86400000
+    }
+  },
+  {
+    "name": "offers nothing after a 429 with a body that is not JSON",
+    "statusCode": 429,
+    "retryAfter": "60",
+    "rawBody": "Too many requests",
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 60000
+    }
+  },
+  {
+    "name": "fails for an invalid request",
+    "statusCode": 400,
+    "retryAfter": null,
+    "body": {
+      "message": "Invalid request."
+    },
+    "expectedError": "REQUEST_FAILED"
+  },
+  {
+    "name": "fails for an unknown app",
+    "statusCode": 404,
+    "retryAfter": null,
+    "body": {
+      "message": "App not found."
+    },
+    "expectedError": "REQUEST_FAILED"
+  },
+  {
+    "name": "fails after a server error",
+    "statusCode": 503,
+    "retryAfter": null,
+    "body": {
+      "message": "Service is currently unavailable. Please try again later."
+    },
+    "expectedError": "REQUEST_FAILED"
+  }
+]

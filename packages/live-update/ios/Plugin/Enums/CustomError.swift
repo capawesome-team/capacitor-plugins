@@ -7,13 +7,15 @@ public enum CustomError: Error {
     case bundleIdMissing
     case bundleIndexHtmlMissing
     case bundleNotFound
+    case bundleUnzipFailed(underlyingError: Error)
     case channelDiscoveryNotEnabled
     case channelMissing
     case checksumCalculationFailed
     case checksumMismatch
+    case checksumMissing
     case configurationValueInvalid(key: String)
     case customIdMissing
-    case downloadUrlMissing
+    case manifestInvalid
     case pluginNotInitialized
     case requestFailed(message: String)
     case signatureMissing
@@ -53,6 +55,8 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("The bundle does not contain an index.html file.", comment: "bundleIndexHtmlMissing")
         case .bundleNotFound:
             return NSLocalizedString("bundle not found.", comment: "bundleNotFound")
+        case .bundleUnzipFailed(let underlyingError):
+            return underlyingError.localizedDescription
         case .channelDiscoveryNotEnabled:
             return NSLocalizedString("Unauthorized. Channel Discovery may not be enabled for this app.", comment: "channelDiscoveryNotEnabled")
         case .channelMissing:
@@ -61,13 +65,15 @@ extension CustomError: LocalizedError {
             return NSLocalizedString("Failed to calculate checksum.", comment: "checksumCalculationFailed")
         case .checksumMismatch:
             return NSLocalizedString("Checksum mismatch.", comment: "checksumMismatch")
+        case .checksumMissing:
+            return NSLocalizedString("Bundle does not contain a checksum.", comment: "checksumMissing")
         case .configurationValueInvalid(let key):
             let format = NSLocalizedString("%@ has an invalid type.", comment: "configurationValueInvalid")
             return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
-        case .downloadUrlMissing:
-            return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
+        case .manifestInvalid:
+            return NSLocalizedString("The bundle manifest could not be read.", comment: "manifestInvalid")
         case .pluginNotInitialized:
             return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .requestFailed(let message):

@@ -8,13 +8,20 @@ import Capacitor
         self.items = items
     }
 
-    public static func findDuplicateItems(_ manifest1: Manifest, _ manifest2: Manifest) -> [ManifestItem] {
-        let checksumSet = Set(manifest2.items.map { $0.checksum })
-        return manifest1.items.filter { checksumSet.contains($0.checksum) }
+    /// - Returns: Per checksum, the first path that holds this content.
+    func mapFirstHrefsByChecksum() -> [String: String] {
+        var hrefsByChecksum = [String: String]()
+        for item in items where hrefsByChecksum[item.checksum] == nil {
+            hrefsByChecksum[item.checksum] = item.href
+        }
+        return hrefsByChecksum
     }
 
-    public static func findMissingItems(_ manifest1: Manifest, _ manifest2: Manifest) -> [ManifestItem] {
-        let checksumSet = Set(manifest2.items.map { $0.checksum })
-        return manifest1.items.filter { !checksumSet.contains($0.checksum) }
+    /// - Returns: `nil` if the data is not a JSON list of items with `href` and `checksum`.
+    static func parse(_ data: Data) -> Manifest? {
+        guard let items = try? JSONDecoder().decode([ManifestItem].self, from: data) else {
+            return nil
+        }
+        return Manifest(items: items)
     }
 }
