@@ -19,7 +19,9 @@
     "@capacitor/android": "^8.5.3",
     "@capacitor/core": "^8.5.3",
     "@capacitor/ios": "^8.5.3",
-    "@capawesome/capacitor-live-update": "file:.."
+    "@capawesome/capacitor-live-update": "file:..",
+    "@ionic/core": "^9.0.11",
+    "ionicons": "^8.1.0"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.3",

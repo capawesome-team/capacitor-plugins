@@ -133,6 +133,9 @@ export interface LiveUpdatePlugin {
   /**
    * Download a bundle.
    *
+   * The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
+   * is already on the device. Use `getBundles()` to check this first.
+   *
    * Only available on Android, iOS and Electron.
    *
    * @since 5.0.0
@@ -390,6 +393,9 @@ export interface LiveUpdatePlugin {
   sync(options?: SyncOptions): Promise<SyncResult>;
   /**
    * Listen for the download progress of a bundle.
+   *
+   * On Android and iOS, the event is only sent if there is something to download and its size is known.
+   * For a zip bundle, the server must report the size of the file.
    *
    * Only available on Android, iOS and Electron.
    *
@@ -978,6 +984,15 @@ export interface SyncOptions {
  */
 export interface SyncResult {
   /**
+   * Custom properties that are associated with the next bundle.
+   *
+   * Only set if `nextBundleId` is not `null` and the bundle has custom properties.
+   *
+   * @since 8.9.0
+   * @example { "key": "value" }
+   */
+  customProperties?: { [key: string]: string };
+  /**
    * The identifier of the next bundle to use.
    *
    * If `null`, the app is up-to-date and no new bundle is available.
@@ -1065,10 +1080,34 @@ export type ReloadedListener = () => void;
  */
 export enum ErrorCode {
   /**
+   * A bundle with the given identifier already exists on the device.
+   *
+   * @since 8.9.0
+   */
+  BundleAlreadyExists = 'BUNDLE_ALREADY_EXISTS',
+  /**
+   * No bundle with the given identifier exists on the device.
+   *
+   * @since 8.9.0
+   */
+  BundleNotFound = 'BUNDLE_NOT_FOUND',
+  /**
    * The download URL of the bundle has expired.
    * Call `fetchLatestBundle(...)` again to get a new URL.
    *
    * @since 8.9.0
    */
   DownloadUrlExpired = 'DOWNLOAD_URL_EXPIRED',
+  /**
+   * A request to the server failed. This happens if the device has no connection, the request timed out or a bundle could not be downloaded.
+   *
+   * @since 8.9.0
+   */
+  RequestFailed = 'REQUEST_FAILED',
+  /**
+   * A sync is already in progress.
+   *
+   * @since 8.9.0
+   */
+  SyncInProgress = 'SYNC_IN_PROGRESS',
 }

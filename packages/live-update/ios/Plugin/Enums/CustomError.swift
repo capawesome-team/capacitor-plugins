@@ -15,11 +15,10 @@ public enum CustomError: Error {
     case checksumMissing
     case configurationValueInvalid(key: String)
     case customIdMissing
-    case downloadFailed
     case downloadUrlExpired
     case downloadUrlMissing
-    case httpTimeout
     case pluginNotInitialized
+    case requestFailed(message: String)
     case signatureMissing
     case signatureVerificationFailed
     case syncInProgress
@@ -28,8 +27,16 @@ public enum CustomError: Error {
 
     var code: String? {
         switch self {
+        case .bundleAlreadyExists:
+            return "BUNDLE_ALREADY_EXISTS"
+        case .bundleNotFound:
+            return "BUNDLE_NOT_FOUND"
         case .downloadUrlExpired:
             return "DOWNLOAD_URL_EXPIRED"
+        case .requestFailed:
+            return "REQUEST_FAILED"
+        case .syncInProgress:
+            return "SYNC_IN_PROGRESS"
         default:
             return nil
         }
@@ -68,16 +75,14 @@ extension CustomError: LocalizedError {
             return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
-        case .downloadFailed:
-            return NSLocalizedString("Bundle could not be downloaded.", comment: "downloadFailed")
         case .downloadUrlExpired:
             return NSLocalizedString("Bundle download URL has expired.", comment: "downloadUrlExpired")
         case .downloadUrlMissing:
             return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
-        case .httpTimeout:
-            return NSLocalizedString("Request timed out.", comment: "httpTimeout")
         case .pluginNotInitialized:
             return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
+        case .requestFailed(let message):
+            return message
         case .signatureMissing:
             return NSLocalizedString("Bundle does not contain a signature.", comment: "signatureMissing")
         case .signatureVerificationFailed:

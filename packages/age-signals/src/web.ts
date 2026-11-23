@@ -10,6 +10,8 @@ import type {
   SetNextAgeSignalsAccessResultOptions,
   SetNextAgeSignalsExceptionOptions,
   SetNextAgeSignalsResultOptions,
+  SetNextApplicableAgeFeaturesExceptionOptions,
+  SetNextApplicableAgeFeaturesResultOptions,
   SetNextRequestAgeSignalsAccessExceptionOptions,
   SetUseFakeManagerOptions,
   ShowSignificantUpdateAcknowledgmentOptions,
@@ -48,6 +50,18 @@ export class AgeSignalsWeb extends WebPlugin implements AgeSignalsPlugin {
 
   async setNextAgeSignalsResult(
     _options: SetNextAgeSignalsResultOptions,
+  ): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async setNextApplicableAgeFeaturesException(
+    _options: SetNextApplicableAgeFeaturesExceptionOptions,
+  ): Promise<void> {
+    throw this.unimplemented('Not implemented on web.');
+  }
+
+  async setNextApplicableAgeFeaturesResult(
+    _options: SetNextApplicableAgeFeaturesResultOptions,
   ): Promise<void> {
     throw this.unimplemented('Not implemented on web.');
   }

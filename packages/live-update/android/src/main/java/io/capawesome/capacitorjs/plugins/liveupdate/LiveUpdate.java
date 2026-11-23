@@ -17,6 +17,7 @@ import androidx.core.content.pm.PackageInfoCompat;
 import com.getcapacitor.Bridge;
 import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.DownloadUrl;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
@@ -60,6 +61,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.FailureReason;
+import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Callback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.CallbackStep;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.DownloadProgressCallback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback;
@@ -201,8 +203,7 @@ public class LiveUpdate {
         String bundleId = options.getBundleId();
 
         if (!hasBundleById(bundleId)) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-            callback.error(exception);
+            callback.error(CustomExceptions.BUNDLE_NOT_FOUND);
             return;
         }
         deleteBundleById(bundleId);
@@ -216,8 +217,7 @@ public class LiveUpdate {
             String bundleId = options.getBundleId();
             // Check if the bundle already exists
             if (hasBundleById(bundleId)) {
-                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_EXISTS);
-                callback.error(exception);
+                callback.error(CustomExceptions.BUNDLE_ALREADY_EXISTS);
                 return;
             }
             String failureAppId = options.getAppId() == null ? getAppId() : options.getAppId();
@@ -270,8 +270,10 @@ public class LiveUpdate {
                             } else if (response.code() == 401) {
                                 callback.error(new Exception("Unauthorized. Channel Discovery may not be enabled for this app."));
                             } else {
-                                callback.error(new Exception(responseBodyString));
+                                callback.error(CustomExceptions.requestFailed(responseBodyString));
                             }
+                        } catch (IOException e) {
+                            handleRequestFailure(e, callback);
                         } catch (Exception e) {
                             callback.error(e);
                         }
@@ -279,7 +281,7 @@ public class LiveUpdate {
 
                     @Override
                     public void error(@NonNull Exception exception) {
-                        callback.error(exception);
+                        handleRequestFailure(exception, callback);
                     }
                 }
             );
@@ -517,8 +519,7 @@ public class LiveUpdate {
             if (hasBundleById(bundleId)) {
                 setNextBundleById(bundleId);
             } else {
-                Exception exception = new Exception(LiveUpdatePlugin.ERROR_BUNDLE_NOT_FOUND);
-                callback.error(exception);
+                callback.error(CustomExceptions.BUNDLE_NOT_FOUND);
                 return;
             }
         }
@@ -527,8 +528,7 @@ public class LiveUpdate {
 
     public void sync(@NonNull SyncOptions options, @NonNull NonEmptyCallback<Result> callback) {
         if (syncInProgress) {
-            Exception exception = new Exception(LiveUpdatePlugin.ERROR_SYNC_IN_PROGRESS);
-            callback.error(exception);
+            callback.error(CustomExceptions.SYNC_IN_PROGRESS);
             return;
         }
         syncInProgress = true;
@@ -768,6 +768,8 @@ public class LiveUpdate {
                         preferences.removePendingFailureIfUnchanged(reportedFailure);
                     }
                     callback.success(checkResponse);
+                } catch (IOException e) {
+                    handleRequestFailure(e, callback);
                 } catch (Exception e) {
                     callback.error(e);
                 }
@@ -775,7 +777,7 @@ public class LiveUpdate {
 
             @Override
             public void error(@NonNull Exception exception) {
-                callback.error(exception);
+                handleRequestFailure(exception, callback);
             }
         };
     }
@@ -818,7 +820,7 @@ public class LiveUpdate {
 
             @Override
             public void error(@NonNull Exception exception) {
-                handleDownloadFailure(exception, completionCallback);
+                handleRequestFailure(exception, completionCallback);
             }
         };
     }
@@ -840,13 +842,16 @@ public class LiveUpdate {
      * Sets the next bundle once the download completed.
      */
     @NonNull
-    private EmptyCallback createSyncDownloadCallback(@NonNull String bundleId, @NonNull NonEmptyCallback<Result> callback) {
+    private EmptyCallback createSyncDownloadCallback(
+        @NonNull CreateCheckResponseBundle bundle,
+        @NonNull NonEmptyCallback<Result> callback
+    ) {
         return new EmptyCallback() {
             @Override
             public void success() {
                 try {
-                    setNextBundleById(bundleId);
-                    SyncResult syncResult = new SyncResult(bundleId);
+                    setNextBundleById(bundle.getId());
+                    SyncResult syncResult = new SyncResult(bundle.getCustomProperties(), bundle.getId());
                     callback.success(syncResult);
                 } catch (Exception e) {
                     callback.error(e);
@@ -946,7 +951,7 @@ public class LiveUpdate {
 
                 @Override
                 public void error(@NonNull Exception exception) {
-                    handleDownloadFailure(exception, completionCallback);
+                    handleRequestFailure(exception, completionCallback);
                 }
             }
         );
@@ -995,9 +1000,6 @@ public class LiveUpdate {
         @NonNull EmptyCallback completionCallback
     ) {
         if (filesToDownload.isEmpty()) {
-            if (progressCallback != null) {
-                progressCallback.onProgress(0, 0);
-            }
             completionCallback.success();
             return;
         }
@@ -1347,12 +1349,14 @@ public class LiveUpdate {
         return getPackageInfo().versionName;
     }
 
-    private void handleDownloadFailure(@NonNull Exception exception, @NonNull EmptyCallback callback) {
+    private void handleRequestFailure(@NonNull Exception exception, @NonNull Callback callback) {
         Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
         if (exception instanceof SocketTimeoutException) {
-            callback.error(exception);
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+        } else if (exception.getMessage() == null) {
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_UNKNOWN_ERROR));
         } else {
-            callback.error(new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED));
+            callback.error(CustomExceptions.requestFailed(exception.getMessage()));
         }
     }
 
@@ -1367,12 +1371,12 @@ public class LiveUpdate {
                 completionCallback.success();
             } else {
                 String errorMessage = response.body().string();
-                Exception exception = new Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
+                CustomException exception = CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED);
                 Logger.error(LiveUpdatePlugin.TAG, errorMessage, exception);
                 completionCallback.error(exception);
             }
         } catch (IOException e) {
-            handleDownloadFailure(e, completionCallback);
+            handleRequestFailure(e, completionCallback);
         } catch (Exception e) {
             completionCallback.error(e);
         }
@@ -1382,22 +1386,23 @@ public class LiveUpdate {
         throws Exception {
         CreateCheckResponseBundle bundle = response.getBundle();
         if (bundle == null) {
-            callback.success(new SyncResult(null));
+            callback.success(new SyncResult(null, null));
             return;
         }
         String latestBundleId = bundle.getId();
         if (isBlockedBundleId(latestBundleId)) {
             Logger.warn(LiveUpdatePlugin.TAG, "Bundle is blocked and will not be downloaded.");
-            callback.success(new SyncResult(null));
+            callback.success(new SyncResult(null, null));
             return;
         }
         if (hasBundleById(latestBundleId)) {
             String nextBundleId = setNextBundleIfNotCurrent(latestBundleId);
-            callback.success(new SyncResult(nextBundleId));
+            JSONObject customProperties = nextBundleId == null ? null : bundle.getCustomProperties();
+            callback.success(new SyncResult(customProperties, nextBundleId));
             return;
         }
         UpdateFailure failure = new UpdateFailure().setAppId(requireAppId()).setBundleId(latestBundleId);
-        EmptyCallback downloadCallback = recordFailureOnError(failure, createSyncDownloadCallback(latestBundleId, callback));
+        EmptyCallback downloadCallback = recordFailureOnError(failure, createSyncDownloadCallback(bundle, callback));
         downloadBundle(latestBundleId, DownloadUrl.fromBundle(bundle), downloadCallback);
     }
 
@@ -1441,6 +1446,10 @@ public class LiveUpdate {
 
     private void notifyDownloadBundleProgressListeners(@NonNull final DownloadBundleProgressEvent event) {
         if (plugin == null) {
+            return;
+        }
+        // The progress cannot be computed without a positive total
+        if (event.getTotalBytes() <= 0) {
             return;
         }
         plugin.notifyDownloadBundleProgressListeners(event);
@@ -1817,7 +1826,7 @@ public class LiveUpdate {
 
     @Nullable
     private FailureReason toFailureReason(@NonNull Exception exception) {
-        if (exception == CustomExceptions.DOWNLOAD_URL_EXPIRED || exception instanceof SocketTimeoutException) {
+        if (exception == CustomExceptions.DOWNLOAD_URL_EXPIRED || CustomExceptions.isRequestFailed(exception)) {
             return FailureReason.DOWNLOAD_FAILED;
         }
         if (exception instanceof ZipException) {
@@ -1833,8 +1842,6 @@ public class LiveUpdate {
                 return FailureReason.BUNDLE_INVALID;
             case LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH:
                 return FailureReason.CHECKSUM_MISMATCHED;
-            case LiveUpdatePlugin.ERROR_DOWNLOAD_FAILED:
-                return FailureReason.DOWNLOAD_FAILED;
             case LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID:
             case LiveUpdatePlugin.ERROR_SIGNATURE_MISSING:
             case LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED:

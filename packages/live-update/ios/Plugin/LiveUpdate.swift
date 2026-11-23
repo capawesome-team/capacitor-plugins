@@ -126,13 +126,15 @@ import CommonCrypto
         let url = try urlComponents.asURL()
         let response = try await self.httpClient.requestWithDeviceId(url: url, type: [GetChannelsResponseItem].self)
         if let error = response.error {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to fetch channels: \(error)")
             if response.response?.statusCode == 401 {
                 throw CustomError.channelDiscoveryNotEnabled
             }
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
+            }
+            if case .responseValidationFailed = error {
+                throw CustomError.requestFailed(message: error.localizedDescription)
             }
             throw error
         }
@@ -809,31 +811,37 @@ import CommonCrypto
         return appVersionName
     }
 
+    private func handleRequestFailure(_ error: Error) throws -> Never {
+        if let urlError = error as? URLError, urlError.code == .timedOut {
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorHttpTimeout)
+        }
+        throw CustomError.requestFailed(message: error.localizedDescription)
+    }
+
     private func handleSyncCheckResponse(_ response: CreateCheckResponse) async throws -> SyncResult {
         guard let bundle = response.bundle else {
-            return SyncResult(nextBundleId: nil)
+            return SyncResult(customProperties: nil, nextBundleId: nil)
         }
         // Check if the bundle is blocked
         if isBlockedBundleId(bundle.id) {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Bundle is blocked and will not be downloaded.")
-            return SyncResult(nextBundleId: nil)
+            return SyncResult(customProperties: nil, nextBundleId: nil)
         }
         // Check if bundle already exists
         if hasBundleById(bundle.id) {
-            var nextBundleId: String?
             let currentBundleId = self.getCurrentBundleId()
-            if bundle.id != currentBundleId {
-                // Set the next bundle
-                setNextBundleById(bundle.id)
-                nextBundleId = bundle.id
+            if bundle.id == currentBundleId {
+                return SyncResult(customProperties: nil, nextBundleId: nil)
             }
-            return SyncResult(nextBundleId: nextBundleId)
+            // Set the next bundle
+            setNextBundleById(bundle.id)
+            return SyncResult(customProperties: bundle.customProperties, nextBundleId: bundle.id)
         }
         let downloadUrl = DownloadUrl(bundle: bundle)
         try await downloadBundleRecordingFailure(appId: getAppId(), bundleId: bundle.id, artifactType: bundle.artifactType, downloadUrl: downloadUrl)
         // Set the next bundle
         setNextBundleById(bundle.id)
-        return SyncResult(nextBundleId: bundle.id)
+        return SyncResult(customProperties: bundle.customProperties, nextBundleId: bundle.id)
     }
 
     private func hasBundleById(_ bundleId: String) -> Bool {
@@ -867,6 +875,10 @@ import CommonCrypto
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
+        // The progress cannot be computed without a positive total
+        guard event.totalBytes > 0 else {
+            return
+        }
         plugin?.notifyDownloadBundleProgressListeners(event)
     }
 
@@ -925,12 +937,10 @@ import CommonCrypto
     private func requireSuccessfulDownloadResponse(_ result: AFDownloadResponse<Data>) throws -> HTTPURLResponse {
         if let error = result.error {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to download file: \(error)")
-            if let urlError = error.underlyingError as? URLError {
-                if urlError.code == .timedOut {
-                    throw urlError
-                }
+            if case .sessionTaskFailed(let taskError) = error {
+                try handleRequestFailure(taskError)
             }
-            throw CustomError.downloadFailed
+            throw CustomError.requestFailed(message: LiveUpdatePlugin.errorDownloadFailed)
         }
         guard let response = result.response else {
             throw CustomError.unknown
@@ -1109,6 +1119,9 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Check response: ", body)
         }
         guard let httpResponse = response.response else {
+            if case .sessionTaskFailed(let taskError)? = response.error {
+                try handleRequestFailure(taskError)
+            }
             let error: Error = response.error.map { $0.underlyingError ?? $0 } ?? CustomError.unknown
             throw error
         }

@@ -13,6 +13,8 @@ public class AgeSignalsPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "setNextAgeSignalsAccessResult", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextAgeSignalsException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextAgeSignalsResult", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setNextApplicableAgeFeaturesException", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "setNextApplicableAgeFeaturesResult", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setNextRequestAgeSignalsAccessException", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "setUseFakeManager", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "showSignificantUpdateAcknowledgment", returnType: CAPPluginReturnPromise)
@@ -74,6 +76,14 @@ public class AgeSignalsPlugin: CAPPlugin, CAPBridgedPlugin {
         rejectCallAsUnimplemented(call)
     }
 
+    @objc func setNextApplicableAgeFeaturesException(_ call: CAPPluginCall) {
+        rejectCallAsUnimplemented(call)
+    }
+
+    @objc func setNextApplicableAgeFeaturesResult(_ call: CAPPluginCall) {
+        rejectCallAsUnimplemented(call)
+    }
+
     @objc func setNextRequestAgeSignalsAccessException(_ call: CAPPluginCall) {
         rejectCallAsUnimplemented(call)
     }
@@ -100,7 +110,11 @@ public class AgeSignalsPlugin: CAPPlugin, CAPBridgedPlugin {
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {
         CAPLog.print("[", AgeSignalsPlugin.tag, "] ", error)
-        call.reject(error.localizedDescription)
+        if let error = error as? CustomError {
+            call.reject(error.localizedDescription, error.code)
+        } else {
+            call.reject(error.localizedDescription)
+        }
     }
 
     private func rejectCallAsUnimplemented(_ call: CAPPluginCall) {

@@ -220,7 +220,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
 
         with:
-          name: maestro-android-${{ github.run_id }}
+          name: maestro-android-${{ github.run_id }}-${{ github.run_attempt }}
           path: ~/.maestro/tests
   e2e-ios:
     name: E2E (iOS)
@@ -289,14 +289,24 @@ jobs:
             echo "::endgroup::"
           done
       - name: Run e2e
+        id: e2e
         if: steps.pkgs.outputs.has_pkgs == 'true'
         run: npm run e2e:ios
+      - name: Collect the simulator log and crash reports on failure
+        if: failure() && steps.e2e.outcome == 'failure'
+        timeout-minutes: 5
+        run: |
+          mkdir -p ~/.maestro/tests
+          cp ~/Library/Logs/DiagnosticReports/App* ~/Library/Logs/DiagnosticReports/com.apple.WebKit* ~/.maestro/tests/ 2>/dev/null || true
+          xcrun simctl spawn "$SIM_UDID" log show --last 20m --style compact --info \
+            --predicate 'process == "App" OR process BEGINSWITH "com.apple.WebKit"' \
+            > ~/.maestro/tests/simulator.log
       - name: Upload Maestro artifacts on failure
         if: failure() && steps.pkgs.outputs.has_pkgs == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
 
         with:
-          name: maestro-ios-${{ github.run_id }}
+          name: maestro-ios-${{ github.run_id }}-${{ github.run_attempt }}
           path: ~/.maestro/tests
   e2e-electron:
     name: E2E (Electron)

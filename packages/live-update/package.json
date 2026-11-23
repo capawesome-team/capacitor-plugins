@@ -81,7 +81,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@capawesome/electron-live-update": "^0.1.0"
+    "@capawesome/electron-live-update": "^0.2.0"
   },
   "devDependencies": {
     "@capacitor/android": "8.0.0",

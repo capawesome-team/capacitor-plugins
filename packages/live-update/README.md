@@ -292,7 +292,7 @@ export default config;
 
 ## Usage
 
-All methods are only available on Android and iOS. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
+All methods are only available on Android, iOS and Electron. The following examples show how to sync with Capawesome Cloud, mark the app as ready, check for and download new bundles, switch between and manage bundles, work with channels, inspect the current and next bundle, identify devices, read the app version, and reset to the default bundle.
 
 ### Sync with Capawesome Cloud
 
@@ -359,10 +359,18 @@ const isNewBundleAvailable = async () => {
 Download a self-hosted bundle from any URL, without any Capawesome Cloud dependency:
 
 ```typescript
-import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { ErrorCode, LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const downloadBundle = async () => {
-  await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  try {
+    await LiveUpdate.downloadBundle({ url: 'https://example.com/1.0.0.zip', bundleId: '1.0.0' });
+  } catch (error) {
+    if (error.code === ErrorCode.BundleAlreadyExists) {
+      console.log('The bundle is already on the device.');
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -577,6 +585,9 @@ downloadBundle(options: DownloadBundleOptions) => Promise<void>
 ```
 
 Download a bundle.
+
+The call fails with the error code `BUNDLE_ALREADY_EXISTS` if a bundle with the same identifier
+is already on the device. Use `getBundles()` to check this first.
 
 Only available on Android, iOS and Electron.
 
@@ -1065,6 +1076,9 @@ addListener(eventName: 'downloadBundleProgress', listenerFunc: DownloadBundlePro
 
 Listen for the download progress of a bundle.
 
+On Android and iOS, the event is only sent if there is something to download and its size is known.
+For a zip bundle, the server must report the size of the file.
+
 Only available on Android, iOS and Electron.
 
 | Param              | Type                                                                                      |
@@ -1335,9 +1349,10 @@ Remove all listeners for this plugin.
 
 #### SyncResult
 
-| Prop               | Type                        | Description                                                                                                | Since |
-| ------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------- | ----- |
-| **`nextBundleId`** | <code>string \| null</code> | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available. | 5.0.0 |
+| Prop                   | Type                                    | Description                                                                                                                                | Since |
+| ---------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`customProperties`** | <code>{ [key: string]: string; }</code> | Custom properties that are associated with the next bundle. Only set if `nextBundleId` is not `null` and the bundle has custom properties. | 8.9.0 |
+| **`nextBundleId`**     | <code>string \| null</code>             | The identifier of the next bundle to use. If `null`, the app is up-to-date and no new bundle is available.                                 | 5.0.0 |
 
 
 #### SyncOptions
