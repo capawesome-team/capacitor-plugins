@@ -3,8 +3,7 @@ package io.capawesome.capacitorjs.plugins.liveupdate.classes;
 import androidx.annotation.NonNull;
 
 /**
- * The address of a bundle file with a placeholder for the checksum of the file.
- * The placeholder is replaced on the text, never through a URL parser, so no other character changes.
+ * The address of a bundle file with the placeholder `{checksum}` for the checksum of the file.
  */
 public class UrlTemplate {
 
@@ -17,8 +16,11 @@ public class UrlTemplate {
         this.value = value;
     }
 
+    /**
+     * Replaces the placeholder on the text, never through a URL parser, so that no other character of the template changes.
+     */
     @NonNull
-    public String fill(@NonNull String checksum) {
+    public String buildFileUrl(@NonNull String checksum) {
         return value.replace(CHECKSUM_PLACEHOLDER, checksum);
     }
 

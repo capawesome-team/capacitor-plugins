@@ -20,7 +20,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -58,7 +58,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -86,7 +86,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": "up_to_date",
+      "result": "up_to_date",
       "reason": null,
       "channelName": "production",
       "bundle": null,
@@ -104,7 +104,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": "skipped",
+      "result": "skipped",
       "reason": "channel_paused",
       "channelName": "production",
       "bundle": null,
@@ -122,7 +122,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": "skipped",
+      "result": "skipped",
       "reason": "some_new_reason",
       "channelName": null,
       "bundle": null,
@@ -140,7 +140,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -168,7 +168,7 @@
       }
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -186,7 +186,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -210,7 +210,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -244,7 +244,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -276,7 +276,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -306,7 +306,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -337,7 +337,7 @@
       }
     },
     "expected": {
-      "outcome": "available",
+      "result": "available",
       "reason": null,
       "channelName": "production",
       "bundle": {
@@ -368,7 +368,7 @@
       }
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -392,7 +392,7 @@
       }
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -439,7 +439,7 @@
       }
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -457,7 +457,7 @@
       "bundle": null
     },
     "expected": {
-      "outcome": "skipped",
+      "result": "skipped",
       "reason": null,
       "channelName": "production",
       "bundle": null,
@@ -470,7 +470,7 @@
     "retryAfter": null,
     "rawBody": "<html><body>Sign in to the network</body></html>",
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -485,7 +485,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -500,7 +500,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -515,7 +515,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -530,7 +530,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -545,7 +545,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -560,7 +560,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -575,7 +575,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -590,7 +590,7 @@
       "message": "Too many requests."
     },
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,
@@ -603,7 +603,7 @@
     "retryAfter": "60",
     "rawBody": "Too many requests",
     "expected": {
-      "outcome": null,
+      "result": null,
       "reason": null,
       "channelName": null,
       "bundle": null,

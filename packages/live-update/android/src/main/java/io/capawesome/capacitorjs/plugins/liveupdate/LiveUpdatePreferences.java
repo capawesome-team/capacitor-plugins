@@ -91,8 +91,8 @@ public class LiveUpdatePreferences {
     /**
      * Removes the pending failure only if it is still the reported one, so a failure recorded in the meantime is kept.
      */
-    public void removePendingFailureIfUnchanged(@NonNull UpdateFailure reportedFailure) {
-        if (!reportedFailure.equals(getPendingFailure())) {
+    public void removeReportedFailure(@NonNull UpdateFailure failure) {
+        if (!failure.equals(getPendingFailure())) {
             return;
         }
         settingsEditor.remove(pendingFailureKey);

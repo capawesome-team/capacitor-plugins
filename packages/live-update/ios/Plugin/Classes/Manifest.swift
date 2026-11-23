@@ -8,9 +8,20 @@ import Capacitor
         self.items = items
     }
 
-    /// Throws a `DecodingError` if the data is not a JSON list of items with `href` and `checksum`.
-    static func parse(_ data: Data) throws -> Manifest {
-        let items = try JSONDecoder().decode([ManifestItem].self, from: data)
+    /// - Returns: Per checksum, the first path that holds this content.
+    func mapFirstHrefsByChecksum() -> [String: String] {
+        var hrefsByChecksum = [String: String]()
+        for item in items where hrefsByChecksum[item.checksum] == nil {
+            hrefsByChecksum[item.checksum] = item.href
+        }
+        return hrefsByChecksum
+    }
+
+    /// - Returns: `nil` if the data is not a JSON list of items with `href` and `checksum`.
+    static func parse(_ data: Data) -> Manifest? {
+        guard let items = try? JSONDecoder().decode([ManifestItem].self, from: data) else {
+            return nil
+        }
         return Manifest(items: items)
     }
 }

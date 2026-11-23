@@ -35,14 +35,6 @@ public class LiveUpdatePreferences: NSObject {
         return UserDefaults.standard.string(forKey: applyPrefix(to: lastVersionNameKey))
     }
 
-    /// - Returns: The pending failure, or `nil` if none is stored or the stored value cannot be read.
-    func getPendingFailure() -> UpdateFailure? {
-        guard let data = UserDefaults.standard.data(forKey: applyPrefix(to: pendingFailureKey)) else {
-            return nil
-        }
-        return try? JSONDecoder().decode(UpdateFailure.self, from: data)
-    }
-
     public func getPreviousBundleId() -> String? {
         return UserDefaults.standard.string(forKey: applyPrefix(to: previousBundleIdKey))
     }
@@ -97,21 +89,29 @@ public class LiveUpdatePreferences: NSObject {
         UserDefaults.standard.synchronize()
     }
 
-    /// Removes the pending failure only if it is still the given one. A failure that was recorded since then is kept.
-    func removePendingFailure(_ failure: UpdateFailure) {
-        guard getPendingFailure() == failure else {
-            return
-        }
-        UserDefaults.standard.removeObject(forKey: applyPrefix(to: pendingFailureKey))
-        UserDefaults.standard.synchronize()
-    }
-
     public func setPreviousBundleId(_ value: String?) {
         if let value = value {
             UserDefaults.standard.set(value, forKey: applyPrefix(to: previousBundleIdKey))
         } else {
             UserDefaults.standard.removeObject(forKey: applyPrefix(to: previousBundleIdKey))
         }
+        UserDefaults.standard.synchronize()
+    }
+
+    /// - Returns: The pending failure, or `nil` if none is stored or the stored value cannot be read.
+    func getPendingFailure() -> UpdateFailure? {
+        guard let data = UserDefaults.standard.data(forKey: applyPrefix(to: pendingFailureKey)) else {
+            return nil
+        }
+        return try? JSONDecoder().decode(UpdateFailure.self, from: data)
+    }
+
+    /// Removes the pending failure only if it is still the given one. A failure that was recorded since then is kept.
+    func removeReportedFailure(_ failure: UpdateFailure) {
+        guard getPendingFailure() == failure else {
+            return
+        }
+        UserDefaults.standard.removeObject(forKey: applyPrefix(to: pendingFailureKey))
         UserDefaults.standard.synchronize()
     }
 

@@ -45,23 +45,24 @@ class ProtocolTestCasesTests: XCTestCase {
         let cases = try loadCases("manifest.json") as [String: Any]
         for testCase in try XCTUnwrap(cases["parse"] as? [[String: Any]]) {
             let text = try XCTUnwrap(testCase["text"] as? String)
-            let manifest = try? Manifest.parse(Data(text.utf8))
+            let manifest = Manifest.parse(Data(text.utf8))
             let items = manifest.map { $0.items.map(serialize) as NSArray }
             XCTAssertEqual(items, testCase["expectedItems"] as? NSArray, name(of: testCase))
         }
     }
 
-    func testManifestPlan() throws {
+    func testManifestFirstHrefsByChecksum() throws {
         let cases = try loadCases("manifest.json") as [String: Any]
         for testCase in try XCTUnwrap(cases["plan"] as? [[String: Any]]) {
             let currentManifest = try (testCase["currentItems"] as? [Any]).map(buildManifest)
             let latestManifest = try buildManifest(XCTUnwrap(testCase["latestItems"] as? [Any]))
-            let plan = ManifestPlan(latestManifest: latestManifest, currentManifest: currentManifest)
-            let actual: [String: Any] = [
-                "copy": plan.copies.map { ["from": $0.sourceHref, "to": $0.item.href] },
-                "download": plan.downloads.map { $0.href }
-            ]
-            XCTAssertEqual(actual as NSDictionary, testCase["expected"] as? NSDictionary, name(of: testCase))
+            let checksumsByHref = Dictionary(uniqueKeysWithValues: latestManifest.items.map { ($0.href, $0.checksum) })
+            let hrefsByChecksum = currentManifest?.mapFirstHrefsByChecksum() ?? [:]
+            let expected = try XCTUnwrap(testCase["expected"] as? [String: Any])
+            for copy in try XCTUnwrap(expected["copy"] as? [[String: String]]) {
+                let checksum = try XCTUnwrap(checksumsByHref[XCTUnwrap(copy["to"])], name(of: testCase))
+                XCTAssertEqual(hrefsByChecksum[checksum], copy["from"], name(of: testCase))
+            }
         }
     }
 
@@ -88,7 +89,7 @@ class ProtocolTestCasesTests: XCTestCase {
     }
 
     private func buildManifest(_ items: [Any]) throws -> Manifest {
-        return try Manifest.parse(JSONSerialization.data(withJSONObject: items))
+        return try XCTUnwrap(Manifest.parse(JSONSerialization.data(withJSONObject: items)))
     }
 
     private func loadCases<T>(_ fileName: String) throws -> T {
@@ -116,7 +117,7 @@ class ProtocolTestCasesTests: XCTestCase {
 
     private func serialize(_ response: CreateCheckResponse) -> [String: Any] {
         return [
-            "outcome": response.outcome?.rawValue ?? NSNull(),
+            "result": response.result?.rawValue ?? NSNull(),
             "reason": response.reason ?? NSNull(),
             "channelName": response.channelName ?? NSNull(),
             "bundle": response.bundle.map(serialize) ?? NSNull(),

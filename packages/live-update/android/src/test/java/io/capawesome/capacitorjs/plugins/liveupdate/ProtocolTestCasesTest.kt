@@ -60,7 +60,7 @@ class ProtocolTestCasesTest {
             val response = parse()
 
             val expected = case.getJSONObject("expected")
-            assertEquals(expected.optStringOrNull("outcome"), response.outcome?.value)
+            assertEquals(expected.optStringOrNull("result"), response.result?.value)
             assertEquals(expected.optStringOrNull("reason"), response.reason)
             assertEquals(expected.optStringOrNull("channelName"), response.channelName)
             assertBundle(expected.optJSONObject("bundle"), response.bundle)
@@ -71,7 +71,7 @@ class ProtocolTestCasesTest {
     @Test
     fun urlTemplate() {
         forEachCase(readArray("url-template.json")) { case ->
-            val url = UrlTemplate(case.getString("urlTemplate")).fill(case.getString("checksum"))
+            val url = UrlTemplate(case.getString("urlTemplate")).buildFileUrl(case.getString("checksum"))
 
             assertEquals(case.getString("expectedUrl"), url)
         }
@@ -99,17 +99,17 @@ class ProtocolTestCasesTest {
     }
 
     @Test
-    fun manifestPlan() {
+    fun manifestFirstHrefsByChecksum() {
         forEachCase(readObject("manifest.json").getJSONArray("plan")) { case ->
             val currentManifest = case.optJSONArray("currentItems")?.let { Manifest.parse(it.toString()) }
             val latestManifest = Manifest.parse(case.getJSONArray("latestItems").toString())!!
+            val checksumsByHref = latestManifest.items.associate { it.href to it.checksum }
 
-            val plan = latestManifest.createPlan(currentManifest)
+            val hrefsByChecksum = currentManifest?.mapFirstHrefsByChecksum() ?: emptyMap()
 
-            val expected = case.getJSONObject("expected")
-            val expectedCopies = expected.getJSONArray("copy").toList<JSONObject>().map { it.getString("from") to it.getString("to") }
-            assertEquals(expectedCopies, plan.filesToCopy.map { it.sourceHref to it.item.href })
-            assertEquals(expected.getJSONArray("download").toList<String>(), plan.itemsToDownload.map { it.href })
+            case.getJSONObject("expected").getJSONArray("copy").toList<JSONObject>().forEach { copy ->
+                assertEquals(copy.getString("from"), hrefsByChecksum[checksumsByHref[copy.getString("to")]])
+            }
         }
     }
 

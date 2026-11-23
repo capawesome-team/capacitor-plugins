@@ -15,6 +15,7 @@ public enum CustomError: Error {
     case checksumMissing
     case configurationValueInvalid(key: String)
     case customIdMissing
+    case manifestInvalid
     case pluginNotInitialized
     case requestFailed(message: String)
     case signatureMissing
@@ -71,6 +72,8 @@ extension CustomError: LocalizedError {
             return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
+        case .manifestInvalid:
+            return NSLocalizedString("The bundle manifest could not be read.", comment: "manifestInvalid")
         case .pluginNotInitialized:
             return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .requestFailed(let message):

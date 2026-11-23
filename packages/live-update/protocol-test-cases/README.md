@@ -111,7 +111,7 @@ With `urlTemplate`, the first file is verified against the checksum, and also ag
 
 Four fields of `expected` in `check-response.json` need a word:
 
-- `outcome` is the `result` of a processed answer, and `null` for every other answer.
+- `result` is the `result` of a processed answer, and `null` for every other answer.
 - `reason` is the `reason` of a skipped check as the server sent it, and `null` for every other answer.
 - `url` of `bundle` is the plain address: `url`, or else `legacyUrl`.
 - `retryAfterMs` is the wait after a 429.

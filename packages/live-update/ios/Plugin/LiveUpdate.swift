@@ -15,7 +15,7 @@ import CommonCrypto
     private static let interruptedDownloadsDeleted: Void = {
         try? FileManager.default.removeItem(at: downloadsDirectoryUrl)
     }()
-    /// The wait after a 429 per app id, from the answer to `nextCheckAllowedAt`. Shared by every instance, so that
+    /// The wait after a 429 per app id, from the answer until the wait ends. Shared by every instance, so that
     /// managers of the same app share one wait. Kept in memory only, so a restart of the app always checks.
     private static var checkWaits = [String: DateInterval]()
     /// Guards `checkWaits`: checks of several app ids can run at the same time.
@@ -134,20 +134,23 @@ import CommonCrypto
     /// Resolves as "no update" while the server asked to wait.
     func fetchCheck(_ options: FetchLatestBundleOptions) async throws -> CreateCheckResponse {
         let appId = try requireAppId(options.getAppId())
-        guard isCheckAllowed(appId: appId) else {
+        if isCheckWaiting(appId: appId) {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. No check was made because the device is rate limited.")
-            return CreateCheckResponse.noUpdate()
+            return CreateCheckResponse.createWithoutUpdate()
         }
         let pendingFailure = getPendingFailure(appId: appId)
         let request = await buildCreateCheckRequest(options, pendingFailure: pendingFailure)
-        let response = try await sendCreateCheckRequest(request, appId: appId)
-        if let retryAfterMs = response.retryAfterMs {
+        let url = try buildCheckUrl(appId: appId)
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] Creating check: ", url)
+        let response = try await httpClient.post(url: url, body: request)
+        let checkResponse = try parseCheckResponse(response)
+        if let retryAfterMs = checkResponse.retryAfterMs {
             startCheckWait(appId: appId, retryAfterMs: retryAfterMs)
         } else if let pendingFailure = pendingFailure {
             // Only a 200 comes without a wait, because every status other than 200 and 429 throws.
-            preferences.removePendingFailure(pendingFailure)
+            preferences.removeReportedFailure(pendingFailure)
         }
-        return response
+        return checkResponse
     }
 
     @objc public func fetchLatestBundle(_ options: FetchLatestBundleOptions) async throws -> FetchLatestBundleResult {
@@ -402,6 +405,10 @@ import CommonCrypto
         return url
     }
 
+    private func buildCheckUrl(appId: String) throws -> URL {
+        return try "https://\(config.serverDomain)/v1/live-updates/apps/\(appId)/checks".asURL()
+    }
+
     private func buildCreateCheckRequest(_ options: FetchLatestBundleOptions, pendingFailure: UpdateFailure?) async -> CreateCheckRequest {
         let osVersion = await UIDevice.current.systemVersion
         return CreateCheckRequest(
@@ -452,17 +459,16 @@ import CommonCrypto
         remainingRollbackTimeout = nil
     }
 
-    private func copyCurrentBundleFile(_ copy: ManifestPlan.Copy, toDirectory: URL) throws {
+    private func copyCurrentBundleFile(sourceHref: String, destination: URL) throws {
         let currentBundleId = getCurrentBundleId()
-        let destination = toDirectory.appendingPathComponent(copy.item.href)
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
         let sourceURL: URL
         if let currentBundleId = currentBundleId {
-            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(copy.sourceHref)
+            sourceURL = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(sourceHref)
         } else {
-            guard let file = Bundle.main.url(forResource: copy.sourceHref, withExtension: nil, subdirectory: defaultWebAssetDir) else {
+            guard let file = Bundle.main.url(forResource: sourceHref, withExtension: nil, subdirectory: defaultWebAssetDir) else {
                 // If the file does not exist in the current bundle, throw an error
                 // We can use CustomError.unknown here since this error will not be handled by the user
                 throw CustomError.unknown
@@ -473,20 +479,19 @@ import CommonCrypto
         try FileManager.default.copyItem(at: sourceURL, to: destination)
     }
 
-    private func copyCurrentBundleFilesAndReturnFailures(
-        copies: [ManifestPlan.Copy],
-        toDirectory: URL
-    ) -> [ManifestItem] {
-        var missingItems = [ManifestItem]()
-        for copy in copies {
-            let success = tryCopyCurrentBundleFile(copy, toDirectory: toDirectory)
-            if !success {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(copy.sourceHref)")
-                // If the file could not be copied, add it to the list of missing items
-                missingItems.append(copy.item)
+    /// A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
+    /// - Returns: The files of the new manifest that must be downloaded, in the order of the new manifest.
+    private func copyUnchangedFilesAndListFilesToDownload(_ latestManifest: Manifest, directory: URL) -> [ManifestItem] {
+        let currentHrefsByChecksum = tryLoadCurrentManifest()?.mapFirstHrefsByChecksum() ?? [:]
+        var itemsToDownload = [ManifestItem]()
+        for item in latestManifest.items {
+            let destination = directory.appendingPathComponent(item.href)
+            if let sourceHref = currentHrefsByChecksum[item.checksum], tryCopyCurrentBundleFile(sourceHref: sourceHref, destination: destination) {
+                continue
             }
+            itemsToDownload.append(item)
         }
-        return missingItems
+        return itemsToDownload
     }
 
     private func createBundlesDirectory() {
@@ -605,10 +610,10 @@ import CommonCrypto
         let temporaryDirectory = try createTemporaryDownloadDirectory()
         defer { tryDeleteDirectory(temporaryDirectory) }
         let latestManifestFile = try await downloadManifestFile(options, directory: temporaryDirectory)
-        let latestManifest = try loadManifest(file: latestManifestFile)
-        let plan = ManifestPlan(latestManifest: latestManifest, currentManifest: tryLoadCurrentManifest())
-        let failedCopies = copyCurrentBundleFilesAndReturnFailures(copies: plan.copies, toDirectory: temporaryDirectory)
-        let filesToDownload = plan.downloads + failedCopies
+        guard let latestManifest = try loadManifest(file: latestManifestFile) else {
+            throw CustomError.manifestInvalid
+        }
+        let filesToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, directory: temporaryDirectory)
         let callback = buildDownloadProgressCallback(bundleId: options.getBundleId())
         try await downloadBundleFiles(options, filesToDownload: filesToDownload, directory: temporaryDirectory, callback: callback)
         try await addBundleOfTypeManifest(bundleId: options.getBundleId(), directory: temporaryDirectory)
@@ -621,7 +626,8 @@ import CommonCrypto
         let zipFile = temporaryDirectory.appendingPathComponent("bundle.zip")
         let callback = buildDownloadProgressCallback(bundleId: options.getBundleId())
         if let urlTemplate = options.urlTemplate {
-            try await downloadZipFileWithMarker(url: urlTemplate.buildFileUrl(checksum: options.requireChecksum()), file: zipFile, callback: callback)
+            let url = try urlTemplate.buildFileUrl(checksum: options.requireChecksum())
+            try await downloadZipFileWithUrlTemplate(url: url, file: zipFile, callback: callback)
             try verifyFirstFileWithUrlTemplate(zipFile, options: options)
         } else {
             let url = try buildUrl(options.getUrl())
@@ -637,7 +643,7 @@ import CommonCrypto
     }
 
     /// Downloads without the device id header.
-    private func downloadFileWithMarker(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
+    private func downloadFileWithUrlTemplate(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
         let destination = buildDownloadDestination(file: file)
         let result = await httpClient.download(url: try buildUrl(url), destination: destination, callback: callback)
         _ = try requireSuccessfulDownloadResponse(result)
@@ -648,7 +654,7 @@ import CommonCrypto
             return try await downloadBundleFile(baseUrl: options.getUrl(), href: manifestFileName, directory: directory, callback: nil)
         }
         let file = directory.appendingPathComponent(manifestFileName)
-        try await downloadFileWithMarker(url: urlTemplate.buildFileUrl(checksum: options.requireChecksum()), file: file, callback: nil)
+        try await downloadFileWithUrlTemplate(url: urlTemplate.buildFileUrl(checksum: options.requireChecksum()), file: file, callback: nil)
         try verifyFirstFileWithUrlTemplate(file, options: options)
         return file
     }
@@ -659,12 +665,12 @@ import CommonCrypto
             return
         }
         let file = directory.appendingPathComponent(item.href)
-        try await downloadFileWithMarker(url: urlTemplate.buildFileUrl(checksum: item.checksum), file: file, callback: callback)
+        try await downloadFileWithUrlTemplate(url: urlTemplate.buildFileUrl(checksum: item.checksum), file: file, callback: callback)
         try verifyChecksum(url: file, expectedChecksum: item.checksum)
     }
 
     /// Downloads without the device id header and without compression.
-    private func downloadZipFileWithMarker(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
+    private func downloadZipFileWithUrlTemplate(url: String, file: URL, callback: ((Progress) -> Void)?) async throws {
         let destination = buildDownloadDestination(file: file)
         let result = await httpClient.downloadWithoutCompression(url: try buildUrl(url), destination: destination, callback: callback)
         _ = try requireSuccessfulDownloadResponse(result)
@@ -832,6 +838,75 @@ import CommonCrypto
         return FileManager.default.fileExists(atPath: path)
     }
 
+    private func isCheckWaiting(appId: String) -> Bool {
+        Self.checkWaitsLock.lock()
+        defer { Self.checkWaitsLock.unlock() }
+        guard let checkWait = Self.checkWaits[appId] else {
+            return false
+        }
+        // A clock that was set back to before the answer ends the wait, so that the wait never grows
+        let now = Date()
+        return now >= checkWait.start && now < checkWait.end
+    }
+
+    private func isSignatureValid(url: URL, signature: String, publicKey: String) throws -> Bool {
+        let publicKeyAsBase64 = publicKey
+            .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
+            .replacingOccurrences(of: "\n", with: "")
+        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode public key.")
+            return false
+        }
+        let publicKeyAttributes: [CFString: Any] = [
+            kSecAttrKeyType: kSecAttrKeyTypeRSA,
+            kSecAttrKeyClass: kSecAttrKeyClassPublic,
+            kSecAttrKeySizeInBits: 2048,
+            kSecReturnPersistentRef: true
+        ]
+        var secKeyCreateWithDataError: Unmanaged<CFError>?
+        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &secKeyCreateWithDataError) else {
+            if let error = secKeyCreateWithDataError?.takeRetainedValue() {
+                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create public key with error: \(error)")
+            }
+            return false
+        }
+        guard let signatureData = Data(base64Encoded: signature) else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
+            return false
+        }
+
+        // Create SHA256 digest
+        var digestContext = CC_SHA256_CTX()
+        CC_SHA256_Init(&digestContext)
+
+        // Update the digest with the file's data
+        let handle = try FileHandle(forReadingFrom: url)
+        while autoreleasepool(invoking: {
+            let nextChunk = handle.readData(ofLength: 2048)
+            guard !nextChunk.isEmpty else { return false }
+            nextChunk.withUnsafeBytes {
+                _ = CC_SHA256_Update(&digestContext, $0.baseAddress, CC_LONG(nextChunk.count))
+            }
+            return true
+        }) { }
+
+        // Compute the digest
+        var digest = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
+        digest.withUnsafeMutableBytes {
+            _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
+        }
+
+        // Verify the signature
+        var secKeyVerifySignatureError: Unmanaged<CFError>?
+        let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
+        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &secKeyVerifySignatureError)
+        if let error = secKeyVerifySignatureError?.takeRetainedValue() {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to verify signature with error: \(error)")
+        }
+        return verificationResult
+    }
+
     private func loadCurrentManifest() throws -> Manifest? {
         if let currentBundleId = getCurrentBundleId() {
             let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
@@ -852,9 +927,20 @@ import CommonCrypto
         }
     }
 
-    private func loadManifest(file: URL) throws -> Manifest {
+    /// - Returns: `nil` if the manifest cannot be used.
+    private func loadManifest(file: URL) throws -> Manifest? {
         let data = try Data(contentsOf: file)
-        return try Manifest.parse(data)
+        return Manifest.parse(data)
+    }
+
+    private func logNoUpdateReason(_ response: CreateCheckResponse, statusCode: Int) {
+        if statusCode != 200 {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The server answered with status \(statusCode).")
+        } else if response.result == .skipped {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The check was skipped with the reason \(response.reason ?? "null").")
+        } else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
+        }
     }
 
     private func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
@@ -863,6 +949,40 @@ import CommonCrypto
             return
         }
         plugin?.notifyDownloadBundleProgressListeners(event)
+    }
+
+    /// Throws if the server could not be reached or answered with a status other than 200 and 429.
+    private func parseCheckResponse(_ response: AFDataResponse<Data?>) throws -> CreateCheckResponse {
+        let body = response.data.flatMap { String(bytes: $0, encoding: .utf8) }
+        if let body = body {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] Check response: ", body)
+        }
+        // A transfer that broke after the headers arrived is a failed request, not an answer.
+        if case .sessionTaskFailed(let taskError)? = response.error {
+            try handleRequestFailure(taskError)
+        }
+        guard let httpResponse = response.response else {
+            let error: Error = response.error.map { $0.underlyingError ?? $0 } ?? CustomError.unknown
+            throw error
+        }
+        let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After")
+        let checkResponse = try CreateCheckResponse.parse(statusCode: httpResponse.statusCode, retryAfter: retryAfter, body: body)
+        if checkResponse.bundle == nil {
+            logNoUpdateReason(checkResponse, statusCode: httpResponse.statusCode)
+        }
+        return checkResponse
+    }
+
+    /// Must be called with `rollbackTimerLock` held.
+    private func pauseRollbackTimer() {
+        guard let deadline = rollbackDeadline else {
+            return
+        }
+        rollbackDispatchWorkItem?.cancel()
+        rollbackDispatchWorkItem = nil
+        rollbackDeadline = nil
+        let now = DispatchTime.now()
+        remainingRollbackTimeout = deadline > now ? Int((deadline.uptimeNanoseconds - now.uptimeNanoseconds) / 1_000_000) : 0
     }
 
     private func performAutoUpdate() {
@@ -887,18 +1007,6 @@ import CommonCrypto
                 CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Auto-update failed: ", error.localizedDescription)
             }
         }
-    }
-
-    /// Must be called with `rollbackTimerLock` held.
-    private func pauseRollbackTimer() {
-        guard let deadline = rollbackDeadline else {
-            return
-        }
-        rollbackDispatchWorkItem?.cancel()
-        rollbackDispatchWorkItem = nil
-        rollbackDeadline = nil
-        let now = DispatchTime.now()
-        remainingRollbackTimeout = deadline > now ? Int((deadline.uptimeNanoseconds - now.uptimeNanoseconds) / 1_000_000) : 0
     }
 
     /// Must be called with `rollbackTimerLock` held.
@@ -1047,33 +1155,6 @@ import CommonCrypto
         return blockedList.contains(bundleId)
     }
 
-    private func isCheckAllowed(appId: String) -> Bool {
-        Self.checkWaitsLock.lock()
-        defer { Self.checkWaitsLock.unlock() }
-        guard let checkWait = Self.checkWaits[appId] else {
-            return true
-        }
-        // A clock that was set back to before the answer ends the wait, so that the wait never grows
-        let now = Date()
-        return now < checkWait.start || now >= checkWait.end
-    }
-
-    private func logNoUpdateReason(_ response: CreateCheckResponse, statusCode: Int) {
-        if statusCode != 200 {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The server answered with status \(statusCode).")
-        } else if response.outcome == .skipped {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The check was skipped with the reason \(response.reason ?? "null").")
-        } else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
-        }
-    }
-
-    private func startCheckWait(appId: String, retryAfterMs: Int64) {
-        Self.checkWaitsLock.lock()
-        defer { Self.checkWaitsLock.unlock() }
-        Self.checkWaits[appId] = DateInterval(start: Date(), duration: Double(retryAfterMs) / 1000.0)
-    }
-
     private func setNextCapacitorServerPath(path: String) {
         if path.hasSuffix("/public") {
             // Must set an empty string to reset the custom server base path
@@ -1082,31 +1163,6 @@ import CommonCrypto
             // Attention: Only the lastPathComponent is used (see https://dub.sh/BLluidt)
             KeyValueStore.standard[self.defaultServerPathKey] = path
         }
-    }
-
-    /// Throws if the server could not be reached or answered with a status other than 200 and 429.
-    private func sendCreateCheckRequest(_ request: CreateCheckRequest, appId: String) async throws -> CreateCheckResponse {
-        let url = try "https://\(config.serverDomain)/v1/live-updates/apps/\(appId)/checks".asURL()
-        CAPLog.print("[", LiveUpdatePlugin.tag, "] Creating check: ", url)
-        let response = try await httpClient.post(url: url, body: request)
-        let body = response.data.flatMap { String(bytes: $0, encoding: .utf8) }
-        if let body = body {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] Check response: ", body)
-        }
-        // A transfer that broke after the headers arrived is a failed request, not an answer.
-        if case .sessionTaskFailed(let taskError)? = response.error {
-            try handleRequestFailure(taskError)
-        }
-        guard let httpResponse = response.response else {
-            let error: Error = response.error.map { $0.underlyingError ?? $0 } ?? CustomError.unknown
-            throw error
-        }
-        let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After")
-        let checkResponse = try CreateCheckResponse.parse(statusCode: httpResponse.statusCode, retryAfter: retryAfter, body: body)
-        if checkResponse.bundle == nil {
-            logNoUpdateReason(checkResponse, statusCode: httpResponse.statusCode)
-        }
-        return checkResponse
     }
 
     private func checkAndResetConfigIfVersionChanged() {
@@ -1147,6 +1203,12 @@ import CommonCrypto
         DispatchQueue.main.asyncAfter(deadline: deadline, execute: workItem)
     }
 
+    private func startCheckWait(appId: String, retryAfterMs: Int64) {
+        Self.checkWaitsLock.lock()
+        defer { Self.checkWaitsLock.unlock() }
+        Self.checkWaits[appId] = DateInterval(start: Date(), duration: Double(retryAfterMs) / 1000.0)
+    }
+
     /// The timer only counts time in the foreground, because a suspended app cannot call `ready()`.
     private func startRollbackTimer() {
         guard config.readyTimeout > 0 else {
@@ -1168,14 +1230,13 @@ import CommonCrypto
         clearRollbackTimer()
     }
 
-    private func tryCopyCurrentBundleFile(
-        _ copy: ManifestPlan.Copy,
-        toDirectory: URL
-    ) -> Bool {
+    /// - Returns: `true` if the file was copied.
+    private func tryCopyCurrentBundleFile(sourceHref: String, destination: URL) -> Bool {
         do {
-            try copyCurrentBundleFile(copy, toDirectory: toDirectory)
+            try copyCurrentBundleFile(sourceHref: sourceHref, destination: destination)
             return true
         } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(sourceHref)")
             return false
         }
     }
@@ -1266,71 +1327,13 @@ import CommonCrypto
         }
         let verified: Bool
         do {
-            verified = try self.verifySignatureForFile(url: url, signature: signature, publicKey: publicKey)
+            verified = try self.isSignatureValid(url: url, signature: signature, publicKey: publicKey)
         } catch {
             throw CustomError.signatureVerificationFailed
         }
         if !verified {
             throw CustomError.signatureVerificationFailed
         }
-    }
-
-    private func verifySignatureForFile(url: URL, signature: String, publicKey: String) throws -> Bool {
-        let publicKeyAsBase64 = publicKey
-            .replacingOccurrences(of: "-----BEGIN PUBLIC KEY-----", with: "")
-            .replacingOccurrences(of: "-----END PUBLIC KEY-----", with: "")
-            .replacingOccurrences(of: "\n", with: "")
-        guard let publicKeyData = Data(base64Encoded: publicKeyAsBase64) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode public key.")
-            return false
-        }
-        let publicKeyAttributes: [CFString: Any] = [
-            kSecAttrKeyType: kSecAttrKeyTypeRSA,
-            kSecAttrKeyClass: kSecAttrKeyClassPublic,
-            kSecAttrKeySizeInBits: 2048,
-            kSecReturnPersistentRef: true
-        ]
-        var secKeyCreateWithDataError: Unmanaged<CFError>?
-        guard let publicKey = SecKeyCreateWithData(publicKeyData as CFData, publicKeyAttributes as CFDictionary, &secKeyCreateWithDataError) else {
-            if let error = secKeyCreateWithDataError?.takeRetainedValue() {
-                CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to create public key with error: \(error)")
-            }
-            return false
-        }
-        guard let signatureData = Data(base64Encoded: signature) else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to decode signature.")
-            return false
-        }
-
-        // Create SHA256 digest
-        var digestContext = CC_SHA256_CTX()
-        CC_SHA256_Init(&digestContext)
-
-        // Update the digest with the file's data
-        let handle = try FileHandle(forReadingFrom: url)
-        while autoreleasepool(invoking: {
-            let nextChunk = handle.readData(ofLength: 2048)
-            guard !nextChunk.isEmpty else { return false }
-            nextChunk.withUnsafeBytes {
-                _ = CC_SHA256_Update(&digestContext, $0.baseAddress, CC_LONG(nextChunk.count))
-            }
-            return true
-        }) { }
-
-        // Compute the digest
-        var digest = Data(count: Int(CC_SHA256_DIGEST_LENGTH))
-        digest.withUnsafeMutableBytes {
-            _ = CC_SHA256_Final($0.bindMemory(to: UInt8.self).baseAddress, &digestContext)
-        }
-
-        // Verify the signature
-        var secKeyVerifySignatureError: Unmanaged<CFError>?
-        let signatureAlgorithm = SecKeyAlgorithm.rsaSignatureDigestPKCS1v15SHA256
-        let verificationResult = SecKeyVerifySignature(publicKey, signatureAlgorithm, digest as CFData, signatureData as CFData, &secKeyVerifySignatureError)
-        if let error = secKeyVerifySignatureError?.takeRetainedValue() {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to verify signature with error: \(error)")
-        }
-        return verificationResult
     }
 }
 

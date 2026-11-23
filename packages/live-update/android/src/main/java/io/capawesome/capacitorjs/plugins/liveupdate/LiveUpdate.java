@@ -20,9 +20,7 @@ import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestFileCopy;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestPlan;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UrlTemplate;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckRequest;
@@ -58,7 +56,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.IsSyncingRes
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.ReadyResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.SyncResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType;
-import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckResult;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.FailureReason;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.Callback;
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.CallbackStep;
@@ -81,6 +79,7 @@ import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -103,13 +102,13 @@ import org.json.JSONObject;
 
 public class LiveUpdate {
 
-    private static final AtomicBoolean downloadsDirectoryDeleted = new AtomicBoolean(false);
-
     /**
      * Per app ID, the `SystemClock.elapsedRealtime()` before which no check is made.
      * Shared by every instance and kept in memory only, so a restart of the app always checks.
      */
-    private static final Map<String, Long> nextCheckAllowedAt = new ConcurrentHashMap<>();
+    private static final Map<String, Long> checkWaitEndsAt = new ConcurrentHashMap<>();
+
+    private static final AtomicBoolean downloadsDirectoryDeleted = new AtomicBoolean(false);
 
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
 
@@ -279,17 +278,17 @@ public class LiveUpdate {
     public void fetchCheck(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<CreateCheckResponse> callback) {
         try {
             String appId = requireAppId(options.getAppId());
-            if (!isCheckAllowed(appId)) {
+            if (isCheckWaiting(appId)) {
                 Logger.debug(LiveUpdatePlugin.TAG, "No update available. No check was made because the device is rate limited.");
                 callback.success(CreateCheckResponse.createWithoutUpdate());
                 return;
             }
-            UpdateFailure pendingFailure = getPendingFailureOfApp(appId);
+            UpdateFailure pendingFailure = getPendingFailure(appId);
             JSONObject body = buildCreateCheckRequest(options, pendingFailure).toJSONObject();
-            String url = buildCreateCheckUrl(appId);
+            String url = buildCheckUrl(appId);
             Logger.debug(LiveUpdatePlugin.TAG, "Creating check: " + url + " " + body);
 
-            httpClient.enqueuePost(url, body, createCheckResponseCallback(appId, pendingFailure, callback));
+            httpClient.enqueuePost(url, body, buildCheckCallback(appId, pendingFailure, callback));
         } catch (Exception e) {
             callback.error(e);
         }
@@ -620,6 +619,56 @@ public class LiveUpdate {
         return new File(context.getFilesDir(), bundlesDirectory + "/" + bundleId);
     }
 
+    /**
+     * Applies the wait of a 429 and clears the reported failure after a 200.
+     */
+    @NonNull
+    private NonEmptyCallback<Response> buildCheckCallback(
+        @NonNull String appId,
+        @Nullable UpdateFailure pendingFailure,
+        @NonNull NonEmptyCallback<CreateCheckResponse> callback
+    ) {
+        return new NonEmptyCallback<Response>() {
+            @Override
+            public void success(@NonNull Response response) {
+                try {
+                    CreateCheckResponse checkResponse = parseCheckResponse(response);
+                    Long retryAfterMs = checkResponse.getRetryAfterMs();
+                    if (retryAfterMs != null) {
+                        startCheckWait(appId, retryAfterMs);
+                    }
+                    if (pendingFailure != null && response.code() == 200) {
+                        preferences.removeReportedFailure(pendingFailure);
+                    }
+                    callback.success(checkResponse);
+                } catch (IOException e) {
+                    handleRequestFailure(e, callback);
+                } catch (Exception e) {
+                    callback.error(e);
+                }
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                handleRequestFailure(exception, callback);
+            }
+        };
+    }
+
+    @NonNull
+    private String buildCheckUrl(@NonNull String appId) {
+        return new HttpUrl.Builder()
+            .scheme("https")
+            .host(config.getServerDomain())
+            .addPathSegment("v1")
+            .addPathSegment("live-updates")
+            .addPathSegment("apps")
+            .addPathSegment(appId)
+            .addPathSegment("checks")
+            .build()
+            .toString();
+    }
+
     @NonNull
     private CreateCheckRequest buildCreateCheckRequest(@NonNull FetchLatestBundleOptions options, @Nullable UpdateFailure pendingFailure)
         throws PackageManager.NameNotFoundException {
@@ -640,147 +689,22 @@ public class LiveUpdate {
     }
 
     @NonNull
-    private String buildCreateCheckUrl(@NonNull String appId) {
-        return new HttpUrl.Builder()
-            .scheme("https")
-            .host(config.getServerDomain())
-            .addPathSegment("v1")
-            .addPathSegment("live-updates")
-            .addPathSegment("apps")
-            .addPathSegment(appId)
-            .addPathSegment("checks")
-            .build()
-            .toString();
-    }
-
-    private File buildDownloadsDirectory() {
-        return new File(context.getCacheDir(), downloadsDirectory);
-    }
-
-    @NonNull
-    private String buildHrefUrl(@NonNull String baseUrl, @NonNull String href) {
-        HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
-        urlBuilder.addQueryParameter("href", href);
-        return urlBuilder.build().toString();
-    }
-
-    private void copyCurrentBundleFile(@NonNull ManifestFileCopy fileCopy, @NonNull File destinationDirectory) throws IOException {
-        String sourceHref = fileCopy.getSourceHref();
-        String currentBundleId = getCurrentBundleId();
-        if (currentBundleId == null) {
-            // Create the source input stream
-            AssetManager assets = context.getAssets();
-            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + sourceHref);
-            // Create the destination file
-            File destination = new File(destinationDirectory, fileCopy.getItem().getHref());
-            // Create all destination directories if they do not exist
-            destination.getParentFile().mkdirs();
-            // Copy the file
-            copyFile(inputStream, destination);
-        } else {
-            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
-            // Create the source and destination files
-            File source = new File(currentBundleDirectory, sourceHref);
-            File destination = new File(destinationDirectory, fileCopy.getItem().getHref());
-            // Create all destination directories if they do not exist
-            destination.getParentFile().mkdirs();
-            // Copy the file
-            copyFile(source, destination);
-        }
-    }
-
-    private List<ManifestItem> copyCurrentBundleFilesAndReturnFailures(
-        @NonNull List<ManifestFileCopy> filesToCopy,
-        @NonNull File destinationDirectory
-    ) {
-        List<ManifestItem> missingItems = new ArrayList<>();
-        for (ManifestFileCopy fileToCopy : filesToCopy) {
-            boolean success = tryCopyCurrentBundleFile(fileToCopy, destinationDirectory);
-            if (!success) {
-                Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + fileToCopy.getItem().getHref());
-                // If the file could not be copied, add it to the list of missing items
-                missingItems.add(fileToCopy.getItem());
-            }
-        }
-        return missingItems;
-    }
-
-    private void copyFile(File input, File output) throws IOException {
-        FileInputStream in = new FileInputStream(input);
-        FileOutputStream out = new FileOutputStream(output);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = in.read(buffer)) > 0) {
-            out.write(buffer, 0, length);
-        }
-        out.close();
-        in.close();
-    }
-
-    private void copyFile(InputStream input, File output) throws IOException {
-        FileOutputStream out = new FileOutputStream(output);
-        byte[] buffer = new byte[1024];
-        int length;
-        while ((length = input.read(buffer)) > 0) {
-            out.write(buffer, 0, length);
-        }
-        out.close();
-        input.close();
-    }
-
-    private void createBundlesDirectory() {
-        File file = buildBundlesDirectory();
-        if (!file.exists()) {
-            file.mkdir();
-        }
-    }
-
-    /**
-     * Applies the wait of a 429 and clears the reported failure after a 200.
-     */
-    @NonNull
-    private NonEmptyCallback<Response> createCheckResponseCallback(
-        @NonNull String appId,
-        @Nullable UpdateFailure reportedFailure,
-        @NonNull NonEmptyCallback<CreateCheckResponse> callback
-    ) {
-        return new NonEmptyCallback<Response>() {
-            @Override
-            public void success(@NonNull Response response) {
-                try {
-                    CreateCheckResponse checkResponse = readCreateCheckResponse(response);
-                    updateNextCheckAllowedAt(appId, checkResponse);
-                    if (reportedFailure != null && response.code() == 200) {
-                        preferences.removePendingFailureIfUnchanged(reportedFailure);
-                    }
-                    callback.success(checkResponse);
-                } catch (IOException e) {
-                    handleRequestFailure(e, callback);
-                } catch (Exception e) {
-                    callback.error(e);
-                }
-            }
-
-            @Override
-            public void error(@NonNull Exception exception) {
-                handleRequestFailure(exception, callback);
-            }
-        };
-    }
-
-    @NonNull
-    private DownloadProgressCallback createDownloadProgressCallback(@NonNull String bundleId) {
+    private DownloadProgressCallback buildDownloadProgressCallback(@NonNull String bundleId) {
         return (downloadedBytes, totalBytes) -> {
             DownloadBundleProgressEvent event = new DownloadBundleProgressEvent(bundleId, downloadedBytes, totalBytes);
             notifyDownloadBundleProgressListeners(event);
         };
     }
 
+    private File buildDownloadsDirectory() {
+        return new File(context.getCacheDir(), downloadsDirectory);
+    }
+
     /**
      * Handles the answer to the download of a file from the URL template, without reading any response header.
      */
     @NonNull
-    private NonEmptyCallback<Response> createProtocolFileDownloadCallback(
+    private NonEmptyCallback<Response> buildDownloadWithUrlTemplateCallback(
         @NonNull File file,
         @NonNull FileVerifier verifier,
         @Nullable DownloadProgressCallback progressCallback,
@@ -806,27 +730,18 @@ public class LiveUpdate {
         };
     }
 
-    private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
-        try {
-            value = value.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "").replace("\n", "");
-            byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
-            X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            return keyFactory.generatePublic(X509publicKey);
-        } catch (Exception exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-            throw new Exception(LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID);
-        }
+    @NonNull
+    private String buildHrefUrl(@NonNull String baseUrl, @NonNull String href) {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
+        urlBuilder.addQueryParameter("href", href);
+        return urlBuilder.build().toString();
     }
 
     /**
      * Sets the next bundle once the download completed.
      */
     @NonNull
-    private EmptyCallback createSyncDownloadCallback(
-        @NonNull CreateCheckResponseBundle bundle,
-        @NonNull NonEmptyCallback<Result> callback
-    ) {
+    private EmptyCallback buildSyncDownloadCallback(@NonNull CreateCheckResponseBundle bundle, @NonNull NonEmptyCallback<Result> callback) {
         return new EmptyCallback() {
             @Override
             public void success() {
@@ -844,6 +759,94 @@ public class LiveUpdate {
                 callback.error(exception);
             }
         };
+    }
+
+    private void copyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) throws IOException {
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId == null) {
+            // Create the source input stream
+            AssetManager assets = context.getAssets();
+            InputStream inputStream = assets.open(defaultWebAssetDir + "/" + sourceHref);
+            // Create all destination directories if they do not exist
+            destination.getParentFile().mkdirs();
+            // Copy the file
+            copyFile(inputStream, destination);
+        } else {
+            File currentBundleDirectory = buildBundleDirectoryFor(currentBundleId);
+            // Create the source file
+            File source = new File(currentBundleDirectory, sourceHref);
+            // Create all destination directories if they do not exist
+            destination.getParentFile().mkdirs();
+            // Copy the file
+            copyFile(source, destination);
+        }
+    }
+
+    private void copyFile(File input, File output) throws IOException {
+        FileInputStream in = new FileInputStream(input);
+        FileOutputStream out = new FileOutputStream(output);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = in.read(buffer)) > 0) {
+            out.write(buffer, 0, length);
+        }
+        out.close();
+        in.close();
+    }
+
+    private void copyFile(InputStream input, File output) throws IOException {
+        FileOutputStream out = new FileOutputStream(output);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = input.read(buffer)) > 0) {
+            out.write(buffer, 0, length);
+        }
+        out.close();
+        input.close();
+    }
+
+    /**
+     * A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
+     *
+     * @return The files of the new manifest that must be downloaded, in the order of the new manifest.
+     */
+    @NonNull
+    private List<ManifestItem> copyUnchangedFilesAndListFilesToDownload(
+        @NonNull Manifest latestManifest,
+        @NonNull File destinationDirectory
+    ) {
+        Manifest currentManifest = tryLoadCurrentManifest();
+        Map<String, String> currentHrefsByChecksum = currentManifest == null ? new HashMap<>() : currentManifest.mapFirstHrefsByChecksum();
+        List<ManifestItem> itemsToDownload = new ArrayList<>();
+        for (ManifestItem item : latestManifest.getItems()) {
+            String sourceHref = currentHrefsByChecksum.get(item.getChecksum());
+            File destination = new File(destinationDirectory, item.getHref());
+            boolean isCopied = sourceHref != null && tryCopyCurrentBundleFile(sourceHref, destination);
+            if (!isCopied) {
+                itemsToDownload.add(item);
+            }
+        }
+        return itemsToDownload;
+    }
+
+    private void createBundlesDirectory() {
+        File file = buildBundlesDirectory();
+        if (!file.exists()) {
+            file.mkdir();
+        }
+    }
+
+    private PublicKey createPublicKeyFromString(@NonNull String value) throws Exception {
+        try {
+            value = value.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "").replace("\n", "");
+            byte[] byteKey = Base64.decode(value, Base64.DEFAULT);
+            X509EncodedKeySpec X509publicKey = new X509EncodedKeySpec(byteKey);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return keyFactory.generatePublic(X509publicKey);
+        } catch (Exception exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID);
+        }
     }
 
     private File createTemporaryDownloadDirectory() {
@@ -951,7 +954,7 @@ public class LiveUpdate {
             @Override
             public void error(@NonNull Exception exception) {
                 String appId = options.getAppId() == null ? getAppId() : options.getAppId();
-                FailureReason reason = toFailureReason(exception);
+                FailureReason reason = FailureReason.fromException(exception);
                 if (appId != null && reason != null) {
                     preferences.trySetPendingFailure(
                         new UpdateFailure().setAppId(appId).setBundleId(options.getBundleId()).setReason(reason)
@@ -982,10 +985,10 @@ public class LiveUpdate {
             return downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
         }
         String checksum = item.getChecksum();
-        String url = urlTemplate.fill(checksum);
+        String url = urlTemplate.buildFileUrl(checksum);
         return httpClient.enqueue(
             url,
-            createProtocolFileDownloadCallback(
+            buildDownloadWithUrlTemplateCallback(
                 destinationFile,
                 file -> verifyChecksum(file, checksum),
                 progressCallback,
@@ -1098,9 +1101,12 @@ public class LiveUpdate {
             callback.success();
         });
         EmptyCallback downloadFilesCallback = runOnSuccess(callback, () -> {
-            Manifest latestManifest = loadLatestManifest(latestManifestFile);
+            Manifest latestManifest = loadManifest(latestManifestFile);
+            if (latestManifest == null) {
+                throw new Exception(LiveUpdatePlugin.ERROR_MANIFEST_INVALID);
+            }
             List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, temporaryDirectory);
-            downloadBundleFiles(options, itemsToDownload, temporaryDirectory, createDownloadProgressCallback(bundleId), addBundleCallback);
+            downloadBundleFiles(options, itemsToDownload, temporaryDirectory, buildDownloadProgressCallback(bundleId), addBundleCallback);
         });
         try {
             downloadManifestFile(options, latestManifestFile, downloadFilesCallback);
@@ -1120,7 +1126,7 @@ public class LiveUpdate {
             downloadZipFile(
                 options,
                 zipFile,
-                createDownloadProgressCallback(bundleId),
+                buildDownloadProgressCallback(bundleId),
                 new EmptyCallback() {
                     @Override
                     public void success() {
@@ -1152,8 +1158,8 @@ public class LiveUpdate {
             return;
         }
         httpClient.enqueue(
-            urlTemplate.fill(options.getChecksum()),
-            createProtocolFileDownloadCallback(manifestFile, file -> verifyFirstFileWithUrlTemplate(file, options), null, callback)
+            urlTemplate.buildFileUrl(options.getChecksum()),
+            buildDownloadWithUrlTemplateCallback(manifestFile, file -> verifyFirstFileWithUrlTemplate(file, options), null, callback)
         );
     }
 
@@ -1176,8 +1182,8 @@ public class LiveUpdate {
             return;
         }
         httpClient.enqueueWithoutCompression(
-            urlTemplate.fill(options.getChecksum()),
-            createProtocolFileDownloadCallback(
+            urlTemplate.buildFileUrl(options.getChecksum()),
+            buildDownloadWithUrlTemplateCallback(
                 zipFile,
                 file -> verifyFirstFileWithUrlTemplate(file, options),
                 progressCallback,
@@ -1317,7 +1323,7 @@ public class LiveUpdate {
     }
 
     @Nullable
-    private UpdateFailure getPendingFailureOfApp(@NonNull String appId) {
+    private UpdateFailure getPendingFailure(@NonNull String appId) {
         UpdateFailure failure = preferences.getPendingFailure();
         if (failure == null || !appId.equals(failure.getAppId())) {
             return null;
@@ -1339,17 +1345,6 @@ public class LiveUpdate {
 
     private String getVersionName() throws PackageManager.NameNotFoundException {
         return getPackageInfo().versionName;
-    }
-
-    private void handleRequestFailure(@NonNull Exception exception, @NonNull Callback callback) {
-        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
-        if (exception instanceof SocketTimeoutException) {
-            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
-        } else if (exception.getMessage() == null) {
-            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_UNKNOWN_ERROR));
-        } else {
-            callback.error(CustomExceptions.requestFailed(exception.getMessage()));
-        }
     }
 
     private void handleDownloadResponse(
@@ -1374,6 +1369,17 @@ public class LiveUpdate {
         }
     }
 
+    private void handleRequestFailure(@NonNull Exception exception, @NonNull Callback callback) {
+        Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+        if (exception instanceof SocketTimeoutException) {
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_HTTP_TIMEOUT));
+        } else if (exception.getMessage() == null) {
+            callback.error(CustomExceptions.requestFailed(LiveUpdatePlugin.ERROR_UNKNOWN_ERROR));
+        } else {
+            callback.error(CustomExceptions.requestFailed(exception.getMessage()));
+        }
+    }
+
     private void handleSyncCheckResponse(@NonNull CreateCheckResponse response, @NonNull NonEmptyCallback<Result> callback)
         throws Exception {
         CreateCheckResponseBundle bundle = response.getBundle();
@@ -1388,12 +1394,15 @@ public class LiveUpdate {
             return;
         }
         if (hasBundleById(latestBundleId)) {
-            String nextBundleId = setNextBundleIfNotCurrent(latestBundleId);
-            JSONObject customProperties = nextBundleId == null ? null : bundle.getCustomProperties();
-            callback.success(new SyncResult(customProperties, nextBundleId));
+            if (latestBundleId.equals(getCurrentBundleId())) {
+                callback.success(new SyncResult(null, null));
+                return;
+            }
+            setNextBundleById(latestBundleId);
+            callback.success(new SyncResult(bundle.getCustomProperties(), latestBundleId));
             return;
         }
-        downloadBundleAndRecordFailure(new DownloadBundleOptions(bundle, requireAppId()), createSyncDownloadCallback(bundle, callback));
+        downloadBundleAndRecordFailure(new DownloadBundleOptions(bundle, requireAppId()), buildSyncDownloadCallback(bundle, callback));
     }
 
     private boolean hasBundleById(@NonNull String bundleId) {
@@ -1407,27 +1416,75 @@ public class LiveUpdate {
         return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
     }
 
-    /**
-     * A check is not allowed while the wait that the server asked for after a 429 lasts.
-     */
-    private boolean isCheckAllowed(@NonNull String appId) {
-        Long allowedAt = nextCheckAllowedAt.get(appId);
-        return allowedAt == null || SystemClock.elapsedRealtime() >= allowedAt;
+    private boolean isChecksumValid(@NonNull File file, @NonNull String checksum) throws Exception {
+        String receivedChecksum = getChecksumForFileAsString(file);
+        return checksum.equals(receivedChecksum);
     }
 
-    @NonNull
-    private Manifest loadLatestManifest(@NonNull File manifestFile) throws Exception {
-        Manifest manifest = Manifest.parse(readText(Okio.buffer(Okio.source(manifestFile))));
-        if (manifest == null) {
-            throw new Exception(LiveUpdatePlugin.ERROR_MANIFEST_INVALID);
+    /**
+     * The wait is the time that the server asked for after a 429.
+     */
+    private boolean isCheckWaiting(@NonNull String appId) {
+        Long waitEndsAt = checkWaitEndsAt.get(appId);
+        return waitEndsAt != null && SystemClock.elapsedRealtime() < waitEndsAt;
+    }
+
+    private boolean isSignatureValid(@NonNull File file, @NonNull String signature, @NonNull String keyAsString) throws Exception {
+        PublicKey key = createPublicKeyFromString(keyAsString);
+        return isSignatureValid(file, signature, key);
+    }
+
+    private boolean isSignatureValid(@NonNull File file, @NonNull String signature, @NonNull PublicKey key) throws Exception {
+        try {
+            byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
+            Signature sig = Signature.getInstance("SHA256withRSA");
+            sig.initVerify(key);
+            BufferedSource source = Okio.buffer(Okio.source(file));
+            Buffer buffer = new Buffer();
+            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1; ) {
+                sig.update(buffer.readByteArray());
+            }
+            source.close();
+            return sig.verify(signatureBytes);
+        } catch (Exception exception) {
+            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
+            throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
         }
-        return manifest;
+    }
+
+    /**
+     * @return The manifest of the current bundle, or `null` if it has none or it cannot be used.
+     */
+    @Nullable
+    private Manifest loadCurrentManifest() throws IOException {
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId == null) {
+            AssetManager assets = context.getAssets();
+            boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
+            if (!manifestFileExists) {
+                return null;
+            }
+            return Manifest.parse(readText(Okio.buffer(Okio.source(assets.open(defaultWebAssetDir + "/" + manifestFileName)))));
+        }
+        File manifestFile = new File(buildBundleDirectoryFor(currentBundleId), manifestFileName);
+        if (!manifestFile.exists()) {
+            return null;
+        }
+        return loadManifest(manifestFile);
+    }
+
+    /**
+     * @return The manifest, or `null` if it cannot be used.
+     */
+    @Nullable
+    private Manifest loadManifest(@NonNull File manifestFile) throws IOException {
+        return Manifest.parse(readText(Okio.buffer(Okio.source(manifestFile))));
     }
 
     private void logNoUpdateReason(@NonNull CreateCheckResponse response, int statusCode) {
         if (statusCode != 200) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available. The server answered with status " + statusCode + ".");
-        } else if (response.getOutcome() == CheckOutcome.SKIPPED) {
+        } else if (response.getResult() == CheckResult.SKIPPED) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available. The check was skipped with the reason " + response.getReason() + ".");
         } else {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
@@ -1443,6 +1500,26 @@ public class LiveUpdate {
             return;
         }
         plugin.notifyDownloadBundleProgressListeners(event);
+    }
+
+    @NonNull
+    private CreateCheckResponse parseCheckResponse(@NonNull Response response) throws CustomException, IOException {
+        String body = response.body().string();
+        Logger.debug(LiveUpdatePlugin.TAG, "Check response: " + response.code() + " " + body);
+        CreateCheckResponse checkResponse = CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
+        if (checkResponse.getBundle() == null) {
+            logNoUpdateReason(checkResponse, response.code());
+        }
+        return checkResponse;
+    }
+
+    private void pauseRollbackTimer() {
+        if (rollbackDeadline == null) {
+            return;
+        }
+        rollbackHandler.removeCallbacksAndMessages(null);
+        remainingRollbackTimeout = Math.max(0, rollbackDeadline - SystemClock.uptimeMillis());
+        rollbackDeadline = null;
     }
 
     private void performAutoUpdate() {
@@ -1471,62 +1548,6 @@ public class LiveUpdate {
             }
         };
         sync(options, callback);
-    }
-
-    private void pauseRollbackTimer() {
-        if (rollbackDeadline == null) {
-            return;
-        }
-        rollbackHandler.removeCallbacksAndMessages(null);
-        remainingRollbackTimeout = Math.max(0, rollbackDeadline - SystemClock.uptimeMillis());
-        rollbackDeadline = null;
-    }
-
-    /**
-     * @return The files of the new manifest that must be downloaded, after the others were copied from the current bundle.
-     */
-    @NonNull
-    private List<ManifestItem> copyUnchangedFilesAndListFilesToDownload(
-        @NonNull Manifest latestManifest,
-        @NonNull File destinationDirectory
-    ) {
-        ManifestPlan plan = latestManifest.createPlan(tryLoadCurrentManifest());
-        List<ManifestItem> itemsToDownload = new ArrayList<>(plan.getItemsToDownload());
-        // If files could not be copied, download them instead
-        itemsToDownload.addAll(copyCurrentBundleFilesAndReturnFailures(plan.getFilesToCopy(), destinationDirectory));
-        return itemsToDownload;
-    }
-
-    @NonNull
-    private CreateCheckResponse readCreateCheckResponse(@NonNull Response response) throws CustomException, IOException {
-        String body = response.body().string();
-        Logger.debug(LiveUpdatePlugin.TAG, "Check response: " + response.code() + " " + body);
-        CreateCheckResponse checkResponse = CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
-        if (checkResponse.getBundle() == null) {
-            logNoUpdateReason(checkResponse, response.code());
-        }
-        return checkResponse;
-    }
-
-    /**
-     * @return The text of the manifest of the current bundle, or `null` if it has none.
-     */
-    @Nullable
-    private String readCurrentManifestText() throws IOException {
-        String currentBundleId = getCurrentBundleId();
-        if (currentBundleId == null) {
-            AssetManager assets = context.getAssets();
-            boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
-            if (!manifestFileExists) {
-                return null;
-            }
-            return readText(Okio.buffer(Okio.source(assets.open(defaultWebAssetDir + "/" + manifestFileName))));
-        }
-        File manifestFile = new File(buildBundleDirectoryFor(currentBundleId), manifestFileName);
-        if (!manifestFile.exists()) {
-            return null;
-        }
-        return readText(Okio.buffer(Okio.source(manifestFile)));
     }
 
     @NonNull
@@ -1670,18 +1691,6 @@ public class LiveUpdate {
         notifyNextBundleSetListeners(bundleId);
     }
 
-    /**
-     * @return The next bundle ID, or `null` if the bundle is already the current bundle.
-     */
-    @Nullable
-    private String setNextBundleIfNotCurrent(@NonNull String bundleId) {
-        if (bundleId.equals(getCurrentBundleId())) {
-            return null;
-        }
-        setNextBundleById(bundleId);
-        return bundleId;
-    }
-
     private void notifyNextBundleSetListeners(@Nullable String bundleId) {
         if (plugin == null) {
             return;
@@ -1770,6 +1779,10 @@ public class LiveUpdate {
         }, delayMillis);
     }
 
+    private void startCheckWait(@NonNull String appId, long retryAfterMs) {
+        checkWaitEndsAt.put(appId, SystemClock.elapsedRealtime() + retryAfterMs);
+    }
+
     /** The timer only counts time in the foreground, because a stopped activity may not run JS. */
     private synchronized void startRollbackTimer() {
         if (config.getReadyTimeout() <= 0) {
@@ -1789,38 +1802,15 @@ public class LiveUpdate {
         remainingRollbackTimeout = null;
     }
 
-    @Nullable
-    private FailureReason toFailureReason(@NonNull Exception exception) {
-        if (CustomExceptions.isRequestFailed(exception)) {
-            return FailureReason.DOWNLOAD_FAILED;
-        }
-        if (exception instanceof ZipException) {
-            return FailureReason.BUNDLE_INVALID;
-        }
-        String message = exception.getMessage();
-        if (message == null) {
-            return null;
-        }
-        switch (message) {
-            case LiveUpdatePlugin.ERROR_BUNDLE_INDEX_HTML_MISSING:
-            case LiveUpdatePlugin.ERROR_MANIFEST_INVALID:
-                return FailureReason.BUNDLE_INVALID;
-            case LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH:
-                return FailureReason.CHECKSUM_MISMATCHED;
-            case LiveUpdatePlugin.ERROR_PUBLIC_KEY_INVALID:
-            case LiveUpdatePlugin.ERROR_SIGNATURE_MISSING:
-            case LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED:
-                return FailureReason.SIGNATURE_VERIFICATION_FAILED;
-            default:
-                return null;
-        }
-    }
-
-    private boolean tryCopyCurrentBundleFile(@NonNull ManifestFileCopy fileToCopy, @NonNull File destinationDirectory) {
+    /**
+     * @return `true` if the file was copied.
+     */
+    private boolean tryCopyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) {
         try {
-            copyCurrentBundleFile(fileToCopy, destinationDirectory);
+            copyCurrentBundleFile(sourceHref, destination);
             return true;
         } catch (IOException exception) {
+            Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + sourceHref);
             return false;
         }
     }
@@ -1835,8 +1825,7 @@ public class LiveUpdate {
     @Nullable
     private Manifest tryLoadCurrentManifest() {
         try {
-            String text = readCurrentManifestText();
-            return text == null ? null : Manifest.parse(text);
+            return loadCurrentManifest();
         } catch (IOException exception) {
             Logger.warn(LiveUpdatePlugin.TAG, "Failed to read the current manifest: " + exception.getMessage());
             return null;
@@ -1856,24 +1845,11 @@ public class LiveUpdate {
         return destination;
     }
 
-    private void updateNextCheckAllowedAt(@NonNull String appId, @NonNull CreateCheckResponse response) {
-        Long retryAfterMs = response.getRetryAfterMs();
-        if (retryAfterMs == null) {
-            return;
-        }
-        nextCheckAllowedAt.put(appId, SystemClock.elapsedRealtime() + retryAfterMs);
-    }
-
     private void verifyChecksum(@NonNull File file, @NonNull String checksum) throws Exception {
-        boolean verified = verifyChecksumForFile(file, checksum);
+        boolean verified = isChecksumValid(file, checksum);
         if (!verified) {
             throw new Exception(LiveUpdatePlugin.ERROR_CHECKSUM_MISMATCH);
         }
-    }
-
-    private boolean verifyChecksumForFile(@NonNull File file, @NonNull String checksum) throws Exception {
-        String receivedChecksum = getChecksumForFileAsString(file);
-        return checksum.equals(receivedChecksum);
     }
 
     private void verifyFile(@NonNull File file, @Nullable String checksum, @Nullable String signature) throws Exception {
@@ -1903,31 +1879,8 @@ public class LiveUpdate {
         if (signature == null) {
             throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_MISSING);
         }
-        boolean verified = verifySignatureForFile(file, signature, publicKey);
+        boolean verified = isSignatureValid(file, signature, publicKey);
         if (!verified) {
-            throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
-        }
-    }
-
-    private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull String keyAsString) throws Exception {
-        PublicKey key = createPublicKeyFromString(keyAsString);
-        return verifySignatureForFile(file, signature, key);
-    }
-
-    private boolean verifySignatureForFile(@NonNull File file, @NonNull String signature, @NonNull PublicKey key) throws Exception {
-        try {
-            byte[] signatureBytes = Base64.decode(signature, Base64.DEFAULT);
-            Signature sig = Signature.getInstance("SHA256withRSA");
-            sig.initVerify(key);
-            BufferedSource source = Okio.buffer(Okio.source(file));
-            Buffer buffer = new Buffer();
-            for (long bytesRead; (bytesRead = source.read(buffer, 2048)) != -1; ) {
-                sig.update(buffer.readByteArray());
-            }
-            source.close();
-            return sig.verify(signatureBytes);
-        } catch (Exception exception) {
-            Logger.error(LiveUpdatePlugin.TAG, exception.getMessage(), exception);
             throw new Exception(LiveUpdatePlugin.ERROR_SIGNATURE_VERIFICATION_FAILED);
         }
     }

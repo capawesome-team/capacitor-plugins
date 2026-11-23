@@ -6,7 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
-import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckResult;
 import java.math.BigInteger;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,10 +23,10 @@ public class CreateCheckResponse {
     private String channelName;
 
     @Nullable
-    private CheckOutcome outcome;
+    private String reason;
 
     @Nullable
-    private String reason;
+    private CheckResult result;
 
     @Nullable
     private Long retryAfterMs;
@@ -51,17 +51,17 @@ public class CreateCheckResponse {
         return channelName;
     }
 
-    @Nullable
-    public CheckOutcome getOutcome() {
-        return outcome;
-    }
-
     /**
      * @return The reason as the server sent it, only set if the check was skipped.
      */
     @Nullable
     public String getReason() {
         return reason;
+    }
+
+    @Nullable
+    public CheckResult getResult() {
+        return result;
     }
 
     /**
@@ -78,41 +78,41 @@ public class CreateCheckResponse {
     @NonNull
     public static CreateCheckResponse parse(int statusCode, @Nullable String retryAfter, @NonNull String body) throws CustomException {
         if (statusCode == 429) {
-            CreateCheckResponse response = createWithoutUpdate();
+            CreateCheckResponse response = new CreateCheckResponse();
             response.retryAfterMs = parseRetryAfterMs(retryAfter);
             return response;
         }
         if (statusCode == 200) {
-            return parseProcessedBody(body);
+            return parseBody(body);
         }
         throw CustomExceptions.requestFailed("The check failed with status " + statusCode + ".");
     }
 
     @NonNull
-    private static CreateCheckResponse parseProcessedBody(@NonNull String body) {
+    private static CreateCheckResponse parseBody(@NonNull String body) {
         JSONObject json;
         try {
             json = new JSONObject(body);
         } catch (JSONException exception) {
             return createWithoutUpdate();
         }
-        CheckOutcome outcome = CheckOutcome.fromValue(getNonEmptyString(json, "result"));
-        if (outcome == null) {
+        CheckResult result = CheckResult.fromValue(getNonEmptyString(json, "result"));
+        if (result == null) {
             return createWithoutUpdate();
         }
         CreateCheckResponseBundle bundle = null;
-        if (outcome == CheckOutcome.AVAILABLE) {
+        if (result == CheckResult.AVAILABLE) {
             JSONObject bundleJson = json.optJSONObject("bundle");
             bundle = bundleJson == null ? null : CreateCheckResponseBundle.parse(bundleJson);
             if (bundle == null) {
                 return createWithoutUpdate();
             }
         }
-        CreateCheckResponse response = createWithoutUpdate();
-        response.outcome = outcome;
+        CreateCheckResponse response = new CreateCheckResponse();
+        response.result = result;
         response.bundle = bundle;
         response.channelName = getNonEmptyString(json, "channelName");
-        response.reason = outcome == CheckOutcome.SKIPPED ? getNonEmptyString(json, "reason") : null;
+        response.reason = result == CheckResult.SKIPPED ? getNonEmptyString(json, "reason") : null;
         return response;
     }
 

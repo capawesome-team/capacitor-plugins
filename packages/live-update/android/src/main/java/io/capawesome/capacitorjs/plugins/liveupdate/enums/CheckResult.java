@@ -3,7 +3,7 @@ package io.capawesome.capacitorjs.plugins.liveupdate.enums;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public enum CheckOutcome {
+public enum CheckResult {
     AVAILABLE("available"),
     SKIPPED("skipped"),
     UP_TO_DATE("up_to_date");
@@ -11,15 +11,15 @@ public enum CheckOutcome {
     @NonNull
     private final String value;
 
-    CheckOutcome(@NonNull String value) {
+    CheckResult(@NonNull String value) {
         this.value = value;
     }
 
     @Nullable
-    public static CheckOutcome fromValue(@Nullable String value) {
-        for (CheckOutcome outcome : values()) {
-            if (outcome.value.equals(value)) {
-                return outcome;
+    public static CheckResult fromValue(@Nullable String value) {
+        for (CheckResult result : values()) {
+            if (result.value.equals(value)) {
+                return result;
             }
         }
         return null;

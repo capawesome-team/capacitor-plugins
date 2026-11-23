@@ -10,7 +10,7 @@ enum FailureReason: String, Codable {
     /// Returns `nil` for an error that is not reported to the server.
     init?(error: Error) {
         switch error {
-        case CustomError.bundleIndexHtmlMissing, CustomError.bundleUnzipFailed, is DecodingError:
+        case CustomError.bundleIndexHtmlMissing, CustomError.bundleUnzipFailed, CustomError.manifestInvalid:
             self = .bundleInvalid
         case CustomError.checksumMismatch:
             self = .checksumMismatched
