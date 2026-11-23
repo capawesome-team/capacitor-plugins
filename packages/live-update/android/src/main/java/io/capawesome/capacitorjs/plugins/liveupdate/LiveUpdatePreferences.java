@@ -5,16 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.getcapacitor.Logger;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure;
 import java.util.UUID;
 import org.json.JSONException;
 
 public class LiveUpdatePreferences {
-
-    /**
-     * Shared by every instance, because all of them write the same pending failure.
-     */
-    private static final Object pendingFailureLock = new Object();
 
     @NonNull
     private final Context context;
@@ -96,13 +92,11 @@ public class LiveUpdatePreferences {
      * Removes the pending failure only if it is still the reported one, so a failure recorded in the meantime is kept.
      */
     public void removePendingFailureIfUnchanged(@NonNull UpdateFailure reportedFailure) {
-        synchronized (pendingFailureLock) {
-            if (!reportedFailure.equals(getPendingFailure())) {
-                return;
-            }
-            settingsEditor.remove(pendingFailureKey);
-            settingsEditor.apply();
+        if (!reportedFailure.equals(getPendingFailure())) {
+            return;
         }
+        settingsEditor.remove(pendingFailureKey);
+        settingsEditor.apply();
     }
 
     public void setAppId(@Nullable String appId) {
@@ -151,14 +145,6 @@ public class LiveUpdatePreferences {
         settingsEditor.apply();
     }
 
-    public void setPendingFailure(@NonNull UpdateFailure failure) throws JSONException {
-        String text = failure.toJSONObject().toString();
-        synchronized (pendingFailureLock) {
-            settingsEditor.putString(pendingFailureKey, text);
-            settingsEditor.apply();
-        }
-    }
-
     public void setPreviousBundleId(@Nullable String bundleId) {
         if (bundleId == null) {
             settingsEditor.remove(previousBundleIdKey);
@@ -166,5 +152,14 @@ public class LiveUpdatePreferences {
             settingsEditor.putString(previousBundleIdKey, bundleId);
         }
         settingsEditor.apply();
+    }
+
+    public void trySetPendingFailure(@NonNull UpdateFailure failure) {
+        try {
+            settingsEditor.putString(pendingFailureKey, failure.toJSONObject().toString());
+            settingsEditor.apply();
+        } catch (JSONException exception) {
+            Logger.warn(LiveUpdatePlugin.TAG, "Failed to record the failed update: " + exception.getMessage());
+        }
     }
 }

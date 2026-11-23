@@ -19,7 +19,6 @@ import com.getcapacitor.Logger;
 import com.getcapacitor.plugin.WebView;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.DownloadUrl;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestFileCopy;
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.ManifestItem;
@@ -96,12 +95,10 @@ import net.lingala.zip4j.model.FileHeader;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.Okio;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LiveUpdate {
@@ -212,23 +209,12 @@ public class LiveUpdate {
     }
 
     public void downloadBundle(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) {
-        try {
-            DownloadUrl downloadUrl = DownloadUrl.fromOptions(options);
-            String bundleId = options.getBundleId();
-            // Check if the bundle already exists
-            if (hasBundleById(bundleId)) {
-                callback.error(CustomExceptions.BUNDLE_ALREADY_EXISTS);
-                return;
-            }
-            String failureAppId = options.getAppId() == null ? getAppId() : options.getAppId();
-            boolean recordsFailure = downloadUrl.hasMarker() && failureAppId != null;
-            EmptyCallback downloadCallback = recordsFailure
-                ? recordFailureOnError(new UpdateFailure().setAppId(failureAppId).setBundleId(bundleId), callback)
-                : callback;
-            downloadBundle(bundleId, downloadUrl, downloadCallback);
-        } catch (Exception exception) {
-            callback.error(exception);
+        // Check if the bundle already exists
+        if (hasBundleById(options.getBundleId())) {
+            callback.error(CustomExceptions.BUNDLE_ALREADY_EXISTS);
+            return;
         }
+        downloadBundleAndRecordFailure(options, callback);
     }
 
     public void fetchChannels(@NonNull FetchChannelsOptions options, @NonNull NonEmptyCallback<FetchChannelsResult> callback) {
@@ -290,8 +276,27 @@ public class LiveUpdate {
         }
     }
 
+    public void fetchCheck(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<CreateCheckResponse> callback) {
+        try {
+            String appId = requireAppId(options.getAppId());
+            if (!isCheckAllowed(appId)) {
+                Logger.debug(LiveUpdatePlugin.TAG, "No update available. No check was made because the device is rate limited.");
+                callback.success(CreateCheckResponse.createWithoutUpdate());
+                return;
+            }
+            UpdateFailure pendingFailure = getPendingFailureOfApp(appId);
+            JSONObject body = buildCreateCheckRequest(options, pendingFailure).toJSONObject();
+            String url = buildCreateCheckUrl(appId);
+            Logger.debug(LiveUpdatePlugin.TAG, "Creating check: " + url + " " + body);
+
+            httpClient.enqueuePost(url, body, createCheckResponseCallback(appId, pendingFailure, callback));
+        } catch (Exception e) {
+            callback.error(e);
+        }
+    }
+
     public void fetchLatestBundle(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<FetchLatestBundleResult> callback) {
-        createCheck(
+        fetchCheck(
             options,
             new NonEmptyCallback<CreateCheckResponse>() {
                 @Override
@@ -535,7 +540,7 @@ public class LiveUpdate {
 
         NonEmptyCallback<Result> syncCallback = finishSyncOnCompletion(callback);
         FetchLatestBundleOptions fetchLatestBundleOptions = new FetchLatestBundleOptions(options.getChannel());
-        createCheck(
+        fetchCheck(
             fetchLatestBundleOptions,
             new NonEmptyCallback<CreateCheckResponse>() {
                 @Override
@@ -730,27 +735,8 @@ public class LiveUpdate {
         }
     }
 
-    private void createCheck(@NonNull FetchLatestBundleOptions options, @NonNull NonEmptyCallback<CreateCheckResponse> callback) {
-        try {
-            String appId = requireAppId(options.getAppId());
-            if (!isCheckAllowed(appId)) {
-                Logger.debug(LiveUpdatePlugin.TAG, "No update available. No check was made because the device is rate limited.");
-                callback.success(CreateCheckResponse.createWithoutUpdate());
-                return;
-            }
-            UpdateFailure pendingFailure = getPendingFailureOfApp(appId);
-            JSONObject body = buildCreateCheckRequest(options, pendingFailure).toJSONObject();
-            String url = buildCreateCheckUrl(appId);
-            Logger.debug(LiveUpdatePlugin.TAG, "Creating check: " + url + " " + body);
-
-            httpClient.enqueuePost(url, body, createCheckResponseCallback(appId, pendingFailure, callback));
-        } catch (Exception e) {
-            callback.error(e);
-        }
-    }
-
     /**
-     * Applies the wait of a 429 and clears the reported failure if the answer says so.
+     * Applies the wait of a 429 and clears the reported failure after a 200.
      */
     @NonNull
     private NonEmptyCallback<Response> createCheckResponseCallback(
@@ -764,7 +750,7 @@ public class LiveUpdate {
                 try {
                     CreateCheckResponse checkResponse = readCreateCheckResponse(response);
                     updateNextCheckAllowedAt(appId, checkResponse);
-                    if (reportedFailure != null && checkResponse.clearsPendingFailure()) {
+                    if (reportedFailure != null && response.code() == 200) {
                         preferences.removePendingFailureIfUnchanged(reportedFailure);
                     }
                     callback.success(checkResponse);
@@ -791,7 +777,7 @@ public class LiveUpdate {
     }
 
     /**
-     * Handles the answer to the download of a file of an address with the marker, without reading any response header.
+     * Handles the answer to the download of a file from the URL template, without reading any response header.
      */
     @NonNull
     private NonEmptyCallback<Response> createProtocolFileDownloadCallback(
@@ -803,11 +789,6 @@ public class LiveUpdate {
         return new NonEmptyCallback<Response>() {
             @Override
             public void success(@NonNull Response response) {
-                if (response.code() == 403) {
-                    response.close();
-                    completionCallback.error(CustomExceptions.DOWNLOAD_URL_EXPIRED);
-                    return;
-                }
                 handleDownloadResponse(
                     response,
                     body -> {
@@ -957,16 +938,37 @@ public class LiveUpdate {
         );
     }
 
-    private void downloadBundle(@NonNull String bundleId, @NonNull DownloadUrl downloadUrl, @NonNull EmptyCallback callback) {
-        if (downloadUrl.getArtifactType() == ArtifactType.MANIFEST) {
-            downloadBundleOfTypeManifest(bundleId, downloadUrl, callback);
+    /**
+     * Records a failed download as the pending failure of the app of the options, or else of the configured app, so that the next check reports it.
+     */
+    private void downloadBundleAndRecordFailure(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback callback) {
+        EmptyCallback recordingCallback = new EmptyCallback() {
+            @Override
+            public void success() {
+                callback.success();
+            }
+
+            @Override
+            public void error(@NonNull Exception exception) {
+                String appId = options.getAppId() == null ? getAppId() : options.getAppId();
+                FailureReason reason = toFailureReason(exception);
+                if (appId != null && reason != null) {
+                    preferences.trySetPendingFailure(
+                        new UpdateFailure().setAppId(appId).setBundleId(options.getBundleId()).setReason(reason)
+                    );
+                }
+                callback.error(exception);
+            }
+        };
+        if (options.getArtifactType() == ArtifactType.MANIFEST) {
+            downloadBundleOfTypeManifest(options, recordingCallback);
         } else {
-            downloadBundleOfTypeZip(bundleId, downloadUrl, callback);
+            downloadBundleOfTypeZip(options, recordingCallback);
         }
     }
 
     private Call downloadBundleFile(
-        @NonNull DownloadUrl downloadUrl,
+        @NonNull DownloadBundleOptions options,
         @NonNull ManifestItem item,
         @NonNull File destinationDirectory,
         @Nullable DownloadProgressCallback progressCallback,
@@ -974,9 +976,9 @@ public class LiveUpdate {
     ) {
         File destinationFile = new File(destinationDirectory, item.getHref());
         destinationFile.getParentFile().mkdirs();
-        UrlTemplate urlTemplate = downloadUrl.getUrlTemplate();
+        UrlTemplate urlTemplate = options.getUrlTemplate();
         if (urlTemplate == null) {
-            String url = buildHrefUrl(downloadUrl.getUrl(), item.getHref());
+            String url = buildHrefUrl(options.getUrl(), item.getHref());
             return downloadAndVerifyFile(url, destinationFile, null, null, progressCallback, completionCallback);
         }
         String checksum = item.getChecksum();
@@ -993,7 +995,7 @@ public class LiveUpdate {
     }
 
     private void downloadBundleFiles(
-        @NonNull DownloadUrl downloadUrl,
+        @NonNull DownloadBundleOptions options,
         @NonNull List<ManifestItem> filesToDownload,
         @NonNull File destinationDirectory,
         @Nullable DownloadProgressCallback progressCallback,
@@ -1021,7 +1023,7 @@ public class LiveUpdate {
         // Start all downloads asynchronously (OkHttp's dispatcher handles parallelization)
         for (ManifestItem item : filesToDownload) {
             Call call = downloadBundleFile(
-                downloadUrl,
+                options,
                 item,
                 destinationDirectory,
                 (downloadedBytes, totalBytes) -> {
@@ -1085,11 +1087,8 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadBundleOfTypeManifest(
-        @NonNull String bundleId,
-        @NonNull DownloadUrl downloadUrl,
-        @NonNull EmptyCallback completionCallback
-    ) {
+    private void downloadBundleOfTypeManifest(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback completionCallback) {
+        String bundleId = options.getBundleId();
         // Create a temporary directory that is deleted once the download completed or failed
         File temporaryDirectory = createTemporaryDownloadDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
@@ -1101,26 +1100,17 @@ public class LiveUpdate {
         EmptyCallback downloadFilesCallback = runOnSuccess(callback, () -> {
             Manifest latestManifest = loadLatestManifest(latestManifestFile);
             List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, temporaryDirectory);
-            downloadBundleFiles(
-                downloadUrl,
-                itemsToDownload,
-                temporaryDirectory,
-                createDownloadProgressCallback(bundleId),
-                addBundleCallback
-            );
+            downloadBundleFiles(options, itemsToDownload, temporaryDirectory, createDownloadProgressCallback(bundleId), addBundleCallback);
         });
         try {
-            downloadManifestFile(downloadUrl, latestManifestFile, downloadFilesCallback);
+            downloadManifestFile(options, latestManifestFile, downloadFilesCallback);
         } catch (Exception e) {
             callback.error(e);
         }
     }
 
-    private void downloadBundleOfTypeZip(
-        @NonNull String bundleId,
-        @NonNull DownloadUrl downloadUrl,
-        @NonNull EmptyCallback completionCallback
-    ) {
+    private void downloadBundleOfTypeZip(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback completionCallback) {
+        String bundleId = options.getBundleId();
         // Create a temporary directory that is deleted once the download completed or failed
         File temporaryDirectory = createTemporaryDownloadDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
@@ -1128,7 +1118,7 @@ public class LiveUpdate {
         try {
             // Download the bundle
             downloadZipFile(
-                downloadUrl,
+                options,
                 zipFile,
                 createDownloadProgressCallback(bundleId),
                 new EmptyCallback() {
@@ -1154,44 +1144,46 @@ public class LiveUpdate {
         }
     }
 
-    private void downloadManifestFile(@NonNull DownloadUrl downloadUrl, @NonNull File manifestFile, @NonNull EmptyCallback callback) {
-        if (downloadUrl.hasMarker()) {
-            httpClient.enqueue(
-                downloadUrl.getUrl(),
-                createProtocolFileDownloadCallback(manifestFile, file -> verifyFirstProtocolFile(file, downloadUrl), null, callback)
-            );
-        } else {
-            String url = buildHrefUrl(downloadUrl.getUrl(), manifestFileName);
+    private void downloadManifestFile(@NonNull DownloadBundleOptions options, @NonNull File manifestFile, @NonNull EmptyCallback callback) {
+        UrlTemplate urlTemplate = options.getUrlTemplate();
+        if (urlTemplate == null) {
+            String url = buildHrefUrl(options.getUrl(), manifestFileName);
             downloadAndVerifyFile(url, manifestFile, null, null, null, callback);
+            return;
         }
+        httpClient.enqueue(
+            urlTemplate.fill(options.getChecksum()),
+            createProtocolFileDownloadCallback(manifestFile, file -> verifyFirstFileWithUrlTemplate(file, options), null, callback)
+        );
     }
 
     private void downloadZipFile(
-        @NonNull DownloadUrl downloadUrl,
+        @NonNull DownloadBundleOptions options,
         @NonNull File zipFile,
         @NonNull DownloadProgressCallback progressCallback,
         @NonNull EmptyCallback completionCallback
     ) {
-        if (downloadUrl.hasMarker()) {
-            httpClient.enqueueWithoutCompression(
-                downloadUrl.getUrl(),
-                createProtocolFileDownloadCallback(
-                    zipFile,
-                    file -> verifyFirstProtocolFile(file, downloadUrl),
-                    progressCallback,
-                    completionCallback
-                )
-            );
-        } else {
+        UrlTemplate urlTemplate = options.getUrlTemplate();
+        if (urlTemplate == null) {
             downloadAndVerifyFile(
-                downloadUrl.getUrl(),
+                options.getUrl(),
                 zipFile,
-                downloadUrl.getChecksum(),
-                downloadUrl.getSignature(),
+                options.getChecksum(),
+                options.getSignature(),
                 progressCallback,
                 completionCallback
             );
+            return;
         }
+        httpClient.enqueueWithoutCompression(
+            urlTemplate.fill(options.getChecksum()),
+            createProtocolFileDownloadCallback(
+                zipFile,
+                file -> verifyFirstFileWithUrlTemplate(file, options),
+                progressCallback,
+                completionCallback
+            )
+        );
     }
 
     @NonNull
@@ -1401,9 +1393,7 @@ public class LiveUpdate {
             callback.success(new SyncResult(customProperties, nextBundleId));
             return;
         }
-        UpdateFailure failure = new UpdateFailure().setAppId(requireAppId()).setBundleId(latestBundleId);
-        EmptyCallback downloadCallback = recordFailureOnError(failure, createSyncDownloadCallback(bundle, callback));
-        downloadBundle(latestBundleId, DownloadUrl.fromBundle(bundle), downloadCallback);
+        downloadBundleAndRecordFailure(new DownloadBundleOptions(bundle, requireAppId()), createSyncDownloadCallback(bundle, callback));
     }
 
     private boolean hasBundleById(@NonNull String bundleId) {
@@ -1508,7 +1498,7 @@ public class LiveUpdate {
     }
 
     @NonNull
-    private CreateCheckResponse readCreateCheckResponse(@NonNull Response response) throws IOException {
+    private CreateCheckResponse readCreateCheckResponse(@NonNull Response response) throws CustomException, IOException {
         String body = response.body().string();
         Logger.debug(LiveUpdatePlugin.TAG, "Check response: " + response.code() + " " + body);
         CreateCheckResponse checkResponse = CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
@@ -1546,31 +1536,6 @@ public class LiveUpdate {
         }
     }
 
-    /**
-     * Records the failure of a download as the pending failure, so that the next check reports it.
-     */
-    /**
-     * @param failure The app ID and bundle ID of the download. The reason is set when the download fails.
-     */
-    @NonNull
-    private EmptyCallback recordFailureOnError(@NonNull UpdateFailure failure, @NonNull EmptyCallback callback) {
-        return new EmptyCallback() {
-            @Override
-            public void success() {
-                callback.success();
-            }
-
-            @Override
-            public void error(@NonNull Exception exception) {
-                FailureReason reason = toFailureReason(exception);
-                if (reason != null) {
-                    tryRecordFailure(failure.setReason(reason));
-                }
-                callback.error(exception);
-            }
-        };
-    }
-
     private void resumeRollbackTimer() {
         if (remainingRollbackTimeout == null) {
             return;
@@ -1606,7 +1571,7 @@ public class LiveUpdate {
             Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
             String appId = getAppId();
             if (appId != null) {
-                tryRecordFailure(
+                preferences.trySetPendingFailure(
                     new UpdateFailure().setAppId(appId).setBundleId(currentBundleId).setReason(FailureReason.READINESS_TIMED_OUT)
                 );
             }
@@ -1826,7 +1791,7 @@ public class LiveUpdate {
 
     @Nullable
     private FailureReason toFailureReason(@NonNull Exception exception) {
-        if (exception == CustomExceptions.DOWNLOAD_URL_EXPIRED || CustomExceptions.isRequestFailed(exception)) {
+        if (CustomExceptions.isRequestFailed(exception)) {
             return FailureReason.DOWNLOAD_FAILED;
         }
         if (exception instanceof ZipException) {
@@ -1878,14 +1843,6 @@ public class LiveUpdate {
         }
     }
 
-    private void tryRecordFailure(@NonNull UpdateFailure failure) {
-        try {
-            preferences.setPendingFailure(failure);
-        } catch (JSONException exception) {
-            Logger.warn(LiveUpdatePlugin.TAG, "Failed to record the failed update: " + exception.getMessage());
-        }
-    }
-
     private File unzipDownloadedBundle(@NonNull File zipFile) throws IOException {
         File destination = new File(zipFile.getParentFile(), "bundle");
         String destinationPath = destination.getPath();
@@ -1931,14 +1888,14 @@ public class LiveUpdate {
     }
 
     /**
-     * Verifies the zip file or the manifest of an address with the marker: the checksum always,
+     * Verifies the zip file or the manifest of a bundle with a URL template: the checksum always,
      * and the signature as well if a public key is configured.
      */
-    private void verifyFirstProtocolFile(@NonNull File file, @NonNull DownloadUrl downloadUrl) throws Exception {
-        verifyChecksum(file, downloadUrl.getChecksum());
+    private void verifyFirstFileWithUrlTemplate(@NonNull File file, @NonNull DownloadBundleOptions options) throws Exception {
+        verifyChecksum(file, options.getChecksum());
         String publicKey = config.getPublicKey();
         if (publicKey != null) {
-            verifySignature(file, downloadUrl.getSignature(), publicKey);
+            verifySignature(file, options.getSignature(), publicKey);
         }
     }
 

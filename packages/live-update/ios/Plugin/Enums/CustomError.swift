@@ -15,8 +15,6 @@ public enum CustomError: Error {
     case checksumMissing
     case configurationValueInvalid(key: String)
     case customIdMissing
-    case downloadUrlExpired
-    case downloadUrlMissing
     case pluginNotInitialized
     case requestFailed(message: String)
     case signatureMissing
@@ -31,8 +29,6 @@ public enum CustomError: Error {
             return "BUNDLE_ALREADY_EXISTS"
         case .bundleNotFound:
             return "BUNDLE_NOT_FOUND"
-        case .downloadUrlExpired:
-            return "DOWNLOAD_URL_EXPIRED"
         case .requestFailed:
             return "REQUEST_FAILED"
         case .syncInProgress:
@@ -75,10 +71,6 @@ extension CustomError: LocalizedError {
             return String(format: format, key)
         case .customIdMissing:
             return NSLocalizedString("customId must be provided.", comment: "customIdMissing")
-        case .downloadUrlExpired:
-            return NSLocalizedString("Bundle download URL has expired.", comment: "downloadUrlExpired")
-        case .downloadUrlMissing:
-            return NSLocalizedString("Bundle does not have a valid download URL.", comment: "downloadUrlMissing")
         case .pluginNotInitialized:
             return NSLocalizedString("Plugin is not initialized.", comment: "pluginNotInitialized")
         case .requestFailed(let message):

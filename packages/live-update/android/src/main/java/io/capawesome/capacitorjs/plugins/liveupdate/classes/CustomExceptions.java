@@ -8,11 +8,6 @@ public class CustomExceptions {
 
     public static final CustomException BUNDLE_ALREADY_EXISTS = new CustomException("BUNDLE_ALREADY_EXISTS", "bundle already exists.");
     public static final CustomException BUNDLE_NOT_FOUND = new CustomException("BUNDLE_NOT_FOUND", "bundle not found.");
-    public static final CustomException CHECKSUM_MISSING = new CustomException(null, "Bundle does not contain a checksum.");
-    public static final CustomException DOWNLOAD_URL_EXPIRED = new CustomException(
-        "DOWNLOAD_URL_EXPIRED",
-        "Bundle download URL has expired."
-    );
     public static final CustomException SYNC_IN_PROGRESS = new CustomException("SYNC_IN_PROGRESS", "Sync is already in progress.");
 
     public static boolean isRequestFailed(@NonNull Exception exception) {

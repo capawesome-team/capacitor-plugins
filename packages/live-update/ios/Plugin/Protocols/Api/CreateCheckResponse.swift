@@ -1,6 +1,6 @@
 import Foundation
 
-/// What the plugin reads from the answer to a check. An answer that cannot be used means "no update".
+/// What the plugin reads from the answer to a check. A 200 that cannot be used means "no update".
 struct CreateCheckResponse {
     struct Bundle {
         let id: String
@@ -9,7 +9,7 @@ struct CreateCheckResponse {
         let checksum: String?
         let customProperties: [String: Any]?
         let signature: String?
-        /// The address of the first file.
+        /// The plain address of the bundle: `url`, or else `legacyUrl`.
         let url: String
         let urlTemplate: UrlTemplate?
     }
@@ -23,48 +23,36 @@ struct CreateCheckResponse {
     let channelName: String?
     let bundle: Bundle?
     let retryAfterMs: Int64?
-    let clearsPendingFailure: Bool
 
-    static func parse(statusCode: Int, retryAfter: String?, body: String?) -> CreateCheckResponse {
+    /// - Throws: `CustomError.requestFailed` for every status other than 200 and 429.
+    static func parse(statusCode: Int, retryAfter: String?, body: String?) throws -> CreateCheckResponse {
         switch statusCode {
         case 200:
             return parseProcessedAnswer(body: body)
         case 429:
             return CreateCheckResponse(outcome: nil, reason: nil, channelName: nil, bundle: nil,
-                                       retryAfterMs: parseRetryAfterMs(retryAfter), clearsPendingFailure: false)
-        case 400..<500:
-            return noUpdate(clearsPendingFailure: true)
+                                       retryAfterMs: parseRetryAfterMs(retryAfter))
         default:
-            return noUpdate(clearsPendingFailure: false)
+            throw CustomError.requestFailed(message: "The check failed with status \(statusCode).")
         }
     }
 
-    static func noUpdate(clearsPendingFailure: Bool) -> CreateCheckResponse {
-        return CreateCheckResponse(outcome: nil, reason: nil, channelName: nil, bundle: nil,
-                                   retryAfterMs: nil, clearsPendingFailure: clearsPendingFailure)
+    /// An answer without an update and without a wait.
+    static func noUpdate() -> CreateCheckResponse {
+        return CreateCheckResponse(outcome: nil, reason: nil, channelName: nil, bundle: nil, retryAfterMs: nil)
     }
 
-    /// A bundle has exactly one of `url` and `urlTemplate`. A `url` is used as it is. A template is filled with the checksum.
-    /// - Returns: The address of the first file, or `nil` if the bundle has both or neither, or a template without a checksum or the placeholder.
-    private static func buildUrl(url: String?, urlTemplate: UrlTemplate?, checksum: String?) -> String? {
-        guard let urlTemplate = urlTemplate else {
-            return url
-        }
-        guard url == nil, let checksum = checksum, urlTemplate.hasChecksumPlaceholder else {
-            return nil
-        }
-        return urlTemplate.buildFileUrl(checksum: checksum)
-    }
-
+    /// The plain address is `url`, or else `legacyUrl`. A `urlTemplate` is optional, but it needs `checksum` and the placeholder.
     private static func parseBundle(_ object: Any?) -> Bundle? {
         guard let object = object as? [String: Any],
               let id = readText(object["id"]),
-              let artifactType = readText(object["artifactType"]).flatMap(ArtifactType.init(rawValue:)) else {
+              let artifactType = readText(object["artifactType"]).flatMap(ArtifactType.init(rawValue:)),
+              let url = readText(object["url"]) ?? readText(object["legacyUrl"]) else {
             return nil
         }
         let checksum = readText(object["checksum"])
         let urlTemplate = readText(object["urlTemplate"]).map(UrlTemplate.init(value:))
-        guard let url = buildUrl(url: readText(object["url"]), urlTemplate: urlTemplate, checksum: checksum) else {
+        if let urlTemplate = urlTemplate, checksum == nil || !urlTemplate.hasChecksumPlaceholder {
             return nil
         }
         return Bundle(id: id, artifactType: artifactType, checksum: checksum,
@@ -81,24 +69,22 @@ struct CreateCheckResponse {
 
     private static func parseProcessedAnswer(body: String?) -> CreateCheckResponse {
         guard let object = parseJsonObject(body) else {
-            return noUpdate(clearsPendingFailure: false)
+            return noUpdate()
         }
         let channelName = readText(object["channelName"])
         switch readText(object["result"]).flatMap(CheckOutcome.init(rawValue:)) {
         case .available:
             guard let bundle = parseBundle(object["bundle"]) else {
-                return noUpdate(clearsPendingFailure: true)
+                return noUpdate()
             }
-            return CreateCheckResponse(outcome: .available, reason: nil, channelName: channelName, bundle: bundle,
-                                       retryAfterMs: nil, clearsPendingFailure: true)
+            return CreateCheckResponse(outcome: .available, reason: nil, channelName: channelName, bundle: bundle, retryAfterMs: nil)
         case .skipped:
             return CreateCheckResponse(outcome: .skipped, reason: readText(object["reason"]), channelName: channelName, bundle: nil,
-                                       retryAfterMs: nil, clearsPendingFailure: true)
+                                       retryAfterMs: nil)
         case .upToDate:
-            return CreateCheckResponse(outcome: .upToDate, reason: nil, channelName: channelName, bundle: nil,
-                                       retryAfterMs: nil, clearsPendingFailure: true)
+            return CreateCheckResponse(outcome: .upToDate, reason: nil, channelName: channelName, bundle: nil, retryAfterMs: nil)
         case nil:
-            return noUpdate(clearsPendingFailure: true)
+            return noUpdate()
         }
     }
 

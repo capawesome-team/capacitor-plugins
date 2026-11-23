@@ -10,7 +10,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "manifest",
-        "url": null,
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
@@ -26,7 +26,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "manifest",
-        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
@@ -34,8 +34,7 @@
           "releaseNotes": "Bug fixes"
         }
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -49,6 +48,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": "MEUCIQDx+abc/def0123456789==",
@@ -64,7 +64,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": "MEUCIQDx+abc/def0123456789==",
@@ -72,8 +72,7 @@
           "releaseNotes": "Bug fixes"
         }
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -91,8 +90,7 @@
       "reason": null,
       "channelName": "production",
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -110,8 +108,7 @@
       "reason": "channel_paused",
       "channelName": "production",
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -129,8 +126,7 @@
       "reason": "some_new_reason",
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -148,8 +144,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -163,6 +158,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "some_new_type",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
@@ -176,8 +172,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -195,8 +190,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -210,6 +204,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
       }
@@ -221,14 +216,13 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "url": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4?token=example",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": null
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -262,8 +256,39 @@
         "signature": "MEUCIQDx+abc/def0123456789==",
         "customProperties": null
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "offers a bundle with a legacy url and no url template",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null
+      }
+    },
+    "expected": {
+      "outcome": "available",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "zip",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
+        "urlTemplate": null,
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+        "signature": null,
+        "customProperties": null
+      },
+      "retryAfterMs": null
     }
   },
   {
@@ -293,8 +318,7 @@
         "signature": null,
         "customProperties": null
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -325,12 +349,11 @@
         "signature": null,
         "customProperties": null
       },
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
-    "name": "offers nothing for a bundle with both a url and a url template",
+    "name": "offers nothing for a bundle with neither a url nor a legacy url",
     "statusCode": 200,
     "retryAfter": null,
     "body": {
@@ -340,7 +363,6 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
-        "url": "https://downloads.example.org/bundles/1.2.3.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
       }
@@ -350,31 +372,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
-    }
-  },
-  {
-    "name": "offers nothing for a bundle with neither a url nor a url template",
-    "statusCode": 200,
-    "retryAfter": null,
-    "body": {
-      "result": "available",
-      "reason": null,
-      "channelName": "production",
-      "bundle": {
-        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
-        "artifactType": "zip",
-        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
-      }
-    },
-    "expected": {
-      "outcome": null,
-      "reason": null,
-      "channelName": null,
-      "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -388,6 +386,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/bundle.zip?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4"
       }
@@ -397,12 +396,11 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
-    "name": "offers nothing and keeps a pending failure for a 2xx answer that is not 200",
+    "name": "fails for a 2xx answer that is not 200",
     "statusCode": 201,
     "retryAfter": null,
     "body": {
@@ -412,6 +410,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
@@ -420,14 +419,7 @@
         }
       }
     },
-    "expected": {
-      "outcome": null,
-      "reason": null,
-      "channelName": null,
-      "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": false
-    }
+    "expectedError": "REQUEST_FAILED"
   },
   {
     "name": "offers nothing for a url template without a checksum",
@@ -440,6 +432,7 @@
       "bundle": {
         "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
         "artifactType": "zip",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f.zip",
         "urlTemplate": "https://files.example.com/apps/app-1/artifacts/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f/{checksum}?token=example",
         "signature": null,
         "customProperties": {}
@@ -450,8 +443,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
@@ -469,12 +461,11 @@
       "reason": null,
       "channelName": "production",
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
+      "retryAfterMs": null
     }
   },
   {
-    "name": "offers nothing and keeps a pending failure for a body that is not JSON",
+    "name": "offers nothing for a body that is not JSON",
     "statusCode": 200,
     "retryAfter": null,
     "rawBody": "<html><body>Sign in to the network</body></html>",
@@ -483,8 +474,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": false
+      "retryAfterMs": null
     }
   },
   {
@@ -499,8 +489,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 120000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 120000
     }
   },
   {
@@ -515,8 +504,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 0,
-      "clearsPendingFailure": false
+      "retryAfterMs": 0
     }
   },
   {
@@ -531,8 +519,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 900000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 900000
     }
   },
   {
@@ -547,8 +534,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 900000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 900000
     }
   },
   {
@@ -563,8 +549,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 900000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 900000
     }
   },
   {
@@ -579,8 +564,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 900000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 900000
     }
   },
   {
@@ -595,8 +579,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 86400000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 86400000
     }
   },
   {
@@ -611,8 +594,7 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 86400000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 86400000
     }
   },
   {
@@ -625,56 +607,34 @@
       "reason": null,
       "channelName": null,
       "bundle": null,
-      "retryAfterMs": 60000,
-      "clearsPendingFailure": false
+      "retryAfterMs": 60000
     }
   },
   {
-    "name": "offers nothing for an invalid request",
+    "name": "fails for an invalid request",
     "statusCode": 400,
     "retryAfter": null,
     "body": {
       "message": "Invalid request."
     },
-    "expected": {
-      "outcome": null,
-      "reason": null,
-      "channelName": null,
-      "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
-    }
+    "expectedError": "REQUEST_FAILED"
   },
   {
-    "name": "offers nothing for an unknown app",
+    "name": "fails for an unknown app",
     "statusCode": 404,
     "retryAfter": null,
     "body": {
       "message": "App not found."
     },
-    "expected": {
-      "outcome": null,
-      "reason": null,
-      "channelName": null,
-      "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": true
-    }
+    "expectedError": "REQUEST_FAILED"
   },
   {
-    "name": "keeps a pending failure after a server error",
+    "name": "fails after a server error",
     "statusCode": 503,
     "retryAfter": null,
     "body": {
       "message": "Service is currently unavailable. Please try again later."
     },
-    "expected": {
-      "outcome": null,
-      "reason": null,
-      "channelName": null,
-      "bundle": null,
-      "retryAfterMs": null,
-      "clearsPendingFailure": false
-    }
+    "expectedError": "REQUEST_FAILED"
   }
 ]

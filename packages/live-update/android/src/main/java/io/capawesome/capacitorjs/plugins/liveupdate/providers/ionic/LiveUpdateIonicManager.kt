@@ -5,10 +5,10 @@ import com.getcapacitor.Logger
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdate
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdateConfig
 import io.capawesome.capacitorjs.plugins.liveupdate.LiveUpdatePlugin
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponse
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponseBundle
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.results.FetchLatestBundleResult
-import io.capawesome.capacitorjs.plugins.liveupdate.enums.ArtifactType
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback
 import io.ionic.liveupdateprovider.MetadataSyncResult
@@ -106,21 +106,21 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
 
     override suspend fun sync(): ProviderSyncResult? {
         try {
-            val result = fetchLatestBundle()
+            val bundle = fetchCheck().bundle
 
             // No update available; nothing to report.
-            val bundleId = result.bundleId
-            if (bundleId == null || bundleId == syncedBundleId) {
+            if (bundle == null || bundle.id == syncedBundleId) {
                 return null
             }
 
             // Use the bundle on disk, or download it (or wait for a running download of the same bundle).
+            val bundleId = bundle.id
             val directory = liveUpdate.getBundleDirectory(bundleId) ?: run {
-                downloadBundleOnce(bundleId, result)
+                downloadBundleOnce(bundle)
                 liveUpdate.getBundleDirectory(bundleId) ?: throw Exception(LiveUpdatePlugin.ERROR_BUNDLE_DIRECTORY_NOT_FOUND)
             }
             applySyncedBundle(bundleId, directory)
-            return MetadataSyncResult(buildMetadata(bundleId, result.customProperties))
+            return MetadataSyncResult(buildMetadata(bundleId, bundle.customProperties))
         } catch (exception: Exception) {
             Logger.error(LiveUpdatePlugin.TAG, "Ionic provider sync failed: ${exception.message}", exception)
             throw exception
@@ -162,13 +162,8 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         preferences.removeSupersededBundleIds(deletedBundleIds)
     }
 
-    private suspend fun downloadBundle(bundleId: String, result: FetchLatestBundleResult) {
-        val downloadUrl = result.downloadUrl
-        if (downloadUrl.isNullOrEmpty()) {
-            throw Exception(LiveUpdatePlugin.ERROR_DOWNLOAD_URL_MISSING)
-        }
-        val artifactType = result.artifactType ?: ArtifactType.ZIP
-        val options = DownloadBundleOptions(appId, artifactType, bundleId, result.checksum, result.signature, downloadUrl)
+    private suspend fun downloadBundle(bundle: CreateCheckResponseBundle) {
+        val options = DownloadBundleOptions(bundle, appId)
         suspendCoroutine { continuation ->
             liveUpdate.downloadBundle(
                 options,
@@ -181,22 +176,22 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         }
     }
 
-    private suspend fun downloadBundleOnce(bundleId: String, result: FetchLatestBundleResult) {
-        val download = bundleDownloads.computeIfAbsent(bundleId) {
-            bundleDownloadScope.async { downloadBundle(bundleId, result) }
+    private suspend fun downloadBundleOnce(bundle: CreateCheckResponseBundle) {
+        val download = bundleDownloads.computeIfAbsent(bundle.id) {
+            bundleDownloadScope.async { downloadBundle(bundle) }
         }
         try {
             download.await()
         } finally {
-            bundleDownloads.remove(bundleId, download)
+            bundleDownloads.remove(bundle.id, download)
         }
     }
 
-    private suspend fun fetchLatestBundle(): FetchLatestBundleResult = suspendCoroutine { continuation ->
-        liveUpdate.fetchLatestBundle(
+    private suspend fun fetchCheck(): CreateCheckResponse = suspendCoroutine { continuation ->
+        liveUpdate.fetchCheck(
             FetchLatestBundleOptions(appId, syncedBundleId, channel),
-            object : NonEmptyCallback<FetchLatestBundleResult> {
-                override fun success(result: FetchLatestBundleResult) = continuation.resume(result)
+            object : NonEmptyCallback<CreateCheckResponse> {
+                override fun success(result: CreateCheckResponse) = continuation.resume(result)
 
                 override fun error(exception: Exception) = continuation.resumeWithException(exception)
             }

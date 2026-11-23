@@ -17,35 +17,18 @@ class ProtocolTestCasesTests: XCTestCase {
 
     func testCheckResponse() throws {
         for testCase in try loadCases("check-response.json") as [[String: Any]] {
-            let response = CreateCheckResponse.parse(
-                statusCode: try XCTUnwrap(testCase["statusCode"] as? Int),
-                retryAfter: testCase["retryAfter"] as? String,
-                body: try readBody(testCase)
-            )
-            let expected = try XCTUnwrap(testCase["expected"] as? [String: Any])
-            XCTAssertEqual(serialize(response) as NSDictionary, expected as NSDictionary, name(of: testCase))
-        }
-    }
-
-    func testDownloadUrlBuild() throws {
-        let cases = try loadCases("download-url.json") as [String: Any]
-        for testCase in try XCTUnwrap(cases["build"] as? [[String: Any]]) {
-            let bundle = try parseBundle(XCTUnwrap(testCase["bundle"] as? [String: Any]))
-            XCTAssertEqual(DownloadUrl(bundle: bundle).text, testCase["expectedDownloadUrl"] as? String, name(of: testCase))
-        }
-    }
-
-    func testDownloadUrlParse() throws {
-        let cases = try loadCases("download-url.json") as [String: Any]
-        for testCase in try XCTUnwrap(cases["parse"] as? [[String: Any]]) {
-            let text = try XCTUnwrap(testCase["downloadUrl"] as? String)
+            let statusCode = try XCTUnwrap(testCase["statusCode"] as? Int)
+            let retryAfter = testCase["retryAfter"] as? String
+            let body = try readBody(testCase)
+            let parse = { try CreateCheckResponse.parse(statusCode: statusCode, retryAfter: retryAfter, body: body) }
             if let expectedError = testCase["expectedError"] as? String {
-                XCTAssertThrowsError(try DownloadUrl.parse(text), name(of: testCase)) { error in
-                    XCTAssertEqual(error.localizedDescription, expectedError, name(of: testCase))
+                XCTAssertThrowsError(try parse(), name(of: testCase)) { error in
+                    XCTAssertEqual((error as? CustomError)?.code, expectedError, name(of: testCase))
                 }
             } else {
+                let response = try parse()
                 let expected = try XCTUnwrap(testCase["expected"] as? [String: Any])
-                XCTAssertEqual(serialize(try DownloadUrl.parse(text)) as NSDictionary, expected as NSDictionary, name(of: testCase))
+                XCTAssertEqual(serialize(response) as NSDictionary, expected as NSDictionary, name(of: testCase))
             }
         }
     }
@@ -117,14 +100,6 @@ class ProtocolTestCasesTests: XCTestCase {
         return testCase["name"] as? String ?? "unnamed case"
     }
 
-    private func parseBundle(_ object: [String: Any]) throws -> CreateCheckResponse.Bundle {
-        var bundleObject = object
-        bundleObject["id"] = "test-bundle"
-        let body = try JSONSerialization.data(withJSONObject: ["result": "available", "bundle": bundleObject])
-        let response = CreateCheckResponse.parse(statusCode: 200, retryAfter: nil, body: String(bytes: body, encoding: .utf8))
-        return try XCTUnwrap(response.bundle)
-    }
-
     private func readBody(_ testCase: [String: Any]) throws -> String? {
         if let rawBody = testCase["rawBody"] as? String {
             return rawBody
@@ -133,17 +108,6 @@ class ProtocolTestCasesTests: XCTestCase {
             return nil
         }
         return String(bytes: try JSONSerialization.data(withJSONObject: body), encoding: .utf8)
-    }
-
-    private func serialize(_ downloadUrl: DownloadUrl) -> [String: Any] {
-        return [
-            "url": downloadUrl.url,
-            "hasMarker": downloadUrl.hasMarker,
-            "artifactType": downloadUrl.artifactType?.rawValue ?? NSNull(),
-            "checksum": downloadUrl.checksum ?? NSNull(),
-            "urlTemplate": downloadUrl.urlTemplate?.value ?? NSNull(),
-            "signature": downloadUrl.signature ?? NSNull()
-        ]
     }
 
     private func serialize(_ item: ManifestItem) -> [String: Any] {
@@ -156,8 +120,7 @@ class ProtocolTestCasesTests: XCTestCase {
             "reason": response.reason ?? NSNull(),
             "channelName": response.channelName ?? NSNull(),
             "bundle": response.bundle.map(serialize) ?? NSNull(),
-            "retryAfterMs": response.retryAfterMs ?? NSNull(),
-            "clearsPendingFailure": response.clearsPendingFailure
+            "retryAfterMs": response.retryAfterMs ?? NSNull()
         ]
     }
 

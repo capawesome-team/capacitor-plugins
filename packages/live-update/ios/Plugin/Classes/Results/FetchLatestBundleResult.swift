@@ -17,32 +17,8 @@ import Capacitor
         self.channel = response.channelName
         self.checksum = bundle?.checksum
         self.customProperties = bundle?.customProperties
-        self.downloadUrl = bundle.map { DownloadUrl(bundle: $0).text }
+        self.downloadUrl = bundle?.url
         self.signature = bundle?.signature
-    }
-
-    func getArtifactType() -> ArtifactType? {
-        return artifactType
-    }
-
-    public func getBundleId() -> String? {
-        return bundleId
-    }
-
-    public func getChecksum() -> String? {
-        return checksum
-    }
-
-    public func getCustomProperties() -> [String: Any]? {
-        return customProperties
-    }
-
-    public func getDownloadUrl() -> String? {
-        return downloadUrl
-    }
-
-    public func getSignature() -> String? {
-        return signature
     }
 
     public func toJSObject() -> AnyObject {

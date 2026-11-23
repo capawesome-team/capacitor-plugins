@@ -4,6 +4,8 @@ import static io.capawesome.capacitorjs.plugins.liveupdate.classes.JsonFields.ge
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException;
+import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckOutcome;
 import java.math.BigInteger;
 import org.json.JSONException;
@@ -20,8 +22,6 @@ public class CreateCheckResponse {
     @Nullable
     private String channelName;
 
-    private boolean clearsPendingFailure;
-
     @Nullable
     private CheckOutcome outcome;
 
@@ -33,16 +33,12 @@ public class CreateCheckResponse {
 
     private CreateCheckResponse() {}
 
-    public boolean clearsPendingFailure() {
-        return clearsPendingFailure;
-    }
-
     /**
-     * @return An answer without an update, without a wait and without clearing the pending failure.
+     * @return An answer without an update and without a wait.
      */
     @NonNull
     public static CreateCheckResponse createWithoutUpdate() {
-        return createWithoutUpdate(false);
+        return new CreateCheckResponse();
     }
 
     @Nullable
@@ -76,8 +72,11 @@ public class CreateCheckResponse {
         return retryAfterMs;
     }
 
+    /**
+     * @throws CustomException With the code `REQUEST_FAILED` for every status other than 200 and 429.
+     */
     @NonNull
-    public static CreateCheckResponse parse(int statusCode, @Nullable String retryAfter, @NonNull String body) {
+    public static CreateCheckResponse parse(int statusCode, @Nullable String retryAfter, @NonNull String body) throws CustomException {
         if (statusCode == 429) {
             CreateCheckResponse response = createWithoutUpdate();
             response.retryAfterMs = parseRetryAfterMs(retryAfter);
@@ -86,15 +85,7 @@ public class CreateCheckResponse {
         if (statusCode == 200) {
             return parseProcessedBody(body);
         }
-        boolean isClientError = statusCode >= 400 && statusCode < 500;
-        return createWithoutUpdate(isClientError);
-    }
-
-    @NonNull
-    private static CreateCheckResponse createWithoutUpdate(boolean clearsPendingFailure) {
-        CreateCheckResponse response = new CreateCheckResponse();
-        response.clearsPendingFailure = clearsPendingFailure;
-        return response;
+        throw CustomExceptions.requestFailed("The check failed with status " + statusCode + ".");
     }
 
     @NonNull
@@ -103,21 +94,21 @@ public class CreateCheckResponse {
         try {
             json = new JSONObject(body);
         } catch (JSONException exception) {
-            return createWithoutUpdate(false);
+            return createWithoutUpdate();
         }
         CheckOutcome outcome = CheckOutcome.fromValue(getNonEmptyString(json, "result"));
         if (outcome == null) {
-            return createWithoutUpdate(true);
+            return createWithoutUpdate();
         }
         CreateCheckResponseBundle bundle = null;
         if (outcome == CheckOutcome.AVAILABLE) {
             JSONObject bundleJson = json.optJSONObject("bundle");
             bundle = bundleJson == null ? null : CreateCheckResponseBundle.parse(bundleJson);
             if (bundle == null) {
-                return createWithoutUpdate(true);
+                return createWithoutUpdate();
             }
         }
-        CreateCheckResponse response = createWithoutUpdate(true);
+        CreateCheckResponse response = createWithoutUpdate();
         response.outcome = outcome;
         response.bundle = bundle;
         response.channelName = getNonEmptyString(json, "channelName");

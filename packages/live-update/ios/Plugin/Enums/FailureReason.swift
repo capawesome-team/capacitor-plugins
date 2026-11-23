@@ -14,7 +14,7 @@ enum FailureReason: String, Codable {
             self = .bundleInvalid
         case CustomError.checksumMismatch:
             self = .checksumMismatched
-        case CustomError.downloadUrlExpired, CustomError.requestFailed:
+        case CustomError.requestFailed:
             self = .downloadFailed
         case CustomError.signatureMissing, CustomError.signatureVerificationFailed:
             self = .signatureVerificationFailed

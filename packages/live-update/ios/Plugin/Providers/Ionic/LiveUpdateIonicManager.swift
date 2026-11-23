@@ -80,21 +80,21 @@ public final class LiveUpdateIonicManager: ProviderManager {
 
     public func sync() async throws -> (any ProviderSyncResult)? {
         do {
-            let result = try await liveUpdate.fetchLatestBundle(FetchLatestBundleOptions(appId: appId, bundleId: syncedBundleId, channel: channel))
+            let response = try await liveUpdate.fetchCheck(FetchLatestBundleOptions(appId: appId, bundleId: syncedBundleId, channel: channel))
 
             // No update available; nothing to report.
-            guard let bundleId = result.getBundleId(), bundleId != syncedBundleId else {
+            guard let bundle = response.bundle, bundle.id != syncedBundleId else {
                 return nil
             }
 
             let directory: URL
-            if let existingDirectory = liveUpdate.getBundleDirectory(bundleId: bundleId) {
+            if let existingDirectory = liveUpdate.getBundleDirectory(bundleId: bundle.id) {
                 directory = existingDirectory
             } else {
-                directory = try await downloadBundle(bundleId: bundleId, result: result)
+                directory = try await downloadBundle(bundle)
             }
-            applySyncedBundle(bundleId: bundleId, directory: directory)
-            return MetadataSyncResult(metadata: buildMetadata(bundleId: bundleId, customProperties: result.getCustomProperties()))
+            applySyncedBundle(bundleId: bundle.id, directory: directory)
+            return MetadataSyncResult(metadata: buildMetadata(bundleId: bundle.id, customProperties: bundle.customProperties))
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] Ionic provider sync failed: ", error.localizedDescription)
             throw error
@@ -135,22 +135,12 @@ public final class LiveUpdateIonicManager: ProviderManager {
     }
 
     /// Downloads the bundle, or awaits a running download of the same bundle, and returns its directory.
-    private func downloadBundle(bundleId: String, result: FetchLatestBundleResult) async throws -> URL {
-        guard let downloadUrl = result.getDownloadUrl(), !downloadUrl.isEmpty else {
-            throw CustomError.downloadUrlMissing
-        }
-        let downloadOptions = DownloadBundleOptions(
-            appId: appId,
-            artifactType: result.getArtifactType() ?? .zip,
-            bundleId: bundleId,
-            checksum: result.getChecksum(),
-            signature: result.getSignature(),
-            url: downloadUrl
-        )
-        try await BundleDownloads.shared.run(bundleId: bundleId) { [liveUpdate] in
+    private func downloadBundle(_ bundle: CreateCheckResponse.Bundle) async throws -> URL {
+        let downloadOptions = DownloadBundleOptions(bundle: bundle, appId: appId)
+        try await BundleDownloads.shared.run(bundleId: bundle.id) { [liveUpdate] in
             try await liveUpdate.downloadBundle(downloadOptions)
         }
-        guard let directory = liveUpdate.getBundleDirectory(bundleId: bundleId) else {
+        guard let directory = liveUpdate.getBundleDirectory(bundleId: bundle.id) else {
             throw CustomError.bundleDirectoryNotFound
         }
         return directory

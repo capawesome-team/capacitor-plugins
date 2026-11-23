@@ -1,9 +1,7 @@
 import Foundation
+import Capacitor
 
 public class LiveUpdatePreferences: NSObject {
-    /// Guards the pending failure, which every instance shares: a remove must not lose a failure that is written meanwhile.
-    private static let pendingFailureLock = NSLock()
-
     private let appIdKey = "appId" // DO NOT CHANGE
     private let blockedBundleIdsKey = "blockedBundleIds" // DO NOT CHANGE
     private let channelKey = "channel" // DO NOT CHANGE
@@ -101,22 +99,10 @@ public class LiveUpdatePreferences: NSObject {
 
     /// Removes the pending failure only if it is still the given one. A failure that was recorded since then is kept.
     func removePendingFailure(_ failure: UpdateFailure) {
-        Self.pendingFailureLock.lock()
-        defer { Self.pendingFailureLock.unlock() }
         guard getPendingFailure() == failure else {
             return
         }
         UserDefaults.standard.removeObject(forKey: applyPrefix(to: pendingFailureKey))
-        UserDefaults.standard.synchronize()
-    }
-
-    func setPendingFailure(_ value: UpdateFailure) {
-        guard let data = try? JSONEncoder().encode(value) else {
-            return
-        }
-        Self.pendingFailureLock.lock()
-        defer { Self.pendingFailureLock.unlock() }
-        UserDefaults.standard.set(data, forKey: applyPrefix(to: pendingFailureKey))
         UserDefaults.standard.synchronize()
     }
 
@@ -126,6 +112,18 @@ public class LiveUpdatePreferences: NSObject {
         } else {
             UserDefaults.standard.removeObject(forKey: applyPrefix(to: previousBundleIdKey))
         }
+        UserDefaults.standard.synchronize()
+    }
+
+    func trySetPendingFailure(_ value: UpdateFailure) {
+        let data: Data
+        do {
+            data = try JSONEncoder().encode(value)
+        } catch {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to record the failed update: ", error.localizedDescription)
+            return
+        }
+        UserDefaults.standard.set(data, forKey: applyPrefix(to: pendingFailureKey))
         UserDefaults.standard.synchronize()
     }
 

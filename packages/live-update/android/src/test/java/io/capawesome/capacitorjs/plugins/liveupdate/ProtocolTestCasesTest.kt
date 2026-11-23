@@ -1,7 +1,6 @@
 package io.capawesome.capacitorjs.plugins.liveupdate
 
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.CustomException
-import io.capawesome.capacitorjs.plugins.liveupdate.classes.DownloadUrl
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.Manifest
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UpdateFailure
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.UrlTemplate
@@ -51,8 +50,14 @@ class ProtocolTestCasesTest {
     fun checkResponse() {
         forEachCase(readArray("check-response.json")) { case ->
             val body = if (case.has("rawBody")) case.getString("rawBody") else case.get("body").toString()
+            val parse = { CreateCheckResponse.parse(case.getInt("statusCode"), case.optStringOrNull("retryAfter"), body) }
+            if (case.has("expectedError")) {
+                val exception = assertThrows(CustomException::class.java) { parse() }
+                assertEquals(case.getString("expectedError"), exception.code)
+                return@forEachCase
+            }
 
-            val response = CreateCheckResponse.parse(case.getInt("statusCode"), case.optStringOrNull("retryAfter"), body)
+            val response = parse()
 
             val expected = case.getJSONObject("expected")
             assertEquals(expected.optStringOrNull("outcome"), response.outcome?.value)
@@ -60,40 +65,6 @@ class ProtocolTestCasesTest {
             assertEquals(expected.optStringOrNull("channelName"), response.channelName)
             assertBundle(expected.optJSONObject("bundle"), response.bundle)
             assertEquals(if (expected.isNull("retryAfterMs")) null else expected.getLong("retryAfterMs"), response.retryAfterMs)
-            assertEquals(expected.getBoolean("clearsPendingFailure"), response.clearsPendingFailure())
-        }
-    }
-
-    @Test
-    fun downloadUrlBuild() {
-        forEachCase(readObject("download-url.json").getJSONArray("build")) { case ->
-            val bundleJson = JSONObject(case.getJSONObject("bundle").toString()).put("id", "test-bundle")
-            val bundle = CreateCheckResponseBundle.parse(bundleJson)
-
-            assertNotNull(bundle)
-            assertEquals(case.getString("expectedDownloadUrl"), DownloadUrl.fromBundle(bundle!!).toString())
-        }
-    }
-
-    @Test
-    fun downloadUrlParse() {
-        forEachCase(readObject("download-url.json").getJSONArray("parse")) { case ->
-            val text = case.getString("downloadUrl")
-            if (case.has("expectedError")) {
-                val exception = assertThrows(CustomException::class.java) { DownloadUrl.parse(text) }
-                assertEquals(case.getString("expectedError"), exception.message)
-                return@forEachCase
-            }
-
-            val downloadUrl = DownloadUrl.parse(text)
-
-            val expected = case.getJSONObject("expected")
-            assertEquals(expected.getString("url"), downloadUrl.url)
-            assertEquals(expected.getBoolean("hasMarker"), downloadUrl.hasMarker())
-            assertEquals(expected.optStringOrNull("artifactType"), downloadUrl.artifactType?.value)
-            assertEquals(expected.optStringOrNull("checksum"), downloadUrl.checksum)
-            assertEquals(expected.optStringOrNull("urlTemplate"), downloadUrl.urlTemplate?.value)
-            assertEquals(expected.optStringOrNull("signature"), downloadUrl.signature)
         }
     }
 
