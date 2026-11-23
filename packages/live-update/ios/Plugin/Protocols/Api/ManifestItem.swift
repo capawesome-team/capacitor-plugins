@@ -16,6 +16,6 @@ public struct ManifestItem: Codable {
     }
 
     private static func isHrefInsideBundle(_ href: String) -> Bool {
-        return !href.split(separator: "/", omittingEmptySubsequences: false).contains("..")
+        return !href.utf8.split(separator: UInt8(ascii: "/"), omittingEmptySubsequences: false).contains { $0.elementsEqual("..".utf8) }
     }
 }
