@@ -1,6 +1,6 @@
 ---
 name: test-live-update
-description: Manually test the live-update plugin end to end with the example app, a Capawesome Cloud test app and Maestro on the iOS simulator and the Android emulator. Part P covers provider mode (Ionic Portals) with example-ionic-provider and the Portals demo. Use after changing the plugin's download, verification, bundle, startup or provider logic, or before releasing.
+description: Manually test the live-update plugin end to end with the example app, a Capawesome Cloud test app and Maestro on the iOS simulator and the Android emulator. Part E covers Electron with the example's Electron app. Part P covers provider mode (Ionic Portals) with example-ionic-provider and the Portals demo. Use after changing the plugin's check, download, verification, bundle, startup or provider logic, or before releasing.
 argument-hint: [paths to cover, e.g. "zip manifest signature"]
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 ---
@@ -28,6 +28,12 @@ Drive the example app on both platforms through the plugin's download paths and 
    - Manifest: `npx @capawesome/cli apps:liveupdates:generatemanifest --path dist` first, then upload with `--artifact-type manifest`.
    - Signed: generate a throwaway RSA key pair outside the repo, put the public key as a single-line PEM into `plugins.LiveUpdate.publicKey`, upload with `--private-key <path>`.
    - Nested `index.html`: the CLI rejects it. Zip a `www/` wrapper yourself, serve it with `python3 -m http.server 8000 --bind 127.0.0.1` from a directory that holds nothing else, and run `adb reverse tcp:8000 tcp:8000` so both devices reach `http://localhost:8000/<file>.zip`.
+   - Custom properties: add `--custom-property key=value` to the upload, once per property.
+   - Moved file: copy one asset of a manifest bundle to a new path inside the next bundle, so both paths hold the same content, then generate the manifest and upload.
+   - Self-hosted: serve a ZIP from the local server and register its address with `npx @capawesome/cli apps:liveupdates:register --app-id <id> --url <url> --channel <channel>`.
+   - Without a URL template: the server offers some bundles with a plain address only. Ask the user for an app and a channel that serves one, and confirm with a check that its answer has `legacyUrl` and no `urlTemplate`.
+   - Manifest from a plain address: the plugin asks for the manifest and for each file as `<url>?href=<path>`, so serve such a bundle with a small server of your own that answers by the `href` value. The cases in `protocol-test-cases/manifest.json` list the manifests that must be refused.
+   - Last release: check out the tag of the last release in a second worktree and build the example there, so both builds can be installed over each other.
 4. Deploy: `npx cap run ios --target <udid>` and `npx cap run android --target emulator-5554` from `example`. If `cap run ios` builds but fails to open the simulator (`Simulator.app does not exist`), install the build yourself: `xcrun simctl install <udid> ios/DerivedData/<udid>/Build/Products/Debug-iphonesimulator/App.app`.
 
 ---
@@ -45,6 +51,29 @@ maestro --device <id> test flows/relaunch.yaml
 ```
 
 Sync completes without a visible signal: poll the bundles directory with `scripts/device.sh <ios|android> bundles` until the bundle id appears, then continue.
+
+The flows above launch the app. A second set does not, so a log capture that is attached to the running app survives:
+
+```
+maestro --device <id> test -e CHANNEL=<channel> flows/enter-channel.yaml
+maestro --device <id> test -e BUTTON="Sync" flows/tap.yaml                              # scrolls down to the button
+maestro --device <id> test -e BUTTON="Fetch Latest Bundle" flows/tap-up.yaml            # scrolls up to the button
+maestro --device <id> test -e BUTTON="Fetch Latest Bundle" -e TIMES=15 flows/tap-repeat.yaml
+maestro --device <id> test -e BUNDLE_ID=x -e URL=... flows/download-manifest.yaml       # a manifest bundle from a plain address
+```
+
+After `Fetch Latest Bundle` the form holds the result, so `Download Bundle`, `Set Next Bundle` and `reload` finish the manual flow.
+
+On Android, call the plugin through the WebView DevTools socket to get the exact result or error of a call:
+
+```
+node scripts/webview-eval.mjs 'Capacitor.Plugins.LiveUpdate.sync({ channel: "<channel>" })'
+node scripts/webview-eval.mjs 'Capacitor.Plugins.LiveUpdate.fetchLatestBundle({ channel: "<channel>" })'
+```
+
+It prints `{"ok":true,"value":...}` or `{"ok":false,"code":...,"message":...}`. Set `ANDROID_SERIAL` for another device and `APP` for another app.
+
+Logs: on Android `adb logcat -s LiveUpdate`. On iOS the plugin writes to stdout only, so start the app with `xcrun simctl launch --console-pty <udid> com.example.plugin > <file> 2>&1` in the background and use the flows that do not launch the app.
 
 ---
 
@@ -64,16 +93,29 @@ Rows marked "config" need a change to `plugins.LiveUpdate` in the example config
 | Nested ZIP | | `download` with the local nested ZIP and its real `CHECKSUM` and no `ERROR`, poll, `set-next-bundle`, `reload` | `files` shows `index.html` at the bundle root, clean |
 | Manifest, fresh | | `sync` on a manifest channel, poll, `reload` | `files` shows the manifest file next to `index.html`, clean |
 | Manifest, incremental | | second manifest bundle on the same channel, `sync-keep-state`, poll, `reload` | `files` shows every asset of the new bundle, clean |
+| Manifest, moved file | | a manifest bundle that holds one file of the current bundle under a new path, `sync-keep-state`, poll, `reload` | `files` shows the file under both paths with the same content, clean |
+| Manual flow, ZIP | | `Fetch Latest Bundle` on a ZIP channel, then `Download Bundle`, `Set Next Bundle`, `reload` | `downloadUrl` is the download address of the API, new title, clean |
+| Manual flow, manifest | | the same on a manifest channel | `files` shows every asset, clean |
+| Up to date | | bundle with custom properties: `sync`, `reload`, then `Fetch Latest Bundle` and `sync` on the same channel | the result holds the bundle with its custom properties, `sync` returns no next bundle and downloads nothing, the log says "The app is up to date." |
+| Without a URL template | | `sync` on a channel whose check answer has no `urlTemplate`, poll, `reload` | bundle installed, clean |
+| Self-hosted bundle | | `sync` on a channel with a registered bundle address, poll, `reload` | bundle installed from that address, clean |
+| Manifest refused | | `download-manifest` with the address of a manifest that must be refused | "The bundle manifest could not be read.", no bundle, clean |
+| Bundle already exists | | `download` of the same bundle twice | second call rejects with the code `BUNDLE_ALREADY_EXISTS` |
+| Bundle not found | | `Set Next Bundle` with an id that is not on the device | rejects with the code `BUNDLE_NOT_FOUND` |
+| Sync in progress | | two `sync` calls at the same time | one rejects with the code `SYNC_IN_PROGRESS`, one bundle installed |
+| Rate limit | | `tap-repeat` on `Fetch Latest Bundle` until the log shows an answer with status 429, then `sync` | no error, the log then says "No check was made because the device is rate limited." |
 | Signature ok | `publicKey` = key A | `sync` on a channel signed with key A, `reload` | new title, clean |
 | Wrong public key | `publicKey` = key B | `sync` on the channel signed with key A | "Signature verification failed.", no bundle, clean |
 | Invalid signature | `publicKey` set | `download` of the nested ZIP with `SIGNATURE=AAAA`, `ERROR="Signature verification failed."` | toast, clean |
 | Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, poll, `reload`, do not tap Ready, `expect-title` with the default title and `TIMEOUT=30000` | back on the default bundle |
 | No rollback with `ready()` | `readyTimeout: 10000` | `sync`, poll, `reload`, `ready`, wait longer than the timeout, `expect-title` with the new title | still on the new bundle, `inspect` agrees |
+| Failure reported | same deploy as the rollback row | after the rollback, one more `sync` on the same channel | the log shows a check whose body holds `failure` with the bundle id and the reason `readiness_timed_out`, and the answer has status 200 |
 | Rolled-back bundle blocked | same deploy as the rollback row | after the rollback row, `ready` on the default bundle (the plugin records the block there), then `sync-keep-state`, poll for 30 s | bundle not installed again, "Get Blocked Bundles" lists it |
 | Server error | `serverDomain: "example.com"` | `sync` | "The check failed with status 405.", no bundle |
 | Timeout error | `serverDomain: "10.255.255.1"`, `httpTimeout: 1000` | `sync` | "Request timed out." |
 | Background auto update | `autoUpdateStrategy: "background"` | `relaunch`, poll without tapping Sync; then send the app to the background and back | bundle appears on start and on resume |
 | Startup sweep | | `scripts/device.sh <platform> plant-leftover`, `relaunch` | downloads folder gone |
+| Update in place | | install the build of the last release, `sync`, `reload`, `ready`, set a channel and a custom id, note the device id. Then install the new build over it without clearing the data (`adb install -r`, `xcrun simctl install`) and start it | same device id, same title and current bundle, channel and custom id kept, a `sync` on a channel with a newer bundle installs it |
 
 A 500 response from the update server needs a server you control that answers over HTTPS; cover it when such a server is available.
 
@@ -88,6 +130,42 @@ A 500 response from the update server needs a server you control that answers ov
 - Maestro needs 10–15 s to start a flow, longer than a 10 s `readyTimeout`. Put `reload` and `ready` into one flow; a separate `ready` flow arrives after the rollback.
 - Maestro matches text partially, so `expect-title` with `Capacitor Live Update` also matches `Capacitor Live Update v2`. To prove a rollback, wait until the new title is gone (`extendedWaitUntil` with `notVisible`) instead of asserting the default title.
 - The background auto update row needs `defaultChannel` set to your channel, because the plugin otherwise syncs the Cloud `default` channel. The plugin skips auto update for 15 minutes after the last check, so upload the next bundle, keep the app in the background for 15 minutes, and only then test the resume.
+- Run the rate limit row last. After an answer with status 429 the plugin makes no check for the time the server asks for. That wait lives in memory, so a restart of the app ends it.
+- A fresh install gives the app a new device id. Use it to start a row without the limits and the state of the row before.
+- On iOS the log line with the result of a call is cut off after about 250 characters. Read long results from the form fields with `maestro --device <id> hierarchy`, or add a temporary print and remove it again.
+---
+
+## Part E: Electron
+
+The Electron platform runs on the engine `@capawesome/electron-live-update`. It supports ZIP bundles only, and it has its own storage and its own rollback at the next start. So it needs its own run.
+
+### Setup
+
+1. Check that the engine on disk is the version that `packages/live-update/package.json` asks for: `node -p "require('@capawesome/electron-live-update/package.json').version"` in `packages/live-update`. If it is older, run `npm install` in the repo root first, or the run tests the wrong engine.
+2. In `packages/live-update`: `npm run build`. In `example`: set `plugins.LiveUpdate.appId` in `capacitor.config.ts`, then `npm run build`, `npx cap sync @capawesome/capacitor-electron` and `npx tsc -p electron/tsconfig.json`. Options that only Electron should get go into `electron/capacitor.electron.config.ts`.
+3. Start the app by hand with `npx electron electron` from `example`. The plugin and the engine log to the terminal with the prefix `[LiveUpdate]`.
+4. To call plugin methods from a script, reuse the helpers of the end-to-end tests in `example/test/electron/support/harness.mjs`: `launch(userDataDir)` starts the app with its own data folder, `callPlugin(page, method, options)` calls a method in the renderer and returns its result, and `writeLiveUpdateConfig({ appId, ... })` sets the options without a new sync. Write such a script outside the repo.
+5. The data lives in `capawesome-live-update` inside the user data folder of the app: `bundles/<bundleId>/`, `staging/` for running downloads and `state.json` for the current bundle, the next bundle, the blocked bundles, the device id and the channel.
+
+### Matrix
+
+| Case | Config | Steps | Expect |
+|------|--------|-------|--------|
+| ZIP sync | | `sync` on a ZIP channel, `reload` | new title, `bundles` holds the bundle, `staging` is empty |
+| Restart applies the update | | `sync`, close the app, start it again | new title after the start |
+| Custom properties | | `sync` on a channel whose bundle has custom properties | the result holds them |
+| Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, `reload`, do not call `ready` | back on the default bundle after the timeout, the next `ready` returns `rollback: true` |
+| Rollback at the next start | `readyTimeout: 10000` | `sync`, `reload`, close the app before the timeout, start it again | the default bundle is shown |
+| No rollback with `ready()` | `readyTimeout: 10000` | `sync`, `reload`, `ready`, wait longer than the timeout | still on the new bundle |
+| Rolled-back bundle blocked | same run as the first rollback row | `sync` again | bundle not installed again, `getBlockedBundles` lists it |
+| Signature ok | `publicKey` = key A | `sync` on a channel signed with key A, `reload` | new title |
+| Wrong public key | `publicKey` = key B | `sync` on the channel signed with key A | "Signature verification failed.", no bundle |
+| Manifest refused | | `downloadBundle` with `artifactType: 'manifest'` | "The manifest artifact type is not supported." |
+| Error codes | | `downloadBundle` of the same bundle twice, `setNextBundle` with an unknown id, two `sync` calls at once | `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND`, `SYNC_IN_PROGRESS` |
+| Timeout error | `serverDomain: "10.255.255.1"`, `httpTimeout: 1000` | `sync` | "Request timed out." with the code `REQUEST_FAILED` |
+| Update in place | | start the build of the last release with a data folder, `sync`, `reload`, `ready`, close it. Start the new build with the same data folder | same device id, same title and current bundle, a `sync` on a channel with a newer bundle installs it |
+
+Run `npm run e2e:electron` in `example` as well. It covers the first sync and both rollback rows against a local mock server.
 
 ---
 
@@ -144,6 +222,7 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 | Concurrent sync | example | fresh channel bundle, `Sync Manager` with `TWICE=yes` | no error, one bundle directory, one download in the log |
 | Offline | example | `serverDomain: "10.255.255.1"` and `httpTimeout: 1000` via config variant, `Sync Manager` | log shows an error, not `null` |
 | Unknown app ID | example | `Sync Manager` with a random UUID as `APPID` | log shows "The check failed with status 404." |
+| Without a URL template | example | `Sync Manager` with an app and a channel whose check answer has no `urlTemplate` | log shows the bundle id and a directory |
 | Shared bundle | demo | fresh install, launch twice, `demo-markers` | help and checkout show the channel marker, one bundle directory per app ID |
 | Signed, correct key | demo | channel with a bundle uploaded with `--private-key`, `publicKey` set, launch twice | marker of the signed bundle |
 | Unsigned with key | demo | upload an unsigned bundle to the same channel, launch twice | log `Signature verification failed.`, marker unchanged |
@@ -152,7 +231,7 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 ### Pitfalls
 
 - iOS writes user defaults when the app terminates. Run `scripts/device.sh ios force-stop` before `prefs`, or the pointer looks stale.
-- In provider mode the Android plugin logs under the tag `LiveUpdate`, not `Capacitor/LiveUpdate`.
+- The Android plugin logs under the tag `LiveUpdate`, in provider mode and in the example app.
 - The demo does not reload a portal after its sync. Count launches: launch one downloads, launch two shows the bundle. The iOS featured portal is created on the Shop tab at startup and needs the second launch as well.
 - The demo's cart tab has no accessibility id on Android; `demo-markers-android.yaml` taps it by position.
 
@@ -160,4 +239,4 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 
 ## Cleanup
 
-Revert `capacitor.config.ts`, stop the local server, `adb reverse --remove tcp:8000`, and delete the Cloud app with `npx @capawesome/cli apps:delete --app-id <id> -y` unless the user wants to keep it. After Part P, restore the backed-up files, remove the lock file and uninstall the provider example and the demo from both devices.
+Revert `capacitor.config.ts`, stop the local server, `adb reverse --remove tcp:8000`, and delete the Cloud app with `npx @capawesome/cli apps:delete --app-id <id> -y` unless the user wants to keep it. After Part E, revert `electron/capacitor.electron.config.ts` and delete the data folders you created. After Part P, restore the backed-up files, remove the lock file and uninstall the provider example and the demo from both devices.

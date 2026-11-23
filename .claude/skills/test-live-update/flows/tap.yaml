@@ -1,0 +1,7 @@
+appId: com.example.plugin
+name: Scroll down to a button and tap it without launching the app
+---
+- scrollUntilVisible:
+    element:
+      text: ${BUTTON}
+- tapOn: ${BUTTON}

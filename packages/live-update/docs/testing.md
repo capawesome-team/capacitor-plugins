@@ -19,6 +19,26 @@ The following test cases should be covered when testing the plugin:
 - [ ] Verify that the temporary download files are deleted after the bundle has been added (ZIP and manifest).
 - [ ] Verify that the temporary download files are deleted when a download fails (network error, malformed URL, checksum mismatch, signature verification failure).
 - [ ] Verify that leftovers of interrupted downloads are deleted on plugin load.
+- [ ] Verify that the manual flow with `fetchLatestBundle()` and `downloadBundle()` installs a ZIP bundle and a manifest bundle.
+- [ ] Verify that `fetchLatestBundle()` returns the latest bundle with its custom properties when the app already uses it, and that `sync()` then downloads nothing.
+- [ ] Verify that a bundle whose check answer has no URL template is installed from its plain address.
+- [ ] Verify that a self-hosted bundle is installed from its registered address.
+- [ ] Verify that a manifest with a file path outside of the bundle is rejected.
+- [ ] Verify that `downloadBundle()`, `setNextBundle()` and `sync()` reject with the error codes `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND` and `SYNC_IN_PROGRESS`.
+- [ ] Verify that an app that is updated from the last release keeps its device ID, its current bundle, its channel and its custom ID.
+
+## Electron
+
+The Electron platform has its own engine, its own storage and its own rollback at the next start. It supports ZIP bundles only. These cases need their own run:
+
+- [ ] Verify that a ZIP bundle is applied after `reload()` and after a restart of the app.
+- [ ] Verify that a rollback is performed when `ready()` is not called within the `readyTimeout` period, in the same session and at the next start.
+- [ ] Verify that roll backed bundles are blocked from being applied again if `autoBlockRollBackedBundles` is set to true.
+- [ ] Verify that the live update fails when the wrong public key is used.
+- [ ] Verify that a manifest bundle is rejected.
+- [ ] Verify that `sync()` returns the custom properties of the next bundle.
+- [ ] Verify the error codes `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND`, `SYNC_IN_PROGRESS` and `REQUEST_FAILED`.
+- [ ] Verify that an app that is updated from the last release keeps its device ID and its current bundle.
 
 ## Provider mode
 
@@ -32,6 +52,7 @@ In provider mode, an Ionic Portals host constructs `LiveUpdateIonicManager` dire
 - [ ] Verify that two concurrent syncs for the same app ID and channel download the bundle once and do not fail.
 - [ ] Verify that `sync()` fails with an error when the device is offline.
 - [ ] Verify that `sync()` fails with an error for an unknown app ID.
+- [ ] Verify that `sync()` installs a bundle whose check answer has no URL template.
 - [ ] Verify that a signed bundle installs with the correct `publicKey`, and that an unsigned bundle or a wrong `publicKey` fails with a signature error and keeps the current bundle.
 
 Two apps cover these cases:
@@ -45,4 +66,4 @@ Check the result on each platform:
 - Android: filter logcat with the tag `LiveUpdate`. Bundles live in `files/_capacitor_live_update_bundles`, the pointers in `shared_prefs/CapawesomeLiveUpdateIonicProvider.xml` (read both with `adb shell run-as <package>`).
 - Take screenshots with Maestro to confirm which bundle a portal shows.
 
-The `test-live-update` skill in `.claude/skills/test-live-update` runs these cases with Maestro on the iOS simulator and the Android emulator. Provider mode is Part P of the skill.
+The `test-live-update` skill in `.claude/skills/test-live-update` runs these cases with Maestro on the iOS simulator and the Android emulator. Electron is Part E of the skill, provider mode is Part P.

@@ -1,0 +1,13 @@
+appId: com.example.plugin
+name: Enter the channel without launching the app
+---
+- extendedWaitUntil:
+    visible: "Capacitor Live Update"
+    timeout: 20000
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: channel-input
+      INPUT_LABEL: Channel
+- inputText: ${CHANNEL}
+- runFlow: _dismiss-keyboard.yaml
