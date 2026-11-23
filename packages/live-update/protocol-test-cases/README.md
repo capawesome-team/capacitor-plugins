@@ -86,7 +86,7 @@ With `urlTemplate`, the SDK loads every file from the template. The address of a
 
 Without `urlTemplate`, the bundle is loaded from the plain address as before this protocol.
 
-`checksum` and `signature` of the answer belong to the first file. That is the zip file, or the manifest of a bundle that is stored file by file. An `up_to_date` answer can come without them and without `urlTemplate`, because nothing is downloaded then.
+`checksum` and `signature` of the answer belong to the first file. That is the zip file, or the manifest of a bundle that is stored file by file.
 
 The SDK sends `Accept-Encoding: identity` when it downloads the zip file of a bundle with `urlTemplate`. Otherwise the zip file may arrive compressed and without `Content-Length`, and the SDK could report the downloaded bytes but not the total size. Every other file is downloaded with the default encodings of the platform.
 

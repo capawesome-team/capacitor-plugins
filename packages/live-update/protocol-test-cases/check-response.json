@@ -84,10 +84,11 @@
       "reason": null,
       "channelName": "production",
       "bundle": {
-        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "id": "7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
         "artifactType": "manifest",
-        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
-        "checksum": null,
+        "legacyUrl": "https://legacy.example.com/bundles/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
           "releaseNotes": "Bug fixes"
@@ -99,11 +100,11 @@
       "reason": null,
       "channelName": "production",
       "bundle": {
-        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "id": "7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
         "artifactType": "manifest",
-        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
-        "urlTemplate": null,
-        "checksum": null,
+        "url": "https://legacy.example.com/bundles/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+        "urlTemplate": "https://files.example.com/apps/app-1/artifacts/7a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d/{checksum}?token=example",
+        "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
         "signature": null,
         "customProperties": {
           "releaseNotes": "Bug fixes"
