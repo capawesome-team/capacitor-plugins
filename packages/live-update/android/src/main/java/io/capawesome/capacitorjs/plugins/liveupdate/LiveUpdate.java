@@ -1343,8 +1343,10 @@ public class LiveUpdate {
         return (int) PackageInfoCompat.getLongVersionCode(getPackageInfo());
     }
 
+    @NonNull
     private String getVersionName() throws PackageManager.NameNotFoundException {
-        return getPackageInfo().versionName;
+        String versionName = getPackageInfo().versionName;
+        return versionName == null ? "" : versionName;
     }
 
     private void handleDownloadResponse(
