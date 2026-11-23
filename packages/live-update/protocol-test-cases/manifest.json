@@ -33,6 +33,27 @@
       ]
     },
     {
+      "name": "reads paths whose names hold two dots",
+      "text": "[{\"href\": \"assets/a..b.js\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}, {\"href\": \"..hidden\", \"checksum\": \"c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e\", \"sizeInBytes\": 200}, {\"href\": \"file..\", \"checksum\": \"5a6b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7a8b9c0d\", \"sizeInBytes\": 300}]",
+      "expectedItems": [
+        {
+          "href": "assets/a..b.js",
+          "checksum": "3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4",
+          "sizeInBytes": 100
+        },
+        {
+          "href": "..hidden",
+          "checksum": "c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e",
+          "sizeInBytes": 200
+        },
+        {
+          "href": "file..",
+          "checksum": "5a6b7c8d9e0f1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f7a8b9c0d",
+          "sizeInBytes": 300
+        }
+      ]
+    },
+    {
       "name": "rejects a manifest with an item that has no checksum",
       "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}, {\"href\": \"assets/app.js\", \"sizeInBytes\": 100}]",
       "expectedItems": null
@@ -40,6 +61,21 @@
     {
       "name": "rejects a manifest with an item that has no path",
       "text": "[{\"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}]",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest with an item that has an empty path",
+      "text": "[{\"href\": \"\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}]",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest with a path that leaves the bundle",
+      "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}, {\"href\": \"../outside.txt\", \"checksum\": \"c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e\", \"sizeInBytes\": 100}]",
+      "expectedItems": null
+    },
+    {
+      "name": "rejects a manifest with a path that leaves the bundle after a combining character",
+      "text": "[{\"href\": \"index.html\", \"checksum\": \"3b7e0c1d9a2f4e5b6c7d8e9f0a1b2c3d4e5f60718293a4b5c6d7e8f901a2b3c4\", \"sizeInBytes\": 100}, {\"href\": \"../\\u0301outside.txt\", \"checksum\": \"c41d7a90be2f13c5d8e6f7a0b1c2d3e4f5061728394a5b6c7d8e9f0a1b2c3d4e\", \"sizeInBytes\": 100}]",
       "expectedItems": null
     },
     {
