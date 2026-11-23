@@ -7,6 +7,21 @@ public enum CustomError: Error {
     case notSupported
     case presentationContextUnavailable
     case updateDescriptionMissing
+
+    var code: String? {
+        switch self {
+        case .apiNotAvailable:
+            return "API_NOT_AVAILABLE"
+        case .invalidRequest:
+            return "INVALID_REQUEST"
+        case .notSupported:
+            return "NOT_SUPPORTED"
+        case .presentationContextUnavailable:
+            return "PRESENTATION_CONTEXT_UNAVAILABLE"
+        case .illegalAgeGates, .updateDescriptionMissing:
+            return nil
+        }
+    }
 }
 
 extension CustomError: LocalizedError {

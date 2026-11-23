@@ -30,14 +30,16 @@ The Age Signals plugin is typically used to comply with age verification require
 - **Age-gated content**: Restrict access to mature or sensitive content based on the user's verification status and age range.
 - **Regulatory compliance**: Meet US state age verification requirements by requesting age signals from Google Play and Apple's DeclaredAgeRange API.
 - **Parental supervision**: Detect supervised accounts and react to pending or denied parental approvals.
-- **Regional eligibility checks**: Use `getRegulatoryRequirements()` on iOS to determine whether the user is in a region with additional age-related obligations.
+- **Regional eligibility checks**: Use `getRegulatoryRequirements()` to determine whether the user is in a region with additional age-related obligations.
 - **Automated testing**: Simulate different age verification scenarios in your Android tests using the built-in fake manager.
 
 ## Compatibility
 
 | Plugin Version | Capacitor Version | Status         |
 | -------------- | ----------------- | -------------- |
-| 0.3.x          | >=8.x.x           | Active support |
+| 0.5.x          | >=8.x.x           | Active support |
+| 0.4.x          | >=8.x.x           | Deprecated     |
+| 0.3.x          | >=8.x.x           | Deprecated     |
 | 0.2.x          | 7.x.x             | Deprecated     |
 
 ## Installation
@@ -68,7 +70,7 @@ npx cap sync
 
 If needed, you can define the following project variable in your app's `variables.gradle` file to change the default version of the dependency:
 
-- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.4`)
+- `$androidPlayAgeSignalsVersion` version of `com.google.android.play:age-signals` (default: `0.0.6`)
 
 This can be useful if you encounter dependency conflicts with other plugins in your project.
 
@@ -130,7 +132,18 @@ const getAgeRange = async () => {
 
 ### Check the regulatory requirements
 
-Check whether the user is in a region and account state that requires age assurance, and which regulatory features your app must support. Only available on iOS:
+Check whether the user is in a region and account state that requires age assurance:
+
+```typescript
+import { AgeSignals } from '@capawesome/capacitor-age-signals';
+
+const getRegulatoryRequirements = async () => {
+  const result = await AgeSignals.getRegulatoryRequirements();
+  console.log('Age Assurance Required:', result.ageAssuranceRequired);
+};
+```
+
+The `regulatoryFeatures` property tells you which regulatory features your app must support. On iOS, this includes the acknowledgment of a significant change:
 
 ```typescript
 import {
@@ -138,7 +151,7 @@ import {
   RegulatoryFeature,
 } from '@capawesome/capacitor-age-signals';
 
-const getRegulatoryRequirements = async () => {
+const showSignificantUpdateAcknowledgment = async () => {
   const result = await AgeSignals.getRegulatoryRequirements();
   if (
     result.regulatoryFeatures.includes(
@@ -163,6 +176,8 @@ const getRegulatoryRequirements = async () => {
 * [`setNextAgeSignalsAccessResult(...)`](#setnextagesignalsaccessresult)
 * [`setNextAgeSignalsException(...)`](#setnextagesignalsexception)
 * [`setNextAgeSignalsResult(...)`](#setnextagesignalsresult)
+* [`setNextApplicableAgeFeaturesException(...)`](#setnextapplicableagefeaturesexception)
+* [`setNextApplicableAgeFeaturesResult(...)`](#setnextapplicableagefeaturesresult)
 * [`setNextRequestAgeSignalsAccessException(...)`](#setnextrequestagesignalsaccessexception)
 * [`setUseFakeManager(...)`](#setusefakemanager)
 * [`showSignificantUpdateAcknowledgment(...)`](#showsignificantupdateacknowledgment)
@@ -210,7 +225,12 @@ Call this method before starting any age assurance flow to find out
 whether the user is in a region and account state where age assurance
 applies at all.
 
-Only available on iOS (26.2+).
+On **Android**, this method uses `getApplicableAgeFeatures()` of the Play
+Age Signals API. It needs a newer version of the Play Store app than the
+other methods, so it may reject with `PLAY_STORE_VERSION_OUTDATED` while
+`requestAgeRange(...)` still works.
+
+Only available on Android and iOS (26.2+).
 
 **Returns:** <code>Promise&lt;<a href="#getregulatoryrequirementsresult">GetRegulatoryRequirementsResult</a>&gt;</code>
 
@@ -325,6 +345,45 @@ Only available on Android.
 | **`options`** | <code><a href="#setnextagesignalsresultoptions">SetNextAgeSignalsResultOptions</a></code> |
 
 **Since:** 0.3.1
+
+--------------------
+
+
+### setNextApplicableAgeFeaturesException(...)
+
+```typescript
+setNextApplicableAgeFeaturesException(options: SetNextApplicableAgeFeaturesExceptionOptions) => Promise<void>
+```
+
+Set the next error to be thrown by the fake manager when the regulatory
+requirements are read.
+
+Only available on Android.
+
+| Param         | Type                                                                                                                  |
+| ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnextapplicableagefeaturesexceptionoptions">SetNextApplicableAgeFeaturesExceptionOptions</a></code> |
+
+**Since:** 0.5.2
+
+--------------------
+
+
+### setNextApplicableAgeFeaturesResult(...)
+
+```typescript
+setNextApplicableAgeFeaturesResult(options: SetNextApplicableAgeFeaturesResultOptions) => Promise<void>
+```
+
+Set the next regulatory requirements to be returned by the fake manager.
+
+Only available on Android.
+
+| Param         | Type                                                                                                            |
+| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#setnextapplicableagefeaturesresultoptions">SetNextApplicableAgeFeaturesResultOptions</a></code> |
+
+**Since:** 0.5.2
 
 --------------------
 
@@ -484,6 +543,20 @@ Only available on iOS (26.4+).
 | **`significantChangeStatus`**       | <code><a href="#significantchangestatus">SignificantChangeStatus</a></code> | The parental approval state for the most recent significant change.                      | 0.5.0 |
 
 
+#### SetNextApplicableAgeFeaturesExceptionOptions
+
+| Prop            | Type                                            | Description                                                                                                        | Since |
+| --------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
+| **`errorCode`** | <code><a href="#errorcode">ErrorCode</a></code> | The error code to be thrown by the fake manager. Only the error codes that are available on Android are supported. | 0.5.2 |
+
+
+#### SetNextApplicableAgeFeaturesResultOptions
+
+| Prop                     | Type                             | Description                                                                                                                                                                                                   | Since |
+| ------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`regulatoryFeatures`** | <code>RegulatoryFeature[]</code> | The regulatory features to be returned by the fake manager. Only the regulatory features that are available on Android are supported. Pass an empty array to simulate a user without regulatory requirements. | 0.5.2 |
+
+
 #### SetNextRequestAgeSignalsAccessExceptionOptions
 
 | Prop            | Type                                            | Description                                                                                                        | Since |
@@ -551,11 +624,11 @@ Only available on iOS (26.4+).
 
 #### RegulatoryFeature
 
-| Members                                             | Value                                                             | Description                                                                                                                                                                        | Since |
-| --------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`DeclaredAgeRangeRequired`**                      | <code>'DECLARED_AGE_RANGE_REQUIRED'</code>                        | The user must share their age range with the app.                                                                                                                                  | 0.5.0 |
-| **`SignificantAppChangeRequiresAdultNotification`** | <code>'SIGNIFICANT_APP_CHANGE_REQUIRES_ADULT_NOTIFICATION'</code> | An adult user must acknowledge a significant change of the app. Use `showSignificantUpdateAcknowledgment(...)` to show the system interface for the acknowledgment.                | 0.5.0 |
-| **`SignificantAppChangeRequiresParentalConsent`**   | <code>'SIGNIFICANT_APP_CHANGE_REQUIRES_PARENTAL_CONSENT'</code>   | A parent or guardian must consent to a significant change of the app. This plugin does not implement the consent flow. Use Apple's PermissionKit framework to request the consent. | 0.5.0 |
+| Members                                             | Value                                                             | Description                                                                                                                                                                                               | Since |
+| --------------------------------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`DeclaredAgeRangeRequired`**                      | <code>'DECLARED_AGE_RANGE_REQUIRED'</code>                        | The user must share their age range with the app. On **Android**, this is the `MANDATORY_SHARING` feature of the Play Age Signals API.                                                                    | 0.5.0 |
+| **`SignificantAppChangeRequiresAdultNotification`** | <code>'SIGNIFICANT_APP_CHANGE_REQUIRES_ADULT_NOTIFICATION'</code> | An adult user must acknowledge a significant change of the app. Use `showSignificantUpdateAcknowledgment(...)` to show the system interface for the acknowledgment. Only available on iOS.                | 0.5.0 |
+| **`SignificantAppChangeRequiresParentalConsent`**   | <code>'SIGNIFICANT_APP_CHANGE_REQUIRES_PARENTAL_CONSENT'</code>   | A parent or guardian must consent to a significant change of the app. This plugin does not implement the consent flow. Use Apple's PermissionKit framework to request the consent. Only available on iOS. | 0.5.0 |
 
 
 #### AgeRangeStatus
@@ -570,24 +643,24 @@ Only available on iOS (26.4+).
 
 #### ErrorCode
 
-| Members                              | Value                                           | Description                                                                                                                                                                                 | Since |
-| ------------------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| **`ApiNotAvailable`**                | <code>'API_NOT_AVAILABLE'</code>                | The age signals API is not available. On **Android**, the Play Store app version installed on the device might be old. On **iOS**, the system was unable to share the age range.            | 0.0.1 |
-| **`AppNotOwned`**                    | <code>'APP_NOT_OWNED'</code>                    | The app was not installed by Google Play. Only available on Android.                                                                                                                        | 0.0.1 |
-| **`CannotBindToService`**            | <code>'CANNOT_BIND_TO_SERVICE'</code>           | Binding to the service in the Play Store has failed. This can be due to having an old Play Store version installed on the device or device memory is overloaded. Only available on Android. | 0.0.1 |
-| **`ClientTransientError`**           | <code>'CLIENT_TRANSIENT_ERROR'</code>           | There was a transient error in the client device. Only available on Android.                                                                                                                | 0.0.1 |
-| **`FakeManagerNotAllowed`**          | <code>'FAKE_MANAGER_NOT_ALLOWED'</code>         | The fake manager is not available, because the app is not debuggable. Only available on Android.                                                                                            | 0.5.0 |
-| **`FakeManagerNotEnabled`**          | <code>'FAKE_MANAGER_NOT_ENABLED'</code>         | The fake manager is not enabled. Only available on Android.                                                                                                                                 | 0.5.0 |
-| **`InternalError`**                  | <code>'INTERNAL_ERROR'</code>                   | Unknown internal error. Only available on Android.                                                                                                                                          | 0.0.1 |
-| **`InvalidRequest`**                 | <code>'INVALID_REQUEST'</code>                  | The request contains invalid parameters. On **iOS**, this is also returned if the requested age gates are rejected by the system.                                                           | 0.5.0 |
-| **`NetworkError`**                   | <code>'NETWORK_ERROR'</code>                    | No available network is found. Only available on Android.                                                                                                                                   | 0.0.1 |
-| **`NotSupported`**                   | <code>'NOT_SUPPORTED'</code>                    | Age signals are not supported on this device.                                                                                                                                               | 0.5.0 |
-| **`PlayServicesNotFound`**           | <code>'PLAY_SERVICES_NOT_FOUND'</code>          | Play Services is not available or its version is too old. Only available on Android.                                                                                                        | 0.0.1 |
-| **`PlayServicesVersionOutdated`**    | <code>'PLAY_SERVICES_VERSION_OUTDATED'</code>   | Play Services needs to be updated. Only available on Android.                                                                                                                               | 0.0.1 |
-| **`PlayStoreNotFound`**              | <code>'PLAY_STORE_NOT_FOUND'</code>             | No Play Store app is found on the device. Only available on Android.                                                                                                                        | 0.0.1 |
-| **`PlayStoreVersionOutdated`**       | <code>'PLAY_STORE_VERSION_OUTDATED'</code>      | The Play Store app needs to be updated. Only available on Android.                                                                                                                          | 0.0.1 |
-| **`PresentationContextUnavailable`** | <code>'PRESENTATION_CONTEXT_UNAVAILABLE'</code> | No view controller was found to present the system interface. Only available on iOS.                                                                                                        | 0.5.0 |
-| **`SdkVersionOutdated`**             | <code>'SDK_VERSION_OUTDATED'</code>             | The Age Signals SDK version is outdated. Only available on Android.                                                                                                                         | 0.4.0 |
+| Members                              | Value                                           | Description                                                                                                                                                                                                                       | Since |
+| ------------------------------------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| **`ApiNotAvailable`**                | <code>'API_NOT_AVAILABLE'</code>                | The age signals API is not available. On **Android**, the Play Store app version installed on the device might be old. On **iOS**, the system was unable to share the age range.                                                  | 0.0.1 |
+| **`AppNotOwned`**                    | <code>'APP_NOT_OWNED'</code>                    | The app was not installed by Google Play. Only available on Android.                                                                                                                                                              | 0.0.1 |
+| **`CannotBindToService`**            | <code>'CANNOT_BIND_TO_SERVICE'</code>           | Binding to the service in the Play Store has failed. This can be due to having an old Play Store version installed on the device or device memory is overloaded. Only available on Android.                                       | 0.0.1 |
+| **`ClientTransientError`**           | <code>'CLIENT_TRANSIENT_ERROR'</code>           | There was a transient error in the client device. Only available on Android.                                                                                                                                                      | 0.0.1 |
+| **`FakeManagerNotAllowed`**          | <code>'FAKE_MANAGER_NOT_ALLOWED'</code>         | The fake manager is not available, because the app is not debuggable. Only available on Android.                                                                                                                                  | 0.5.0 |
+| **`FakeManagerNotEnabled`**          | <code>'FAKE_MANAGER_NOT_ENABLED'</code>         | The fake manager is not enabled. Only available on Android.                                                                                                                                                                       | 0.5.0 |
+| **`InternalError`**                  | <code>'INTERNAL_ERROR'</code>                   | Unknown internal error. Only available on Android.                                                                                                                                                                                | 0.0.1 |
+| **`InvalidRequest`**                 | <code>'INVALID_REQUEST'</code>                  | The request contains invalid parameters. On **iOS**, this is also returned if the requested age gates are rejected by the system.                                                                                                 | 0.5.0 |
+| **`NetworkError`**                   | <code>'NETWORK_ERROR'</code>                    | No available network is found. Only available on Android.                                                                                                                                                                         | 0.0.1 |
+| **`NotSupported`**                   | <code>'NOT_SUPPORTED'</code>                    | Age signals are not supported on this device. On **Android**, the Play Age Signals API does not support the device type. On **iOS**, the iOS version or the Xcode version used to build the app is too old for the called method. | 0.5.0 |
+| **`PlayServicesNotFound`**           | <code>'PLAY_SERVICES_NOT_FOUND'</code>          | Play Services is not available or its version is too old. Only available on Android.                                                                                                                                              | 0.0.1 |
+| **`PlayServicesVersionOutdated`**    | <code>'PLAY_SERVICES_VERSION_OUTDATED'</code>   | Play Services needs to be updated. Only available on Android.                                                                                                                                                                     | 0.0.1 |
+| **`PlayStoreNotFound`**              | <code>'PLAY_STORE_NOT_FOUND'</code>             | No Play Store app is found on the device. Only available on Android.                                                                                                                                                              | 0.0.1 |
+| **`PlayStoreVersionOutdated`**       | <code>'PLAY_STORE_VERSION_OUTDATED'</code>      | The Play Store app needs to be updated. Only available on Android.                                                                                                                                                                | 0.0.1 |
+| **`PresentationContextUnavailable`** | <code>'PRESENTATION_CONTEXT_UNAVAILABLE'</code> | No view controller was found to present the system interface. Only available on iOS.                                                                                                                                              | 0.5.0 |
+| **`SdkVersionOutdated`**             | <code>'SDK_VERSION_OUTDATED'</code>             | The Age Signals SDK version is outdated. Only available on Android.                                                                                                                                                               | 0.4.0 |
 
 </docgen-api>
 
@@ -703,6 +776,24 @@ console.log(result.status); // 'VERIFICATION_REQUIRED'
 console.log(result.ageRange); // undefined
 ```
 
+#### Example: Testing a User in a Regulated Region
+
+```typescript
+import {
+  AgeSignals,
+  RegulatoryFeature,
+} from '@capawesome/capacitor-age-signals';
+
+await AgeSignals.setUseFakeManager({ useFake: true });
+
+await AgeSignals.setNextApplicableAgeFeaturesResult({
+  regulatoryFeatures: [RegulatoryFeature.DeclaredAgeRangeRequired],
+});
+
+const result = await AgeSignals.getRegulatoryRequirements();
+console.log(result.ageAssuranceRequired); // true
+```
+
 #### Example: Testing Error Scenarios
 
 ```typescript
@@ -718,7 +809,7 @@ await AgeSignals.setNextRequestAgeSignalsAccessException({
 try {
   await AgeSignals.requestAgeRange();
 } catch (error) {
-  console.log('Caught network error:', error);
+  console.log(error.code === ErrorCode.NetworkError); // true
 }
 
 // Simulate a network error while the age range is read
@@ -729,7 +820,7 @@ await AgeSignals.setNextAgeSignalsException({
 try {
   await AgeSignals.getAgeRange();
 } catch (error) {
-  console.log('Caught network error:', error);
+  console.log(error.code === ErrorCode.NetworkError); // true
 }
 ```
 
@@ -770,7 +861,7 @@ On iOS 26.5 and later, the more granular declarations may be replaced by `CONFIR
 
 ### How can I test different age verification scenarios?
 
-On Android, the plugin integrates the `FakeAgeSignalsManager` API, which lets you simulate age signals without live responses from Google Play. Enable it with `setUseFakeManager(...)` and set the next results or exceptions with `setNextAgeSignalsAccessResult(...)`, `setNextAgeSignalsResult(...)`, `setNextRequestAgeSignalsAccessException(...)` and `setNextAgeSignalsException(...)`. The fake manager is only available if your app is debuggable. See the [Testing](#testing) section for complete examples.
+On Android, the plugin integrates the `FakeAgeSignalsManager` API, which lets you simulate age signals without live responses from Google Play. Enable it with `setUseFakeManager(...)` and set the next results or exceptions with the `setNext...(...)` methods. The fake manager is only available if your app is debuggable. See the [Testing](#testing) section for complete examples.
 
 ### Why do I get a VerifyError in my Android unit tests?
 

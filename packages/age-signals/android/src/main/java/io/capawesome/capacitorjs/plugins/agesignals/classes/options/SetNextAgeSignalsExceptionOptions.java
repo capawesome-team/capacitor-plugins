@@ -48,6 +48,8 @@ public class SetNextAgeSignalsExceptionOptions {
                 return AgeSignalsErrorCode.INTERNAL_ERROR;
             case "SDK_VERSION_OUTDATED":
                 return AgeSignalsErrorCode.SDK_VERSION_OUTDATED;
+            case "NOT_SUPPORTED":
+                return AgeSignalsErrorCode.DEVICE_NOT_SUPPORTED;
             default:
                 throw new Exception("Invalid errorCode: " + errorCode);
         }

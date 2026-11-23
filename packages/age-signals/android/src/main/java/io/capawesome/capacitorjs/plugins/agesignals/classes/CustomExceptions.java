@@ -45,5 +45,10 @@ public class CustomExceptions {
         "FAKE_MANAGER_NOT_ENABLED",
         "Fake manager is not enabled."
     );
+    public static final CustomException NOT_SUPPORTED = new CustomException(
+        "NOT_SUPPORTED",
+        "Age signals are not supported on this device."
+    );
+    public static final CustomException REGULATORY_FEATURES_MISSING = new CustomException(null, "regulatoryFeatures must be provided.");
     public static final CustomException STATUS_MISSING = new CustomException(null, "status must be provided.");
 }
