@@ -7,9 +7,11 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.CustomException;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsAccessResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsExceptionOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsResultOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextApplicableAgeFeaturesResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetUseFakeManagerOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.EmptyCallback;
 import io.capawesome.capacitorjs.plugins.agesignals.interfaces.NonEmptyResultCallback;
@@ -43,7 +45,12 @@ public class AgeSignalsPlugin extends Plugin {
 
     @PluginMethod
     public void getRegulatoryRequirements(PluginCall call) {
-        rejectCallAsUnimplemented(call);
+        try {
+            assert implementation != null;
+            implementation.getRegulatoryRequirements(createResultCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
     }
 
     @PluginMethod
@@ -97,6 +104,30 @@ public class AgeSignalsPlugin extends Plugin {
 
             assert implementation != null;
             implementation.setNextAgeSignalsResult(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextApplicableAgeFeaturesException(PluginCall call) {
+        try {
+            SetNextAgeSignalsExceptionOptions options = new SetNextAgeSignalsExceptionOptions(call);
+
+            assert implementation != null;
+            implementation.setNextApplicableAgeFeaturesException(options, createEmptyCallback(call));
+        } catch (Exception exception) {
+            rejectCall(call, exception);
+        }
+    }
+
+    @PluginMethod
+    public void setNextApplicableAgeFeaturesResult(PluginCall call) {
+        try {
+            SetNextApplicableAgeFeaturesResultOptions options = new SetNextApplicableAgeFeaturesResultOptions(call);
+
+            assert implementation != null;
+            implementation.setNextApplicableAgeFeaturesResult(options, createEmptyCallback(call));
         } catch (Exception exception) {
             rejectCall(call, exception);
         }
@@ -167,7 +198,12 @@ public class AgeSignalsPlugin extends Plugin {
             message = ERROR_UNKNOWN_ERROR;
         }
         Logger.error(TAG, message, exception);
-        call.reject(message);
+        String code = exception instanceof CustomException ? ((CustomException) exception).getCode() : null;
+        if (code == null) {
+            call.reject(message);
+        } else {
+            call.reject(message, code);
+        }
     }
 
     private void rejectCallAsUnimplemented(@NonNull PluginCall call) {

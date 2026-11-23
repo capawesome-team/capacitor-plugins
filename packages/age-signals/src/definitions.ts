@@ -24,7 +24,12 @@ export interface AgeSignalsPlugin {
    * whether the user is in a region and account state where age assurance
    * applies at all.
    *
-   * Only available on iOS (26.2+).
+   * On **Android**, this method uses `getApplicableAgeFeatures()` of the Play
+   * Age Signals API. It needs a newer version of the Play Store app than the
+   * other methods, so it may reject with `PLAY_STORE_VERSION_OUTDATED` while
+   * `requestAgeRange(...)` still works.
+   *
+   * Only available on Android and iOS (26.2+).
    *
    * @since 0.5.0
    */
@@ -91,6 +96,27 @@ export interface AgeSignalsPlugin {
    */
   setNextAgeSignalsResult(
     options: SetNextAgeSignalsResultOptions,
+  ): Promise<void>;
+  /**
+   * Set the next error to be thrown by the fake manager when the regulatory
+   * requirements are read.
+   *
+   * Only available on Android.
+   *
+   * @since 0.5.2
+   */
+  setNextApplicableAgeFeaturesException(
+    options: SetNextApplicableAgeFeaturesExceptionOptions,
+  ): Promise<void>;
+  /**
+   * Set the next regulatory requirements to be returned by the fake manager.
+   *
+   * Only available on Android.
+   *
+   * @since 0.5.2
+   */
+  setNextApplicableAgeFeaturesResult(
+    options: SetNextApplicableAgeFeaturesResultOptions,
   ): Promise<void>;
   /**
    * Set the next error to be thrown by the fake manager when access to the age
@@ -344,6 +370,36 @@ export interface SetNextAgeSignalsResultOptions {
    * @since 0.5.0
    */
   significantChangeStatus?: SignificantChangeStatus;
+}
+
+/**
+ * @since 0.5.2
+ */
+export interface SetNextApplicableAgeFeaturesExceptionOptions {
+  /**
+   * The error code to be thrown by the fake manager.
+   *
+   * Only the error codes that are available on Android are supported.
+   *
+   * @since 0.5.2
+   */
+  errorCode: ErrorCode;
+}
+
+/**
+ * @since 0.5.2
+ */
+export interface SetNextApplicableAgeFeaturesResultOptions {
+  /**
+   * The regulatory features to be returned by the fake manager.
+   *
+   * Only the regulatory features that are available on Android are supported.
+   * Pass an empty array to simulate a user without regulatory requirements.
+   *
+   * @since 0.5.2
+   * @example ["DECLARED_AGE_RANGE_REQUIRED"]
+   */
+  regulatoryFeatures: RegulatoryFeature[];
 }
 
 /**
@@ -651,13 +707,14 @@ export enum ParentalControl {
 /**
  * A regulatory feature that the app must support for the current user.
  *
- * Only available on iOS.
- *
  * @since 0.5.0
  */
 export enum RegulatoryFeature {
   /**
    * The user must share their age range with the app.
+   *
+   * On **Android**, this is the `MANDATORY_SHARING` feature of the Play Age
+   * Signals API.
    *
    * @since 0.5.0
    */
@@ -668,6 +725,8 @@ export enum RegulatoryFeature {
    * Use `showSignificantUpdateAcknowledgment(...)` to show the system
    * interface for the acknowledgment.
    *
+   * Only available on iOS.
+   *
    * @since 0.5.0
    */
   SignificantAppChangeRequiresAdultNotification = 'SIGNIFICANT_APP_CHANGE_REQUIRES_ADULT_NOTIFICATION',
@@ -676,6 +735,8 @@ export enum RegulatoryFeature {
    *
    * This plugin does not implement the consent flow. Use Apple's PermissionKit
    * framework to request the consent.
+   *
+   * Only available on iOS.
    *
    * @since 0.5.0
    */
@@ -794,6 +855,10 @@ export enum ErrorCode {
   NetworkError = 'NETWORK_ERROR',
   /**
    * Age signals are not supported on this device.
+   *
+   * On **Android**, the Play Age Signals API does not support the device type.
+   * On **iOS**, the iOS version or the Xcode version used to build the app is
+   * too old for the called method.
    *
    * @since 0.5.0
    */

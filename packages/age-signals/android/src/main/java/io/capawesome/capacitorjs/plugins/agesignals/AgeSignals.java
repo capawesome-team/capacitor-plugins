@@ -12,6 +12,8 @@ import com.google.android.play.agesignals.AgeSignalsManager;
 import com.google.android.play.agesignals.AgeSignalsManagerFactory;
 import com.google.android.play.agesignals.AgeSignalsRequest;
 import com.google.android.play.agesignals.AgeSignalsResult;
+import com.google.android.play.agesignals.ApplicableAgeFeaturesRequest;
+import com.google.android.play.agesignals.ApplicableAgeFeaturesResult;
 import com.google.android.play.agesignals.model.AgeSignalsErrorCode;
 import com.google.android.play.agesignals.model.AgeSignalsStatus;
 import com.google.android.play.agesignals.testing.FakeAgeSignalsManager;
@@ -19,8 +21,10 @@ import io.capawesome.capacitorjs.plugins.agesignals.classes.CustomExceptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsAccessResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsExceptionOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextAgeSignalsResultOptions;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetNextApplicableAgeFeaturesResultOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.options.SetUseFakeManagerOptions;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.results.GetAgeRangeResult;
+import io.capawesome.capacitorjs.plugins.agesignals.classes.results.GetRegulatoryRequirementsResult;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.results.IsAvailableResult;
 import io.capawesome.capacitorjs.plugins.agesignals.classes.results.RequestAgeRangeResult;
 import io.capawesome.capacitorjs.plugins.agesignals.enums.AgeRangeStatus;
@@ -44,6 +48,12 @@ public class AgeSignals {
     public void getAgeRange(@NonNull NonEmptyResultCallback<GetAgeRangeResult> callback) {
         Task<AgeSignalsResult> task = getManager().checkAgeSignals(AgeSignalsRequest.builder().build());
         task.addOnSuccessListener(result -> callback.success(new GetAgeRangeResult(result)));
+        task.addOnFailureListener(exception -> callback.error(mapException(exception)));
+    }
+
+    public void getRegulatoryRequirements(@NonNull NonEmptyResultCallback<GetRegulatoryRequirementsResult> callback) {
+        Task<ApplicableAgeFeaturesResult> task = getManager().getApplicableAgeFeatures(ApplicableAgeFeaturesRequest.builder().build());
+        task.addOnSuccessListener(result -> callback.success(new GetRegulatoryRequirementsResult(result)));
         task.addOnFailureListener(exception -> callback.error(mapException(exception)));
     }
 
@@ -90,6 +100,27 @@ public class AgeSignals {
     public void setNextAgeSignalsResult(@NonNull SetNextAgeSignalsResultOptions options, @NonNull EmptyCallback callback) {
         try {
             getFakeManager().setNextAgeSignalsResult(options.buildAgeSignalsResult());
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void setNextApplicableAgeFeaturesException(@NonNull SetNextAgeSignalsExceptionOptions options, @NonNull EmptyCallback callback) {
+        try {
+            getFakeManager().setNextApplicableAgeFeaturesException(options.buildAgeSignalsException());
+            callback.success();
+        } catch (Exception exception) {
+            callback.error(exception);
+        }
+    }
+
+    public void setNextApplicableAgeFeaturesResult(
+        @NonNull SetNextApplicableAgeFeaturesResultOptions options,
+        @NonNull EmptyCallback callback
+    ) {
+        try {
+            getFakeManager().setNextApplicableAgeFeaturesResult(options.buildApplicableAgeFeaturesResult());
             callback.success();
         } catch (Exception exception) {
             callback.error(exception);
@@ -191,6 +222,8 @@ public class AgeSignals {
                 return CustomExceptions.CANNOT_BIND_TO_SERVICE;
             case AgeSignalsErrorCode.CLIENT_TRANSIENT_ERROR:
                 return CustomExceptions.CLIENT_TRANSIENT_ERROR;
+            case AgeSignalsErrorCode.DEVICE_NOT_SUPPORTED:
+                return CustomExceptions.NOT_SUPPORTED;
             case AgeSignalsErrorCode.INTERNAL_ERROR:
                 return CustomExceptions.INTERNAL_ERROR;
             case AgeSignalsErrorCode.NETWORK_ERROR:
