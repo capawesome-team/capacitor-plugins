@@ -938,6 +938,8 @@ import CommonCrypto
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The server answered with status \(statusCode).")
         } else if response.result == .skipped {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available. The check was skipped with the reason \(response.reason ?? "null").")
+        } else if response.result == .upToDate {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "The app is up to date.")
         } else {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "No update available.")
         }

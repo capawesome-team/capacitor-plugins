@@ -1488,6 +1488,8 @@ public class LiveUpdate {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available. The server answered with status " + statusCode + ".");
         } else if (response.getResult() == CheckResult.SKIPPED) {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available. The check was skipped with the reason " + response.getReason() + ".");
+        } else if (response.getResult() == CheckResult.UP_TO_DATE) {
+            Logger.debug(LiveUpdatePlugin.TAG, "The app is up to date.");
         } else {
             Logger.debug(LiveUpdatePlugin.TAG, "No update available.");
         }
