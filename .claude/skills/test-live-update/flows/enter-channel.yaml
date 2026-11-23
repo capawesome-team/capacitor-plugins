@@ -5,6 +5,16 @@ name: Enter the channel without launching the app
     visible: "Capacitor Live Update"
     timeout: 20000
 - runFlow:
+    when:
+      platform: iOS
+    commands:
+      - scrollUntilVisible:
+          direction: UP
+          timeout: 20000
+          optional: true
+          element:
+            text: "Channel"
+- runFlow:
     file: _tap-input.yaml
     env:
       INPUT_ID: channel-input

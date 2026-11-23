@@ -1,0 +1,53 @@
+appId: com.example.plugin
+name: Download a bundle via the form without launching the app (expects an empty form)
+---
+- runFlow:
+    when:
+      true: ${typeof TYPE !== 'undefined' && TYPE != ''}
+    commands:
+      - extendedWaitUntil:
+          visible: "Artifact Type"
+          timeout: 20000
+      - tapOn: "Artifact Type"
+      - tapOn: ${TYPE}
+      - tapOn: "OK"
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: bundle-id-input
+      INPUT_LABEL: Bundle ID
+- inputText: "${typeof BUNDLE_ID !== 'undefined' ? BUNDLE_ID : 'test-bundle'}"
+- runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    when:
+      true: ${typeof CHECKSUM !== 'undefined' && CHECKSUM != ''}
+    commands:
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: checksum-input
+            INPUT_LABEL: Checksum
+      - inputText: ${CHECKSUM}
+      - runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    file: _tap-input.yaml
+    env:
+      INPUT_ID: download-url-input
+      INPUT_LABEL: Download URL
+- inputText: ${URL}
+- runFlow: _dismiss-keyboard.yaml
+- runFlow:
+    when:
+      true: ${typeof SIGNATURE !== 'undefined' && SIGNATURE != ''}
+    commands:
+      - runFlow:
+          file: _tap-input.yaml
+          env:
+            INPUT_ID: signature-input
+            INPUT_LABEL: Signature
+      - inputText: ${SIGNATURE}
+      - runFlow: _dismiss-keyboard.yaml
+- scrollUntilVisible:
+    element:
+      text: "Download Bundle"
+- tapOn: "Download Bundle"

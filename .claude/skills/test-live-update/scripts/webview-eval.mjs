@@ -17,11 +17,17 @@ if (!expression) {
 
 const adb = (...args) => execFileSync('adb', ['-s', serial, ...args], { encoding: 'utf8' });
 
-const connect = async () => {
-  const pid = adb('shell', 'pidof', app).trim();
-  if (!pid) {
+const findPid = () => {
+  try {
+    return adb('shell', 'pidof', app).trim();
+  } catch {
+    // pidof exits with an error when the app has no process.
     throw new Error(`${app} is not running on ${serial}`);
   }
+};
+
+const connect = async () => {
+  const pid = findPid();
   adb('forward', `tcp:${port}`, `localabstract:webview_devtools_remote_${pid}`);
   const pages = await (await fetch(`http://localhost:${port}/json`)).json();
   const page = pages.find(candidate => candidate.type === 'page') ?? pages[0];
