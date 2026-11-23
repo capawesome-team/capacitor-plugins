@@ -299,13 +299,22 @@ All methods are only available on Android, iOS and Electron. The following examp
 Automatically download and set the latest bundle for the app using [Capawesome Cloud](https://cloud.capawesome.io/). Call `reload()` or restart the app to apply the changes. The `channel` option overrides the channel for this single sync call without persisting it:
 
 ```typescript
-import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { ErrorCode, LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const sync = async () => {
-  const result = await LiveUpdate.sync({
-    channel: 'production-5',
-  });
-  return result.nextBundleId;
+  try {
+    const result = await LiveUpdate.sync({
+      channel: 'production-5',
+    });
+    return result.nextBundleId;
+  } catch (error) {
+    if (error.code === ErrorCode.RequestFailed) {
+      console.log('The request to the server failed.');
+      return null;
+    } else {
+      throw error;
+    }
+  }
 };
 ```
 
@@ -335,21 +344,30 @@ const ready = async () => {
 Fetch the latest bundle from Capawesome Cloud and compare it with the bundle that is currently in use:
 
 ```typescript
-import { LiveUpdate } from '@capawesome/capacitor-live-update';
+import { ErrorCode, LiveUpdate } from '@capawesome/capacitor-live-update';
 
 const fetchLatestBundle = async () => {
   await LiveUpdate.fetchLatestBundle();
 };
 
 const isNewBundleAvailable = async () => {
-  const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle({
-    channel: 'production-5',
-  });
-  if (latestBundleId) {
-    const { bundleId: currentBundleId } = await LiveUpdate.getCurrentBundle();
-    return latestBundleId !== currentBundleId;
-  } else {
-    return false;
+  try {
+    const { bundleId: latestBundleId } = await LiveUpdate.fetchLatestBundle({
+      channel: 'production-5',
+    });
+    if (latestBundleId) {
+      const { bundleId: currentBundleId } = await LiveUpdate.getCurrentBundle();
+      return latestBundleId !== currentBundleId;
+    } else {
+      return false;
+    }
+  } catch (error) {
+    if (error.code === ErrorCode.RequestFailed) {
+      console.log('The request to the server failed.');
+      return false;
+    } else {
+      throw error;
+    }
   }
 };
 ```
