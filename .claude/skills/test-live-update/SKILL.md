@@ -70,7 +70,7 @@ Rows marked "config" need a change to `plugins.LiveUpdate` in the example config
 | Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, poll, `reload`, do not tap Ready, `expect-title` with the default title and `TIMEOUT=30000` | back on the default bundle |
 | No rollback with `ready()` | `readyTimeout: 10000` | `sync`, poll, `reload`, `ready`, wait longer than the timeout, `expect-title` with the new title | still on the new bundle, `inspect` agrees |
 | Rolled-back bundle blocked | same deploy as the rollback row | after the rollback row, `ready` on the default bundle (the plugin records the block there), then `sync-keep-state`, poll for 30 s | bundle not installed again, "Get Blocked Bundles" lists it |
-| No error on 404 | `serverDomain: "example.com"` | `sync` | no error toast, no bundle |
+| Server error | `serverDomain: "example.com"` | `sync` | "The check failed with status 405.", no bundle |
 | Timeout error | `serverDomain: "10.255.255.1"`, `httpTimeout: 1000` | `sync` | "Request timed out." |
 | Background auto update | `autoUpdateStrategy: "background"` | `relaunch`, poll without tapping Sync; then send the app to the background and back | bundle appears on start and on resume |
 | Startup sweep | | `scripts/device.sh <platform> plant-leftover`, `relaunch` | downloads folder gone |
@@ -143,7 +143,7 @@ Run each row on both platforms. "Log" is `scripts/example-log.sh`, "prefs" is `s
 | Native update reset | example | bump the version code, reinstall, `Get Latest App Directory` | log `null`, prefs without `lastSyncedBundleId`, old bundle deleted |
 | Concurrent sync | example | fresh channel bundle, `Sync Manager` with `TWICE=yes` | no error, one bundle directory, one download in the log |
 | Offline | example | `serverDomain: "10.255.255.1"` and `httpTimeout: 1000` via config variant, `Sync Manager` | log shows an error, not `null` |
-| Unknown app ID | example | `Sync Manager` with a random UUID as `APPID` | log `null`, no error |
+| Unknown app ID | example | `Sync Manager` with a random UUID as `APPID` | log shows "The check failed with status 404." |
 | Shared bundle | demo | fresh install, launch twice, `demo-markers` | help and checkout show the channel marker, one bundle directory per app ID |
 | Signed, correct key | demo | channel with a bundle uploaded with `--private-key`, `publicKey` set, launch twice | marker of the signed bundle |
 | Unsigned with key | demo | upload an unsigned bundle to the same channel, launch twice | log `Signature verification failed.`, marker unchanged |

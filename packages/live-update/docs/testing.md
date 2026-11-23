@@ -7,13 +7,15 @@ The following test cases should be covered when testing the plugin:
 - [ ] Verify that a rollback is performed when the `ready()` method is not called within the `readyTimeout` period.
 - [ ] Verify that no rollback is performed when the `ready()` method is called within the `readyTimeout` period.
 - [ ] Verify that the live update is still applied after restarting the app.
-- [ ] Verify that no error is thrown on internal server errors/not found responses.
+- [ ] Verify that `sync()` and `fetchLatestBundle()` reject with `REQUEST_FAILED` when the server answers the update check with an error, for example with status 404 or 500.
+- [ ] Verify that `sync()` and `fetchLatestBundle()` resolve with no update when the server answers the update check with status 429, and that no further check is made while the wait lasts.
+- [ ] Verify that a rollback and a failed download are reported with the next update check.
 - [ ] Verify that the correct timeout error is thrown when the server does not respond within the `timeout` period.
 - [ ] Verify that the `background` auto update strategy performs updates in the background on app start and resumes.
 - [ ] Verify that roll backed bundles are blocked from being applied again if `autoBlockRollBackedBundles` is set to true.
 - [ ] Verify that the live update is applied after calling `reload()`.
 - [ ] Verify that a ZIP bundle whose `index.html` sits in a subfolder is unwrapped and applied.
-- [ ] Verify that a manifest update reuses the unchanged files of the current bundle and the resulting bundle is complete.
+- [ ] Verify that a manifest update reuses the unchanged files of the current bundle, also under a new path, and the resulting bundle is complete.
 - [ ] Verify that the temporary download files are deleted after the bundle has been added (ZIP and manifest).
 - [ ] Verify that the temporary download files are deleted when a download fails (network error, malformed URL, checksum mismatch, signature verification failure).
 - [ ] Verify that leftovers of interrupted downloads are deleted on plugin load.
@@ -29,7 +31,7 @@ In provider mode, an Ionic Portals host constructs `LiveUpdateIonicManager` dire
 - [ ] Verify that a native app update (new version code) forgets the latest app directory and deletes the old bundle.
 - [ ] Verify that two concurrent syncs for the same app ID and channel download the bundle once and do not fail.
 - [ ] Verify that `sync()` fails with an error when the device is offline.
-- [ ] Verify that `sync()` returns no update and no error for an unknown app ID.
+- [ ] Verify that `sync()` fails with an error for an unknown app ID.
 - [ ] Verify that a signed bundle installs with the correct `publicKey`, and that an unsigned bundle or a wrong `publicKey` fails with a signature error and keeps the current bundle.
 
 Two apps cover these cases:
