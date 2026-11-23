@@ -76,7 +76,44 @@
     }
   },
   {
-    "name": "offers nothing when the device is up to date",
+    "name": "reads the bundle when the device is up to date",
+    "statusCode": 200,
+    "retryAfter": null,
+    "body": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "legacyUrl": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "checksum": null,
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      }
+    },
+    "expected": {
+      "result": "up_to_date",
+      "reason": null,
+      "channelName": "production",
+      "bundle": {
+        "id": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "artifactType": "manifest",
+        "url": "https://legacy.example.com/bundles/6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+        "urlTemplate": null,
+        "checksum": null,
+        "signature": null,
+        "customProperties": {
+          "releaseNotes": "Bug fixes"
+        }
+      },
+      "retryAfterMs": null
+    }
+  },
+  {
+    "name": "reads an up to date answer without a bundle",
     "statusCode": 200,
     "retryAfter": null,
     "body": {

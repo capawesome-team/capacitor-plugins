@@ -9,6 +9,7 @@ import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckRespo
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.api.CreateCheckResponseBundle
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.DownloadBundleOptions
 import io.capawesome.capacitorjs.plugins.liveupdate.classes.options.FetchLatestBundleOptions
+import io.capawesome.capacitorjs.plugins.liveupdate.enums.CheckResult
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.EmptyCallback
 import io.capawesome.capacitorjs.plugins.liveupdate.interfaces.NonEmptyCallback
 import io.ionic.liveupdateprovider.MetadataSyncResult
@@ -106,10 +107,11 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
 
     override suspend fun sync(): ProviderSyncResult? {
         try {
-            val bundle = fetchCheck().bundle
+            val response = fetchCheck()
+            val bundle = response.bundle
 
             // No update available; nothing to report.
-            if (bundle == null || bundle.id == syncedBundleId) {
+            if (response.result != CheckResult.AVAILABLE || bundle == null || bundle.id == syncedBundleId) {
                 return null
             }
 

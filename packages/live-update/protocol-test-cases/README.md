@@ -39,8 +39,10 @@ A check that the server processed is answered with 200.
 | `result` | `reason` | `bundle` |
 |---|---|---|
 | `available` | none | The bundle to load |
-| `up_to_date` | none | none |
+| `up_to_date` | none | The latest bundle of the channel, if there is one |
 | `skipped` | Why no bundle is offered | none |
+
+Only `available` offers an update. `fetchLatestBundle()` returns the bundle of an `up_to_date` answer too.
 
 The SDK writes the reason to its log as the server sent it, for example `channel_paused`. It does not hand the reason to the app.
 
@@ -84,7 +86,7 @@ With `urlTemplate`, the SDK loads every file from the template. The address of a
 
 Without `urlTemplate`, the bundle is loaded from the plain address as before this protocol.
 
-`checksum` and `signature` of the answer belong to the first file. That is the zip file, or the manifest of a bundle that is stored file by file.
+`checksum` and `signature` of the answer belong to the first file. That is the zip file, or the manifest of a bundle that is stored file by file. An `up_to_date` answer can come without them and without `urlTemplate`, because nothing is downloaded then.
 
 The SDK sends `Accept-Encoding: identity` when it downloads the zip file of a bundle with `urlTemplate`. Otherwise the zip file may arrive compressed and without `Content-Length`, and the SDK could report the downloaded bytes but not the total size. Every other file is downloaded with the default encodings of the platform.
 

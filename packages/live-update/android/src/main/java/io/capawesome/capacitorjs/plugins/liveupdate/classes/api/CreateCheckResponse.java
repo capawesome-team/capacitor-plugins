@@ -101,12 +101,12 @@ public class CreateCheckResponse {
             return createWithoutUpdate();
         }
         CreateCheckResponseBundle bundle = null;
-        if (result == CheckResult.AVAILABLE) {
+        if (result != CheckResult.SKIPPED) {
             JSONObject bundleJson = json.optJSONObject("bundle");
             bundle = bundleJson == null ? null : CreateCheckResponseBundle.parse(bundleJson);
-            if (bundle == null) {
-                return createWithoutUpdate();
-            }
+        }
+        if (result == CheckResult.AVAILABLE && bundle == null) {
+            return createWithoutUpdate();
         }
         CreateCheckResponse response = new CreateCheckResponse();
         response.result = result;

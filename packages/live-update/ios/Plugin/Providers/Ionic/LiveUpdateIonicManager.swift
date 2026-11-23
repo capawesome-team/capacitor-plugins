@@ -83,7 +83,7 @@ public final class LiveUpdateIonicManager: ProviderManager {
             let response = try await liveUpdate.fetchCheck(FetchLatestBundleOptions(appId: appId, bundleId: syncedBundleId, channel: channel))
 
             // No update available; nothing to report.
-            guard let bundle = response.bundle, bundle.id != syncedBundleId else {
+            guard response.result == .available, let bundle = response.bundle, bundle.id != syncedBundleId else {
                 return nil
             }
 

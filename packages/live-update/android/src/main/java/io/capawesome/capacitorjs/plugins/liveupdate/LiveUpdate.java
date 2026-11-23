@@ -1385,7 +1385,7 @@ public class LiveUpdate {
     private void handleSyncCheckResponse(@NonNull CreateCheckResponse response, @NonNull NonEmptyCallback<Result> callback)
         throws Exception {
         CreateCheckResponseBundle bundle = response.getBundle();
-        if (bundle == null) {
+        if (response.getResult() != CheckResult.AVAILABLE || bundle == null) {
             callback.success(new SyncResult(null, null));
             return;
         }
@@ -1509,7 +1509,7 @@ public class LiveUpdate {
         String body = response.body().string();
         Logger.debug(LiveUpdatePlugin.TAG, "Check response: " + response.code() + " " + body);
         CreateCheckResponse checkResponse = CreateCheckResponse.parse(response.code(), response.header("Retry-After"), body);
-        if (checkResponse.getBundle() == null) {
+        if (checkResponse.getResult() != CheckResult.AVAILABLE) {
             logNoUpdateReason(checkResponse, response.code());
         }
         return checkResponse;

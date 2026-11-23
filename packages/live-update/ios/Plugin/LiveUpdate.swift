@@ -809,7 +809,7 @@ import CommonCrypto
     }
 
     private func handleSyncCheckResponse(_ response: CreateCheckResponse) async throws -> SyncResult {
-        guard let bundle = response.bundle else {
+        guard response.result == .available, let bundle = response.bundle else {
             return SyncResult(customProperties: nil, nextBundleId: nil)
         }
         // Check if the bundle is blocked
@@ -967,7 +967,7 @@ import CommonCrypto
         }
         let retryAfter = httpResponse.value(forHTTPHeaderField: "Retry-After")
         let checkResponse = try CreateCheckResponse.parse(statusCode: httpResponse.statusCode, retryAfter: retryAfter, body: body)
-        if checkResponse.bundle == nil {
+        if checkResponse.result != .available {
             logNoUpdateReason(checkResponse, statusCode: httpResponse.statusCode)
         }
         return checkResponse

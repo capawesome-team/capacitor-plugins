@@ -65,7 +65,8 @@ struct CreateCheckResponse {
             return CreateCheckResponse(bundle: nil, channelName: channelName, reason: getNonEmptyString(object["reason"]), result: .skipped,
                                        retryAfterMs: nil)
         case .upToDate:
-            return CreateCheckResponse(bundle: nil, channelName: channelName, reason: nil, result: .upToDate, retryAfterMs: nil)
+            return CreateCheckResponse(bundle: parseBundle(object["bundle"]), channelName: channelName, reason: nil, result: .upToDate,
+                                       retryAfterMs: nil)
         case nil:
             return createWithoutUpdate()
         }
