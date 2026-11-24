@@ -98,7 +98,7 @@ public class LiveUpdatePlugin extends Plugin {
         if (implementation == null) {
             throw new ProviderError.InvalidConfiguration(ERROR_PLUGIN_NOT_INITIALIZED, null);
         }
-        return new LiveUpdateIonicManager(context, configuration, implementation);
+        return new LiveUpdateIonicManager(context, configuration, getLiveUpdateConfig());
     }
 
     @Override

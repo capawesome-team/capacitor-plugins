@@ -15,6 +15,13 @@ import LiveUpdateProvider
 /// - `publicKey`, `serverDomain`, `httpTimeout` (optional) — same as the plugin config;
 ///   only applied to the headless instance created by `init(configuration:)`
 public final class LiveUpdateIonicManager: ProviderManager {
+    /// The directory below the Library directory that holds the bundles of all managers,
+    /// apart from the bundles of the plugin's JS API. A new value would lose the bundles of earlier app starts.
+    private static let bundlesDirectory = "NoCloud/capawesome_capacitor_live_update_ionic_provider_bundles" // NEVER CHANGE!
+    private static var unusedBundlesDeleted = false
+    /// Guards `unusedBundlesDeleted`: managers can be created on several threads at the same time.
+    private static let unusedBundlesDeletedLock = NSLock()
+
     public private(set) var latestAppDirectory: URL?
 
     private let appId: String
@@ -25,14 +32,15 @@ public final class LiveUpdateIonicManager: ProviderManager {
 
     /// Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
     /// that construct the manager directly and attach it to a Portal via
-    /// `liveUpdateSource: .provider(manager:)`. Uses a headless `LiveUpdate` instance with
-    /// the default configuration, overridden by the configuration dictionary.
+    /// `liveUpdateSource: .provider(manager:)`. Uses the default configuration,
+    /// overridden by the configuration dictionary.
     public convenience init(configuration: [String: Any]) throws {
         let config = try LiveUpdateIonicManager.buildConfig(configuration: configuration)
-        try self.init(configuration: configuration, liveUpdate: LiveUpdate(config: config))
+        try self.init(configuration: configuration, config: config)
     }
 
-    init(configuration: [String: Any], liveUpdate: LiveUpdate) throws {
+    init(configuration: [String: Any], config: LiveUpdateConfig) throws {
+        let liveUpdate = LiveUpdate(config: config, bundlesDirectory: Self.bundlesDirectory)
         guard let appId = configuration["appId"] as? String ?? liveUpdate.getAppId(), !appId.isEmpty else {
             throw ProviderError.invalidConfiguration(message: CustomError.appIdMissing.localizedDescription)
         }
@@ -41,9 +49,8 @@ public final class LiveUpdateIonicManager: ProviderManager {
         self.channel = channel
         self.liveUpdate = liveUpdate
         self.preferences = LiveUpdateIonicPreferences(stateKey: Self.buildStateKey(appId: appId, channel: channel))
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: liveUpdate.getVersionCode())
+        deleteUnusedBundlesOncePerProcess()
         restoreSyncedBundle()
-        deleteSupersededBundles()
     }
 
     private static func buildStateKey(appId: String, channel: String?) -> String {
@@ -102,11 +109,11 @@ public final class LiveUpdateIonicManager: ProviderManager {
     }
 
     /// Does not delete the previous bundle, because a visible portal may still serve it.
-    /// It is recorded as superseded and deleted on the next launch instead.
+    /// It is deleted on the next app start instead.
     private func applySyncedBundle(bundleId: String, directory: URL) {
         syncedBundleId = bundleId
         latestAppDirectory = directory
-        preferences.setLastSyncedBundleId(bundleId, versionCode: liveUpdate.getVersionCode())
+        preferences.setLastSyncedBundleId(bundleId)
     }
 
     private func buildMetadata(bundleId: String, customProperties: [String: Any]?) -> [String: Any] {
@@ -120,23 +127,23 @@ public final class LiveUpdateIonicManager: ProviderManager {
         return metadata
     }
 
-    /// Deletes the superseded bundles that no manager points to anymore. Bundles that were not
-    /// superseded by a manager are never deleted, because they may belong to the plugin's JS API.
-    private func deleteSupersededBundles() {
-        let supersededBundleIds = preferences.getSupersededBundleIds()
-        if supersededBundleIds.isEmpty {
+    /// Deletes every bundle that no manager points to. Runs only once per process, because a visible
+    /// portal may still serve a bundle that its manager replaced since the app started.
+    /// Holds the lock until it is done, so a manager created at the same time waits for it.
+    private func deleteUnusedBundlesOncePerProcess() {
+        Self.unusedBundlesDeletedLock.lock()
+        defer { Self.unusedBundlesDeletedLock.unlock() }
+        if Self.unusedBundlesDeleted {
             return
         }
-        let lastSyncedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
-        let deletedBundleIds = supersededBundleIds.filter { bundleId in
-            !lastSyncedBundleIds.contains(bundleId) && liveUpdate.tryDeleteUnusedBundle(bundleId: bundleId)
-        }
-        preferences.removeSupersededBundleIds(deletedBundleIds)
+        Self.unusedBundlesDeleted = true
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: liveUpdate.getVersionCode())
+        liveUpdate.tryDeleteBundlesExcept(bundleIds: preferences.getLastSyncedBundleIdsOfAllManagers())
     }
 
     /// Downloads the bundle, or awaits a running download of the same bundle, and returns its directory.
     private func downloadBundle(_ bundle: CreateCheckResponse.Bundle) async throws -> URL {
-        let downloadOptions = DownloadBundleOptions(bundle: bundle, appId: appId)
+        let downloadOptions = DownloadBundleOptions(bundle: bundle, appId: appId, currentBundleId: syncedBundleId)
         try await BundleDownloads.shared.run(bundleId: bundle.id) { [liveUpdate] in
             try await liveUpdate.downloadBundle(downloadOptions)
         }

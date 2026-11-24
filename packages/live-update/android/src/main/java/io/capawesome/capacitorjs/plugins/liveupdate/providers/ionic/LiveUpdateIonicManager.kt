@@ -42,27 +42,36 @@ import org.json.JSONObject
  */
 class LiveUpdateIonicManager
 @Throws(ProviderError.InvalidConfiguration::class)
-constructor(context: Context, configuration: Map<String, *>, private val liveUpdate: LiveUpdate) : ProviderManager {
+constructor(context: Context, configuration: Map<String, *>, config: LiveUpdateConfig) : ProviderManager {
 
     /**
      * Creates a manager without a running Capacitor plugin, e.g. for Ionic Portals hosts
      * that construct the manager directly and attach it to a Portal via
-     * `setLiveUpdateProviderManager(...)`. Uses a headless [LiveUpdate] instance configured
-     * via the configuration map.
+     * `setLiveUpdateProviderManager(...)`. Uses a config built from the configuration map.
      */
     @Throws(ProviderError.InvalidConfiguration::class)
     constructor(
         context: Context,
         configuration: Map<String, *>
-    ) : this(context, configuration, LiveUpdate(createLiveUpdateConfig(configuration), context.applicationContext))
+    ) : this(context, configuration, createLiveUpdateConfig(configuration))
 
     companion object {
+        /**
+         * The directory below the files directory that holds the bundles of all managers,
+         * apart from the bundles of the plugin's JS API. A new value would lose the bundles of earlier app starts.
+         */
+        private const val BUNDLES_DIRECTORY = "capawesome_capacitor_live_update_ionic_provider_bundles" // NEVER CHANGE!
+
         /**
          * Downloads in flight per bundle ID, shared by all managers, so that concurrent syncs
          * download the same bundle only once.
          */
         private val bundleDownloads = ConcurrentHashMap<String, Deferred<Unit>>()
         private val bundleDownloadScope = CoroutineScope(SupervisorJob())
+        private var unusedBundlesDeleted = false
+
+        /** Guards [unusedBundlesDeleted]: managers can be created on several threads at the same time. */
+        private val unusedBundlesDeletedLock = Any()
 
         @Throws(ProviderError.InvalidConfiguration::class)
         private fun createLiveUpdateConfig(configuration: Map<String, *>): LiveUpdateConfig {
@@ -85,8 +94,8 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
 
     private val appId: String
     private val channel: String?
+    private val liveUpdate = LiveUpdate(config, context.applicationContext, BUNDLES_DIRECTORY)
     private val preferences: LiveUpdateIonicPreferences
-    private val versionCode: String = liveUpdate.versionCodeAsString
     private var syncedBundleId: String? = null
 
     init {
@@ -100,9 +109,8 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         val sharedPreferences =
             context.applicationContext.getSharedPreferences(LiveUpdateIonicPreferences.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         preferences = LiveUpdateIonicPreferences(sharedPreferences, stateKey)
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode)
+        deleteUnusedBundlesOncePerProcess()
         restoreSyncedBundle()
-        deleteSupersededBundles()
     }
 
     override suspend fun sync(): ProviderSyncResult? {
@@ -132,7 +140,7 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     private fun applySyncedBundle(bundleId: String, directory: File) {
         syncedBundleId = bundleId
         latestAppDirectory = directory
-        preferences.setLastSyncedBundleId(bundleId, versionCode)
+        preferences.setLastSyncedBundleId(bundleId)
     }
 
     private fun buildMetadata(bundleId: String, customProperties: JSONObject?): Map<String, Any> {
@@ -148,24 +156,23 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     }
 
     /**
-     * Deletes the bundles this manager no longer points at, unless another manager or the
-     * plugin still uses them. Never runs right after a sync, because a visible portal may
-     * still serve the previous bundle.
+     * Deletes every bundle that no manager points to. Runs only once per process, because a visible
+     * portal may still serve a bundle that its manager replaced since the app started.
+     * Holds the lock until it is done, so a manager created at the same time waits for it.
      */
-    private fun deleteSupersededBundles() {
-        val supersededBundleIds = preferences.getSupersededBundleIds()
-        if (supersededBundleIds.isEmpty()) {
-            return
+    private fun deleteUnusedBundlesOncePerProcess() {
+        synchronized(unusedBundlesDeletedLock) {
+            if (unusedBundlesDeleted) {
+                return
+            }
+            unusedBundlesDeleted = true
+            preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(liveUpdate.versionCodeAsString)
+            liveUpdate.tryDeleteBundlesExcept(preferences.getLastSyncedBundleIdsOfAllManagers())
         }
-        val referencedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
-        val deletedBundleIds = supersededBundleIds
-            .filter { it !in referencedBundleIds && liveUpdate.tryDeleteUnusedBundle(it) }
-            .toSet()
-        preferences.removeSupersededBundleIds(deletedBundleIds)
     }
 
     private suspend fun downloadBundle(bundle: CreateCheckResponseBundle) {
-        val options = DownloadBundleOptions(bundle, appId)
+        val options = DownloadBundleOptions(bundle, appId).setCurrentBundleId(syncedBundleId)
         suspendCoroutine { continuation ->
             liveUpdate.downloadBundle(
                 options,

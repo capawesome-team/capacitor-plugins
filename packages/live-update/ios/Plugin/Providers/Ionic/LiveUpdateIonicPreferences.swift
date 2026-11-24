@@ -4,23 +4,18 @@ import Foundation
 /// Persisted state of one provider manager, scoped by its state key (`<appId>` or `<appId>.<channel>`).
 ///
 /// All managers share the same `UserDefaults`, so a manager can see which bundles
-/// the other managers still point at.
+/// the other managers still point at. The app version code is stored once for all managers.
 final class LiveUpdateIonicPreferences {
     private static let keyPrefix = "CapawesomeLiveUpdateIonicProvider."
     private static let lastSyncedBundleIdPrefix = keyPrefix + "lastSyncedBundleId."
-    private static let lastVersionCodePrefix = keyPrefix + "lastVersionCode."
-    private static let supersededBundleIdsPrefix = keyPrefix + "supersededBundleIds."
+    private static let lastVersionCodeKey = keyPrefix + "lastVersionCode"
 
     private let userDefaults: UserDefaults
     private let lastSyncedBundleIdKey: String
-    private let lastVersionCodeKey: String
-    private let supersededBundleIdsKey: String
 
     init(userDefaults: UserDefaults = .standard, stateKey: String) {
         self.userDefaults = userDefaults
         self.lastSyncedBundleIdKey = Self.lastSyncedBundleIdPrefix + stateKey
-        self.lastVersionCodeKey = Self.lastVersionCodePrefix + stateKey
-        self.supersededBundleIdsKey = Self.supersededBundleIdsPrefix + stateKey
     }
 
     func getLastSyncedBundleId() -> String? {
@@ -35,47 +30,23 @@ final class LiveUpdateIonicPreferences {
         return Set(bundleIds)
     }
 
-    /// - Returns: The bundles this manager no longer points at and that may be deleted once unused.
-    func getSupersededBundleIds() -> Set<String> {
-        return Set(userDefaults.stringArray(forKey: supersededBundleIdsKey) ?? [])
-    }
-
-    func removeSupersededBundleIds(_ bundleIds: Set<String>) {
-        if bundleIds.isEmpty {
+    /// Forgets the last synced bundles of all managers if they were synced on another app version code,
+    /// because the bundles were built for that native version.
+    func resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: String) {
+        let lastVersionCode = userDefaults.string(forKey: Self.lastVersionCodeKey)
+        if lastVersionCode == versionCode {
             return
         }
-        setSupersededBundleIds(getSupersededBundleIds().subtracting(bundleIds))
+        if lastVersionCode != nil {
+            userDefaults.dictionaryRepresentation().keys
+                .filter { $0.hasPrefix(Self.lastSyncedBundleIdPrefix) }
+                .forEach { userDefaults.removeObject(forKey: $0) }
+        }
+        userDefaults.set(versionCode, forKey: Self.lastVersionCodeKey)
     }
 
-    /// Forgets the last synced bundle if it was synced on another app version code,
-    /// because the bundle was built for that native version.
-    func resetLastSyncedBundleIdIfVersionChanged(versionCode: String) {
-        guard let lastSyncedBundleId = getLastSyncedBundleId(),
-              let lastVersionCode = userDefaults.string(forKey: lastVersionCodeKey),
-              lastVersionCode != versionCode else {
-            return
-        }
-        setSupersededBundleIds(getSupersededBundleIds().union([lastSyncedBundleId]))
-        userDefaults.removeObject(forKey: lastSyncedBundleIdKey)
-        userDefaults.removeObject(forKey: lastVersionCodeKey)
-    }
-
-    /// Points this manager at the given bundle, synced on the given app version code,
-    /// and records the previous bundle as superseded.
-    func setLastSyncedBundleId(_ bundleId: String, versionCode: String) {
-        if let previousBundleId = getLastSyncedBundleId(), previousBundleId != bundleId {
-            setSupersededBundleIds(getSupersededBundleIds().union([previousBundleId]))
-        }
+    func setLastSyncedBundleId(_ bundleId: String) {
         userDefaults.set(bundleId, forKey: lastSyncedBundleIdKey)
-        userDefaults.set(versionCode, forKey: lastVersionCodeKey)
-    }
-
-    private func setSupersededBundleIds(_ bundleIds: Set<String>) {
-        if bundleIds.isEmpty {
-            userDefaults.removeObject(forKey: supersededBundleIdsKey)
-        } else {
-            userDefaults.set(Array(bundleIds), forKey: supersededBundleIdsKey)
-        }
     }
 }
 #endif

@@ -80,8 +80,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
@@ -110,7 +112,12 @@ public class LiveUpdate {
 
     private static final AtomicBoolean downloadsDirectoryDeleted = new AtomicBoolean(false);
 
+    private static final String defaultBundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
+
     private final long autoUpdateIntervalMs = 15 * 60 * 1000; // 15 minutes
+
+    @NonNull
+    private final String bundlesDirectory;
 
     @NonNull
     private final LiveUpdateConfig config;
@@ -132,7 +139,6 @@ public class LiveUpdate {
     @NonNull
     private final SharedPreferences.Editor webViewSettingsEditor;
 
-    private final String bundlesDirectory = "_capacitor_live_update_bundles"; // DO NOT CHANGE!
     private final String downloadsDirectory = "capawesome_capacitor_live_update_downloads";
     private final Handler rollbackHandler = new Handler(Looper.getMainLooper());
     private final String manifestFileName = "capawesome-live-update-manifest.json"; // DO NOT CHANGE!
@@ -153,20 +159,28 @@ public class LiveUpdate {
     private boolean syncInProgress = false;
 
     public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull LiveUpdatePlugin plugin) throws PackageManager.NameNotFoundException {
-        this(config, plugin.getContext(), plugin);
+        this(config, plugin.getContext(), plugin, defaultBundlesDirectory);
     }
 
     /**
      * Creates a headless instance without a Capacitor plugin, e.g. for Ionic Portals hosts
      * that construct a provider manager directly. WebView-related operations (server path
      * changes, reload) and plugin events are skipped in this mode.
+     *
+     * @param bundlesDirectory The directory below the files directory that holds the bundles of this instance.
      */
-    public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context) throws PackageManager.NameNotFoundException {
-        this(config, context, null);
+    public LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context, @NonNull String bundlesDirectory)
+        throws PackageManager.NameNotFoundException {
+        this(config, context, null, bundlesDirectory);
     }
 
-    private LiveUpdate(@NonNull LiveUpdateConfig config, @NonNull Context context, @Nullable LiveUpdatePlugin plugin)
-        throws PackageManager.NameNotFoundException {
+    private LiveUpdate(
+        @NonNull LiveUpdateConfig config,
+        @NonNull Context context,
+        @Nullable LiveUpdatePlugin plugin,
+        @NonNull String bundlesDirectory
+    ) throws PackageManager.NameNotFoundException {
+        this.bundlesDirectory = bundlesDirectory;
         this.config = config;
         this.context = context;
         this.httpClient = new LiveUpdateHttpClient(config);
@@ -560,17 +574,19 @@ public class LiveUpdate {
     }
 
     /**
-     * @return `true` if the bundle does not exist or was deleted, `false` if it is the current or next bundle.
+     * Deletes every downloaded bundle of this instance whose ID is not in the given set.
      */
-    public boolean tryDeleteUnusedBundle(@NonNull String bundleId) {
-        if (!hasBundleById(bundleId)) {
-            return true;
+    public void tryDeleteBundlesExcept(@NonNull Set<String> bundleIds) {
+        for (String bundleId : getDownloadedBundleIds()) {
+            if (bundleIds.contains(bundleId)) {
+                continue;
+            }
+            File bundleDirectory = buildBundleDirectoryFor(bundleId);
+            deleteFileRecursively(bundleDirectory);
+            if (bundleDirectory.exists()) {
+                Logger.warn(LiveUpdatePlugin.TAG, "Failed to delete bundle with id: " + bundleId);
+            }
         }
-        if (isBundleInUse(bundleId)) {
-            return false;
-        }
-        deleteBundleById(bundleId);
-        return true;
     }
 
     private void addBundle(@NonNull String bundleId, @NonNull File sourceDirectory) throws Exception {
@@ -761,8 +777,11 @@ public class LiveUpdate {
         };
     }
 
-    private void copyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) throws IOException {
-        String currentBundleId = getCurrentBundleId();
+    /**
+     * @param currentBundleId The bundle to copy the file from, or `null` for the built-in bundle.
+     */
+    private void copyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination, @Nullable String currentBundleId)
+        throws IOException {
         if (currentBundleId == null) {
             // Create the source input stream
             AssetManager assets = context.getAssets();
@@ -808,20 +827,22 @@ public class LiveUpdate {
     /**
      * A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
      *
+     * @param currentBundleId The bundle to copy files from, or `null` for the built-in bundle.
      * @return The files of the new manifest that must be downloaded, in the order of the new manifest.
      */
     @NonNull
     private List<ManifestItem> copyUnchangedFilesAndListFilesToDownload(
         @NonNull Manifest latestManifest,
-        @NonNull File destinationDirectory
+        @NonNull File destinationDirectory,
+        @Nullable String currentBundleId
     ) {
-        Manifest currentManifest = tryLoadCurrentManifest();
+        Manifest currentManifest = tryLoadCurrentManifest(currentBundleId);
         Map<String, String> currentHrefsByChecksum = currentManifest == null ? new HashMap<>() : currentManifest.mapFirstHrefsByChecksum();
         List<ManifestItem> itemsToDownload = new ArrayList<>();
         for (ManifestItem item : latestManifest.getItems()) {
             String sourceHref = currentHrefsByChecksum.get(item.getChecksum());
             File destination = new File(destinationDirectory, item.getHref());
-            boolean isCopied = sourceHref != null && tryCopyCurrentBundleFile(sourceHref, destination);
+            boolean isCopied = sourceHref != null && tryCopyCurrentBundleFile(sourceHref, destination, currentBundleId);
             if (!isCopied) {
                 itemsToDownload.add(item);
             }
@@ -896,12 +917,8 @@ public class LiveUpdate {
     }
 
     private void deleteUnusedBundles() {
-        String[] bundleIds = getDownloadedBundleIds();
-        for (String bundleId : bundleIds) {
-            if (!isBundleInUse(bundleId)) {
-                deleteBundleById(bundleId);
-            }
-        }
+        Set<String> bundleIdsInUse = new HashSet<>(Arrays.asList(getCurrentBundleId(), getNextBundleId()));
+        tryDeleteBundlesExcept(bundleIdsInUse);
     }
 
     private Call downloadAndVerifyFile(
@@ -1105,7 +1122,16 @@ public class LiveUpdate {
             if (latestManifest == null) {
                 throw new Exception(LiveUpdatePlugin.ERROR_MANIFEST_INVALID);
             }
-            List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, temporaryDirectory);
+            String currentBundleId = options.getCurrentBundleId() == null ? getCurrentBundleId() : options.getCurrentBundleId();
+            List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(
+                latestManifest,
+                temporaryDirectory,
+                currentBundleId
+            );
+            Logger.debug(
+                LiveUpdatePlugin.TAG,
+                "Downloading " + itemsToDownload.size() + " of " + latestManifest.getItems().size() + " files."
+            );
             downloadBundleFiles(options, itemsToDownload, temporaryDirectory, buildDownloadProgressCallback(bundleId), addBundleCallback);
         });
         try {
@@ -1412,12 +1438,6 @@ public class LiveUpdate {
         return bundleDirectory.exists();
     }
 
-    private boolean isBundleInUse(@NonNull String bundleId) {
-        String currentBundleId = getCurrentBundleId();
-        String nextBundleId = getNextBundleId();
-        return bundleId.equals(currentBundleId) || bundleId.equals(nextBundleId);
-    }
-
     private boolean isChecksumValid(@NonNull File file, @NonNull String checksum) throws Exception {
         String receivedChecksum = getChecksumForFileAsString(file);
         return checksum.equals(receivedChecksum);
@@ -1455,11 +1475,11 @@ public class LiveUpdate {
     }
 
     /**
+     * @param currentBundleId The bundle to load the manifest of, or `null` for the built-in bundle.
      * @return The manifest of the current bundle, or `null` if it has none or it cannot be used.
      */
     @Nullable
-    private Manifest loadCurrentManifest() throws IOException {
-        String currentBundleId = getCurrentBundleId();
+    private Manifest loadCurrentManifest(@Nullable String currentBundleId) throws IOException {
         if (currentBundleId == null) {
             AssetManager assets = context.getAssets();
             boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
@@ -1809,9 +1829,9 @@ public class LiveUpdate {
     /**
      * @return `true` if the file was copied.
      */
-    private boolean tryCopyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) {
+    private boolean tryCopyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination, @Nullable String currentBundleId) {
         try {
-            copyCurrentBundleFile(sourceHref, destination);
+            copyCurrentBundleFile(sourceHref, destination, currentBundleId);
             return true;
         } catch (IOException exception) {
             Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + sourceHref);
@@ -1827,9 +1847,9 @@ public class LiveUpdate {
      * A current manifest that is missing or cannot be used means that every file is downloaded.
      */
     @Nullable
-    private Manifest tryLoadCurrentManifest() {
+    private Manifest tryLoadCurrentManifest(@Nullable String currentBundleId) {
         try {
-            return loadCurrentManifest();
+            return loadCurrentManifest(currentBundleId);
         } catch (IOException exception) {
             Logger.warn(LiveUpdatePlugin.TAG, "Failed to read the current manifest: " + exception.getMessage());
             return null;

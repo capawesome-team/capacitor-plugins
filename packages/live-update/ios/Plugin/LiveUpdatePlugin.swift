@@ -383,6 +383,22 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
         }
     }
 
+    func liveUpdateConfig() -> LiveUpdateConfig {
+        var config = LiveUpdateConfig()
+
+        config.appId = getConfig().getString("appId", config.appId)
+        config.autoBlockRolledBackBundles = getConfig().getBoolean("autoBlockRolledBackBundles", config.autoBlockRolledBackBundles)
+        config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
+        config.autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.autoUpdateStrategy) ?? config.autoUpdateStrategy
+        config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
+        config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
+        config.publicKey = getConfig().getString("publicKey", config.publicKey)
+        config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
+        config.serverDomain = getConfig().getString("serverDomain", config.serverDomain) ?? config.serverDomain
+
+        return config
+    }
+
     func notifyDownloadBundleProgressListeners(_ event: DownloadBundleProgressEvent) {
         if let event = event.toJSObject() as? JSObject {
             notifyListeners(eventDownloadBundleProgess, data: event, retainUntilConsumed: false)
@@ -404,22 +420,6 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc private func handleAppWillEnterForeground() {
         implementation?.handleAppWillEnterForeground()
-    }
-
-    private func liveUpdateConfig() -> LiveUpdateConfig {
-        var config = LiveUpdateConfig()
-
-        config.appId = getConfig().getString("appId", config.appId)
-        config.autoBlockRolledBackBundles = getConfig().getBoolean("autoBlockRolledBackBundles", config.autoBlockRolledBackBundles)
-        config.autoDeleteBundles = getConfig().getBoolean("autoDeleteBundles", config.autoDeleteBundles)
-        config.autoUpdateStrategy = getConfig().getString("autoUpdateStrategy", config.autoUpdateStrategy) ?? config.autoUpdateStrategy
-        config.defaultChannel = getConfig().getString("defaultChannel", config.defaultChannel)
-        config.httpTimeout = getConfig().getInt("httpTimeout", config.httpTimeout)
-        config.publicKey = getConfig().getString("publicKey", config.publicKey)
-        config.readyTimeout = getConfig().getInt("readyTimeout", config.readyTimeout)
-        config.serverDomain = getConfig().getString("serverDomain", config.serverDomain) ?? config.serverDomain
-
-        return config
     }
 
     private func rejectCall(_ call: CAPPluginCall, _ error: Error) {

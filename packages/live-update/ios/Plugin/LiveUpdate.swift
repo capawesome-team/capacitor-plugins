@@ -7,6 +7,7 @@ import CommonCrypto
 
 // swiftlint:disable type_body_length
 @objc public class LiveUpdate: NSObject {
+    static let defaultBundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
     private static let downloadsDirectoryUrl = FileManager.default
         .urls(for: .cachesDirectory, in: .userDomainMask).first!
         .appendingPathComponent("capawesome_capacitor_live_update_downloads")
@@ -22,7 +23,7 @@ import CommonCrypto
     private static let checkWaitsLock = NSLock()
 
     private let autoUpdateIntervalMs: Int64 = 15 * 60 * 1000 // 15 minutes
-    private let bundlesDirectory = "NoCloud/ionic_built_snapshots" // DO NOT CHANGE! (See https://dub.sh/BLluidt)
+    private let bundlesDirectory: String
     private let config: LiveUpdateConfig
     private let defaultWebAssetDir = "public" // DO NOT CHANGE! (See https://dub.sh/Buvz4yj)
     private let defaultServerPathKey = "serverBasePath" // DO NOT CHANGE! (See https://dub.sh/ceDl0zT)
@@ -46,7 +47,9 @@ import CommonCrypto
     /// - Parameter plugin: The Capacitor plugin, or `nil` for a headless instance
     ///   (e.g. for Ionic Portals hosts that construct a provider manager directly).
     ///   In headless mode, WebView-related operations and plugin events are skipped.
-    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin? = nil) {
+    /// - Parameter bundlesDirectory: The directory below the Library directory that holds the bundles of this instance.
+    init(config: LiveUpdateConfig, plugin: LiveUpdatePlugin? = nil, bundlesDirectory: String = LiveUpdate.defaultBundlesDirectory) {
+        self.bundlesDirectory = bundlesDirectory
         self.config = config
         self.httpClient = LiveUpdateHttpClient(config: config)
         self.plugin = plugin
@@ -356,6 +359,13 @@ import CommonCrypto
         return try await handleSyncCheckResponse(response)
     }
 
+    /// Deletes every downloaded bundle of this instance whose id is not in the given set.
+    func tryDeleteBundlesExcept(bundleIds: Set<String>) {
+        for bundleId in getDownloadedBundleIds() where !bundleIds.contains(bundleId) {
+            tryDeleteDirectory(buildBundleURLFor(bundleId: bundleId))
+        }
+    }
+
     private func addBundle(bundleId: String, directory: URL) throws {
         // Search folder with index.html file
         guard let indexHtmlFile = self.searchIndexHtmlFile(url: directory) else {
@@ -459,8 +469,8 @@ import CommonCrypto
         remainingRollbackTimeout = nil
     }
 
-    private func copyCurrentBundleFile(sourceHref: String, destination: URL) throws {
-        let currentBundleId = getCurrentBundleId()
+    /// - Parameter currentBundleId: The bundle to copy the file from, or `nil` for the built-in bundle.
+    private func copyCurrentBundleFile(sourceHref: String, destination: URL, currentBundleId: String?) throws {
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
@@ -480,13 +490,15 @@ import CommonCrypto
     }
 
     /// A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
+    /// - Parameter currentBundleId: The bundle to copy files from, or `nil` for the built-in bundle.
     /// - Returns: The files of the new manifest that must be downloaded, in the order of the new manifest.
-    private func copyUnchangedFilesAndListFilesToDownload(_ latestManifest: Manifest, directory: URL) -> [ManifestItem] {
-        let currentHrefsByChecksum = tryLoadCurrentManifest()?.mapFirstHrefsByChecksum() ?? [:]
+    private func copyUnchangedFilesAndListFilesToDownload(_ latestManifest: Manifest, directory: URL, currentBundleId: String?) -> [ManifestItem] {
+        let currentHrefsByChecksum = tryLoadCurrentManifest(currentBundleId: currentBundleId)?.mapFirstHrefsByChecksum() ?? [:]
         var itemsToDownload = [ManifestItem]()
         for item in latestManifest.items {
             let destination = directory.appendingPathComponent(item.href)
-            if let sourceHref = currentHrefsByChecksum[item.checksum], tryCopyCurrentBundleFile(sourceHref: sourceHref, destination: destination) {
+            if let sourceHref = currentHrefsByChecksum[item.checksum],
+               tryCopyCurrentBundleFile(sourceHref: sourceHref, destination: destination, currentBundleId: currentBundleId) {
                 continue
             }
             itemsToDownload.append(item)
@@ -524,9 +536,8 @@ import CommonCrypto
     }
 
     private func deleteUnusedBundles() {
-        for bundleId in getDownloadedBundleIds() {
-            tryDeleteUnusedBundle(bundleId: bundleId)
-        }
+        let bundleIdsInUse = Set([getCurrentBundleId(), getNextBundleId()].compactMap { $0 })
+        tryDeleteBundlesExcept(bundleIds: bundleIdsInUse)
     }
 
     private func downloadAndVerifyFile(url: URL, file: URL, checksum: String?, signature: String?, callback: ((Progress) -> Void)?) async throws {
@@ -613,7 +624,13 @@ import CommonCrypto
         guard let latestManifest = try loadManifest(file: latestManifestFile) else {
             throw CustomError.manifestInvalid
         }
-        let filesToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, directory: temporaryDirectory)
+        let currentBundleId = options.getCurrentBundleId() ?? getCurrentBundleId()
+        let filesToDownload = copyUnchangedFilesAndListFilesToDownload(
+            latestManifest,
+            directory: temporaryDirectory,
+            currentBundleId: currentBundleId
+        )
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Downloading \(filesToDownload.count) of \(latestManifest.items.count) files.")
         let callback = buildDownloadProgressCallback(bundleId: options.getBundleId())
         try await downloadBundleFiles(options, filesToDownload: filesToDownload, directory: temporaryDirectory, callback: callback)
         try await addBundleOfTypeManifest(bundleId: options.getBundleId(), directory: temporaryDirectory)
@@ -907,8 +924,9 @@ import CommonCrypto
         return verificationResult
     }
 
-    private func loadCurrentManifest() throws -> Manifest? {
-        if let currentBundleId = getCurrentBundleId() {
+    /// - Parameter currentBundleId: The bundle to load the manifest of, or `nil` for the built-in bundle.
+    private func loadCurrentManifest(currentBundleId: String?) throws -> Manifest? {
+        if let currentBundleId = currentBundleId {
             let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
             let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
             if manifestFileExists {
@@ -1233,9 +1251,9 @@ import CommonCrypto
     }
 
     /// - Returns: `true` if the file was copied.
-    private func tryCopyCurrentBundleFile(sourceHref: String, destination: URL) -> Bool {
+    private func tryCopyCurrentBundleFile(sourceHref: String, destination: URL, currentBundleId: String?) -> Bool {
         do {
-            try copyCurrentBundleFile(sourceHref: sourceHref, destination: destination)
+            try copyCurrentBundleFile(sourceHref: sourceHref, destination: destination, currentBundleId: currentBundleId)
             return true
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(sourceHref)")
@@ -1244,9 +1262,9 @@ import CommonCrypto
     }
 
     /// - Returns: `nil` if the current bundle has no manifest or its manifest cannot be used, so that every file is downloaded.
-    private func tryLoadCurrentManifest() -> Manifest? {
+    private func tryLoadCurrentManifest(currentBundleId: String?) -> Manifest? {
         do {
-            return try loadCurrentManifest()
+            return try loadCurrentManifest(currentBundleId: currentBundleId)
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to load the current manifest: \(error.localizedDescription)")
             return nil
@@ -1261,25 +1279,6 @@ import CommonCrypto
             try FileManager.default.removeItem(at: url)
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete directory: \(url.path)")
-        }
-    }
-
-    /// Deletes the bundle unless it is the current or next bundle.
-    /// - Returns: `true` if the bundle does not exist anymore.
-    @discardableResult
-    func tryDeleteUnusedBundle(bundleId: String) -> Bool {
-        guard hasBundleById(bundleId) else {
-            return true
-        }
-        guard bundleId != getCurrentBundleId() && bundleId != getNextBundleId() else {
-            return false
-        }
-        do {
-            try deleteBundleById(bundleId)
-            return true
-        } catch {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to delete bundle with id: \(bundleId)")
-            return false
         }
     }
 

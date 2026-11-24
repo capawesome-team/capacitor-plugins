@@ -21,6 +21,9 @@ public class DownloadBundleOptions {
     private String checksum;
 
     @Nullable
+    private String currentBundleId;
+
+    @Nullable
     private String signature;
 
     @NonNull
@@ -91,6 +94,14 @@ public class DownloadBundleOptions {
         return checksum;
     }
 
+    /**
+     * @return The bundle to reuse files from, or `null` for the current bundle of the WebView.
+     */
+    @Nullable
+    public String getCurrentBundleId() {
+        return currentBundleId;
+    }
+
     @Nullable
     public String getSignature() {
         return signature;
@@ -107,5 +118,11 @@ public class DownloadBundleOptions {
     @Nullable
     public UrlTemplate getUrlTemplate() {
         return urlTemplate;
+    }
+
+    @NonNull
+    public DownloadBundleOptions setCurrentBundleId(@Nullable String currentBundleId) {
+        this.currentBundleId = currentBundleId;
+        return this;
     }
 }
