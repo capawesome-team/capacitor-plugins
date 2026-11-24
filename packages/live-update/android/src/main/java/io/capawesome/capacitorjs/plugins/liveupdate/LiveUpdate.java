@@ -468,10 +468,6 @@ public class LiveUpdate {
         // Get the current and previous bundle IDs
         String currentBundleId = getCurrentBundleId();
         String previousBundleId = getPreviousBundleId();
-        // Block the rolled back bundle if enabled
-        if (config.getAutoBlockRolledBackBundles() && rollbackPerformed && previousBundleId != null) {
-            addBlockedBundleId(previousBundleId);
-        }
         // Return the result
         ReadyResult result = new ReadyResult(currentBundleId, previousBundleId, rollbackPerformed);
         callback.success(result);
@@ -1584,26 +1580,29 @@ public class LiveUpdate {
     }
 
     private void rollback() {
+        String currentBundleId = getCurrentBundleId();
+        if (currentBundleId == null) {
+            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
+            return;
+        }
         // Set the rollback flag
         rollbackPerformed = true;
         // Set the new previous bundle ID
-        String currentBundleId = getCurrentBundleId();
         setPreviousBundleId(currentBundleId);
-        // Log the rollback result
-        if (currentBundleId == null) {
-            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Default bundle is already in use.");
-        } else {
-            Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
-            String appId = getAppId();
-            if (appId != null) {
-                preferences.trySetPendingFailure(
-                    new UpdateFailure().setAppId(appId).setBundleId(currentBundleId).setReason(FailureReason.READINESS_TIMED_OUT)
-                );
-            }
-            // Rollback to the default bundle
-            setNextBundleById(null);
-            setCurrentBundleById(null);
+        Logger.debug(LiveUpdatePlugin.TAG, "App is not ready. Rolling back to default bundle.");
+        String appId = getAppId();
+        if (appId != null) {
+            preferences.trySetPendingFailure(
+                new UpdateFailure().setAppId(appId).setBundleId(currentBundleId).setReason(FailureReason.READINESS_TIMED_OUT)
+            );
         }
+        // Block the rolled back bundle if enabled
+        if (config.getAutoBlockRolledBackBundles()) {
+            addBlockedBundleId(currentBundleId);
+        }
+        // Rollback to the default bundle
+        setNextBundleById(null);
+        setCurrentBundleById(null);
     }
 
     /**

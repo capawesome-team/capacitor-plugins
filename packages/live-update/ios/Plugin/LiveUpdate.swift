@@ -279,10 +279,6 @@ import CommonCrypto
         // Get the current and previous bundle IDs
         let currentBundleId = getCurrentBundleId()
         let previousBundleId = getPreviousBundleId()
-        // Block the rolled back bundle if enabled
-        if config.autoBlockRolledBackBundles && rollbackPerformed, let previousBundleId = previousBundleId {
-            addBlockedBundleId(previousBundleId)
-        }
         // Return the result
         let result = ReadyResult(currentBundleId: currentBundleId, previousBundleId: previousBundleId, rollback: rollbackPerformed)
         completion(result, nil)
@@ -1042,22 +1038,25 @@ import CommonCrypto
     }
 
     private func rollback() {
+        guard let currentBundleId = getCurrentBundleId() else {
+            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
+            return
+        }
         // Set the rollback flag
         rollbackPerformed = true
         // Set the new previous bundle ID
-        let currentBundleId = getCurrentBundleId()
         setPreviousBundleId(bundleId: currentBundleId)
-        // Perform the rollback
-        if let currentBundleId = currentBundleId {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
-            if let appId = getAppId() {
-                preferences.trySetPendingFailure(UpdateFailure(appId: appId, bundleId: currentBundleId, reason: .readinessTimedOut))
-            }
-            setNextBundleById(nil)
-            setCurrentBundleById(nil)
-        } else {
-            CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Default bundle is already in use.")
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "App is not ready. Rolling back to default bundle.")
+        if let appId = getAppId() {
+            preferences.trySetPendingFailure(UpdateFailure(appId: appId, bundleId: currentBundleId, reason: .readinessTimedOut))
         }
+        // Block the rolled back bundle if enabled
+        if config.autoBlockRolledBackBundles {
+            addBlockedBundleId(currentBundleId)
+        }
+        // Rollback to the default bundle
+        setNextBundleById(nil)
+        setCurrentBundleById(nil)
     }
 
     private func searchIndexHtmlFile(url: URL) -> URL? {
