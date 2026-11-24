@@ -201,8 +201,11 @@ public class LiveUpdate {
         }
 
         // Start the rollback timer to rollback to the default bundle
-        // if the app is not ready after a certain time
-        startRollbackTimer();
+        // if the app is not ready after a certain time.
+        // An instance without a plugin has no WebView to roll back.
+        if (plugin != null) {
+            startRollbackTimer();
+        }
     }
 
     public void clearBlockedBundles() {
