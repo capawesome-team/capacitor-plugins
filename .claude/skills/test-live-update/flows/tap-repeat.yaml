@@ -1,0 +1,12 @@
+appId: com.example.plugin
+name: Tap a button TIMES times without launching the app
+---
+- scrollUntilVisible:
+    element:
+      text: ${BUTTON}
+- repeat:
+    times: ${TIMES}
+    commands:
+      - tapOn: ${BUTTON}
+      - waitForAnimationToEnd:
+          timeout: 1500

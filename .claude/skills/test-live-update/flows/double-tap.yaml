@@ -1,0 +1,7 @@
+appId: com.example.plugin
+name: Scroll to a button and double tap it without launching the app
+---
+- scrollUntilVisible:
+    element:
+      text: ${BUTTON}
+- doubleTapOn: ${BUTTON}

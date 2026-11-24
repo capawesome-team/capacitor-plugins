@@ -35,11 +35,15 @@ name: Fill the provider form of example-ionic-provider and tap one of its button
       - eraseText: 100
       - inputText: ${CHANNEL}
       - runFlow: _dismiss-keyboard.yaml
-- tapOn: ${BUTTON}
+- runFlow:
+    when:
+      true: ${typeof TWICE === 'undefined' || TWICE !== 'yes'}
+    commands:
+      - tapOn: ${BUTTON}
 - runFlow:
     when:
       true: ${typeof TWICE !== 'undefined' && TWICE === 'yes'}
     commands:
-      - tapOn: ${BUTTON}
+      - doubleTapOn: ${BUTTON}
 - waitForAnimationToEnd:
     timeout: 4000
