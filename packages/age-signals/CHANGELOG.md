@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.2
+
+### Patch Changes
+
+- [`c9cd8fc57d78fd989547642aadbb9ae3a950d1b2`](https://github.com/capawesome-team/capacitor-plugins/commit/c9cd8fc57d78fd989547642aadbb9ae3a950d1b2) ([#1241](https://github.com/capawesome-team/capacitor-plugins/pull/1241)): fix(android,ios): pass the error code when a call is rejected
+
+- [`c9cd8fc57d78fd989547642aadbb9ae3a950d1b2`](https://github.com/capawesome-team/capacitor-plugins/commit/c9cd8fc57d78fd989547642aadbb9ae3a950d1b2) ([#1241](https://github.com/capawesome-team/capacitor-plugins/pull/1241)): feat(android): update to Play Age Signals `0.0.6` and support `getRegulatoryRequirements()`, `setNextApplicableAgeFeaturesException(...)` and `setNextApplicableAgeFeaturesResult(...)`
+
 ## 0.5.1
 
 ### Patch Changes
