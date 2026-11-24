@@ -10,7 +10,7 @@ public class LiveUpdatePlugin: CAPPlugin, CAPBridgedPlugin {
     public static let errorDownloadFailed = "Bundle could not be downloaded."
     public static let errorHttpTimeout = "Request timed out."
     public static let tag = "LiveUpdate"
-    public static let version = "8.9.0"
+    public static let version = "8.10.0"
     public static let userDefaultsPrefix = "CapawesomeLiveUpdate" // DO NOT CHANGE
 
     public let identifier = "LiveUpdatePlugin"
