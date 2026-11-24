@@ -761,8 +761,8 @@ public class LiveUpdate {
         };
     }
 
-    private void copyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) throws IOException {
-        String currentBundleId = getCurrentBundleId();
+    private void copyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination, @Nullable String currentBundleId)
+        throws IOException {
         if (currentBundleId == null) {
             // Create the source input stream
             AssetManager assets = context.getAssets();
@@ -808,20 +808,22 @@ public class LiveUpdate {
     /**
      * A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
      *
+     * @param currentBundleId The bundle to copy files from, or `null` for the built-in web folder.
      * @return The files of the new manifest that must be downloaded, in the order of the new manifest.
      */
     @NonNull
     private List<ManifestItem> copyUnchangedFilesAndListFilesToDownload(
         @NonNull Manifest latestManifest,
-        @NonNull File destinationDirectory
+        @NonNull File destinationDirectory,
+        @Nullable String currentBundleId
     ) {
-        Manifest currentManifest = tryLoadCurrentManifest();
+        Manifest currentManifest = tryLoadCurrentManifest(currentBundleId);
         Map<String, String> currentHrefsByChecksum = currentManifest == null ? new HashMap<>() : currentManifest.mapFirstHrefsByChecksum();
         List<ManifestItem> itemsToDownload = new ArrayList<>();
         for (ManifestItem item : latestManifest.getItems()) {
             String sourceHref = currentHrefsByChecksum.get(item.getChecksum());
             File destination = new File(destinationDirectory, item.getHref());
-            boolean isCopied = sourceHref != null && tryCopyCurrentBundleFile(sourceHref, destination);
+            boolean isCopied = sourceHref != null && tryCopyCurrentBundleFile(sourceHref, destination, currentBundleId);
             if (!isCopied) {
                 itemsToDownload.add(item);
             }
@@ -1092,6 +1094,7 @@ public class LiveUpdate {
 
     private void downloadBundleOfTypeManifest(@NonNull DownloadBundleOptions options, @NonNull EmptyCallback completionCallback) {
         String bundleId = options.getBundleId();
+        String currentBundleId = options.getCurrentBundleId() == null ? getCurrentBundleId() : options.getCurrentBundleId();
         // Create a temporary directory that is deleted once the download completed or failed
         File temporaryDirectory = createTemporaryDownloadDirectory();
         EmptyCallback callback = deleteTemporaryDirectoryOnCompletion(temporaryDirectory, completionCallback);
@@ -1105,7 +1108,15 @@ public class LiveUpdate {
             if (latestManifest == null) {
                 throw new Exception(LiveUpdatePlugin.ERROR_MANIFEST_INVALID);
             }
-            List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, temporaryDirectory);
+            List<ManifestItem> itemsToDownload = copyUnchangedFilesAndListFilesToDownload(
+                latestManifest,
+                temporaryDirectory,
+                currentBundleId
+            );
+            Logger.debug(
+                LiveUpdatePlugin.TAG,
+                "Downloading " + itemsToDownload.size() + " of " + latestManifest.getItems().size() + " files."
+            );
             downloadBundleFiles(options, itemsToDownload, temporaryDirectory, buildDownloadProgressCallback(bundleId), addBundleCallback);
         });
         try {
@@ -1458,8 +1469,7 @@ public class LiveUpdate {
      * @return The manifest of the current bundle, or `null` if it has none or it cannot be used.
      */
     @Nullable
-    private Manifest loadCurrentManifest() throws IOException {
-        String currentBundleId = getCurrentBundleId();
+    private Manifest loadCurrentManifest(@Nullable String currentBundleId) throws IOException {
         if (currentBundleId == null) {
             AssetManager assets = context.getAssets();
             boolean manifestFileExists = Arrays.asList(assets.list(defaultWebAssetDir)).contains(manifestFileName);
@@ -1809,9 +1819,9 @@ public class LiveUpdate {
     /**
      * @return `true` if the file was copied.
      */
-    private boolean tryCopyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination) {
+    private boolean tryCopyCurrentBundleFile(@NonNull String sourceHref, @NonNull File destination, @Nullable String currentBundleId) {
         try {
-            copyCurrentBundleFile(sourceHref, destination);
+            copyCurrentBundleFile(sourceHref, destination, currentBundleId);
             return true;
         } catch (IOException exception) {
             Logger.warn(LiveUpdatePlugin.TAG, "Failed to copy file: " + sourceHref);
@@ -1827,9 +1837,9 @@ public class LiveUpdate {
      * A current manifest that is missing or cannot be used means that every file is downloaded.
      */
     @Nullable
-    private Manifest tryLoadCurrentManifest() {
+    private Manifest tryLoadCurrentManifest(@Nullable String currentBundleId) {
         try {
-            return loadCurrentManifest();
+            return loadCurrentManifest(currentBundleId);
         } catch (IOException exception) {
             Logger.warn(LiveUpdatePlugin.TAG, "Failed to read the current manifest: " + exception.getMessage());
             return null;

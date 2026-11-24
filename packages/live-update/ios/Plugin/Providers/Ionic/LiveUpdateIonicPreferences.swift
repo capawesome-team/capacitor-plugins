@@ -35,46 +35,62 @@ final class LiveUpdateIonicPreferences {
         return Set(bundleIds)
     }
 
-    /// - Returns: The bundles this manager no longer points at and that may be deleted once unused.
-    func getSupersededBundleIds() -> Set<String> {
-        return Set(userDefaults.stringArray(forKey: supersededBundleIdsKey) ?? [])
+    /// - Returns: The bundles that the managers no longer point at and that may be deleted once unused.
+    func getSupersededBundleIdsOfAllManagers() -> Set<String> {
+        let bundleIds = userDefaults.dictionaryRepresentation()
+            .filter { $0.key.hasPrefix(Self.supersededBundleIdsPrefix) }
+            .flatMap { $0.value as? [String] ?? [] }
+        return Set(bundleIds)
     }
 
-    func removeSupersededBundleIds(_ bundleIds: Set<String>) {
+    func removeSupersededBundleIdsOfAllManagers(_ bundleIds: Set<String>) {
         if bundleIds.isEmpty {
             return
         }
-        setSupersededBundleIds(getSupersededBundleIds().subtracting(bundleIds))
+        let keys = userDefaults.dictionaryRepresentation().keys.filter { $0.hasPrefix(Self.supersededBundleIdsPrefix) }
+        for key in keys {
+            setStringSet(getStringSet(forKey: key).subtracting(bundleIds), forKey: key)
+        }
     }
 
-    /// Forgets the last synced bundle if it was synced on another app version code,
+    /// Forgets the last synced bundle of every manager that synced it on another app version code,
     /// because the bundle was built for that native version.
-    func resetLastSyncedBundleIdIfVersionChanged(versionCode: String) {
-        guard let lastSyncedBundleId = getLastSyncedBundleId(),
-              let lastVersionCode = userDefaults.string(forKey: lastVersionCodeKey),
-              lastVersionCode != versionCode else {
-            return
+    func resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: String) {
+        let lastSyncedBundleIdsByKey = userDefaults.dictionaryRepresentation()
+            .filter { $0.key.hasPrefix(Self.lastSyncedBundleIdPrefix) }
+        for (key, value) in lastSyncedBundleIdsByKey {
+            let stateKey = String(key.dropFirst(Self.lastSyncedBundleIdPrefix.count))
+            guard let lastSyncedBundleId = value as? String,
+                  let lastVersionCode = userDefaults.string(forKey: Self.lastVersionCodePrefix + stateKey),
+                  lastVersionCode != versionCode else {
+                continue
+            }
+            let supersededBundleIdsKey = Self.supersededBundleIdsPrefix + stateKey
+            setStringSet(getStringSet(forKey: supersededBundleIdsKey).union([lastSyncedBundleId]), forKey: supersededBundleIdsKey)
+            userDefaults.removeObject(forKey: key)
+            userDefaults.removeObject(forKey: Self.lastVersionCodePrefix + stateKey)
         }
-        setSupersededBundleIds(getSupersededBundleIds().union([lastSyncedBundleId]))
-        userDefaults.removeObject(forKey: lastSyncedBundleIdKey)
-        userDefaults.removeObject(forKey: lastVersionCodeKey)
     }
 
     /// Points this manager at the given bundle, synced on the given app version code,
     /// and records the previous bundle as superseded.
     func setLastSyncedBundleId(_ bundleId: String, versionCode: String) {
         if let previousBundleId = getLastSyncedBundleId(), previousBundleId != bundleId {
-            setSupersededBundleIds(getSupersededBundleIds().union([previousBundleId]))
+            setStringSet(getStringSet(forKey: supersededBundleIdsKey).union([previousBundleId]), forKey: supersededBundleIdsKey)
         }
         userDefaults.set(bundleId, forKey: lastSyncedBundleIdKey)
         userDefaults.set(versionCode, forKey: lastVersionCodeKey)
     }
 
-    private func setSupersededBundleIds(_ bundleIds: Set<String>) {
-        if bundleIds.isEmpty {
-            userDefaults.removeObject(forKey: supersededBundleIdsKey)
+    private func getStringSet(forKey key: String) -> Set<String> {
+        return Set(userDefaults.stringArray(forKey: key) ?? [])
+    }
+
+    private func setStringSet(_ values: Set<String>, forKey key: String) {
+        if values.isEmpty {
+            userDefaults.removeObject(forKey: key)
         } else {
-            userDefaults.set(Array(bundleIds), forKey: supersededBundleIdsKey)
+            userDefaults.set(Array(values), forKey: key)
         }
     }
 }

@@ -459,8 +459,7 @@ import CommonCrypto
         remainingRollbackTimeout = nil
     }
 
-    private func copyCurrentBundleFile(sourceHref: String, destination: URL) throws {
-        let currentBundleId = getCurrentBundleId()
+    private func copyCurrentBundleFile(sourceHref: String, destination: URL, currentBundleId: String?) throws {
         let parentDirectory = destination.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: parentDirectory, withIntermediateDirectories: true, attributes: nil)
 
@@ -480,13 +479,15 @@ import CommonCrypto
     }
 
     /// A file is copied from the first path of the current bundle with the same checksum. A file that cannot be copied is downloaded.
+    /// - Parameter currentBundleId: The bundle to copy files from, or `nil` for the built-in web folder.
     /// - Returns: The files of the new manifest that must be downloaded, in the order of the new manifest.
-    private func copyUnchangedFilesAndListFilesToDownload(_ latestManifest: Manifest, directory: URL) -> [ManifestItem] {
-        let currentHrefsByChecksum = tryLoadCurrentManifest()?.mapFirstHrefsByChecksum() ?? [:]
+    private func copyUnchangedFilesAndListFilesToDownload(_ latestManifest: Manifest, directory: URL, currentBundleId: String?) -> [ManifestItem] {
+        let currentHrefsByChecksum = tryLoadCurrentManifest(currentBundleId: currentBundleId)?.mapFirstHrefsByChecksum() ?? [:]
         var itemsToDownload = [ManifestItem]()
         for item in latestManifest.items {
             let destination = directory.appendingPathComponent(item.href)
-            if let sourceHref = currentHrefsByChecksum[item.checksum], tryCopyCurrentBundleFile(sourceHref: sourceHref, destination: destination) {
+            if let sourceHref = currentHrefsByChecksum[item.checksum],
+               tryCopyCurrentBundleFile(sourceHref: sourceHref, destination: destination, currentBundleId: currentBundleId) {
                 continue
             }
             itemsToDownload.append(item)
@@ -613,7 +614,13 @@ import CommonCrypto
         guard let latestManifest = try loadManifest(file: latestManifestFile) else {
             throw CustomError.manifestInvalid
         }
-        let filesToDownload = copyUnchangedFilesAndListFilesToDownload(latestManifest, directory: temporaryDirectory)
+        let currentBundleId = options.getCurrentBundleId() ?? getCurrentBundleId()
+        let filesToDownload = copyUnchangedFilesAndListFilesToDownload(
+            latestManifest,
+            directory: temporaryDirectory,
+            currentBundleId: currentBundleId
+        )
+        CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Downloading \(filesToDownload.count) of \(latestManifest.items.count) files.")
         let callback = buildDownloadProgressCallback(bundleId: options.getBundleId())
         try await downloadBundleFiles(options, filesToDownload: filesToDownload, directory: temporaryDirectory, callback: callback)
         try await addBundleOfTypeManifest(bundleId: options.getBundleId(), directory: temporaryDirectory)
@@ -907,8 +914,8 @@ import CommonCrypto
         return verificationResult
     }
 
-    private func loadCurrentManifest() throws -> Manifest? {
-        if let currentBundleId = getCurrentBundleId() {
+    private func loadCurrentManifest(currentBundleId: String?) throws -> Manifest? {
+        if let currentBundleId = currentBundleId {
             let manifestFileUrl = buildBundleURLFor(bundleId: currentBundleId).appendingPathComponent(manifestFileName)
             let manifestFileExists = FileManager.default.fileExists(atPath: manifestFileUrl.path)
             if manifestFileExists {
@@ -1233,9 +1240,9 @@ import CommonCrypto
     }
 
     /// - Returns: `true` if the file was copied.
-    private func tryCopyCurrentBundleFile(sourceHref: String, destination: URL) -> Bool {
+    private func tryCopyCurrentBundleFile(sourceHref: String, destination: URL, currentBundleId: String?) -> Bool {
         do {
-            try copyCurrentBundleFile(sourceHref: sourceHref, destination: destination)
+            try copyCurrentBundleFile(sourceHref: sourceHref, destination: destination, currentBundleId: currentBundleId)
             return true
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to copy file: \(sourceHref)")
@@ -1244,9 +1251,9 @@ import CommonCrypto
     }
 
     /// - Returns: `nil` if the current bundle has no manifest or its manifest cannot be used, so that every file is downloaded.
-    private func tryLoadCurrentManifest() -> Manifest? {
+    private func tryLoadCurrentManifest(currentBundleId: String?) -> Manifest? {
         do {
-            return try loadCurrentManifest()
+            return try loadCurrentManifest(currentBundleId: currentBundleId)
         } catch {
             CAPLog.print("[", LiveUpdatePlugin.tag, "] ", "Failed to load the current manifest: \(error.localizedDescription)")
             return nil

@@ -6,6 +6,7 @@ import Capacitor
     private var artifactType: ArtifactType
     private var bundleId: String
     private var checksum: String?
+    private var currentBundleId: String?
     private var signature: String?
     private var url: String
     /// The template for the files of the bundle, never set for a download from JavaScript.
@@ -21,17 +22,21 @@ import Capacitor
         self.artifactType = artifactType
         self.bundleId = bundleId
         self.checksum = checksum
+        self.currentBundleId = nil
         self.signature = signature
         self.url = url
         self.urlTemplate = nil
     }
 
-    /// - Parameter appId: The app whose failure is recorded.
-    init(bundle: CreateCheckResponse.Bundle, appId: String) {
+    /// - Parameters:
+    ///   - appId: The app whose failure is recorded.
+    ///   - currentBundleId: The bundle to reuse unchanged files from, or `nil` for the current bundle of the WebView.
+    init(bundle: CreateCheckResponse.Bundle, appId: String, currentBundleId: String? = nil) {
         self.appId = appId
         self.artifactType = bundle.artifactType
         self.bundleId = bundle.id
         self.checksum = bundle.checksum
+        self.currentBundleId = currentBundleId
         self.signature = bundle.signature
         self.url = bundle.url
         self.urlTemplate = bundle.urlTemplate
@@ -52,6 +57,10 @@ import Capacitor
 
     func getChecksum() -> String? {
         return checksum
+    }
+
+    func getCurrentBundleId() -> String? {
+        return currentBundleId
     }
 
     func getSignature() -> String? {

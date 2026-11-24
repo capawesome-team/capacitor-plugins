@@ -10,6 +10,7 @@ class LiveUpdateIonicPreferencesTest {
 
     private val sharedPreferences = FakeSharedPreferences()
     private val preferences = LiveUpdateIonicPreferences(sharedPreferences, "app-1.production")
+    private val otherPreferences = LiveUpdateIonicPreferences(sharedPreferences, "app-2")
 
     @Test
     fun setLastSyncedBundleId_recordsPreviousBundleAsSuperseded() {
@@ -18,7 +19,7 @@ class LiveUpdateIonicPreferencesTest {
         preferences.setLastSyncedBundleId("bundle-3", "1")
 
         assertEquals("bundle-3", preferences.getLastSyncedBundleId())
-        assertEquals(setOf("bundle-1", "bundle-2"), preferences.getSupersededBundleIds())
+        assertEquals(setOf("bundle-1", "bundle-2"), preferences.getSupersededBundleIdsOfAllManagers())
     }
 
     @Test
@@ -37,46 +38,48 @@ class LiveUpdateIonicPreferencesTest {
     }
 
     @Test
-    fun resetLastSyncedBundleIdIfVersionChanged_writesNothingWithoutBundle() {
-        preferences.resetLastSyncedBundleIdIfVersionChanged("1")
+    fun resetLastSyncedBundleIdsOfAllManagersIfVersionChanged_writesNothingWithoutBundle() {
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged("1")
 
         assertTrue(sharedPreferences.all.isEmpty())
     }
 
     @Test
-    fun resetLastSyncedBundleIdIfVersionChanged_keepsBundleWithoutVersionCode() {
+    fun resetLastSyncedBundleIdsOfAllManagersIfVersionChanged_keepsBundleWithoutVersionCode() {
         sharedPreferences.edit().putString("lastSyncedBundleId.app-1.production", "bundle-1").apply()
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged("1")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged("1")
 
         assertEquals("bundle-1", preferences.getLastSyncedBundleId())
         assertFalse(sharedPreferences.contains("lastVersionCode.app-1.production"))
     }
 
     @Test
-    fun resetLastSyncedBundleIdIfVersionChanged_keepsBundleIfVersionIsUnchanged() {
+    fun resetLastSyncedBundleIdsOfAllManagersIfVersionChanged_keepsBundleIfVersionIsUnchanged() {
         preferences.setLastSyncedBundleId("bundle-1", "1")
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged("1")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged("1")
 
         assertEquals("bundle-1", preferences.getLastSyncedBundleId())
         assertFalse(sharedPreferences.contains("supersededBundleIds.app-1.production"))
     }
 
     @Test
-    fun resetLastSyncedBundleIdIfVersionChanged_forgetsAndSupersedesBundleIfVersionChanged() {
+    fun resetLastSyncedBundleIdsOfAllManagersIfVersionChanged_forgetsAndSupersedesBundlesOfAllManagersIfVersionChanged() {
         preferences.setLastSyncedBundleId("bundle-1", "1")
+        otherPreferences.setLastSyncedBundleId("bundle-2", "1")
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged("2")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged("2")
 
         assertNull(preferences.getLastSyncedBundleId())
+        assertNull(otherPreferences.getLastSyncedBundleId())
         assertFalse(sharedPreferences.contains("lastVersionCode.app-1.production"))
-        assertEquals(setOf("bundle-1"), preferences.getSupersededBundleIds())
+        assertFalse(sharedPreferences.contains("lastVersionCode.app-2"))
+        assertEquals(setOf("bundle-1", "bundle-2"), preferences.getSupersededBundleIdsOfAllManagers())
     }
 
     @Test
     fun getLastSyncedBundleIdsOfAllManagers_returnsBundlesOfAllManagers() {
-        val otherPreferences = LiveUpdateIonicPreferences(sharedPreferences, "app-2")
         preferences.setLastSyncedBundleId("bundle-1", "1")
         preferences.setLastSyncedBundleId("bundle-2", "1")
         otherPreferences.setLastSyncedBundleId("bundle-1", "1")
@@ -85,29 +88,31 @@ class LiveUpdateIonicPreferencesTest {
     }
 
     @Test
-    fun removeSupersededBundleIds_keepsOtherSupersededBundles() {
+    fun removeSupersededBundleIdsOfAllManagers_keepsOtherSupersededBundles() {
         preferences.setLastSyncedBundleId("bundle-1", "1")
         preferences.setLastSyncedBundleId("bundle-2", "1")
         preferences.setLastSyncedBundleId("bundle-3", "1")
+        otherPreferences.setLastSyncedBundleId("bundle-4", "1")
+        otherPreferences.setLastSyncedBundleId("bundle-5", "1")
 
-        preferences.removeSupersededBundleIds(setOf("bundle-1"))
+        preferences.removeSupersededBundleIdsOfAllManagers(setOf("bundle-1", "bundle-4"))
 
-        assertEquals(setOf("bundle-2"), preferences.getSupersededBundleIds())
+        assertEquals(setOf("bundle-2"), preferences.getSupersededBundleIdsOfAllManagers())
     }
 
     @Test
-    fun removeSupersededBundleIds_removesKeyWhenEmpty() {
+    fun removeSupersededBundleIdsOfAllManagers_removesKeyWhenEmpty() {
         preferences.setLastSyncedBundleId("bundle-1", "1")
         preferences.setLastSyncedBundleId("bundle-2", "1")
 
-        preferences.removeSupersededBundleIds(setOf("bundle-1"))
+        preferences.removeSupersededBundleIdsOfAllManagers(setOf("bundle-1"))
 
         assertFalse(sharedPreferences.contains("supersededBundleIds.app-1.production"))
     }
 
     @Test
-    fun removeSupersededBundleIds_writesNothingIfNothingToRemove() {
-        preferences.removeSupersededBundleIds(emptySet())
+    fun removeSupersededBundleIdsOfAllManagers_writesNothingIfNothingToRemove() {
+        preferences.removeSupersededBundleIdsOfAllManagers(emptySet())
 
         assertTrue(sharedPreferences.all.isEmpty())
     }

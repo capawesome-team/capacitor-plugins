@@ -6,15 +6,18 @@ class LiveUpdateIonicPreferencesTests: XCTestCase {
     private let suiteName = "LiveUpdateIonicPreferencesTests"
     private let lastSyncedBundleIdKey = "CapawesomeLiveUpdateIonicProvider.lastSyncedBundleId.app-1.production"
     private let lastVersionCodeKey = "CapawesomeLiveUpdateIonicProvider.lastVersionCode.app-1.production"
+    private let otherLastVersionCodeKey = "CapawesomeLiveUpdateIonicProvider.lastVersionCode.app-2"
     private let supersededBundleIdsKey = "CapawesomeLiveUpdateIonicProvider.supersededBundleIds.app-1.production"
     private var userDefaults: UserDefaults!
     private var preferences: LiveUpdateIonicPreferences!
+    private var otherPreferences: LiveUpdateIonicPreferences!
 
     override func setUp() {
         super.setUp()
         UserDefaults().removePersistentDomain(forName: suiteName)
         userDefaults = UserDefaults(suiteName: suiteName)
         preferences = LiveUpdateIonicPreferences(userDefaults: userDefaults, stateKey: "app-1.production")
+        otherPreferences = LiveUpdateIonicPreferences(userDefaults: userDefaults, stateKey: "app-2")
     }
 
     override func tearDown() {
@@ -28,7 +31,7 @@ class LiveUpdateIonicPreferencesTests: XCTestCase {
         preferences.setLastSyncedBundleId("bundle-3", versionCode: "1")
 
         XCTAssertEqual(preferences.getLastSyncedBundleId(), "bundle-3")
-        XCTAssertEqual(preferences.getSupersededBundleIds(), ["bundle-1", "bundle-2"])
+        XCTAssertEqual(preferences.getSupersededBundleIdsOfAllManagers(), ["bundle-1", "bundle-2"])
     }
 
     func testSetLastSyncedBundleIdDoesNotSupersedeSameBundle() {
@@ -44,42 +47,44 @@ class LiveUpdateIonicPreferencesTests: XCTestCase {
         XCTAssertEqual(userDefaults.string(forKey: lastVersionCodeKey), "1")
     }
 
-    func testResetLastSyncedBundleIdIfVersionChangedWritesNothingWithoutBundle() {
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: "1")
+    func testResetLastSyncedBundleIdsOfAllManagersIfVersionChangedWritesNothingWithoutBundle() {
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: "1")
 
         XCTAssertTrue(persistedValues().isEmpty)
     }
 
-    func testResetLastSyncedBundleIdIfVersionChangedKeepsBundleWithoutVersionCode() {
+    func testResetLastSyncedBundleIdsOfAllManagersIfVersionChangedKeepsBundleWithoutVersionCode() {
         userDefaults.set("bundle-1", forKey: lastSyncedBundleIdKey)
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: "1")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: "1")
 
         XCTAssertEqual(preferences.getLastSyncedBundleId(), "bundle-1")
         XCTAssertNil(userDefaults.object(forKey: lastVersionCodeKey))
     }
 
-    func testResetLastSyncedBundleIdIfVersionChangedKeepsBundleIfVersionIsUnchanged() {
+    func testResetLastSyncedBundleIdsOfAllManagersIfVersionChangedKeepsBundleIfVersionIsUnchanged() {
         preferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: "1")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: "1")
 
         XCTAssertEqual(preferences.getLastSyncedBundleId(), "bundle-1")
         XCTAssertNil(userDefaults.object(forKey: supersededBundleIdsKey))
     }
 
-    func testResetLastSyncedBundleIdIfVersionChangedForgetsAndSupersedesBundleIfVersionChanged() {
+    func testResetLastSyncedBundleIdsOfAllManagersIfVersionChangedForgetsAndSupersedesBundlesOfAllManagersIfVersionChanged() {
         preferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
+        otherPreferences.setLastSyncedBundleId("bundle-2", versionCode: "1")
 
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: "2")
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: "2")
 
         XCTAssertNil(preferences.getLastSyncedBundleId())
+        XCTAssertNil(otherPreferences.getLastSyncedBundleId())
         XCTAssertNil(userDefaults.object(forKey: lastVersionCodeKey))
-        XCTAssertEqual(preferences.getSupersededBundleIds(), ["bundle-1"])
+        XCTAssertNil(userDefaults.object(forKey: otherLastVersionCodeKey))
+        XCTAssertEqual(preferences.getSupersededBundleIdsOfAllManagers(), ["bundle-1", "bundle-2"])
     }
 
     func testGetLastSyncedBundleIdsOfAllManagersReturnsBundlesOfAllManagers() {
-        let otherPreferences = LiveUpdateIonicPreferences(userDefaults: userDefaults, stateKey: "app-2")
         preferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
         preferences.setLastSyncedBundleId("bundle-2", versionCode: "1")
         otherPreferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
@@ -87,33 +92,35 @@ class LiveUpdateIonicPreferencesTests: XCTestCase {
         XCTAssertEqual(preferences.getLastSyncedBundleIdsOfAllManagers(), ["bundle-1", "bundle-2"])
     }
 
-    func testGetSupersededBundleIdsReadsStoredArray() {
+    func testGetSupersededBundleIdsOfAllManagersReadsStoredArray() {
         userDefaults.set(["bundle-1", "bundle-2"], forKey: supersededBundleIdsKey)
 
-        XCTAssertEqual(preferences.getSupersededBundleIds(), ["bundle-1", "bundle-2"])
+        XCTAssertEqual(preferences.getSupersededBundleIdsOfAllManagers(), ["bundle-1", "bundle-2"])
     }
 
-    func testRemoveSupersededBundleIdsKeepsOtherSupersededBundles() {
+    func testRemoveSupersededBundleIdsOfAllManagersKeepsOtherSupersededBundles() {
         preferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
         preferences.setLastSyncedBundleId("bundle-2", versionCode: "1")
         preferences.setLastSyncedBundleId("bundle-3", versionCode: "1")
+        otherPreferences.setLastSyncedBundleId("bundle-4", versionCode: "1")
+        otherPreferences.setLastSyncedBundleId("bundle-5", versionCode: "1")
 
-        preferences.removeSupersededBundleIds(["bundle-1"])
+        preferences.removeSupersededBundleIdsOfAllManagers(["bundle-1", "bundle-4"])
 
-        XCTAssertEqual(preferences.getSupersededBundleIds(), ["bundle-2"])
+        XCTAssertEqual(preferences.getSupersededBundleIdsOfAllManagers(), ["bundle-2"])
     }
 
-    func testRemoveSupersededBundleIdsRemovesKeyWhenEmpty() {
+    func testRemoveSupersededBundleIdsOfAllManagersRemovesKeyWhenEmpty() {
         preferences.setLastSyncedBundleId("bundle-1", versionCode: "1")
         preferences.setLastSyncedBundleId("bundle-2", versionCode: "1")
 
-        preferences.removeSupersededBundleIds(["bundle-1"])
+        preferences.removeSupersededBundleIdsOfAllManagers(["bundle-1"])
 
         XCTAssertNil(userDefaults.object(forKey: supersededBundleIdsKey))
     }
 
-    func testRemoveSupersededBundleIdsWritesNothingIfNothingToRemove() {
-        preferences.removeSupersededBundleIds([])
+    func testRemoveSupersededBundleIdsOfAllManagersWritesNothingIfNothingToRemove() {
+        preferences.removeSupersededBundleIdsOfAllManagers([])
 
         XCTAssertTrue(persistedValues().isEmpty)
     }

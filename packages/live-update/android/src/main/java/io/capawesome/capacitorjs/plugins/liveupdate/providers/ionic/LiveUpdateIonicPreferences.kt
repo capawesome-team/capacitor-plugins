@@ -33,39 +33,54 @@ class LiveUpdateIonicPreferences(private val sharedPreferences: SharedPreference
         .toSet()
 
     /**
-     * @return The bundles this manager no longer points at and that may be deleted once unused.
+     * @return The bundles that the managers no longer point at and that may be deleted once unused.
      */
-    fun getSupersededBundleIds(): Set<String> = sharedPreferences.getStringSet(supersededBundleIdsKey, null)?.toSet() ?: emptySet()
+    fun getSupersededBundleIdsOfAllManagers(): Set<String> = sharedPreferences.all
+        .filterKeys { it.startsWith(SUPERSEDED_BUNDLE_IDS_PREFIX) }
+        .values
+        .filterIsInstance<Set<*>>()
+        .flatten()
+        .filterIsInstance<String>()
+        .toSet()
 
-    fun removeSupersededBundleIds(bundleIds: Set<String>) {
+    fun removeSupersededBundleIdsOfAllManagers(bundleIds: Set<String>) {
         if (bundleIds.isEmpty()) {
             return
         }
-        val remainingBundleIds = getSupersededBundleIds() - bundleIds
         val editor = sharedPreferences.edit()
-        if (remainingBundleIds.isEmpty()) {
-            editor.remove(supersededBundleIdsKey)
-        } else {
-            editor.putStringSet(supersededBundleIdsKey, remainingBundleIds)
-        }
+        sharedPreferences.all.keys
+            .filter { it.startsWith(SUPERSEDED_BUNDLE_IDS_PREFIX) }
+            .forEach { key ->
+                val remainingBundleIds = getStringSet(key) - bundleIds
+                if (remainingBundleIds.isEmpty()) {
+                    editor.remove(key)
+                } else {
+                    editor.putStringSet(key, remainingBundleIds)
+                }
+            }
         editor.apply()
     }
 
     /**
-     * Forgets the last synced bundle if it was synced on another app version code,
+     * Forgets the last synced bundle of every manager that synced it on another app version code,
      * because the bundle was built for that native version.
      */
-    fun resetLastSyncedBundleIdIfVersionChanged(versionCode: String) {
-        val lastSyncedBundleId = getLastSyncedBundleId() ?: return
-        val lastVersionCode = sharedPreferences.getString(lastVersionCodeKey, null) ?: return
-        if (lastVersionCode == versionCode) {
-            return
-        }
-        sharedPreferences.edit()
-            .putStringSet(supersededBundleIdsKey, getSupersededBundleIds() + lastSyncedBundleId)
-            .remove(lastSyncedBundleIdKey)
-            .remove(lastVersionCodeKey)
-            .apply()
+    fun resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: String) {
+        val editor = sharedPreferences.edit()
+        sharedPreferences.all
+            .filterKeys { it.startsWith(LAST_SYNCED_BUNDLE_ID_PREFIX) }
+            .forEach { (key, lastSyncedBundleId) ->
+                val stateKey = key.removePrefix(LAST_SYNCED_BUNDLE_ID_PREFIX)
+                val lastVersionCode = sharedPreferences.getString(LAST_VERSION_CODE_PREFIX + stateKey, null)
+                if (lastSyncedBundleId !is String || lastVersionCode == null || lastVersionCode == versionCode) {
+                    return@forEach
+                }
+                val supersededBundleIds = getStringSet(SUPERSEDED_BUNDLE_IDS_PREFIX + stateKey) + lastSyncedBundleId
+                editor.putStringSet(SUPERSEDED_BUNDLE_IDS_PREFIX + stateKey, supersededBundleIds)
+                    .remove(key)
+                    .remove(LAST_VERSION_CODE_PREFIX + stateKey)
+            }
+        editor.apply()
     }
 
     /**
@@ -76,10 +91,12 @@ class LiveUpdateIonicPreferences(private val sharedPreferences: SharedPreference
         val editor = sharedPreferences.edit()
         val previousBundleId = getLastSyncedBundleId()
         if (previousBundleId != null && previousBundleId != bundleId) {
-            editor.putStringSet(supersededBundleIdsKey, getSupersededBundleIds() + previousBundleId)
+            editor.putStringSet(supersededBundleIdsKey, getStringSet(supersededBundleIdsKey) + previousBundleId)
         }
         editor.putString(lastSyncedBundleIdKey, bundleId)
             .putString(lastVersionCodeKey, versionCode)
             .apply()
     }
+
+    private fun getStringSet(key: String): Set<String> = sharedPreferences.getStringSet(key, null)?.toSet() ?: emptySet()
 }

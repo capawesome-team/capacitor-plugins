@@ -15,6 +15,11 @@ import LiveUpdateProvider
 /// - `publicKey`, `serverDomain`, `httpTimeout` (optional) — same as the plugin config;
 ///   only applied to the headless instance created by `init(configuration:)`
 public final class LiveUpdateIonicManager: ProviderManager {
+    /// Set by the first manager of the process.
+    private static var hasDeletedSupersededBundles = false
+    /// Guards `hasDeletedSupersededBundles`: managers can be created on several threads at the same time.
+    private static let hasDeletedSupersededBundlesLock = NSLock()
+
     public private(set) var latestAppDirectory: URL?
 
     private let appId: String
@@ -41,9 +46,8 @@ public final class LiveUpdateIonicManager: ProviderManager {
         self.channel = channel
         self.liveUpdate = liveUpdate
         self.preferences = LiveUpdateIonicPreferences(stateKey: Self.buildStateKey(appId: appId, channel: channel))
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode: liveUpdate.getVersionCode())
+        deleteSupersededBundlesOncePerProcess()
         restoreSyncedBundle()
-        deleteSupersededBundles()
     }
 
     private static func buildStateKey(appId: String, channel: String?) -> String {
@@ -120,23 +124,29 @@ public final class LiveUpdateIonicManager: ProviderManager {
         return metadata
     }
 
-    /// Deletes the superseded bundles that no manager points to anymore. Bundles that were not
+    /// Forgets the bundles of all managers that were synced on another app version code, then deletes
+    /// the superseded bundles of all managers that no manager points to anymore. Bundles that were not
     /// superseded by a manager are never deleted, because they may belong to the plugin's JS API.
-    private func deleteSupersededBundles() {
-        let supersededBundleIds = preferences.getSupersededBundleIds()
-        if supersededBundleIds.isEmpty {
+    /// Runs only for the first manager of the process, because a visible portal of a later manager
+    /// may still serve a bundle that a sync in this process superseded.
+    private func deleteSupersededBundlesOncePerProcess() {
+        Self.hasDeletedSupersededBundlesLock.lock()
+        defer { Self.hasDeletedSupersededBundlesLock.unlock() }
+        if Self.hasDeletedSupersededBundles {
             return
         }
+        Self.hasDeletedSupersededBundles = true
+        preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode: liveUpdate.getVersionCode())
         let lastSyncedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
-        let deletedBundleIds = supersededBundleIds.filter { bundleId in
+        let deletedBundleIds = preferences.getSupersededBundleIdsOfAllManagers().filter { bundleId in
             !lastSyncedBundleIds.contains(bundleId) && liveUpdate.tryDeleteUnusedBundle(bundleId: bundleId)
         }
-        preferences.removeSupersededBundleIds(deletedBundleIds)
+        preferences.removeSupersededBundleIdsOfAllManagers(deletedBundleIds)
     }
 
     /// Downloads the bundle, or awaits a running download of the same bundle, and returns its directory.
     private func downloadBundle(_ bundle: CreateCheckResponse.Bundle) async throws -> URL {
-        let downloadOptions = DownloadBundleOptions(bundle: bundle, appId: appId)
+        let downloadOptions = DownloadBundleOptions(bundle: bundle, appId: appId, currentBundleId: syncedBundleId)
         try await BundleDownloads.shared.run(bundleId: bundle.id) { [liveUpdate] in
             try await liveUpdate.downloadBundle(downloadOptions)
         }

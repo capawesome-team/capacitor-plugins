@@ -64,6 +64,11 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         private val bundleDownloads = ConcurrentHashMap<String, Deferred<Unit>>()
         private val bundleDownloadScope = CoroutineScope(SupervisorJob())
 
+        /**
+         * Guarded by the companion object. Set by the first manager of the process.
+         */
+        private var hasDeletedSupersededBundles = false
+
         @Throws(ProviderError.InvalidConfiguration::class)
         private fun createLiveUpdateConfig(configuration: Map<String, *>): LiveUpdateConfig {
             val config = LiveUpdateConfig()
@@ -100,9 +105,8 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
         val sharedPreferences =
             context.applicationContext.getSharedPreferences(LiveUpdateIonicPreferences.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
         preferences = LiveUpdateIonicPreferences(sharedPreferences, stateKey)
-        preferences.resetLastSyncedBundleIdIfVersionChanged(versionCode)
+        deleteSupersededBundlesOncePerProcess()
         restoreSyncedBundle()
-        deleteSupersededBundles()
     }
 
     override suspend fun sync(): ProviderSyncResult? {
@@ -148,24 +152,28 @@ constructor(context: Context, configuration: Map<String, *>, private val liveUpd
     }
 
     /**
-     * Deletes the bundles this manager no longer points at, unless another manager or the
-     * plugin still uses them. Never runs right after a sync, because a visible portal may
-     * still serve the previous bundle.
+     * Forgets the bundles of all managers that were synced on another app version code, then deletes
+     * the superseded bundles of all managers, unless a manager or the plugin still uses them.
+     * Runs only for the first manager of the process, because a visible portal of a later manager
+     * may still serve a bundle that a sync in this process superseded.
      */
-    private fun deleteSupersededBundles() {
-        val supersededBundleIds = preferences.getSupersededBundleIds()
-        if (supersededBundleIds.isEmpty()) {
-            return
+    private fun deleteSupersededBundlesOncePerProcess() {
+        synchronized(LiveUpdateIonicManager) {
+            if (hasDeletedSupersededBundles) {
+                return
+            }
+            hasDeletedSupersededBundles = true
+            preferences.resetLastSyncedBundleIdsOfAllManagersIfVersionChanged(versionCode)
+            val referencedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
+            val deletedBundleIds = preferences.getSupersededBundleIdsOfAllManagers()
+                .filter { it !in referencedBundleIds && liveUpdate.tryDeleteUnusedBundle(it) }
+                .toSet()
+            preferences.removeSupersededBundleIdsOfAllManagers(deletedBundleIds)
         }
-        val referencedBundleIds = preferences.getLastSyncedBundleIdsOfAllManagers()
-        val deletedBundleIds = supersededBundleIds
-            .filter { it !in referencedBundleIds && liveUpdate.tryDeleteUnusedBundle(it) }
-            .toSet()
-        preferences.removeSupersededBundleIds(deletedBundleIds)
     }
 
     private suspend fun downloadBundle(bundle: CreateCheckResponseBundle) {
-        val options = DownloadBundleOptions(bundle, appId)
+        val options = DownloadBundleOptions(bundle, appId).setCurrentBundleId(syncedBundleId)
         suspendCoroutine { continuation ->
             liveUpdate.downloadBundle(
                 options,
