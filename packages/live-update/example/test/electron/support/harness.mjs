@@ -27,16 +27,22 @@ export const startMockServer = ({
     const server = createServer((req, res) => {
       const { port } = server.address();
       if (
-        req.url.startsWith('/v1/apps/') &&
-        req.url.includes('/bundles/latest')
+        req.method === 'POST' &&
+        req.url.startsWith('/v1/live-updates/apps/') &&
+        req.url.endsWith('/checks')
       ) {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(
           JSON.stringify({
-            artifactType: 'zip',
-            bundleId,
-            checksum,
-            url: `http://localhost:${port}/bundle.zip`,
+            bundle: {
+              artifactType: 'zip',
+              checksum,
+              id: bundleId,
+              url: `http://localhost:${port}/bundle.zip`,
+            },
+            channelName: null,
+            reason: null,
+            result: 'available',
           }),
         );
         return;
