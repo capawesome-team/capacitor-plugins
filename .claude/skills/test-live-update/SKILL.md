@@ -147,14 +147,13 @@ The Electron platform runs on the engine `@capawesome/electron-live-update`. It 
 
 ### Setup
 
-1. Check that the engine on disk is the version that `packages/live-update/package.json` asks for: `grep '"version"' node_modules/@capawesome/electron-live-update/package.json` in the repo root. A copy in `packages/live-update/node_modules` wins over it. If the engine is older, run `npm install` in the repo root first, or the run tests the wrong engine. The Timeout error row proves the engine at run time.
+1. Check that the engine on disk is the version that `packages/live-update/package.json` asks for: `grep '"version"' node_modules/@capawesome/electron-live-update/package.json` in the repo root. A copy in `packages/live-update/node_modules` wins over it. If the engine is older, run `npm install` in the repo root first, or the run tests the wrong engine. The row "Check answered with an error" proves the engine at run time.
 2. In `packages/live-update`: `npm run build`. In `example`: set `plugins.LiveUpdate.appId` in `capacitor.config.ts`, then `npm run build`, `npx cap sync @capawesome/capacitor-electron` and `npx tsc -p electron/tsconfig.json`. Options that only Electron should get go into `electron/capacitor.electron.config.ts`.
 3. Start the app by hand with `npx electron electron` from `example`. The first start downloads the Electron binary when it is missing. The plugin and the engine log to the terminal with the prefix `[LiveUpdate]`.
 4. To call plugin methods from a script, reuse the helpers of the end-to-end tests in `example/test/electron/support/harness.mjs`: `launch(userDataDir)` starts the app with its own data folder, `callPlugin(page, method, options)` calls a method in the renderer and returns its result, and `writeLiveUpdateConfig({ appId, ... })` sets the options without `npx cap sync`. Write such a script outside the repo. Things to know:
    - `writeLiveUpdateConfig` uses the app id of the mock server unless you pass `appId`.
    - `callPlugin` rejects with the message only. To read the code of an error, call the method inside `page.evaluate`, catch the error there and return its `code` and `message`.
    - `activeBundleVersion` reads a meta tag that only the bundles of the end-to-end tests have. For a marker bundle read the text of `ion-title`.
-   - Set `publicKey` as a PEM with line breaks. The engine does not read a key that is written in one line.
 5. The data lives in `capawesome-live-update` inside the user data folder of the app: `bundles/<bundleId>/`, `staging/` for running downloads and `state.json` for the current bundle, the next bundle, the blocked bundles, the device id, the channel and the custom id. Delete the data folders you created when the run is done.
 
 ### Matrix
@@ -164,16 +163,18 @@ The Electron platform runs on the engine `@capawesome/electron-live-update`. It 
 | ZIP sync | | `sync` on a ZIP channel, `reload` | new title, `bundles` holds the bundle, `staging` is empty |
 | Restart applies the update | | `sync`, close the app, start it again | new title after the start |
 | Custom properties | | `fetchLatestBundle` and `sync` on a channel whose bundle has custom properties | both results hold them |
-| Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, `reload`, do not call `ready` | back on the default bundle after the timeout, the next `ready` returns `rollback: true` |
-| Rollback at the next start | `readyTimeout: 10000` | `sync`, `reload`, close the app before the timeout, start it again | the default bundle is shown |
+| Rollback without `ready()` | `readyTimeout: 10000`, `autoBlockRolledBackBundles: true` | `sync`, `reload`, do not call `ready` | back on the default bundle after the timeout, `state.json` holds `pendingFailure` with the reason `readiness_timed_out`, the next `ready` returns `rollback: true` |
+| Rollback at the next start | `readyTimeout: 10000` | `sync`, `reload`, close the app before the timeout, start it again | the default bundle is shown, `state.json` holds `pendingFailure` with the reason `app_crashed` |
 | No rollback with `ready()` | `readyTimeout: 10000` | `sync`, `reload`, `ready`, wait longer than the timeout | still on the new bundle |
 | Rolled-back bundle blocked | same run as the first rollback row | `sync` again | bundle not installed again, `getBlockedBundles` lists it |
-| Signature ok | `publicKey` = key A | `sync` on a channel signed with key A, `reload` | new title |
+| Failure reported | after each of the two rollback rows | `sync` again, then read `state.json`. To see the body, set `serverDomain` to a local server that records the body of each check and answers with the result `up_to_date`, and start the app with the same data folder | no error, `pendingFailure` is `null` after the `sync`. The first recorded body holds `failure` with the bundle id and the reason, the next one holds none |
+| Wait after a 429 | `serverDomain` = a local server that answers the first check with status 429 and `Retry-After: 3` | `sync` twice at once, then once more after 4 s | the first two give no next bundle and the server sees one request, the third one reaches the server |
+| Signature ok | `publicKey` = key A, once with line breaks and once in one line | `sync` on a channel signed with key A, `reload` | new title both times |
 | Wrong public key | `publicKey` = key B | `sync` on the channel signed with key A | "Signature verification failed.", no bundle |
 | Manifest refused | | `downloadBundle` with `artifactType: 'manifest'` | "The manifest artifact type is not supported." |
 | Error codes | | `downloadBundle` of the same bundle twice, `setNextBundle` with an unknown id, two `sync` calls at once | `BUNDLE_ALREADY_EXISTS`, `BUNDLE_NOT_FOUND`, `SYNC_IN_PROGRESS` |
 | Timeout error | `serverDomain: "10.255.255.1"`, `httpTimeout: 1000` | `sync` | "Request timed out." with the code `REQUEST_FAILED` |
-| Check answered with an error | `serverDomain: "example.com"` | `sync`, `fetchLatestBundle` | no error, no bundle |
+| Check answered with an error | `serverDomain: "example.com"` | `sync`, `fetchLatestBundle` | both reject with "The check failed with status 405." and the code `REQUEST_FAILED` |
 | Update in place | | start the build of the last release with a data folder, `sync`, `reload`, `ready`, set a channel and a custom id, close it. Start the new build with the same data folder | same device id, channel, custom id, title and current bundle, `state.json` unchanged, a `sync` on a channel with a newer bundle installs it |
 
 Run `npm run e2e:electron` in `example` as well. It covers the first sync and both rollback rows against a local mock server.
