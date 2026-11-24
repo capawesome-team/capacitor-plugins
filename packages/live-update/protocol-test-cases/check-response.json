@@ -667,11 +667,26 @@
     "expectedError": "REQUEST_FAILED"
   },
   {
-    "name": "fails after a server error",
+    "name": "waits the seconds of Retry-After after a 503",
     "statusCode": 503,
-    "retryAfter": null,
+    "retryAfter": "60",
     "body": {
       "message": "Service is currently unavailable. Please try again later."
+    },
+    "expected": {
+      "result": null,
+      "reason": null,
+      "channelName": null,
+      "bundle": null,
+      "retryAfterMs": 60000
+    }
+  },
+  {
+    "name": "fails after a server error",
+    "statusCode": 500,
+    "retryAfter": null,
+    "body": {
+      "message": "An unexpected error occurred. Please try again."
     },
     "expectedError": "REQUEST_FAILED"
   }
